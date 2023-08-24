@@ -23,16 +23,19 @@ class UsersController < ApplicationController
   def add_language
     if @language.nil?
       @user.errors.add(:language_id, "can not be blank. Please select a language before adding.")
-      render :edit
+      return render "edit"
+    end
+
+    if current_user.languages.include?(@language)
+      @user.errors.add(:language_id, "#{@language.name} is already in your languages list.")
+      return render "edit"
+    end
+
+    current_user.languages << @language
+    if current_user.save
+      redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."
     else
-      if current_user.languages.include?(@language)
-        flash[:alert] = "#{@language.name} is already in your languages list."
-      elsif current_user.languages << @language && current_user.save
-        flash[:notice] = "#{@language.name} was added to your languages list."
-      else
-        flash[:alert] = "Error unable to add #{@language.name} to your languages list!"
-      end
-      redirect_to edit_users_path
+      redirect_to edit_users_path, alert: "Error unable to add #{@language.name} to your languages list!"
     end
   end
 

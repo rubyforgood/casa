@@ -448,8 +448,8 @@ RSpec.describe "/users", type: :request do
       end
 
       it "should notify the user that the language is already in their list" do
-        expect(response).to redirect_to(edit_users_path)
-        expect(flash[:alert]).to eq "#{language.name} is already in your languages list."
+        expect(response).to have_http_status(200)
+        expect(response.body).to include("#{language.name} is already in your languages list.")
       end
     end
   end
