@@ -14,11 +14,10 @@ const defineCaseContactsTable = function () {
 }
 
 $('document').ready(() => {
-  try {
-    const asyncNotificationsElement = $('#async-notifications')
+  const asyncNotificationsElement = $('#async-notifications')
+
+  if (asyncNotificationsElement.length) {
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
-  } catch (err) {
-    console.error(err)
   }
 
   $.fn.dataTable.ext.search.push(
@@ -115,11 +114,9 @@ $('document').ready(() => {
         },
         dataType: 'json',
         type: 'POST',
-        success: function (response) {
-          if (response.error) {
-            pageNotifier.notify('Error while saving preferences', 'error')
-            console.error(response.error)
-          }
+        error: function (jqXHR, textStatus, errorMessage) {
+          console.error(errorMessage)
+          pageNotifier.notify('Error while saving preferences', 'error')
         }
       })
     },
