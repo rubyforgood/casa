@@ -8,9 +8,15 @@ RSpec.describe CaseGroup, type: :model do
       casa_org = create(:casa_org)
       create(:case_group, casa_org: casa_org, name: "The Johnson Family")
       non_uniq_case_group = build(:case_group, casa_org: casa_org, name: "The Johnson Family")
+      non_uniq_case_group_whitespace = build(:case_group, casa_org: casa_org, name: "The Johnson Family   ")
+      non_uniq_case_group_case_sensitive = build(:case_group, casa_org: casa_org, name: "The Johnson family")
 
       expect(non_uniq_case_group).to_not be_valid
+      expect(non_uniq_case_group_case_sensitive).to_not be_valid
+      expect(non_uniq_case_group_whitespace).to_not be_valid
       expect(non_uniq_case_group.errors[:name]).to include("has already been taken")
+      expect(non_uniq_case_group_case_sensitive.errors[:name]).to include("has already been taken")
+      expect(non_uniq_case_group_whitespace.errors[:name]).to include("has already been taken")
     end
   end
 

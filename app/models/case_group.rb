@@ -3,8 +3,15 @@ class CaseGroup < ApplicationRecord
   has_many :case_group_memberships
   has_many :casa_cases, through: :case_group_memberships
 
-  validates :name, presence: true, uniqueness: {scope: :casa_org}
   validates_presence_of :case_group_memberships
+
+  validates :name, presence: true, uniqueness: {scope: :casa_org, case_sensitive: false}
+
+  private
+
+  def strip_name
+    self.name = name.strip if name
+  end
 end
 
 # == Schema Information

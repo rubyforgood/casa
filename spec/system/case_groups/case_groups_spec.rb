@@ -41,7 +41,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
 
     visit case_groups_path
     click_on "New Case Group"
-    fill_in "Name", with: "A family"
+    fill_in "Name", with: "A Family "
     select casa_case.case_number, from: "Cases"
     click_on "Submit"
 
