@@ -2,6 +2,7 @@ class CaseGroup < ApplicationRecord
   belongs_to :casa_org
   has_many :case_group_memberships
   has_many :casa_cases, through: :case_group_memberships
+  before_validation :strip_name
 
   validates_presence_of :case_group_memberships
 
