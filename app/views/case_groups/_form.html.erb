@@ -24,13 +24,17 @@
 
     <div class="input-style-1">
       <%= form.label :casa_case_ids, 'Cases' %>
-      <%= form.collection_select(
-            :casa_case_ids,
-            current_organization.casa_cases,
-            :id, :case_number,
-            { include_hidden: false },
-            { class: "form-control", multiple: true }
-          ) %>
+      <%= form.select(
+        :casa_case_ids,
+        current_organization.casa_cases.pluck(:case_number, :id),
+        { include_hidden: false },
+        { class: "form-control dropdown select group-select", multiple: true,
+          'multiselect-search': true,
+          'multiselect-select-all': true,
+          'multiselect-max-items': 43,
+          'multiselect-hide-x': false
+        }
+      ) %>
     </div>
 
     <div class="actions mb-10">

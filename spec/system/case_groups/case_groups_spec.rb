@@ -12,7 +12,10 @@ RSpec.describe "Case Groups", type: :system, js: true do
     visit case_groups_path
     click_on "New Case Group"
     fill_in "Name", with: "A family"
-    select casa_case.case_number, from: "Cases"
+    find(".multiselect-dropdown").click
+    find('input[type="checkbox"] + label', text: casa_case.case_number).sibling('input[type="checkbox"]').set(true)
+    find("#case_group_name").click
+
     click_on "Submit"
 
     visit case_groups_path
