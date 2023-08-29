@@ -80,10 +80,9 @@ class CaseContactsController < ApplicationController
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
       render :new
-    elsif @selected_cases.count > 1
-      redirect_to case_contacts_path(success: true), notice: "Case contacts successfully created"
     else
-      redirect_to casa_case_path(CaseContact.last.casa_case, success: true), notice: "Case contact successfully created"
+      contact_msg = @selected_cases.count > 1 ? 'contants' : 'contant'
+      redirect_to case_contacts_path(success: true), notice: "Case #{contact_msg} successfully created"
     end
   end
 
