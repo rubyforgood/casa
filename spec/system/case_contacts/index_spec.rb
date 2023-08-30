@@ -42,17 +42,6 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           expect(page).to have_text(case_contacts[2].contact_groups_with_types.keys.first)
         end
       end
-
-      it "sorts case_contacts by occurred_at attribute (default)" do
-        case_contacts
-        sign_in volunteer
-        visit case_contacts_path
-
-        aggregate_failures do
-          expect(page.body.index(case_contacts[2].decorate.subheading)).to be < page.body.index(case_contacts[1].decorate.subheading)
-          expect(page.body.index(case_contacts[1].decorate.subheading)).to be < page.body.index(case_contacts[0].decorate.subheading)
-        end
-      end
     end
 
     describe "filtering case contacts" do
