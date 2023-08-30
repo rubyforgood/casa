@@ -63,7 +63,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit casa_case_path(casa_case.id)
       click_on "New Case Contact"
-      
+
       check "School"
       check "Therapist"
       within "#enter-contact-details" do
