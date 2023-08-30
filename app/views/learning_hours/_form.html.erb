@@ -27,7 +27,20 @@ id: "learning-hours-form" do |form| %>
                                    value: @learning_hour.learning_hour_type_id %>
       </div>
     </div>
-  </div>
+    <% if current_user.casa_org.learning_topic_active%>
+      <div class="select-style-1">
+        <%= form.label :learning_hour_topic_id, "Topic of Learning" %>
+        <div class="select-position">
+          <%= form.collection_select :learning_hour_topic_id,
+            LearningHourTopic.for_organization(current_user.casa_org),
+                                    :id,
+                                    :name,
+                                    prompt: "Select learning topic",
+                                    value: @learning_hour.learning_hour_topic_id %>
+        </div>
+      </div>
+    <%end%>
+      </div>
   <div class="field-card duration mt-4">
     <h5 class="mb-3">Learning Duration</h5>
       <div class="input-style-1 duration-hours">

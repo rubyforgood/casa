@@ -75,6 +75,24 @@ RSpec.describe "casa_org/edit", type: :system do
     message = find("#casa_org_twilio_phone_number").native.attribute("validationMessage")
     expect(message).to eq "Please fill out this field."
   end
+
+  it "displays learning hour topic in learning hour when enabled" do
+    organization = create(:casa_org, learning_topic_active: true)
+    volunteer = create(:volunteer, casa_org: organization)
+
+    sign_in volunteer
+    visit new_volunteer_learning_hour_path(volunteer)
+    expect(page).to have_text("Learning Topic")
+  end
+
+  it "does not display learning hour topic in learning hour when disabled" do
+    organization = create(:casa_org)
+    volunteer = create(:volunteer, casa_org: organization)
+
+    sign_in volunteer
+    visit new_volunteer_learning_hour_path(volunteer)
+    expect(page).to_not have_text("Learning Topic")
+  end
 end
 
 def stub_twilio
