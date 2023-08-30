@@ -1,6 +1,6 @@
 /* global $ */
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('table#all-case-emancipations').DataTable({
     autoWidth: false,
     searching: false,

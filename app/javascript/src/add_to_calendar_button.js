@@ -19,6 +19,6 @@ function createCalendarEvents () {
   })
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   createCalendarEvents()
 })
