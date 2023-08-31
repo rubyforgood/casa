@@ -5,12 +5,11 @@ class User < ApplicationRecord
   include Roles
   include ByOrganizationScope
   include DateHelper
-  include GenerateToken
 
   before_update :record_previous_email
   after_create :skip_email_confirmation_upon_creation
   before_save :normalize_phone_number
-  before_validation :ensure_token
+  has_secure_token :token, length: 36
 
   validates_with UserValidator
 

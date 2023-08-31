@@ -52,3 +52,4 @@ values/casa_admin_parameters.rb
 values/supervisor_parameters.rb
 values/user_parameters.rb
 values/volunteer_parameters.rb
+blueprints/api/v1/session_blueprint.rb

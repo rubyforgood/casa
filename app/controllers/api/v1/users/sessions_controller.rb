@@ -16,7 +16,7 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
 
   def load_resource
     @user = User.find_by(email: user_params[:email])
-    if !@user&.valid_password?(user_params[:password])
+    unless @user&.valid_password?(user_params[:password])
       @user = nil
     end
   end
