@@ -9,11 +9,13 @@ controllers/learning_hour_types_controller.rb
 controllers/mileage_reports_controller.rb
 controllers/placements_controller.rb
 controllers/users/sessions_controller.rb
+controllers/learning_hour_topics_controller.rb
 datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb
 decorators/court_date_decorator.rb
 decorators/learning_hour_decorator.rb
+decorators/learning_hour_topic_decorator.rb
 helpers/all_casa_admins/casa_orgs_helper.rb
 helpers/api_base_helper.rb
 helpers/date_helper.rb
