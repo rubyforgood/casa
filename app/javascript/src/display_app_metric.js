@@ -5,7 +5,7 @@ Chart.register(...registerables)
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-$(document).ready(function () {
+$(() => { // JQuery's callback for the DOM loading
   const chartElement = document.getElementById('myChart')
 
   if (chartElement) {

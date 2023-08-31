@@ -496,7 +496,7 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
     })
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   if (!(window.location.pathname.includes('patch_notes'))) {
     return
   }
@@ -505,9 +505,9 @@ $('document').ready(() => {
     const asyncNotificationsElement = $('#async-notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
-    $('#new-patch-note button').click(patchNoteFunctions.onCreate)
-    $('#patch-note-list .button-delete').click(patchNoteFunctions.onDeletePatchNote)
-    $('#patch-note-list .button-edit').click(patchNoteFunctions.onEditPatchNote)
+    $('#new-patch-note button').on('click', patchNoteFunctions.onCreate)
+    $('#patch-note-list .button-delete').on('click', patchNoteFunctions.onDeletePatchNote)
+    $('#patch-note-list .button-edit').on('click', patchNoteFunctions.onEditPatchNote)
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
     pageNotifier.notify(err.message, 'error')

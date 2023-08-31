@@ -38,7 +38,7 @@ function checkPasswordsAndDisplayPopup (button, password, confirmation, enablePo
 
 // Expects the class name constants above are applied to the correct fields. See
 // `app/views/users/edit.html.erb` for usage
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   if ($(`.${SUBMIT_BUTTON_CLASS}`).length > 0) {
     const button = $(`.${SUBMIT_BUTTON_CLASS}`)[0]
     const password = $(`.${PASSWORD_FIELD_CLASS}`)[0]

@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :case_group do
     casa_org { CasaOrg.first || create(:casa_org) }
-    name { "A family" }
+    sequence(:name) { |n| "Family #{n}" }
 
     after(:build) do |case_group, _|
       if case_group.case_group_memberships.empty?

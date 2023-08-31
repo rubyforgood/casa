@@ -10,5 +10,4 @@ jobs:
     steps:
       - uses: andymckay/labeler@master
         with:
-          remove-labels: "help-wanted"
-          ignore-if-assigned: false
+          remove-labels: "Help Wanted"
