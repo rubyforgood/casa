@@ -27,7 +27,7 @@ id: "learning-hours-form" do |form| %>
                                    value: @learning_hour.learning_hour_type_id %>
       </div>
     </div>
-    <% if current_user.casa_org.learning_topic_active%>
+    <% if current_user.casa_org.learning_topic_active %>
       <div class="select-style-1">
         <%= form.label :learning_hour_topic_id, "Topic of Learning" %>
         <div class="select-position">
@@ -39,7 +39,7 @@ id: "learning-hours-form" do |form| %>
                                     value: @learning_hour.learning_hour_topic_id %>
         </div>
       </div>
-    <%end%>
+    <% end %>
       </div>
   <div class="field-card duration mt-4">
     <h5 class="mb-3">Learning Duration</h5>
