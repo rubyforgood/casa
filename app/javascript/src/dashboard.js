@@ -13,7 +13,7 @@ const defineCaseContactsTable = function () {
   )
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   const asyncNotificationsElement = $('#async-notifications')
 
   if (asyncNotificationsElement.length) {

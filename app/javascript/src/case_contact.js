@@ -94,7 +94,7 @@ window.onload = function () {
     }
   }
 
-  $('#casa-contact-form').submit(function (e) {
+  $('#casa-contact-form').on('submit', function (e) {
     validateNoteContent(e)
   })
 
@@ -108,7 +108,7 @@ window.onload = function () {
 
   const caseContactSubmitFormModal = document.getElementById('modal-case-contact-submit')
   caseContactSubmitFormModal.onclick = function () {
-    $('#casa-contact-form').unbind('submit')
+    $('#casa-contact-form').off('submit')
   }
 
   caseContactSubmit.on('click', function () {
@@ -185,7 +185,7 @@ function displayHighlightModal (event) {
   $('#caseContactHighlight').modal('show')
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
   $('#open-highlight-modal').on('click', displayHighlightModal)
