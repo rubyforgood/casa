@@ -1,6 +1,6 @@
 /* global $ */
 
-$(() => {
+$(() => { // JQuery's callback for the DOM loading
   const formId = 'casa-contact-form'
   let localStorageKey = formId
 
@@ -9,6 +9,7 @@ $(() => {
       const caseContactId = $(`#${formId}`)[0].action.split('/').pop()
       localStorageKey = `${formId}-${caseContactId}`
     }
+
     const save = () => {
       const data = []
 
