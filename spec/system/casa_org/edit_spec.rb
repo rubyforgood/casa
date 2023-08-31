@@ -76,7 +76,7 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(message).to eq "Please fill out this field."
   end
 
-  it "displays learning hour topic in learning hour when enabled",js: true do
+  it "displays learning hour topic in learning hour when enabled", js: true do
     organization = create(:casa_org, learning_topic_active: true)
     volunteer = create(:volunteer, casa_org: organization)
 
@@ -85,7 +85,7 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(page).to have_text("Learning Topic")
   end
 
-  it "does not display learning hour topic in learning hour when disabled",js: true do
+  it "does not display learning hour topic in learning hour when disabled", js: true do
     organization = create(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
 
