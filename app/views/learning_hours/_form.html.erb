@@ -29,7 +29,7 @@ id: "learning-hours-form" do |form| %>
     </div>
     <% if current_user.casa_org.learning_topic_active %>
       <div class="select-style-1">
-        <%= form.label :learning_hour_topic_id, "Topic of Learning" %>
+        <%= form.label :learning_hour_topic_id, "Learning Topic" %>
         <div class="select-position">
           <%= form.collection_select :learning_hour_topic_id,
             LearningHourTopic.for_organization(current_user.casa_org),
