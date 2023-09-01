@@ -7,8 +7,10 @@ class OtherDutiesController < ApplicationController
 
     @volunteer_duties = if current_user.casa_admin?
       generate_other_duty_list(policy_scope(Volunteer))
-    else
+    elsif current_user.supervisor?
       generate_other_duty_list(current_user.volunteers)
+    else # for volunteer user
+      generate_other_duty_list([current_user])
     end
   end
 
