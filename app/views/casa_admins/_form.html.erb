@@ -19,6 +19,18 @@
     <div class="mb-30">
       <%= render "/shared/invite_login", resource: casa_admin %>
     </div>
+
+    <div>
+      <% if current_user.casa_admin? %>
+        <div class="form-group">
+          <%= form.label :monthly_learning_hours_report, "Receive Monthly Learning Hours Report" %>
+          <%= form.check_box :monthly_learning_hours_report %>
+        </div>
+      <% end %>
+    </div>
+
+    <br />
+
     <% if casa_admin.persisted? %>
       <div class="mb-20 col">
         <% if casa_admin.active? %>
