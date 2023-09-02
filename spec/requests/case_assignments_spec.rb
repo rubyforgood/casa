@@ -16,7 +16,7 @@ RSpec.describe "/case_assignments", type: :request do
 
     context "when the volunteer has been previously assigned to the casa_case" do
       let!(:case_assignment) { create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case) }
-      let(:params) { { case_assignment: { volunteer_id: volunteer.id } } }
+      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
       subject(:request) do
         post case_assignments_url(casa_case_id: casa_case.id), params: params
@@ -27,7 +27,7 @@ RSpec.describe "/case_assignments", type: :request do
       it "reassigns the volunteer to the casa_case" do
         expect { request }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
       end
-      
+
       it { is_expected.to redirect_to edit_casa_case_path(casa_case) }
 
       it "sets flash message correctly" do
@@ -36,7 +36,7 @@ RSpec.describe "/case_assignments", type: :request do
       end
 
       context "when missing params" do
-        let(:params) { { case_assignment: { volunteer_id: '' } } }
+        let(:params) { {case_assignment: {volunteer_id: ""}} }
 
         it { is_expected.to redirect_to edit_casa_case_path(casa_case) }
 
@@ -48,7 +48,7 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case assignment parent is a volunteer" do
-      let(:params) { { case_assignment: { casa_case_id: casa_case.id } } }
+      let(:params) { {case_assignment: {casa_case_id: casa_case.id}} }
 
       subject(:request) do
         post case_assignments_url(volunteer_id: volunteer.id), params: params
@@ -68,7 +68,7 @@ RSpec.describe "/case_assignments", type: :request do
       end
 
       context "when missing params" do
-        let(:params) { { case_assignment: { volunteer_id: '' } } }
+        let(:params) { {case_assignment: {volunteer_id: ""}} }
 
         it { is_expected.to redirect_to edit_volunteer_path(volunteer) }
 
@@ -80,7 +80,7 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case assignment parent is a casa_case" do
-      let(:params) { { case_assignment: { volunteer_id: volunteer.id } } }
+      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
       subject(:request) do
         post case_assignments_url(casa_case_id: casa_case.id), params: params
@@ -100,7 +100,7 @@ RSpec.describe "/case_assignments", type: :request do
       end
 
       context "when missing params" do
-        let(:params) { { case_assignment: { volunteer_id: '' } } }
+        let(:params) { {case_assignment: {volunteer_id: ""}} }
 
         it { is_expected.to redirect_to edit_casa_case_path(casa_case) }
 
@@ -119,21 +119,21 @@ RSpec.describe "/case_assignments", type: :request do
 
         response
       end
-      
+
       context "when the case belongs to another organization" do
         let(:other_casa_case) { create(:casa_case, casa_org: other_org) }
         let(:url) { case_assignments_url(casa_case_id: other_casa_case.id) }
-        let(:params) { { case_assignment: { volunteer_id: volunteer.id } } }
+        let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
         it "does not create a case assignment" do
           expect { request }.not_to change(other_casa_case.volunteers, :count)
         end
       end
-  
+
       context "when the volunteer belongs to another organization" do
         let(:other_volunteer) { build_stubbed(:volunteer, casa_org: other_org) }
         let(:url) { case_assignments_url(casa_case_id: casa_case.id) }
-        let(:params) { { case_assignment: { volunteer_id: other_volunteer.id } } }
+        let(:params) { {case_assignment: {volunteer_id: other_volunteer.id}} }
 
         it "does not create a case assignment" do
           expect { request }.not_to change(casa_case.volunteers, :count)
@@ -206,7 +206,7 @@ RSpec.describe "/case_assignments", type: :request do
     let(:redirect_to_path) { "" }
 
     subject(:request) do
-      patch unassign_case_assignment_url(assignment, redirect_to_path:)
+      patch unassign_case_assignment_url(assignment, redirect_to_path: redirect_to_path)
 
       response
     end
@@ -221,7 +221,7 @@ RSpec.describe "/case_assignments", type: :request do
     it "deactivates the case assignment" do
       expect { request }.to change { assignment.reload.active? }.to(false)
     end
-    
+
     it { is_expected.to redirect_to edit_casa_case_path(casa_case) }
 
     it "sets flash message correctly" do
@@ -262,7 +262,7 @@ RSpec.describe "/case_assignments", type: :request do
   describe "PATCH /show_hide_contacts" do
     before { sign_in admin }
 
-    let(:assignment) { create(:case_assignment, casa_case:, volunteer:, active: false) }
+    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false) }
 
     subject(:request) do
       patch show_hide_contacts_case_assignment_path(assignment)
@@ -291,7 +291,9 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when case contacts are hidden" do
-      let(:assignment) { create(:case_assignment, casa_case:, volunteer:, active: false, hide_old_contacts: true ) }
+      let(:assignment) do
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, hide_old_contacts: true)
+      end
 
       it "toggles to show case contacts" do
         expect { request }.to change { assignment.reload.hide_old_contacts? }
@@ -306,7 +308,7 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case_assignment is active" do
-      let(:assignment) { create(:case_assignment, casa_case:, volunteer:, active: true) }
+      let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: true) }
 
       xit "does not toggle contacts visibility" do
         # TODO: fix controller as it is trying to render a template that does not exist
@@ -322,11 +324,11 @@ RSpec.describe "/case_assignments", type: :request do
   describe "PATCH /reimbursement" do
     before { sign_in admin }
 
-    let(:assignment) { create(:case_assignment, casa_case:, volunteer:) }
+    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
     subject(:request) do
       patch reimbursement_case_assignment_url(assignment)
-      
+
       response
     end
 
