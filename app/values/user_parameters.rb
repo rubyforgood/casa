@@ -9,6 +9,7 @@ class UserParameters < SimpleDelegator
         :password,
         :active,
         :type,
+        :monthly_learning_hours_report,
         address_attributes: [:id, :content]
       )
 

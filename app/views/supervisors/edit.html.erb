@@ -11,6 +11,16 @@
       <p>
         <%= render "/shared/invite_login", resource: @supervisor %>
       </p>
+
+      <div>
+        <% if current_user.casa_admin? || current_user.supervisor? %>
+          <div class="form-group">
+            <%= form.label :monthly_learning_hours_report, "Receive Monthly Learning Hours Report" %>
+            <%= form.check_box :monthly_learning_hours_report %>
+          </div>
+        <% end %>
+      </div>
+
       <p>
         <%= render "manage_active", user: @supervisor %>
       </p>
@@ -26,6 +36,7 @@
           </div>
         <% end %>
       </div>
+    <br />
     <% end %>
   </div>
 </div>
