@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_09_002819) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_03_182657) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -628,6 +628,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_09_002819) do
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
+  add_foreign_key "placements", "casa_cases"
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
