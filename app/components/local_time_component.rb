@@ -20,7 +20,7 @@ class LocalTimeComponent < ViewComponent::Base
     formatted_date = time.strftime("%B %d, %Y")
     time_of_day = time.strftime(time_format)
     time_zone = time.zone
-    return { date: formatted_date, time: time_of_day, zone: time_zone }
+    formatted_date + " at " + time_of_day + " " + time_zone
   end
 
   private
