@@ -304,7 +304,7 @@ GEM
     pdf-forms (1.4.0)
       cliver (~> 0.3.2)
       safe_shell (>= 1.0.3, < 2.0)
-    pg (1.5.3)
+    pg (1.5.4)
     pretender (0.5.0)
       actionpack (>= 6.1)
     pry (0.14.2)
