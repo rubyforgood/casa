@@ -2,7 +2,7 @@ class LearningHoursMailer < ApplicationMailer
 
   def learning_hours_report_email(user)
     # user is either an Admin or Supervisor, this mailer is invoked through the rake task :monthly_learning_hours_report.rake
-    binding.pry
+
     @user = user
 
     if @user.nil?
