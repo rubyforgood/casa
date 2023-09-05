@@ -157,6 +157,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.boolean "twilio_enabled", default: false
+    t.boolean "additional_expenses_enabled", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -167,6 +169,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "hide_old_contacts", default: false
+    t.boolean "allow_reimbursement", default: true
     t.index ["casa_case_id"], name: "index_case_assignments_on_casa_case_id"
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
@@ -581,6 +584,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
     t.boolean "monthly_learning_hours_report", default: false
+    t.boolean "receive_reimbursement_email", default: false
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -618,7 +622,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
+  add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "notes", "users", column: "creator_id"
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
