@@ -1,5 +1,4 @@
 class LearningHoursMailer < ApplicationMailer
-
   def learning_hours_report_email(user)
     # user is either an Admin or Supervisor, this mailer is invoked through the rake task :monthly_learning_hours_report.rake
 
@@ -20,6 +19,6 @@ class LearningHoursMailer < ApplicationMailer
 
     attachments["learning-hours-report-#{Date.today}.csv"] = csv_data
 
-    mail(to: @user.email, subject: "Learning Hours Report for #{end_date.strftime('%B, %Y')}.")
+    mail(to: @user.email, subject: "Learning Hours Report for #{end_date.strftime("%B, %Y")}.")
   end
 end

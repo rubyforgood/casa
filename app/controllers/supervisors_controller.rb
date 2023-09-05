@@ -136,7 +136,8 @@ class SupervisorsController < ApplicationController
         :receive_reimbursement_email,
         :monthly_learning_hours_report,
         volunteer_ids: [],
-        supervisor_volunteer_ids: [])
+        supervisor_volunteer_ids: []
+      )
   end
 
   def update_supervisor_params

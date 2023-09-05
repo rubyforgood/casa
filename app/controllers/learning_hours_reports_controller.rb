@@ -8,9 +8,8 @@ class LearningHoursReportsController < ApplicationController
     respond_to do |format|
       format.csv do
         send_data learning_hours_report.to_csv,
-                  filename: "learning-hours-report-#{Time.current.strftime("%Y-%m-%d")}.csv"
+          filename: "learning-hours-report-#{Time.current.strftime("%Y-%m-%d")}.csv"
       end
     end
   end
 end
-
