@@ -126,24 +126,16 @@ class SupervisorsController < ApplicationController
 
   def supervisor_params
     params.require(:supervisor)
-
       .permit(
-
         :display_name,
-
         :email,
-
         :old_emails,
-
         :phone_number,
-
         :active,
         :monthly_learning_hours_report,
-
         :receive_reimbursement_email,
         :monthly_learning_hours_report,
         volunteer_ids: [],
-
         supervisor_volunteer_ids: [])
   end
 
