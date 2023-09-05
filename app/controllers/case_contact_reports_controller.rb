@@ -12,6 +12,11 @@ class CaseContactReportsController < ApplicationController
         send_data case_contact_report.to_csv,
           filename: "case-contacts-report-#{Time.zone.now.to_i}.csv"
       end
+
+      format.xlsx do 
+        send_data case_contact_report.to_excel,
+        filename: "case-contacts-report-#{Time.zone.now.to_i}.xlsx"
+      end      
     end
   end
 
@@ -31,7 +36,8 @@ class CaseContactReportsController < ApplicationController
       creator_ids: [],
       supervisor_ids: [],
       casa_case_ids: [],
-      filtered_csv_cols: {}
+      filtered_csv_cols: {},
+      report_format:"" # New parameter to choose the format (csv or excel)
     ).merge(casa_org_id: current_organization.id)
     convert_radio_options_to_boolean(parameters)
     parameters

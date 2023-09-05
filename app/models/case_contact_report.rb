@@ -11,6 +11,11 @@ class CaseContactReport
     CaseContactsExportCsvService.new(case_contacts_for_csv, columns).perform
   end
 
+  def to_excel
+    case_contacts_for_excel = @case_contacts
+    CaseContactsExportExcelService.new(case_contacts_for_excel, columns).perform
+  end
+
   private
 
   def filtered_case_contacts(args)
