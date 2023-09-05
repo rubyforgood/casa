@@ -266,5 +266,22 @@ RSpec.describe "/other_duties", type: :request do
         expect(response.body).to_not include(other_org_duty.decorate.truncate_notes)
       end
     end
+
+    context 'when volunteer' do
+      it "shows only duties from the volunteer" do
+        volunteer = create(:volunteer)
+        mine = build(:other_duty)
+        other = build(:other_duty)
+
+        volunteer.other_duties << mine
+
+        sign_in volunteer
+        get other_duties_url
+
+        expect(response).to be_successful
+        expect(response.body).to include(mine.decorate.truncate_notes)
+        expect(response.body).not_to include(other.decorate.truncate_notes)
+      end
+    end
   end
 end
