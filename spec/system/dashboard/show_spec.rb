@@ -38,6 +38,5 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).not_to have_css("td", text: "Bob Loblaw")
       expect(page).not_to have_text("Detail View")
     end
-
   end
 end

@@ -267,7 +267,7 @@ RSpec.describe "/other_duties", type: :request do
       end
     end
 
-    context 'when volunteer' do
+    context "when volunteer" do
       it "shows only duties from the volunteer" do
         volunteer = create(:volunteer)
         mine = build(:other_duty)
