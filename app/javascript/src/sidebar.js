@@ -9,7 +9,7 @@ function toggleSidebar () {
   }
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('#toggle-sidebar-js, #sidebar-js').on('click', toggleSidebar)
 
   // Show group actions dropdown expanded when any of the child is active

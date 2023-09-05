@@ -99,7 +99,7 @@ export class Toggler {
   }
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   if (!((/casa_cases\/[A-Za-z\-0-9]+\/emancipation/).test(window.location.pathname))) {
     return
   }

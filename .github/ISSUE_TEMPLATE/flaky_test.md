@@ -8,7 +8,7 @@ Flaky tests are defined as tests that return both passes and failures despite no
 Fix the test so it runs consistently.
 
 ### CI Workflow
-rspec or docker?
+rspec or rspec in docker?
 
 ### Sample Error Output:
 ```

@@ -55,7 +55,7 @@ en:
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
   time:
     formats:
-      day_and_date: "%A, %v"
+      day_and_date: "%A, %d-%b-%Y"
       standard: "%m-%d-%Y"
       contact_occurred_at: "%Y%m%d%H%M%s"
       full: "%B %-d, %Y"
