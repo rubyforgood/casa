@@ -23,4 +23,3 @@ class LearningHoursMailer < ApplicationMailer
     mail(to: @user.email, subject: "Learning Hours Report for #{end_date.strftime('%B, %Y')}.")
   end
 end
-
