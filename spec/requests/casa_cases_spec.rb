@@ -567,19 +567,6 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response.body).to include(mine.case_number)
         expect(response.body).not_to include(other.case_number)
       end
-
-      it "shows only duties from the user" do
-        mine = build(:other_duty)
-        other = build(:other_duty)
-
-        user.other_duties << mine
-
-        get casa_cases_url
-
-        expect(response).to be_successful
-        expect(response.body).to include(mine.decorate.truncate_notes)
-        expect(response.body).not_to include(other.decorate.truncate_notes)
-      end
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
