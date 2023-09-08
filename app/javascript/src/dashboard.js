@@ -1,5 +1,7 @@
 /* global alert */
 /* global $ */
+const AsyncNotifier = require('../src/async_notifier')
+let pageNotifier
 
 const defineCaseContactsTable = function () {
   $('table#case_contacts').DataTable(
@@ -11,7 +13,13 @@ const defineCaseContactsTable = function () {
   )
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
+  const asyncNotificationsElement = $('#async-notifications')
+
+  if (asyncNotificationsElement.length) {
+    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+  }
+
   $.fn.dataTable.ext.search.push(
     function (settings, data, dataIndex) {
       if (settings.nTable.id !== 'casa-cases') {
@@ -106,7 +114,10 @@ $('document').ready(() => {
         },
         dataType: 'json',
         type: 'POST',
-        success: function (response) { }
+        error: function (jqXHR, textStatus, errorMessage) {
+          console.error(errorMessage)
+          pageNotifier.notify('Error while saving preferences', 'error')
+        }
       })
     },
     stateSaveParams: function (settings, data) {

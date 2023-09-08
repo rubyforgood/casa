@@ -4,21 +4,21 @@ const Add2Calendar = require('add2calendar')
 
 function createCalendarEvents () {
   const calendarButtons = document.querySelectorAll('div.cal-btn')
-  if (!calendarButtons) return
-  calendarButtons.forEach((btn) => {
+
+  for (const calendarButton of calendarButtons) {
     const calendarEvent = new Add2Calendar({
-      title: btn.dataset.title,
-      start: btn.dataset.start,
-      end: btn.dataset.end,
-      description: btn.dataset.title,
+      title: calendarButton.dataset.title,
+      start: calendarButton.dataset.start,
+      end: calendarButton.dataset.end,
+      description: calendarButton.dataset.title,
       isAllDay: true
     })
 
-    calendarEvent.createWidget(`#${btn.id}`)
-    btn.title = btn.dataset.tooltip
-  })
+    calendarEvent.createWidget(`#${calendarButton.id}`)
+    calendarButton.title = calendarButton.dataset.tooltip
+  }
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   createCalendarEvents()
 })

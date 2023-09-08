@@ -7,6 +7,7 @@ class ApplicationController < ActionController::Base
   before_action :store_user_location!, if: :storable_location?
   before_action :authenticate_user!
   before_action :set_current_user
+  before_action :set_timeout_duration
   before_action :set_current_organization
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
@@ -99,6 +100,12 @@ class ApplicationController < ActionController::Base
 
   def set_current_user
     RequestStore.store[:current_user] = current_user
+  end
+
+  def set_timeout_duration
+    return unless current_user
+
+    @timeout_duration = current_user.timeout_in
   end
 
   def set_current_organization

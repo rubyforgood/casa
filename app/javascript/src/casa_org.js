@@ -31,7 +31,7 @@ function removeCheckedAttr (el) {
   el.attr('disabled', true)
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('.accordionTwilio').attr('data-bs-toggle', 'collapse')
   $('.accordionTwilio').attr('data-bs-target', '#collapseTwilio')
   $('.accordionTwilio').attr('aria-expanded', 'false')
