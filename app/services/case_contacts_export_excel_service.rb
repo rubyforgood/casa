@@ -16,7 +16,8 @@ class CaseContactsExportExcelService
 
         if case_contacts.present?
           case_contacts.decorate.each do |case_contact|
-            sheet.add.row CaseContactsExportExcelService.DATA_COLUMNS(case_contact).slice(*filtered_columns).values
+            sheet.add_row CaseContactsExportExcelService.DATA_COLUMNS(case_contact).slice(*filtered_columns).values
+
           end
         end
       end
