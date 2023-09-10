@@ -32,13 +32,8 @@
             <% end %>
           </li>
         <% end %>
-        <% if policy(OtherDuty).index? %>
-          <li class="<%= active_class(other_duties_path) %> nav-item">
-            <%= link_to other_duties_path do %>
-              <i class="lni lni-agenda mr-10"></i>
-              Other Duties
-            <% end %>
-          </li>
+        <% if current_user.casa_admin? || current_user.supervisor? %>
+          <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
         <li class="<%= active_class(casa_cases_path) %> nav-item">
           <%= link_to casa_cases_path do %>
@@ -104,6 +99,9 @@
               Emancipation Checklist(s)
             <% end %>
           </li>
+        <% end %>
+        <% if current_user.volunteer? %>
+          <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
         <li class="nav-item nav-item-has-children">
           <a
