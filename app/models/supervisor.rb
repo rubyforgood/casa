@@ -66,7 +66,7 @@ end
 #  invited_by_type               :string
 #  last_sign_in_at               :datetime
 #  last_sign_in_ip               :string
-#  monthly_learning_hours_report :boolean          default(FALSE)
+#  monthly_learning_hours_report :boolean          default(FALSE), not null
 #  old_emails                    :string           default([]), is an Array
 #  phone_number                  :string           default("")
 #  receive_email_notifications   :boolean          default(TRUE)
