@@ -1,14 +1,7 @@
 class LearningHoursMailer < ApplicationMailer
   def learning_hours_report_email(user)
     # user is either an Admin or Supervisor, this mailer is invoked through the rake task :monthly_learning_hours_report.rake
-
     @user = user
-
-    if @user.nil?
-      Bugsnag.notify("No user provided for LearningHoursMailer#learning_hours_report_email")
-      return
-    end
-
     @casa_org = @user.casa_org
 
     # Generate the learning hours CSV for the current month

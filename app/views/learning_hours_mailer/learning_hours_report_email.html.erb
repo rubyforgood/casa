@@ -41,21 +41,19 @@
                     <tbody style="box-sizing: border-box;">
                       <tr style="box-sizing: border-box;">
                         <td class="cell c1776" style="box-sizing: border-box; width: 70%; vertical-align: middle;" width="70%" valign="middle">
-                          <div class="c1144" style="box-sizing: border-box; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; font-size: 17px; font-weight: 500;text-align: center;color: #fff;">Court
-                            Appointed Special Advocate (CASA) / <%= @casa_organization&.name %>
-                            <br style="box-sizing: border-box;">
+                          <div class="c1144" style="box-sizing: border-box; padding-right: 10px; padding-left: 10px; font-size: 17px; font-weight: 500;text-align: center;color: #fff;">
                           </div>
                         </td>
                       </tr>
                       <tr style="box-sizing: border-box;">
-                        <td class="card-content" style="box-sizing: border-box; font-size: 13px; line-height: 20px; color: rgb(111, 119, 125); padding-top: 10px; padding-right: 20px; padding-bottom: 0px; padding-left: 20px; vertical-align: top;" valign="top">
-                          <h3 style="box-sizing: border-box; font-weight: 800; margin: 20px 0 5px; font-size: 16px;">Learning hours have been added this week!</h3>
-                          <p style="box-sizing: border-box;">Please see the attached full report or export the full report at <a href="https://casa-qa.herokuapp.com/reports" style="box-sizing: border-box;">https://casa-qa.herokuapp.com/reports</a>.</p>
+                        <td class="card-content" style="box-sizing: border-box; font-size: 13px; line-height: 20px; color: rgb(111, 119, 125); padding-top: 10px; padding-right: 35px; padding-bottom: 10px; padding-left: 34px; vertical-align: top;" valign="top">
+                          <h3 style="box-sizing: border-box; font-weight: 800; margin: 0px 0 5px; font-size: 16px;">Learning hours have been added this week!</h3>
+                          <p style="box-sizing: border-box;">Please see the attached full report or export the full report <%= link_to "here", reports_url %></p>
                         </td>
                       </tr>
                     </tbody>
                   </table>
-                  <table class="footer" style="box-sizing: border-box; margin-top: 50px; color: rgb(152, 156, 165); text-align: center; font-size: 11px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" align="center">
+                  <table class="footer" style="box-sizing: border-box; margin-top: 40px; color: rgb(152, 156, 165); text-align: center; font-size: 11px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" align="center">
                     <tbody style="box-sizing: border-box;">
                       <tr style="box-sizing: border-box;">
                         <td class="footer-cell" style="box-sizing: border-box;"></td>
@@ -63,9 +61,9 @@
                     </tbody>
                   </table>
                   <div class="c2577" style="text-align:center;box-sizing: border-box; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
-                    <p class="footer-info" style="box-sizing: border-box;">Court Appointed Special Advocate (CASA) / <%= @casa_organization&.name %>
+                    <p class="footer-info" style="box-sizing: border-box;">Court Appointed Special Advocate (CASA) <%= @casa_org.name %>
                       <br style="box-sizing: border-box;">
-                      <br style="box-sizing: border-box;"><%= @casa_organization&.address %>
+                      <br style="box-sizing: border-box;"><%= @casa_org.address %>
                     </p>
                   </div>
                 </td>
