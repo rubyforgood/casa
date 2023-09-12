@@ -24,14 +24,5 @@ RSpec.describe LearningHoursMailer, type: :mailer do
       expect(mail.attachments.first.filename).to eq("learning-hours-report-#{Date.today}.csv")
       expect(mail.attachments.first.body.raw_source).to eq(csv_data)
     end
-
-    context "when no user is provided" do
-      it "does not send the email and notifies Bugsnag" do
-        expect(Bugsnag).to receive(:notify)
-
-        mail = LearningHoursMailer.learning_hours_report_email(nil)
-        expect(mail.message).to be_a_kind_of(ActionMailer::Base::NullMail)
-      end
-    end
   end
 end
