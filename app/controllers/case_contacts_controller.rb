@@ -108,6 +108,9 @@ class CaseContactsController < ApplicationController
       if @case_contact.valid?
         created_at = @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")
         flash[:notice] = "Case contact created at #{created_at}, was successfully updated."
+        if @case_contact.want_driving_reimbursement_changed? && @case_contact.want_driving_reimbursement? && !current_user.supervisor.blank?
+          SupervisorMailer.reimbursement_request_reminder(current_user, current_user.supervisor).deliver
+        end
         redirect_to casa_case_path(@case_contact.casa_case)
       else
         render :edit
@@ -169,6 +172,11 @@ class CaseContactsController < ApplicationController
       end
 
       case_contact = @case_contact.dup
+
+      if case_contact.want_driving_reimbursement? && !current_user.supervisor.blank?
+        SupervisorMailer.reimbursement_request_reminder(current_user, current_user.supervisor).deliver
+      end
+
       case_contact.casa_case = casa_case
       if @selected_cases.count == 1 && case_contact.valid?
         if current_role == "Volunteer"

@@ -19,4 +19,13 @@ class SupervisorMailer < UserMailer
       subject: "Weekly summary of volunteers' activities for the week of #{Date.today - 7.days}"
     )
   end
+
+  def reimbursement_request_reminder(volunteer, supervisor)
+    @volunteer = volunteer
+    @casa_organization = volunteer.casa_org
+    @supervisor = supervisor
+    if supervisor.receive_reimbursement_email
+      mail(to: @supervisor.email, subject: "New reimbursement request from #{@volunteer.display_name}")
+    end
+  end
 end

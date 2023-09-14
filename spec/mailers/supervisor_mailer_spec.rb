@@ -116,4 +116,16 @@ RSpec.describe SupervisorMailer, type: :mailer do
       expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
     end
   end
+
+  describe ".reimbursement_request_reminder" do
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
+    let(:volunteer) { create(:volunteer) }
+    let(:casa_organization) { volunteer.casa_org }
+
+    let(:mail) { SupervisorMailer.reimbursement_request_reminder(volunteer, supervisor) }
+
+    it "sends email reminder" do
+      expect(mail.body.encoded).to match("#{volunteer.display_name} has submitted a reimbursement request")
+    end
+  end
 end

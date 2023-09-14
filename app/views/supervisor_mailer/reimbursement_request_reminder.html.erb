@@ -1,0 +1,15 @@
+<meta itemprop="name" content="Volunteer Reimbursement Request Reminder" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<style>/* Email styles need to be inline */</style>
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      Hello <%= @supervisor.display_name %>,
+    </td>
+  </tr>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <%= @volunteer.display_name %> has submitted a reimbursement request, please follow up on the reimbursements page
+      <a href="<%= "#{reimbursements_url}" %>" target="_blank">this link</a> to view reimbursement requests.
+    </td>
+  </tr>
+</table>
