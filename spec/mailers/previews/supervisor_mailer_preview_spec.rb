@@ -51,17 +51,17 @@ RSpec.describe SupervisorMailerPreview do
     end
   end
 
-  describe "#reimbursement_request_reminder" do
+  describe "#reimbursement_request_email" do
     context "When no ID is passed" do
       let(:preview) { described_class.new }
-      let(:email) { preview.reimbursement_request_reminder }
+      let(:email) { preview.reimbursement_request_email }
 
       it { expect(email.to).to eq [supervisor.email] }
     end
 
     context "When passed ID is valid" do
       let(:preview) { described_class.new(volunteer_id: volunteer.id, supervisor_id: supervisor.id) }
-      let(:email) { preview.reimbursement_request_reminder }
+      let(:email) { preview.reimbursement_request_email }
 
       it { expect(email.to).to eq [supervisor.email] }
     end

@@ -117,12 +117,12 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
   end
 
-  describe ".reimbursement_request_reminder" do
+  describe ".reimbursement_request_email" do
     let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
     let(:volunteer) { create(:volunteer) }
     let(:casa_organization) { volunteer.casa_org }
 
-    let(:mail) { SupervisorMailer.reimbursement_request_reminder(volunteer, supervisor) }
+    let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }
 
     it "sends email reminder" do
       expect(mail.body.encoded).to match("#{volunteer.display_name} has submitted a reimbursement request")

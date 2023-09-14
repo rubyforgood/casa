@@ -20,7 +20,7 @@ class SupervisorMailer < UserMailer
     )
   end
 
-  def reimbursement_request_reminder(volunteer, supervisor)
+  def reimbursement_request_email(volunteer, supervisor)
     @volunteer = volunteer
     @casa_organization = volunteer.casa_org
     @supervisor = supervisor
