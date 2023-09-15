@@ -42,7 +42,7 @@ RSpec.describe "reports", type: :system, js: true do
       visit reports_path
 
       click_on I18n.t("reports.index.download_report_button")
-      expect(page).to have_text("Downloading Report")
+      expect(page).to have_text("Select the export format:")
     end
   end
 
@@ -75,7 +75,7 @@ RSpec.describe "reports", type: :system, js: true do
       visit reports_path
 
       click_on I18n.t("reports.index.download_report_button")
-      expect(page).to have_text("Downloading Report")
+      expect(page).to have_text("Select the export format:")
     end
   end
 end
