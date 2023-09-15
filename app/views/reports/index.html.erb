@@ -87,7 +87,7 @@
 
         <div class="table-wrapper table-responsive">
           <%= form_with url: case_contact_reports_path, scope: 'report', method: :get, local: true, id: 'report-form' do |f| %>
-          <%= hidden_field_tag :format, '', id: 'report-format' %>              
+          <%= hidden_field_tag :format, '', id: 'report-format' %>
             <div class="field form-group mb-20">
               <label class="form-label"><h6>Starting From</h6></label>
               <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
@@ -209,7 +209,7 @@
                 <button
                   type="button"
                   class="btn-sm main-btn primary-btn btn-hover"
-                  data-bs-toggle="modal" 
+                  data-bs-toggle="modal"
                   data-bs-target="#formatSelectionModal"
                 >
                   <i class="lni lni-download mr-10"></i> Download Report
