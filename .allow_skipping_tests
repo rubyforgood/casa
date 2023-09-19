@@ -37,6 +37,7 @@ notifications/youth_birthday_notification.rb
 policies/fund_request_policy.rb
 policies/learning_hour_policy.rb
 policies/learning_hour_type_policy.rb
+policies/learning_hour_topic_policy.rb
 policies/note_policy.rb
 presenters/base_presenter.rb
 presenters/case_contact_presenter.rb
