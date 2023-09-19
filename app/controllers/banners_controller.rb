@@ -23,22 +23,30 @@ class BannersController < ApplicationController
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.build(banner_params)
-    if @banner.save
-      redirect_to banners_path
-    else
-      render :new
+
+    Banner.transaction do
+      deactivate_alternate_active_banner
+      @banner.save!
     end
+
+    redirect_to banners_path
+  rescue
+    render :new
   end
 
   def update
     authorize :application, :admin_or_supervisor?
 
     @banner = current_organization.banners.find(params[:id])
-    if @banner.update(banner_params)
-      redirect_to banners_path
-    else
-      render :edit
+
+    Banner.transaction do
+      deactivate_alternate_active_banner
+      @banner.update!(banner_params)
     end
+
+    redirect_to banners_path
+  rescue
+    render :edit
   end
 
   def destroy
@@ -52,5 +60,12 @@ class BannersController < ApplicationController
 
   def banner_params
     params.require(:banner).permit(:active, :content, :name).merge(user: current_user)
+  end
+
+  def deactivate_alternate_active_banner
+    if banner_params[:active].to_i == 1
+      alternate_active_banner = current_organization.banners.where(active: true).where.not(id: @banner.id).first
+      alternate_active_banner&.update!(active: false)
+    end
   end
 end

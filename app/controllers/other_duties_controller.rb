@@ -7,8 +7,10 @@ class OtherDutiesController < ApplicationController
 
     @volunteer_duties = if current_user.casa_admin?
       generate_other_duty_list(policy_scope(Volunteer))
-    else
+    elsif current_user.supervisor?
       generate_other_duty_list(current_user.volunteers)
+    else # for volunteer user
+      generate_other_duty_list([current_user])
     end
   end
 
@@ -22,7 +24,7 @@ class OtherDutiesController < ApplicationController
     @other_duty = OtherDuty.new(other_duty_params)
 
     if @other_duty.save
-      redirect_to casa_cases_path, notice: "Duty was successfully created."
+      redirect_to other_duties_path, notice: "Duty was successfully created."
     else
       render :new, status: :unprocessable_entity
     end
@@ -36,7 +38,7 @@ class OtherDutiesController < ApplicationController
     authorize @other_duty
 
     if @other_duty.update(other_duty_params)
-      redirect_to casa_cases_path, notice: "Duty was successfully updated."
+      redirect_to other_duties_path, notice: "Duty was successfully updated."
     else
       render :edit, status: :unprocessable_entity
     end

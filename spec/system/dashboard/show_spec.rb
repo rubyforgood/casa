@@ -38,25 +38,5 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).not_to have_css("td", text: "Bob Loblaw")
       expect(page).not_to have_text("Detail View")
     end
-
-    it "sees all their other duties", js: true do
-      volunteer_2 = create(:volunteer, display_name: "Other Volunteer")
-
-      other_duty_1 = create(:other_duty, notes: "Test 1", creator_id: volunteer.id)
-      other_duty_2 = create(:other_duty, notes: "Test 2", creator_id: volunteer.id)
-      other_duty_3 = create(:other_duty, notes: "Test 3", creator_id: volunteer_2.id)
-
-      visit casa_cases_path
-
-      expect(page).to have_text("Other Duties")
-      expect(page).to have_text(other_duty_1.notes)
-      expect(page).to have_text(other_duty_2.notes)
-      expect(page).to_not have_text(other_duty_3.notes)
-    end
-
-    it "has a New Duty link" do
-      visit casa_cases_path
-      expect(page).to have_link("New Duty", href: new_other_duty_path)
-    end
   end
 end
