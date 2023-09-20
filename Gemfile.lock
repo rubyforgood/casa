@@ -435,7 +435,7 @@ GEM
       rubocop-performance (= 1.12.0)
     stimulus-rails (1.2.2)
       railties (>= 6.0.0)
-    strong_migrations (1.6.1)
+    strong_migrations (1.6.2)
       activerecord (>= 5.2)
     thor (1.2.2)
     timeout (0.4.0)
