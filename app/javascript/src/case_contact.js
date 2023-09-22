@@ -72,12 +72,7 @@ function displayHighlightModal (event) {
 
 $(() => { // JQuery's callback for the DOM loading
   const milesDriven = $('#case_contact_miles_driven')
-
-  if (!(milesDriven.length)) {
-    return
-  }
-
-  const durationHours = document.getElementById('case-contact-duration-hours-display')
+  const durationHoursElement = $('#case-contact-duration-hours-display')
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
   const caseOccurredAt = document.getElementById('case_contact_occurred_at')
   const caseContactSubmit = $('#case-contact-submit')
@@ -127,22 +122,10 @@ $(() => { // JQuery's callback for the DOM loading
     validateOccurredAt(caseOccurredAt, 'focusout')
   }
 
-  function validateAtLeastOneChecked (elements) {
-    // convert to Array
-    const elementsArray = Array.prototype.slice.call(elements)
-
-    const numChecked = elementsArray.filter(x => x.checked).length
-    if (numChecked === 0) {
-      elementsArray[0].required = true
-    } else {
-      elementsArray[0].required = false
-    }
-  }
-
   function validateDuration () {
     const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
     const fifteenMinutes = 15
-    const totalMinutes = durationMinutes.value + durationHours.value * 60
+    const totalMinutes = durationMinutes.value + durationHoursElement.val() * 60
 
     if (totalMinutes < fifteenMinutes) {
       durationMinutes.setCustomValidity(msg)
@@ -183,9 +166,6 @@ $(() => { // JQuery's callback for the DOM loading
   }
 
   caseContactSubmit.on('click', function () {
-    validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
-    validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
-
     validateDuration()
   })
 
