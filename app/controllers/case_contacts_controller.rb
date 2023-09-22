@@ -187,7 +187,7 @@ class CaseContactsController < ApplicationController
 
   def send_reimbursement_email(case_contact)
     if case_contact.want_driving_reimbursement_changed? && case_contact.want_driving_reimbursement? && !current_user.supervisor.blank?
-      SupervisorMailer.reimbursement_request_email(current_user, current_user.supervisor).deliver
+      SupervisorMailer.reimbursement_request_email(current_user, current_user.supervisor).deliver_later
     end
   end
 

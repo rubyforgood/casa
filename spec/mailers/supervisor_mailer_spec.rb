@@ -125,6 +125,8 @@ RSpec.describe SupervisorMailer, type: :mailer do
     let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }
 
     it "sends email reminder" do
+      expect(mail.subject).to eq("New reimbursement request from #{volunteer.display_name}")
+      expect(mail.to).to eq([supervisor.email])
       expect(mail.body.encoded).to match("#{volunteer.display_name} has submitted a reimbursement request")
     end
   end

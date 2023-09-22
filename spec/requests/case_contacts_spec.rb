@@ -142,6 +142,32 @@ RSpec.describe "/case_contacts", type: :request do
         end
       end
 
+      context "reimbursement mail to supervisor" do
+        let(:case_contact) {create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: admin)}
+        let(:supervisor) {create(:supervisor, receive_email_notifications: true)}
+
+        it "sends reimbursement request email when conditions are met" do
+          allow(case_contact).to receive(:want_driving_reimbursement?).and_return(true)
+          allow(admin).to receive(:supervisor).and_return(supervisor)
+    
+          mailer_double = double("SupervisorMailer")
+          allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
+    
+          expect(mailer_double).to receive(:deliver_later)
+          request
+        end
+
+        it "does not send reimbursement request email when conditions are not met" do
+          allow(case_contact).to receive(:want_driving_reimbursement?).and_return(false)
+    
+          mailer_double = double("SupervisorMailer")
+          allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
+    
+          expect(mailer_double).not_to receive(:deliver_later)
+          request
+        end
+      end
+
       context "with additional expense" do
         let(:params) do
           {
