@@ -4,9 +4,78 @@
 
 import Swal from 'sweetalert2'
 
-window.onload = function () {
-  const milesDriven = document.getElementById('case_contact_miles_driven')
-  if (!milesDriven) return
+function validateOccurredAt (caseOccurredAt, eventType = '') {
+  const msg = 'Case Contact Occurrences cannot be in the future.'
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
+
+  const caseDate = new Date(caseOccurredAt.value)
+  caseDate.setDate(caseDate.getDate())
+  caseDate.setHours(0, 0, 0, 0)
+
+  if (caseDate > today) {
+    if (eventType !== 'focusout') {
+      alert(msg)
+    }
+    caseOccurredAt.value = enGBDateString(today)
+  }
+}
+
+function enGBDateString (date) {
+  return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
+}
+
+function convertDateToSystemTimeZone (date) {
+  return new Date((typeof date === 'string' ? new Date(date) : date))
+}
+
+async function displayFollowupAlert () {
+  const { value: text, isConfirmed } = await fireSwalFollowupAlert()
+
+  if (!isConfirmed) return
+
+  const params = text ? { note: text } : {}
+  const caseContactId = this.id.replace('followup-button-', '')
+
+  $.post(
+    `/case_contacts/${caseContactId}/followups`,
+    params,
+    () => window.location.reload()
+  )
+}
+
+async function fireSwalFollowupAlert () {
+  const inputLabel = 'Optional: Add a note about what followup is needed.'
+
+  return await Swal.fire({
+    input: 'textarea',
+    title: inputLabel,
+    inputPlaceholder: 'Type your note here...',
+    inputAttributes: { 'aria-label': 'Type your note here' },
+
+    showCancelButton: true,
+    showCloseButton: true,
+
+    confirmButtonText: 'Confirm',
+    confirmButtonColor: '#dc3545',
+
+    customClass: {
+      inputLabel: 'mx-5'
+    }
+  })
+}
+
+function displayHighlightModal (event) {
+  event.preventDefault()
+  $('#caseContactHighlight').modal('show')
+}
+
+$(() => { // JQuery's callback for the DOM loading
+  const milesDriven = $('#case_contact_miles_driven')
+
+  if (!(milesDriven.length)) {
+    return
+  }
 
   const durationHours = document.getElementById('case-contact-duration-hours-display')
   const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
@@ -40,13 +109,15 @@ window.onload = function () {
     caseOccurredAt.value = timeZoneConvertedDate
   }
 
-  milesDriven.onchange = function () {
-    const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
+  milesDriven.on('change', () => {
+    const contactMedium = $('input[name="case_contact[medium_type]"]:checked').val() || '(contact medium not set)'
     const contactMediumInPerson = `${contactMedium}` === 'in-person'
-    if (milesDriven.value > 0 && !contactMediumInPerson) {
-      alert(`Just checking: you drove ${milesDriven.value} miles for a ${contactMedium} contact?`)
+    const milesDrivenCount = milesDriven.val()
+
+    if (milesDrivenCount > 0 && !contactMediumInPerson) {
+      alert(`Just checking: you drove ${milesDrivenCount} miles for a ${contactMedium} contact?`)
     }
-  }
+  })
 
   caseOccurredAt.onchange = function () {
     validateOccurredAt(caseOccurredAt)
@@ -117,75 +188,7 @@ window.onload = function () {
 
     validateDuration()
   })
-}
 
-function validateOccurredAt (caseOccurredAt, eventType = '') {
-  const msg = 'Case Contact Occurrences cannot be in the future.'
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  const caseDate = new Date(caseOccurredAt.value)
-  caseDate.setDate(caseDate.getDate())
-  caseDate.setHours(0, 0, 0, 0)
-
-  if (caseDate > today) {
-    if (eventType !== 'focusout') {
-      alert(msg)
-    }
-    caseOccurredAt.value = enGBDateString(today)
-  }
-}
-
-function enGBDateString (date) {
-  return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
-}
-
-function convertDateToSystemTimeZone (date) {
-  return new Date((typeof date === 'string' ? new Date(date) : date))
-}
-
-async function displayFollowupAlert () {
-  const { value: text, isConfirmed } = await fireSwalFollowupAlert()
-
-  if (!isConfirmed) return
-
-  const params = text ? { note: text } : {}
-  const caseContactId = this.id.replace('followup-button-', '')
-
-  $.post(
-    `/case_contacts/${caseContactId}/followups`,
-    params,
-    () => window.location.reload()
-  )
-}
-
-async function fireSwalFollowupAlert () {
-  const inputLabel = 'Optional: Add a note about what followup is needed.'
-
-  return await Swal.fire({
-    input: 'textarea',
-    title: inputLabel,
-    inputPlaceholder: 'Type your note here...',
-    inputAttributes: { 'aria-label': 'Type your note here' },
-
-    showCancelButton: true,
-    showCloseButton: true,
-
-    confirmButtonText: 'Confirm',
-    confirmButtonColor: '#dc3545',
-
-    customClass: {
-      inputLabel: 'mx-5'
-    }
-  })
-}
-
-function displayHighlightModal (event) {
-  event.preventDefault()
-  $('#caseContactHighlight').modal('show')
-}
-
-$(() => { // JQuery's callback for the DOM loading
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
   $('#open-highlight-modal').on('click', displayHighlightModal)
