@@ -58,7 +58,7 @@
       <h5 classs="mb-3"><%= form.label :medium_type, "b. Contact Medium" %></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check radio-style mb-20">
-          <%= b.radio_button(class: "form-check-input") %>
+          <%= b.radio_button(class: "form-check-input", required: true) %>
           <%= b.label(class: "form-check-label") %>
         </div>
       <% end %>
