@@ -1,0 +1,2 @@
+class LearningHourTopicPolicy < ApplicationPolicy
+end

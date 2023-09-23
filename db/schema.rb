@@ -10,7 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
+
+ActiveRecord::Schema[7.0].define(version: 2023_09_03_182657) do
+
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -159,6 +161,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.string "twilio_api_key_secret"
     t.boolean "twilio_enabled", default: false
     t.boolean "additional_expenses_enabled", default: false
+    t.boolean "learning_topic_active", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -370,6 +373,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.index ["casa_org_id"], name: "index_languages_on_casa_org_id"
   end
 
+  create_table "learning_hour_topics", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "casa_org_id", null: false
+    t.integer "position", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_learning_hour_topics_on_casa_org_id"
+  end
+
   create_table "learning_hour_types", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
     t.string "name"
@@ -389,6 +401,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "learning_hour_type_id"
+    t.bigint "learning_hour_topic_id"
+    t.index ["learning_hour_topic_id"], name: "index_learning_hours_on_learning_hour_topic_id"
     t.index ["learning_hour_type_id"], name: "index_learning_hours_on_learning_hour_type_id"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
   end
@@ -619,6 +633,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "languages", "casa_orgs"
+  add_foreign_key "learning_hour_topics", "casa_orgs"
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
@@ -629,6 +644,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_02_021531) do
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
+  add_foreign_key "placements", "casa_cases"
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"

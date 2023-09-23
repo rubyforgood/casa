@@ -22,6 +22,7 @@ class CasaOrg < ApplicationRecord
   has_many :placements, through: :casa_cases
   has_many :banners, dependent: :destroy
   has_many :learning_hour_types, dependent: :destroy
+  has_many :learning_hour_topics, dependent: :destroy
   has_many :case_groups, dependent: :destroy
   has_one_attached :logo
   has_one_attached :court_report_template
@@ -87,6 +88,10 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  def has_alternate_active_banner?(current_banner_id)
+    banners.where(active: true).where.not(id: current_banner_id).exists?
+  end
+
   private
 
   def sanitize_svg
@@ -127,6 +132,7 @@ end
 #  address                     :string
 #  display_name                :string
 #  footer_links                :string           default([]), is an Array
+#  learning_topic_active       :boolean          default(FALSE)
 #  name                        :string           not null
 #  show_driving_reimbursement  :boolean          default(TRUE)
 #  show_fund_request           :boolean          default(FALSE)

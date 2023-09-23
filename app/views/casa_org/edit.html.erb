@@ -46,6 +46,10 @@
       <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label mb-2' %>
     </div>
     <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :learning_topic_active, class: 'form-check-input' %>
+      <%= form.label :learning_topic_active, "Enable Learning Topic", class: 'form-check-label mb-2' %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
       <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>
       <%= form.label :twilio_enabled, "Enable Twilio", class: 'form-check-label mb-2' %>
     </div>
@@ -136,4 +140,7 @@
 </div>
 <div class="tables-wrapper">
   <%= render "learning_hour_types" %>
+</div>
+<div class="tables-wrapper">
+  <%= render "learning_hour_topics" %>
 </div>
