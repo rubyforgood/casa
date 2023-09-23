@@ -16,11 +16,11 @@ test("occured date field won't allow future dates and it will be set back to the
 
   document.body.innerHTML = `<input value="${afterTomorrowString}" data-provide="datepicker" data-date-format="yyyy/mm/dd" class="form-control label-font-weight" type="text" name="case_contact[occurred_at]" id="case_contact_occurred_at">`
 
-  const caseOccurredAt = document.getElementById('case_contact_occurred_at')
+  const caseOccurredAt = $('#case_contact_occurred_at')
 
   validateOccurredAt(caseOccurredAt, 'focusout')
 
-  expect(caseOccurredAt.value).toEqual(todayString)
+  expect(caseOccurredAt.val()).toEqual(todayString)
 })
 
 test('utc date is correctly converted to system date', () => {
