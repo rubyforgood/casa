@@ -9,7 +9,7 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const caseDate = new Date(caseOccurredAt.value)
+  const caseDate = new Date(caseOccurredAt.val())
   caseDate.setDate(caseDate.getDate())
   caseDate.setHours(0, 0, 0, 0)
 
@@ -17,7 +17,7 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
     if (eventType !== 'focusout') {
       alert(msg)
     }
-    caseOccurredAt.value = enGBDateString(today)
+    caseOccurredAt.val(enGBDateString(today))
   }
 }
 
@@ -73,8 +73,8 @@ function displayHighlightModal (event) {
 $(() => { // JQuery's callback for the DOM loading
   const milesDriven = $('#case_contact_miles_driven')
   const durationHoursElement = $('#case-contact-duration-hours-display')
-  const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
-  const caseOccurredAt = document.getElementById('case_contact_occurred_at')
+  const durationMinutes = $('#case-contact-duration-minutes-display')
+  const caseOccurredAt = $('#case_contact_occurred_at')
   const caseContactSubmit = $('#case-contact-submit')
   const volunteerAddressFieldState = (hide) => {
     if (hide) $('.field.volunteer-address').addClass('hide-field')
@@ -84,7 +84,7 @@ $(() => { // JQuery's callback for the DOM loading
     $('.field.volunteer-address input[type=text]').prop('required', !hide)
   }
 
-  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
+  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]').prop('checked')) {
     volunteerAddressFieldState(false)
   } else {
     volunteerAddressFieldState(true)
@@ -100,8 +100,8 @@ $(() => { // JQuery's callback for the DOM loading
 
   const timeZoneConvertedDate = enGBDateString(new Date())
 
-  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.value)) === timeZoneConvertedDate) {
-    caseOccurredAt.value = timeZoneConvertedDate
+  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.val())) === timeZoneConvertedDate) {
+    caseOccurredAt.val(timeZoneConvertedDate)
   }
 
   milesDriven.on('change', () => {
@@ -114,29 +114,32 @@ $(() => { // JQuery's callback for the DOM loading
     }
   })
 
-  caseOccurredAt.onchange = function () {
+  caseOccurredAt.on('change', () => {
     validateOccurredAt(caseOccurredAt)
-  }
+  })
 
-  caseOccurredAt.onfocusout = function () {
+  caseOccurredAt.on('focusout', () => {
     validateOccurredAt(caseOccurredAt, 'focusout')
-  }
+  })
 
   function validateDuration () {
     const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
     const fifteenMinutes = 15
-    const totalMinutes = durationMinutes.value + durationHoursElement.val() * 60
+    const totalMinutes = durationMinutes.val() + durationHoursElement.val() * 60
+    const durationMinutesDOMElement = durationMinutes.get(0)
 
     if (totalMinutes < fifteenMinutes) {
-      durationMinutes.setCustomValidity(msg)
+      durationMinutesDOMElement.setCustomValidity(msg)
     } else {
-      durationMinutes.setCustomValidity('')
+      durationMinutesDOMElement.setCustomValidity('')
     }
+
+    durationMinutesDOMElement.reportValidity()
   }
 
   function validateNoteContent (e) {
-    const noteContent = document.getElementById('case_contact_notes').value
-    if (noteContent !== '') {
+    const noteContent = $('#case_contact_notes').val()
+    if (noteContent) {
       e.preventDefault()
       $('#confirm-submit').modal('show')
       const escapedNoteContent = noteContent.replace(/&/g, '&amp;')
@@ -144,7 +147,7 @@ $(() => { // JQuery's callback for the DOM loading
         .replace(/</g, '&lt;')
         .replace(/"/g, '&quot;')
         .replace(/'/g, '&apos;')
-      document.getElementById('note-content').innerHTML = escapedNoteContent
+      $('#note-content').html(escapedNoteContent)
     }
   }
 
@@ -153,17 +156,17 @@ $(() => { // JQuery's callback for the DOM loading
   })
 
   $('#confirm-submit').on('focus', function () {
-    document.getElementById('modal-case-contact-submit').disabled = false
+    $('#modal-case-contact-submit').prop('disabled', false)
   })
 
   $('#confirm-submit').on('hide.bs.modal', function () {
     caseContactSubmit.prop('disabled', false)
   })
 
-  const caseContactSubmitFormModal = document.getElementById('modal-case-contact-submit')
-  caseContactSubmitFormModal.onclick = function () {
+  const caseContactSubmitFormModal = $('#modal-case-contact-submit')
+  caseContactSubmitFormModal.on('click', () => {
     $('#casa-contact-form').off('submit')
-  }
+  })
 
   caseContactSubmit.on('click', function () {
     validateDuration()
