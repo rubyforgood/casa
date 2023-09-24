@@ -75,6 +75,7 @@ group :test do
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
+  gem "email_spec"
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
