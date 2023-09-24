@@ -81,7 +81,7 @@ class CaseContactsController < ApplicationController
       @casa_cases = [@case_contact.casa_case]
       render :new
     else
-      redirect_to case_contacts_path(success: true), notice: "Case #{'contact'.pluralize(@selected_cases.count)} successfully created"
+      redirect_to case_contacts_path(success: true), notice: "Case #{"contact".pluralize(@selected_cases.count)} successfully created"
     end
   end
 
