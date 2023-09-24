@@ -1,6 +1,6 @@
 /* global $ */
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   const { groupBy, map, mapValues } = require('lodash')
 
   const formatOccurredAtDate = (record) => new Date(record.occurred_at.replaceAll('-', ' ')).toDateString()

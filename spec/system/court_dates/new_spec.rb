@@ -21,7 +21,7 @@ RSpec.describe "court_dates/new", type: :system do
 
   context "when all fields are filled" do
     it "is successful", js: true do
-      expect(page.body).to have_content(casa_case.case_number)
+      expect(page).to have_content(casa_case.case_number)
 
       fill_in "court_date_date", with: :now
       fill_in "court_date_court_report_due_date", with: :now
@@ -38,7 +38,7 @@ RSpec.describe "court_dates/new", type: :system do
       end
 
       expect(page).to have_content("Court date was successfully created.")
-      expect(page.body).to have_content(casa_case.case_number)
+      expect(page).to have_content(casa_case.case_number)
       expect(page).to have_content("Court Report Due Date:")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)

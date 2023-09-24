@@ -1,4 +1,4 @@
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   if ($('#twilio_disabled').length) {
     $('#twilio_disabled').removeClass('main-btn danger-btn-outline btn-hover btn-sm my-1')
     $('#twilio_disabled').addClass('main-btn deactive-btn btn-sm my-1')

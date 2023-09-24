@@ -39,7 +39,7 @@ RSpec.describe "/other_duties", type: :request do
   describe "POST /create" do
     context "when volunteer" do
       context "with valid parameters" do
-        it "creates one new Duty and returns to casa_cases page" do
+        it "creates one new Duty and returns to other duties page" do
           volunteer = create(:volunteer)
 
           sign_in volunteer
@@ -47,7 +47,7 @@ RSpec.describe "/other_duties", type: :request do
           expect {
             post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
           }.to change(OtherDuty, :count).by(1)
-          expect(response).to redirect_to(casa_cases_path)
+          expect(response).to redirect_to(other_duties_path)
         end
       end
 
@@ -149,7 +149,7 @@ RSpec.describe "/other_duties", type: :request do
   describe "PATCH /update" do
     context "when volunteer updating own duty" do
       context "with valid parameters" do
-        it "updates the duty and redirects to casa_cases page" do
+        it "updates the duty and redirects to other duties page" do
           volunteer = create(:volunteer)
           other_duty = create(:other_duty, notes: "Test 1", creator: volunteer)
 
@@ -157,7 +157,7 @@ RSpec.describe "/other_duties", type: :request do
           patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
 
           expect(other_duty.reload.notes).to eq("Test 2")
-          expect(response).to redirect_to casa_cases_path
+          expect(response).to redirect_to other_duties_path
         end
       end
 
@@ -268,13 +268,19 @@ RSpec.describe "/other_duties", type: :request do
     end
 
     context "when volunteer" do
-      it "redirects to root path" do
+      it "shows only duties from the volunteer" do
         volunteer = create(:volunteer)
+        mine = build(:other_duty)
+        other = build(:other_duty)
+
+        volunteer.other_duties << mine
 
         sign_in volunteer
-        get other_duties_path
+        get other_duties_url
 
-        expect(response).to redirect_to root_path
+        expect(response).to be_successful
+        expect(response.body).to include(mine.decorate.truncate_notes)
+        expect(response.body).not_to include(other.decorate.truncate_notes)
       end
     end
   end

@@ -493,6 +493,17 @@ RSpec.describe "/casa_cases", type: :request do
       end
     end
 
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "denies access" do
+          post casa_cases_url, params: {casa_case: valid_attributes}
+
+          expect(response).not_to be_successful
+          expect(flash[:notice]).to match(/you are not authorized/)
+        end
+      end
+    end
+
     describe "GET /edit" do
       it "render a successful response" do
         get edit_casa_case_url(casa_case)
@@ -567,19 +578,6 @@ RSpec.describe "/casa_cases", type: :request do
         expect(response.body).to include(mine.case_number)
         expect(response.body).not_to include(other.case_number)
       end
-
-      it "shows only duties from the user" do
-        mine = build(:other_duty)
-        other = build(:other_duty)
-
-        user.other_duties << mine
-
-        get casa_cases_url
-
-        expect(response).to be_successful
-        expect(response.body).to include(mine.decorate.truncate_notes)
-        expect(response.body).not_to include(other.decorate.truncate_notes)
-      end
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
@@ -629,6 +627,17 @@ RSpec.describe "/casa_cases", type: :request do
         get new_casa_case_url
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+      end
+    end
+
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "denies access" do
+          post casa_cases_url, params: {casa_case: valid_attributes}
+
+          expect(response).not_to be_successful
+          expect(flash[:notice]).to match(/you are not authorized/)
+        end
       end
     end
 

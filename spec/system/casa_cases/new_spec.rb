@@ -65,7 +65,7 @@ RSpec.describe "casa_cases/new", type: :system do
           click_on "Create CASA Case"
         end
 
-        expect(page.body).to have_content(case_number)
+        expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
         expect(page).to have_content("Next Court Date:")
         expect(page).not_to have_content("Court Report Due Date:")
@@ -112,7 +112,7 @@ RSpec.describe "casa_cases/new", type: :system do
             click_on "Create CASA Case"
           end
 
-          expect(page.body).to have_content(case_number)
+          expect(page).to have_content(case_number)
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).to have_content("Next Court Date:")
           expect(page).not_to have_content("Court Report Due Date:")

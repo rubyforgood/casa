@@ -7,7 +7,9 @@ import { application } from './application'
 import DismissController from './dismiss_controller'
 import ExtendedNestedFormController from './extended_nested_form_controller'
 import HelloController from './hello_controller'
+import RevealController from 'stimulus-reveal-controller'
 
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)
+application.register('reveal', RevealController)

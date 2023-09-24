@@ -24,6 +24,7 @@ end
 #
 # Foreign Keys
 #
+#  fk_rails_...  (casa_case_id => casa_cases.id)
 #  fk_rails_...  (creator_id => users.id)
 #  fk_rails_...  (placement_type_id => placement_types.id)
 #

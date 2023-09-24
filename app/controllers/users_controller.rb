@@ -26,6 +26,11 @@ class UsersController < ApplicationController
       return render "edit"
     end
 
+    if current_user.languages.include?(@language)
+      @user.errors.add(:language_id, "#{@language.name} is already in your languages list.")
+      return render "edit"
+    end
+
     current_user.languages << @language
     if current_user.save
       redirect_to edit_users_path, notice: "#{@language.name} was added to your languages list."

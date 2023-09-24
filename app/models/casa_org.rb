@@ -22,6 +22,7 @@ class CasaOrg < ApplicationRecord
   has_many :placements, through: :casa_cases
   has_many :banners, dependent: :destroy
   has_many :learning_hour_types, dependent: :destroy
+  has_many :learning_hour_topics, dependent: :destroy
   has_many :case_groups, dependent: :destroy
   has_one_attached :logo
   has_one_attached :court_report_template
@@ -87,6 +88,7 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+
   # Given a specific date, returns the active mileage rate.
   # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
   # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:
@@ -96,6 +98,10 @@ class CasaOrg < ApplicationRecord
   # @return [BigDecimal, nil]
   def mileage_rate_for_given_date(date)
     mileage_rates.where(is_active: true, effective_date: ..date).order(effective_date: :desc).first&.amount
+  end
+  
+  def has_alternate_active_banner?(current_banner_id)
+    banners.where(active: true).where.not(id: current_banner_id).exists?
   end
 
   private
@@ -138,6 +144,7 @@ end
 #  address                     :string
 #  display_name                :string
 #  footer_links                :string           default([]), is an Array
+#  learning_topic_active       :boolean          default(FALSE)
 #  name                        :string           not null
 #  show_driving_reimbursement  :boolean          default(TRUE)
 #  show_fund_request           :boolean          default(FALSE)

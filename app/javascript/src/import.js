@@ -53,7 +53,7 @@ function populateFileInput (inputId) {
   }
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   ['volunteer', 'supervisor'].forEach((importType) => {
     const inputFileElementId = `${importType}-file`
     const inputFileElement = $(`#${inputFileElementId}`)[0]

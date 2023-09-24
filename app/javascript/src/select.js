@@ -1,6 +1,6 @@
 /* global $ */
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('.select2').select2(
     {
       theme: 'bootstrap-5',
