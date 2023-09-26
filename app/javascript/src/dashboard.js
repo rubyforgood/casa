@@ -1,6 +1,6 @@
 /* global alert */
 /* global $ */
-const AsyncNotifier = require('../src/async_notifier')
+const AsyncNotifier = require('./notifier')
 let pageNotifier
 
 const defineCaseContactsTable = function () {
