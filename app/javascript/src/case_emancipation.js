@@ -104,8 +104,8 @@ $(() => { // JQuery's callback for the DOM loading
     return
   }
 
-  const asyncNotificationsElement = $('#async-notifications')
-  emancipationPage.notifier = new Notifier(asyncNotificationsElement)
+  const notificationsElement = $('#notifications')
+  emancipationPage.notifier = new Notifier(notificationsElement)
 
   $('.category-collapse-icon').on('click', function () {
     const categoryCollapseIcon = $(this)

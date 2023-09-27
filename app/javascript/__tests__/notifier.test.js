@@ -3,11 +3,11 @@
 require('jest')
 const Notifier = require('../src/notifier.js')
 
-let asyncNotificationsElement
+let notificationsElement
 let notifier
 
 beforeEach(() => {
-  document.body.innerHTML = `<div id="async-notifications">
+  document.body.innerHTML = `<div id="notifications">
       <div id="async-waiting-indicator" style="display: none">
         Saving <div class="load-spinner"></div>
       </div>
@@ -17,8 +17,8 @@ beforeEach(() => {
     </div>`
 
   $(document).ready(() => {
-    asyncNotificationsElement = $('#async-notifications')
-    notifier = new Notifier(asyncNotificationsElement)
+    notificationsElement = $('#notifications')
+    notifier = new Notifier(notificationsElement)
   })
 })
 
@@ -30,7 +30,7 @@ describe('notify', () => {
       try {
         notifier.notify(notificationMessage, 'info')
 
-        const successMessages = asyncNotificationsElement.find('.async-success-indicator')
+        const successMessages = notificationsElement.find('.async-success-indicator')
 
         // Notifications contain the "Saved" message and the new message
         expect(successMessages.length).toBe(2)
@@ -49,7 +49,7 @@ describe('notify', () => {
       try {
         notifier.notify(notificationMessage, 'error')
 
-        const failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+        const failureMessages = notificationsElement.find('.async-failure-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(failureMessages[0].innerHTML).toContain(notificationMessage)
@@ -60,25 +60,25 @@ describe('notify', () => {
     })
   })
 
-  test('notify should append a dismissable message to the async-notifications widget', (done) => {
+  test('notify should append a dismissable message to the notifications widget', (done) => {
     $(document).ready(() => {
       try {
         notifier.notify('', 'error')
         notifier.notify('', 'info')
 
-        let failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
-        let successMessages = asyncNotificationsElement.find('.async-success-indicator')
+        let failureMessages = notificationsElement.find('.async-failure-indicator')
+        let successMessages = notificationsElement.find('.async-success-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(successMessages.length).toBe(2)
 
         failureMessages.children('button').click()
-        failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+        failureMessages = notificationsElement.find('.async-failure-indicator')
 
         expect(failureMessages.length).toBe(0)
 
         $(successMessages[1]).children('button').click()
-        successMessages = asyncNotificationsElement.find('.async-success-indicator')
+        successMessages = notificationsElement.find('.async-success-indicator')
 
         expect(successMessages.length).toBe(1)
 
@@ -199,7 +199,7 @@ describe('stopAsyncOperation', () => {
         notifier.startAsyncOperation()
         notifier.stopAsyncOperation(errorMessage)
 
-        const failureMessages = asyncNotificationsElement.find('.async-failure-indicator')
+        const failureMessages = notificationsElement.find('.async-failure-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(failureMessages[0].innerHTML).toContain(errorMessage)

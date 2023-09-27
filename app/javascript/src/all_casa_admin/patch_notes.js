@@ -502,7 +502,7 @@ $(() => { // JQuery's callback for the DOM loading
   }
 
   try {
-    const asyncNotificationsElement = $('#async-notifications')
+    const asyncNotificationsElement = $('#notifications')
     pageNotifier = new AsyncNotifier(asyncNotificationsElement)
 
     $('#new-patch-note button').on('click', patchNoteFunctions.onCreate)
