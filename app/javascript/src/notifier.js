@@ -34,11 +34,11 @@ module.exports = class Notifier {
     switch (level) {
       case 'error':
         this.notificationsElement.append(`
-          <div class="async-failure-indicator">
+          <div class="failure-indicator">
             Error: ${escapedMessage}
             <button class="btn btn-danger btn-sm">×</button>
           </div>`)
-          .find('.async-failure-indicator button').click(function () {
+          .find('.failure-indicator button').click(function () {
             $(this).parent().remove()
           })
 

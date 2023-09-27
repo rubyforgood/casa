@@ -49,7 +49,7 @@ describe('notify', () => {
       try {
         notifier.notify(notificationMessage, 'error')
 
-        const failureMessages = notificationsElement.find('.async-failure-indicator')
+        const failureMessages = notificationsElement.find('.failure-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(failureMessages[0].innerHTML).toContain(notificationMessage)
@@ -66,14 +66,14 @@ describe('notify', () => {
         notifier.notify('', 'error')
         notifier.notify('', 'info')
 
-        let failureMessages = notificationsElement.find('.async-failure-indicator')
+        let failureMessages = notificationsElement.find('.failure-indicator')
         let successMessages = notificationsElement.find('.async-success-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(successMessages.length).toBe(2)
 
         failureMessages.children('button').click()
-        failureMessages = notificationsElement.find('.async-failure-indicator')
+        failureMessages = notificationsElement.find('.failure-indicator')
 
         expect(failureMessages.length).toBe(0)
 
@@ -199,7 +199,7 @@ describe('resolveAsyncOperation', () => {
         notifier.waitForAsyncOperation()
         notifier.resolveAsyncOperation(errorMessage)
 
-        const failureMessages = notificationsElement.find('.async-failure-indicator')
+        const failureMessages = notificationsElement.find('.failure-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(failureMessages[0].innerHTML).toContain(errorMessage)
