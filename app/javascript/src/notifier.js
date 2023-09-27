@@ -10,21 +10,24 @@ module.exports = class Notifier {
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
     this.savedToastTimeouts = []
-    this.waitingSaveOperationCount = 0
+    this.waitingAsyncOperationCount = 0
   }
 
   // Adds notification messages to the notification element
-  //  @param  {string} message The message to be displayed
-  //  @param  {string} level One of the following logging levels
+  //  @param   {string} message The message to be displayed
+  //  @param   {string} level One of the following logging levels
   //    "error"  Shows a red notification
   //    "info"   Shows a green notification
   //    "warn"   Shows an orange notification
-  //  @throws {TypeError}  for a parameter of the incorrect type
-  //  @throws {RangeError} for unsupported logging levels
+  //  @returns {jQuery} a jQuery object representing the new notification
+  //  @throws  {TypeError}  for a parameter of the incorrect type
+  //  @throws  {RangeError} for unsupported logging levels
 
-  notify (message, level) {
+  notify (message, level, isDismissable = true) {
     TypeChecker.checkString(message, 'message')
 
+    let classPrefixMessage = ''
+    let classSuffixDismissButton = ''
     const escapedMessage = message.replace(/&/g, '&amp;')
       .replace(/>/g, '&gt;')
       .replace(/</g, '&lt;')
@@ -33,62 +36,63 @@ module.exports = class Notifier {
 
     switch (level) {
       case 'error':
-        this.notificationsElement.append(`
-          <div class="async-failure-indicator">
-            Error: ${escapedMessage}
-            <button class="btn btn-danger btn-sm">×</button>
-          </div>`)
-          .find('.async-failure-indicator button').click(function () {
-            $(this).parent().remove()
-          })
+        classPrefixMessage = 'failure'
+        classSuffixDismissButton = 'danger'
 
         break
       case 'info':
-        this.notificationsElement.append(`
-          <div class="async-success-indicator">
-            ${escapedMessage}
-            <button class="btn btn-success btn-sm">×</button>
-          </div>`)
-          .find('.async-success-indicator button').click(function () {
-            $(this).parent().remove()
-          })
+        classPrefixMessage = 'success'
+        classSuffixDismissButton = 'success'
 
         break
       case 'warn':
-        this.notificationsElement.append(`
-          <div class="async-warn-indicator">
-            ${escapedMessage}
-            <button class="btn btn-warning btn-sm">×</button>
-          </div>`)
-          .find('.async-warn-indicator button').click(function () {
-            $(this).parent().remove()
-          })
+        classPrefixMessage = 'warn'
+        classSuffixDismissButton = 'warning'
 
         break
       default:
         throw new RangeError('Unsupported option for param level')
     }
+
+    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${classSuffixDismissButton} btn-sm">×</button>` : ''
+    const newNotification =
+      $(
+        `<div class="${classPrefixMessage}-indicator">
+          ${escapedMessage}
+          ${dismissButtonAsHTML}
+        </div>`
+      )
+
+    this.notificationsElement.append(newNotification)
+
+    if (isDismissable) {
+      newNotification.children('button').on('click', function () {
+        $(this).parent().remove()
+      })
+    }
+
+    return newNotification
   }
 
-  // Shows the loading toast
-  startAsyncOperation () {
+  // Shows a loading indicator until all operations resolve
+  waitForAsyncOperation () {
     this.loadingToast.show()
-    this.waitingSaveOperationCount++
+    this.waitingAsyncOperationCount++
   }
 
-  // Shows the saved toast for 2 seconds
+  // Shows the saved toast for 2 seconds and hides the loading indicator if no more async operations are pending
   //  @param  {string=}  error The error to be displayed(optional)
   //  @throws {Error}    for trying to resolve more async operations than the amount currently awaiting
-  stopAsyncOperation (errorMsg) {
-    if (this.waitingSaveOperationCount < 1) {
+  resolveAsyncOperation (errorMsg) {
+    if (this.waitingAsyncOperationCount < 1) {
       const resolveNonexistantOperationError = 'Attempted to resolve an async operation when awaiting none'
       this.notify(resolveNonexistantOperationError, 'error')
       throw new Error(resolveNonexistantOperationError)
     }
 
-    this.waitingSaveOperationCount--
+    this.waitingAsyncOperationCount--
 
-    if (this.waitingSaveOperationCount === 0) {
+    if (this.waitingAsyncOperationCount === 0) {
       this.loadingToast.hide()
     }
 

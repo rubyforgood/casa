@@ -7,7 +7,7 @@
   }
 }
 
-#async-notifications {
+#notifications {
   bottom: 2em;
   display: flex;
   flex-direction: column;
@@ -24,17 +24,17 @@
     padding: .5em
   }
 
-  .async-failure-indicator {
+  .failure-indicator {
     background-color: #b71c1c;
     color: white
   }
 
-  .async-success-indicator {
+  .success-indicator {
     background-color: #28a745;
     color: white
   }
 
-  .async-warn-indicator {
+  .warn-indicator {
     background-color: #ffc107;
   }
 
