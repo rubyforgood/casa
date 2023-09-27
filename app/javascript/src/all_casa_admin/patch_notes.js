@@ -1,4 +1,4 @@
-const AsyncNotifier = require('../notifier')
+const Notifier = require('../notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
 const patchNoteFormBeforeEditData = {}
@@ -503,7 +503,7 @@ $(() => { // JQuery's callback for the DOM loading
 
   try {
     const asyncNotificationsElement = $('#notifications')
-    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+    pageNotifier = new Notifier(asyncNotificationsElement)
 
     $('#new-patch-note button').on('click', patchNoteFunctions.onCreate)
     $('#patch-note-list .button-delete').on('click', patchNoteFunctions.onDeletePatchNote)
