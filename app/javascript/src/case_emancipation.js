@@ -17,7 +17,7 @@ function resolveAsyncOperation (error) {
     error = error.message
   }
 
-  emancipationPage.notifier.stopAsyncOperation(error)
+  emancipationPage.notifier.resolveAsyncOperation(error)
 }
 
 // Adds or deletes an option from the current casa case
@@ -39,7 +39,7 @@ function saveCheckState (action, checkItemId) {
 
   TypeChecker.checkPositiveInteger(checkItemId, 'checkItemId')
 
-  emancipationPage.notifier.startAsyncOperation()
+  emancipationPage.notifier.waitForAsyncOperation()
 
   // Post request
   return $.post(emancipationPage.savePath, {

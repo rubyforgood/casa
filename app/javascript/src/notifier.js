@@ -70,16 +70,16 @@ module.exports = class Notifier {
     }
   }
 
-  // Shows the loading toast
-  startAsyncOperation () {
+  // Shows a loading indicator until all operations resolve
+  waitForAsyncOperation () {
     this.loadingToast.show()
     this.waitingSaveOperationCount++
   }
 
-  // Shows the saved toast for 2 seconds
+  // Shows the saved toast for 2 seconds and hides the loading indicator if no more async operations are pending
   //  @param  {string=}  error The error to be displayed(optional)
   //  @throws {Error}    for trying to resolve more async operations than the amount currently awaiting
-  stopAsyncOperation (errorMsg) {
+  resolveAsyncOperation (errorMsg) {
     if (this.waitingSaveOperationCount < 1) {
       const resolveNonexistantOperationError = 'Attempted to resolve an async operation when awaiting none'
       this.notify(resolveNonexistantOperationError, 'error')
