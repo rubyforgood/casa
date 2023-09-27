@@ -116,6 +116,20 @@ describe('notify', () => {
       }
     })
   })
+
+  test('notify should return a jQuery object representing the new notification', (done) => {
+    $(document).ready(() => {
+      try {
+        const returnedMessage = notifier.notify('test', 'info')
+        const onlyMessage = notificationsElement.children('.success-indicator')
+        expect(returnedMessage.is(onlyMessage)).toBe(true)
+
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
 })
 
 describe('waitForAsyncOperation', () => {
