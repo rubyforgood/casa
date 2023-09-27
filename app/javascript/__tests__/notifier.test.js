@@ -89,6 +89,27 @@ describe('notify', () => {
     })
   })
 
+  test('notify should append a non dismissable message to the notifications widget when message dismissable is turned off', (done) => {
+    $(document).ready(() => {
+      try {
+        notifier.notify('', 'error', false)
+
+        let failureMessages = notificationsElement.find('.failure-indicator')
+
+        expect(failureMessages.length).toBe(1)
+
+        failureMessages.children('button').click()
+        failureMessages = notificationsElement.find('.failure-indicator')
+
+        expect(failureMessages.length).toBe(1)
+
+        done()
+      } catch (error) {
+        done(error)
+      }
+    })
+  })
+
   test('notify should throw a RangeError when passed an unsupported message level', (done) => {
     $(document).ready(() => {
       try {
