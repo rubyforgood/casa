@@ -11,7 +11,7 @@ beforeEach(() => {
       <div id="async-waiting-indicator" style="display: none">
         Saving <div class="load-spinner"></div>
       </div>
-      <div id="async-success-indicator" class="async-success-indicator" style="display: none">
+      <div id="async-success-indicator" class="success-indicator" style="display: none">
         Saved
       </div>
     </div>`
@@ -30,7 +30,7 @@ describe('notify', () => {
       try {
         notifier.notify(notificationMessage, 'info')
 
-        const successMessages = notificationsElement.find('.async-success-indicator')
+        const successMessages = notificationsElement.find('.success-indicator')
 
         // Notifications contain the "Saved" message and the new message
         expect(successMessages.length).toBe(2)
@@ -67,7 +67,7 @@ describe('notify', () => {
         notifier.notify('', 'info')
 
         let failureMessages = notificationsElement.find('.failure-indicator')
-        let successMessages = notificationsElement.find('.async-success-indicator')
+        let successMessages = notificationsElement.find('.success-indicator')
 
         expect(failureMessages.length).toBe(1)
         expect(successMessages.length).toBe(2)
@@ -78,7 +78,7 @@ describe('notify', () => {
         expect(failureMessages.length).toBe(0)
 
         $(successMessages[1]).children('button').click()
-        successMessages = notificationsElement.find('.async-success-indicator')
+        successMessages = notificationsElement.find('.success-indicator')
 
         expect(successMessages.length).toBe(1)
 
