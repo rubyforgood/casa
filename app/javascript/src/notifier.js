@@ -66,7 +66,7 @@ module.exports = class Notifier {
     this.notificationsElement.append(newNotification)
 
     if (isDismissable) {
-      newNotification.on('click', function () {
+      newNotification.children('button').on('click', function () {
         $(this).parent().remove()
       })
     }
