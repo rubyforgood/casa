@@ -4,7 +4,7 @@ class MileageRatesController < ApplicationController
 
   def index
     authorize :application, :see_mileage_rate?
-    @mileage_rates = MileageRate.where(casa_org: current_organization)
+    @mileage_rates = MileageRate.where(casa_org: current_organization).order(effective_date: :asc)
   end
 
   def new
