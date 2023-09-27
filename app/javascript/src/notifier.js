@@ -56,11 +56,11 @@ module.exports = class Notifier {
         break
       case 'warn':
         this.notificationsElement.append(`
-          <div class="async-warn-indicator">
+          <div class="warn-indicator">
             ${escapedMessage}
             <button class="btn btn-warning btn-sm">×</button>
           </div>`)
-          .find('.async-warn-indicator button').click(function () {
+          .find('.warn-indicator button').click(function () {
             $(this).parent().remove()
           })
 
