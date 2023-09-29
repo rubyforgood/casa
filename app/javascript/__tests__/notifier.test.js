@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 require('jest')
-const Notifier = require('../src/notifier.js')
+const { Notifier } = require('../src/notifier.js')
 
 let notificationsElement
 let notifier

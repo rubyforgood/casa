@@ -1,7 +1,43 @@
 /* global $ */
 const TypeChecker = require('./type_checker.js')
 
-module.exports = class Notifier {
+class Notification {
+  constructor (notificationElementAsJQuery) {
+    TypeChecker.checkNonEmptyJQueryObject(notificationElementAsJQuery, 'notificationElementAsJQuery')
+
+    this.notificationElement = notificationElementAsJQuery
+  }
+
+  dismiss () {
+
+  }
+
+  getText () {
+
+  }
+
+  isDismissable () {
+
+  }
+
+  isDismissed () {
+
+  }
+
+  setDismissable () {
+
+  }
+
+  setText () {
+
+  }
+
+  toggleDismissable () {
+
+  }
+}
+
+class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
     TypeChecker.checkNonEmptyJQueryObject(notificationsElement, 'notificationsElement')
@@ -116,3 +152,5 @@ module.exports = class Notifier {
     }
   }
 }
+
+module.exports = { Notifier, Notification }
