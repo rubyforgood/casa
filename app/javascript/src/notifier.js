@@ -13,7 +13,7 @@ class Notification {
   }
 
   getText () {
-
+    return this.notificationElement.children('span').text()
   }
 
   isDismissable () {
@@ -28,8 +28,9 @@ class Notification {
 
   }
 
-  setText () {
-
+  setText (newText) {
+    TypeChecker.checkString(newText, 'newText')
+    return this.notificationElement.children('span').text(newText)
   }
 
   toggleDismissable () {
@@ -91,7 +92,7 @@ class Notifier {
     }
 
     const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${classSuffixDismissButton} btn-sm">×</button>` : ''
-    const newNotification =
+    const newNotificationAsJQuery =
       $(
         `<div class="${classPrefixMessage}-indicator">
           <span>${escapedMessage}</span>
@@ -99,14 +100,15 @@ class Notifier {
         </div>`
       )
 
-    this.notificationsElement.append(newNotification)
+    this.notificationsElement.append(newNotificationAsJQuery)
 
     if (isDismissable) {
-      newNotification.children('button').on('click', function () {
+      newNotificationAsJQuery.children('button').on('click', function () {
         $(this).parent().remove()
       })
     }
 
+    const newNotification = new Notification(newNotificationAsJQuery)
     console.log(newNotification)
     return newNotification
   }
