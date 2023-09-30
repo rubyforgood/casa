@@ -94,7 +94,7 @@ class Notifier {
     const newNotification =
       $(
         `<div class="${classPrefixMessage}-indicator">
-          ${escapedMessage}
+          <span>${escapedMessage}</span>
           ${dismissButtonAsHTML}
         </div>`
       )
@@ -107,6 +107,7 @@ class Notifier {
       })
     }
 
+    console.log(newNotification)
     return newNotification
   }
 

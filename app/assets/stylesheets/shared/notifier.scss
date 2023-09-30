@@ -21,7 +21,11 @@
     margin: .25em;
     margin-left: auto;
     margin-right: 0;
-    padding: .5em
+    padding: .5em;
+
+    span {
+      display: inline
+    }
   }
 
   .failure-indicator {
