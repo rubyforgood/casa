@@ -138,12 +138,12 @@ describe('notify', () => {
     })
   })
 
-  test('notify should return a jQuery object representing the new notification', (done) => {
+  test('notify should return a Notification object representing the new notification', (done) => {
     $(document).ready(() => {
       try {
-        const returnedMessage = notifier.notify('test', 'info')
-        const onlyMessage = notificationsElement.children('.success-indicator')
-        expect(returnedMessage.is(onlyMessage)).toBe(true)
+        const notification = notifier.notify('test', 'info')
+        const onlyNotification = notificationsElement.children('.success-indicator')
+        expect(notification.notificationElement.is(onlyNotification)).toBe(true)
 
         done()
       } catch (error) {
