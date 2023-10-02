@@ -7,7 +7,7 @@ const levels = {
     classSuffixDismissButton: 'danger'
   },
 
-  success: {
+  info: {
     classPrefixMessage: 'success',
     classSuffixDismissButton: 'success'
   },
@@ -32,6 +32,8 @@ class Notification {
 
     if (this.level === 'failure') {
       this.level = 'error'
+    } else if (this.level === 'success') {
+      this.level = 'info'
     }
 
     this.notificationElement = notificationElementAsJQuery
