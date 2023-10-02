@@ -1,15 +1,46 @@
 /* global $ */
 const TypeChecker = require('./type_checker.js')
 
+const levels = {
+  error: {
+    classPrefixMessage: 'failure',
+    classSuffixDismissButton: 'danger'
+  },
+
+  success: {
+    classPrefixMessage: 'success',
+    classSuffixDismissButton: 'success'
+  },
+
+  warn: {
+    classPrefixMessage: 'warn',
+    classSuffixDismissButton: 'warning'
+  }
+}
+
 class Notification {
   constructor (notificationElementAsJQuery) {
     TypeChecker.checkNonEmptyJQueryObject(notificationElementAsJQuery, 'notificationElementAsJQuery')
+
+    const levelCapturedViaClassNames = notificationElementAsJQuery.attr('class').match(/(warn|failure|success)-indicator/)
+
+    if (!levelCapturedViaClassNames) {
+      throw new RangeError('Failed to parse notification level from notification level class')
+    }
+
+    this.level = levelCapturedViaClassNames[1]
+
+    if (this.level === 'failure') {
+      this.level = 'error'
+    }
 
     this.notificationElement = notificationElementAsJQuery
   }
 
   dismiss () {
+    this.throwErrorIfDismissed()
 
+    this.notificationElement.remove()
   }
 
   getText () {
@@ -17,24 +48,57 @@ class Notification {
   }
 
   isDismissable () {
-
+    return this.notificationElement.children('button').length
   }
 
   isDismissed () {
-
+    return !($('#notifications').find(this.notificationElement).length)
   }
 
-  setDismissable () {
+  setUserDismissable (dismissable) {
+    this.throwErrorIfDismissed()
 
+    if (dismissable && !(this.isDismissable())) {
+      this.#userDismissableDisable()
+    } else if (!dismissable && this.isDismissable()) {
+      this.#userDismissableEnable()
+    }
   }
 
   setText (newText) {
+    this.throwErrorIfDismissed()
     TypeChecker.checkString(newText, 'newText')
+
     return this.notificationElement.children('span').text(newText)
   }
 
-  toggleDismissable () {
+  throwErrorIfDismissed () {
+    if (this.removed) {
+      throw new ReferenceError('Invalid Operation. This notification has been dismissed.')
+    }
+  }
 
+  toggleUserDismissable () {
+    this.throwErrorIfDismissed()
+
+    if (this.isDismissable()) {
+      this.#userDismissableDisable()
+    } else {
+      this.#userDismissableEnable()
+    }
+  }
+
+  #userDismissableDisable () {
+    this.notificationElement.children('button').remove()
+  }
+
+  #userDismissableEnable () {
+    const dismissButton = $(`<button class="btn btn-${levels[this.level].classSuffixDismissButton} btn-sm">×</button>`)
+    this.notificationElement.append(dismissButton)
+
+    dismissButton.on('click', function () {
+      $(this).parent().remove()
+    })
   }
 }
 
@@ -63,38 +127,20 @@ class Notifier {
   notify (message, level, isDismissable = true) {
     TypeChecker.checkString(message, 'message')
 
-    let classPrefixMessage = ''
-    let classSuffixDismissButton = ''
     const escapedMessage = message.replace(/&/g, '&amp;')
       .replace(/>/g, '&gt;')
       .replace(/</g, '&lt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;')
 
-    switch (level) {
-      case 'error':
-        classPrefixMessage = 'failure'
-        classSuffixDismissButton = 'danger'
-
-        break
-      case 'info':
-        classPrefixMessage = 'success'
-        classSuffixDismissButton = 'success'
-
-        break
-      case 'warn':
-        classPrefixMessage = 'warn'
-        classSuffixDismissButton = 'warning'
-
-        break
-      default:
-        throw new RangeError('Unsupported option for param level')
+    if (!(levels[level])) {
+      throw new RangeError('Unsupported option for param level')
     }
 
-    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${classSuffixDismissButton} btn-sm">×</button>` : ''
+    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levels[level].classSuffixDismissButton} btn-sm">×</button>` : ''
     const newNotificationAsJQuery =
       $(
-        `<div class="${classPrefixMessage}-indicator">
+        `<div class="${levels[level].classPrefixMessage}-indicator">
           <span>${escapedMessage}</span>
           ${dismissButtonAsHTML}
         </div>`
