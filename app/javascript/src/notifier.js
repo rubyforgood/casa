@@ -38,7 +38,7 @@ class Notification {
   }
 
   dismiss () {
-    this.throwErrorIfDismissed()
+    this.#throwErrorIfDismissed()
 
     this.notificationElement.remove()
   }
@@ -56,7 +56,7 @@ class Notification {
   }
 
   setUserDismissable (dismissable) {
-    this.throwErrorIfDismissed()
+    this.#throwErrorIfDismissed()
 
     if (dismissable && !(this.isDismissable())) {
       this.#userDismissableDisable()
@@ -66,20 +66,20 @@ class Notification {
   }
 
   setText (newText) {
-    this.throwErrorIfDismissed()
+    this.#throwErrorIfDismissed()
     TypeChecker.checkString(newText, 'newText')
 
     return this.notificationElement.children('span').text(newText)
   }
 
-  throwErrorIfDismissed () {
+  #throwErrorIfDismissed () {
     if (this.removed) {
       throw new ReferenceError('Invalid Operation. This notification has been dismissed.')
     }
   }
 
   toggleUserDismissable () {
-    this.throwErrorIfDismissed()
+    this.#throwErrorIfDismissed()
 
     if (this.isDismissable()) {
       this.#userDismissableDisable()
