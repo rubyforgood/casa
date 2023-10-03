@@ -329,7 +329,18 @@ describe('Notifications', () => {
   })
 
   describe('getText', () => {
-
+    test('getText should return the text of the notification', (done) => {
+      $(() => { // JQuery's callback for the DOM loading
+        try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notification.getText()).toBe(notificationDefaultMessage)
+  
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('isDismissable', () => {
