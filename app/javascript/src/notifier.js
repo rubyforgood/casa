@@ -75,7 +75,7 @@ class Notification {
   }
 
   #throwErrorIfDismissed () {
-    if (this.removed) {
+    if (this.isDismissed()) {
       throw new ReferenceError('Invalid Operation. This notification has been dismissed.')
     }
   }

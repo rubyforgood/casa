@@ -285,13 +285,47 @@ describe('Notifier', () => {
 
 describe('Notifications', () => {
   let notification
+  let notificationDefaultMessage = 'm*GV}.n?@D\\~]jW=JD$d'
 
   beforeEach(() => {
-    notification = notifier.notify('m*GV}.n?@D\\~]jW=JD$d', 'warn')
+    $(() => {
+      notification = notifier.notify(notificationDefaultMessage, 'warn')
+    })
   })
 
   describe('dismiss', () => {
+    test('dismiss should remove the notification elements', (done) => {
+      $(() => { // JQuery's callback for the DOM loading
+        try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
 
+          notification.dismiss()
+          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('dismiss should throw an error if the notification has already been dismissed', (done) => {
+      $(() => { // JQuery's callback for the DOM loading
+        try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+
+          notification.dismiss()
+          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+
+          expect(() => {
+            notification.dismiss()
+          }).toThrow(ReferenceError)
+
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('getText', () => {
