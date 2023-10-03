@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 require('jest')
-const { Notifier, Notification } = require('../src/notifier.js')
+const { Notifier } = require('../src/notifier.js')
 
 let notificationsElement
 let notifier
@@ -285,7 +285,7 @@ describe('Notifier', () => {
 
 describe('Notifications', () => {
   let notification
-  let notificationDefaultMessage = 'm*GV}.n?@D\\~]jW=JD$d'
+  const notificationDefaultMessage = 'm*GV}.n?@D\\~]jW=JD$d'
 
   beforeEach(() => {
     $(() => {
