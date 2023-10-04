@@ -49,7 +49,7 @@ class Notification {
     return this.notificationElement.children('span').text()
   }
 
-  isDismissable () {
+  isUserDismissable () {
     return this.notificationElement.children('button').length
   }
 
