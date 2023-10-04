@@ -16,7 +16,7 @@ beforeEach(() => {
       </div>
     </div>`
 
-  $(document).ready(() => {
+  $(() => { // JQuery's callback for the DOM loading
     notificationsElement = $('#notifications')
     notifier = new Notifier(notificationsElement)
   })
@@ -27,7 +27,7 @@ describe('Notifier', () => {
     test("displays a green notification when passed a message and level='info'", (done) => {
       const notificationMessage = "'Y$deH[|%ROii]jy"
 
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           notifier.notify(notificationMessage, 'info')
 
@@ -46,7 +46,7 @@ describe('Notifier', () => {
     test("displays a red notification when passed a message and level='error'", (done) => {
       const notificationMessage = '\\+!h0bbH"yN7dx9.'
 
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           notifier.notify(notificationMessage, 'error')
 
@@ -62,7 +62,7 @@ describe('Notifier', () => {
     })
 
     test('appends a dismissable message to the notifications widget', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           notifier.notify('', 'error')
           notifier.notify('', 'info')
@@ -91,7 +91,7 @@ describe('Notifier', () => {
     })
 
     test('appends a non dismissable message to the notifications widget when message dismissable is turned off', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           notifier.notify('', 'error', false)
 
@@ -112,7 +112,7 @@ describe('Notifier', () => {
     })
 
     test('throws a RangeError when passed an unsupported message level', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(() => {
             notifier.notify('message', 'unsupported level')
@@ -126,7 +126,7 @@ describe('Notifier', () => {
     })
 
     test('throws a TypeError when param message is not a string', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(() => {
             notifier.notify(6, 'info')
@@ -140,7 +140,7 @@ describe('Notifier', () => {
     })
 
     test('returns a Notification object representing the new notification', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           const notification = notifier.notify('test', 'info')
           const onlyNotification = notificationsElement.children('.success-indicator')
@@ -156,7 +156,7 @@ describe('Notifier', () => {
 
   describe('waitForAsyncOperation', () => {
     test('displays the loading indicator', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         const loadingToast = $('#async-waiting-indicator')
 
         try {
@@ -175,7 +175,7 @@ describe('Notifier', () => {
 
   describe('resolveAsyncOperation', () => {
     test('displays the saved toast for 2 seconds when not passed an error', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         const savedToast = $('#async-success-indicator')
 
         try {
@@ -196,7 +196,7 @@ describe('Notifier', () => {
     })
 
     test('displays the saved toast for 2 seconds after the last call in a quick succession of calls when not passed an error', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         const savedToast = $('#async-success-indicator')
 
         try {
@@ -230,7 +230,7 @@ describe('Notifier', () => {
     test('displays a red notification when passed an error', (done) => {
       const errorMessage = 'hxDEe@no$~Bl%m^]'
 
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           notifier.waitForAsyncOperation()
           notifier.resolveAsyncOperation(errorMessage)
@@ -247,7 +247,7 @@ describe('Notifier', () => {
     })
 
     test('hides the loading toast when there are no more async operations to wait on', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         const loadingToast = $('#async-waiting-indicator')
 
         try {
@@ -268,7 +268,7 @@ describe('Notifier', () => {
     })
 
     test('throws an error and display it in a red notification when trying to stop an async operation when it\'s sexpecting to resolve none', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(() => {
             notifier.resolveAsyncOperation()
@@ -288,14 +288,14 @@ describe('Notifications', () => {
   const notificationDefaultMessage = 'm*GV}.n?@D\\~]jW=JD$d'
 
   beforeEach(() => {
-    $(() => { // JQuery's callback for the DOM loading
+    $(() => {
       notification = notifier.notify(notificationDefaultMessage, 'warn')
     })
   })
 
   describe('dismiss', () => {
     test('removes the notification elements', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
 
@@ -309,7 +309,7 @@ describe('Notifications', () => {
     })
 
     test('should throw an error if the notification has already been dismissed', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
 
@@ -330,7 +330,7 @@ describe('Notifications', () => {
 
   describe('getText', () => {
     test('should return the text of the notification', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
           expect(notification.getText()).toBe(notificationDefaultMessage)
@@ -345,7 +345,7 @@ describe('Notifications', () => {
 
   describe('isUserDismissable', () => {
     test('returns true if there is a dismiss button', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -355,7 +355,7 @@ describe('Notifications', () => {
     })
 
     test('returns false if there is not a dismiss button', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -367,7 +367,7 @@ describe('Notifications', () => {
 
   describe('isDismissed', () => {
     test('returns true if the notification could be found as a child of the notificatons component', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -377,7 +377,7 @@ describe('Notifications', () => {
     })
 
     test('returns false if the notification could not be found as a child of the notificatons component', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -389,7 +389,7 @@ describe('Notifications', () => {
 
   describe('setUserDismissable', () => {
     test('adds a dismiss button that removes the notification element when clicked if one is not present', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -399,7 +399,7 @@ describe('Notifications', () => {
     })
 
     test('removes the dismiss button that removes the notification element when clicked if the button is present', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -409,7 +409,7 @@ describe('Notifications', () => {
     })
 
     test('throws an error if the notification is dismissed', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -421,7 +421,7 @@ describe('Notifications', () => {
 
   describe('setText', () => {
     test('changes the text of the notification', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -431,7 +431,7 @@ describe('Notifications', () => {
     })
 
     test('throws an error if the notification has been dismissed', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -443,7 +443,7 @@ describe('Notifications', () => {
 
   describe('toggleUserDismissable', () => {
     test('will add a functioning dismiss button for the user if there is none', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -453,7 +453,7 @@ describe('Notifications', () => {
     })
 
     test('will remove the dismiss button for the user if is present', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
@@ -463,7 +463,7 @@ describe('Notifications', () => {
     })
 
     test('throws an error if the notification has been dismissed', (done) => {
-      $(() => { // JQuery's callback for the DOM loading
+      $(() => {
         try {
           done()
         } catch (error) {
