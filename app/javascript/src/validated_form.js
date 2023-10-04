@@ -3,31 +3,28 @@ $(() => { // JQuery's callback for the DOM loading
   const validatedFormCollection = $('.component-validated-form')
 
   validatedFormCollection.on('submit', function (e) {
-    e.preventDefault()
-
-    const form = this
+    const form = $(this)
     let valid = true
 
-    console.log('Test')
-
-    this.children('.component-date-picker-range').each(function () {
-      const maxDateValue = this.attr('data-max_date')
-      const minDateValue = this.attr('data-min_date')
+    form.find('.component-date-picker-range').each(function () {
+      const thisDatePickerRangeAsJQuery = $(this)
+      const maxDateValue = thisDatePickerRangeAsJQuery.attr('data-max-date')
+      const minDateValue = thisDatePickerRangeAsJQuery.attr('data-min-date')
 
       const max = maxDateValue === 'today' ? new Date() : new Date(maxDateValue)
       const min = minDateValue === 'today' ? new Date() : new Date(minDateValue)
 
-      const setDate = new Date(this.val())
+      const setDate = new Date(thisDatePickerRangeAsJQuery.val())
 
-      if (setDate > max) {
+      if (setDate > max && !isNaN(max)) {
         valid = false
-      } else if (setDate < min) {
+      } else if (setDate < min && !isNaN(min)) {
         valid = false
       }
     })
 
-    if (valid) {
-      form.submit()
+    if (!valid) {
+      e.preventDefault()
     }
   })
 })

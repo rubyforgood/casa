@@ -334,7 +334,7 @@ describe('Notifications', () => {
         try {
           expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
           expect(notification.getText()).toBe(notificationDefaultMessage)
-  
+
           done()
         } catch (error) {
           done(error)
