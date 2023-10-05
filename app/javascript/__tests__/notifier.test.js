@@ -347,6 +347,12 @@ describe('Notifications', () => {
     test('returns true if there is a dismiss button', (done) => {
       $(() => {
         try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notification.isUserDismissable()).toBeTruthy()
+
+          notification.notificationElement.children('button').remove()
+
+          expect(notification.isUserDismissable()).not.toBeTruthy()
           done()
         } catch (error) {
           done(error)
