@@ -356,7 +356,7 @@ class DbPopulator
       begin
         MileageRate.create!({
           amount: Faker::Number.between(from: 0.0, to: 1.0).round(2),
-          effective_date: Faker::Date.forward(days: 700),
+          effective_date: Faker::Date.backward(days: 700),
           is_active: true,
           casa_org_id: casa_org.id
         })
