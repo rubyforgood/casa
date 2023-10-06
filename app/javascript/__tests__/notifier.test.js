@@ -362,9 +362,11 @@ describe('Notifications', () => {
   })
 
   describe('isDismissed', () => {
-    test('returns true if the notification could be found as a child of the notificatons component', (done) => {
+    test('returns a truthy value if the notification could be found as a child of the notificatons component', (done) => {
       $(() => {
         try {
+          expect($(document).find(notification.notificationElement).length).toBe(1)
+          expect(notification.isUserDismissable()).toBeTruthy()
           done()
         } catch (error) {
           done(error)
