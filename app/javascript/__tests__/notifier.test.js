@@ -395,6 +395,19 @@ describe('Notifications', () => {
     test('adds a dismiss button that removes the notification element when clicked if one is not present', (done) => {
       $(() => {
         try {
+          const notificationMessage = 'mn6#:6C^*hnQ/:cC;2mM'
+          notification = notifier.notify(notificationMessage, 'info', false)
+
+          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notification.notificationElement.children('button').length).toBe(0)
+
+          notification.setUserDismissable(true)
+
+          expect(notification.notificationElement.children('button').length).toBe(1)
+
+          notification.notificationElement.children('button').click()
+
+          expect($(document).find(notification.notificationElement).length).toBe(0)
           done()
         } catch (error) {
           done(error)

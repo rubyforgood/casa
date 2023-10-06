@@ -60,10 +60,10 @@ class Notification {
   setUserDismissable (dismissable) {
     this.#throwErrorIfDismissed()
 
-    if (dismissable && !(this.isDismissable())) {
-      this.#userDismissableDisable()
-    } else if (!dismissable && this.isDismissable()) {
+    if (dismissable && !(this.isUserDismissable())) {
       this.#userDismissableEnable()
+    } else if (!dismissable && this.isUserDismissable()) {
+      this.#userDismissableDisable()
     }
   }
 
