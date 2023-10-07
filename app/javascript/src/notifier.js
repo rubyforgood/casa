@@ -1,7 +1,110 @@
 /* global $ */
 const TypeChecker = require('./type_checker.js')
 
-module.exports = class Notifier {
+const levels = {
+  error: {
+    classPrefixMessage: 'failure',
+    classSuffixDismissButton: 'danger'
+  },
+
+  info: {
+    classPrefixMessage: 'success',
+    classSuffixDismissButton: 'success'
+  },
+
+  warn: {
+    classPrefixMessage: 'warn',
+    classSuffixDismissButton: 'warning'
+  }
+}
+
+class Notification {
+  constructor (notificationElementAsJQuery) {
+    TypeChecker.checkNonEmptyJQueryObject(notificationElementAsJQuery, 'notificationElementAsJQuery')
+
+    const levelCapturedViaClassNames = notificationElementAsJQuery.attr('class').match(/(warn|failure|success)-indicator/)
+
+    if (!levelCapturedViaClassNames) {
+      throw new RangeError('Failed to parse notification level from notification level class')
+    }
+
+    this.level = levelCapturedViaClassNames[1]
+
+    if (this.level === 'failure') {
+      this.level = 'error'
+    } else if (this.level === 'success') {
+      this.level = 'info'
+    }
+
+    this.notificationElement = notificationElementAsJQuery
+  }
+
+  dismiss () {
+    this.#throwErrorIfDismissed()
+
+    this.notificationElement.remove()
+  }
+
+  getText () {
+    return this.notificationElement.children('span').text()
+  }
+
+  isUserDismissable () {
+    return this.notificationElement.children('button').length
+  }
+
+  isDismissed () {
+    return !($('#notifications').find(this.notificationElement).length)
+  }
+
+  setUserDismissable (dismissable) {
+    this.#throwErrorIfDismissed()
+
+    if (dismissable && !(this.isUserDismissable())) {
+      this.#userDismissableEnable()
+    } else if (!dismissable && this.isUserDismissable()) {
+      this.#userDismissableDisable()
+    }
+  }
+
+  setText (newText) {
+    this.#throwErrorIfDismissed()
+    TypeChecker.checkString(newText, 'newText')
+
+    return this.notificationElement.children('span').text(newText)
+  }
+
+  #throwErrorIfDismissed () {
+    if (this.isDismissed()) {
+      throw new ReferenceError('Invalid Operation. This notification has been dismissed.')
+    }
+  }
+
+  toggleUserDismissable () {
+    this.#throwErrorIfDismissed()
+
+    if (this.isUserDismissable()) {
+      this.#userDismissableDisable()
+    } else {
+      this.#userDismissableEnable()
+    }
+  }
+
+  #userDismissableDisable () {
+    this.notificationElement.children('button').remove()
+  }
+
+  #userDismissableEnable () {
+    const dismissButton = $(`<button class="btn btn-${levels[this.level].classSuffixDismissButton} btn-sm">×</button>`)
+    this.notificationElement.append(dismissButton)
+
+    dismissButton.on('click', function () {
+      $(this).parent().remove()
+    })
+  }
+}
+
+class Notifier {
   //  @param {object} notificationsElement The notification DOM element as a jQuery object
   constructor (notificationsElement) {
     TypeChecker.checkNonEmptyJQueryObject(notificationsElement, 'notificationsElement')
@@ -26,50 +129,34 @@ module.exports = class Notifier {
   notify (message, level, isDismissable = true) {
     TypeChecker.checkString(message, 'message')
 
-    let classPrefixMessage = ''
-    let classSuffixDismissButton = ''
     const escapedMessage = message.replace(/&/g, '&amp;')
       .replace(/>/g, '&gt;')
       .replace(/</g, '&lt;')
       .replace(/"/g, '&quot;')
       .replace(/'/g, '&apos;')
 
-    switch (level) {
-      case 'error':
-        classPrefixMessage = 'failure'
-        classSuffixDismissButton = 'danger'
-
-        break
-      case 'info':
-        classPrefixMessage = 'success'
-        classSuffixDismissButton = 'success'
-
-        break
-      case 'warn':
-        classPrefixMessage = 'warn'
-        classSuffixDismissButton = 'warning'
-
-        break
-      default:
-        throw new RangeError('Unsupported option for param level')
+    if (!(levels[level])) {
+      throw new RangeError('Unsupported option for param level')
     }
 
-    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${classSuffixDismissButton} btn-sm">×</button>` : ''
-    const newNotification =
+    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levels[level].classSuffixDismissButton} btn-sm">×</button>` : ''
+    const newNotificationAsJQuery =
       $(
-        `<div class="${classPrefixMessage}-indicator">
-          ${escapedMessage}
+        `<div class="${levels[level].classPrefixMessage}-indicator">
+          <span>${escapedMessage}</span>
           ${dismissButtonAsHTML}
         </div>`
       )
 
-    this.notificationsElement.append(newNotification)
+    this.notificationsElement.append(newNotificationAsJQuery)
 
     if (isDismissable) {
-      newNotification.children('button').on('click', function () {
+      newNotificationAsJQuery.children('button').on('click', function () {
         $(this).parent().remove()
       })
     }
+
+    const newNotification = new Notification(newNotificationAsJQuery)
 
     return newNotification
   }
@@ -116,3 +203,5 @@ module.exports = class Notifier {
     }
   }
 }
+
+module.exports = { Notifier, Notification }

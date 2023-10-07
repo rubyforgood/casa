@@ -1,7 +1,7 @@
 /* eslint-env jquery */
 /* global $ */
 
-const Notifier = require('./notifier')
+const { Notifier } = require('./notifier')
 const TypeChecker = require('./type_checker')
 
 const emancipationPage = {
