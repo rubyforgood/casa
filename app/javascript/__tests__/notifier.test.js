@@ -565,6 +565,12 @@ describe('Notifications', () => {
     test('will remove the dismiss button for the user if is present', (done) => {
       $(() => {
         try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notification.notificationElement.children('button').length).toBe(1)
+
+          notification.toggleUserDismissable()
+
+          expect(notification.notificationElement.children('button').length).toBe(0)
           done()
         } catch (error) {
           done(error)
