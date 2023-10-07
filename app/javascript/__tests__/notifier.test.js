@@ -1,7 +1,7 @@
 /* eslint-env jest */
 
 require('jest')
-const { Notifier } = require('../src/notifier.js')
+const { Notifier, Notification } = require('../src/notifier.js')
 
 let notificationsElement
 let notifier
@@ -293,6 +293,36 @@ describe('Notifications', () => {
     })
   })
 
+  describe('constructor', () => {
+    test('throws a TypeError when passed a non jQuery object', (done) => {
+      $(() => {
+        try {
+          expect(() => {
+            // eslint-disable-next-line no-new
+            new Notification(3)
+          }).toThrow(TypeError)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('throws a ReferenceError when passed jQuery object not representing anything in the dom', (done) => {
+      $(() => {
+        try {
+          expect(() => {
+            // eslint-disable-next-line no-new
+            new Notification($('#non-existant-element'))
+          }).toThrow(ReferenceError)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+  })
+
   describe('dismiss', () => {
     test('removes the notification elements', (done) => {
       $(() => {
@@ -408,6 +438,16 @@ describe('Notifications', () => {
           notification.notificationElement.children('button').click()
 
           expect($(document).find(notification.notificationElement).length).toBe(0)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('does nothing if the notification is already in the desired state', (done) => {
+      $(() => {
+        try {
           done()
         } catch (error) {
           done(error)
