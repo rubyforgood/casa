@@ -507,6 +507,13 @@ describe('Notifications', () => {
     test('changes the text of the notification', (done) => {
       $(() => {
         try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+
+          const newNotificationMessage = 'VOr%%:#Vc*tbNbM}iUT}'
+
+          notification.setText(newNotificationMessage)
+
+          expect(notification.notificationElement.text()).toContain(newNotificationMessage)
           done()
         } catch (error) {
           done(error)
@@ -517,6 +524,12 @@ describe('Notifications', () => {
     test('throws an error if the notification has been dismissed', (done) => {
       $(() => {
         try {
+          notification.notificationElement.remove()
+          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+
+          expect(() => {
+            notification.setText('new Text')
+          }).toThrow(ReferenceError)
           done()
         } catch (error) {
           done(error)
