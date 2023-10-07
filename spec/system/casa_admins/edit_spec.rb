@@ -108,13 +108,12 @@ RSpec.describe "casa_admins/edit", type: :system do
   end
 
   it "can convert the admin to a supervisor", js: true do
-    another = create(:casa_admin)
-    visit edit_casa_admin_path(another)
+    visit edit_casa_admin_path(admin)
 
     click_on "Change to Supervisor"
 
     expect(page).to have_text("Admin was changed to Supervisor.")
-    expect(User.find(another.id)).to be_supervisor
+    expect(User.find(admin.id)).to be_supervisor
   end
 
   it "is not able to edit last sign in" do
