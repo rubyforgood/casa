@@ -83,7 +83,7 @@ class Notification {
   toggleUserDismissable () {
     this.#throwErrorIfDismissed()
 
-    if (this.isDismissable()) {
+    if (this.isUserDismissable()) {
       this.#userDismissableDisable()
     } else {
       this.#userDismissableEnable()
