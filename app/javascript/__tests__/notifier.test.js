@@ -349,7 +349,6 @@ describe('Notifications', () => {
           expect(() => {
             notification.dismiss()
           }).toThrow(ReferenceError)
-
           done()
         } catch (error) {
           done(error)
@@ -474,6 +473,12 @@ describe('Notifications', () => {
     test('removes the dismiss button that removes the notification element when clicked if the button is present', (done) => {
       $(() => {
         try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notification.notificationElement.children('button').length).toBe(1)
+
+          notification.setUserDismissable(false)
+
+          expect(notification.notificationElement.children('button').length).toBe(0)
           done()
         } catch (error) {
           done(error)
@@ -484,6 +489,12 @@ describe('Notifications', () => {
     test('throws an error if the notification is dismissed', (done) => {
       $(() => {
         try {
+          notification.notificationElement.remove()
+          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+
+          expect(() => {
+            notification.setUserDismissable(true)
+          }).toThrow(ReferenceError)
           done()
         } catch (error) {
           done(error)
