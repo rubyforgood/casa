@@ -157,7 +157,7 @@ class Notifier {
     }
 
     const newNotification = new Notification(newNotificationAsJQuery)
-    console.log(newNotification)
+
     return newNotification
   }
 
