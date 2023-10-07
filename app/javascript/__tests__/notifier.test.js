@@ -448,6 +448,22 @@ describe('Notifications', () => {
     test('does nothing if the notification is already in the desired state', (done) => {
       $(() => {
         try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notification.notificationElement.children('button').length).toBe(1)
+
+          notification.setUserDismissable(true)
+
+          expect(notification.notificationElement.children('button').length).toBe(1)
+
+          const notificationMessage = 'fd@4g*G@.6sV{!^Yj*TR'
+          notification = notifier.notify(notificationMessage, 'info', false)
+
+          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notification.notificationElement.children('button').length).toBe(0)
+
+          notification.setUserDismissable(false)
+
+          expect(notification.notificationElement.children('button').length).toBe(0)
           done()
         } catch (error) {
           done(error)
