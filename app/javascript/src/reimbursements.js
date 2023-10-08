@@ -81,7 +81,6 @@ $(() => { // JQuery's callback for the DOM loading
     if (e.status === 401) {
       window.location.reload()
     } else {
-      console.log(e)
       if (e.responseJSON && e.responseJSON.error) {
         window.alert(e.responseJSON.error)
       } else {
