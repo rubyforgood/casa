@@ -53,6 +53,37 @@
   overflow-y: auto;
 }
 
+.logo-div {
+  height: 80px;
+}
+
+// Stops weird text wrapping when opening and closing sidebar
+.nav-item {
+  width: 250px;
+}
+
+.nav-item > a {
+  color: globals.$sidebar-inactive !important;
+  height: 44px;
+
+  &:hover {
+    color: globals.$sidebar-active !important;
+
+    span {
+      color: globals.$sidebar-dark !important;
+    }
+  }
+}
+
+.nav-item.active > a {
+  color: globals.$sidebar-dark !important;
+}
+
+.btn-sidebar {
+  color: #fff !important;
+  background-color: globals.$sidebar-active !important;
+}
+
 .sidebar-wrapper .sidebar-menu {
   margin-top: 24px;
   .list-group-item {
@@ -149,5 +180,34 @@
 
   .footer-nav #mobile-space {
     margin-top: 72px;
+  }
+}
+
+// These overrides are for larger than mobile screens
+@media only screen and (min-width: screen-sizes.$mobile) {
+  .sidebar-nav-wrapper {
+    -webkit-transform: translateX(0px) !important;
+    -moz-transform: translateX(0px) !important;
+    -ms-transform: translateX(0px) !important;
+    -o-transform: translateX(0px) !important;
+    transform: translateX(0px) !important;
+
+    &.active {
+      width: 66px;
+
+      -webkit-transform: translateX(0px) !important;
+      -moz-transform: translateX(0px) !important;
+      -ms-transform: translateX(0px) !important;
+      -o-transform: translateX(0px) !important;
+      transform: translateX(0px) !important;
+    }
+  }
+
+  .main-wrapper {
+    margin-left: 250px !important;
+
+    &.active {
+      margin-left: 66px !important;
+    }
   }
 }

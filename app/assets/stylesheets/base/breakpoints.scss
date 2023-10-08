@@ -1,4 +1,6 @@
 $small: 640px;
 $medium: 1024px;
-$mobile: $medium;
 $large: 1200px;
+
+// If you adjust this breakpoint, you also need to adjust the breakpoint value in app/javascript/controllers/sidebar-controller.js
+$mobile: 770px;
