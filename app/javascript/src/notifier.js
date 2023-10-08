@@ -1,4 +1,6 @@
 /* global $ */
+import { escape } from 'lodash'
+
 const TypeChecker = require('./type_checker.js')
 
 const levels = {
@@ -129,11 +131,7 @@ class Notifier {
   notify (message, level, isDismissable = true) {
     TypeChecker.checkString(message, 'message')
 
-    const escapedMessage = message.replace(/&/g, '&amp;')
-      .replace(/>/g, '&gt;')
-      .replace(/</g, '&lt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&apos;')
+    const escapedMessage = escape(message)
 
     if (!(levels[level])) {
       throw new RangeError('Unsupported option for param level')

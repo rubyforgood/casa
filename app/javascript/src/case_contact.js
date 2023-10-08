@@ -2,6 +2,7 @@
 /* global window */
 /* global $ */
 
+import { escape } from 'lodash'
 import Swal from 'sweetalert2'
 
 function validateOccurredAt (caseOccurredAt, eventType = '') {
@@ -142,12 +143,7 @@ $(() => { // JQuery's callback for the DOM loading
     if (noteContent) {
       e.preventDefault()
       $('#confirm-submit').modal('show')
-      const escapedNoteContent = noteContent.replace(/&/g, '&amp;')
-        .replace(/>/g, '&gt;')
-        .replace(/</g, '&lt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;')
-      $('#note-content').html(escapedNoteContent)
+      $('#note-content').html(escape(noteContent))
     }
   }
 

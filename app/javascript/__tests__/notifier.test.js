@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { escape } from 'lodash'
 
 require('jest')
 const { Notifier, Notification } = require('../src/notifier.js')
@@ -33,7 +34,7 @@ describe('Notifier', () => {
 
           const successMessages = notificationsElement.find('.success-indicator')
 
-          // Notifications contain the "Saved" message and the new message
+          // Notifications contain the hidden "Saved" message and the new message
           expect(successMessages.length).toBe(2)
           expect(successMessages[1].innerHTML).toContain(notificationMessage)
           done()
@@ -542,10 +543,10 @@ describe('Notifications', () => {
     test('will add a functioning dismiss button for the user if there is none', (done) => {
       $(() => {
         try {
-          const notificationMessage = 'nm8j$w*HszPHkObK._n'
+          const notificationMessage = 'nm8j$<w*HszPHkObK._n'
           notification = notifier.notify(notificationMessage, 'info', false)
 
-          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationMessage))
           expect(notification.notificationElement.children('button').length).toBe(0)
 
           notification.toggleUserDismissable()
@@ -565,7 +566,7 @@ describe('Notifications', () => {
     test('will remove the dismiss button for the user if is present', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
           expect(notification.notificationElement.children('button').length).toBe(1)
 
           notification.toggleUserDismissable()
@@ -582,7 +583,7 @@ describe('Notifications', () => {
       $(() => {
         try {
           notification.notificationElement.remove()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
 
           expect(() => {
             notification.toggleUserDismissable()
