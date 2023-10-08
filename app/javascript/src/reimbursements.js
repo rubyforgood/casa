@@ -60,7 +60,7 @@ $(() => { // JQuery's callback for the DOM loading
         contentType: 'application/json'
       }).then(() => reimbursementsTable.draw())
     } catch (error) {
-      console.log(error)
+      console.error(error)
       event.target.checked = !event.target.checked
       window.alert('Failed to update reimbursement complete setting')
     }
