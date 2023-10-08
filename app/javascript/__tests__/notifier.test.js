@@ -1,4 +1,5 @@
 /* eslint-env jest */
+import { escape } from 'lodash'
 
 require('jest')
 const { Notifier, Notification } = require('../src/notifier.js')
@@ -35,7 +36,7 @@ describe('Notifier', () => {
 
           // Notifications contain the "Saved" message and the new message
           expect(successMessages.length).toBe(2)
-          expect(successMessages[1].innerHTML).toContain(notificationMessage)
+          expect(successMessages[1].innerHTML).toContain(escape(notificationMessage))
           done()
         } catch (error) {
           done(error)
@@ -53,7 +54,7 @@ describe('Notifier', () => {
           const failureMessages = notificationsElement.find('.failure-indicator')
 
           expect(failureMessages.length).toBe(1)
-          expect(failureMessages[0].innerHTML).toContain(notificationMessage)
+          expect(failureMessages[0].innerHTML).toContain(escape(notificationMessage))
           done()
         } catch (error) {
           done(error)
@@ -327,10 +328,10 @@ describe('Notifications', () => {
     test('removes the notification elements', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
 
           notification.dismiss()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
           done()
         } catch (error) {
           done(error)
@@ -341,10 +342,10 @@ describe('Notifications', () => {
     test('should throw an error if the notification has already been dismissed', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
 
           notification.dismiss()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
 
           expect(() => {
             notification.dismiss()
@@ -361,8 +362,8 @@ describe('Notifications', () => {
     test('should return the text of the notification', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
-          expect(notification.getText()).toBe(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
+          expect(notification.getText()).toBe(escape(notificationDefaultMessage))
 
           done()
         } catch (error) {
@@ -376,7 +377,7 @@ describe('Notifications', () => {
     test('returns a truthy value if there is a dismiss button, false otherwise', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
           expect(notification.isUserDismissable()).toBeTruthy()
 
           notification.notificationElement.children('button').remove()
@@ -427,7 +428,7 @@ describe('Notifications', () => {
           const notificationMessage = 'mn6#:6C^*hnQ/:cC;2mM'
           notification = notifier.notify(notificationMessage, 'info', false)
 
-          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationMessage))
           expect(notification.notificationElement.children('button').length).toBe(0)
 
           notification.setUserDismissable(true)
@@ -447,7 +448,7 @@ describe('Notifications', () => {
     test('does nothing if the notification is already in the desired state', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
           expect(notification.notificationElement.children('button').length).toBe(1)
 
           notification.setUserDismissable(true)
@@ -457,7 +458,7 @@ describe('Notifications', () => {
           const notificationMessage = 'fd@4g*G@.6sV{!^Yj*TR'
           notification = notifier.notify(notificationMessage, 'info', false)
 
-          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationMessage))
           expect(notification.notificationElement.children('button').length).toBe(0)
 
           notification.setUserDismissable(false)
@@ -473,7 +474,7 @@ describe('Notifications', () => {
     test('removes the dismiss button that removes the notification element when clicked if the button is present', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
           expect(notification.notificationElement.children('button').length).toBe(1)
 
           notification.setUserDismissable(false)
@@ -490,7 +491,7 @@ describe('Notifications', () => {
       $(() => {
         try {
           notification.notificationElement.remove()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
 
           expect(() => {
             notification.setUserDismissable(true)
@@ -507,13 +508,13 @@ describe('Notifications', () => {
     test('changes the text of the notification', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
 
           const newNotificationMessage = 'VOr%%:#Vc*tbNbM}iUT}'
 
           notification.setText(newNotificationMessage)
 
-          expect(notification.notificationElement.text()).toContain(newNotificationMessage)
+          expect(notification.notificationElement.text()).toContain(escape(newNotificationMessage))
           done()
         } catch (error) {
           done(error)
@@ -525,7 +526,7 @@ describe('Notifications', () => {
       $(() => {
         try {
           notification.notificationElement.remove()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
 
           expect(() => {
             notification.setText('new Text')
@@ -542,10 +543,10 @@ describe('Notifications', () => {
     test('will add a functioning dismiss button for the user if there is none', (done) => {
       $(() => {
         try {
-          const notificationMessage = 'nm8j$w*HszPHkObK._n'
+          const notificationMessage = 'nm8j$<w*HszPHkObK._n'
           notification = notifier.notify(notificationMessage, 'info', false)
 
-          expect(notificationsElement[0].innerHTML).toContain(notificationMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationMessage))
           expect(notification.notificationElement.children('button').length).toBe(0)
 
           notification.toggleUserDismissable()
@@ -565,7 +566,7 @@ describe('Notifications', () => {
     test('will remove the dismiss button for the user if is present', (done) => {
       $(() => {
         try {
-          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).toContain(escape(notificationDefaultMessage))
           expect(notification.notificationElement.children('button').length).toBe(1)
 
           notification.toggleUserDismissable()
@@ -582,7 +583,7 @@ describe('Notifications', () => {
       $(() => {
         try {
           notification.notificationElement.remove()
-          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect(notificationsElement[0].innerHTML).not.toContain(escape(notificationDefaultMessage))
 
           expect(() => {
             notification.toggleUserDismissable()
