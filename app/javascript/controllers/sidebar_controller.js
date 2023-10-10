@@ -22,13 +22,14 @@ export default class extends Controller {
   }
 
   hoverOn () {
-    if (!this.openValue && this.isNotMobile()) {
-      this.toggleSidebar()
-      this.toggleLinks()
-    }
+    this.toggleHover()
   }
 
   hoverOff () {
+    this.toggleHover()
+  }
+
+  toggleHover() {
     if (!this.openValue && this.isNotMobile()) {
       this.toggleSidebar()
       this.toggleLinks()
