@@ -35,11 +35,32 @@
         <% if current_user.casa_admin? || current_user.supervisor? %>
           <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
-        <li class="<%= active_class(casa_cases_path) %> nav-item">
-          <%= link_to casa_cases_path do %>
-            <i class="lni lni-folder mr-10"></i>
-            <%= cases_index_title %>
-          <% end %>
+        <li class=" nav-item nav-item-has-children">
+          <a
+            href="#0"
+            class="collapsed"
+            data-bs-toggle="collapse"
+            data-bs-target="#ddmenu_cases"
+            aria-controls="ddmenu_cases"
+            aria-expanded="true"
+            aria-label="Toggle navigation">
+              <span class="icon">
+                <i class="lni lni-folder mr-10"></i>
+              </span>
+            <span class="text"><%= cases_index_title %></span>
+          </a>
+          <ul id="ddmenu_cases" class="collapse dropdown-nav">
+            <li>
+              <%= link_to 'All', casa_cases_path %>
+            </li>
+            <% current_user.casa_cases.each do |casa_case| %>
+              <li>
+                <%= link_to edit_casa_case_path(casa_case) do %>
+                  <%= casa_case.case_number %>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
         </li>
         <% if policy(CasaAdmin).index? %>
           <li class="<%= active_class(casa_admins_path) %> nav-item">
@@ -61,7 +82,7 @@
           <li class="nav-item nav-item-has-children">
             <a
               href="#0"
-              class=""
+              class="collapsed"
               data-bs-toggle="collapse"
               data-bs-target="#ddmenu_case_contacts"
               aria-controls="ddmenu_case_contacts"
@@ -103,19 +124,10 @@
         <% if current_user.volunteer? %>
           <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
-
-        <% if policy(:application).see_banner_page? %>
-          <li class="<%= active_class(casa_admins_path) %> nav-item">
-            <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
-              <i class="lni lni-flag mr-10"></i>
-              Banners
-            <% end %>
-          </li>
-        <% end %>
-
         <li class="nav-item nav-item-has-children">
           <a
             href="#0"
+            class="collapsed"
             class="group-actions"
             data-bs-toggle="collapse"
             data-bs-target="#ddmenu_55"
@@ -182,6 +194,14 @@
               </li>
             <% end %>
 
+            <% if policy(:application).see_banner_page? %>
+              <li>
+                <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
+                  <i class="lni lni-flag mr-10"></i>
+                  Banners
+                <% end %>
+              </li>
+            <% end %>
           </ul>
         </li>
         <li>
