@@ -29,7 +29,7 @@ export default class extends Controller {
     this.toggleHover()
   }
 
-  toggleHover() {
+  toggleHover () {
     if (!this.openValue && this.isNotMobile()) {
       this.toggleSidebar()
       this.toggleLinks()
