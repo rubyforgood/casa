@@ -53,9 +53,8 @@
             </a>
             <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:edit_casa_case_path) } %>
           </li>
-        <% end %>
 
-        <% if !current_user.volunteer? %>
+        <% else %>
           <li class="<%= active_class(casa_cases_path) %> nav-item">
             <%= link_to casa_cases_path do %>
               <i class="lni lni-folder mr-10"></i>
