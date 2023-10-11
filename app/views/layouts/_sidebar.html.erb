@@ -36,7 +36,7 @@
           <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
 
-        <% if !policy(Volunteer).index? %>
+        <% if current_user.volunteer? %>
           <li class="nav-item nav-item-has-children">
             <a
               href="#0"
@@ -55,7 +55,7 @@
           </li>
         <% end %>
 
-        <% if policy(Volunteer).index? %>
+        <% if !current_user.volunteer? %>
           <li class="<%= active_class(casa_cases_path) %> nav-item">
             <%= link_to casa_cases_path do %>
               <i class="lni lni-folder mr-10"></i>
