@@ -10,14 +10,13 @@
       <tr>
         <td><%= feature_flag.name %></td>
         <td>
-            <%= form_with(model: [ :all_casa_admins, feature_flag ], url: all_casa_admins_feature_flag_path(feature_flag), method: :patch, local: true) do |form| %>
-              <div class="feature-flag-div">
-                <label class="switch">
-                  <input type="checkbox">
-                  <span class="slider round-<%= feature_flag.enabled ? 'on' : 'off' %>"></span>
-                </label>
-              </div>
+          <div class="form-check form-switch">
+            <%= form_for([:all_casa_admins, feature_flag], url: all_casa_admins_feature_flag_path(feature_flag)) do |f| %>
+              <%= f.check_box :enabled, class: "form-check-input", role: "switch"%>
+              <label class="form-check-label" for="<%= f.object_name %>"><%= f.label :enabled %></label>
+              <%= f.hidden_field :enabled, value: "false", id: "hidden_submit" %>
             <% end %>
+          </div>
         </td>
       </tr>
     <% end %>
