@@ -1,4 +1,5 @@
 class FeatureFlag < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
 end
 
 # == Schema Information

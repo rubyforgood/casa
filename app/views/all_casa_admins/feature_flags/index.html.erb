@@ -1,0 +1,28 @@
+<h1>Feature Flags</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @feature_flags.each do |feature_flag| %>
+      <tr>
+        <td><%= feature_flag.name %></td>
+        <td>
+            <%= form_with(model: [ :all_casa_admins, feature_flag ], url: all_casa_admins_feature_flag_path(feature_flag), method: :patch, local: true) do |form| %>
+              <div class="feature-flag-div">
+                <label class="switch">
+                  <input type="checkbox">
+                  <span class="slider round-<%= feature_flag.enabled ? 'on' : 'off' %>"></span>
+                </label>
+              </div>
+            <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+
