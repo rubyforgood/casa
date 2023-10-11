@@ -45,7 +45,7 @@
           </li>
         <% end %>
 
-        <li class=" nav-item nav-item-has-children">
+        <li class="nav-item nav-item-has-children">
           <a
             href="#0"
             class="collapsed"
@@ -59,18 +59,7 @@
               </span>
             <span class="text"><%= cases_index_title %></span>
           </a>
-          <ul id="ddmenu_cases" class="collapse dropdown-nav">
-            <li>
-              <%= link_to 'All', casa_cases_path %>
-            </li>
-            <% current_user.casa_cases.each do |casa_case| %>
-              <li>
-                <%= link_to edit_casa_case_path(casa_case) do %>
-                  <%= casa_case.case_number %>
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
+          <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:edit_casa_case_path) } %>
         </li>
         <% if policy(CasaAdmin).index? %>
           <li class="<%= active_class(casa_admins_path) %> nav-item">
@@ -103,18 +92,7 @@
                 </span>
               <span class="text">Case Contacts</span>
             </a>
-            <ul id="ddmenu_case_contacts" class="collapse dropdown-nav">
-              <li>
-                <%= link_to 'All', case_contacts_path %>
-              </li>
-              <% current_user.casa_cases.each do |casa_case| %>
-                <li>
-                  <%= link_to case_contacts_path(casa_case_id: casa_case.id) do %>
-                    <%= casa_case.case_number %>
-                  <% end %>
-                </li>
-              <% end %>
-            </ul>
+            <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: case_contacts_path, dropdown_id: "ddmenu_case_contacts", link_generator: method(:get_case_contact_link) } %>
           </li>
           <li class="<%= active_class(volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %> nav-item">
             <%= link_to volunteer_learning_hours_path(volunteer_id: current_user.id || 0) do %>

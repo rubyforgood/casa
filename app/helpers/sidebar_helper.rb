@@ -15,6 +15,10 @@ module SidebarHelper
     link_to label, path, class: "list-group-item #{active_class(path)}" if visible
   end
 
+  def get_case_contact_link(casa_case)
+    case_contacts_path(casa_case_id: casa_case.id)
+  end
+
   private # private doesn't work in modules. It's here for semantic purposes
 
   def active_class(link_path)
