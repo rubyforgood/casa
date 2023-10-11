@@ -35,7 +35,7 @@
         <% if current_user.casa_admin? || current_user.supervisor? %>
           <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
-        
+
         <% if !policy(Volunteer).index? %>
           <li class="nav-item nav-item-has-children">
             <a
