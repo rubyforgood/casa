@@ -44,7 +44,7 @@
     "stimulus-reveal-controller": "^4.1.0",
     "strftime": "^0.10.2",
     "sweetalert2": "^11.3.5",
-    "trix": "^2.0.6",
+    "trix": "^2.0.7",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
