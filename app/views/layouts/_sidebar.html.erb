@@ -44,23 +44,35 @@
             <% end %>
           </li>
         <% end %>
+        
+        <% if !policy(Volunteer).index? %>
+          <li class="nav-item nav-item-has-children">
+            <a
+              href="#0"
+              class="collapsed"
+              data-bs-toggle="collapse"
+              data-bs-target="#ddmenu_cases"
+              aria-controls="ddmenu_cases"
+              aria-expanded="true"
+              aria-label="Toggle navigation">
+                <span class="icon">
+                  <i class="lni lni-folder mr-10"></i>
+                </span>
+              <span class="text"><%= cases_index_title %></span>
+            </a>
+            <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:edit_casa_case_path) } %>
+          </li>
+        <% end %>
 
-        <li class="nav-item nav-item-has-children">
-          <a
-            href="#0"
-            class="collapsed"
-            data-bs-toggle="collapse"
-            data-bs-target="#ddmenu_cases"
-            aria-controls="ddmenu_cases"
-            aria-expanded="true"
-            aria-label="Toggle navigation">
-              <span class="icon">
-                <i class="lni lni-folder mr-10"></i>
-              </span>
-            <span class="text"><%= cases_index_title %></span>
-          </a>
-          <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:edit_casa_case_path) } %>
-        </li>
+        <% if policy(Volunteer).index? %>
+          <li class="<%= active_class(casa_cases_path) %> nav-item">
+            <%= link_to casa_cases_path do %>
+              <i class="lni lni-folder mr-10"></i>
+              <%= cases_index_title %>
+            <% end %>
+          </li>
+        <% end %>
+
         <% if policy(CasaAdmin).index? %>
           <li class="<%= active_class(casa_admins_path) %> nav-item">
             <%= link_to casa_admins_path do %>
