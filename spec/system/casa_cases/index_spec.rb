@@ -34,7 +34,7 @@ RSpec.describe "casa_cases/index", type: :system do
     create(:case_assignment, volunteer: volunteer, casa_case: cina)
 
     sign_in volunteer
-    
+
     visit root_path
     click_on "My Cases"
     within "#ddmenu_cases" do
