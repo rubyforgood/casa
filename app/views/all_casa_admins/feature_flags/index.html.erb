@@ -10,18 +10,12 @@
       <tr>
         <td><%= feature_flag.name %></td>
         <td>
-          <div class="form-check form-switch">
-            <%= form_for([:all_casa_admins, feature_flag], url: all_casa_admins_feature_flag_path(feature_flag)) do |f| %>
-              <%= f.check_box :enabled, class: "form-check-input", role: "switch"%>
-              <label class="form-check-label" for="<%= f.object_name %>"><%= f.label :enabled %></label>
-              <%= f.hidden_field :enabled, value: "false", id: "hidden_submit" %>
-            <% end %>
-          </div>
+      <div class="form-check form-switch">
+        <input type="checkbox" class="form-check-input toggle-switch" data-feature-flag-id="<%= feature_flag.id %>" id="feature-checkbox-<%= feature_flag.id %>" <% if feature_flag.enabled? %>checked<% end %>>
+        <input type="hidden" name="feature_flag[enabled]" value="0" id="hidden_submit">
+      </div>
         </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-
-

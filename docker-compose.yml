@@ -3,7 +3,7 @@ version: "3"
 services:
   web:
     build: .
-    command: bundle exec rails s -b 0.0.0.0
+    command: bin/dev
     ports:
       - "3000:3000"
       - "4000:4000"
