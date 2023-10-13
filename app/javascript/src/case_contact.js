@@ -6,7 +6,7 @@ import { escape } from 'lodash'
 import Swal from 'sweetalert2'
 
 function validateOccurredAt (caseOccurredAt, eventType = '') {
-  const msg = 'Case Contact Occurrences cannot be in the future.'
+  /* const msg = 'Case Contact Occurrences cannot be in the future.'
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
@@ -19,7 +19,7 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
       alert(msg)
     }
     caseOccurredAt.val(enGBDateString(today))
-  }
+  } */
 }
 
 function enGBDateString (date) {
