@@ -1,9 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "/all_casa_admins/feature_flags", type: :request do
-
   let(:all_casa_admin) { build(:all_casa_admin) }
-  let(:feature_flag) {create(:feature_flag)}
+  let(:feature_flag) { create(:feature_flag) }
 
   before(:each) { sign_in all_casa_admin }
 
@@ -17,11 +16,9 @@ RSpec.describe "/all_casa_admins/feature_flags", type: :request do
   end
 
   describe "PATCH /update" do
-
     it "updates enable to false on toggle" do
-
       patch "/all_casa_admins/feature_flags/#{feature_flag.id}"
-      
+
       feature_flag.reload
       expect(feature_flag.enabled).to eq(false)
     end

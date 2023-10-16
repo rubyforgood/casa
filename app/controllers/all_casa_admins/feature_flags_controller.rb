@@ -1,7 +1,6 @@
 class AllCasaAdmins::FeatureFlagsController < AllCasaAdminsController
-
   def index
-    @feature_flags = FeatureFlag.all.order(name: 'asc')
+    @feature_flags = FeatureFlag.all.order(name: "asc")
   end
 
   def update
