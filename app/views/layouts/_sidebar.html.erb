@@ -51,7 +51,7 @@
                 </span>
               <span class="text"><%= cases_index_title %></span>
             </a>
-            <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:edit_casa_case_path) } %>
+            <%= render partial: 'shared/sidebar_dropdown', locals: { all_link_path: casa_cases_path, dropdown_id: "ddmenu_cases", link_generator: method(:casa_case_path) } %>
           </li>
 
         <% else %>
