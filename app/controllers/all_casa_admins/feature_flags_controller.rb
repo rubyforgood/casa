@@ -8,6 +8,4 @@ class AllCasaAdmins::FeatureFlagsController < AllCasaAdminsController
     @feature_flag = FeatureFlag.find(params[:id])
     @feature_flag.update(enabled: !@feature_flag.enabled)
   end
-
-
 end

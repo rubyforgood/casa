@@ -1,21 +1,18 @@
-<h1>Feature Flags</h1>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @feature_flags.each do |feature_flag| %>
-      <tr>
-        <td><%= feature_flag.name %></td>
-        <td>
-      <div class="form-check form-switch">
-        <input type="checkbox" class="form-check-input toggle-switch" data-feature-flag-id="<%= feature_flag.id %>" id="feature-checkbox-<%= feature_flag.id %>" <% if feature_flag.enabled? %>checked<% end %>>
-        <input type="hidden" name="feature_flag[enabled]" value="0" id="hidden_submit">
-      </div>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div id=feature-flags>
+  <h1>Feature Flags</h1>
+  <table>
+    <tbody>
+      <% @feature_flags.each do |feature_flag| %>
+        <tr class="flag-rows">
+          <td class="flag-name"><%= feature_flag.name %></td>
+          <td>
+            <div class="form-check form-switch">
+              <input type="checkbox" class="form-check-input toggle-switch" data-feature-flag-id="<%= feature_flag.id %>" id="feature-checkbox-<%= feature_flag.id %>" <% if feature_flag.enabled? %>checked<% end %>>
+              <input type="hidden" name="feature_flag[enabled]" value="0" id="hidden_submit">
+            </div>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
