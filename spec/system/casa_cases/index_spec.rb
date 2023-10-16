@@ -41,6 +41,7 @@ RSpec.describe "casa_cases/index", type: :system do
       click_on case_number
     end
 
-    expect(page).to have_text("Editing CINA-1")
+    expect(page).to have_text("CASA Case Details")
+    expect(page).to have_text("Case number: CINA-1")
   end
 end
