@@ -51,6 +51,7 @@ class DbPopulator
     create_languages(casa_org)
     create_mileage_rates(casa_org)
     create_learning_hour_types(casa_org)
+    create_learning_hour_topics(casa_org)
     casa_org
   end
 
@@ -354,8 +355,8 @@ class DbPopulator
     while i < attempt_count
       begin
         MileageRate.create!({
-          amount: Faker::Number.decimal(l_digits: 2, r_digits: 2),
-          effective_date: Faker::Date.forward(days: 700),
+          amount: Faker::Number.between(from: 0.0, to: 1.0).round(2),
+          effective_date: Faker::Date.backward(days: 700),
           is_active: true,
           casa_org_id: casa_org.id
         })
@@ -374,6 +375,14 @@ class DbPopulator
       learning_hour_type = casa_org.learning_hour_types.new(name: learning_type.capitalize)
       learning_hour_type.position = 99 if learning_type == "other"
       learning_hour_type.save
+    end
+  end
+
+  def create_learning_hour_topics(casa_org)
+    learning_topics = %w[cases reimbursements court_reports]
+    learning_topics.each do |learning_topic|
+      learning_hour_topic = casa_org.learning_hour_topics.new(name: learning_topic.humanize.capitalize)
+      learning_hour_topic.save
     end
   end
 

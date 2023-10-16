@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 ruby "3.2.2"
-gem "rails", "~> 7.0.7"
+gem "rails", "~> 7.0.8"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
@@ -11,7 +11,7 @@ gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.4" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
-gem "cssbundling-rails", "~> 1.2" # compiles css
+gem "cssbundling-rails", "~> 1.3" # compiles css
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
@@ -35,7 +35,7 @@ gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.3.1" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "6.4.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "rack-cors" # for allowing cross-origin resource sharing
@@ -81,6 +81,7 @@ group :test do
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
+  gem "email_spec"
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"

@@ -9,7 +9,7 @@ class OtherDutyPolicy < UserPolicy
   end
 
   def index?
-    admin_or_supervisor?
+    admin_or_supervisor_or_volunteer?
   end
 
   def new?

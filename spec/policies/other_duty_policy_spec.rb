@@ -16,8 +16,8 @@ RSpec.describe OtherDutyPolicy do
       is_expected.to permit(supervisor)
     end
 
-    it "does not permit volunteer" do
-      is_expected.to_not permit(volunteer)
+    it "allows volunteer" do
+      is_expected.to permit(volunteer)
     end
   end
 end

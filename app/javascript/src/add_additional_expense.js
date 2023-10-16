@@ -1,15 +1,11 @@
 /* global $ */
 
 function showAdditionalExpense () {
-  for (let i = 1; i < 10; i++) {
-    if ($(`#expense${i + 1}`).is(':hidden')) {
-      $(`#expense${i + 1}`).wrap('<li></li>')
-      $(`#expense${i + 1}`).removeClass('d-none')
-      break
-    }
-  }
+  $('.expense-container.d-none').first().removeClass('d-none')
 }
 
-$(document).on('click', '#add-another-expense', function () {
-  showAdditionalExpense()
+$(() => { // JQuery's callback for the DOM loading
+  $('#add-another-expense').on('click', function () {
+    showAdditionalExpense()
+  })
 })

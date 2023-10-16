@@ -40,10 +40,20 @@ RSpec.describe "/case_contacts", type: :request do
   describe "GET /new" do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
-    let!(:contact_types_b) { create_list(:contact_type, 2, contact_type_group: contact_type_group_b) }
+    let!(:contact_types_b) do
+      [
+        create(:contact_type, name: "Teacher", contact_type_group: contact_type_group_b),
+        create(:contact_type, name: "Counselor", contact_type_group: contact_type_group_b)
+      ]
+    end
 
     let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: "A") }
-    let!(:contact_types_a) { create_list(:contact_type, 2, contact_type_group: contact_type_group_a) }
+    let!(:contact_types_a) do
+      [
+        create(:contact_type, name: "Sibling", contact_type_group: contact_type_group_a),
+        create(:contact_type, name: "Parent", contact_type_group: contact_type_group_a)
+      ]
+    end
 
     subject(:request) do
       get new_case_contact_path
@@ -53,9 +63,9 @@ RSpec.describe "/case_contacts", type: :request do
 
     it { is_expected.to have_http_status(:success) }
 
-    it "shows all contact types alphabetically" do
+    it "shows all contact types alphabetically by group" do
       page = request.parsed_body
-      expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+      expected_contact_types = ["Parent", "Sibling", "Counselor", "Teacher"]
       expect(page).to match(/#{expected_contact_types.join(".*")}/m)
     end
 

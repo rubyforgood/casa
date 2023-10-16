@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "casa_admins/edit", type: :system do
-  let(:admin) { create :casa_admin }
+  let(:admin) { create :casa_admin, monthly_learning_hours_report: false }
 
   before { sign_in admin }
 
@@ -14,6 +14,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       fill_in "Display name", with: expected_display_name
       fill_in "Phone number", with: expected_phone_number
+      check "Receive Monthly Learning Hours Report"
 
       click_on "Submit"
 
@@ -23,6 +24,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
+      expect(admin.monthly_learning_hours_report).to be_truthy
     end
   end
 
@@ -106,13 +108,12 @@ RSpec.describe "casa_admins/edit", type: :system do
   end
 
   it "can convert the admin to a supervisor", js: true do
-    another = create(:casa_admin)
-    visit edit_casa_admin_path(another)
+    visit edit_casa_admin_path(admin)
 
     click_on "Change to Supervisor"
 
     expect(page).to have_text("Admin was changed to Supervisor.")
-    expect(User.find(another.id)).to be_supervisor
+    expect(User.find(admin.id)).to be_supervisor
   end
 
   it "is not able to edit last sign in" do

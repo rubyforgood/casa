@@ -12,7 +12,7 @@
 // custom css for the app
 @use "base/breakpoints";
 
-@use "shared/async_notifier";
+@use "shared/notifier";
 @use "shared/dashboard";
 @use "shared/flashes";
 @use "shared/footer";

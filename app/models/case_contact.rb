@@ -151,6 +151,21 @@ class CaseContact < ApplicationRecord
     errors.add(:occurred_at, :invalid, message: "cannot be in the future")
   end
 
+  # Displays occurred_at in the format January 1, 1970
+  # @return [String]
+  def occurred_at_display
+    occurred_at.strftime("%B %-d, %Y")
+  end
+
+  # Returns the mileage rate if the casa_org has a mileage_rate for the date of the contact. Otherwise returns nil.
+  # @return [BigDecimal, nil]
+  def reimbursement_amount
+    mileage_rate = casa_case.casa_org.mileage_rate_for_given_date(occurred_at.to_datetime)
+    return nil unless mileage_rate
+
+    mileage_rate * miles_driven
+  end
+
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 

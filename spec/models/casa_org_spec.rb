@@ -121,5 +121,54 @@ RSpec.describe CasaOrg, type: :model do
         expect(hearing_types_names).to include(*HearingType::DEFAULT_HEARING_TYPES)
       end
     end
+
+    describe "mileage rate for a given date" do
+      let(:casa_org) { build(:casa_org) }
+
+      describe "with a casa org with no rates" do
+        it "is nil" do
+          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+        end
+      end
+
+      describe "with a casa org with inactive dates" do
+        let!(:mileage_rates) do
+          [
+            create(:mileage_rate, casa_org: casa_org, effective_date: 10.days.ago, is_active: false),
+            create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.ago, is_active: false)
+          ]
+        end
+
+        it "is nil" do
+          expect(casa_org.mileage_rates.count).to eq 2
+          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+        end
+      end
+
+      describe "with active dates in the future" do
+        let!(:mileage_rate) { create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.from_now) }
+
+        it "is nil" do
+          expect(casa_org.mileage_rates.count).to eq 1
+          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+        end
+      end
+
+      describe "with active dates in the past" do
+        let!(:mileage_rates) do
+          [
+            create(:mileage_rate, casa_org: casa_org, amount: 4.50, effective_date: 20.days.ago),
+            create(:mileage_rate, casa_org: casa_org, amount: 5.50, effective_date: 10.days.ago),
+            create(:mileage_rate, casa_org: casa_org, amount: 6.50, effective_date: 3.days.ago)
+          ]
+        end
+
+        it "uses the most recent date" do
+          expect(casa_org.mileage_rate_for_given_date(12.days.ago.to_date)).to eq 4.50
+          expect(casa_org.mileage_rate_for_given_date(5.days.ago.to_date)).to eq 5.50
+          expect(casa_org.mileage_rate_for_given_date(Date.today)).to eq 6.50
+        end
+      end
+    end
   end
 end
