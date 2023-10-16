@@ -26,6 +26,7 @@ mailers/application_mailer.rb
 models/application_record.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
+models/concerns/generate_token.rb
 models/fund_request.rb
 models/notification.rb
 notifications/base_notification.rb
@@ -55,3 +56,4 @@ values/casa_admin_parameters.rb
 values/supervisor_parameters.rb
 values/user_parameters.rb
 values/volunteer_parameters.rb
+blueprints/api/v1/session_blueprint.rb
