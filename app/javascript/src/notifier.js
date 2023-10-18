@@ -21,8 +21,12 @@ const levels = {
 }
 
 class Notification {
-  constructor (notificationElementAsJQuery) {
+  constructor (notificationElementAsJQuery, parentNotifier) {
     TypeChecker.checkNonEmptyJQueryObject(notificationElementAsJQuery, 'notificationElementAsJQuery')
+
+    if (!(parentNotifier instanceof Notifier)) {
+      throw new TypeError('Param parentNotifier must be an instance of Notifier')
+    }
 
     const levelCapturedViaClassNames = notificationElementAsJQuery.attr('class').match(/(warn|failure|success)-indicator/)
 
@@ -38,13 +42,19 @@ class Notification {
       this.level = 'info'
     }
 
+    notificationElementAsJQuery.children('button').on('click', () => {
+      this.dismiss()
+    })
+
     this.notificationElement = notificationElementAsJQuery
+    this.parentNotifier = parentNotifier
   }
 
   dismiss () {
     this.#throwErrorIfDismissed()
 
     this.notificationElement.remove()
+    this.parentNotifier.notificationsCount[this.level]--
   }
 
   getText () {
@@ -100,8 +110,8 @@ class Notification {
     const dismissButton = $(`<button class="btn btn-${levels[this.level].classSuffixDismissButton} btn-sm">×</button>`)
     this.notificationElement.append(dismissButton)
 
-    dismissButton.on('click', function () {
-      $(this).parent().remove()
+    dismissButton.on('click', () => {
+      this.dismiss()
     })
   }
 }
@@ -112,6 +122,11 @@ class Notifier {
     TypeChecker.checkNonEmptyJQueryObject(notificationsElement, 'notificationsElement')
 
     this.loadingToast = notificationsElement.find('#async-waiting-indicator')
+    this.notificationsCount = {
+      error: 0,
+      info: 0,
+      warn: 0
+    }
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
     this.savedToastTimeouts = []
@@ -148,13 +163,9 @@ class Notifier {
 
     this.notificationsElement.append(newNotificationAsJQuery)
 
-    if (isDismissable) {
-      newNotificationAsJQuery.children('button').on('click', function () {
-        $(this).parent().remove()
-      })
-    }
+    const newNotification = new Notification(newNotificationAsJQuery, this)
 
-    const newNotification = new Notification(newNotificationAsJQuery)
+    this.notificationsCount[level]++
 
     return newNotification
   }
