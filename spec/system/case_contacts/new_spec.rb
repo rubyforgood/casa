@@ -155,7 +155,6 @@ RSpec.describe "case_contacts/new", type: :system do
         within "#enter-contact-details" do
           choose "Yes"
         end
-        choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         fill_in "case-contact-duration-hours-display", with: "0"
         fill_in "case-contact-duration-minutes-display", with: "5"
