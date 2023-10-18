@@ -18,7 +18,7 @@
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^7.0.8",
     "@rails/actiontext": "^7.1.0",
-    "@rails/activestorage": "^7.0.8",
+    "@rails/activestorage": "^7.1.1",
     "@rails/ujs": "^7.1.1",
     "add2calendar": "^1.1.8",
     "bindings": "^1.5.0",
