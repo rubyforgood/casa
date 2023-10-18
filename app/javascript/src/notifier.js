@@ -121,12 +121,26 @@ class Notifier {
   constructor (notificationsElement) {
     TypeChecker.checkNonEmptyJQueryObject(notificationsElement, 'notificationsElement')
 
+    const outer = this
+
     this.loadingToast = notificationsElement.find('#async-waiting-indicator')
-    this.notificationsCount = {
+    this.notificationsCount = new Proxy({
       error: 0,
       info: 0,
       warn: 0
-    }
+    }, {
+      set(target, propertyKey, value) {
+        const defaultSet = Reflect.set(target, propertyKey, value)
+
+        if (outer.totalNotificationCount()) {
+          outer.setMinimizeButtonVisibility(true)
+        } else {
+          outer.setMinimizeButtonVisibility(false)
+        }
+
+        return defaultSet
+      }
+    })
     this.notificationsElement = notificationsElement
     this.savedToast = notificationsElement.find('#async-success-indicator')
     this.savedToastTimeouts = []
@@ -204,6 +218,20 @@ class Notifier {
 
       this.notify(errorMsg, 'error')
     }
+  }
+
+  setMinimizeButtonVisibility (visible) {
+    if (visible) {
+      this.notificationsElement.children('button').show()
+    } else {
+      this.notificationsElement.children('button').hide()
+    }
+  }
+
+  totalNotificationCount () {
+    return Object.values(this.notificationsCount).reduce((acc, currentValue) => {
+      return acc + currentValue
+    }, 0)
   }
 
   // Shows a loading indicator until all operations resolve
