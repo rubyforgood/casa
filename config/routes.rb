@@ -166,6 +166,8 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+
+    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
