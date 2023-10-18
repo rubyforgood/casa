@@ -15,6 +15,7 @@ beforeEach(() => {
       <div id="async-success-indicator" class="success-indicator" style="display: none">
         Saved
       </div>
+      <button id="toggle-minimize-notifications" style="display: none;">minimize notifications <i class="fa-solid fa-minus"></i></button>
     </div>`
 
   $(() => { // JQuery's callback for the DOM loading
@@ -155,23 +156,8 @@ describe('Notifier', () => {
     })
   })
 
-  describe('waitForAsyncOperation', () => {
-    test('displays the loading indicator', (done) => {
-      $(() => {
-        const loadingToast = $('#async-waiting-indicator')
-
-        try {
-          expect(loadingToast.css('display')).toBe('none')
-
-          notifier.waitForAsyncOperation()
-          expect(loadingToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
+  describe('notificationsCount', () => {
+    
   })
 
   describe('resolveAsyncOperation', () => {
@@ -274,6 +260,33 @@ describe('Notifier', () => {
           expect(() => {
             notifier.resolveAsyncOperation()
           }).toThrow()
+
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+  })
+
+  describe('setMinimizeButtonVisibility', () => {
+
+  })
+
+  describe('totalNotificationCount', () => {
+
+  })
+
+  describe('waitForAsyncOperation', () => {
+    test('displays the loading indicator', (done) => {
+      $(() => {
+        const loadingToast = $('#async-waiting-indicator')
+
+        try {
+          expect(loadingToast.css('display')).toBe('none')
+
+          notifier.waitForAsyncOperation()
+          expect(loadingToast.attr('style')).toEqual(expect.not.stringContaining('display: none'))
 
           done()
         } catch (error) {
