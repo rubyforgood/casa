@@ -170,12 +170,6 @@ class Notifier {
     return newNotification
   }
 
-  // Shows a loading indicator until all operations resolve
-  waitForAsyncOperation () {
-    this.loadingToast.show()
-    this.waitingAsyncOperationCount++
-  }
-
   // Shows the saved toast for 2 seconds and hides the loading indicator if no more async operations are pending
   //  @param  {string=}  error The error to be displayed(optional)
   //  @throws {Error}    for trying to resolve more async operations than the amount currently awaiting
@@ -210,6 +204,12 @@ class Notifier {
 
       this.notify(errorMsg, 'error')
     }
+  }
+
+  // Shows a loading indicator until all operations resolve
+  waitForAsyncOperation () {
+    this.loadingToast.show()
+    this.waitingAsyncOperationCount++
   }
 }
 
