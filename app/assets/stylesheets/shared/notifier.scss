@@ -8,10 +8,12 @@
 }
 
 #notifications {
-  bottom: 2em;
+  bottom: 0;
   display: flex;
   flex-direction: column;
   font-weight: 900;
+  max-height: 100vh;
+  overflow-y: auto;
   position: fixed;
   right: 2em;
   z-index: 100;
