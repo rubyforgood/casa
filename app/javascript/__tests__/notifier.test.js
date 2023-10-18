@@ -157,7 +157,32 @@ describe('Notifier', () => {
   })
 
   describe('notificationsCount', () => {
-    
+    it('automatically shows the minimize button when going from 0 to 1 notifications', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    it('automatically hides the minimize button when going from 1 to 0 notifications', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    it('increments the correct', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('resolveAsyncOperation', () => {
@@ -270,11 +295,34 @@ describe('Notifier', () => {
   })
 
   describe('setMinimizeButtonVisibility', () => {
+    it('hides the mimimize button when passed false', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
 
+    it('shows the mimimize button when passed true', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('totalNotificationCount', () => {
-
+    it('returns the number of notifications the notifier currently has displayed', (done) => {
+      $(() => {
+        try {
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('waitForAsyncOperation', () => {
@@ -363,6 +411,22 @@ describe('Notifications', () => {
           expect(() => {
             notification.dismiss()
           }).toThrow(ReferenceError)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('causes the notifier to hide the minimize button if it dismisses the last notification', (done) => {
+      $(() => {
+        try {
+          expect(notificationsElement[0].innerHTML).toContain(notificationDefaultMessage)
+          expect($('#toggle-minimize-notifications').css('display')).not.toContain('none')
+
+          notification.dismiss()
+          expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
+          expect($('#toggle-minimize-notifications').css('display')).toContain('none')
           done()
         } catch (error) {
           done(error)

@@ -129,7 +129,7 @@ class Notifier {
       info: 0,
       warn: 0
     }, {
-      set(target, propertyKey, value) {
+      set (target, propertyKey, value) {
         const defaultSet = Reflect.set(target, propertyKey, value)
 
         if (outer.totalNotificationCount()) {
