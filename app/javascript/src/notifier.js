@@ -133,9 +133,9 @@ class Notifier {
         const defaultSet = Reflect.set(target, propertyKey, value)
 
         if (outer.totalNotificationCount()) {
-          outer.setMinimizeButtonVisibility(true)
+          outer.#setMinimizeButtonVisibility(true)
         } else {
-          outer.setMinimizeButtonVisibility(false)
+          outer.#setMinimizeButtonVisibility(false)
         }
 
         return defaultSet
@@ -220,7 +220,7 @@ class Notifier {
     }
   }
 
-  setMinimizeButtonVisibility (visible) {
+  #setMinimizeButtonVisibility (visible) {
     if (visible) {
       this.notificationsElement.children('button').show()
     } else {

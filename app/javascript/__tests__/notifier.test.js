@@ -294,26 +294,6 @@ describe('Notifier', () => {
     })
   })
 
-  describe('setMinimizeButtonVisibility', () => {
-    it('hides the mimimize button when passed false', (done) => {
-      $(() => {
-        try {
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
-
-    it('shows the mimimize button when passed true', (done) => {
-      $(() => {
-        try {
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
-  })
-
   describe('totalNotificationCount', () => {
     it('returns the number of notifications the notifier currently has displayed', (done) => {
       $(() => {
