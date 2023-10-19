@@ -236,12 +236,7 @@ readonly: true %>
   </div>
 
   <div class="card-style-1 pl-25 mb-10">
-    <div class="notes-header pr-25">
-      <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
-
-      <button id="open-highlight-modal" class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" data-bs-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
-
-    </div>
+    <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
     <div class="cc-italic mb-3">
       Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
     </div>
@@ -257,34 +252,3 @@ readonly: true %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
   <% end %>
-
-<div class="warning-modal">
-  <div class="modal fade" id="caseContactHighlight" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content card-style">
-        <div class="modal-header px-0 border-0">
-          <h5 class="text-bold">Highlight</h5>
-          <button
-            class="border-0 bg-transparent h1"
-            data-bs-dismiss="modal">
-            <i class="lni lni-cross-circle"></i>
-          </button>
-        </div>
-        <div class="modal-body px-0">
-          <div class="mb-30">
-            <h6 class="mb-20">
-              Coming Soon.
-            </h6>
-          </div>
-          <div class="action d-flex flex-wrap justify-content-end">
-            <button
-              data-bs-dismiss="modal"
-              class="main-btn danger-btn-outline btn-hover m-1"><i class="lni lni-ban mr-10"></i>
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
