@@ -157,9 +157,27 @@ describe('Notifier', () => {
   })
 
   describe('notificationsCount', () => {
+    const initialNotificationsCountState = {
+      error: 0,
+      info: 0,
+      warn: 0
+    }
+
     it('automatically shows the minimize button when going from 0 to 1 notifications', (done) => {
       $(() => {
         try {
+          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
+          expect($('#toggle-minimize-notifications').css('display')).toBe('none')
+
+          notifier.notify('message', 'warn')
+
+          expect(notifier.notificationsCount).toEqual({
+            error: 0,
+            info: 0,
+            warn: 1
+          })
+          expect($('#toggle-minimize-notifications').css('display')).not.toBe('none')
+          done()
         } catch (error) {
           done(error)
         }
@@ -169,15 +187,55 @@ describe('Notifier', () => {
     it('automatically hides the minimize button when going from 1 to 0 notifications', (done) => {
       $(() => {
         try {
+          const notification = notifier.notify('message', 'warn')
+
+          expect(notifier.notificationsCount).toEqual({
+            error: 0,
+            info: 0,
+            warn: 1
+          })
+          expect($('#toggle-minimize-notifications').css('display')).not.toBe('none')
+
+          notification.dismiss()
+
+          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
+          expect($('#toggle-minimize-notifications').css('display')).toBe('none')
+          done()
         } catch (error) {
           done(error)
         }
       })
     })
 
-    it('increments the correct', (done) => {
+    it('increments the correct level after creating a new notification', (done) => {
       $(() => {
         try {
+          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
+
+          notifier.notify('message', 'info')
+
+          expect(notifier.notificationsCount).toEqual({
+            error: 0,
+            info: 1,
+            warn: 0
+          })
+
+          notifier.notify('message', 'error')
+
+          expect(notifier.notificationsCount).toEqual({
+            error: 1,
+            info: 1,
+            warn: 0
+          })
+
+          notifier.notify('message', 'warn')
+
+          expect(notifier.notificationsCount).toEqual({
+            error: 1,
+            info: 1,
+            warn: 1
+          })
+          done()
         } catch (error) {
           done(error)
         }
