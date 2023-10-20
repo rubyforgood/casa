@@ -356,6 +356,26 @@ describe('Notifier', () => {
     it('returns the number of notifications the notifier currently has displayed', (done) => {
       $(() => {
         try {
+          expect(notifier.totalNotificationCount()).toBe(0)
+
+          const notificationCount = Math.floor(Math.random() * 10) + 1
+          const notifications = []
+
+          for (let i = 0; i < notificationCount; i++) {
+            notifications.push(notifier.notify('message', 'error'))
+          }
+
+          expect(notifier.totalNotificationCount()).toBe(notificationCount)
+
+          const aboutHalfNotificationCount = Math.floor(notificationCount / 2)
+
+          for (let i = 0; i < aboutHalfNotificationCount; i++) {
+            notifications.pop().dismiss()
+          }
+
+          expect(notifier.totalNotificationCount()).toBe(notificationCount - aboutHalfNotificationCount)
+
+          done()
         } catch (error) {
           done(error)
         }
