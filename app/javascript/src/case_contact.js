@@ -2,129 +2,15 @@
 /* global window */
 /* global $ */
 
+import { escape } from 'lodash'
 import Swal from 'sweetalert2'
-
-window.onload = function () {
-  const milesDriven = document.getElementById('case_contact_miles_driven')
-  if (!milesDriven) return
-
-  const durationHours = document.getElementById('case-contact-duration-hours-display')
-  const durationMinutes = document.getElementById('case-contact-duration-minutes-display')
-  const caseOccurredAt = document.getElementById('case_contact_occurred_at')
-  const caseContactSubmit = $('#case-contact-submit')
-  const volunteerAddressFieldState = (hide) => {
-    if (hide) $('.field.volunteer-address').addClass('hide-field')
-    else $('.field.volunteer-address').removeClass('hide-field')
-    $('.field.volunteer-address input[type=text]').prop('disabled', hide)
-    $('.field.volunteer-address input[type=hidden]').prop('disabled', hide)
-    $('.field.volunteer-address input[type=text]').prop('required', !hide)
-  }
-
-  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]')[0].checked) {
-    volunteerAddressFieldState(false)
-  } else {
-    volunteerAddressFieldState(true)
-  }
-
-  $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
-    if (this.value === 'true') {
-      volunteerAddressFieldState(false)
-    } else if (this.value === 'false') {
-      volunteerAddressFieldState(true)
-    }
-  })
-
-  const timeZoneConvertedDate = enGBDateString(new Date())
-
-  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.value)) === timeZoneConvertedDate) {
-    caseOccurredAt.value = timeZoneConvertedDate
-  }
-
-  milesDriven.onchange = function () {
-    const contactMedium = document.getElementById('case_contact_medium_type').value || '(contact medium not set)'
-    const contactMediumInPerson = `${contactMedium}` === 'in-person'
-    if (milesDriven.value > 0 && !contactMediumInPerson) {
-      alert(`Just checking: you drove ${milesDriven.value} miles for a ${contactMedium} contact?`)
-    }
-  }
-
-  caseOccurredAt.onchange = function () {
-    validateOccurredAt(caseOccurredAt)
-  }
-
-  caseOccurredAt.onfocusout = function () {
-    validateOccurredAt(caseOccurredAt, 'focusout')
-  }
-
-  function validateAtLeastOneChecked (elements) {
-    // convert to Array
-    const elementsArray = Array.prototype.slice.call(elements)
-
-    const numChecked = elementsArray.filter(x => x.checked).length
-    if (numChecked === 0) {
-      elementsArray[0].required = true
-    } else {
-      elementsArray[0].required = false
-    }
-  }
-
-  function validateDuration () {
-    const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
-    const fifteenMinutes = 15
-    const totalMinutes = durationMinutes.value + durationHours.value * 60
-
-    if (totalMinutes < fifteenMinutes) {
-      durationMinutes.setCustomValidity(msg)
-    } else {
-      durationMinutes.setCustomValidity('')
-    }
-  }
-
-  function validateNoteContent (e) {
-    const noteContent = document.getElementById('case_contact_notes').value
-    if (noteContent !== '') {
-      e.preventDefault()
-      $('#confirm-submit').modal('show')
-      const escapedNoteContent = noteContent.replace(/&/g, '&amp;')
-        .replace(/>/g, '&gt;')
-        .replace(/</g, '&lt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&apos;')
-      document.getElementById('note-content').innerHTML = escapedNoteContent
-    }
-  }
-
-  $('#casa-contact-form').on('submit', function (e) {
-    validateNoteContent(e)
-  })
-
-  $('#confirm-submit').on('focus', function () {
-    document.getElementById('modal-case-contact-submit').disabled = false
-  })
-
-  $('#confirm-submit').on('hide.bs.modal', function () {
-    caseContactSubmit.prop('disabled', false)
-  })
-
-  const caseContactSubmitFormModal = document.getElementById('modal-case-contact-submit')
-  caseContactSubmitFormModal.onclick = function () {
-    $('#casa-contact-form').off('submit')
-  }
-
-  caseContactSubmit.on('click', function () {
-    validateAtLeastOneChecked(document.querySelectorAll('.casa-case-id'))
-    validateAtLeastOneChecked(document.querySelectorAll('.case-contact-contact-type'))
-
-    validateDuration()
-  })
-}
 
 function validateOccurredAt (caseOccurredAt, eventType = '') {
   const msg = 'Case Contact Occurrences cannot be in the future.'
   const today = new Date()
   today.setHours(0, 0, 0, 0)
 
-  const caseDate = new Date(caseOccurredAt.value)
+  const caseDate = new Date(caseOccurredAt.val())
   caseDate.setDate(caseDate.getDate())
   caseDate.setHours(0, 0, 0, 0)
 
@@ -132,7 +18,7 @@ function validateOccurredAt (caseOccurredAt, eventType = '') {
     if (eventType !== 'focusout') {
       alert(msg)
     }
-    caseOccurredAt.value = enGBDateString(today)
+    caseOccurredAt.val(enGBDateString(today))
   }
 }
 
@@ -186,6 +72,102 @@ function displayHighlightModal (event) {
 }
 
 $(() => { // JQuery's callback for the DOM loading
+  const milesDriven = $('#case_contact_miles_driven')
+  const durationHoursElement = $('#case-contact-duration-hours-display')
+  const durationMinutes = $('#case-contact-duration-minutes-display')
+  const caseOccurredAt = $('#case_contact_occurred_at')
+  const caseContactSubmit = $('#case-contact-submit')
+  const volunteerAddressFieldState = (hide) => {
+    if (hide) $('.field.volunteer-address').addClass('hide-field')
+    else $('.field.volunteer-address').removeClass('hide-field')
+    $('.field.volunteer-address input[type=text]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=hidden]').prop('disabled', hide)
+    $('.field.volunteer-address input[type=text]').prop('required', !hide)
+  }
+
+  if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]').prop('checked')) {
+    volunteerAddressFieldState(false)
+  } else {
+    volunteerAddressFieldState(true)
+  }
+
+  $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
+    if (this.value === 'true') {
+      volunteerAddressFieldState(false)
+    } else if (this.value === 'false') {
+      volunteerAddressFieldState(true)
+    }
+  })
+
+  const timeZoneConvertedDate = enGBDateString(new Date())
+
+  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.val())) === timeZoneConvertedDate) {
+    caseOccurredAt.val(timeZoneConvertedDate)
+  }
+
+  milesDriven.on('change', () => {
+    const contactMedium = $('input[name="case_contact[medium_type]"]:checked').val() || '(contact medium not set)'
+    const contactMediumInPerson = `${contactMedium}` === 'in-person'
+    const milesDrivenCount = milesDriven.val()
+
+    if (milesDrivenCount > 0 && !contactMediumInPerson) {
+      alert(`Just checking: you drove ${milesDrivenCount} miles for a ${contactMedium} contact?`)
+    }
+  })
+
+  caseOccurredAt.on('change', () => {
+    validateOccurredAt(caseOccurredAt)
+  })
+
+  caseOccurredAt.on('focusout', () => {
+    validateOccurredAt(caseOccurredAt, 'focusout')
+  })
+
+  function validateDuration () {
+    const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
+    const fifteenMinutes = 15
+    const totalMinutes = durationMinutes.val() + durationHoursElement.val() * 60
+    const durationMinutesDOMElement = durationMinutes.get(0)
+
+    if (totalMinutes < fifteenMinutes) {
+      durationMinutesDOMElement.setCustomValidity(msg)
+    } else {
+      durationMinutesDOMElement.setCustomValidity('')
+    }
+
+    durationMinutesDOMElement.reportValidity()
+  }
+
+  function validateNoteContent (e) {
+    const noteContent = $('#case_contact_notes').val()
+    if (noteContent) {
+      e.preventDefault()
+      $('#confirm-submit').modal('show')
+      $('#note-content').html(escape(noteContent))
+    }
+  }
+
+  $('#casa-contact-form').on('submit', function (e) {
+    validateNoteContent(e)
+  })
+
+  $('#confirm-submit').on('focus', function () {
+    $('#modal-case-contact-submit').prop('disabled', false)
+  })
+
+  $('#confirm-submit').on('hide.bs.modal', function () {
+    caseContactSubmit.prop('disabled', false)
+  })
+
+  const caseContactSubmitFormModal = $('#modal-case-contact-submit')
+  caseContactSubmitFormModal.on('click', () => {
+    $('#casa-contact-form').off('submit')
+  })
+
+  caseContactSubmit.on('click', function () {
+    validateDuration()
+  })
+
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
   $('#open-highlight-modal').on('click', displayHighlightModal)

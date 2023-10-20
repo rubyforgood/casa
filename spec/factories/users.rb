@@ -8,6 +8,7 @@ FactoryBot.define do
     case_assignments { [] }
     phone_number { "" }
     confirmed_at { Time.now }
+    token { "verysecuretoken" }
 
     trait :inactive do
       volunteer

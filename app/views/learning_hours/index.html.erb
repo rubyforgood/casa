@@ -15,6 +15,9 @@
           <tr>
             <th>Title</th>
             <th>Learning Type</th>
+            <% if current_user.casa_org.learning_topic_active %>
+              <th>Learning Topic</th>
+            <% end %>
             <th>Date</th>
             <th>Time Spent</th>
           </tr>
@@ -26,6 +29,9 @@
                 <%= link_to learning_hour.name, volunteer_learning_hour_path(id: learning_hour.id) %>
               </td>
               <td> <%= learning_hour.learning_hour_type.name %> </td>
+              <% if current_user.casa_org.learning_topic_active %>
+                <td> <%= learning_hour.learning_hour_topic&.name %> </td>
+              <% end %>
               <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
               <td>
               <% if (learning_hour.duration_hours > 0) %>

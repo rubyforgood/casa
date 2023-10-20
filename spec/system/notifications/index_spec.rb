@@ -166,6 +166,22 @@ RSpec.describe "notifications/index", type: :system do
     end
   end
 
+  context "ReimbursementCompleteNotification" do
+    it "should display a notification on the notifications page" do
+      case_contact = create(:case_contact, :wants_reimbursement)
+      volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
+      sign_in volunteer
+      visit notifications_path
+      notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
+        "#{case_contact.miles_driven}mi on #{case_contact.occurred_at_display} has been processed and is " \
+        "en route."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Reimbursement Approved")
+      expect(page).to have_content(notification_message)
+      expect(page).to have_link(href: case_contacts_path(casa_case_id: casa_case.id))
+    end
+  end
+
   context "when there are no notifications" do
     it "displays a message to the user" do
       sign_in volunteer

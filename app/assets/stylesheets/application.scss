@@ -12,7 +12,7 @@
 // custom css for the app
 @use "base/breakpoints";
 
-@use "shared/async_notifier";
+@use "shared/notifier";
 @use "shared/dashboard";
 @use "shared/flashes";
 @use "shared/footer";
@@ -31,6 +31,7 @@
 @use "pages/case_contacts";
 @use "pages/court_dates";
 @use "pages/emancipation";
+@use "pages/feature_flags";
 @use "pages/login";
 @use "pages/password";
 @use "pages/patch_notes";

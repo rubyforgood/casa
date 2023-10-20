@@ -103,6 +103,16 @@
         <% if current_user.volunteer? %>
           <%= render partial: "layouts/other_duties_nav_item" %>
         <% end %>
+
+        <% if policy(:application).see_banner_page? %>
+          <li class="<%= active_class(casa_admins_path) %> nav-item">
+            <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
+              <i class="lni lni-flag mr-10"></i>
+              Banners
+            <% end %>
+          </li>
+        <% end %>
+
         <li class="nav-item nav-item-has-children">
           <a
             href="#0"
@@ -172,14 +182,6 @@
               </li>
             <% end %>
 
-            <% if policy(:application).see_banner_page? %>
-              <li>
-                <%= link_to banners_path, class: "#{active_class(banners_path)}" do %>
-                  <i class="lni lni-flag mr-10"></i>
-                  Banners
-                <% end %>
-              </li>
-            <% end %>
           </ul>
         </li>
         <li>

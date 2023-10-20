@@ -71,7 +71,7 @@
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
         <%= form.text_field :occurred_at,
                             value: occurred_at.to_date,
-                            data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                            data: {date_format: "yyyy/mm/dd", provide: "datepicker"},
                             class: "card-style-1" %>
       </div>
     </div>

@@ -1,5 +1,7 @@
 require "pry"
 require "webmock/rspec"
+require "email_spec"
+require "email_spec/rspec"
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"

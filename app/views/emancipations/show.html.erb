@@ -1,8 +1,10 @@
-<div class="row pt-30 mb-30">
-  <div class="col-sm-12 dashboard-table-header">
+<div class="row justify-content-between align-items-center pt-30 mb-30">
+  <div class="col-sm-auto dashboard-table-header">
     <h1>Emancipation Checklist</h1>
     <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
-    <span class="d-block float-md-right my-2 mt-md-0 text-center">
+  </div>
+  <div class="col-sm-auto">
+    <span class="mt-md-0 text-center">
       <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: "main-btn primary-btn btn-sm btn-hover" do %>
         <i class="lni lni-download mr-10"></i>
             Download Checklist
@@ -53,5 +55,3 @@
   <% end %>
 </div>
 <!-- card end -->
-
-<%= render "shared/async_notifier" %>

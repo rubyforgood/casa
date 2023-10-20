@@ -1,7 +1,7 @@
 /* eslint-env jquery */
 /* global $ */
 
-const Notifier = require('./async_notifier')
+const { Notifier } = require('./notifier')
 const TypeChecker = require('./type_checker')
 
 const emancipationPage = {
@@ -17,7 +17,7 @@ function resolveAsyncOperation (error) {
     error = error.message
   }
 
-  emancipationPage.notifier.stopAsyncOperation(error)
+  emancipationPage.notifier.resolveAsyncOperation(error)
 }
 
 // Adds or deletes an option from the current casa case
@@ -39,7 +39,7 @@ function saveCheckState (action, checkItemId) {
 
   TypeChecker.checkPositiveInteger(checkItemId, 'checkItemId')
 
-  emancipationPage.notifier.startAsyncOperation()
+  emancipationPage.notifier.waitForAsyncOperation()
 
   // Post request
   return $.post(emancipationPage.savePath, {
@@ -104,8 +104,8 @@ $(() => { // JQuery's callback for the DOM loading
     return
   }
 
-  const asyncNotificationsElement = $('#async-notifications')
-  emancipationPage.notifier = new Notifier(asyncNotificationsElement)
+  const notificationsElement = $('#notifications')
+  emancipationPage.notifier = new Notifier(notificationsElement)
 
   $('.category-collapse-icon').on('click', function () {
     const categoryCollapseIcon = $(this)

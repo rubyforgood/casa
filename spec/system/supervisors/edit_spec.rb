@@ -125,7 +125,9 @@ RSpec.describe "supervisors/edit", type: :system do
 
       sign_in user
 
+      visit supervisors_path
       visit edit_supervisor_path(supervisor)
+
       click_on "Change to Admin"
 
       expect(page).to have_text("Supervisor was changed to Admin.")

@@ -1,4 +1,4 @@
-const AsyncNotifier = require('../async_notifier')
+const { Notifier } = require('../notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
 const patchNoteFormBeforeEditData = {}
@@ -77,7 +77,7 @@ patchNoteFunctions.createPatchNote = function (patchNoteGroupId, patchNoteText, 
       patch_note_type_id: patchNoteTypeId
     },
     beforeSend: function () {
-      pageNotifier.startAsyncOperation()
+      pageNotifier.waitForAsyncOperation()
     }
   })
     .then(function (response, textStatus, jqXHR) {
@@ -108,7 +108,7 @@ patchNoteFunctions.deletePatchNote = function (patchNoteId) {
     url: `${patchNotePath}/${patchNoteId}`,
     type: 'DELETE',
     beforeSend: function () {
-      pageNotifier.startAsyncOperation()
+      pageNotifier.waitForAsyncOperation()
     }
   })
     .then(function (response, textStatus, jqXHR) {
@@ -447,7 +447,7 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
     error = error.message
   }
 
-  pageNotifier.stopAsyncOperation(error)
+  pageNotifier.resolveAsyncOperation(error)
 }
 
 // Saves an edited patch note
@@ -475,7 +475,7 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
       patch_note_type_id: patchNoteTypeId
     },
     beforeSend: function () {
-      pageNotifier.startAsyncOperation()
+      pageNotifier.waitForAsyncOperation()
     }
   })
     .then(function (response, textStatus, jqXHR) {
@@ -502,8 +502,8 @@ $(() => { // JQuery's callback for the DOM loading
   }
 
   try {
-    const asyncNotificationsElement = $('#async-notifications')
-    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+    const asyncNotificationsElement = $('#notifications')
+    pageNotifier = new Notifier(asyncNotificationsElement)
 
     $('#new-patch-note button').on('click', patchNoteFunctions.onCreate)
     $('#patch-note-list .button-delete').on('click', patchNoteFunctions.onDeletePatchNote)

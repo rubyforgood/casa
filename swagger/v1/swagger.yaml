@@ -1,0 +1,61 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+components:
+  schemas:
+    login_success:
+      type: object
+      properties:
+        id:
+          type: integer
+        display_name:
+          type: string
+        email:
+          type: string
+        token:
+          type: string
+    login_failure:
+      type: object
+      properties:
+        message:
+          type: string
+paths:
+  "/api/v1/users/sign_in":
+    post:
+      summary: Signs in a user
+      tags:
+      - Sessions
+      parameters: []
+      responses:
+        '201':
+          description: user signed in
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/login_success"
+        '401':
+          description: invalid credentials
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/login_failure"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+              required:
+              - email
+              - password
+servers:
+- url: https://{defaultHost}
+  variables:
+    defaultHost:
+      default: www.example.com

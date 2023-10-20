@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
 
@@ -110,6 +112,7 @@ Rails.application.routes.draw do
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
   resources :learning_hour_types, only: %i[new create edit update]
+  resources :learning_hour_topics, only: %i[new create edit update]
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
   resources :banners, only: %i[index new edit create update destroy]
@@ -163,6 +166,8 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+
+    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
@@ -188,4 +193,13 @@ Rails.application.routes.draw do
   end
 
   get "/error", to: "error#index"
+
+  namespace :api do
+    namespace :v1 do
+      namespace :users do
+        post "sign_in", to: "sessions#create"
+        # get 'sign_out', to: 'sessions#destroy'
+      end
+    end
+  end
 end

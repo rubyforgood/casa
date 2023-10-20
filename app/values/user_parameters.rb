@@ -10,6 +10,7 @@ class UserParameters < SimpleDelegator
         :active,
         :receive_reimbursement_email,
         :type,
+        :monthly_learning_hours_report,
         address_attributes: [:id, :content]
       )
 
