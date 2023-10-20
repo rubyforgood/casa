@@ -9,14 +9,20 @@ let notifier
 
 beforeEach(() => {
   document.body.innerHTML = `<div id="notifications">
-      <div id="async-waiting-indicator" style="display: none">
-        Saving <div class="load-spinner"></div>
-      </div>
-      <div id="async-success-indicator" class="success-indicator" style="display: none">
-        Saved
-      </div>
-      <button id="toggle-minimize-notifications" style="display: none;">minimize notifications <i class="fa-solid fa-minus"></i></button>
-    </div>`
+  <div id="async-waiting-indicator" style="display: none">
+    Saving <i class="load-spinner"></i>
+  </div>
+  <div id="async-success-indicator" class="success-indicator" style="display: none">
+    Saved
+  </div>
+  <button id="toggle-minimize-notifications" style="display: none;">
+    minimize notifications 
+    <span class="badge rounded-pill bg-success">1</span>
+    <span class="badge rounded-pill bg-warning">1</span>
+    <span class="badge rounded-pill bg-danger">1</span>
+    <i class="fa-solid fa-minus"></i>
+  </button>
+</div>`
 
   $(() => { // JQuery's callback for the DOM loading
     notificationsElement = $('#notifications')
@@ -37,7 +43,7 @@ describe('Notifier', () => {
 
           // Notifications contain the hidden "Saved" message and the new message
           expect(successMessages.length).toBe(2)
-          expect(successMessages[1].innerHTML).toContain(notificationMessage)
+          expect(successMessages[0].innerHTML).toContain(notificationMessage)
           done()
         } catch (error) {
           done(error)
@@ -80,7 +86,7 @@ describe('Notifier', () => {
 
           expect(failureMessages.length).toBe(0)
 
-          $(successMessages[1]).children('button').click()
+          $(successMessages[0]).children('button').click()
           successMessages = notificationsElement.find('.success-indicator')
 
           expect(successMessages.length).toBe(1)
