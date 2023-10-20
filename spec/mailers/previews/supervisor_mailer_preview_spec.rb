@@ -3,7 +3,7 @@ require File.join(Rails.root, "lib", "mailers", "previews", "supervisor_mailer_p
 
 RSpec.describe SupervisorMailerPreview do
   let!(:supervisor) { create(:supervisor) }
-  let!(:volunteer) { create(:volunteer) }
+  let!(:volunteer) { create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
 
   describe "#account_setup" do
     context "When no ID is passed" do
