@@ -175,7 +175,7 @@ class Notifier {
         </div>`
       )
 
-    this.notificationsElement.append(newNotificationAsJQuery)
+    this.notificationsElement.prepend(newNotificationAsJQuery)
 
     const newNotification = new Notification(newNotificationAsJQuery, this)
 
