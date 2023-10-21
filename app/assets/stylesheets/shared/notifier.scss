@@ -30,7 +30,7 @@
     }
   }
 
-  .failure-indicator {
+  .danger-notification {
     background-color: #b71c1c;
     color: white
   }
@@ -40,12 +40,12 @@
     padding: 0;
   }
 
-  .success-indicator {
+  .success-notification {
     background-color: #28a745;
     color: white
   }
 
-  .warn-indicator {
+  .warning-notification {
     background-color: #ffc107;
   }
 

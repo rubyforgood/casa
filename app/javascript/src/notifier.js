@@ -3,21 +3,10 @@ import { escape } from 'lodash'
 
 const TypeChecker = require('./type_checker.js')
 
-const levels = {
-  error: {
-    classBootstrap: 'danger',
-    classPrefixMessage: 'failure'
-  },
-
-  info: {
-    classBootstrap: 'success',
-    classPrefixMessage: 'success'
-  },
-
-  warn: {
-    classBootstrap: 'warning',
-    classPrefixMessage: 'warn'
-  }
+const levelClasses = {
+  error: 'danger',
+  info: 'success',
+  warn: 'warning'
 }
 
 class Notification {
@@ -28,7 +17,7 @@ class Notification {
       throw new TypeError('Param parentNotifier must be an instance of Notifier')
     }
 
-    const levelCapturedViaClassNames = notificationElementAsJQuery.attr('class').match(/(warn|failure|success)-indicator/)
+    const levelCapturedViaClassNames = notificationElementAsJQuery.attr('class').match(/(warning|danger|success)-notification/)
 
     if (!levelCapturedViaClassNames) {
       throw new RangeError('Failed to parse notification level from notification level class')
@@ -36,10 +25,12 @@ class Notification {
 
     this.level = levelCapturedViaClassNames[1]
 
-    if (this.level === 'failure') {
+    if (this.level === 'danger') {
       this.level = 'error'
     } else if (this.level === 'success') {
       this.level = 'info'
+    } else if (this.level === 'warning') {
+      this.level = 'warn'
     }
 
     notificationElementAsJQuery.children('button').on('click', () => {
@@ -107,7 +98,7 @@ class Notification {
   }
 
   #userDismissableEnable () {
-    const dismissButton = $(`<button class="btn btn-${levels[this.level].classBootstrap} btn-sm">×</button>`)
+    const dismissButton = $(`<button class="btn btn-${levelClasses[this.level]} btn-sm">×</button>`)
     this.notificationElement.append(dismissButton)
 
     dismissButton.on('click', () => {
@@ -123,7 +114,22 @@ class Notifier {
 
     const outer = this
 
-    this.loadingToast = notificationsElement.find('#async-waiting-indicator')
+    this.elements = {
+      loadingToast: notificationsElement.find('#async-waiting-indicator'),
+      messageCountBadges: {
+        all: notificationsElement.find('#toggle-minimize-notifications .badge'),
+        error: notificationsElement.find('#toggle-minimize-notifications .bg-danger'),
+        info: notificationsElement.find('#toggle-minimize-notifications .bg-success'),
+        warn: notificationsElement.find('#toggle-minimize-notifications .bg-warning')
+      },
+      messagesContainer: notificationsElement.children('.messages'),
+      minimizeButton: notificationsElement.children('#toggle-minimize-notifications'),
+      minimizeButtonIcon: notificationsElement.find('#toggle-minimize-notifications fa-solid'),
+      minimizeButtonText: notificationsElement.find('#toggle-minimize-notifications span').first(),
+      notificationsElement,
+      savedToast: notificationsElement.find('#async-success-indicator')
+    }
+
     this.notificationsCount = new Proxy({
       error: 0,
       info: 0,
@@ -138,11 +144,11 @@ class Notifier {
           outer.#setMinimizeButtonVisibility(false)
         }
 
-        const levelBadge = $('#toggle-minimize-notifications').children(`.bg-${levels[propertyKey].classBootstrap}`)
+        const levelBadge = outer.elements.messageCountBadges[propertyKey]
 
         levelBadge.text(value)
 
-        if (value && outer.notificationsElement.children('.messages').css('display') === 'none') {
+        if (value && outer.elements.messagesContainer.css('display') === 'none') {
           levelBadge.show()
         } else {
           levelBadge.hide()
@@ -151,8 +157,7 @@ class Notifier {
         return defaultSet
       }
     })
-    this.notificationsElement = notificationsElement
-    this.savedToast = notificationsElement.find('#async-success-indicator')
+
     this.savedToastTimeouts = []
     this.waitingAsyncOperationCount = 0
   }
@@ -172,20 +177,20 @@ class Notifier {
 
     const escapedMessage = escape(message)
 
-    if (!(levels[level])) {
+    if (!(levelClasses[level])) {
       throw new RangeError('Unsupported option for param level')
     }
 
-    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levels[level].classBootstrap} btn-sm">×</button>` : ''
+    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levelClasses[level]} btn-sm">×</button>` : ''
     const newNotificationAsJQuery =
       $(
-        `<div class="${levels[level].classPrefixMessage}-indicator">
+        `<div class="${levelClasses[level]}-notification">
           <span>${escapedMessage}</span>
           ${dismissButtonAsHTML}
         </div>`
       )
 
-    this.notificationsElement.children('.messages').append(newNotificationAsJQuery)
+    this.elements.messagesContainer.append(newNotificationAsJQuery)
 
     const newNotification = new Notification(newNotificationAsJQuery, this)
 
@@ -207,18 +212,18 @@ class Notifier {
     this.waitingAsyncOperationCount--
 
     if (this.waitingAsyncOperationCount === 0) {
-      this.loadingToast.hide()
+      this.elements.loadingToast.hide()
     }
 
     if (!errorMsg) {
-      this.savedToast.show()
+      this.elements.savedToast.show()
 
       this.savedToastTimeouts.forEach((timeoutID) => {
         clearTimeout(timeoutID)
       })
 
       this.savedToastTimeouts.push(setTimeout(() => {
-        this.savedToast.hide()
+        this.elements.savedToast.hide()
         this.savedToastTimeouts.shift()
       }, 2000))
     } else {
@@ -232,21 +237,20 @@ class Notifier {
 
   #setMinimizeButtonVisibility (visible) {
     if (visible) {
-      this.notificationsElement.children('button').show()
+      this.elements.minimizeButton.show()
     } else {
-      this.notificationsElement.children('button').hide()
+      this.elements.minimizeButton.hide()
     }
   }
 
   toggleMinimize () {
-    const messagesContainer = this.notificationsElement.children('.messages')
-    const minimizeButton = this.notificationsElement.children('#toggle-minimize-notifications')
+    const { messagesContainer } = this.elements
 
     if (messagesContainer.css('display') === 'none') {
       messagesContainer.show()
-      minimizeButton.children('span').first().show()
-      minimizeButton.children('.badge').hide()
-      minimizeButton.children('.fa-solid').removeClass('fa-plus').addClass('fa-minus')
+      this.elements.minimizeButtonText.show()
+      this.elements.messageCountBadges.all.hide()
+      this.elements.minimizeButtonIcon.removeClass('fa-plus').addClass('fa-minus')
     } else {
       messagesContainer.hide()
 
@@ -254,13 +258,13 @@ class Notifier {
         const levelMessageCount = this.notificationsCount[level]
 
         if (levelMessageCount) {
-          const levelBadge = minimizeButton.children(`.bg-${levels[level].classBootstrap}`)
+          const levelBadge = this.elements.messageCountBadges[level]
           levelBadge.show()
         }
       }
 
-      minimizeButton.children('span').first().hide()
-      minimizeButton.children('.fa-solid').removeClass('fa-minus').addClass('fa-plus')
+      this.elements.minimizeButtonText.hide()
+      this.elements.minimizeButtonIcon.removeClass('fa-minus').addClass('fa-plus')
     }
   }
 
@@ -272,7 +276,7 @@ class Notifier {
 
   // Shows a loading indicator until all operations resolve
   waitForAsyncOperation () {
-    this.loadingToast.show()
+    this.elements.loadingToast.show()
     this.waitingAsyncOperationCount++
   }
 }

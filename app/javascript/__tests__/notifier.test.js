@@ -14,7 +14,7 @@ beforeEach(() => {
   <div id="async-waiting-indicator" style="display: none">
     Saving <i class="load-spinner"></i>
   </div>
-  <div id="async-success-indicator" class="success-indicator" style="display: none">
+  <div id="async-success-indicator" class="success-notification" style="display: none">
     Saved
   </div>
   <button id="toggle-minimize-notifications" style="display: none;">
@@ -41,7 +41,7 @@ describe('Notifier', () => {
         try {
           notifier.notify(notificationMessage, 'info')
 
-          const successMessages = notificationsElement.children('.messages').find('.success-indicator')
+          const successMessages = notificationsElement.children('.messages').find('.success-notification')
 
           expect(successMessages.length).toBe(1)
           expect(successMessages[0].innerHTML).toContain(notificationMessage)
@@ -59,7 +59,7 @@ describe('Notifier', () => {
         try {
           notifier.notify(notificationMessage, 'error')
 
-          const failureMessages = notificationsElement.find('.failure-indicator')
+          const failureMessages = notificationsElement.find('.danger-notification')
 
           expect(failureMessages.length).toBe(1)
           expect(failureMessages[0].innerHTML).toContain(notificationMessage)
@@ -77,19 +77,19 @@ describe('Notifier', () => {
           notifier.notify('', 'info')
 
           const messagesContainer = notificationsElement.children('.messages')
-          let failureMessages = messagesContainer.find('.failure-indicator')
-          let successMessages = messagesContainer.find('.success-indicator')
+          let failureMessages = messagesContainer.find('.danger-notification')
+          let successMessages = messagesContainer.find('.success-notification')
 
           expect(failureMessages.length).toBe(1)
           expect(successMessages.length).toBe(1)
 
           failureMessages.children('button').click()
-          failureMessages = notificationsElement.find('.failure-indicator')
+          failureMessages = notificationsElement.find('.danger-notification')
 
           expect(failureMessages.length).toBe(0)
 
           $(successMessages[0]).children('button').click()
-          successMessages = notificationsElement.find('.success-indicator')
+          successMessages = notificationsElement.find('.success-notification')
 
           expect(successMessages.length).toBe(1)
 
@@ -105,12 +105,12 @@ describe('Notifier', () => {
         try {
           notifier.notify('', 'error', false)
 
-          let failureMessages = notificationsElement.find('.failure-indicator')
+          let failureMessages = notificationsElement.find('.danger-notification')
 
           expect(failureMessages.length).toBe(1)
 
           failureMessages.children('button').click()
-          failureMessages = notificationsElement.find('.failure-indicator')
+          failureMessages = notificationsElement.find('.danger-notification')
 
           expect(failureMessages.length).toBe(1)
 
@@ -153,7 +153,7 @@ describe('Notifier', () => {
       $(() => {
         try {
           const notification = notifier.notify('test', 'info')
-          const onlyNotification = notificationsElement.children('.messages').children('.success-indicator')
+          const onlyNotification = notificationsElement.children('.messages').children('.success-notification')
           expect(notification.notificationElement.is(onlyNotification)).toBe(true)
 
           done()
@@ -313,7 +313,7 @@ describe('Notifier', () => {
           notifier.waitForAsyncOperation()
           notifier.resolveAsyncOperation(errorMessage)
 
-          const failureMessages = notificationsElement.find('.failure-indicator')
+          const failureMessages = notificationsElement.find('.danger-notification')
 
           expect(failureMessages.length).toBe(1)
           expect(failureMessages[0].innerHTML).toContain(errorMessage)
