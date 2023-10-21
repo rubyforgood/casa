@@ -5,18 +5,18 @@ const TypeChecker = require('./type_checker.js')
 
 const levels = {
   error: {
-    classPrefixMessage: 'failure',
-    classSuffixDismissButton: 'danger'
+    classBootstrap: 'danger',
+    classPrefixMessage: 'failure'
   },
 
   info: {
-    classPrefixMessage: 'success',
-    classSuffixDismissButton: 'success'
+    classBootstrap: 'success',
+    classPrefixMessage: 'success'
   },
 
   warn: {
-    classPrefixMessage: 'warn',
-    classSuffixDismissButton: 'warning'
+    classBootstrap: 'warning',
+    classPrefixMessage: 'warn'
   }
 }
 
@@ -107,7 +107,7 @@ class Notification {
   }
 
   #userDismissableEnable () {
-    const dismissButton = $(`<button class="btn btn-${levels[this.level].classSuffixDismissButton} btn-sm">×</button>`)
+    const dismissButton = $(`<button class="btn btn-${levels[this.level].classBootstrap} btn-sm">×</button>`)
     this.notificationElement.append(dismissButton)
 
     dismissButton.on('click', () => {
@@ -138,6 +138,16 @@ class Notifier {
           outer.#setMinimizeButtonVisibility(false)
         }
 
+        const levelBadge = $('#toggle-minimize-notifications').children(`.bg-${levels[propertyKey].classBootstrap}`)
+
+        levelBadge.text(value)
+
+        if (value && outer.notificationsElement.children('.messages').css('display') === 'none') {
+          levelBadge.show()
+        } else {
+          levelBadge.hide()
+        }
+
         return defaultSet
       }
     })
@@ -166,7 +176,7 @@ class Notifier {
       throw new RangeError('Unsupported option for param level')
     }
 
-    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levels[level].classSuffixDismissButton} btn-sm">×</button>` : ''
+    const dismissButtonAsHTML = isDismissable ? `<button class="btn btn-${levels[level].classBootstrap} btn-sm">×</button>` : ''
     const newNotificationAsJQuery =
       $(
         `<div class="${levels[level].classPrefixMessage}-indicator">
@@ -225,6 +235,32 @@ class Notifier {
       this.notificationsElement.children('button').show()
     } else {
       this.notificationsElement.children('button').hide()
+    }
+  }
+
+  toggleMinimize () {
+    const messagesContainer = this.notificationsElement.children('.messages')
+    const minimizeButton = this.notificationsElement.children('#toggle-minimize-notifications')
+
+    if (messagesContainer.css('display') === 'none') {
+      messagesContainer.show()
+      minimizeButton.children('span').first().show()
+      minimizeButton.children('.badge').hide()
+      minimizeButton.children('.fa-solid').removeClass('fa-plus').addClass('fa-minus')
+    } else {
+      messagesContainer.hide()
+
+      for (const level in this.notificationsCount) {
+        const levelMessageCount = this.notificationsCount[level]
+
+        if (levelMessageCount) {
+          const levelBadge = minimizeButton.children(`.bg-${levels[level].classBootstrap}`)
+          levelBadge.show()
+        }
+      }
+
+      minimizeButton.children('span').first().hide()
+      minimizeButton.children('.fa-solid').removeClass('fa-minus').addClass('fa-plus')
     }
   }
 
