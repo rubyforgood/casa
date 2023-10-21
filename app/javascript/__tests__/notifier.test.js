@@ -9,6 +9,8 @@ let notifier
 
 beforeEach(() => {
   document.body.innerHTML = `<div id="notifications">
+  <div class="messages">
+  </div>
   <div id="async-waiting-indicator" style="display: none">
     Saving <i class="load-spinner"></i>
   </div>
@@ -39,10 +41,9 @@ describe('Notifier', () => {
         try {
           notifier.notify(notificationMessage, 'info')
 
-          const successMessages = notificationsElement.find('.success-indicator')
+          const successMessages = notificationsElement.children('.messages').find('.success-indicator')
 
-          // Notifications contain the hidden "Saved" message and the new message
-          expect(successMessages.length).toBe(2)
+          expect(successMessages.length).toBe(1)
           expect(successMessages[0].innerHTML).toContain(notificationMessage)
           done()
         } catch (error) {
@@ -75,11 +76,12 @@ describe('Notifier', () => {
           notifier.notify('', 'error')
           notifier.notify('', 'info')
 
-          let failureMessages = notificationsElement.find('.failure-indicator')
-          let successMessages = notificationsElement.find('.success-indicator')
+          const messagesContainer = notificationsElement.children('.messages')
+          let failureMessages = messagesContainer.find('.failure-indicator')
+          let successMessages = messagesContainer.find('.success-indicator')
 
           expect(failureMessages.length).toBe(1)
-          expect(successMessages.length).toBe(2)
+          expect(successMessages.length).toBe(1)
 
           failureMessages.children('button').click()
           failureMessages = notificationsElement.find('.failure-indicator')
@@ -151,7 +153,7 @@ describe('Notifier', () => {
       $(() => {
         try {
           const notification = notifier.notify('test', 'info')
-          const onlyNotification = notificationsElement.children('.success-indicator')
+          const onlyNotification = notificationsElement.children('.messages').children('.success-indicator')
           expect(notification.notificationElement.is(onlyNotification)).toBe(true)
 
           done()
