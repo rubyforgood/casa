@@ -160,6 +160,10 @@ class Notifier {
 
     this.savedToastTimeouts = []
     this.waitingAsyncOperationCount = 0
+
+    this.elements.minimizeButton.on('click', () => {
+      this.toggleMinimize()
+    })
   }
 
   // Adds notification messages to the notification element
