@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/casa_cases", type: :request do
+  let(:date_in_care) { Date.today }
   let(:organization) { build(:casa_org) }
   let(:group) { build(:contact_type_group) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
@@ -8,6 +9,9 @@ RSpec.describe "/casa_cases", type: :request do
     {
       case_number: "1234",
       birth_month_year_youth: pre_transition_aged_youth_age,
+      "date_in_care(3i)": date_in_care.day,
+      "date_in_care(2i)": date_in_care.month,
+      "date_in_care(1i)": date_in_care.year,
       casa_org_id: organization.id,
       casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
     }
@@ -158,6 +162,7 @@ RSpec.describe "/casa_cases", type: :request do
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
           expect(casa_case.birth_month_year_youth).to eq pre_transition_aged_youth_age
+          expect(casa_case.date_in_care.to_date).to eq date_in_care
         end
 
         it "also responds as json", :aggregate_failures do
