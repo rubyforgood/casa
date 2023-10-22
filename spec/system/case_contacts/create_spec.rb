@@ -16,7 +16,7 @@ RSpec.describe "case_contacts/create", type: :system do
       complete_form(casa_case)
       click_on "Submit"
 
-      expect(page.current_url).to eq case_contacts_url
+      expect(page).to have_current_path(case_contacts_path)
     end
 
     it "when /case_contacts?casa_case_id=ID" do
@@ -26,7 +26,7 @@ RSpec.describe "case_contacts/create", type: :system do
       complete_form(casa_case)
       click_on "Submit"
 
-      expect(page.current_url).to eq case_contacts_url(casa_case_id: casa_case.id)
+      expect(page).to have_current_path(case_contacts_path(casa_case_id: casa_case.id))
     end
 
     it "when /casa_cases/CASE_NUMBER" do
@@ -36,7 +36,7 @@ RSpec.describe "case_contacts/create", type: :system do
       complete_form(casa_case)
       click_on "Submit"
 
-      expect(page.current_url).to eq casa_case_url(casa_case)
+      expect(page).to have_current_path(casa_case_path(casa_case))
     end
   end
 end
