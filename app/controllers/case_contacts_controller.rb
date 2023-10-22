@@ -25,6 +25,7 @@ class CaseContactsController < ApplicationController
   end
 
   def new
+    store_referring_location
     authorize CaseContact
     @casa_cases = policy_scope(current_organization.casa_cases)
 
@@ -81,7 +82,8 @@ class CaseContactsController < ApplicationController
       @casa_cases = [@case_contact.casa_case]
       render :new
     else
-      redirect_to case_contacts_path(success: true), notice: "Case #{"contact".pluralize(@selected_cases.count)} successfully created"
+      flash[:notice] = "Case #{"contact".pluralize(@selected_cases.count)} successfully created"
+      redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
     end
   end
 

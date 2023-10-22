@@ -87,6 +87,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def store_referring_location
+    session[:return_to] = request.referer
+  end
+
+  def redirect_back_to_referer(fallback_location:)
+    redirect_to(session[:return_to] || fallback_location)
+  end
+
   private
 
   def store_user_location!
