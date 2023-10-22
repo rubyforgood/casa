@@ -1,11 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/index", type: :system do
+  let(:organization) { create(:casa_org) }
+  let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
+  let(:case_number) { "CINA-1" }
+
   it "is filterable and linkable", :js do
     organization = build(:casa_org)
     admin = build(:casa_admin, casa_org: organization)
     volunteer = build(:volunteer, display_name: "Cool Volunteer", casa_org: organization)
-    cina = build(:casa_case, active: true, casa_org: organization, case_number: "CINA-1")
+    cina = build(:casa_case, active: true, casa_org: organization, case_number: case_number)
     tpr = create(:casa_case, active: true, casa_org: organization, case_number: "TPR-100")
     no_prefix = create(:casa_case, active: true, casa_org: organization, case_number: "123-12-123")
     create(:case_assignment, volunteer: volunteer, casa_case: cina)
@@ -23,5 +27,21 @@ RSpec.describe "casa_cases/index", type: :system do
     click_on "Assigned to more than 1 Volunteer"
     click_on "Assigned to Transition Aged Youth"
     click_on "Casa Case Prefix"
+  end
+
+  it "has a usable dropdown in sidebar" do
+    cina = build(:casa_case, active: true, casa_org: organization, case_number: case_number)
+    create(:case_assignment, volunteer: volunteer, casa_case: cina)
+
+    sign_in volunteer
+
+    visit root_path
+    click_on "My Cases"
+    within "#ddmenu_cases" do
+      click_on case_number
+    end
+
+    expect(page).to have_text("CASA Case Details")
+    expect(page).to have_text("Case number: CINA-1")
   end
 end

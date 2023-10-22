@@ -1,0 +1,12 @@
+<ul id="<%= dropdown_id %>" class="collapse dropdown-nav">
+    <li>
+        <%= link_to 'All', all_link_path %>
+    </li>
+    <% current_user.casa_cases.each do |casa_case| %>
+        <li>
+        <%= link_to link_generator.call(casa_case) do %>
+            <%= casa_case.case_number %>
+        <% end %>
+        </li>
+    <% end %>
+</ul>
