@@ -66,5 +66,15 @@ FactoryBot.define do
       }
       initialize_with { new(params: params) }
     end
+
+    trait :reimbursement_complete do
+      type { "ReimbursementCompleteNotification" }
+      params {
+        {
+          case_contact: create(:case_contact)
+        }
+      }
+      initialize_with { new(params: params) }
+    end
   end
 end

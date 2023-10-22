@@ -5,7 +5,6 @@ class CaseContact < ApplicationRecord
   attr_accessor :duration_hours
 
   validate :contact_made_chosen
-  validates :duration_minutes, numericality: {greater_than_or_equal_to: 15, message: "Minimum case contact duration should be 15 minutes."}
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true
   validates :occurred_at, presence: true
@@ -149,6 +148,21 @@ class CaseContact < ApplicationRecord
     return unless occurred_at && occurred_at >= Date.tomorrow
 
     errors.add(:occurred_at, :invalid, message: "cannot be in the future")
+  end
+
+  # Displays occurred_at in the format January 1, 1970
+  # @return [String]
+  def occurred_at_display
+    occurred_at.strftime("%B %-d, %Y")
+  end
+
+  # Returns the mileage rate if the casa_org has a mileage_rate for the date of the contact. Otherwise returns nil.
+  # @return [BigDecimal, nil]
+  def reimbursement_amount
+    mileage_rate = casa_case.casa_org.mileage_rate_for_given_date(occurred_at.to_datetime)
+    return nil unless mileage_rate
+
+    mileage_rate * miles_driven
   end
 
   def reimbursement_only_when_miles_driven

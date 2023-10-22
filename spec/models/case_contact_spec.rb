@@ -27,16 +27,14 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
   end
 
-  it "validates duration_minutes is only numeric values" do
+  it "validates duration_minutes to allow nil value" do
     case_contact = build_stubbed(:case_contact, duration_minutes: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
-  it "validates duration_minutes cannot be less than 15 minutes." do
+  it "validates duration_minutes can be less than 15 minutes." do
     case_contact = build_stubbed(:case_contact, duration_minutes: 10)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
   it "verifies occurred at is not in the future" do
@@ -470,6 +468,25 @@ RSpec.describe CaseContact, type: :model do
         followup = create(:followup, case_contact: case_contact)
 
         expect(case_contact.requested_followup).to eq(followup)
+      end
+    end
+  end
+
+  describe "reimbursement amount" do
+    let(:case_contact) { build(:case_contact, :wants_reimbursement) }
+
+    describe "when casa org has nil mileage_rate_for_given_date" do
+      it "is nil" do
+        expect(case_contact.casa_case.casa_org.mileage_rate_for_given_date(case_contact.occurred_at.to_datetime)).to be_nil
+        expect(case_contact.reimbursement_amount).to be_nil
+      end
+    end
+
+    describe "when casa org has value for mileage_rate_for_given_date" do
+      let!(:mileage_rate) { create(:mileage_rate, casa_org: case_contact.casa_case.casa_org, effective_date: 3.days.ago, amount: 5.50) }
+
+      it "is multiple of miles driven and mileage rate" do
+        expect(case_contact.reimbursement_amount).to eq 2508
       end
     end
   end

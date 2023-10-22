@@ -24,7 +24,14 @@
           <%= render(Sidebar::LinkComponent.new(title: "Supervisors", icon: "network", path: supervisors_path, render_check: policy(Supervisor).index?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Volunteers", icon: "heart-filled", path: volunteers_path, render_check: policy(Volunteer).index?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.casa_admin? || current_user.supervisor?)) %>
-          <%= render(Sidebar::LinkComponent.new(title: cases_index_title, icon: "folder", path: casa_cases_path)) %>
+          <!-- Renders Cases for Volunteers -->
+          <%= render(Sidebar::GroupComponent.new(title: cases_index_title, icon: "folder", render_check: current_user.volunteer?)) do |group| %>
+            <% group.with_link(title: "All", path: casa_cases_path, nav_item: false) %>
+            <% group.with_links(current_user.casa_cases.map { |cc| { title: cc.case_number, path: casa_case_path(cc), nav_item: false }}) %>
+          <% end %>
+          <!-- Renders Cases for Non-Volunteers -->
+          <%= render(Sidebar::LinkComponent.new(title: cases_index_title, icon: "folder", path: casa_cases_path, render_check: !current_user.volunteer?)) %>
+
           <%= render(Sidebar::LinkComponent.new(title: "Admins", icon: "star-filled", path: casa_admins_path, render_check: policy(CasaAdmin).index?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Patch Notes", icon: "notepad", path: all_casa_admins_patch_notes_path, render_check: all_casa_admin_signed_in?)) %>
           <%= render(Sidebar::GroupComponent.new(title: "Case Contacts", icon: "users", render_check: current_user.volunteer?)) do |group| %>

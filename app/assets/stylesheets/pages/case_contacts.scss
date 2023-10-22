@@ -133,21 +133,3 @@ legend {
 .cc-italic {
     font-style: italic;
 }
-
-.notes-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5em;
-
-  h2 {
-    margin-bottom: 0;
-  }
-}
-
-.highlight-button {
-  background: none;
-  border: none;
-  color: var(--blue);
-  font-size: 1.1em;
-}

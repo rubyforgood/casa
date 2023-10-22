@@ -8,7 +8,7 @@ RSpec.describe FeatureFlag, type: :model do
       expect {
         create(:feature_flag, name: duplicate_feature_flag_name)
         create(:feature_flag, name: duplicate_feature_flag_name)
-      }.to raise_error(ActiveRecord::RecordNotUnique)
+      }.to raise_error(ActiveRecord::RecordInvalid)
     end
   end
 end

@@ -50,6 +50,10 @@ class Rack::Attack
     end
   end
 
+  throttle("reg/ip", limit: 5, period: 20.seconds) do |req|
+    req.ip if req.path.starts_with?("/api/v1")
+  end
+
   # Throttle POST requests to /xxxx/sign_in by email param
   #
   # Key: "rack::attack:#{Time.now.to_i/:period}:logins/email:#{req.email}"
