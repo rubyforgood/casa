@@ -124,7 +124,7 @@ class Notifier {
       },
       messagesContainer: notificationsElement.children('.messages'),
       minimizeButton: notificationsElement.children('#toggle-minimize-notifications'),
-      minimizeButtonIcon: notificationsElement.find('#toggle-minimize-notifications fa-solid'),
+      minimizeButtonIcon: notificationsElement.find('#toggle-minimize-notifications i'),
       minimizeButtonText: notificationsElement.find('#toggle-minimize-notifications span').first(),
       notificationsElement,
       savedToast: notificationsElement.find('#async-success-indicator')

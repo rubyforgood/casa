@@ -18,10 +18,10 @@ beforeEach(() => {
     Saved
   </div>
   <button id="toggle-minimize-notifications" style="display: none;">
-    minimize notifications 
-    <span class="badge rounded-pill bg-success">1</span>
-    <span class="badge rounded-pill bg-warning">1</span>
-    <span class="badge rounded-pill bg-danger">1</span>
+    <span>minimize notifications </span>
+    <span class="badge rounded-pill bg-success" style="display: none;"></span>
+    <span class="badge rounded-pill bg-warning" style="display: none;"></span>
+    <span class="badge rounded-pill bg-danger" style="display: none;"></span>
     <i class="fa-solid fa-minus"></i>
   </button>
 </div>`
@@ -34,9 +34,42 @@ beforeEach(() => {
 
 describe('Notifier', () => {
   describe('clicking the minify button', () => {
+    let minimizeButton
+
+    beforeEach(() => { // Create a notification so the minify button displays
+      $(() => {
+        notifier.notify('a notification', 'info')
+        minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
+      })
+    })
+
     test('should toggle the notifier between the minified and expanded state', (done) => {
       $(() => {
         try {
+          const messageNotificationsContainer = notificationsElement.find('.messages')
+          const minimizeButtonIcon = minimizeButton.children('i')
+          const minimizeButtonText = minimizeButton.children('span').first()
+
+          expect(minimizeButton.css('display')).not.toBe('none')
+          expect(messageNotificationsContainer.css('display')).not.toBe('none')
+          expect(minimizeButtonIcon.hasClass('fa-minus')).toBeTruthy()
+          expect(minimizeButtonIcon.hasClass('fa-plus')).not.toBeTruthy()
+          expect(minimizeButtonText.css('display')).not.toBe('none')
+
+          minimizeButton.click()
+
+          expect(messageNotificationsContainer.css('display')).toBe('none')
+          expect(minimizeButtonIcon.hasClass('fa-minus')).not.toBeTruthy()
+          expect(minimizeButtonIcon.hasClass('fa-plus')).toBeTruthy()
+          expect(minimizeButtonText.css('display')).toBe('none')
+
+          minimizeButton.click()
+
+          expect(messageNotificationsContainer.css('display')).not.toBe('none')
+          expect(minimizeButtonIcon.hasClass('fa-minus')).toBeTruthy()
+          expect(minimizeButtonIcon.hasClass('fa-plus')).not.toBeTruthy()
+          expect(minimizeButtonText.css('display')).not.toBe('none')
+
           done()
         } catch (error) {
           done(error)
