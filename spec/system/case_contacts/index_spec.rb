@@ -103,7 +103,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing all cases
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on "All"
         end
         expect(page).to have_text("Case 1 Notes")
@@ -112,7 +112,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing case 1
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on case_number
         end
         expect(page).to have_text("Case 1 Notes")
@@ -121,7 +121,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing case 2
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on another_case_number
         end
         expect(page).to have_text("Case 2 Notes")
@@ -138,7 +138,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # no contacts because we're only showing case 1 and that occurred before the filter dates
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on case_number
         end
         expect(page).to_not have_text("Case 1 Notes")

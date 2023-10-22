@@ -37,7 +37,7 @@ RSpec.describe "casa_cases/index", type: :system do
 
     visit root_path
     click_on "My Cases"
-    within "#ddmenu_cases" do
+    within "#ddmenu_my-cases" do
       click_on case_number
     end
 
