@@ -4,7 +4,7 @@ export default class extends Controller {
   static targets = ['sidebar', 'menu', 'logo', 'linkTitle', 'groupList']
   static values = {
     open: Boolean,
-    breakpoint: { type: Number, default: 770 }
+    breakpoint: { type: Number, default: 768 }
   }
 
   static outlets = ['sidebar-group']
@@ -56,6 +56,6 @@ export default class extends Controller {
   }
 
   isNotMobile () {
-    return window.screen.width >= this.breakpointValue
+    return window.innerWidth >= this.breakpointValue
   }
 }
