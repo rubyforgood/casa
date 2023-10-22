@@ -319,7 +319,7 @@ RSpec.describe "/case_contacts", type: :request do
 
     context "with invalid parameters" do
       let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
-      let(:invalid_attributes) { {creator: "volunteer", casa_case_id: [other_casa_case.id], occurred_at: Time.now + 1.week} }
+      let(:invalid_attributes) { {creator: volunteer, casa_case_id: [other_casa_case.id], occurred_at: Time.now + 1.week} }
       let(:params) { {case_contact: invalid_attributes} }
 
       it { is_expected.to have_http_status(:success) }
