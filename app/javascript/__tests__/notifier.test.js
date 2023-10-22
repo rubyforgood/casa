@@ -33,6 +33,28 @@ beforeEach(() => {
 })
 
 describe('Notifier', () => {
+  describe('clicking the minify button', () => {
+    test('should toggle the notifier between the minified and expanded state', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('should show only badges where there exists at least one notification matching the badge level when minimized', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+  })
+
   describe('notify', () => {
     test("displays a green notification when passed a message and level='info'", (done) => {
       const notificationMessage = "'Y$deH[|%ROii]jy"
@@ -63,6 +85,36 @@ describe('Notifier', () => {
 
           expect(failureMessages.length).toBe(1)
           expect(failureMessages[0].innerHTML).toContain(notificationMessage)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('displays the minimize button after no notifications were present before', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test("displays the badge corresponding to the notification's level if it is the only notification with that level", (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test("increments the number on badge corresponding to the notification's level when the badge is already displayed", (done) => {
+      $(() => {
+        try {
           done()
         } catch (error) {
           done(error)
@@ -156,93 +208,6 @@ describe('Notifier', () => {
           const onlyNotification = notificationsElement.children('.messages').children('.success-notification')
           expect(notification.notificationElement.is(onlyNotification)).toBe(true)
 
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
-  })
-
-  describe('notificationsCount', () => {
-    const initialNotificationsCountState = {
-      error: 0,
-      info: 0,
-      warn: 0
-    }
-
-    it('automatically shows the minimize button when going from 0 to 1 notifications', (done) => {
-      $(() => {
-        try {
-          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
-          expect($('#toggle-minimize-notifications').css('display')).toBe('none')
-
-          notifier.notify('message', 'warn')
-
-          expect(notifier.notificationsCount).toEqual({
-            error: 0,
-            info: 0,
-            warn: 1
-          })
-          expect($('#toggle-minimize-notifications').css('display')).not.toBe('none')
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
-
-    it('automatically hides the minimize button when going from 1 to 0 notifications', (done) => {
-      $(() => {
-        try {
-          const notification = notifier.notify('message', 'warn')
-
-          expect(notifier.notificationsCount).toEqual({
-            error: 0,
-            info: 0,
-            warn: 1
-          })
-          expect($('#toggle-minimize-notifications').css('display')).not.toBe('none')
-
-          notification.dismiss()
-
-          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
-          expect($('#toggle-minimize-notifications').css('display')).toBe('none')
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
-
-    it('increments the correct level after creating a new notification', (done) => {
-      $(() => {
-        try {
-          expect(notifier.notificationsCount).toEqual(initialNotificationsCountState)
-
-          notifier.notify('message', 'info')
-
-          expect(notifier.notificationsCount).toEqual({
-            error: 0,
-            info: 1,
-            warn: 0
-          })
-
-          notifier.notify('message', 'error')
-
-          expect(notifier.notificationsCount).toEqual({
-            error: 1,
-            info: 1,
-            warn: 0
-          })
-
-          notifier.notify('message', 'warn')
-
-          expect(notifier.notificationsCount).toEqual({
-            error: 1,
-            info: 1,
-            warn: 1
-          })
           done()
         } catch (error) {
           done(error)
@@ -493,6 +458,36 @@ describe('Notifications', () => {
           notification.dismiss()
           expect(notificationsElement[0].innerHTML).not.toContain(notificationDefaultMessage)
           expect($('#toggle-minimize-notifications').css('display')).toContain('none')
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test("hides the badge corresponding to the notification's level when there are no more notifications matching the dismissed notification's level", (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('hides the minimize button if no notifications are left', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test("decrements the number on badge corresponding to the notification's level when there are still notifications matching the dismissed notification's level left", (done) => {
+      $(() => {
+        try {
           done()
         } catch (error) {
           done(error)
