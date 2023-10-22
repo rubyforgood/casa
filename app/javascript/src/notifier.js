@@ -162,7 +162,7 @@ class Notifier {
     this.waitingAsyncOperationCount = 0
 
     this.elements.minimizeButton.on('click', () => {
-      this.toggleMinimize()
+      this.#toggleMinimize()
     })
   }
 
@@ -247,7 +247,7 @@ class Notifier {
     }
   }
 
-  toggleMinimize () {
+  #toggleMinimize () {
     const { messagesContainer } = this.elements
 
     if (messagesContainer.css('display') === 'none') {
