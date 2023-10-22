@@ -80,6 +80,41 @@ describe('Notifier', () => {
     test('should show only badges where there exists at least one notification matching the badge level when minimized', (done) => {
       $(() => {
         try {
+          const minimizeButtonBadgeError = minimizeButton.children('.bg-danger')
+          const minimizeButtonBadgeInfo = minimizeButton.children('.bg-success')
+          const minimizeButtonBadgeWarning = minimizeButton.children('.bg-warning')
+
+          expect(minimizeButton.css('display')).not.toBe('none')
+
+          minimizeButton.click()
+
+          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeInfo.text()).toBe('1')
+          expect(minimizeButtonBadgeError.css('display')).toContain('none')
+          expect(minimizeButtonBadgeWarning.css('display')).toContain('none')
+
+          minimizeButton.click()
+          const notification2 = notifier.notify('msg', 'error')
+          notifier.notify('msg', 'warn')
+
+          minimizeButton.click()
+          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeInfo.text()).toBe('1')
+          expect(minimizeButtonBadgeError.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeError.text()).toBe('1')
+          expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeWarning.text()).toBe('1')
+
+          minimizeButton.click()
+          notification2.dismiss()
+
+          minimizeButton.click()
+          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeInfo.text()).toBe('1')
+          expect(minimizeButtonBadgeError.css('display')).toContain('none')
+          expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
+          expect(minimizeButtonBadgeWarning.text()).toBe('1')
+
           done()
         } catch (error) {
           done(error)
