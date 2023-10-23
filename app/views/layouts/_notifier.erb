@@ -1,8 +1,17 @@
 <div id="notifications">
+  <div class="messages">
+  </div>
   <div id="async-waiting-indicator" style="display: none">
     Saving <i class="load-spinner"></i>
   </div>
-  <div id="async-success-indicator" class="success-indicator" style="display: none">
+  <div id="async-success-indicator" class="success-notification" style="display: none">
     Saved
   </div>
+  <button id="toggle-minimize-notifications" style="display: none;">
+    <span>minimize notifications </span>
+    <span class="badge rounded-pill bg-success" style="display: none;"></span>
+    <span class="badge rounded-pill bg-warning" style="display: none;"></span>
+    <span class="badge rounded-pill bg-danger" style="display: none;"></span>
+    <i class="fa-solid fa-minus"></i>
+  </button>
 </div>

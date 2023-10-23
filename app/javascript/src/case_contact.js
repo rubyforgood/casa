@@ -66,11 +66,6 @@ async function fireSwalFollowupAlert () {
   })
 }
 
-function displayHighlightModal (event) {
-  event.preventDefault()
-  $('#caseContactHighlight').modal('show')
-}
-
 $(() => { // JQuery's callback for the DOM loading
   const milesDriven = $('#case_contact_miles_driven')
   const durationHoursElement = $('#case-contact-duration-hours-display')
@@ -170,7 +165,6 @@ $(() => { // JQuery's callback for the DOM loading
 
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
-  $('#open-highlight-modal').on('click', displayHighlightModal)
 
   if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
     $('#thank_you').modal()

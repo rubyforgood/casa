@@ -29,7 +29,7 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(emancipation_category["data-is-open"]).to match(/true/)
       find(".check-item").click
       find(".emacipation-category-input-label-pair").click
-      expect(page).to have_css(".success-indicator", text: "Unchecked #{emancipation_option.name}")
+      expect(page).to have_css(".success-notification", text: "Unchecked #{emancipation_option.name}")
       expect(emancipation_category["data-is-open"]).to match(/true/)
     end
 

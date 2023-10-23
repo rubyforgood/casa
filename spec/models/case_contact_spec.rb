@@ -27,16 +27,14 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
   end
 
-  it "validates duration_minutes is only numeric values" do
+  it "validates duration_minutes to allow nil value" do
     case_contact = build_stubbed(:case_contact, duration_minutes: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
-  it "validates duration_minutes cannot be less than 15 minutes." do
+  it "validates duration_minutes can be less than 15 minutes." do
     case_contact = build_stubbed(:case_contact, duration_minutes: 10)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
   it "verifies occurred at is not in the future" do
