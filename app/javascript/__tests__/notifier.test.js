@@ -163,6 +163,17 @@ describe('Notifier', () => {
     test('displays the minimize button after no notifications were present before', (done) => {
       $(() => {
         try {
+          const messageNotificationsContainer = notificationsElement.find('.messages')
+          const minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
+
+          expect(minimizeButton.css('display')).toBe('none')
+          expect(messageNotificationsContainer.children().length).toBe(0)
+
+          notifier.notify('msg', 'info')
+
+          expect(minimizeButton.css('display')).not.toBe('none')
+          expect(messageNotificationsContainer.children().length).toBeGreaterThan(0)
+
           done()
         } catch (error) {
           done(error)
@@ -170,23 +181,76 @@ describe('Notifier', () => {
       })
     })
 
-    test("displays the badge corresponding to the notification's level if it is the only notification with that level", (done) => {
-      $(() => {
-        try {
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
-    })
+    describe('when the notifier is minimized', () => {
+      let minimizeButton
 
-    test("increments the number on badge corresponding to the notification's level when the badge is already displayed", (done) => {
-      $(() => {
-        try {
-          done()
-        } catch (error) {
-          done(error)
-        }
+      beforeEach(() => {
+        $(() => {
+          minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
+
+          notifier.notify('msg', 'info')
+          minimizeButton.click()
+        })
+      })
+
+      test("un-hides the badge corresponding to the notification's level if it is the only notification with that level", (done) => {
+        $(() => {
+          try {
+            const minimizeButtonBadgeError = notificationsElement.find('#toggle-minimize-notifications .bg-danger')
+
+            expect(notificationsElement.children('.messages').css('display')).toBe('none')
+            expect(minimizeButton.css('display')).not.toBe('none')
+            expect(minimizeButtonBadgeError.css('display')).toBe('none')
+
+            notifier.notify('msg', 'error')
+
+            expect(minimizeButtonBadgeError.css('display')).not.toBe('none')
+
+            done()
+          } catch (error) {
+            done(error)
+          }
+        })
+      })
+
+      test("increments the number on badge corresponding to the notification's level when the badge is already displayed", (done) => {
+        $(() => {
+          try {
+            const minimizeButtonBadgeInfo = notificationsElement.find('#toggle-minimize-notifications .bg-success')
+
+            expect(notificationsElement.children('.messages').css('display')).toBe('none')
+            expect(minimizeButton.css('display')).not.toBe('none')
+            expect(minimizeButtonBadgeInfo.css('display')).not.toBe('none')
+            expect(minimizeButtonBadgeInfo.text()).toBe('1')
+
+            notifier.notify('msg', 'info')
+
+            expect(minimizeButtonBadgeInfo.text()).toBe('2')
+
+            const minimizeButtonBadgeError = notificationsElement.find('#toggle-minimize-notifications .bg-danger')
+            notifier.notify('msg', 'error')
+
+            expect(minimizeButtonBadgeError.css('display')).not.toBe('none')
+            expect(minimizeButtonBadgeError.text()).toBe('1')
+
+            notifier.notify('msg', 'error')
+
+            expect(minimizeButtonBadgeError.text()).toBe('2')
+
+            const minimizeButtonBadgeWarning = notificationsElement.find('#toggle-minimize-notifications .bg-warning')
+            notifier.notify('msg', 'warn')
+
+            expect(minimizeButtonBadgeWarning.css('display')).not.toBe('none')
+            expect(minimizeButtonBadgeWarning.text()).toBe('1')
+
+            notifier.notify('msg', 'warn')
+
+            expect(minimizeButtonBadgeWarning.text()).toBe('2')
+            done()
+          } catch (error) {
+            done(error)
+          }
+        })
       })
     })
 
