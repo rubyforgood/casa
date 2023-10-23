@@ -5,23 +5,6 @@
 import { escape } from 'lodash'
 import Swal from 'sweetalert2'
 
-function validateOccurredAt (caseOccurredAt, eventType = '') {
-  /* const msg = 'Case Contact Occurrences cannot be in the future.'
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  const caseDate = new Date(caseOccurredAt.val())
-  caseDate.setDate(caseDate.getDate())
-  caseDate.setHours(0, 0, 0, 0)
-
-  if (caseDate > today) {
-    if (eventType !== 'focusout') {
-      alert(msg)
-    }
-    caseOccurredAt.val(enGBDateString(today))
-  } */
-}
-
 function enGBDateString (date) {
   return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
 }
@@ -110,14 +93,6 @@ $(() => { // JQuery's callback for the DOM loading
     }
   })
 
-  caseOccurredAt.on('change', () => {
-    validateOccurredAt(caseOccurredAt)
-  })
-
-  caseOccurredAt.on('focusout', () => {
-    validateOccurredAt(caseOccurredAt, 'focusout')
-  })
-
   function validateDuration () {
     const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
     const fifteenMinutes = 15
@@ -172,6 +147,5 @@ $(() => { // JQuery's callback for the DOM loading
 })
 
 export {
-  validateOccurredAt,
   convertDateToSystemTimeZone
 }
