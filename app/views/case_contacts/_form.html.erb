@@ -70,7 +70,7 @@
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
         <%= render "layouts/components/ranged_date_picker",
           form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
-          max_date: "today", component_name: "occurred at" %>
+          max_date: "today", component_name: "occurred on" %>
       </div>
     </div>
 
