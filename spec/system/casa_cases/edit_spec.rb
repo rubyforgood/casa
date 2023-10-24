@@ -350,7 +350,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         sign_in_and_assign_volunteer
 
-        expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
+        expect(find("select[name='case_assignment[volunteer_id]']").all("option").count { |option| option[:value].present? }).to eq 1
       end
     end
 
@@ -371,10 +371,26 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_1.display_name)
 
+        # Attempt to assign a second volunteer without selecting one
+        click_on "Assign Volunteer"
+        expect(page).to have_text("Unable to assign volunteer to case: Volunteer must exist. Volunteer can't be blank.")
+
         select volunteer_2.display_name, from: "Select a Volunteer"
         click_on "Assign Volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_2.display_name)
+      end
+    end
+
+    describe "form behavior" do
+      it "displays 'Please select volunteer' in the dropdown" do
+        sign_in supervisor
+        visit edit_casa_case_path(casa_case.id)
+
+        select_element = find("#case_assignment_casa_case_id")
+
+        # Check if the default option exists and has the expected text
+        expect(select_element).to have_selector("option[value='']", text: "Please Select Volunteer")
       end
     end
 
