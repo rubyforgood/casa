@@ -114,3 +114,20 @@ div.row.volunteer-filters {
     }
   }
 }
+
+
+
+@media only screen and (max-width: screen-sizes.$large) {
+  .dataTables_wrapper .dataTables_paginate {
+    span.ellipsis {
+      position: absolute;
+      right: 10.5%;
+      bottom: 40%;
+    }
+  }
+
+  #casa-cases_paginate.dataTables_paginate.paging_simple_numbers {
+    position: absolute;
+    right: 0.3%;
+  }
+}
