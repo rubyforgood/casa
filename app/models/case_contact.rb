@@ -196,6 +196,14 @@ class CaseContact < ApplicationRecord
     followups.requested.first
   end
 
+  def should_send_reimbursement_email?
+    want_driving_reimbursement_changed? && want_driving_reimbursement? && supervisor_active?
+  end
+
+  def supervisor_active?
+    !supervisor.blank? && supervisor.active?
+  end
+
   def self.options_for_sorted_by
     sorted_by_params.map do |option|
       [I18n.t("models.case_contact.options_for_sorted_by.#{option}"), option]
