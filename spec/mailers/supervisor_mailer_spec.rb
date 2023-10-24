@@ -119,7 +119,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
   describe ".reimbursement_request_email" do
     let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
-    let(:volunteer) { create(:volunteer) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
     let(:casa_organization) { volunteer.casa_org }
 
     let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }

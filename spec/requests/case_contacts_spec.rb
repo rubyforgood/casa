@@ -106,7 +106,7 @@ RSpec.describe "/case_contacts", type: :request do
       let(:selected_casa_case_ids) { [casa_case.id] }
       let(:valid_attributes) do
         attributes_for(:case_contact, :wants_reimbursement, casa_case: casa_case).merge(
-          creator: admin, casa_case_id: selected_casa_case_ids
+          casa_case_id: selected_casa_case_ids
         )
       end
       let(:params) { {case_contact: valid_attributes} }
@@ -143,13 +143,15 @@ RSpec.describe "/case_contacts", type: :request do
       end
 
       context "reimbursement mail to supervisor" do
-        let(:case_contact) { create(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: admin) }
-        let(:supervisor) { create(:supervisor, receive_email_notifications: true) }
+        let(:supervisor) { create(:supervisor, receive_reimbursement_email: true, casa_org: organization) }
+        let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org: organization) }
+        let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+
+        before do
+          sign_in volunteer
+        end
 
         it "sends reimbursement request email when conditions are met" do
-          allow(case_contact).to receive(:want_driving_reimbursement?).and_return(true)
-          allow(admin).to receive(:supervisor).and_return(supervisor)
-
           mailer_double = double("SupervisorMailer")
           allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
 
@@ -158,8 +160,7 @@ RSpec.describe "/case_contacts", type: :request do
         end
 
         it "does not send reimbursement request email when conditions are not met" do
-          allow(case_contact).to receive(:want_driving_reimbursement?).and_return(false)
-
+          supervisor.update(active: false)
           mailer_double = double("SupervisorMailer")
           allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
 
