@@ -77,7 +77,7 @@ class Notification {
     return this.notificationElement.children('span').text(newText)
   }
 
-  #throwErrorIfDismissed () {
+  #throwErrorIfDismissed () { // Methods prefixed with a hash are private
     if (this.isDismissed()) {
       throw new ReferenceError('Invalid Operation. This notification has been dismissed.')
     }
