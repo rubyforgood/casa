@@ -98,11 +98,14 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
 }
 
 $(() => { // JQuery's callback for the DOM loading
-  const notificationsElement = $('#notifications')
-  const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
-
   const validatedFormCollection = $('.component-validated-form')
   const validatableFormSectionComponents = []
+  let pageNotifier
+
+  if (validatedFormCollection.length) {
+    const notificationsElement = $('#notifications')
+    pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+  }
 
   validatedFormCollection.find('.component-date-picker-range').each(function () {
     try {
