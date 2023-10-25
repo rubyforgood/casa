@@ -101,6 +101,7 @@ $(() => { // JQuery's callback for the DOM loading
   const validatedFormCollection = $('.component-validated-form')
   const validatableFormSectionComponents = []
   let pageNotifier
+  let formErrorCountNotification
 
   if (validatedFormCollection.length) {
     const notificationsElement = $('#notifications')
@@ -118,10 +119,23 @@ $(() => { // JQuery's callback for the DOM loading
   })
 
   validatedFormCollection.on('submit', function (e) {
-    e.preventDefault()
+    const errorCount = validatableFormSectionComponents.reduce((acc, currentComponent) => {
+      return currentComponent.validate() ? acc + 1 : acc
+    }, 0)
 
-    for (const component of validatableFormSectionComponents) {
-      component.validate()
+    if (errorCount) {
+      e.preventDefault()
+
+      if (formErrorCountNotification) {
+        formErrorCountNotification.setText(`${errorCount} error${errorCount > 1 ? 's' : ''} need${errorCount > 1 ? '' : 's'} to be fixed before you can submit.`)
+      } else {
+        formErrorCountNotification = pageNotifier.notify(`${errorCount} error${errorCount > 1 ? 's' : ''} need${errorCount > 1 ? '' : 's'} to be fixed before you can submit.`, 'error', false)
+      }
+    } else {
+      if (formErrorCountNotification) {
+        formErrorCountNotification.dismiss()
+        $(e.currentTarget).trigger('submit')
+      }
     }
   })
 })
