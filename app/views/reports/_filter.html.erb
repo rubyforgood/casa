@@ -3,12 +3,7 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content card-style">
         <div class="modal-header px-0 border-0">
-          <h5 class="text-bold">Filter Exported Columns</h5>
-          <button
-            class="border-0 bg-transparent h1"
-            data-bs-dismiss="modal">
-            <i class="lni lni-cross-circle"></i>
-          </button>
+          <h5 class="text-bold">Filter Columns</h5>
         </div>
         <div class="modal-body px-0">
           <div class="mb-30">
@@ -16,7 +11,7 @@
               Select columns:
             </h6>
             <%= form.fields_for :filtered_csv_cols do |ff| %>
-              <% CaseContactsExportCsvService.DATA_COLUMNS.keys.each_with_index do |column, index| %>
+              <% CaseContactsExportDataColumns.data_columns.keys.each_with_index do |column, index| %>
                 <div class="form-check checkbox-style m-2">
                   <%= ff.check_box column, { class: "form-check-input", checked: true }, true, false %>
                   <%= ff.label column, column.to_s.titleize, class: "form-check-label" %>
@@ -27,8 +22,9 @@
           <div class="action d-flex flex-wrap justify-content-end">
             <button
               data-bs-dismiss="modal"
-              class="main-btn success-btn-outline btn-hover m-1"><i class="lni lni-download mr-10"></i>
-              Export
+              type="button"
+              class="btn-sm main-btn primary-btn btn-hover">
+              OK
             </button>
           </div>
         </div>
