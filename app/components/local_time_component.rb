@@ -15,6 +15,6 @@ class LocalTimeComponent < ViewComponent::Base
   end
 
   def specific_time
-    Time.at(unix_timestamp).strftime("%b %d, %Y, %l:%M %p %Z")
+    Time.at(unix_timestamp).in_time_zone(@time_zone).strftime("%b %d, %Y, %l:%M %p %Z")
   end
 end
