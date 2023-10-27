@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 class LocalTimeComponent < ViewComponent::Base
-  include ActionController::Cookies
-  attr_reader :format, :unix_timestamp
+  attr_reader :format, :unix_timestamp, :time_zone
 
-  def initialize(format:, unix_timestamp:)
+  def initialize(format:, unix_timestamp:, time_zone:)
     @format = format
+    @time_zone = time_zone
     @unix_timestamp = unix_timestamp
   end
 
@@ -14,12 +14,7 @@ class LocalTimeComponent < ViewComponent::Base
     time.strftime(@format)
   end
 
-  private
-
-  def before_render
-    browser_tz = ActiveSupport::TimeZone.find_tzinfo(cookies[:browser_time_zone])
-    ActiveSupport::TimeZone.all.find { |zone| zone.tzinfo == browser_tz } || Time.zone
-  rescue TZInfo::UnknownTimezone, TZInfo::InvalidTimezoneIdentifier
-    @time_zone = Time.zone
+  def specific_time
+    Time.at(unix_timestamp).strftime("%b %d, %Y, %l:%M %p %Z")
   end
 end
