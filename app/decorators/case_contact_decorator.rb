@@ -18,10 +18,6 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
-  def report_duration_minutes
-    object.duration_minutes
-  end
-
   def miles_traveled
     object.miles_driven.zero? ? nil : "#{object.miles_driven} miles driven"
   end
@@ -32,10 +28,6 @@ class CaseContactDecorator < Draper::Decorator
 
   def contact_made
     object.contact_made ? nil : "No Contact Made"
-  end
-
-  def report_contact_made
-    object.contact_made
   end
 
   def subheading
@@ -62,10 +54,6 @@ class CaseContactDecorator < Draper::Decorator
     else
       "No contact type specified"
     end
-  end
-
-  def report_contact_types
-    object.contact_types&.map { |ct| ct.name }&.join("|")
   end
 
   def medium_icon_classes
@@ -99,5 +87,62 @@ class CaseContactDecorator < Draper::Decorator
 
   def additional_expenses_count
     object.additional_expenses.any? ? object.additional_expenses.length : 0
+  end
+
+  # Report decorations for CSV/Excel
+  def report_internal_contact_number
+    object.id
+  end
+
+  def report_duration_minutes
+    object.duration_minutes
+  end
+
+  def report_contact_types
+    object.contact_types.map { |ct| ct.name }&.join("|")
+  end
+
+  def report_contact_made
+    object.contact_made
+  end
+
+  def report_contact_medium
+    object.medium_type
+  end
+
+  def report_occurred_at
+    I18n.l(object.occurred_at, format: :full, default: nil)
+  end
+
+  def report_added_to_system_at
+    object.created_at
+  end
+
+  def report_miles_driven
+    object.miles_driven
+  end
+
+  def report_wants_driving_reimbursement
+    object.want_driving_reimbursement
+  end
+
+  def report_casa_case_number
+    object.casa_case.case_number
+  end
+
+  def report_creator_email
+    object.creator.email
+  end
+
+  def report_creator_name
+    object.creator.display_name
+  end
+
+  def report_supervisor_name
+    object.supervisor&.display_name
+  end
+
+  def report_case_contact_notes
+    object.notes
   end
 end

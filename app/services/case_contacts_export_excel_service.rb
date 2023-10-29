@@ -2,30 +2,19 @@
 
 # CaseContactsExportExcelService handles the conversion of case contact data to Excel format.
 # It provides methods for exporting case contact information to Excel files.
-require 'case_contacts_export_data_columns'
-
-class CaseContactsExportExcelService
-  attr_reader :case_contacts, :filtered_columns
-  include CaseContactsExportDataColumns
-
+class CaseContactsExportExcelService < CaseContactsExportService
   FONT_SIZE = 11
   LINE_PADDING = 10
 
-  def initialize(case_contacts, filtered_columns = nil)
-    @filtered_columns = filtered_columns || CaseContactsExportDataColumns.data_columns.keys
-
-    @case_contacts = case_contacts.preload({ creator: :supervisor }, :contact_types, :casa_case)
-  end
-
   def perform
     Axlsx::Package.new do |p|
-      p.workbook.add_worksheet(name: 'Case Contacts') do |sheet|
+      p.workbook.add_worksheet(name: "Case Contacts") do |sheet|
         sheet.add_row(filtered_columns.map(&:to_s).map(&:titleize))
 
         if case_contacts.present?
-          wrap_style = p.workbook.styles.add_style(alignment: { wrap_text: true, vertical: :center })
+          wrap_style = p.workbook.styles.add_style(alignment: {wrap_text: true, vertical: :center})
 
-          case_contacts.decorate.each do |case_contact|
+          case_contacts.each do |case_contact|
             format_row(sheet, case_contact, wrap_style)
           end
           configure_case_contact_notes_width(sheet)
@@ -42,14 +31,14 @@ class CaseContactsExportExcelService
   def configure_case_contact_notes_width(sheet)
     case_contact_notes_index = filtered_columns.index(:case_contact_notes)
 
-    if case_contact_notes_index
-      sheet.column_info[case_contact_notes_index].width = 140
-    end
+    return unless case_contact_notes_index
+
+    sheet.column_info[case_contact_notes_index].width = 140
   end
 
   def format_row(sheet, case_contact, wrap_style)
-    row_data = CaseContactsExportDataColumns.data_columns(case_contact).slice(*filtered_columns).values
-    row_data << ''
+    row_data = values_for_export(case_contact, filtered_columns)
+    row_data << ""
     sheet.add_row(row_data, style: wrap_style)
   end
 
@@ -68,5 +57,4 @@ class CaseContactsExportExcelService
     font_scale = font_size / row.worksheet.workbook.font_scale_divisor
     (string.to_s.size + 3) * font_scale
   end
-  
 end

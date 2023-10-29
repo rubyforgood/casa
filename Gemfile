@@ -80,6 +80,7 @@ group :test do
   gem "selenium-webdriver"
   gem "simplecov"
   gem "docx"
+  gem "roo"
 end
 
 # gem "pdf-reader", "~> 2.9"

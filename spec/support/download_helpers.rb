@@ -20,6 +20,11 @@ module DownloadHelpers
     Docx::Document.open(download)
   end
 
+  def download_xlsx
+    wait_for_download
+    Roo::Excelx.new(download)
+  end
+
   def header_text(download_docx)
     zip = download_docx.zip
     files = zip.glob("word/header*.xml").map { |h| h.name }

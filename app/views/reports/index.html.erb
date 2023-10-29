@@ -87,7 +87,6 @@
 
         <div class="table-wrapper table-responsive">
           <%= form_with url: case_contact_reports_path, scope: 'report', method: :get, local: true, id: 'report-form' do |f| %>
-          <%= hidden_field_tag :format, '', id: 'report-format' %>
             <div class="field form-group mb-20">
               <label class="form-label"><h6>Starting From</h6></label>
               <%= f.text_field :start_date, value: 6.months.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
@@ -215,36 +214,29 @@
                 </button>
               </li>
             </ul>
+
+            <!-- Modal for selecting report format -->
+            <div class="modal fade" id="formatSelectionModal" tabindex="-1" role="dialog" aria-labelledby="formatSelectionModalLabel" aria-hidden="true">
+              <div class="modal-dialog  modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="formatSelectionModalLabel">Select Format</h5>
+                    <button type="button" class="border-0 bg-transparent h1" aria-label="Close" data-bs-dismiss="modal">
+                      <i class="lni lni-cross-circle"></i>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <p>Select the export format:</p>
+                    <button type="submit" class="btn btn-primary" name="format" value="csv" data-bs-dismiss="modal">CSV </button>
+                    <button type="submit" class="btn btn-primary" name="format" value="xlsx" data-bs-dismiss="modal">Excel</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- end of modal -->
           <% end %>
         </div>
       </div>
     </div>
   </div>
 </div>
-
-<div class="modal fade" id="formatSelectionModal" tabindex="-1" role="dialog" aria-labelledby="formatSelectionModalLabel" aria-hidden="true">
-  <div class="modal-dialog  modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="formatSelectionModalLabel">Select Format</h5>
-        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <p>Select the export format:</p>
-        <button type="button" class="btn btn-primary" onclick="updateFormat('csv')" data-bs-dismiss="modal">CSV </button>
-        <button type="button" class="btn btn-primary" onclick="updateFormat('xlsx')" data-bs-dismiss="modal">Excel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-  function updateFormat(format) {
-    const form = document.getElementById('report-form');
-    const formatField = document.getElementById('report-format');
-    formatField.value = format;
-    form.submit();
-  }
-</script>
