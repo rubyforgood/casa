@@ -428,7 +428,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.5)
       parser
-    selenium-webdriver (4.13.1)
+    selenium-webdriver (4.14.0)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
