@@ -95,7 +95,7 @@ GEM
       parser (>= 2.4)
       smart_properties
     bindex (0.8.1)
-    blueprinter (0.25.3)
+    blueprinter (0.30.0)
     brakeman (6.0.1)
     bugsnag (6.26.0)
       concurrent-ruby (~> 1.0)
