@@ -20,6 +20,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit casa_case_path(casa_case.id)
 
+      # assert to wait for page loading, to reduce flakiness
+      expect(page).to have_text("CASA Case Details")
+
       # does not show empty contact type groups
       expect(page).to_not have_text("Empty")
 
@@ -152,7 +155,6 @@ RSpec.describe "case_contacts/new", type: :system do
         within "#enter-contact-details" do
           choose "Yes"
         end
-        choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         fill_in "case-contact-duration-hours-display", with: "0"
         fill_in "case-contact-duration-minutes-display", with: "5"
@@ -190,10 +192,7 @@ RSpec.describe "case_contacts/new", type: :system do
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
 
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line.first.include?(note_content)).to be true
-        expected_text = strip_tags(note_content)
-        expect(page).to have_css("#case_contacts_list h1", text: expected_text)
+        expect(page).to have_css("#case_contacts_list h1", text: "Hello world")
       end
     end
   end
@@ -585,6 +584,22 @@ RSpec.describe "case_contacts/new", type: :system do
         org = build(:casa_org, show_driving_reimbursement: false)
         contact_type_group = create_contact_types(org)
         volunteer = create(:volunteer, :with_casa_cases, casa_org: org)
+        contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
+        assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
+
+        sign_in volunteer
+
+        visit new_case_contact_path
+
+        expect(page).not_to have_field("b. Want Driving Reimbursement")
+      end
+    end
+
+    context "when driving reimbursement is hidden when volunteer not allowed to request" do
+      it "does not show for case_contacts" do
+        org = build(:casa_org, show_driving_reimbursement: true)
+        contact_type_group = create_contact_types(org)
+        volunteer = create(:volunteer, :with_disasllow_reimbursement, casa_org: org)
         contact_types_for_cases = contact_type_group.contact_types.reject { |ct| ct.name == "Attorney" }
         assign_contact_types_to_cases(volunteer.casa_cases, contact_types_for_cases)
 

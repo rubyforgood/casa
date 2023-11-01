@@ -31,9 +31,9 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Email", with: "new_volunteer2@example.com"
       fill_in "Display name", with: "New Volunteer Display Name 2"
 
-      expect {
+      expect do
         click_on "Create Volunteer"
-      }.to change(User, :count).by(1)
+      end.to change(User, :count).by(1)
     end
   end
 
@@ -47,5 +47,23 @@ RSpec.describe "volunteers/new", type: :system do
 
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
     end
+  end
+
+  it "displays learning hour topic for volunteers when enabled", js: true do
+    organization = create(:casa_org, learning_topic_active: true)
+    volunteer = create(:volunteer, casa_org: organization)
+
+    sign_in volunteer
+    visit new_volunteer_learning_hour_path(volunteer)
+    expect(page).to have_text("Learning Topic")
+  end
+
+  it "learning hour topic hidden when disabled", js: true do
+    organization = create(:casa_org)
+    volunteer = create(:volunteer, casa_org: organization)
+
+    sign_in volunteer
+    visit new_volunteer_learning_hour_path(volunteer)
+    expect(page).to_not have_text("Learning Topic")
   end
 end

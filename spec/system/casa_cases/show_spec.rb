@@ -67,7 +67,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
     it "can see next court date", js: true do
       expect(page).to have_content(
-        "Next Court Date: #{I18n.l(future_court_date.date, format: "%A, %-d-%^b-%Y")}"
+        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
       )
     end
 
@@ -188,21 +188,28 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     context "when old case contacts are hidden" do
-      it "should display only visible cases to volunteer", js: true do
-        casa_case = create(:casa_case, casa_org: organization)
-        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
-
-        sign_in volunteer_1
-
+      before do
         volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
-        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
         create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+      end
 
+      it "should display only visible cases to volunteer", js: true do
         visit casa_case_path(casa_case.id)
-
         expect(page).to have_css("#case_contacts_list .card-content", count: 1)
+      end
+    end
+
+    context "when old case contacts are displayed" do
+      before do
+        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: false)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+      end
+
+      it "should display all cases to the volunteer" do
+        visit casa_case_path(casa_case.id)
+        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
       end
     end
   end

@@ -24,6 +24,10 @@ class CaseAssignmentPolicy < ApplicationPolicy
     record.active? && admin_or_supervisor? && same_org?
   end
 
+  def reimbursement?
+    admin_or_supervisor? && same_org?
+  end
+
   def hide_contacts?
     !record.active? && !record.hide_old_contacts? && admin_or_supervisor?
   end

@@ -9,17 +9,23 @@
   <nav class="sidebar-nav">
     <nav class="sidebar-nav">
       <ul>
-        <li class="nav-item">
+        <li class="<%= active_class(all_casa_admins_patch_notes_path) %> nav-item">
           <%= link_to all_casa_admins_patch_notes_path do %>
             <i class="lni lni-notepad mr-10"></i>
             Patch Notes
           <% end %>
         </li>
         <li>
-        <li class="nav-item">
+        <li class="<%= active_class(edit_all_casa_admins_path) %> nav-item">
           <%= link_to edit_all_casa_admins_path do %>
             <i class="lni lni-pencil-alt mr-10"></i>
             Edit Profile
+          <% end %>
+        </li>
+        <li class="<%= active_class(all_casa_admins_feature_flags_path) %> nav-item">
+          <%= link_to all_casa_admins_feature_flags_path do %>
+            <i class="lni lni-pencil-alt mr-10"></i>
+            Feature Flags
           <% end %>
         </li>
         <li class="nav-item">

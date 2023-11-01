@@ -6,8 +6,6 @@
 
 import Swal from 'sweetalert2'
 
-const CourtOrderList = require('./court_order_list.js')
-
 function copyOrdersFromCaseWithConfirmation () {
   const id = $(this).next().val()
   const caseNumber = $('select.siblings-casa-cases').find(':selected').text()
@@ -123,9 +121,7 @@ function handleGenerateReport (e) {
     })
 }
 
-$('document').ready(() => {
-  const courtOrdersListContainer = $('#court-orders-list-container')
-
+$(() => { // JQuery's callback for the DOM loading
   $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
 
   if ($('button.copy-court-button').length) {
@@ -139,19 +135,6 @@ $('document').ready(() => {
       disableBtn($('button.copy-court-button')[0])
     }
   })
-
-  if (courtOrdersListContainer.length) {
-    const courtOrders = new CourtOrderList(courtOrdersListContainer)
-
-    $('button#add-court-order-button').on('click', () => {
-      courtOrders.addCourtOrder()
-    })
-
-    $('button.remove-court-order-button').on('click', (event) => {
-      const orderHTML = $(event.target).parent()
-      courtOrders.removeCourtOrderWithConfirmation(orderHTML)
-    })
-  }
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 

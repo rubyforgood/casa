@@ -1,8 +1,8 @@
 on:
   schedule:
     # * is a special character in YAML so you have to quote this string
-    - cron:  '0 * * * *'
-  workflow_dispatch: # Enable manual runs of the bot
+    - cron: '0 * * * *'
+  workflow_dispatch:  # Enable manual runs of the bot
 
 jobs:
   remove_help_wanted_labels:
@@ -22,9 +22,8 @@ jobs:
                 "project_name": "CASA Volunteer Portal"
               },
               {
-                "column_name": "In progress",
-                "labels": ["Help Wanted"],
-                "project_name": "CASA Volunteer Portal"
+                "column_id": "47fc9ee4",
+                "labels": ["Help Wanted"]
               },
               {
                 "column_name": "Merged to QA",

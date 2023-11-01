@@ -8,7 +8,9 @@ class UserParameters < SimpleDelegator
         :phone_number,
         :password,
         :active,
+        :receive_reimbursement_email,
         :type,
+        :monthly_learning_hours_report,
         address_attributes: [:id, :content]
       )
 

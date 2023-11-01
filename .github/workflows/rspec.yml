@@ -22,7 +22,7 @@ jobs:
 
     services:
       db:
-        image: postgres:12.3
+        image: postgres:14.8
         env:
           POSTGRES_PASSWORD: password
         ports:
@@ -34,7 +34,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1

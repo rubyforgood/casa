@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe SupervisorMailer, type: :mailer do
   describe ".weekly_digest" do
-    let(:supervisor) { build(:supervisor) }
+    let(:supervisor) { build(:supervisor, :receive_reimbursement_attachment) }
     let(:volunteer) { build(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
     let(:casa_case) { build(:casa_case, casa_org: supervisor.casa_org) }
 
@@ -26,6 +26,10 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
         expect(mail.body.encoded).to_not match("Notes: #{other_contact.notes}")
+      end
+
+      it "has a CSV attachment" do
+        expect(mail.attachments.count).to eq(1)
       end
     end
 
@@ -110,6 +114,20 @@ RSpec.describe SupervisorMailer, type: :mailer do
     it "informs the correct expiration date" do
       email_body = mail.html_part.body.to_s.squish
       expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
+    end
+  end
+
+  describe ".reimbursement_request_email" do
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
+    let(:casa_organization) { volunteer.casa_org }
+
+    let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }
+
+    it "sends email reminder" do
+      expect(mail.subject).to eq("New reimbursement request from #{volunteer.display_name}")
+      expect(mail.to).to eq([supervisor.email])
+      expect(mail.body.encoded).to match("#{volunteer.display_name} has submitted a reimbursement request")
     end
   end
 end

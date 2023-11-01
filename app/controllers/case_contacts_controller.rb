@@ -102,12 +102,13 @@ class CaseContactsController < ApplicationController
     @current_organization_groups = current_organization.contact_type_groups
 
     if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      if additional_expense_params&.any? && FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      if additional_expense_params&.any? && policy(:case_contact).additional_expenses_allowed?
         update_or_create_additional_expense(additional_expense_params, @case_contact)
       end
       if @case_contact.valid?
         created_at = @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")
         flash[:notice] = "Case contact created at #{created_at}, was successfully updated."
+        send_reimbursement_email(@case_contact)
         redirect_to casa_case_path(@case_contact.casa_case)
       else
         render :edit
@@ -129,7 +130,7 @@ class CaseContactsController < ApplicationController
     authorize CasaAdmin
 
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
-    case_contact.restore(recrusive: true)
+    case_contact.restore(recursive: true)
     flash[:notice] = "Contact is successfully restored."
     redirect_to request.referer
   end
@@ -156,7 +157,7 @@ class CaseContactsController < ApplicationController
 
   def create_case_contact_for_every_selected_casa_case(selected_cases)
     selected_cases.map do |casa_case|
-      if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      if policy(:case_contact).additional_expenses_allowed?
         new_cc = casa_case.case_contacts.new(create_case_contact_params.except(:casa_case_attributes))
         update_or_create_additional_expense(additional_expense_params, new_cc)
         if new_cc.valid?
@@ -169,6 +170,9 @@ class CaseContactsController < ApplicationController
       end
 
       case_contact = @case_contact.dup
+
+      send_reimbursement_email(case_contact)
+
       case_contact.casa_case = casa_case
       if @selected_cases.count == 1 && case_contact.valid?
         if current_role == "Volunteer"
@@ -178,6 +182,12 @@ class CaseContactsController < ApplicationController
         end
       end
       new_cc
+    end
+  end
+
+  def send_reimbursement_email(case_contact)
+    if case_contact.should_send_reimbursement_email?
+      SupervisorMailer.reimbursement_request_email(case_contact.creator, case_contact.supervisor).deliver_later
     end
   end
 
@@ -215,13 +225,18 @@ class CaseContactsController < ApplicationController
 
   def current_organization_groups
     current_organization.contact_type_groups
+      .includes(:contact_types)
       .joins(:contact_types)
       .where(contact_types: {active: true})
       .uniq
   end
 
   def all_case_contacts
-    policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+    query = policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+    if params[:casa_case_id].present?
+      query = query.where(casa_case_id: params[:casa_case_id])
+    end
+    query
   end
 
   def additional_expense_params

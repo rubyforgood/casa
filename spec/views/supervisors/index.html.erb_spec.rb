@@ -1,36 +1,61 @@
 require "rails_helper"
 
 RSpec.describe "supervisors/index", type: :view do
-  let(:user) {}
-
-  before do
-    enable_pundit(view, user)
-    allow(view).to receive(:current_user).and_return(user)
-    assign :supervisors, []
-    assign :available_volunteers, []
-    sign_in user
-  end
-
   context "when logged in as an admin" do
-    let(:user) { build_stubbed :casa_admin }
-
     it "can access the 'New Supervisor' button" do
+      user = create(:casa_admin)
+      enable_pundit(view, user)
+      casa_cases = create_list(:casa_case, 2, court_dates: [])
+      assign :casa_cases, casa_cases
+      assign :supervisors, []
+      assign :available_volunteers, []
+
+      sign_in user
+
       render template: "supervisors/index"
 
       expect(rendered).to have_link("New Supervisor", href: new_supervisor_path)
     end
 
-    context "when a supervisor has volunteers who have and have not submitted a case contact in 14 days" do
-      let(:supervisor) { create(:supervisor) }
-      let!(:volunteer_with_recently_created_contacts) {
-        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
-      }
-      let!(:volunteer_without_recently_created_contacts) {
-        create(:volunteer, :with_casa_cases, supervisor: supervisor)
-      }
+    it "show casa_cases list" do
+      user = create(:casa_admin)
+      enable_pundit(view, user)
+      casa_case1 = create(:casa_case,
+        case_number: "123",
+        active: true,
+        birth_month_year_youth: Date.new(1900))
+      casa_case2 = create(:casa_case,
+        case_number: "456",
+        active: false,
+        birth_month_year_youth: Date.new(2100))
+      assign :casa_cases, [casa_case1, casa_case2]
+      assign :supervisors, []
+      assign :available_volunteers, []
 
+      sign_in user
+      render template: "supervisors/index"
+
+      expect(rendered).to have_text "123"
+      expect(rendered).to have_text "Active"
+      expect(rendered).to have_text "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}"
+
+      expect(rendered).to have_text "456"
+      expect(rendered).to have_text "Inactive"
+      expect(rendered).to have_text "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+    end
+
+    context "when a supervisor has volunteers who have and have not submitted a case contact in 14 days" do
       it "shows positive and negative numbers" do
+        supervisor = create(:supervisor)
+        enable_pundit(view, supervisor)
+        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+
         assign :supervisors, [supervisor]
+        assign :casa_cases, []
+        assign :available_volunteers, []
+
+        sign_in supervisor
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -40,8 +65,18 @@ RSpec.describe "supervisors/index", type: :view do
       end
 
       it "accurately displays the number of active and inactive volunteers per supervisor" do
-        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        user = create(:casa_admin)
+        enable_pundit(view, user)
+        supervisor = create(:supervisor)
+        create_list(:volunteer, 2, :with_cases_and_contacts, supervisor: supervisor)
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+        casa_cases = create_list(:casa_case, 2, court_dates: [])
+
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
+        assign :available_volunteers, []
+
+        sign_in user
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -61,13 +96,18 @@ RSpec.describe "supervisors/index", type: :view do
     end
 
     context "when a supervisor only has volunteers who have not submitted a case contact in 14 days" do
-      let(:supervisor) { create(:supervisor) }
-      let!(:volunteer_without_recently_created_contacts) {
-        create(:volunteer, :with_casa_cases, supervisor: supervisor)
-      }
-
       it "omits the attempted contact stat bar" do
+        user = create(:casa_admin)
+        enable_pundit(view, user)
+        supervisor = create(:supervisor)
+        create(:volunteer, :with_casa_cases, supervisor: supervisor)
+        casa_cases = create_list(:casa_case, 2, court_dates: [])
+
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
+        assign :available_volunteers, []
+
+        sign_in user
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -78,13 +118,18 @@ RSpec.describe "supervisors/index", type: :view do
     end
 
     context "when a supervisor only has volunteers who have submitted a case contact in 14 days" do
-      let(:supervisor) { create(:supervisor) }
-      let!(:volunteer_with_recently_created_contacts) {
-        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
-      }
-
       it "shows the end of the attempted contact bar instead of the no attempted contact bar" do
+        user = create(:casa_admin)
+        enable_pundit(view, user)
+        supervisor = create(:supervisor)
+        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        casa_cases = create_list(:casa_case, 2, court_dates: [])
+
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
+        assign :available_volunteers, []
+
+        sign_in user
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -95,10 +140,17 @@ RSpec.describe "supervisors/index", type: :view do
     end
 
     context "when a supervisor does not have volunteers" do
-      let(:supervisor) { create(:supervisor) }
-
       it "shows a no assigned volunteers message instead of attempted and no attempted contact bars" do
+        user = create(:casa_admin)
+        enable_pundit(view, user)
+        supervisor = create(:supervisor)
+        casa_cases = create_list(:casa_case, 2, court_dates: [])
+
         assign :supervisors, [supervisor]
+        assign :casa_cases, casa_cases
+        assign :available_volunteers, []
+
+        sign_in user
         render template: "supervisors/index"
 
         parsed_html = Nokogiri.HTML5(rendered)
@@ -111,9 +163,16 @@ RSpec.describe "supervisors/index", type: :view do
   end
 
   context "when logged in as a supervisor" do
-    let(:user) { build_stubbed :supervisor }
-
     it "cannot access the 'New Supervisor' button" do
+      user = create(:supervisor)
+      enable_pundit(view, user)
+      casa_cases = create_list(:casa_case, 2, court_dates: [])
+
+      assign :casa_cases, casa_cases
+      assign :supervisors, []
+      assign :available_volunteers, []
+
+      sign_in user
       render template: "supervisors/index"
 
       expect(rendered).to_not have_link("New Supervisor", href: new_supervisor_path)

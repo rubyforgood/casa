@@ -18,9 +18,6 @@ chdir APP_ROOT do
   system! 'gem install bundler --conservative'
   system('bundle check') || system!('bundle install')
 
-  puts 'Using correct node version'
-  system('nvm use') || abort("install correct node version using 'nvm install' and try again")
-
   puts 'Updating yarn'
   system('yarn install') || abort("install yarn and try again")
 

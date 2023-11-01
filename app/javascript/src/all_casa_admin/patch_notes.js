@@ -1,16 +1,10 @@
-const AsyncNotifier = require('../async_notifier')
+const { Notifier } = require('../notifier')
 const TypeChecker = require('../type_checker')
 const patchNotePath = window.location.pathname
 const patchNoteFormBeforeEditData = {}
 const patchNoteFunctions = {} // A hack to be able to alphabetize functions
 
 let pageNotifier
-
-jQuery.ajaxSetup({
-  beforeSend: function () {
-    pageNotifier.startAsyncOperation()
-  }
-})
 
 // Inserts a patch note display after the create patch note form in the patch note list and styles it as new
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
@@ -69,10 +63,22 @@ patchNoteFunctions.createPatchNote = function (patchNoteGroupId, patchNoteText, 
   TypeChecker.checkString(patchNoteText, 'patchNoteText')
 
   // Post request
-  return $.post(patchNotePath, {
-    note: patchNoteText,
-    patch_note_group_id: patchNoteGroupId,
-    patch_note_type_id: patchNoteTypeId
+  // return $.post(patchNotePath, {
+  //   note: patchNoteText,
+  //   patch_note_group_id: patchNoteGroupId,
+  //   patch_note_type_id: patchNoteTypeId
+  // })
+  return $.ajax({
+    url: patchNotePath,
+    type: 'POST',
+    data: {
+      note: patchNoteText,
+      patch_note_group_id: patchNoteGroupId,
+      patch_note_type_id: patchNoteTypeId
+    },
+    beforeSend: function () {
+      pageNotifier.waitForAsyncOperation()
+    }
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
@@ -100,7 +106,10 @@ patchNoteFunctions.deletePatchNote = function (patchNoteId) {
 
   return $.ajax({
     url: `${patchNotePath}/${patchNoteId}`,
-    type: 'DELETE'
+    type: 'DELETE',
+    beforeSend: function () {
+      pageNotifier.waitForAsyncOperation()
+    }
   })
     .then(function (response, textStatus, jqXHR) {
       if (response.errors) {
@@ -438,7 +447,7 @@ patchNoteFunctions.resolveAsyncOperation = function (error) {
     error = error.message
   }
 
-  pageNotifier.stopAsyncOperation(error)
+  pageNotifier.resolveAsyncOperation(error)
 }
 
 // Saves an edited patch note
@@ -464,6 +473,9 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
       note: patchNoteText,
       patch_note_group_id: patchNoteGroupId,
       patch_note_type_id: patchNoteTypeId
+    },
+    beforeSend: function () {
+      pageNotifier.waitForAsyncOperation()
     }
   })
     .then(function (response, textStatus, jqXHR) {
@@ -484,18 +496,18 @@ patchNoteFunctions.savePatchNote = function (patchNoteGroupId, patchNoteId, patc
     })
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   if (!(window.location.pathname.includes('patch_notes'))) {
     return
   }
 
   try {
-    const asyncNotificationsElement = $('#async-notifications')
-    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+    const asyncNotificationsElement = $('#notifications')
+    pageNotifier = new Notifier(asyncNotificationsElement)
 
-    $('#new-patch-note button').click(patchNoteFunctions.onCreate)
-    $('#patch-note-list .button-delete').click(patchNoteFunctions.onDeletePatchNote)
-    $('#patch-note-list .button-edit').click(patchNoteFunctions.onEditPatchNote)
+    $('#new-patch-note button').on('click', patchNoteFunctions.onCreate)
+    $('#patch-note-list .button-delete').on('click', patchNoteFunctions.onDeletePatchNote)
+    $('#patch-note-list .button-edit').on('click', patchNoteFunctions.onEditPatchNote)
   } catch (err) {
     pageNotifier.notify('Could not intialize app', 'error')
     pageNotifier.notify(err.message, 'error')

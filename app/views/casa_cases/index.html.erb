@@ -1,11 +1,16 @@
+<% if Rails.env.development? %>
+  <div data-controller="hello">
+  </div>
+<% end %>
+
 <div class="title-wrapper pt-30">
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
         <% if current_user.volunteer? %>
-          <h2>My <%= "Case".pluralize(@casa_cases.count) %></h2>
+          <h1>My <%= "Case".pluralize(@casa_cases.count) %></h1>
         <% else %>
-          <h2><%= "Case".pluralize(@casa_cases.count) %></h2>
+          <h1><%= "Case".pluralize(@casa_cases.count) %></h1>
         <% end %>
       </div>
     </div>
@@ -15,11 +20,24 @@
         <span class="ml-5">
           <% if policy(:dashboard).see_volunteers_section? %>
             <%= link_to new_casa_case_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
-          <i class="lni lni-plus"></i>
-            New Case
+              <i class="lni lni-plus"></i>
+              New Case
             <% end %>
           <% end %>
         </span>
+        <% if policy(:application).admin_or_supervisor? %>
+          <span class="ml-5">
+            <%= link_to case_groups_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+              Case Groups
+            <% end %>
+          </span>
+          <span class="ml-5">
+            <%= link_to new_bulk_court_date_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+              <i class="lni lni-plus"></i>
+              New Bulk Court Date
+            <% end %>
+          </span>
+        <% end %>
         <span class="ml-5">
           <% if policy(CasaCase).can_see_filters? %>
             <button
@@ -50,8 +68,9 @@
               <th>Judge</th>
               <th>Status</th>
               <th>Transition Aged Youth</th>
-              <th>Assigned To</th>
-              <th>Actions</th>
+              <% unless current_user.volunteer? %>
+                <th>Assigned To</th>
+              <% end %>
               <th></th>
             </tr>
           </thead>
@@ -63,24 +82,17 @@
                 <td class="min-width"><%= casa_case.judge_name %></td>
                 <td class="min-width"><%= casa_case.decorate.status %></td>
                 <td class="min-width"><%= casa_case.decorate.transition_aged_youth %></td>
-                <td class="min-width">
-                  <% if casa_case.active? %>
-                    <% if current_user.volunteer? %>
-                      <%= safe_join(casa_case.assigned_volunteers.map { |vol|
-                    vol.display_name }, ", ") %>
-                    <% else %>
+                <% unless current_user.volunteer? %>
+                  <td class="min-width">
+                    <% if casa_case.active? %>
                       <%= safe_join(casa_case.assigned_volunteers.map { |vol|
                     link_to(vol.display_name, edit_volunteer_path(vol)) },
                                 ", ") %>
+                    <% else %>
+                      Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>
                     <% end %>
-                  <% else %>
-                    Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>
-                  <% end %>
-                </td>
-                <td class="min-width">
-                  <i class="lni lni-search-alt text-active"></i>
-                  <%= link_to "Detail View", casa_case_path(casa_case) %>
-                </td>
+                  </td>
+                <% end %>
                 <td>
                   <i class="lni lni-pencil-alt text-danger"></i>
                   <%= link_to "Edit", edit_casa_case_path(casa_case), class: 'text-danger' %>
@@ -93,4 +105,3 @@
     </div>
   </div>
 </div>
-<%= render 'other_duties' %>

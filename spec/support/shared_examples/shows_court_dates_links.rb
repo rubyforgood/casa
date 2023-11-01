@@ -17,6 +17,6 @@ shared_examples_for "shows court dates links" do
   it "past court dates are ordered" do
     visit casa_case_path(casa_case)
     expect(page).to have_text("December 23, 2019")
-    expect(page.body).to match(/December 23, 2019.*December 28, 2019/m)
+    expect(page).to have_text(/December 23, 2019.*December 28, 2019/m)
   end
 end

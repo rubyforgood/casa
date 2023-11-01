@@ -21,24 +21,24 @@ RSpec.describe "court_dates/new", type: :system do
 
   context "when all fields are filled" do
     it "is successful", js: true do
-      expect(page.body).to have_content(casa_case.case_number)
+      expect(page).to have_content(casa_case.case_number)
 
       fill_in "court_date_date", with: :now
       fill_in "court_date_court_report_due_date", with: :now
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
-      find("#add-court-order-button").click
-
-      fill_in "court_date_case_court_orders_attributes_0_text", with: text
-      select "Partially implemented", from: "court_date_case_court_orders_attributes_0_implementation_status"
+      click_on "Add a court order"
+      text_area = first(:css, "textarea").native
+      text_area.send_keys(text)
+      page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
       within ".top-page-actions" do
         click_on "Create"
       end
 
       expect(page).to have_content("Court date was successfully created.")
-      expect(page.body).to have_content(casa_case.case_number)
+      expect(page).to have_content(casa_case.case_number)
       expect(page).to have_content("Court Report Due Date:")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)

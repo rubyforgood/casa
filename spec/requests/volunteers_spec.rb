@@ -112,13 +112,6 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "POST /create" do
-    before do
-      sign_in admin
-      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
-      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
-      @short_io_stub = WebMockHelper.short_io_stub_sms
-    end
-
     context "with valid params" do
       let(:params) do
         {
@@ -129,28 +122,34 @@ RSpec.describe "/volunteers", type: :request do
         }
       end
 
-      it "creates a new volunteer" do
-        post volunteers_url, params: params
+      it "creates a new volunteer and sends account_setup email" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+
+        sign_in admin
+        expect {
+          post volunteers_url, params: params
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+
         expect(response).to have_http_status(:redirect)
         volunteer = Volunteer.last
         expect(volunteer.email).to eq("volunteer1@example.com")
         expect(volunteer.display_name).to eq("Example")
+        expect(volunteer.casa_org).to eq(admin.casa_org)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
       end
 
-      it "assigns new volunteer to creator's organization" do
-        expect(volunteer.casa_org_id).to eq(admin.casa_org_id)
-      end
-
-      it "sends an account_setup email" do
-        expect {
-          post volunteers_url, params: params
-        }.to change { ActionMailer::Base.deliveries.count }.by(1)
-      end
-
       it "sends a SMS when phone number exists" do
+        organization = create(:casa_org, twilio_enabled: true)
+        admin = create(:casa_admin, casa_org: organization)
         params[:volunteer][:phone_number] = "+12222222222"
+        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
+        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
+        @short_io_stub = WebMockHelper.short_io_stub_sms
+
+        sign_in admin
         post volunteers_url, params: params
+
         expect(@short_io_stub).to have_been_requested.times(2)
         expect(@twilio_activation_success_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
@@ -159,7 +158,15 @@ RSpec.describe "/volunteers", type: :request do
       end
 
       it "does not send a SMS when phone number is not provided" do
+        organization = create(:casa_org, twilio_enabled: true)
+        admin = create(:casa_admin, casa_org: organization)
+        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
+        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
+        @short_io_stub = WebMockHelper.short_io_stub_sms
+
+        sign_in admin
         post volunteers_url, params: params
+
         expect(@short_io_stub).to have_been_requested.times(0)
         expect(@twilio_activation_success_stub).to have_been_requested.times(0)
         expect(@twilio_activation_error_stub).to have_been_requested.times(0)
@@ -169,17 +176,33 @@ RSpec.describe "/volunteers", type: :request do
       end
 
       it "does not send a SMS when Twilio API has an error" do
-        org = create(:casa_org, twilio_account_sid: "articuno31")
-        admin = build(:casa_admin, casa_org: org)
+        org = create(:casa_org, twilio_account_sid: "articuno31", twilio_enabled: true)
+        admin = create(:casa_admin, casa_org: org)
+        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
+        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
+        @short_io_stub = WebMockHelper.short_io_stub_sms
+        params[:volunteer][:phone_number] = "+12222222222"
 
         sign_in admin
-
-        params[:volunteer][:phone_number] = "+12222222222"
         post volunteers_url, params: params
+
         expect(@twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
-        expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent due to error./)
+        expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent. Error: ./)
+      end
+
+      it "does not send a SMS if the casa_org does not have Twilio enabled" do
+        org = create(:casa_org, twilio_enabled: false)
+        admin = build(:casa_admin, casa_org: org)
+        params[:volunteer][:phone_number] = "+12222222222"
+
+        sign_in admin
+        post volunteers_url, params: params
+
+        expect(response).to have_http_status(:redirect)
+        follow_redirect!
+        expect(flash[:notice]).to match(/New volunteer created successfully./)
       end
     end
 
@@ -194,16 +217,16 @@ RSpec.describe "/volunteers", type: :request do
       end
 
       it "does not create a new volunteer" do
-        expect {
-          post volunteers_url, params: params
-        }.to_not change { Volunteer.count }
-        expect(response).to have_http_status(:success)
-      end
+        org = create(:casa_org, twilio_enabled: false)
+        admin = build(:casa_admin, casa_org: org)
 
-      it "sends an account_setup email" do
+        sign_in admin
+
         expect {
           post volunteers_url, params: params
-        }.to_not change { ActionMailer::Base.deliveries.count }
+        }.to change(Volunteer, :count).by(0)
+          .and change(ActionMailer::Base.deliveries, :count).by(0)
+        expect(response).to have_http_status(:success)
       end
     end
   end
@@ -366,6 +389,18 @@ RSpec.describe "/volunteers", type: :request do
       get send_reactivation_alert_volunteer_path(volunteer)
       expect(response).to redirect_to(edit_volunteer_path(volunteer))
       expect(response.status).to match 302
+    end
+
+    it "does not send a reactivation SMS when Casa Org has Twilio disabled" do
+      org = create(:casa_org, twilio_enabled: false)
+      adm = create(:casa_admin, casa_org: org)
+      vol = create(:volunteer, casa_org: org)
+
+      sign_in adm
+
+      get send_reactivation_alert_volunteer_path(vol)
+      expect(response).to redirect_to(edit_volunteer_path(vol))
+      expect(flash[:notice]).to match(/Volunteer reactivation alert not sent. Twilio is disabled for #{org.name}/)
     end
   end
 

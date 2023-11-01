@@ -1,0 +1,70 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>Banners</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <h3 class="mb-10">Banners</h3>
+        <p class="text-sm mb-20">
+          Banners display at the top of the page and can be used to callout a message to volunteers. One example is displaying a banner with a link to a survey that volunteers can fill out. You can create multiple banners but only one can be active at a time.
+        </p>
+        <%= link_to new_banner_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+          <i class="lni lni-plus mr-10"></i>
+          New Banner
+        <% end %>
+        <div class="table-wrapper table-responsive">
+          <table class="table striped-table" id="banners">
+            <thead>
+            <tr>
+              <th>Name</th>
+              <th>Active?</th>
+              <th>Last Updated By</th>
+              <th>Updated At</th>
+              <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <% @banners.each do |banner| %>
+              <tr>
+                <td class="min-width">
+                  <%= banner.name %>
+                </td>
+                <td class="min-width">
+                  <% if banner.active? %>
+                    Yes
+                  <% else %>
+                    No
+                  <% end %>
+                </td>
+                <td class="min-width">
+                  <%= banner.user.display_name %>
+                </td>
+                <td class="min-width">
+                  <%= time_ago_in_words(banner.updated_at) %> ago
+                </td>
+                <td>
+                  <%= link_to edit_banner_path(banner) do %>
+                    <div class="action">
+                      <button class="text-danger">
+                        <i class="lni lni-pencil-alt"></i> Edit
+                      </button>
+                    </div>
+                  <% end %>
+                  <%= link_to 'Delete', banner_path(banner), class: 'btn btn-danger', method: :delete, data: { confirm: "Are you sure that you want to delete this banner?" } %>
+                </td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

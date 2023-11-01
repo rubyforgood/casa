@@ -16,8 +16,8 @@ sudo apt install -y libpq-dev      # Helps compile C programs to be able to comm
 # Optional
 sudo apt install -y curl           # A command to help fetching and sending data to urls
 sudo apt install -y vim            # A text editor accessible from the command line
-```  
-  
+```
+
 ```
 # Install Postgres
 #   Add the postgres repo
@@ -39,6 +39,9 @@ sudo apt update
 
 #   Install Postgres 12
 sudo apt install -y postgresql-12
+
+#   Turn the server on
+systemctl start postgresql
 
 #   Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
@@ -79,7 +82,7 @@ rbenv init
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install 3.1.2
+rbenv install 3.2.2
 ```
 
 If you would like RVM instead of rbenv
@@ -90,9 +93,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.1.2
-rvm alias create ruby 3.1.2
-rvm alias create default ruby-3.1.2
+rvm install 3.2.2
+rvm alias create ruby 3.2.2
+rvm alias create default ruby-3.2.2
 ```
 
 ```# Download the Chrome browser (for RSpec testing):
@@ -102,12 +105,12 @@ sudo apt-get -y update
 sudo apt-get -y install google-chrome-stable
 ```
 
-## Connecting to Github via ssh  
-Connecting to Gihub via ssh prevents being required to login very often when using git commands. 
+## Connecting to Github via ssh
+Connecting to Gihub via ssh prevents being required to login very often when using git commands.
 
 ### Creating an SSH Key Pair
  - Open Terminal.
- - Paste the text below, substituting in your GitHub email address.  
+ - Paste the text below, substituting in your GitHub email address.
 `ssh-keygen -t ed25519 -C "your_email@example.com"`
  - For all prompts simply press enter to set default values.
 
@@ -117,7 +120,7 @@ Connecting to Gihub via ssh prevents being required to login very often when usi
 
 See [github's article](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent) for more details/updates.
 
-### Add your ssh key to your github account.  
+### Add your ssh key to your github account.
 [See github's guide](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/adding-a-new-ssh-key-to-your-github-account)
 
 ### Test Your ssh Connection
@@ -127,9 +130,9 @@ See [github's article](https://docs.github.com/en/authentication/connecting-to-g
 
 ## Project Installation
 
-`cd` to the directory where you would like to install CASA  
+`cd` to the directory where you would like to install CASA
 
-Run this series of commands to install the project.  
+Run this series of commands to install the project.
 ```
 git clone git@github.com:rubyforgood/casa.git # Download a copy of the repository locally
 cd casa                                       # Go into the folder containing casa

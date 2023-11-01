@@ -1,0 +1,31 @@
+<div class="mb-1">
+  <strong class="text-dark">CASA organization </strong>
+  <%= resource&.casa_org&.name %>
+</div>
+<div class="mb-1">
+  <strong class="text-dark">Added to system </strong>
+  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_created_at %>
+</div>
+<div class="mb-1">
+  <strong class="text-dark">Invitation email sent </strong>
+  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %>
+</div>
+<div class="mb-1">
+  <strong class="text-dark">Last logged in </strong>
+  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_current_sign_in_at || "never" %>
+</div>
+<div class="mb-1">
+  <strong class="text-dark">Invitation accepted </strong>
+  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_accepted_at || "never" %>
+</div>
+<div class="mb-1">
+  <strong class="text-dark">Password reset last sent </strong>
+  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_reset_password_sent_at || "never" %>
+</div>
+
+<% if resource.is_a?(Volunteer) %>
+  <div class="mb-1">
+    <strong class="text-dark">Learning Hours This Year</strong>
+    <%= resource.learning_hours_spent_in_one_year %>
+  </div>
+<% end %>

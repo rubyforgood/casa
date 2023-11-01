@@ -15,7 +15,10 @@ en:
       court_date: Next Court Date
       prompt:
         deactivate:
-          confirm_swal: Deactivating a CASA Case will unassign any volunteers currently assigned to this case.
+          confirm_swal: >
+            Deactivating a CASA Case will unassign any volunteers currently
+            assigned to this case.
+
           fail: No, go back
           success: Yes, deactivate
       youth_birth_month_year: "Youth's Birth Month & Year"
@@ -120,7 +123,9 @@ en:
       label:
         display_name: Display name
       prompt:
-        mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
+        mark_inactive_warning: >
+          "WARNING: Marking an admin inactive will make them unable to login.
+          Are you sure you want to do this?"
     index:
       active: Active
       active_text: Admin is
@@ -151,7 +156,9 @@ en:
       hide: Hide
       read_more: Read more
     confirm_note_content_dialog:
-      body: Please double check your notes to ensure they don't contain any identifying details about your youth or anyone else.
+      body: >
+        Please double check your notes to ensure they don't contain any
+        identifying details about your youth or anyone else.
       header: Confirm Note Content
       note: Note
     edit:
@@ -202,8 +209,10 @@ en:
       button:
         download: Download Court Report
         generate: Generate Report
-      description: "The Court Report is pre-filled with information for your case. You can select among currently active cases
-      assigned to you. The document is in Microsoft Word format (.docx)."
+      description: >
+        "The Court Report is pre-filled with information for your case.
+        You can select among currently active cases
+        assigned to you. The document is in Microsoft Word format (.docx)."
       generate_report: Generate Court Report
       label:
         case_number: "Case Number:"
@@ -230,17 +239,18 @@ en:
       title: Learning Hours
     form:
       learning_hours_title: Learning Hours Title
-      learning_type: Type of Learning
+      learning_hour_type_id: Type of Learning
       duration: Learning Duration
       occurred_on: Occurred On
       create_button: Create New Learning Hours Entry
       update_button: Edit Learning Hours Entry
     confirm_note_content_dialog:
-        header: Congratulations
-        body: New entry created
+      header: Congratulations
+      body: New entry created
   global:
     add_court_order: Add a court order
-    court_orders: Court Orders - Please check that you didn't enter any youth names
+    court_orders: >
+      Court Orders - Please check that you didn't enter any youth names
     email: Email
   judges:
     edit:
@@ -300,7 +310,9 @@ en:
         volunteers: Volunteers
   notifications:
     index:
-      no_notifications: You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
+      no_notifications: >
+        You currently don't have any notifications. Notifications are generated
+        when someone requests follow-up on a case contact.
   reimbursements:
     data_table:
       heading:
@@ -347,7 +359,9 @@ en:
       export_page_title: Export Data
       filter_cols: Filter Columns
       reports_subhead: Case Contacts Report
-      reports_description: This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
+      reports_description: >
+        This CSV is a listing of all fields for the case contacts of all
+        volunteers. Select the start and end date.
       select_contact_type_groups_placeholder: -Select Contact Type Groups-
       select_contact_types_placeholder: -Select Contact Types-
       select_supervisors_placeholder: -Select Supervisors-
@@ -372,7 +386,8 @@ en:
       hide_unassigned: Hide unassigned
       include_unassigned: Include unassigned
       manage_volunteers: Manage Volunteers
-      no_volunteers_available: There are no active, unassigned volunteers available.
+      no_volunteers_available: >
+       There are no active, unassigned volunteers available.
       select_a_volunteer: Select a Volunteer
       title: Editing Supervisor
       unassign: Unassign
@@ -385,7 +400,9 @@ en:
         zero: Assigned Volunteers
   volunteers:
     edit:
-      notes_placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors."
+      notes_placeholder: >
+        "Enter a note regarding the volunteer. These notes are only visible
+        to CASA administrators and supervisors."
       note_submit: "Save Note"
     index:
       active: Active
@@ -398,7 +415,7 @@ en:
         case_number: Case Number(s)
         contacts: Contacts Made in Past 60 Days
         e_mail: Email
-        last_attempted_contact:  Last Attempted Contact
+        last_attempted_contact: Last Attempted Contact
         hours_spent_in: Hours spent in last 30 days
         name: Name
         supervisor: Supervisor

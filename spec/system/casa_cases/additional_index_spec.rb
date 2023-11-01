@@ -24,7 +24,6 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Status")
       expect(page).to have_selector("th", text: "Transition Aged Youth")
       expect(page).to have_selector("th", text: "Assigned To")
-      expect(page).to have_selector("th", text: "Actions")
     end
 
     it "filters active/inactive", js: true do

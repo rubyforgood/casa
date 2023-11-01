@@ -1,6 +1,6 @@
 /* global $ */
 
-$(() => {
+$(() => { // JQuery's callback for the DOM loading
   const formId = 'casa-contact-form'
   let localStorageKey = formId
 

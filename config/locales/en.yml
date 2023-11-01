@@ -31,6 +31,10 @@
 
 en:
   hello: "Hello world"
+  activerecord:
+    attributes:
+      learning_hour:
+        learning_hour_type: "Type of Learning"
   pundit:
     default: "Sorry, you are not authorized to perform this action."
     casa_case_policy:
@@ -51,12 +55,13 @@ en:
       description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
   time:
     formats:
-      day_and_date: "%A, %v"
+      day_and_date: "%A, %d-%b-%Y"
       standard: "%m-%d-%Y"
       contact_occurred_at: "%Y%m%d%H%M%s"
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
+      edit_profile: "%B %d, %Y at %I:%M %p %Z"
   notifications:
     emancipation_checklist_reminder_notification:
       title: "Emancipation Checklist Reminder"

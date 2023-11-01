@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
 
@@ -24,7 +26,18 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
-  resources :health, only: %i[index]
+  resources :preference_sets, only: [] do
+    collection do
+      post "/table_state_update/:table_name", to: "preference_sets#table_state_update", as: :table_state_update
+      get "/table_state/:table_name", to: "preference_sets#table_state", as: :table_state
+    end
+  end
+
+  resources :health, only: %i[index] do
+    collection do
+      get :case_contacts_creation_times_in_last_week
+    end
+  end
 
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases, except: %i[destroy] do
@@ -98,7 +111,13 @@ Rails.application.routes.draw do
   resources :other_duties, only: %i[new create edit index update]
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
+  resources :learning_hour_types, only: %i[new create edit update]
+  resources :learning_hour_topics, only: %i[new create edit update]
   resources :followup_reports, only: :index
+  resources :placement_reports, only: :index
+  resources :banners, only: %i[index new edit create update destroy]
+  resources :bulk_court_dates, only: %i[new create]
+  resources :case_groups, only: %i[index new edit create update destroy]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -131,6 +150,7 @@ Rails.application.routes.draw do
       get :unassign
       patch :unassign
       patch :show_hide_contacts
+      patch :reimbursement
     end
   end
   resources :case_court_orders, only: %i[destroy]
@@ -146,6 +166,8 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+
+    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
@@ -171,4 +193,13 @@ Rails.application.routes.draw do
   end
 
   get "/error", to: "error#index"
+
+  namespace :api do
+    namespace :v1 do
+      namespace :users do
+        post "sign_in", to: "sessions#create"
+        # get 'sign_out', to: 'sessions#destroy'
+      end
+    end
+  end
 end

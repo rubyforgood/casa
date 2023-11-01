@@ -117,13 +117,6 @@ RSpec.describe CourtDate, type: :model do
     end
   end
 
-  describe "#generate_report" do
-    subject { court_date.generate_report }
-
-    # TODO write a better test for this
-    it { is_expected.not_to be_nil }
-  end
-
   describe "#display_name" do
     subject { court_date.display_name }
     it "contains case number and date" do

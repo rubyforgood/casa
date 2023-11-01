@@ -1,5 +1,5 @@
 class CaseAssignmentsController < ApplicationController
-  before_action :load_case_assignment, only: %i[destroy unassign show_hide_contacts]
+  before_action :load_case_assignment, only: %i[destroy unassign show_hide_contacts reimbursement]
   after_action :verify_authorized
 
   def create
@@ -73,6 +73,15 @@ class CaseAssignmentsController < ApplicationController
     end
   end
 
+  def reimbursement
+    casa_case = @case_assignment.casa_case
+    message = "Volunteer allow reimbursement changed from Case #{casa_case.case_number}."
+    authorize @case_assignment, :reimbursement?
+    if @case_assignment.update(allow_reimbursement: !@case_assignment.allow_reimbursement)
+      redirect_to after_action_path(casa_case), notice: message
+    end
+  end
+
   private
 
   def case_assignment_parent
@@ -92,7 +101,7 @@ class CaseAssignmentsController < ApplicationController
   end
 
   def case_assignment_params
-    params.require(:case_assignment).permit(:casa_case_id, :volunteer_id)
+    params.require(:case_assignment).permit(:casa_case_id, :volunteer_id, :reimbursement)
   end
 
   def load_case_assignment

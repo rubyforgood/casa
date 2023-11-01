@@ -2,8 +2,8 @@
 
 source "https://rubygems.org"
 
-ruby "3.1.3"
-gem "rails", "~> 7.0.4"
+ruby "3.2.2"
+gem "rails", "~> 7.0.8"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
@@ -11,7 +11,7 @@ gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
 gem "caxlsx", "~> 3.4" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
-gem "cssbundling-rails", "~> 1.1" # compiles css
+gem "cssbundling-rails", "~> 1.3" # compiles css
 gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
@@ -35,15 +35,21 @@ gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.2.1" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "6.4.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
+gem "rack-cors" # for allowing cross-origin resource sharing
 gem "request_store"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
+gem "stimulus-rails"
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "rswag-api"
+gem "rswag-ui"
+gem "blueprinter" # for JSON serialization
+gem "oj" # faster JSON parsing 🍊
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
@@ -54,12 +60,14 @@ group :development, :test do
   gem "pry"
   gem "pry-byebug"
   gem "rspec-rails"
+  gem "rswag-specs"
   gem "shoulda-matchers"
   gem "standard", "1.5.0" # 1.6.0 errors on all factorybot create variables
 end
 
 group :development do
   gem "annotate" # for adding db field listings to models as comments
+  gem "bundler-audit" # for checking for security issues in gems
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "spring" # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem "spring-commands-rspec"
@@ -73,11 +81,12 @@ group :test do
   gem "capybara"
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
+  gem "email_spec"
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov"
-  gem "webdrivers" # easy installation and use of web drivers to run system tests with browsers
+  gem "docx"
 end
 
 # gem "pdf-reader", "~> 2.9"

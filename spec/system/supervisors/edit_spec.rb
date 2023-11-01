@@ -125,7 +125,9 @@ RSpec.describe "supervisors/edit", type: :system do
 
       sign_in user
 
+      visit supervisors_path
       visit edit_supervisor_path(supervisor)
+
       click_on "Change to Admin"
 
       expect(page).to have_text("Supervisor was changed to Admin.")
@@ -248,6 +250,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
         it "does not error out when adding non-existent volunteer" do
           visit edit_supervisor_path(supervisor)
+          select volunteer_1.display_name, from: "Select a Volunteer"
           click_on "Assign Volunteer"
           expect(page.find_button("Assign Volunteer", disabled: true)).to be_present
           expect(page).to have_text("There are no active, unassigned volunteers available.")

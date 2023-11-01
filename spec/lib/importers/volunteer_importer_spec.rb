@@ -93,7 +93,7 @@ RSpec.describe VolunteerImporter do
 
       expect(alert[:type]).to eq(:error)
       expect(alert[:message]).to eq("Not all rows were imported.")
-      expect(alert[:exported_rows]).to include("Phone number must be 12 digits including country code (+1)")
+      expect(alert[:exported_rows]).to include("Phone number must be 10 digits or 12 digits including country code (+1)")
     end
   end
 end

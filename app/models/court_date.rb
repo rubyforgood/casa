@@ -10,11 +10,11 @@ class CourtDate < ApplicationRecord
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
 
-  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
+  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
+
+  before_save :set_court_report_due_date
 
   scope :ordered_ascending, -> { order("date asc") }
-
-  DOCX_TEMPLATE_PATH = Rails.root.join("app", "documents", "templates", "default_past_court_date_template.docx")
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
   def associated_reports
@@ -34,34 +34,15 @@ class CourtDate < ApplicationRecord
     case_court_orders.any? || hearing_type || judge
   end
 
-  def generate_report
-    template = Sablon.template(File.expand_path(DOCX_TEMPLATE_PATH))
-
-    template.render_to_string(context_hash)
-  end
-
   def display_name
     "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date)}"
   end
 
   private
 
-  def context_hash
-    {
-      court_date: date,
-      case_number: casa_case.case_number,
-      judge_name: judge&.name || "None",
-      hearing_type_name: hearing_type&.name || "None",
-      case_court_orders: case_court_orders_context_hash
-    }
-  end
-
-  def case_court_orders_context_hash
-    case_court_orders.map do |order|
-      {
-        text: order.text,
-        implementation_status: order.implementation_status&.humanize
-      }
+  def set_court_report_due_date
+    if date.present? && court_report_due_date.blank?
+      self.court_report_due_date = date - 3.weeks
     end
   end
 end

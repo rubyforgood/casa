@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<head>
+  <meta name="viewport" content="width=device-width">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>Actionable emails e.g. reset password</title>
+  <style>/* Email styles need to be inline, except @media queries */</style>
+  <style type="text/css">
+    @media only screen and (max-width: 640px) {
+      body {
+        padding: 0 !important;
+      }
+
+      h3 {
+        font-weight: 800 !important;
+        margin: 20px 0 5px !important;
+      }
+
+      h3 {
+        font-size: 16px !important;
+      }
+
+      .container {
+        padding: 0 !important;
+        width: 100% !important;
+      }
+    }
+  </style>
+</head>
+
+<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
+  <table class="main-body" style="box-sizing: border-box; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%; height: 100%; background-color: rgb(234, 236, 237);" width="100%" height="100%" bgcolor="rgb(234, 236, 237)">
+    <tbody style="box-sizing: border-box;">
+      <tr class="row" style="box-sizing: border-box; vertical-align: top;" valign="top">
+        <td class="main-body-cell" style="box-sizing: border-box;">
+          <table class="container" style="box-sizing: border-box; font-family: Helvetica, serif; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; height: 0px; width: 90%; max-width: 550px;" width="90%" height="0">
+            <tbody style="box-sizing: border-box;">
+              <tr style="box-sizing: border-box;">
+                <td class="container-cell" style="box-sizing: border-box; vertical-align: top; font-size: medium; padding-bottom: 50px;" valign="top">
+                  <table class="c1766" style="box-sizing: border-box; margin-top: 0px; margin-right: auto; background:#728089;margin-left: 0px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%; min-height: 30px; background:#fff; min-height: 150px; margin-bottom: 20px; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px;" width="100%" height="0">
+                    <tbody style="box-sizing: border-box;">
+                      <tr style="box-sizing: border-box;">
+                        <td class="cell c1776" style="box-sizing: border-box; width: 70%; vertical-align: middle;" width="70%" valign="middle">
+                          <div class="c1144" style="box-sizing: border-box; padding-right: 10px; padding-left: 10px; font-size: 17px; font-weight: 500;text-align: center;color: #fff;">
+                          </div>
+                        </td>
+                      </tr>
+                      <tr style="box-sizing: border-box;">
+                        <td class="card-content" style="box-sizing: border-box; font-size: 13px; line-height: 20px; color: rgb(111, 119, 125); padding-top: 10px; padding-right: 35px; padding-bottom: 10px; padding-left: 34px; vertical-align: top;" valign="top">
+                          <h3 style="box-sizing: border-box; font-weight: 800; margin: 0px 0 5px; font-size: 16px;">Learning hours have been added this week!</h3>
+                          <p style="box-sizing: border-box;">Please see the attached full report or export the full report <%= link_to "here", reports_url %></p>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <table class="footer" style="box-sizing: border-box; margin-top: 40px; color: rgb(152, 156, 165); text-align: center; font-size: 11px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" align="center">
+                    <tbody style="box-sizing: border-box;">
+                      <tr style="box-sizing: border-box;">
+                        <td class="footer-cell" style="box-sizing: border-box;"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  <div class="c2577" style="text-align:center;box-sizing: border-box; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
+                    <p class="footer-info" style="box-sizing: border-box;">Court Appointed Special Advocate (CASA) <%= @casa_org.name %>
+                      <br style="box-sizing: border-box;">
+                      <br style="box-sizing: border-box;"><%= @casa_org.address %>
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</body>
+</html>

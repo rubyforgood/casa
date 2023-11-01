@@ -70,9 +70,9 @@ RSpec.describe "notifications/index", type: :system do
       end
 
       it "lists followup notifications, showing their note" do
-        # Wait until page reloads
-        sleep(1)
-        expect(page).to have_content "Resolve Reminder"
+        within("#resolve", wait: 5) do
+          expect(page).to have_content "Resolve Reminder"
+        end
 
         sign_in volunteer
         visit notifications_path
@@ -92,9 +92,9 @@ RSpec.describe "notifications/index", type: :system do
       end
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
-        # Wait until page reloads
-        sleep(1)
-        expect(page).to have_content "Resolve Reminder"
+        within("#resolve", wait: 5) do
+          expect(page).to have_content "Resolve Reminder"
+        end
 
         sign_in volunteer
         visit notifications_path
@@ -111,13 +111,14 @@ RSpec.describe "notifications/index", type: :system do
 
       before do
         click_button "Make Reminder"
-        click_button "Confirm"
       end
 
       it "lists followup notifications showing admin current name" do
-        # Wait until page reloads
-        sleep(1)
-        expect(page).to have_content "Resolve Reminder"
+        click_button "Confirm"
+
+        within("#resolve", wait: 5) do
+          expect(page).to have_content "Resolve Reminder"
+        end
 
         visit edit_users_path
         fill_in "Display name", with: created_by_name
@@ -132,6 +133,52 @@ RSpec.describe "notifications/index", type: :system do
         expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
         expect(page).to have_text("New followup")
       end
+    end
+  end
+
+  context "EmancipationChecklistReminder" do
+    before do
+      volunteer.notifications << create(:notification, :emancipation_checklist_reminder, params: {casa_case: casa_case})
+      sign_in volunteer
+      visit notifications_path
+    end
+
+    it "should display a notification reminder that links to the emancipation checklist" do
+      notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Emancipation Checklist Reminder")
+      expect(page).to have_link(notification_message, href: casa_case_emancipation_path(casa_case.id))
+    end
+  end
+
+  context "YouthBirthdayNotification" do
+    before do
+      volunteer.notifications << create(:notification, :youth_birthday, params: {casa_case: casa_case})
+      sign_in volunteer
+      visit notifications_path
+    end
+
+    it "should display a notification on the notifications page" do
+      notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Youth Birthday Notification")
+      expect(page).to have_link(notification_message, href: casa_case_path(casa_case.id))
+    end
+  end
+
+  context "ReimbursementCompleteNotification" do
+    it "should display a notification on the notifications page" do
+      case_contact = create(:case_contact, :wants_reimbursement)
+      volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
+      sign_in volunteer
+      visit notifications_path
+      notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
+        "#{case_contact.miles_driven}mi on #{case_contact.occurred_at_display} has been processed and is " \
+        "en route."
+      expect(page).not_to have_text(I18n.t(".notifications.index.no_notifications"))
+      expect(page).to have_content("Reimbursement Approved")
+      expect(page).to have_content(notification_message)
+      expect(page).to have_link(href: case_contacts_path(casa_case_id: casa_case.id))
     end
   end
 

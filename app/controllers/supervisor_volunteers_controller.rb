@@ -10,7 +10,7 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.save
     flash_message = "#{volunteer.display_name} successfully assigned to #{supervisor.display_name}."
 
-    redirect_to request.referrer, notice: flash_message
+    redirect_to request.referer, notice: flash_message
   end
 
   def unassign
@@ -22,7 +22,7 @@ class SupervisorVolunteersController < ApplicationController
     supervisor_volunteer.save!
     flash_message = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
 
-    redirect_to request.referrer, notice: flash_message
+    redirect_to request.referer, notice: flash_message
   end
 
   private

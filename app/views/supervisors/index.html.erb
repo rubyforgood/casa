@@ -2,7 +2,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>Supervisors</h2>
+        <h1>Supervisors</h1>
       </div>
     </div>
     <!-- end col -->
@@ -156,6 +156,65 @@
         <% else %>
           There are no active volunteers without supervisors to display here
         <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style">
+        <div class="title mb-30">
+          <h2>Casa Cases without Court Dates</h2>
+        </div>
+        <div class="table-wrapper table-responsive">
+          <table class="table striped-table" id="casa_cases">
+            <thead>
+              <tr>
+                <th>Case Number</th>
+                <th>Hearing Type</th>
+                <th>Judge</th>
+                <th>Status</th>
+                <th>Transition Aged Youth</th>
+                <th>Assigned To</th>
+                <th>Actions</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @casa_cases.each do |casa_case| %>
+                <tr class="<%= casa_case.decorate.inactive_class %>">
+                  <td class="min-width"><%= link_to(casa_case.case_number, casa_case) %></td>
+                  <td class="min-width"><%= casa_case.hearing_type_name %></td>
+                  <td class="min-width"><%= casa_case.judge_name %></td>
+                  <td class="min-width"><%= casa_case.decorate.status %></td>
+                  <td class="min-width"><%= casa_case.decorate.transition_aged_youth %></td>
+                  <td class="min-width">
+                    <% if casa_case.active? %>
+                      <% if current_user.volunteer? %>
+                        <%= safe_join(casa_case.assigned_volunteers.map { |vol|
+                      vol.display_name }, ", ") %>
+                      <% else %>
+                        <%= safe_join(casa_case.assigned_volunteers.map { |vol|
+                      link_to(vol.display_name, edit_volunteer_path(vol)) },
+                                  ", ") %>
+                      <% end %>
+                    <% else %>
+                      Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>
+                    <% end %>
+                  </td>
+                  <td class="min-width">
+                    <i class="lni lni-search-alt text-active"></i>
+                    <%= link_to "Detail View", casa_case_path(casa_case) %>
+                  </td>
+                  <td>
+                    <i class="lni lni-pencil-alt text-danger"></i>
+                    <%= link_to "Edit", edit_casa_case_path(casa_case), class: 'text-danger' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
         </div>
       </div>
     </div>

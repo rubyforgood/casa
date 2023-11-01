@@ -1,0 +1,53 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>New Bulk Court Date</h1>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card-style mb-30">
+  <%= form_with(model: @court_date, url: bulk_court_dates_path, method: :post, local: true, data: { controller: "extended-nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
+    <%= render "/shared/error_messages", resource: @court_date %>
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h6>Create a court date for all cases in a group</h6>
+      </div>
+      <div class="col-md-6">
+        <div class="breadcrumb-wrapper">
+          <span class="top-page-actions ml-5">
+            <%= button_tag(
+                  type: "submit",
+                  class: "btn-sm main-btn primary-btn btn-hover"
+                ) do %>
+              <% if @court_date.persisted? %>
+                <i class="lni lni-pencil-alt"></i>
+                Update
+              <% else %>
+                <i class="lni lni-plus"></i>
+                Create
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <div class="select-style-1">
+        <%= form.label :case_group_id, "Case Group" %>
+        <div class="select-position">
+          <%= form.collection_select(
+                :case_group_id,
+                current_organization.case_groups,
+                :id, :name,
+                {include_hidden: false, include_blank: "-Select Case Group-"},
+                {class: "form-control"}
+              ) %>
+        </div>
+      </div>
+
+      <%= render 'court_dates/fields', court_date: @court_date, form: form, casa_case: nil %>
+    </div>
+  <% end %>
+</div>

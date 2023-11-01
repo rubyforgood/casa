@@ -7,10 +7,10 @@ RSpec.describe LearningHour, type: :model do
     expect(learning_hour.errors[:name]).to eq(["/ Title cannot be blank"])
   end
 
-  it "has a learning_type" do
-    learning_hour = build_stubbed(:learning_hour, learning_type: nil)
+  it "has a learning_hour_type" do
+    learning_hour = build_stubbed(:learning_hour, learning_hour_type: nil)
     expect(learning_hour).to_not be_valid
-    expect(learning_hour.errors[:learning_type]).to eq(["can't be blank"])
+    expect(learning_hour.errors[:learning_hour_type]).to eq(["must exist"])
   end
 
   context "duration_hours is zero" do
@@ -38,5 +38,18 @@ RSpec.describe LearningHour, type: :model do
   it "has date that is not in the future" do
     learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now.strftime("%d %b %Y"))
     expect(learning_hour).to_not be_valid
+  end
+
+  it "does not require learning_hour_topic if casa_org learning_hour_topic disabled" do
+    learning_hour = build_stubbed(:learning_hour, learning_hour_topic: nil)
+    expect(learning_hour).to be_valid
+  end
+
+  it "requires learning_hour_topic if casa_org learning_hour_topic enabled" do
+    casa_org = build(:casa_org, learning_topic_active: true)
+    user = build(:user, casa_org: casa_org)
+    learning_hour = build(:learning_hour, user: user)
+    expect(learning_hour).to_not be_valid
+    expect(learning_hour.errors[:learning_hour_topic]).to eq(["can't be blank"])
   end
 end

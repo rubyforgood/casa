@@ -15,16 +15,23 @@
           <tr>
             <th>Title</th>
             <th>Learning Type</th>
+            <% if current_user.casa_org.learning_topic_active %>
+              <th>Learning Topic</th>
+            <% end %>
             <th>Date</th>
             <th>Time Spent</th>
-            <th>Action></th>
           </tr>
         </thead>
         <tbody>
           <% @learning_hours.order(occurred_at: :desc).each do |learning_hour| %>
             <tr>
-              <td> <%= learning_hour.name %> </td>
-              <td> <%= (learning_hour.learning_type).humanize %> </td>
+              <td>
+                <%= link_to learning_hour.name, volunteer_learning_hour_path(id: learning_hour.id) %>
+              </td>
+              <td> <%= learning_hour.learning_hour_type.name %> </td>
+              <% if current_user.casa_org.learning_topic_active %>
+                <td> <%= learning_hour.learning_hour_topic&.name %> </td>
+              <% end %>
               <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
               <td>
               <% if (learning_hour.duration_hours > 0) %>
@@ -32,7 +39,6 @@
               <% end %>
               <%= learning_hour.duration_minutes %> min
               </td>
-              <td><%= link_to 'See More', volunteer_learning_hour_path(id: learning_hour.id) %> </td>
             </tr>
           <% end %>
         </tbody>

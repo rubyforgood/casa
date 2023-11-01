@@ -1,16 +1,12 @@
-<header class="header">
-  <div class="container-fluid">
+<header class="header pt-0">
+  <%= render 'layouts/banner' %>
+
+  <div class="container-fluid pt-30">
     <div class="row">
       <div class="col-lg-5 col-md-5 col-6">
-        <div class="header-left d-flex align-items-center">
-          <div class="menu-toggle-btn mr-20">
-            <button
-              id="menu-toggle"
-              class="main-btn secondary-btn btn-hover">
-              <i class="lni lni-chevron-left me-2"></i> Menu
-            </button>
-          </div>
-        </div>
+        <button type="button" class="btn btn-sidebar d-md-none" data-controller="navbar" data-action="click->navbar#click" data-navbar-sidebar-outlet=".sidebar-controller">
+          <i class="lni lni-menu"></i>
+        </button>
       </div>
 
       <div class="col-lg-7 col-md-7 col-6">
@@ -60,14 +56,14 @@
               class="dropdown-menu dropdown-menu-end"
               aria-labelledby="profile">
               <li>
-                <a href="#0">
+                <span>
                   <strong>Role: <%= current_role %></strong>
-                </a>
+                </span>
               </li>
               <li>
-                <a href="#0">
+                <span>
                   <strong> <%= current_user.email %></strong>
-                </a>
+                </span>
               </li>
               <li>
                 <%= link_to edit_users_path do %>

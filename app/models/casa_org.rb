@@ -2,12 +2,15 @@ class CasaOrg < ApplicationRecord
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
+  scope :with_logo, -> { joins(:logo_attachment) }
+
   before_create :set_slug
   before_update :sanitize_svg
+  before_save :normalize_phone_number
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -16,6 +19,11 @@ class CasaOrg < ApplicationRecord
   has_many :mileage_rates, dependent: :destroy
   has_many :case_assignments, through: :users, source: :casa_cases
   has_many :languages, dependent: :destroy
+  has_many :placements, through: :casa_cases
+  has_many :banners, dependent: :destroy
+  has_many :learning_hour_types, dependent: :destroy
+  has_many :learning_hour_topics, dependent: :destroy
+  has_many :case_groups, dependent: :destroy
   has_one_attached :logo
   has_one_attached :court_report_template
 
@@ -80,6 +88,21 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  # Given a specific date, returns the active mileage rate.
+  # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
+  # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:
+  # then the active rate for the given date of January 5, 1970 would be the January 3 rate.
+  # If no rates are active for the given date, will return nil.
+  # @param date [Date]
+  # @return [BigDecimal, nil]
+  def mileage_rate_for_given_date(date)
+    mileage_rates.where(is_active: true, effective_date: ..date).order(effective_date: :desc).first&.amount
+  end
+
+  def has_alternate_active_banner?(current_banner_id)
+    banners.where(active: true).where.not(id: current_banner_id).exists?
+  end
+
   private
 
   def sanitize_svg
@@ -103,26 +126,35 @@ class CasaOrg < ApplicationRecord
       errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
     end
   end
+
+  def normalize_phone_number
+    if twilio_phone_number&.length == 10
+      self.twilio_phone_number = "+1#{twilio_phone_number}"
+    end
+  end
 end
 
 # == Schema Information
 #
 # Table name: casa_orgs
 #
-#  id                         :bigint           not null, primary key
-#  address                    :string
-#  display_name               :string
-#  footer_links               :string           default([]), is an Array
-#  name                       :string           not null
-#  show_driving_reimbursement :boolean          default(TRUE)
-#  show_fund_request          :boolean          default(FALSE)
-#  slug                       :string
-#  twilio_account_sid         :string
-#  twilio_api_key_secret      :string
-#  twilio_api_key_sid         :string
-#  twilio_phone_number        :string
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
+#  id                          :bigint           not null, primary key
+#  additional_expenses_enabled :boolean          default(FALSE)
+#  address                     :string
+#  display_name                :string
+#  footer_links                :string           default([]), is an Array
+#  learning_topic_active       :boolean          default(FALSE)
+#  name                        :string           not null
+#  show_driving_reimbursement  :boolean          default(TRUE)
+#  show_fund_request           :boolean          default(FALSE)
+#  slug                        :string
+#  twilio_account_sid          :string
+#  twilio_api_key_secret       :string
+#  twilio_api_key_sid          :string
+#  twilio_enabled              :boolean          default(FALSE)
+#  twilio_phone_number         :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
 #
 # Indexes
 #

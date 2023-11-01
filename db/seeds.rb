@@ -62,6 +62,8 @@ class SeederMain
       HearingType,
       Judge,
       Language,
+      LearningHourType,
+      LearningHourTopic,
       MileageRate,
       Supervisor,
       SupervisorVolunteer,
