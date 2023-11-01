@@ -2,6 +2,9 @@
 const { Notifier } = require('./notifier')
 const TypeChecker = require('./type_checker')
 
+const GET_ERROR_STATE_UNDEFINED_MESSAGE = 'getErrorState for the component is not defined'
+const GET_WARNING_STATE_UNDEFINED_MESSAGE = 'getWarningState for the component is not defined'
+
 // Abstract Class
 class ValidatableFormSectionComponent {
   constructor (componentElementsAsJQuery, notifier) {
@@ -17,24 +20,76 @@ class ValidatableFormSectionComponent {
   }
 
   clearUserError () {
+    // Removes the error displayed to the user
     throw new ReferenceError('clearUserError for the component is not defined')
   }
 
   // @param  {string} errorState The value returned by getErrorState()
   errorHighlightUI (errorState) {
+    // Highlights the error input area for the user to see easier
+    // If there is no error, returns the component back to the original state
     throw new ReferenceError('errorHighlightUI for the component is not defined')
   }
 
   // @returns A string describing the invalid state of the inputs for the user to read, empty string if the inputs are valid
   getErrorState () {
-    throw new ReferenceError('getErrorState for the component is not defined')
+    throw new ReferenceError(GET_ERROR_STATE_UNDEFINED_MESSAGE)
+  }
+
+  // @returns A string describing the potentially invalid state of the inputs for the user to read, empty string if there is nothing to warn about
+  getWarningState () {
+    throw new ReferenceError(GET_WARNING_STATE_UNDEFINED_MESSAGE)
   }
 
   notifyUserOfError (errorMsg) {
+    // Shows the error message to the user
     throw new ReferenceError('notifyUserOfError for the component is not defined')
   }
 
   validate () {
+    let errorMsg
+    let errorValidationDisabled = false
+    let warningMsg
+    let warningValidationDisabled = false
+
+    try {
+      errorMsg = this.#validateError()
+    } catch (err) {
+      if (err instanceof ReferenceError && err.message === GET_ERROR_STATE_UNDEFINED_MESSAGE) {
+        errorValidationDisabled = true
+      } else {
+        throw err
+      }
+    }
+
+    try {
+      warningMsg = this.#validateWarning()
+    } catch (err) {
+      if (err instanceof ReferenceError && err.message === GET_WARNING_STATE_UNDEFINED_MESSAGE) {
+        warningValidationDisabled = true
+      } else {
+        throw err
+      }
+    }
+
+    if (errorValidationDisabled && warningValidationDisabled) {
+      throw new ReferenceError('No validations are implemented for this component')
+    }
+
+    const messages = {}
+
+    if (errorMsg) {
+      messages.error = errorMsg
+    }
+
+    if (warningMsg) {
+      messages.warning = warningMsg
+    }
+
+    return messages
+  }
+
+  #validateError () {
     const errorState = this.getErrorState()
 
     if (errorState) {
@@ -45,6 +100,22 @@ class ValidatableFormSectionComponent {
 
     this.errorHighlightUI(errorState)
     return errorState
+  }
+
+  #validateWarning () {
+    const warningState = this.getWarningState()
+
+    this.warningHighlightUI(warningState)
+
+    return warningState
+  }
+
+  // @param  {string} errorState The value returned by getWarningState()
+  warningHighlightUI (errorState) {
+    // Highlights the warning input area for the user to see easier
+    // Also appends a required checkbox near the warning area with warning text
+    // If there is no warning, returns the component back to the original state
+    throw new ReferenceError('warningHighlightUI for the component is not defined')
   }
 }
 
@@ -119,9 +190,18 @@ $(() => { // JQuery's callback for the DOM loading
   })
 
   validatedFormCollection.on('submit', function (e) {
-    const errorCount = validatableFormSectionComponents.reduce((acc, currentComponent) => {
-      return currentComponent.validate() ? acc + 1 : acc
-    }, 0)
+    let errorCount = 0
+
+    for (const validatableFormSectionComponent of validatableFormSectionComponents) {
+      try {
+        if (validatableFormSectionComponent.validate().error) {
+          errorCount++
+        }
+      } catch (err) {
+        console.error('Failed to validate the following component:', validatableFormSectionComponent)
+        console.error('Validation threw error:', err)
+      }
+    }
 
     if (errorCount) {
       e.preventDefault()
