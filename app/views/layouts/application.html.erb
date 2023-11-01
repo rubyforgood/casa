@@ -63,7 +63,6 @@
   </section>
 
   <%= render "layouts/notifier" %>
-  <%= render (LocalTimeComponent.new(format: "A date: %b %d, %Y", unix_timestamp: 1694349775, time_zone: current_user&.decorate&.local_time_zone)) %>
 
   <footer class="footer">
     <div class="container-fluid">
