@@ -1083,7 +1083,7 @@ h6,
     font-size: 14px;
     font-weight: 500;
     color: #262d3f;
-    display: inline;
+    display: block;
     margin-bottom: 10px; }
   .input-style-1 input,
   .input-style-1 textarea {
