@@ -19,7 +19,7 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "*"
-        update-types: [ "version-update:semver-major" ]
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: "bundler"
     directory: "/"
