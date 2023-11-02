@@ -121,7 +121,7 @@ function handleGenerateReport (e) {
     })
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
 
   if ($('button.copy-court-button').length) {

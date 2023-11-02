@@ -62,10 +62,10 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(CourtDate.count).to eq 2
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
-      page.find("a", text: "Delete Future Court Date").click
-      page.driver.browser.switch_to.alert.accept
-
-      expect(page).to have_content "Court date was successfully deleted."
+      accept_alert "Are you sure?" do
+        page.find("a", text: "Delete Future Court Date").click
+      end
+      expect(page).to have_content "Court date was successfully deleted"
       expect(CourtDate.count).to eq 1
     end
   end

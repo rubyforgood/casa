@@ -13,7 +13,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
           click_on "Create"
         end
 
-        expect(page).to have_selector(".async-warn-indicator", text: "Cannot save an empty patch note")
+        expect(page).to have_selector(".warning-notification", text: "Cannot save an empty patch note")
       end
     end
 

@@ -4,6 +4,7 @@ class CasaOrgController < ApplicationController
   before_action :set_hearing_types, only: %i[edit update]
   before_action :set_judges, only: %i[edit update]
   before_action :set_learning_hour_types, only: %i[edit update]
+  before_action :set_learning_hour_topics, only: %i[edit update]
   before_action :set_sent_emails, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
@@ -52,7 +53,8 @@ class CasaOrgController < ApplicationController
       :twilio_phone_number,
       :twilio_api_key_sid,
       :twilio_api_key_secret,
-      :twilio_enabled
+      :twilio_enabled,
+      :learning_topic_active
     )
   end
 
@@ -75,5 +77,9 @@ class CasaOrgController < ApplicationController
 
   def set_sent_emails
     @sent_emails = SentEmail.for_organization(@casa_org).order("created_at DESC").limit(10)
+  end
+
+  def set_learning_hour_topics
+    @learning_hour_topics = LearningHourTopic.for_organization(@casa_org)
   end
 end

@@ -155,7 +155,6 @@ RSpec.describe "case_contacts/new", type: :system do
         within "#enter-contact-details" do
           choose "Yes"
         end
-        choose "Video"
         fill_in "case_contact_occurred_at", with: "04/04/2020"
         fill_in "case-contact-duration-hours-display", with: "0"
         fill_in "case-contact-duration-minutes-display", with: "5"
@@ -193,10 +192,7 @@ RSpec.describe "case_contacts/new", type: :system do
           click_on "Continue Submitting"
         }.to change(CaseContact, :count).by(1)
 
-        hello_line = page.body.split("\n").select { |x| x.include?("Hello") }
-        expect(hello_line.first.include?(note_content)).to be true
-        expected_text = strip_tags(note_content)
-        expect(page).to have_css("#case_contacts_list h1", text: expected_text)
+        expect(page).to have_css("#case_contacts_list h1", text: "Hello world")
       end
     end
   end

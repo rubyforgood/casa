@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe "dashboard/show", type: :system do
   let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw") }
+  let(:casa_admin) { create(:casa_admin, display_name: "John Doe") }
+
   context "volunteer user" do
     before do
       sign_in volunteer
@@ -21,15 +23,13 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).not_to have_text(casa_case_3.case_number)
     end
 
-    it "sees volunteer names in Cases table as plain text" do
+    it "volunteer does not see his name in Cases table" do
       casa_case = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
       visit casa_cases_path
 
-      expect(page).to have_text("Bob Loblaw")
-      expect(page).to have_no_link("Bob Loblaw")
-      expect(page).to have_css("td", text: "Bob Loblaw")
+      expect(page).not_to have_css("td", text: "Bob Loblaw")
     end
 
     it "displays 'No active cases' when they don't have any assignments", js: true do
@@ -38,25 +38,22 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).not_to have_css("td", text: "Bob Loblaw")
       expect(page).not_to have_text("Detail View")
     end
+  end
 
-    it "sees all their other duties", js: true do
-      volunteer_2 = create(:volunteer, display_name: "Other Volunteer")
-
-      other_duty_1 = create(:other_duty, notes: "Test 1", creator_id: volunteer.id)
-      other_duty_2 = create(:other_duty, notes: "Test 2", creator_id: volunteer.id)
-      other_duty_3 = create(:other_duty, notes: "Test 3", creator_id: volunteer_2.id)
-
-      visit casa_cases_path
-
-      expect(page).to have_text("Other Duties")
-      expect(page).to have_text(other_duty_1.notes)
-      expect(page).to have_text(other_duty_2.notes)
-      expect(page).to_not have_text(other_duty_3.notes)
+  context "admin user" do
+    before do
+      sign_in casa_admin
     end
 
-    it "has a New Duty link" do
+    it "sees volunteer names in Cases table as a link" do
+      casa_case = build(:casa_case, active: true, casa_org: volunteer.casa_org, case_number: "CINA-1")
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
+
       visit casa_cases_path
-      expect(page).to have_link("New Duty", href: new_other_duty_path)
+
+      expect(page).to have_text("Bob Loblaw")
+      expect(page).to have_link("Bob Loblaw")
+      expect(page).to have_css("td", text: "Bob Loblaw")
     end
   end
 end

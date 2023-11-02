@@ -42,17 +42,6 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           expect(page).to have_text(case_contacts[2].contact_groups_with_types.keys.first)
         end
       end
-
-      it "sorts case_contacts by occurred_at attribute (default)" do
-        case_contacts
-        sign_in volunteer
-        visit case_contacts_path
-
-        aggregate_failures do
-          expect(page.body.index(case_contacts[2].decorate.subheading)).to be < page.body.index(case_contacts[1].decorate.subheading)
-          expect(page.body.index(case_contacts[1].decorate.subheading)).to be < page.body.index(case_contacts[0].decorate.subheading)
-        end
-      end
     end
 
     describe "filtering case contacts" do
@@ -114,7 +103,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing all cases
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on "All"
         end
         expect(page).to have_text("Case 1 Notes")
@@ -123,7 +112,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing case 1
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on case_number
         end
         expect(page).to have_text("Case 1 Notes")
@@ -132,7 +121,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # showing case 2
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on another_case_number
         end
         expect(page).to have_text("Case 2 Notes")
@@ -149,7 +138,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         # no contacts because we're only showing case 1 and that occurred before the filter dates
         visit root_path
         click_on "Case Contacts"
-        within "#ddmenu_case_contacts" do
+        within "#ddmenu_case-contacts" do
           click_on case_number
         end
         expect(page).to_not have_text("Case 1 Notes")

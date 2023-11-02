@@ -1,11 +1,15 @@
 require "amazing_print"
 
-DENY_FILESPEC = File.join(Rails.root, ".allow_skipping_tests")
-DASHED_LINE = "-" * 80
-
 desc "Check app rb files to verify that there are corresponding spec files."
 task test_checker: :environment do
   # File containing app filespecs that should not be flagged as errors for not having spec files.
+  def deny_filespec
+    File.join(Rails.root, ".allow_skipping_tests")
+  end
+
+  def dashed_line
+    "-" * 80
+  end
   # Lines beginning with '#' are ignored.
 
   # Transform the object into the object's AmazingPrint representation.
@@ -55,7 +59,7 @@ task test_checker: :environment do
 
   def ignore_files
     return @ignore_files if @ignore_files
-    file_lines = File.readlines(DENY_FILESPEC).map(&:chomp)
+    file_lines = File.readlines(deny_filespec).map(&:chomp)
     @ignore_files = file_lines.reject { |line| /\s*#/.match(line) } # exclude comment lines
   end
 
@@ -76,9 +80,9 @@ task test_checker: :environment do
     percent = (100 * missing_but_denied_files.size.to_f / app_files.size)
     puts <<~TEXT
 
-      #{DASHED_LINE}
+      #{dashed_line}
       #{missing_but_denied_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
-      but were listed in the deny file (#{DENY_FILESPEC}):
+      but were listed in the deny file (#{deny_filespec}):
 
       #{amazing_printize(missing_but_denied_files)}
     TEXT
@@ -88,7 +92,7 @@ task test_checker: :environment do
     percent = (100 * missing_and_not_denied_spec_files.size.to_f / app_files.size)
     puts <<~ERROR_TXT
 
-      #{DASHED_LINE}
+      #{dashed_line}
       #{missing_and_not_denied_spec_files.size} of #{app_files.size} app files (#{percent.round(1)}%) did not have a corresponding spec file
       and are not in the deny list:
 

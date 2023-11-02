@@ -1,6 +1,6 @@
 /* global alert */
 /* global $ */
-const AsyncNotifier = require('../src/async_notifier')
+const { Notifier } = require('./notifier')
 let pageNotifier
 
 const defineCaseContactsTable = function () {
@@ -13,11 +13,11 @@ const defineCaseContactsTable = function () {
   )
 }
 
-$('document').ready(() => {
-  const asyncNotificationsElement = $('#async-notifications')
+$(() => { // JQuery's callback for the DOM loading
+  const notificationsElement = $('#notifications')
 
-  if (asyncNotificationsElement.length) {
-    pageNotifier = new AsyncNotifier(asyncNotificationsElement)
+  if (notificationsElement.length && ($('table#case_contacts').length || $('table#casa_cases').length || $('table#volunteers').length || $('table#supervisors').length)) {
+    pageNotifier = new Notifier(notificationsElement)
   }
 
   $.fn.dataTable.ext.search.push(

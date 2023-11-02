@@ -40,10 +40,20 @@ RSpec.describe "/case_contacts", type: :request do
   describe "GET /new" do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
-    let!(:contact_types_b) { create_list(:contact_type, 2, contact_type_group: contact_type_group_b) }
+    let!(:contact_types_b) do
+      [
+        create(:contact_type, name: "Teacher", contact_type_group: contact_type_group_b),
+        create(:contact_type, name: "Counselor", contact_type_group: contact_type_group_b)
+      ]
+    end
 
     let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: "A") }
-    let!(:contact_types_a) { create_list(:contact_type, 2, contact_type_group: contact_type_group_a) }
+    let!(:contact_types_a) do
+      [
+        create(:contact_type, name: "Sibling", contact_type_group: contact_type_group_a),
+        create(:contact_type, name: "Parent", contact_type_group: contact_type_group_a)
+      ]
+    end
 
     subject(:request) do
       get new_case_contact_path
@@ -53,9 +63,9 @@ RSpec.describe "/case_contacts", type: :request do
 
     it { is_expected.to have_http_status(:success) }
 
-    it "shows all contact types alphabetically" do
+    it "shows all contact types alphabetically by group" do
       page = request.parsed_body
-      expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+      expected_contact_types = ["Parent", "Sibling", "Counselor", "Teacher"]
       expect(page).to match(/#{expected_contact_types.join(".*")}/m)
     end
 
@@ -96,7 +106,7 @@ RSpec.describe "/case_contacts", type: :request do
       let(:selected_casa_case_ids) { [casa_case.id] }
       let(:valid_attributes) do
         attributes_for(:case_contact, :wants_reimbursement, casa_case: casa_case).merge(
-          creator: admin, casa_case_id: selected_casa_case_ids
+          casa_case_id: selected_casa_case_ids
         )
       end
       let(:params) { {case_contact: valid_attributes} }
@@ -129,6 +139,33 @@ RSpec.describe "/case_contacts", type: :request do
 
         it "redirects to the case contact page" do
           expect(request).to redirect_to(case_contacts_path(success: true))
+        end
+      end
+
+      context "reimbursement mail to supervisor" do
+        let(:supervisor) { create(:supervisor, receive_reimbursement_email: true, casa_org: organization) }
+        let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org: organization) }
+        let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+
+        before do
+          sign_in volunteer
+        end
+
+        it "sends reimbursement request email when conditions are met" do
+          mailer_double = double("SupervisorMailer")
+          allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
+
+          expect(mailer_double).to receive(:deliver_later)
+          request
+        end
+
+        it "does not send reimbursement request email when conditions are not met" do
+          supervisor.update(active: false)
+          mailer_double = double("SupervisorMailer")
+          allow(SupervisorMailer).to receive(:reimbursement_request_email).and_return(mailer_double)
+
+          expect(mailer_double).not_to receive(:deliver_later)
+          request
         end
       end
 
@@ -309,7 +346,7 @@ RSpec.describe "/case_contacts", type: :request do
 
     context "with invalid parameters" do
       let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
-      let(:invalid_attributes) { {creator: volunteer, casa_case_id: [other_casa_case.id]} }
+      let(:invalid_attributes) { {creator: volunteer, casa_case_id: [other_casa_case.id], occurred_at: Time.now + 1.week} }
       let(:params) { {case_contact: invalid_attributes} }
 
       it { is_expected.to have_http_status(:success) }
