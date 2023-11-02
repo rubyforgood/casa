@@ -75,13 +75,17 @@ RSpec.describe "Case Groups", type: :system, js: true do
     visit case_groups_path
     click_on "New Case Group"
     fill_in "Name", with: "A family"
-    select casa_case.case_number, from: "Cases"
+    find(".ts-control > input").click
+    find("div.option", text: casa_case.case_number).click
+    find("#case_group_name").click
     click_on "Submit"
 
     visit case_groups_path
     click_on "New Case Group"
     fill_in "Name", with: "A Family "
-    select casa_case.case_number, from: "Cases"
+    find(".ts-control > input").click
+    find("div.option", text: casa_case.case_number).click
+    find("#case_group_name").click
     click_on "Submit"
 
     expect(page).to have_text("Name has already been taken")
