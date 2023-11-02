@@ -117,7 +117,7 @@ div.row.volunteer-filters {
 
 
 
-@media only screen and (max-width: screen-sizes.$large) {
+@media only screen and (max-width: 2560px) {
 
   #casa-cases_paginate.dataTables_paginate.paging_simple_numbers {
     position: absolute;
@@ -125,8 +125,21 @@ div.row.volunteer-filters {
     span.ellipsis {
       position: absolute;
       right: 10.5%;
-      bottom: 40%;
+      bottom: 12%;
     }
+  }
+
+  #casa-cases_next.paginate_button.next,
+  #volunteers_next.paginate_button.next
+  {
+    position: absolute;
+    bottom: 48%;
+    right: 0.4%;
+  }
+
+  #volunteers_previous.paginate_button.previous,
+  #casa-cases_previous.paginate_button.previous{
+    margin-right: 100px;
   }
 
   #volunteers_paginate.dataTables_paginate.paging_simple_numbers {
@@ -136,15 +149,14 @@ div.row.volunteer-filters {
     span.ellipsis {
       position: absolute;
       right: 10%;
-      bottom: 40%;
+      bottom: 12%;
     }
   }
+
 }
 
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-
   .dataTables_wrapper .dataTables_info {
-    width: 70%;
+    width: 50%;
   }
-
 }
