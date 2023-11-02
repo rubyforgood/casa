@@ -1,4 +1,5 @@
 /* global $ */
+import { debounce } from 'lodash'
 const { Notifier } = require('./notifier')
 const TypeChecker = require('./type_checker')
 
@@ -129,6 +130,10 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
 
     this.max = maxDateValue === 'today' ? new Date() : new Date(maxDateValue)
     this.min = minDateValue === 'today' ? new Date() : new Date(minDateValue)
+
+    if (this.min instanceof Date && this.max instanceof Date && max < min) {
+      throw new RangeError('The minimum date for the component was set to be later than the maximum date')
+    }
   }
 
   clearUserError () {
