@@ -20,6 +20,8 @@ class ValidatableFormSectionComponent {
     this.componentElementsAsJQuery = componentElementsAsJQuery
   }
 
+  // Implement the 4 methods below for an error validation component
+
   clearUserError () {
     // Removes the error displayed to the user
     throw new ReferenceError('clearUserError for the component is not defined')
@@ -37,14 +39,24 @@ class ValidatableFormSectionComponent {
     throw new ReferenceError(GET_ERROR_STATE_UNDEFINED_MESSAGE)
   }
 
+  notifyUserOfError (errorMsg) {
+    // Shows the error message to the user
+    throw new ReferenceError('notifyUserOfError for the component is not defined')
+  }
+
+  // Implement the 2 methods below for a warning validation component
+
   // @returns A string describing the potentially invalid state of the inputs for the user to read, empty string if there is nothing to warn about
   getWarningState () {
     throw new ReferenceError(GET_WARNING_STATE_UNDEFINED_MESSAGE)
   }
 
-  notifyUserOfError (errorMsg) {
-    // Shows the error message to the user
-    throw new ReferenceError('notifyUserOfError for the component is not defined')
+  // @param  {string} errorState The value returned by getWarningState()
+  warningHighlightUI (errorState) {
+    // Highlights the warning input area for the user to see easier
+    // Also appends a required checkbox near the warning area with warning text
+    // If there is no warning, returns the component back to the original state
+    throw new ReferenceError('warningHighlightUI for the component is not defined')
   }
 
   validate () {
@@ -110,14 +122,6 @@ class ValidatableFormSectionComponent {
 
     return warningState
   }
-
-  // @param  {string} errorState The value returned by getWarningState()
-  warningHighlightUI (errorState) {
-    // Highlights the warning input area for the user to see easier
-    // Also appends a required checkbox near the warning area with warning text
-    // If there is no warning, returns the component back to the original state
-    throw new ReferenceError('warningHighlightUI for the component is not defined')
-  }
 }
 
 class RangedDatePicker extends ValidatableFormSectionComponent {
@@ -128,10 +132,13 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
     const minDateValue = this.componentElementsAsJQuery.attr('data-min-date')
     this.name = this.componentElementsAsJQuery.attr('component-name')
 
-    this.max = maxDateValue === 'today' ? new Date() : new Date(maxDateValue)
-    this.min = minDateValue === 'today' ? new Date() : new Date(minDateValue)
+    const max = maxDateValue === 'today' ? new Date() : new Date(maxDateValue)
+    const min = minDateValue === 'today' ? new Date() : new Date(minDateValue)
 
-    if (this.min instanceof Date && this.max instanceof Date && max < min) {
+    this.max = max
+    this.min = min
+
+    if (min instanceof Date && max instanceof Date && max < min) {
       throw new RangeError('The minimum date for the component was set to be later than the maximum date')
     }
   }
@@ -173,6 +180,30 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
   }
 }
 
+class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent{
+  constructor (allInputs, notifier) {
+    super(allInputs, notifier)
+
+    const milesDrivenInput = allInputs.filter('#case_contact_miles_driven')
+    const contactMediumCheckboxes = allInputs.not(milesDrivenInput)
+
+    this.drivingContactMediumCheckbox = contactMediumCheckboxes.filter('#case_contact_medium_type_in-person')
+    this.nonDrivingContactMediumCheckboxes = contactMediumCheckboxes.not(this.drivingContactMediumCheckbox)
+    this.milesDrivenInput = milesDrivenInput
+
+    console.log(this)
+  }
+}
+
+function safeInstantiateComponent (componentName, instantiate) {
+  try {
+    instantiate()
+  } catch (e) {
+    console.error(`Failed to instantiate ${componentName} with the following jQuery object:`, $(this))
+    console.error('Instantiation failed with error:', e)
+  }
+}
+
 $(() => { // JQuery's callback for the DOM loading
   const validatedFormCollection = $('.component-validated-form')
   const validatableFormSectionComponents = []
@@ -185,13 +216,13 @@ $(() => { // JQuery's callback for the DOM loading
   }
 
   validatedFormCollection.find('.component-date-picker-range').each(function () {
-    try {
+    safeInstantiateComponent('ranged date picker', () => {
       validatableFormSectionComponents.push(new RangedDatePicker($(this), pageNotifier))
-    } catch (e) {
-      console.error('Failed to instantiate ranged date picker with the following jQuery object:')
-      console.error($(this))
-      console.error(e)
-    }
+    })
+  })
+
+  safeInstantiateComponent('non driving contact medium warning', () => {
+    validatableFormSectionComponents.push(new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier))
   })
 
   validatedFormCollection.on('submit', function (e) {
