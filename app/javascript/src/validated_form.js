@@ -224,7 +224,7 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   getWarningState () {
-    if (this.nonDrivingContactMediumCheckboxes.filter(':checked').length && this.milesDrivenInput.val()) {
+    if (this.nonDrivingContactMediumCheckboxes.filter(':checked').length && Number.parseInt(this.milesDrivenInput.val())) {
       return 'You requested driving reimbursement for a contact medium that typically does not involve driving. Are you sure that\'s right?'
     }
 
@@ -293,7 +293,9 @@ $(() => { // JQuery's callback for the DOM loading
   })
 
   safeInstantiateComponent('non driving contact medium warning', () => {
-    validatableFormSectionComponents.push(new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier))
+    const contactMediumWithMilesDrivenWarning = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier)
+    console.log(contactMediumWithMilesDrivenWarning)
+    validatableFormSectionComponents.push(contactMediumWithMilesDrivenWarning)
   })
 
   validatedFormCollection.on('submit', function (e) {
