@@ -218,6 +218,8 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
     this.nonDrivingContactMediumCheckboxes = contactMediumCheckboxes.not(this.drivingContactMediumCheckbox)
     this.milesDrivenInput = milesDrivenInput
 
+    this.notifier = notifier
+
     console.log(this)
   }
 
@@ -237,7 +239,13 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   showUserWarning (warningMsg) {
-    // Shows the warning notification to the user
+    TypeChecker.checkNonEmptyString(warningMsg, 'warningMsg')
+
+    if (this.warningNotification) {
+      this.warningNotification.setText(warningMsg)
+    } else if (this.notifier) {
+      this.warningNotification = this.notifier.notify(warningMsg, 'warn')
+    }
   }
 
   removeUserWarning () {
