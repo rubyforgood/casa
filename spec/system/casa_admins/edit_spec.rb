@@ -9,11 +9,13 @@ RSpec.describe "casa_admins/edit", type: :system do
     it "can successfully edit user display name and phone number" do
       expected_display_name = "Root Admin"
       expected_phone_number = "+14398761234"
+      expected_date_of_birth = "1997/04/16"
 
       visit edit_casa_admin_path(admin)
 
       fill_in "Display name", with: expected_display_name
       fill_in "Phone number", with: expected_phone_number
+      fill_in "Date of birth", with: expected_date_of_birth
       check "Receive Monthly Learning Hours Report"
 
       click_on "Submit"
@@ -24,6 +26,7 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       expect(admin.display_name).to eq expected_display_name
       expect(admin.phone_number).to eq expected_phone_number
+      expect(admin.date_of_birth.strftime("%Y/%m/%d")).to eq expected_date_of_birth
       expect(admin.monthly_learning_hours_report).to be_truthy
     end
   end
@@ -68,6 +71,13 @@ RSpec.describe "casa_admins/edit", type: :system do
     end
 
     it_should_behave_like "shows error for invalid phone numbers"
+
+    it "shows error message for invalid date" do
+      fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
+      click_on "Submit"
+
+      expect(page).to have_text "Date of birth must be in the past."
+    end
 
     it "shows error message for empty email" do
       fill_in "Email", with: ""

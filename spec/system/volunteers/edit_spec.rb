@@ -12,6 +12,8 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer)
 
         fill_in "volunteer_display_name", with: "Kamisato Ayato"
+        fill_in "volunteer_phone_number", with: "+14163248967"
+        fill_in "volunteer_date_of_birth", with: "1988/07/01"
         click_on "Submit"
 
         expect(page).to have_text "Volunteer was successfully updated."
@@ -73,6 +75,20 @@ RSpec.describe "volunteers/edit", type: :system do
           click_on "Submit"
 
           expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for invalid date of birth" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_date_of_birth", with: 5.days.from_now.strftime("%Y/%m/%d")
+          click_on "Submit"
+
+          expect(page).to have_text "Date of birth must be in the past."
         end
       end
 
