@@ -224,7 +224,7 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent{
 
   getWarningState () {
     if (this.nonDrivingContactMediumCheckboxes.filter(':checked').length && this.milesDrivenInput.val()) {
-
+      return 'You requested driving reimbursement for a contact medium that typically does not involve driving. Are you sure that\'s right?'
     }
 
     return ''
