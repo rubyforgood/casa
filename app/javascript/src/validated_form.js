@@ -1,5 +1,4 @@
 /* global $ */
-import { debounce } from 'lodash'
 const { Notifier } = require('./notifier')
 const TypeChecker = require('./type_checker')
 
@@ -208,7 +207,7 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
   }
 }
 
-class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent{
+class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   constructor (allInputs, notifier) {
     super(allInputs, notifier)
 
