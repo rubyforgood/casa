@@ -173,7 +173,7 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
   removeUserError () {
     if (this.errorNotification) {
       this.errorNotification.dismiss()
-      this.errorNotification = undefined
+      delete this.errorNotification
     }
   }
 
@@ -249,7 +249,13 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   removeUserWarning () {
-    // Removes the warning notification displayed to the user
+    if (this.warningNotification) {
+      if (!(this.warningNotification.isDismissed())) {
+        this.warningNotification.dismiss()
+      }
+
+      delete this.warningNotification
+    }
   }
 
   showWarningConfirmation () {
@@ -257,7 +263,6 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   removeWarningConfirmation () {
-    // Removes UI requiring the user to acknowledge the warning
   }
 }
 
