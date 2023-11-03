@@ -22,9 +22,9 @@ class ValidatableFormSectionComponent {
 
   // Implement the 4 methods below for an error validation component
 
-  clearUserError () {
-    // Removes the error displayed to the user
-    throw new ReferenceError('clearUserError for the component is not defined')
+  // @returns A string describing the invalid state of the inputs for the user to read, empty string if the inputs are valid
+  getErrorState () {
+    throw new ReferenceError(GET_ERROR_STATE_UNDEFINED_MESSAGE)
   }
 
   // @param  {string} errorState The value returned by getErrorState()
@@ -34,17 +34,17 @@ class ValidatableFormSectionComponent {
     throw new ReferenceError('errorHighlightUI for the component is not defined')
   }
 
-  // @returns A string describing the invalid state of the inputs for the user to read, empty string if the inputs are valid
-  getErrorState () {
-    throw new ReferenceError(GET_ERROR_STATE_UNDEFINED_MESSAGE)
-  }
-
-  notifyUserOfError (errorMsg) {
+  showUserError (errorMsg) {
     // Shows the error message to the user
-    throw new ReferenceError('notifyUserOfError for the component is not defined')
+    throw new ReferenceError('showUserError for the component is not defined')
   }
 
-  // Implement the 2 methods below for a warning validation component
+  removeUserError () {
+    // Removes the error displayed to the user
+    throw new ReferenceError('clearUserError for the component is not defined')
+  }
+
+  // Implement the 6 methods below for a warning validation component
 
   // @returns A string describing the potentially invalid state of the inputs for the user to read, empty string if there is nothing to warn about
   getWarningState () {
@@ -57,6 +57,26 @@ class ValidatableFormSectionComponent {
     // Also appends a required checkbox near the warning area with warning text
     // If there is no warning, returns the component back to the original state
     throw new ReferenceError('warningHighlightUI for the component is not defined')
+  }
+
+  showUserWarning (warningMsg) {
+    // Shows the warning notification to the user
+    throw new ReferenceError('showUserWarning for the component is not defined')
+  }
+
+  removeUserWarning () {
+    // Removes the warning notification displayed to the user
+    throw new ReferenceError('clearUserWarning for the component is not defined')
+  }
+
+  showWarningConfirmation () {
+    // Shows UI requiring the user to acknowledge the warning
+    throw new ReferenceError('showWarningConfirmation for the component is not defined')
+  }
+
+  removeWarningConfirmation () {
+    // Removes UI requiring the user to acknowledge the warning
+    throw new ReferenceError('removeWarningConfirmation for the component is not defined')
   }
 
   validate () {
@@ -106,9 +126,9 @@ class ValidatableFormSectionComponent {
     const errorState = this.getErrorState()
 
     if (errorState) {
-      this.notifyUserOfError(errorState)
+      this.showUserError(errorState)
     } else {
-      this.clearUserError()
+      this.removeUserError()
     }
 
     this.errorHighlightUI(errorState)
@@ -117,6 +137,14 @@ class ValidatableFormSectionComponent {
 
   #validateWarning () {
     const warningState = this.getWarningState()
+
+    if (warningState) {
+      this.showUserWarning()
+      this.showWarningConfirmation()
+    } else {
+      this.removeUserWarning()
+      this.removeWarningConfirmation()
+    }
 
     this.warningHighlightUI(warningState)
 
@@ -143,7 +171,7 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
     }
   }
 
-  clearUserError () {
+  removeUserError () {
     if (this.errorNotification) {
       this.errorNotification.dismiss()
       this.errorNotification = undefined
@@ -169,7 +197,7 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
     }
   }
 
-  notifyUserOfError (errorMsg) {
+  showUserError (errorMsg) {
     TypeChecker.checkNonEmptyString(errorMsg, 'errorMsg')
 
     if (this.errorNotification) {
@@ -192,6 +220,37 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent{
     this.milesDrivenInput = milesDrivenInput
 
     console.log(this)
+  }
+
+  getWarningState () {
+    if (this.nonDrivingContactMediumCheckboxes.filter(':checked').length && this.milesDrivenInput.val()) {
+
+    }
+
+    return ''
+  }
+
+  // @param  {string} errorState The value returned by getWarningState()
+  warningHighlightUI (errorState) {
+    // Highlights the warning input area for the user to see easier
+    // Also appends a required checkbox near the warning area with warning text
+    // If there is no warning, returns the component back to the original state
+  }
+
+  showUserWarning (warningMsg) {
+    // Shows the warning notification to the user
+  }
+
+  removeUserWarning () {
+    // Removes the warning notification displayed to the user
+  }
+
+  showWarningConfirmation () {
+    // Shows UI requiring the user to acknowledge the warning
+  }
+
+  removeWarningConfirmation () {
+    // Removes UI requiring the user to acknowledge the warning
   }
 }
 
