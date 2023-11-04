@@ -30,7 +30,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: lts/fermium
+          node-version: lts/gallium
 
       - run: yarn
       - run: yarn lint
