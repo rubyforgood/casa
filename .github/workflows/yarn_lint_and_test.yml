@@ -9,6 +9,7 @@ on:
       - '**/*.json'
       - '**/*.jsx'
       - 'yarn.lock'
+      - '.github/workflows/*.yml'
   pull_request:
     branches:
       - main
@@ -17,6 +18,7 @@ on:
       - '**/*.json'
       - '**/*.jsx'
       - 'yarn.lock'
+      - '.github/workflows/*.yml'
 
 jobs:
   yarn_lint:
