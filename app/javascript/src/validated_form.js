@@ -215,6 +215,7 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
 
     this.drivingContactMediumCheckbox = contactMediumCheckboxes.filter('#case_contact_medium_type_in-person')
     this.nonDrivingContactMediumCheckboxes = contactMediumCheckboxes.not(this.drivingContactMediumCheckbox)
+    this.checkboxContainer = this.drivingContactMediumCheckbox.parents('.contact-medium.form-group')
     this.milesDrivenInput = milesDrivenInput
 
     this.notifier = notifier
@@ -231,10 +232,10 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   // @param  {string} errorState The value returned by getWarningState()
   warningHighlightUI (errorState) {
     if (errorState) {
-      this.drivingContactMediumCheckbox.parents('.contact-medium.form-group').css('background-color', '#fff8e1')
+      this.checkboxContainer.css('background-color', '#fff8e1')
       this.milesDrivenInput.css('border', '2px solid #ffc107')
     } else {
-      this.drivingContactMediumCheckbox.parents('.contact-medium.form-group').css('background-color', '')
+      this.checkboxContainer.css('background-color', '')
       this.milesDrivenInput.css('border', '')
     }
   }
@@ -260,10 +261,16 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   showWarningConfirmation () {
-    // Shows UI requiring the user to acknowledge the warning
+    this.checkboxContainer.append($(
+`<div class="warning-required-checkbox">
+  <input type="checkbox" id="warning-non-driving-contact-medium-check" class="form-check-input" required="true">
+  <label for="warning-non-driving-contact-medium-check">I'm sure I drove for this contact medium.</label>
+</div>`
+    ))
   }
 
   removeWarningConfirmation () {
+    this.checkboxContainer.find('.warning-required-checkbox').remove()
   }
 }
 
