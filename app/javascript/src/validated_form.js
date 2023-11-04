@@ -53,7 +53,6 @@ class ValidatableFormSectionComponent {
   // @param  {string} errorState The value returned by getWarningState()
   warningHighlightUI (errorState) {
     // Highlights the warning input area for the user to see easier
-    // Also appends a required checkbox near the warning area with warning text
     // If there is no warning, returns the component back to the original state
     throw new ReferenceError('warningHighlightUI for the component is not defined')
   }
@@ -219,8 +218,6 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
     this.milesDrivenInput = milesDrivenInput
 
     this.notifier = notifier
-
-    console.log(this)
   }
 
   getWarningState () {
@@ -233,9 +230,13 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
 
   // @param  {string} errorState The value returned by getWarningState()
   warningHighlightUI (errorState) {
-    // Highlights the warning input area for the user to see easier
-    // Also appends a required checkbox near the warning area with warning text
-    // If there is no warning, returns the component back to the original state
+    if (errorState) {
+      this.drivingContactMediumCheckbox.parents('.contact-medium.form-group').css('background-color', '#fff8e1')
+      this.milesDrivenInput.css('border', '2px solid #ffc107')
+    } else {
+      this.drivingContactMediumCheckbox.parents('.contact-medium.form-group').css('background-color', '')
+      this.milesDrivenInput.css('border', '')
+    }
   }
 
   showUserWarning (warningMsg) {
@@ -278,13 +279,15 @@ function safeInstantiateComponent (componentName, instantiate) {
 $(() => { // JQuery's callback for the DOM loading
   const validatedFormCollection = $('.component-validated-form')
   const validatableFormSectionComponents = []
-  let pageNotifier
+
   let formErrorCountNotification
 
-  if (validatedFormCollection.length) {
-    const notificationsElement = $('#notifications')
-    pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+  if (!(validatedFormCollection.length)) {
+    return
   }
+
+  const notificationsElement = $('#notifications')
+  const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
   validatedFormCollection.find('.component-date-picker-range').each(function () {
     safeInstantiateComponent('ranged date picker', () => {
