@@ -147,6 +147,7 @@ end
 #  confirmed_at                  :datetime
 #  current_sign_in_at            :datetime
 #  current_sign_in_ip            :string
+#  date_of_birth                 :datetime
 #  display_name                  :string           default(""), not null
 #  email                         :string           default(""), not null
 #  encrypted_password            :string           default(""), not null

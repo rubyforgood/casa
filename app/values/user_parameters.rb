@@ -6,6 +6,7 @@ class UserParameters < SimpleDelegator
         :casa_org_id,
         :display_name,
         :phone_number,
+        :date_of_birth,
         :password,
         :active,
         :receive_reimbursement_email,

@@ -135,7 +135,7 @@ class CasaAdminsController < ApplicationController
   end
 
   def update_casa_admin_params
-    CasaAdminParameters.new(params).with_only(:email, :display_name, :phone_number, :monthly_learning_hours_report)
+    CasaAdminParameters.new(params).with_only(:email, :display_name, :phone_number, :date_of_birth, :monthly_learning_hours_report)
   end
 
   def learning_hours_checked?
