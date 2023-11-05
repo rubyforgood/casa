@@ -40,7 +40,7 @@ RSpec.describe ReimbursementsController, type: :request do
   describe "PATCH /mark_as_complete" do
     it "changes reimbursement status to complete" do
       patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
-      expect(ReimbursementCompleteNotification).to(have_received(:with).once.with(**{case_contact: case_contact}))
+      expect(ReimbursementCompleteNotification).to(have_received(:with).once.with(case_contact: case_contact))
       expect(response).to redirect_to(reimbursements_path)
       expect(response).to have_http_status(:redirect)
       expect(case_contact.reload.reimbursement_complete).to be_truthy

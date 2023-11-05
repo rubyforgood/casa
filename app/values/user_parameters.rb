@@ -42,8 +42,8 @@ class UserParameters < SimpleDelegator
     self
   end
 
-  def with_only(*keys)
-    params.slice!(*keys)
+  def with_only(*)
+    params.slice!(*)
     self
   end
 
