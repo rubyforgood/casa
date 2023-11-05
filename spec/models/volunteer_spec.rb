@@ -288,6 +288,63 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
+  describe ".with_supervisor" do
+    subject { Volunteer.with_supervisor }
+
+    context "no volunteers" do
+      it { is_expected.to be_empty }
+    end
+
+    context "volunteers" do
+      let!(:unassigned1) { create(:volunteer, display_name: "aaa") }
+      let!(:unassigned2) { create(:volunteer, display_name: "bbb") }
+
+      let!(:supervisor1) { create(:supervisor, display_name: "supe1") }
+      let!(:assigned1) { create(:volunteer, display_name: "ccc") }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1, supervisor: supervisor1) }
+
+      let!(:supervisor2) { create(:supervisor, display_name: "supe2") }
+      let!(:assigned2) { create(:volunteer, display_name: "ddd") }
+      let!(:assignment2) { create(:supervisor_volunteer, volunteer: assigned2, supervisor: supervisor2) }
+
+      let!(:assigned3) { create(:volunteer, display_name: "eee") }
+      let!(:assignment3) { create(:supervisor_volunteer, volunteer: assigned3, supervisor: supervisor2) }
+
+      it { is_expected.to contain_exactly(assigned1, assigned2, assigned3) }
+    end
+  end
+
+  describe ".birthday_next_month" do
+    subject { Volunteer.birthday_next_month }
+    before do
+      travel_to Date.new(2022, 10, 1)
+    end
+
+    after do
+      travel_back
+    end
+
+    context "there are volunteers whose birthdays are not next month" do
+      let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(1990, 9, 1)) }
+      let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1998, 10, 15)) }
+      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1919, 12, 1)) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context "there are volunteers whose birthdays are next month" do
+      let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(2001, 11, 1)) }
+      let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1920, 11, 15)) }
+      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1989, 11, 30)) }
+
+      let!(:volunteer4) { create(:volunteer, date_of_birth: Date.new(2001, 6, 1)) }
+      let!(:volunteer5) { create(:volunteer, date_of_birth: Date.new(1920, 1, 15)) }
+      let!(:volunteer6) { create(:volunteer, date_of_birth: Date.new(1967, 2, 21)) }
+
+      it { is_expected.to contain_exactly(volunteer1, volunteer2, volunteer3) }
+    end
+  end
+
   describe "#with_assigned_cases" do
     let!(:volunteers) { create_list(:volunteer, 3) }
     let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
