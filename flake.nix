@@ -72,6 +72,8 @@
               then
                 pg_ctl start -l $PGLOG -o "--unix_socket_directories='$PGHOST'"
               fi
+
+              trap 'pg_ctl stop -D "$PGDATA" -s -m fast' EXIT
             '';
 
             buildInputs = [
