@@ -120,7 +120,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (3.4.1)
+    caxlsx (4.0.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -331,7 +331,7 @@ GEM
       nio4r (~> 2.0)
     pundit (2.3.1)
       activesupport (>= 3.0.0)
-    racc (1.7.1)
+    racc (1.7.3)
     rack (2.2.8)
     rack-attack (6.7.0)
       rack (>= 1.0, < 4)
@@ -536,7 +536,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 3.4)
+  caxlsx (~> 4.0)
   caxlsx_rails (~> 0.6.3)
   cssbundling-rails (~> 1.3)
   database_cleaner-active_record
