@@ -59,7 +59,7 @@ class ReimbursementsController < ApplicationController
     return query if params[:occurred_at][key].empty?
 
     query.where(
-      key == :end ? "? >= occurred_at" : "occurred_at >= ?",
+      (key == :end) ? "? >= occurred_at" : "occurred_at >= ?",
       get_normalised_time_for_occurred_at_filter(key)
     )
   rescue ArgumentError

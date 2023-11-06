@@ -69,7 +69,7 @@ class DbPopulator
     # Org #1: volunteer1@example.com
     # Org #2: volunteer2-1@example.com
     email = ->(klass, n) do
-      org_fragment = @casa_org_counter > 1 ? "#{@casa_org_counter}-" : ""
+      org_fragment = (@casa_org_counter > 1) ? "#{@casa_org_counter}-" : ""
       klass.name.underscore + org_fragment + n.to_s + "@example.com"
     end
 

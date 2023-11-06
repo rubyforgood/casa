@@ -15,11 +15,7 @@ module TemplateHelper
 
   def sanitize_closing_tags(closing_tags)
     closing_tags.map { |tag|
-      if tag.include? "\/"
-        tag.squish.tr("\\/", "")
-      else
-        tag
-      end
+      tag.squish.tr("\\/", "")
     }
   end
 
@@ -41,6 +37,6 @@ module TemplateHelper
   end
 
   def active_if_status(status)
-    status == "complete" ? "active" : nil
+    (status == "complete") ? "active" : nil
   end
 end

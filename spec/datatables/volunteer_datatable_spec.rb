@@ -82,7 +82,7 @@ RSpec.describe VolunteerDatatable do
         volunteers = create_list :volunteer, 2, casa_org: org, supervisor: supervisor
 
         volunteers.each_with_index do |volunteer, idx|
-          volunteer.casa_cases << build(:casa_case, casa_org: org, birth_month_year_youth: idx == 1 ? 10.years.ago : 16.years.ago)
+          volunteer.casa_cases << build(:casa_case, casa_org: org, birth_month_year_youth: (idx == 1) ? 10.years.ago : 16.years.ago)
         end
       end
 

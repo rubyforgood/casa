@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
       short_io_service = ShortUrlService.new
       response = short_io_service.create_short_url(val)
       short_url = short_io_service.short_url
-      hash_of_short_urls[index] = response.code == 201 || response.code == 200 ? short_url : nil
+      hash_of_short_urls[index] = (response.code == 201 || response.code == 200) ? short_url : nil
     }
     hash_of_short_urls
   end

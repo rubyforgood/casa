@@ -62,7 +62,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "1.5.0" # 1.6.0 errors on all factorybot create variables
+  gem "standard", "~> 1.31.0"
 end
 
 group :development do
