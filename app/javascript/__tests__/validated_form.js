@@ -1,3 +1,4 @@
+/* eslint-env jest */
 require('jest')
 
 const { NonDrivingContactMediumWarning, RangedDatePicker } = require('../src/notifier.js')
@@ -8,19 +9,19 @@ describe('RangedDatePicker', () => {
   })
 
   describe('errorHighlightUI', () => {
-    
+
   })
 
   describe('getErrorState', () => {
-    
+
   })
-  
+
   describe('showUserError', () => {
-    
+
   })
 
   describe('removeUserError', () => {
-    
+
   })
 })
 
