@@ -93,10 +93,12 @@ project to build and develop within an environment without needing to install
 to get the server up and running:
 
 1. Install [Nix](https://zero-to-nix.com/concepts/nix-installer)
-1. `cd` into casa
-1. `nix develop`
-1. `bundix` # to generate a a Gemfile lock that nix can understand
-1. `bundle install`
+2. Add the following to `~/.config/nix/nix.conf` or `/etc/nix/nix.conf`:
+```
+    experimental-features = nix-command flakes
+```
+3. `cd` into casa
+4. `nix develop` and wait for the packages to be downloaded and the environment to be built
 
 Then you can setup the database and run the server.
 This will run on Linux and macOS.
