@@ -37,7 +37,7 @@ describe('RangedDatePicker', () => {
   </button>
 </div>`
     $(() => { // JQuery's callback for the DOM loading
-      notifier = new Notifier(notificationsElement)
+      notifier = new Notifier($('#notifications'))
     })
   })
 
