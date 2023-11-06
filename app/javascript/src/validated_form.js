@@ -169,13 +169,6 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
     }
   }
 
-  removeUserError () {
-    if (this.errorNotification) {
-      this.errorNotification.dismiss()
-      delete this.errorNotification
-    }
-  }
-
   errorHighlightUI (errorState) {
     if (errorState) {
       this.componentElementsAsJQuery.css('border', '2px solid red')
@@ -202,6 +195,13 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
       this.errorNotification.setText(errorMsg)
     } else if (this.notifier) {
       this.errorNotification = this.notifier.notify(errorMsg, 'error', false)
+    }
+  }
+
+  removeUserError () {
+    if (this.errorNotification) {
+      this.errorNotification.dismiss()
+      delete this.errorNotification
     }
   }
 }
@@ -338,3 +338,5 @@ $(() => { // JQuery's callback for the DOM loading
     }
   })
 })
+
+module.exports = { NonDrivingContactMediumWarning, RangedDatePicker }
