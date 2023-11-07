@@ -42,13 +42,18 @@ describe('RangedDatePicker', () => {
   })
 
   describe('constructor', () => {
-    test('throws a TypeError when passed an invalid jQuery object', (done) => {
+    test('Throws appropriate errors when initialized with values other than a valid jQuery object', (done) => {
       $(() => {
         try {
           expect(() => {
             // eslint-disable-next-line no-new
             new RangedDatePicker(3, notifier)
           }).toThrow(TypeError)
+
+          expect(() => {
+            // eslint-disable-next-line no-new
+            new RangedDatePicker($('#non-existant'), notifier)
+          }).toThrow(ReferenceError)
 
           done()
         } catch (error) {
@@ -94,8 +99,55 @@ describe('RangedDatePicker', () => {
 })
 
 describe('NonDrivingContactMediumWarning', () => {
-  describe('constructor', () => {
+  let notifier
 
+  beforeEach(() => {
+    document.body.innerHTML =
+`<form class="component-validated-form">
+</form>
+
+<div id="notifications">
+  <div class="messages">
+  </div>
+  <div id="async-waiting-indicator" style="display: none">
+    Saving <i class="load-spinner"></i>
+  </div>
+  <div id="async-success-indicator" class="success-notification" style="display: none">
+    Saved
+  </div>
+  <button id="toggle-minimize-notifications" style="display: none;">
+    <span>minimize notifications </span>
+    <span class="badge rounded-pill bg-success" style="display: none;"></span>
+    <span class="badge rounded-pill bg-warning" style="display: none;"></span>
+    <span class="badge rounded-pill bg-danger" style="display: none;"></span>
+    <i class="fa-solid fa-minus"></i>
+  </button>
+</div>`
+    $(() => { // JQuery's callback for the DOM loading
+      notifier = new Notifier($('#notifications'))
+    })
+  })
+
+  describe('constructor', () => {
+    test('Throws appropriate errors when initialized with values other than a valid jQuery object', (done) => {
+      $(() => {
+        try {
+          expect(() => {
+            // eslint-disable-next-line no-new
+            new NonDrivingContactMediumWarning(3, notifier)
+          }).toThrow(TypeError)
+
+          expect(() => {
+            // eslint-disable-next-line no-new
+            new NonDrivingContactMediumWarning($('#non-existant'), notifier)
+          }).toThrow(ReferenceError)
+
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('warningHighlightUI', () => {
