@@ -94,7 +94,7 @@ describe('RangedDatePicker', () => {
     beforeEach(() => {
       $(() => {
         datePickerElement = $('input')
-        datePickerElement.attr('data-min-date', new Date(new Date().getTime() - 2 * MILLISECONDS_IN_A_DAY))
+        datePickerElement.attr('data-min-date', new Date(new Date().getTime() - (2 * MILLISECONDS_IN_A_DAY)))
         rangedDatePicker = new RangedDatePicker($('input'), notifier)
       })
     })
@@ -118,6 +118,12 @@ describe('RangedDatePicker', () => {
     test('returns an error message if the user input date is before min', (done) => {
       $(() => {
         try {
+          datePickerElement.val(new Date(new Date().getTime() - (3 * MILLISECONDS_IN_A_DAY)))
+
+          const errorState = rangedDatePicker.getErrorState()
+
+          expect(typeof errorState).toBe('string')
+          expect(errorState.length).toBeGreaterThan(0)
           done()
         } catch (error) {
           done(error)
@@ -125,9 +131,14 @@ describe('RangedDatePicker', () => {
       })
     })
 
-    test('returns empty string if the user input string is between min and max', (done) => {
+    test('returns a falsy value if the user input string is between min and max', (done) => {
       $(() => {
         try {
+          datePickerElement.val(new Date(new Date().getTime() - MILLISECONDS_IN_A_DAY))
+
+          const errorState = rangedDatePicker.getErrorState()
+
+          expect(errorState).toBeFalsy()
           done()
         } catch (error) {
           done(error)
