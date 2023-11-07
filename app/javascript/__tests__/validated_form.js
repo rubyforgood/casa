@@ -4,7 +4,7 @@ require('jest')
 const { Notifier } = require('../src/notifier.js')
 const { NonDrivingContactMediumWarning, RangedDatePicker } = require('../src/validated_form.js')
 
-const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000
+const MILLISECONDS_IN_A_DAY = 86400000
 
 describe('RangedDatePicker', () => {
   let notifier
@@ -84,7 +84,47 @@ describe('RangedDatePicker', () => {
   })
 
   describe('errorHighlightUI', () => {
+    let rangedDatePicker
+    let datePickerElement
 
+    beforeEach(() => {
+      $(() => {
+        datePickerElement = $('input')
+        rangedDatePicker = new RangedDatePicker($('input'), notifier)
+      })
+    })
+
+    test('draws a red border around the input if passed an error message', (done) => {
+      $(() => {
+        try {
+          expect(datePickerElement.css('border')).not.toMatch('2px solid red')
+          rangedDatePicker.errorHighlightUI('An error')
+
+          expect(datePickerElement.css('border')).toBe('2px solid red')
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('removes the red border around the input when passed a falsy value if it was previously highlighted to indicate an error', (done) => {
+      $(() => {
+        try {
+          expect(datePickerElement.css('border')).not.toMatch('solid red')
+          rangedDatePicker.errorHighlightUI('An error')
+
+          expect(datePickerElement.css('border')).toBe('2px solid red')
+
+          rangedDatePicker.errorHighlightUI()
+
+          expect(datePickerElement.css('border')).not.toMatch('solid red')
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('getErrorState', () => {
