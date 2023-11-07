@@ -45,7 +45,7 @@
         inherit (rubyNix {
           inherit gemset ruby;
           name = "ruby-env-casa";
-          gemConfig = pkgs.defaultGemConfig // gemConfig;
+          gemConfig = pkgs.defaultGemConfig;
         })
           env;
 
