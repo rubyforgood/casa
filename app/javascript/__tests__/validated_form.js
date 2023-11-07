@@ -4,6 +4,8 @@ require('jest')
 const { Notifier } = require('../src/notifier.js')
 const { NonDrivingContactMediumWarning, RangedDatePicker } = require('../src/validated_form.js')
 
+const MILLISECONDS_IN_A_DAY = 24 * 60 * 60 * 1000
+
 describe('RangedDatePicker', () => {
   let notifier
 
@@ -66,7 +68,7 @@ describe('RangedDatePicker', () => {
       $(() => {
         try {
           const datePickerElement = $('input')
-          datePickerElement.attr('data-min-date', new Date(new Date().getTime() + 24 * 60 * 60 * 1000))
+          datePickerElement.attr('data-min-date', new Date(new Date().getTime() + MILLISECONDS_IN_A_DAY))
 
           expect(() => {
             // eslint-disable-next-line no-new
@@ -86,7 +88,52 @@ describe('RangedDatePicker', () => {
   })
 
   describe('getErrorState', () => {
+    let rangedDatePicker
+    let datePickerElement
 
+    beforeEach(() => {
+      $(() => {
+        datePickerElement = $('input')
+        datePickerElement.attr('data-min-date', new Date(new Date().getTime() - 2 * MILLISECONDS_IN_A_DAY))
+        rangedDatePicker = new RangedDatePicker($('input'), notifier)
+      })
+    })
+
+    test('returns an error message if the user input date is past max', (done) => {
+      $(() => {
+        try {
+          datePickerElement.val(new Date(new Date().getTime() + MILLISECONDS_IN_A_DAY))
+
+          const errorState = rangedDatePicker.getErrorState()
+
+          expect(typeof errorState).toBe('string')
+          expect(errorState.length).toBeGreaterThan(0)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('returns an error message if the user input date is before min', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('returns empty string if the user input string is between min and max', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('showUserError', () => {
