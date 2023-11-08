@@ -330,6 +330,19 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
+
+    it "displays Supervisor error message if invalid date of birth" do
+      org = create(:casa_org)
+      supervisor = create(:supervisor, casa_org: org)
+
+      sign_in supervisor
+      visit edit_users_path
+
+      fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
+      click_on "Update Profile"
+      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_text("Date of birth must be in the past.")
+    end
   end
 
   context "when admin" do
@@ -537,6 +550,18 @@ RSpec.describe "users/edit", type: :system do
       click_on "Save Preferences"
       expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
+    end
+
+    it "displays admin error message if invalid date of birth" do
+      org = create(:casa_org)
+      admin = create(:casa_admin, casa_org: org)
+
+      sign_in admin
+      visit edit_users_path
+
+      fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
+      click_on "Update Profile"
+      expect(page).to have_text("Date of birth must be in the past.")
     end
   end
 end

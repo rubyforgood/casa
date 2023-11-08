@@ -28,6 +28,18 @@
   <% end %>
 </div>
 
+<div class="input-style-1">
+  <%= f.label :date_of_birth, "Date of birth" %>
+  <% if policy(resource).update_user_setting? %>
+    <%= f.text_field :date_of_birth,
+                     value: resource.decorate.formatted_date_of_birth,
+                     data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                     class: "form-control label-font-weight" %>
+  <% else %>
+    <input type="text" placeholder="<%= resource.decorate.formatted_date_of_birth %>" autocomplete="off" readonly>
+  <% end %>
+</div>
+
 <div class="form-check checkbox-style mb-20">
   <%= f.check_box :receive_reimbursement_email, class: "form-check-input" %>
   <%= f.label :receive_reimbursement_email, "Email Reimbursement Requests", class: "form-check-label" %>

@@ -43,6 +43,11 @@ RSpec.describe User, type: :model do
       expect(user.valid?).to be false
     end
 
+    it "requires date of birth to be in the past" do
+      user = build(:user, date_of_birth: 10.days.from_now)
+      expect(user.valid?).to be false
+    end
+
     it "has an empty old_emails array when initialized" do
       user = build(:user)
       expect(user.old_emails).to eq([])

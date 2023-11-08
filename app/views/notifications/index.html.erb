@@ -28,7 +28,7 @@
 </div>
 
 <% @notifications.each do |notification| %>
-  <% if ["YouthBirthdayNotification", "EmancipationChecklistReminderNotification"].include? notification.type %>
+  <% if read_when_seen_notifications.include? notification.type %>
     <% notification.mark_as_read! %>
   <% end %>
 <% end %>

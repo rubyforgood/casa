@@ -5,6 +5,7 @@ FactoryBot.define do
     sequence(:display_name) { |n| "User #{n}" }
     password { "12345678" }
     password_confirmation { "12345678" }
+    date_of_birth { nil }
     case_assignments { [] }
     phone_number { "" }
     confirmed_at { Time.now }
