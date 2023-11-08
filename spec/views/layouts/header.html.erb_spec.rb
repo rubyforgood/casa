@@ -30,6 +30,11 @@ RSpec.describe "layout/header", type: :view do
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
     end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
+    end
   end
 
   context "when logged in as a supervisor" do
@@ -43,6 +48,11 @@ RSpec.describe "layout/header", type: :view do
       expect(rendered).to match "<strong>Role: Supervisor</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
+    end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
     end
   end
 
@@ -65,6 +75,11 @@ RSpec.describe "layout/header", type: :view do
       render partial: "layouts/header"
 
       expect(rendered).to_not have_link("Edit Organization")
+    end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
     end
   end
 

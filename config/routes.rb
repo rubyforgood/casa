@@ -192,6 +192,10 @@ Rails.application.routes.draw do
     delete :remove_from_volunteer
   end
 
+  direct :help do
+    "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
+  end
+
   get "/error", to: "error#index"
 
   namespace :api do

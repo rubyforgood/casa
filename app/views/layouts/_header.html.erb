@@ -86,6 +86,12 @@
                 </li>
               <% end %>
               <li>
+                <%= link_to help_url, target: :_blank do %>
+                  <i class="lni lni-question-circle"></i>
+                  Help
+                <% end %>
+              </li>
+              <li>
                 <%= link_to destroy_user_session_path do %>
                   <i class="lni lni-exit"></i>
                   Sign Out
