@@ -188,11 +188,86 @@ describe('RangedDatePicker', () => {
   })
 
   describe('showUserError', () => {
+    let rangedDatePicker
+    let notifierElement
 
+    beforeEach(() => {
+      $(() => {
+        notifierElement = $('#notifications')
+        rangedDatePicker = new RangedDatePicker($('input'), notifier)
+      })
+    })
+
+    test('shows an error notification to the user', (done) => {
+      $(() => {
+        try {
+          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+
+          rangedDatePicker.showUserError(errorText)
+
+          const notifications = notifierElement.find('.danger-notification')
+          expect(notifications[0].innerHTML).toContain(errorText)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('changes the text of the error notification if it already exists', (done) => {
+      $(() => {
+        try {
+          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+          const errorText2 = 'l6o4H/z*KnA:/AFg.-.G'
+
+          rangedDatePicker.showUserError(errorText)
+
+          const notifications = notifierElement.find('.danger-notification')
+          expect(notifications[0].innerHTML).toContain(errorText)
+
+          rangedDatePicker.showUserError(errorText2)
+
+          expect(notifierElement[0].innerHTML).not.toContain(errorText)
+          expect(notifications[0].innerHTML).toContain(errorText2)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('removeUserError', () => {
+    let rangedDatePicker
+    let notifierElement
 
+    beforeEach(() => {
+      $(() => {
+        notifierElement = $('#notifications')
+        rangedDatePicker = new RangedDatePicker($('input'), notifier)
+      })
+    })
+
+    test('removes the error notification shown to the user', (done) => {
+      $(() => {
+        try {
+          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+
+          rangedDatePicker.showUserError(errorText)
+
+          const notifications = notifierElement.find('.danger-notification')
+          expect(notifications[0].innerHTML).toContain(errorText)
+
+          rangedDatePicker.removeUserError()
+
+          expect(notifierElement.find('.danger-notification').length).toBe(0)
+          expect(notifierElement[0].innerHTML).not.toContain(errorText)
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 })
 
