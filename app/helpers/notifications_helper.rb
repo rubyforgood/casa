@@ -1,4 +1,8 @@
 module NotificationsHelper
+  def read_when_seen_notifications
+    ["YouthBirthdayNotification", "VolunteerBirthdayNotification", "EmancipationChecklistReminderNotification"]
+  end
+
   def notifications_after_and_including_deploy(notifications)
     latest_deploy_time = Health.instance.latest_deploy_time
 
