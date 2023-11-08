@@ -123,4 +123,32 @@ RSpec.describe UserDecorator do
       expect(decorated_user.formatted_invitation_sent_at).to eq expected_date
     end
   end
+
+  describe "#formatted_birthday" do
+    context "when a user has no date of birth set"
+    it "returns a blank string" do
+      user.update(date_of_birth: nil)
+      expect(decorated_user.formatted_birthday).to eq ""
+    end
+
+    context "when a user has a valid date of birth"
+    it "returns the month and ordinal of their birthday" do
+      user.update(date_of_birth: Date.new(1991, 7, 8))
+      expect(decorated_user.formatted_birthday).to eq "July 8th"
+    end
+  end
+
+  describe "#formatted_date_of_birth" do
+    context "when a user has no date of birth set"
+    it "returns a blank string" do
+      user.update(date_of_birth: nil)
+      expect(decorated_user.formatted_date_of_birth).to eq ""
+    end
+
+    context "when a user has a valid date of birth"
+    it "returns the YYYY/MM/DD of their date of birth" do
+      user.update(date_of_birth: Date.new(1991, 7, 8))
+      expect(decorated_user.formatted_date_of_birth).to eq "1991/07/08"
+    end
+  end
 end
