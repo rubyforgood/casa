@@ -16,7 +16,7 @@ class VolunteerBirthdayNotification < BaseNotification
 
   # Define helper methods to make rendering easier.
   def message
-    "🎉 🎂  #{params[:volunteer].display_name}'s birthday is on #{params[:volunteer].date_of_birth.to_date.to_fs(:short_ordinal)}!"
+    "🎉 🎂  #{params[:volunteer].display_name}'s birthday is on #{params[:volunteer].decorate.formatted_birthday}!"
   end
 
   def title

@@ -26,7 +26,7 @@
             <div class="input-style-1">
               <%= form.label :date_of_birth, "Date of birth" %>
               <%= form.text_field :date_of_birth,
-                                  value: @user.date_of_birth&.strftime("%Y/%m/%d"),
+                                  value: @user.decorate.formatted_date_of_birth,
                                   data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                   class: "form-control label-font-weight" %>
             </div>
