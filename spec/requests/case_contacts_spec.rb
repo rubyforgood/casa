@@ -125,8 +125,8 @@ RSpec.describe "/case_contacts", type: :request do
         expect(case_contact.want_driving_reimbursement).to eq(true)
       end
 
-      it "redirects to casa_case#show" do
-        expect(request).to redirect_to(casa_case_url(casa_case, success: true))
+      it "redirects to case_contacts#index as fallback" do
+        expect(request).to redirect_to(case_contacts_path(success: true))
       end
 
       context "when multiple casa cases were selected" do
