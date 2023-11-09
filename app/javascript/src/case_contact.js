@@ -51,8 +51,6 @@ async function fireSwalFollowupAlert () {
 
 $(() => { // JQuery's callback for the DOM loading
   const milesDriven = $('#case_contact_miles_driven')
-  const durationHoursElement = $('#case-contact-duration-hours-display')
-  const durationMinutes = $('#case-contact-duration-minutes-display')
   const caseOccurredAt = $('#case_contact_occurred_at')
   const caseContactSubmit = $('#case-contact-submit')
   const volunteerAddressFieldState = (hide) => {

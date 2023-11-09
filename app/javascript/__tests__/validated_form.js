@@ -201,7 +201,7 @@ describe('RangedDatePicker', () => {
     test('shows an error notification to the user', (done) => {
       $(() => {
         try {
-          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+          const errorText = 'Q~Au\\`FMET"["8.JKB_M'
 
           rangedDatePicker.showUserError(errorText)
 
@@ -217,7 +217,7 @@ describe('RangedDatePicker', () => {
     test('changes the text of the error notification if it already exists', (done) => {
       $(() => {
         try {
-          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+          const errorText = 'Q~Au\\`FMET"["8.JKB_M'
           const errorText2 = 'l6o4H/z*KnA:/AFg.-.G'
 
           rangedDatePicker.showUserError(errorText)
@@ -251,7 +251,7 @@ describe('RangedDatePicker', () => {
     test('removes the error notification shown to the user', (done) => {
       $(() => {
         try {
-          const errorText = 'Q~Au\`FMET"["8.JKB_M'
+          const errorText = 'Q~Au\\`FMET"["8.JKB_M'
 
           rangedDatePicker.showUserError(errorText)
 
