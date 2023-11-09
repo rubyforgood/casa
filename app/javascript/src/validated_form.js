@@ -218,6 +218,10 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
     this.checkboxContainer = this.drivingContactMediumCheckbox.parents('.contact-medium.form-group')
     this.milesDrivenInput = milesDrivenInput
 
+    allInputs.on('change', (e) => {
+      this.validate()
+    })
+
     this.notifier = notifier
   }
 
@@ -312,7 +316,6 @@ $(() => { // JQuery's callback for the DOM loading
 
   validatedFormCollection.on('submit', function (e) {
     let errorCount = 0
-    let warningCount = 0
 
     for (const validatableFormSectionComponent of validatableFormSectionComponents) {
       try {
@@ -320,10 +323,6 @@ $(() => { // JQuery's callback for the DOM loading
 
         if (validationResult.error) {
           errorCount++
-        }
-
-        if (validationResult.warning) {
-          warningCount++
         }
       } catch (err) {
         console.error('Failed to validate the following component:', validatableFormSectionComponent)
