@@ -134,19 +134,19 @@ class ValidatableFormSectionComponent {
   }
 
   #validateWarning () {
-    const warningState = this.getWarningState()
+    const warningMsg = this.getWarningState()
 
-    if (warningState) {
-      this.showUserWarning()
+    if (warningMsg) {
+      this.showUserWarning(warningMsg)
       this.showWarningConfirmation()
     } else {
-      this.removeUserWarning()
+      this.removeUserWarning(warningMsg)
       this.removeWarningConfirmation()
     }
 
-    this.warningHighlightUI(warningState)
+    this.warningHighlightUI(warningMsg)
 
-    return warningState
+    return warningMsg
   }
 }
 
@@ -302,19 +302,28 @@ $(() => { // JQuery's callback for the DOM loading
     })
   })
 
-  safeInstantiateComponent('non driving contact medium warning', () => {
-    const contactMediumWithMilesDrivenWarning = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier)
-    console.log(contactMediumWithMilesDrivenWarning)
-    validatableFormSectionComponents.push(contactMediumWithMilesDrivenWarning)
-  })
+  if ($('#case_contact_miles_driven').length) {
+    safeInstantiateComponent('non driving contact medium warning', () => {
+      const contactMediumWithMilesDrivenWarning = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier)
+      console.log(contactMediumWithMilesDrivenWarning)
+      validatableFormSectionComponents.push(contactMediumWithMilesDrivenWarning)
+    })
+  }
 
   validatedFormCollection.on('submit', function (e) {
     let errorCount = 0
+    let warningCount = 0
 
     for (const validatableFormSectionComponent of validatableFormSectionComponents) {
       try {
-        if (validatableFormSectionComponent.validate().error) {
+        const validationResult = validatableFormSectionComponent.validate()
+
+        if (validationResult.error) {
           errorCount++
+        }
+
+        if (validationResult.warning) {
+          warningCount++
         }
       } catch (err) {
         console.error('Failed to validate the following component:', validatableFormSectionComponent)
