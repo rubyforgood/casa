@@ -93,21 +93,6 @@ $(() => { // JQuery's callback for the DOM loading
     }
   })
 
-  function validateDuration () {
-    const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
-    const fifteenMinutes = 15
-    const totalMinutes = durationMinutes.val() + durationHoursElement.val() * 60
-    const durationMinutesDOMElement = durationMinutes.get(0)
-
-    if (totalMinutes < fifteenMinutes) {
-      durationMinutesDOMElement.setCustomValidity(msg)
-    } else {
-      durationMinutesDOMElement.setCustomValidity('')
-    }
-
-    durationMinutesDOMElement.reportValidity()
-  }
-
   function validateNoteContent (e) {
     const noteContent = $('#case_contact_notes').val()
     if (noteContent) {
@@ -132,10 +117,6 @@ $(() => { // JQuery's callback for the DOM loading
   const caseContactSubmitFormModal = $('#modal-case-contact-submit')
   caseContactSubmitFormModal.on('click', () => {
     $('#casa-contact-form').off('submit')
-  })
-
-  caseContactSubmit.on('click', function () {
-    validateDuration()
   })
 
   $('[data-toggle="tooltip"]').tooltip()
