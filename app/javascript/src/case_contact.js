@@ -81,16 +81,6 @@ $(() => { // JQuery's callback for the DOM loading
     caseOccurredAt.val(timeZoneConvertedDate)
   }
 
-  milesDriven.on('change', () => {
-    const contactMedium = $('input[name="case_contact[medium_type]"]:checked').val() || '(contact medium not set)'
-    const contactMediumInPerson = `${contactMedium}` === 'in-person'
-    const milesDrivenCount = milesDriven.val()
-
-    if (milesDrivenCount > 0 && !contactMediumInPerson) {
-      alert(`Just checking: you drove ${milesDrivenCount} miles for a ${contactMedium} contact?`)
-    }
-  })
-
   function validateNoteContent (e) {
     const noteContent = $('#case_contact_notes').val()
     if (noteContent) {
