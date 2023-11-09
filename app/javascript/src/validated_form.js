@@ -247,7 +247,7 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   showUserWarning (warningMsg) {
     TypeChecker.checkNonEmptyString(warningMsg, 'warningMsg')
 
-    if (this.warningNotification) {
+    if (this.warningNotification && !(this.warningNotification.isDismissed())) {
       this.warningNotification.setText(warningMsg)
     } else if (this.notifier) {
       this.warningNotification = this.notifier.notify(warningMsg, 'warn')
