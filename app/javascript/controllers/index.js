@@ -10,6 +10,8 @@ import ExtendedNestedFormController from './extended_nested_form_controller'
 
 import HelloController from './hello_controller'
 
+import MultipleSelectController from './multiple_select_controller'
+
 import NavbarController from './navbar_controller'
 
 import SidebarController from './sidebar_controller'
@@ -18,6 +20,7 @@ import SidebarGroupController from './sidebar_group_controller'
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)
+application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
 application.register('sidebar', SidebarController)
 application.register('sidebar-group', SidebarGroupController)
