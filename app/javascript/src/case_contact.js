@@ -1,4 +1,3 @@
-/* global alert */
 /* global window */
 /* global $ */
 
@@ -50,7 +49,6 @@ async function fireSwalFollowupAlert () {
 }
 
 $(() => { // JQuery's callback for the DOM loading
-  const milesDriven = $('#case_contact_miles_driven')
   const caseOccurredAt = $('#case_contact_occurred_at')
   const caseContactSubmit = $('#case-contact-submit')
   const volunteerAddressFieldState = (hide) => {
