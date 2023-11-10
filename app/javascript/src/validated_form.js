@@ -265,15 +265,21 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   }
 
   showWarningConfirmation () {
-    this.checkboxContainer.append($(
+    if (!(this.warningConfirmationShown)) {
+      this.checkboxContainer.append($(
 `<div class="warning-required-checkbox">
   <input type="checkbox" id="warning-non-driving-contact-medium-check" class="form-check-input" required="true">
   <label for="warning-non-driving-contact-medium-check">I'm sure I drove for this contact medium.</label>
 </div>`
-    ))
+      ))
+    }
+
+    this.warningConfirmationShown = true
   }
 
   removeWarningConfirmation () {
+    delete this.warningConfirmationShown
+
     this.checkboxContainer.find('.warning-required-checkbox').remove()
   }
 }
