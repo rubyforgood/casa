@@ -14,6 +14,7 @@
   flex-direction: column;
   font-weight: 900;
   max-height: 100vh;
+  max-width: 40%;
   overflow-y: auto;
   position: fixed;
   right: 2em;
@@ -38,7 +39,6 @@
 
   .messages {
     margin-bottom: 0;
-    max-width: 40%;
     padding: 0;
 
     div {
