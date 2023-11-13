@@ -20,7 +20,7 @@ gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
-gem "friendly_id", "~> 5.5.0" # allows us to use a slug instead of casa case ids in their URLs
+gem "friendly_id", "~> 5.5.1" # allows us to use a slug instead of casa case ids in their URLs
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jsbundling-rails"
