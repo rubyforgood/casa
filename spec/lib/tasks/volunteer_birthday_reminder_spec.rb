@@ -9,7 +9,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
     Rake::Task.clear
     Casa::Application.load_tasks
 
-    travel_to Date.new(2022, 10, 1)
+    travel_to Date.new(2022, 10, 15)
   end
 
   after do
@@ -64,6 +64,26 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
 
     it "does not create a notification" do
       expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(0)
+    end
+  end
+
+  context "when today is the 15th" do
+    before { travel_to(Date.new(2022, 10, 15)) }
+
+    let!(:volunteer) do
+      create(:volunteer, :with_assigned_supervisor, date_of_birth: Date.new(1988, 11, 30))
+    end
+
+    it "runs the rake task" do
+      expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(1)
+    end
+  end
+
+  context "when today is not the 15th" do
+    before { travel_to(Date.new(2022, 10, 1)) }
+
+    it "skips the rake task" do
+      expect { rake_task }.to change { Notification.count }.by(0)
     end
   end
 end
