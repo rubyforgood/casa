@@ -1,14 +1,31 @@
 require "rails_helper"
 
 RSpec.describe "/mileage_rates", type: :request do
-  let(:admin) { create(:casa_admin) }
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: casa_org) }
 
   describe "GET /index" do
-    it "renders a successful response" do
-      sign_in admin
+    let!(:mileage_rate) { create(:mileage_rate, effective_date: Date.new(2023, 1, 1), casa_org: casa_org) }
+    let!(:other_mileage_rate) do
+      create(:mileage_rate, effective_date: Date.new(2023, 2, 1), casa_org: casa_org)
+    end
+    let!(:other_casa_org_mileage_rate) do
+      create(:mileage_rate, effective_date: Date.new(2023, 2, 1))
+    end
 
+    before { sign_in admin }
+
+    subject(:request) do
       get mileage_rates_path
-      expect(response).to be_successful
+
+      response
+    end
+
+    it { is_expected.to be_successful }
+    it "shows mileage rates correctly", :aggregate_failures do
+      page = request.body
+      expect(page).to match(/#{mileage_rate_path(mileage_rate)}.*#{mileage_rate_path(other_mileage_rate)}/m)
+      expect(page).not_to include(mileage_rate_path(other_casa_org_mileage_rate))
     end
   end
 
