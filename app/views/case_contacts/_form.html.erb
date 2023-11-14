@@ -8,15 +8,15 @@
       <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
     <% end %>
     <div class="casa-case-scroll">
-      <% casa_cases.each_with_index do |casa_case, index| %>
+      <% casa_cases.each do |casa_case| %>
         <div class="form-check checkbox-style mb-10 ml-5">
           <%= check_box_tag "case_contact[casa_case_id][]",
                             casa_case.id,
                             @selected_cases.include?(casa_case),
-                            id: "case_contact_casa_case_id_#{index}",
+                            id: "case_contact_casa_case_id_#{casa_case.id}",
                             class: ["form-check-input", "casa-case-id"],
                             disabled: case_contact.persisted? %>
-          <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
+          <label class="form-check-label" for="case_contact_casa_case_id_<%= casa_case.id %>">
             <%= casa_case.case_number %>
           </label>
         </div>
