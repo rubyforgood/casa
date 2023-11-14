@@ -3,9 +3,9 @@
 
   <div class="card-style-1 pl-25 mb-10">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case">1. Select all relevant CASA cases<span class="red-letter"> *</span></label></h2>
+      <h4 class="mb-20"><label for="case_contact_casa_case">1. Select all relevant cases for this contact <span class="red-letter">*</span></label></h4>
     <% else %>
-      <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
+      <h4 class="mb-20"><label for="case_contact_casa_case">1. Select all relevant case for this contact <span class="red-letter">*</span></label></h4>
     <% end %>
     <div class="casa-case-scroll">
       <% casa_cases.each_with_index do |casa_case, index| %>
