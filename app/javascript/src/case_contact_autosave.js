@@ -13,7 +13,7 @@ $(() => { // JQuery's callback for the DOM loading
     const save = () => {
       const data = []
 
-      $(`#${formId} :input`).each((_, { id, type, value, checked }) => {
+      $(`#${formId} :input`).each((_, { id, type, value, checked } /* javascript destructuring assignment */) => {
         if (id && type !== 'button' && type !== 'submit') {
           data.push({ id, value, checked })
         }
