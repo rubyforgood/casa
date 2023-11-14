@@ -277,6 +277,40 @@ describe('NonDrivingContactMediumWarning', () => {
   beforeEach(() => {
     document.body.innerHTML =
 `<form class="component-validated-form">
+  <div class="field contact-medium form-group">
+    <h5 classs="mb-3"><label for="case_contact_medium_type">b. Contact Medium</label></h5>
+    <input type="hidden" name="case_contact[medium_type]" value="" autocomplete="off">
+    <div class="form-check radio-style mb-20">
+      <input class="form-check-input" type="radio" value="in-person" name="case_contact[medium_type]" id="case_contact_medium_type_in-person">
+      <label class="form-check-label" for="case_contact_medium_type_in-person">In Person</label>
+    </div>
+    <div class="form-check radio-style mb-20">
+      <input class="form-check-input" type="radio" value="text/email" checked="checked" name="case_contact[medium_type]" id="case_contact_medium_type_textemail">
+      <label class="form-check-label" for="case_contact_medium_type_textemail">Text/Email</label>
+    </div>
+
+    <div class="form-check radio-style mb-20">
+      <input class="form-check-input" type="radio" value="video" name="case_contact[medium_type]" id="case_contact_medium_type_video">
+      <label class="form-check-label" for="case_contact_medium_type_video">Video</label>
+    </div>
+
+    <div class="form-check radio-style mb-20">
+      <input class="form-check-input" type="radio" value="voice-only" name="case_contact[medium_type]" id="case_contact_medium_type_voice-only">
+      <label class="form-check-label" for="case_contact_medium_type_voice-only">Voice Only</label>
+    </div>
+
+    <div class="form-check radio-style mb-20">
+      <input class="form-check-input" type="radio" value="letter" name="case_contact[medium_type]" id="case_contact_medium_type_letter">
+      <label class="form-check-label" for="case_contact_medium_type_letter">Letter</label>
+    </div>
+  </div>
+
+  <div class="field miles-driven form-group">
+    <h5 class="mb-3"><label for="case_contact_miles_driven">a. Miles Driven</label></h5>
+    <div class="input-style-1">
+      <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+    </div>
+  </div>
 </form>
 
 <div id="notifications">
