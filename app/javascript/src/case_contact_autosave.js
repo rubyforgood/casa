@@ -30,7 +30,7 @@ $(() => { // JQuery's callback for the DOM loading
         formData.forEach(({ id, value, checked }) => {
           const input = document.querySelector(`#${id}`)
 
-          if (input) {
+          if (input && !(/checkbox|hidden|image|radio|reset|submit/.test(input.type))) {
             input.value = value
           }
 
