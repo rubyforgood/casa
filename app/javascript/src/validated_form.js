@@ -184,7 +184,7 @@ class RangedDatePicker extends ValidatableFormSectionComponent {
     if (setDate > max && !isNaN(max)) {
       return `Date for ${this.name} is past maximum allowed date of ${max.toDateString()}`
     } else if (setDate < min && !isNaN(min)) {
-      return `Date for ${this.name} is behind minimum allowed date of ${min.toDateString()}`
+      return `Date for ${this.name} is before minimum allowed date of ${min.toDateString()}`
     }
   }
 
