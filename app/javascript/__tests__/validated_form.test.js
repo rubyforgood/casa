@@ -369,12 +369,24 @@ describe('NonDrivingContactMediumWarning', () => {
     let component
 
     beforeEach(() => {
-      component = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
     })
 
     test('returns the warning message if a non driving contact medium is selected and the miles driven count is > 0', (done) => {
       $(() => {
         try {
+          expect(nonDrivingOptions.length).toBeGreaterThan(0)
+
+          milesDrivenInput.val(1)
+
+          nonDrivingOptions.each(function () {
+            const option = $(this)
+
+            option.trigger('click')
+
+            expect(component.getWarningState()).toBe('You requested driving reimbursement for a contact medium that typically does not involve driving. Are you sure that\'s right?')
+          })
+
           done()
         } catch (error) {
           done(error)
@@ -382,9 +394,26 @@ describe('NonDrivingContactMediumWarning', () => {
       })
     })
 
-    test('returns a falsy value if the driving contact medium is selected or the miles drivne count is 0', (done) => {
+    test('returns a falsy value if the driving contact medium is selected or the miles driven count is 0', (done) => {
       $(() => {
         try {
+          expect(nonDrivingOptions.length).toBeGreaterThan(0)
+
+          milesDrivenInput.val(0)
+
+          nonDrivingOptions.each(function () {
+            const option = $(this)
+
+            option.trigger('click')
+
+            expect(component.getWarningState()).toBeFalsy()
+          })
+
+          milesDrivenInput.val(1)
+          drivingOption.trigger('click')
+
+          expect(component.getWarningState()).toBeFalsy()
+
           done()
         } catch (error) {
           done(error)
@@ -394,9 +423,26 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('warningHighlightUI', () => {
+    let checkboxContainer
+    let component
+
+    beforeEach(() => {
+      $(() => {
+        checkboxContainer = $('.contact-medium.form-group')
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      })
+    })
+
     test('when passed a truthy value, it makes the parent container for the checkboxes yellow and draws a yellow border around the miles driven input', (done) => {
       $(() => {
         try {
+          expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+
+          component.warningHighlightUI('A warning message')
+
+          expect(checkboxContainer.css('background-color')).toBe('rgb(255, 248, 225)')
+          expect(milesDrivenInput.css('border')).toBe('2px solid #ffc107')
           done()
         } catch (error) {
           done(error)
@@ -407,6 +453,19 @@ describe('NonDrivingContactMediumWarning', () => {
     test('when passed a falsy value, it removes the error highlighting', (done) => {
       $(() => {
         try {
+          expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+
+          component.warningHighlightUI('A warning message')
+
+          expect(checkboxContainer.css('background-color')).toBe('rgb(255, 248, 225)')
+          expect(milesDrivenInput.css('border')).toBe('2px solid #ffc107')
+
+          component.warningHighlightUI()
+
+          expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+
           done()
         } catch (error) {
           done(error)
@@ -416,9 +475,26 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('showUserWarning', () => {
-    test('', (done) => {
+    let component
+    let notifierElement
+
+    beforeEach(() => {
+      $(() => {
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+        notifierElement = $('#notifications')
+      })
+    })
+
+    test('it shows the user a warning through the notifier', (done) => {
       $(() => {
         try {
+          const warningText = 'Q~Au\\`FMET"["8.JKB_M'
+
+          component.showUserWarning(warningText)
+
+          const notifications = notifierElement.find('.warning-notification')
+          expect(notifications[0].innerHTML).toContain(warningText)
+
           done()
         } catch (error) {
           done(error)
@@ -429,6 +505,15 @@ describe('NonDrivingContactMediumWarning', () => {
     test('idempotence test', (done) => {
       $(() => {
         try {
+          const warningText = 'Q~Au\\`FMET"["8.JKB_M'
+
+          component.showUserWarning(warningText)
+          component.showUserWarning(warningText)
+
+          const notifications = notifierElement.find('.warning-notification')
+          expect(notifications[0].innerHTML).toContain(warningText)
+          expect(notifications.length).toBe(1)
+
           done()
         } catch (error) {
           done(error)
@@ -438,9 +523,33 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('removeUserWarning', () => {
-    test('it removes the user warning if it is visible', (done) => {
+    let component
+    let notifierElement
+
+    beforeEach(() => {
+      $(() => {
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+        notifierElement = $('#notifications')
+      })
+    })
+
+    test('it removes the user warning if it is present', (done) => {
       $(() => {
         try {
+          const warningText = 'Q~Au\\`FMET"["8.JKB_M'
+
+          component.showUserWarning(warningText)
+          const componentNotification = component.warningNotification
+
+          let notifications = notifierElement.find('.warning-notification')
+          expect(notifications[0].innerHTML).toContain(warningText)
+          expect(componentNotification.isDismissed()).toBe(false)
+
+          component.removeUserWarning()
+
+          notifications = notifierElement.find('.warning-notification')
+          expect(notifications.length).toBe(0)
+          expect(componentNotification.isDismissed()).toBe(true)
           done()
         } catch (error) {
           done(error)
@@ -451,6 +560,21 @@ describe('NonDrivingContactMediumWarning', () => {
     test('idempotence test', (done) => {
       $(() => {
         try {
+          const warningText = 'Q~Au\\`FMET"["8.JKB_M'
+
+          component.showUserWarning(warningText)
+          const componentNotification = component.warningNotification
+
+          let notifications = notifierElement.find('.warning-notification')
+          expect(notifications[0].innerHTML).toContain(warningText)
+          expect(componentNotification.isDismissed()).toBe(false)
+
+          component.removeUserWarning()
+          component.removeUserWarning()
+
+          notifications = notifierElement.find('.warning-notification')
+          expect(notifications.length).toBe(0)
+          expect(componentNotification.isDismissed()).toBe(true)
           done()
         } catch (error) {
           done(error)
@@ -460,9 +584,23 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('showWarningConfirmation', () => {
+    let component
+
+    beforeEach(() => {
+      $(() => {
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      })
+    })
+
     test('it adds the required checkbox with the warning label', (done) => {
       $(() => {
         try {
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(0)
+
+          component.showWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(1)
+          expect($('label[for=warning-non-driving-contact-medium-check]').text()).toBe('I\'m sure I drove for this contact medium.')
           done()
         } catch (error) {
           done(error)
@@ -473,6 +611,13 @@ describe('NonDrivingContactMediumWarning', () => {
     test('idempotence test', (done) => {
       $(() => {
         try {
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(0)
+
+          component.showWarningConfirmation()
+          component.showWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(1)
+          expect($('label[for=warning-non-driving-contact-medium-check]').text()).toBe('I\'m sure I drove for this contact medium.')
           done()
         } catch (error) {
           done(error)
@@ -482,9 +627,25 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('removeWarningConfirmation', () => {
+    let component
+
+    beforeEach(() => {
+      $(() => {
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      })
+    })
+
     test('it removes the required checkbox with the warning label', (done) => {
       $(() => {
         try {
+          component.showWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(1)
+          expect($('label[for=warning-non-driving-contact-medium-check]').text()).toBe('I\'m sure I drove for this contact medium.')
+
+          component.removeWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(0)
           done()
         } catch (error) {
           done(error)
@@ -495,6 +656,15 @@ describe('NonDrivingContactMediumWarning', () => {
     test('idempotence test', (done) => {
       $(() => {
         try {
+          component.showWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(1)
+          expect($('label[for=warning-non-driving-contact-medium-check]').text()).toBe('I\'m sure I drove for this contact medium.')
+
+          component.removeWarningConfirmation()
+          component.removeWarningConfirmation()
+
+          expect($('input#warning-non-driving-contact-medium-check[required=true]').length).toBe(0)
           done()
         } catch (error) {
           done(error)

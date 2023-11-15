@@ -233,9 +233,9 @@ class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
     return ''
   }
 
-  // @param  {string} errorState The value returned by getWarningState()
-  warningHighlightUI (errorState) {
-    if (errorState) {
+  // @param  {string} warningState The value returned by getWarningState()
+  warningHighlightUI (warningState) {
+    if (warningState) {
       this.checkboxContainer.css('background-color', '#fff8e1')
       this.milesDrivenInput.css('border', '2px solid #ffc107')
     } else {
