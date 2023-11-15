@@ -9,7 +9,6 @@ $(() => { // JQuery's callback for the DOM loading
 
     $('#twilio_disabled').on('click', function (event) {
       event.preventDefault()
-      console.log('tooltip?')
     })
   }
 })

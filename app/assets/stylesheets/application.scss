@@ -20,11 +20,12 @@
 @use "shared/form";
 @use "shared/layout";
 @use "shared/navbar";
+@use "shared/noscript";
 @use "shared/select2_additional_styles";
 @use "shared/sidebar";
 @use "shared/typography";
 @use "shared/utilities";
-@use "shared/noscript";
+@use "shared/validated_form_component";
 
 @use "pages/all_casa_admin_dashboard";
 @use "pages/casa_cases";

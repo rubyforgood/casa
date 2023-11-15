@@ -14,10 +14,16 @@
   flex-direction: column;
   font-weight: 900;
   max-height: 100vh;
+  max-width: 40%;
   overflow-y: auto;
+  pointer-events: none;
   position: fixed;
   right: 2em;
   z-index: 100;
+
+  &>* {
+    pointer-events: auto;
+  }
 
   div {
     border-radius: .25em;
@@ -39,8 +45,14 @@
   .messages {
     margin-bottom: 0;
     padding: 0;
+    pointer-events: none;
+
+    &>* {
+      pointer-events: auto;
+    }
 
     div {
+      display: flex;
       width: fit-content;
     }
   }

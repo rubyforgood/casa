@@ -509,7 +509,7 @@ describe('Notifier', () => {
   })
 })
 
-describe('Notifications', () => {
+describe('Notification', () => {
   let notification
   const notificationDefaultMessage = 'm*GV}.n?@D\\~]jW=JD$d'
 

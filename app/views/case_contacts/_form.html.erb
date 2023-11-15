@@ -1,4 +1,4 @@
-<%= form_with(model: case_contact, local: true, id: "casa-contact-form") do |form| %>
+<%= form_with(model: case_contact, local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
   <%= render "/shared/error_messages", resource: case_contact %>
 
   <div class="card-style-1 pl-25 mb-10">
@@ -65,14 +65,12 @@
     </div>
 
     <div class="pr-50">
-
       <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <div class="input-style-1">
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
-        <%= form.text_field :occurred_at,
-                            value: occurred_at.to_date,
-                            data: {date_format: "yyyy/mm/dd", provide: "datepicker"},
-                            class: "card-style-1" %>
+        <%= render "layouts/components/ranged_date_picker",
+          form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
+          max_date: "today", component_name: "occurred on" %>
       </div>
     </div>
 
