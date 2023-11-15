@@ -37,12 +37,12 @@
             <h3 class="mt-10"><label>Date of contact</label></h3>
           </div>
           <div class="col-sm-6 input-style-1">
-            <%= f.label "Starting from", for: :occurred_starting_at %>
+            <%= f.label "Starting from", for: "filterrific_occurred_starting_at" %>
             <%= f.text_field(:occurred_starting_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                                   class: "") %>
           </div>
           <div class="col-sm-6 input-style-1">
-            <%= f.label "Ending at", for: :occurred_until %>
+            <%= f.label "Ending at", for: "filterrific_occurred_ending_at" %>
             <%= f.text_field(:occurred_ending_at, data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                                                   class: "") %>
           </div>
