@@ -84,26 +84,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.
 3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.
 
-**Nix** 
-
-If you have [Nix](https://nixos.org) installed you can use the [flake.nix](flake.nix)
-configuration file located at the root of the project to build and develop within an environment
-without needing to install `rvm`, `nodejs`, `yarn`, `postgresql` or other tools separately.
-The environment also uses the `gemset.nix` file to automatically download and install all the gems
-necessary to get the server up and running:
-
-1. Install [Nix](https://zero-to-nix.com/concepts/nix-installer)
-2. Add the following to `~/.config/nix/nix.conf` or `/etc/nix/nix.conf`:
-```
-    experimental-features = nix-command flakes
-```
-3. `cd` into casa
-4. `nix-shell -p bundix --run "bundix -l"` to update the `gemset.nix` file
-5. `nix develop` and wait for the packages to be downloaded and the environment to be built
-
-Then you can setup the database and run the server.
-This will run on Linux and macOS.
-
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2
@@ -155,6 +135,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
  - [Mac](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
  - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
+ - [Nix](doc/NIX_SETUP.md)
 
 #### Ubuntu and WSL
 
