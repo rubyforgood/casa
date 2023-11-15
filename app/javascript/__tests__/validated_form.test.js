@@ -272,6 +272,10 @@ describe('RangedDatePicker', () => {
 })
 
 describe('NonDrivingContactMediumWarning', () => {
+  let checkboxes
+  let drivingOption
+  let milesDrivenInput
+  let nonDrivingOptions
   let notifier
 
   beforeEach(() => {
@@ -331,6 +335,10 @@ describe('NonDrivingContactMediumWarning', () => {
   </button>
 </div>`
     $(() => { // JQuery's callback for the DOM loading
+      checkboxes = $('.contact-medium.form-group input:not([type=hidden])')
+      drivingOption = checkboxes.filter('#case_contact_medium_type_in-person')
+      milesDrivenInput = $('#case_contact_miles_driven')
+      nonDrivingOptions = checkboxes.not(drivingOption)
       notifier = new Notifier($('#notifications'))
     })
   })
@@ -357,23 +365,141 @@ describe('NonDrivingContactMediumWarning', () => {
     })
   })
 
-  describe('warningHighlightUI', () => {
+  describe('getWarningState', () => {
+    let component
 
+    beforeEach(() => {
+      component = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+    })
+
+    test('returns the warning message if a non driving contact medium is selected and the miles driven count is > 0', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('returns a falsy value if the driving contact medium is selected or the miles drivne count is 0', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+  })
+
+  describe('warningHighlightUI', () => {
+    test('when passed a truthy value, it makes the parent container for the checkboxes yellow and draws a yellow border around the miles driven input', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
+
+    test('when passed a falsy value, it removes the error highlighting', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('showUserWarning', () => {
+    test('', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
 
+    test('idempotence test', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('removeUserWarning', () => {
+    test('it removes the user warning if it is visible', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
 
+    test('idempotence test', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('showWarningConfirmation', () => {
+    test('it adds the required checkbox with the warning label', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
 
+    test('idempotence test', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 
   describe('removeWarningConfirmation', () => {
+    test('it removes the required checkbox with the warning label', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
 
+    test('idempotence test', (done) => {
+      $(() => {
+        try {
+          done()
+        } catch (error) {
+          done(error)
+        }
+      })
+    })
   })
 })
