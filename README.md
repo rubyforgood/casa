@@ -24,7 +24,6 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
-      - [Ubuntu and WSL](#ubuntu-and-wsl)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
