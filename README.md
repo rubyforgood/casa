@@ -37,7 +37,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in slack http://bit.ly/rubyforgood #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
+We highly recommend that you join us in [slack](http://bit.ly/3Quxc1Q) #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
@@ -222,7 +222,7 @@ Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard f
 
 # Communication and Collaboration
 
-Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: http://bit.ly/rubyforgood
+Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: http://bit.ly/3Quxc1Q
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
