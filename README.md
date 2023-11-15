@@ -24,7 +24,6 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
-      - [Ubuntu and WSL](#ubuntu-and-wsl)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
@@ -84,26 +83,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.
 3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.
 
-**Nix** 
-
-If you have [Nix](https://nixos.org) installed you can use the [flake.nix](flake.nix)
-configuration file located at the root of the project to build and develop within an environment
-without needing to install `rvm`, `nodejs`, `yarn`, `postgresql` or other tools separately.
-The environment also uses the `gemset.nix` file to automatically download and install all the gems
-necessary to get the server up and running:
-
-1. Install [Nix](https://zero-to-nix.com/concepts/nix-installer)
-2. Add the following to `~/.config/nix/nix.conf` or `/etc/nix/nix.conf`:
-```
-    experimental-features = nix-command flakes
-```
-3. `cd` into casa
-4. `nix-shell -p bundix --run "bundix -l"` to update the `gemset.nix` file
-5. `nix develop` and wait for the packages to be downloaded and the environment to be built
-
-Then you can setup the database and run the server.
-This will run on Linux and macOS.
-
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
 1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2
@@ -155,25 +134,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
  - [Mac](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
  - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
-
-#### Ubuntu and WSL
-
-1. Rbenv
-
-    If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
-
-    - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-    - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-    - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-    - `exec $SHELL`
-    - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
-
-    You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
-
-2. Chrome / Chromium
-
-    If you are on Ubuntu in Windows Subsystem for Linux (WSL) you may need to install google-chrome and chromedriver if your version of Ubuntu requires the chromium snap to be installed.
-    For instructions how to do this, check out our [WSL Setup docs](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md#google-chrome).
+ - [Nix](doc/NIX_SETUP.md)
 
 ### Common issues
 
