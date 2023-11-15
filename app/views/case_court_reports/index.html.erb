@@ -17,7 +17,7 @@
         </p>
         <%= form_with url: generate_case_court_reports_path, local: false do |form| %>
           <div class="input-style-1">
-            <%= form.label :case_number, "Case Number:" %>
+            <%= form.label :case_selection, "Case Number:" %>
             <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
 
             <% show_search = !current_user.volunteer? %>

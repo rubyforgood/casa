@@ -3,9 +3,9 @@
 
   <div class="card-style-1 pl-25 mb-10">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case">1. Select all relevant CASA cases<span class="red-letter"> *</span></label></h2>
+      <h2><label>1. Select all relevant CASA cases<span class="red-letter"> *</span></label></h2>
     <% else %>
-      <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
+      <h2><label>1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
     <% end %>
     <div class="casa-case-scroll">
       <% casa_cases.each do |casa_case| %>
@@ -33,9 +33,9 @@
   </div>
 
   <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
-    <h2 class="mb-3"><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
+    <h2 class="mb-3"><label>3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
     <div class="">
-      <h5 classs="mb-3"><%= form.label :contact_made, "a. Contact Made" %></h5>
+      <h5 classs="mb-3"><label>a. Contact Made</label></h5>
       <div class="form-check radio-style mb-20">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -55,7 +55,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h5 classs="mb-3"><%= form.label :medium_type, "b. Contact Medium" %></h5>
+      <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check radio-style mb-20">
           <%= b.radio_button(class: "form-check-input") %>
@@ -75,7 +75,7 @@
     </div>
 
     <div class="pr-50 ">
-      <h5 class="mb-3"><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
+      <h5 class="mb-3"><label>d. Duration of Meeting</label></h5>
       <div class="row align-items-center">
         <div class="input-style-1 col pl-0">
           <%= form.number_field :duration_hours,
@@ -100,7 +100,7 @@
   </div>
 
   <div class="card-style-1 pl-25 mb-10 pr-50">
-    <h2 class="mb-3"><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
+    <h2 class="mb-3"><label>4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
       <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <div class="input-style-1">
@@ -114,7 +114,7 @@
 
     <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(casa_cases) %>
       <div class="field want-driving-reimbursement form-group">
-        <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
+        <h5 class="mb-3"><label>b. Want Driving Reimbursement</label></h5>
         <div class="form-check radio-style mb-20">
           <%= form.radio_button :want_driving_reimbursement, true,
                           required: false,
@@ -131,7 +131,7 @@
         </div>
       </div>
       <div class="field volunteer-address form-group">
-        <h5 class="mb-3"><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
+        <h5 class="mb-3"><label>c. Volunteer Address</label></h5>
         <div class="input-style-1 mb-0">
         <%
           if current_role == "Volunteer"

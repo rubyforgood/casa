@@ -36,7 +36,7 @@
         <%= form_for volunteer, url: add_language_users_path do |form| %>
           <div class="row select-style-1 mt-3">
             <div class="col-lg-12">
-              <label><h5>Add Language</h5></label>
+              <h5><%= form.label :languages, "Add Language" %></h5>
             </div>
             <div class="col-lg-4">
               <div class="select-position">
