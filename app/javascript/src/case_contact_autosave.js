@@ -34,7 +34,7 @@ $(() => { // JQuery's callback for the DOM loading
             input.value = value
           }
 
-          if (!input.checked) {
+          if (input && !input.checked) {
             input.checked = checked
           }
         })
