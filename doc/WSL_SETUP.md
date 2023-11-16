@@ -1,5 +1,3 @@
-
-
 This guide will walk you through setting up the neccessary environment using  [WSL](https://docs.microsoft.com/en-us/windows/wsl/install) (Windows Subsystem for Linux), which will allow you to run Ubuntu on your Windows machine.
 
 You will need the following local tools installed:
@@ -58,6 +56,16 @@ Instructions for rbenv:
 
     `rbenv global 3.2.2` OR `rbenv local 3.2.2`
 
+#### Troubleshooting
+    If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
+
+    - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
+    - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
+    - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
+    - `exec $SHELL`
+    - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
+
+    You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
 
 ### NodeJS
 

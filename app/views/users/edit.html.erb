@@ -39,7 +39,7 @@
 
             <div class="input-style-1">
               <%= form.fields_for :address, address do |f| %>
-                <%= f.label :address, "Address" %>
+                <%= f.label :content, "Address" %>
                 <%= f.text_field :content, class: "form-control" %>
               <% end %>
             </div>
@@ -81,7 +81,7 @@
               <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
                 <div class="input-style-1">
                   <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password" %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
                 </div>
                 <div class="input-style-1">
                   <%= f.label :password, "New Password" %><br>

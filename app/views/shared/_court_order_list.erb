@@ -1,4 +1,4 @@
-<%= form.label :case_court_orders, "Court Orders - Please check that you didn't enter any youth names" %>
+<label>Court Orders - Please check that you didn't enter any youth names</label>
 <template data-extended-nested-form-target="template">
   <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
     <%= render "shared/court_order_form", f: ff %>

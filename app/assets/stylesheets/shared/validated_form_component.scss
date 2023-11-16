@@ -1,0 +1,10 @@
+.warning-required-checkbox {
+    background-color: #ffc107;
+    padding: 0.5em;
+
+    input[type="checkbox"] {
+        width: 18px;
+        height: 18px;
+        margin-right: 0.5em;
+    }
+}

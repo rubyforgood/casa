@@ -51,6 +51,8 @@
           <label><%= option.name %></label>
         </div>
       <% end %>
+      <!-- The labels here intentionally do not have for attributes matching the inputs -->
+      <!-- This is because javascript sets the state of the checkbox depending on whether the ajax based saving was successful -->
     </div>
   <% end %>
 </div>

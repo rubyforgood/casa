@@ -39,7 +39,7 @@
                               class: "form-check-input",
                               data: { value: "" },
                               id: "unassigned-vol-filter" %>
-            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label" %>
+            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
           </div>
           <% current_organization.supervisors.where(active: true).each do |supervisor| %>
             <div class="dropdown-item form-check checkbox-style">

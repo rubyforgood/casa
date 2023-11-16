@@ -13,7 +13,7 @@ $(() => { // JQuery's callback for the DOM loading
     const save = () => {
       const data = []
 
-      $(`#${formId} :input`).each((_, { id, type, value, checked }) => {
+      $(`#${formId} :input`).each((_, { id, type, value, checked } /* javascript destructuring assignment */) => {
         if (id && type !== 'button' && type !== 'submit') {
           data.push({ id, value, checked })
         }
@@ -30,11 +30,11 @@ $(() => { // JQuery's callback for the DOM loading
         formData.forEach(({ id, value, checked }) => {
           const input = document.querySelector(`#${id}`)
 
-          if (input) {
+          if (input && !(/checkbox|hidden|image|radio|reset|submit/.test(input.type))) {
             input.value = value
           }
 
-          if (!input.checked) {
+          if (input && !input.checked) {
             input.checked = checked
           }
         })

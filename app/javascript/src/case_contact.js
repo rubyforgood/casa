@@ -1,26 +1,8 @@
-/* global alert */
 /* global window */
 /* global $ */
 
 import { escape } from 'lodash'
 import Swal from 'sweetalert2'
-
-function validateOccurredAt (caseOccurredAt, eventType = '') {
-  const msg = 'Case Contact Occurrences cannot be in the future.'
-  const today = new Date()
-  today.setHours(0, 0, 0, 0)
-
-  const caseDate = new Date(caseOccurredAt.val())
-  caseDate.setDate(caseDate.getDate())
-  caseDate.setHours(0, 0, 0, 0)
-
-  if (caseDate > today) {
-    if (eventType !== 'focusout') {
-      alert(msg)
-    }
-    caseOccurredAt.val(enGBDateString(today))
-  }
-}
 
 function enGBDateString (date) {
   return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
@@ -67,9 +49,6 @@ async function fireSwalFollowupAlert () {
 }
 
 $(() => { // JQuery's callback for the DOM loading
-  const milesDriven = $('#case_contact_miles_driven')
-  const durationHoursElement = $('#case-contact-duration-hours-display')
-  const durationMinutes = $('#case-contact-duration-minutes-display')
   const caseOccurredAt = $('#case_contact_occurred_at')
   const caseContactSubmit = $('#case-contact-submit')
   const volunteerAddressFieldState = (hide) => {
@@ -100,39 +79,6 @@ $(() => { // JQuery's callback for the DOM loading
     caseOccurredAt.val(timeZoneConvertedDate)
   }
 
-  milesDriven.on('change', () => {
-    const contactMedium = $('input[name="case_contact[medium_type]"]:checked').val() || '(contact medium not set)'
-    const contactMediumInPerson = `${contactMedium}` === 'in-person'
-    const milesDrivenCount = milesDriven.val()
-
-    if (milesDrivenCount > 0 && !contactMediumInPerson) {
-      alert(`Just checking: you drove ${milesDrivenCount} miles for a ${contactMedium} contact?`)
-    }
-  })
-
-  caseOccurredAt.on('change', () => {
-    validateOccurredAt(caseOccurredAt)
-  })
-
-  caseOccurredAt.on('focusout', () => {
-    validateOccurredAt(caseOccurredAt, 'focusout')
-  })
-
-  function validateDuration () {
-    const msg = 'Please enter a minimum duration of 15 minutes (even if you spent less time than this).'
-    const fifteenMinutes = 15
-    const totalMinutes = durationMinutes.val() + durationHoursElement.val() * 60
-    const durationMinutesDOMElement = durationMinutes.get(0)
-
-    if (totalMinutes < fifteenMinutes) {
-      durationMinutesDOMElement.setCustomValidity(msg)
-    } else {
-      durationMinutesDOMElement.setCustomValidity('')
-    }
-
-    durationMinutesDOMElement.reportValidity()
-  }
-
   function validateNoteContent (e) {
     const noteContent = $('#case_contact_notes').val()
     if (noteContent) {
@@ -159,10 +105,6 @@ $(() => { // JQuery's callback for the DOM loading
     $('#casa-contact-form').off('submit')
   })
 
-  caseContactSubmit.on('click', function () {
-    validateDuration()
-  })
-
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
 
@@ -172,6 +114,5 @@ $(() => { // JQuery's callback for the DOM loading
 })
 
 export {
-  validateOccurredAt,
   convertDateToSystemTimeZone
 }
