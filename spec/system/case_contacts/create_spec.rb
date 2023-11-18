@@ -55,6 +55,6 @@ def complete_form(casa_case)
   end
 
   choose "In Person"
-  fill_in "case-contact-duration-hours-display", with: "1"
-  fill_in "case-contact-duration-minutes-display", with: "45"
+  fill_in "case_contact_duration_hours", with: "1"
+  fill_in "case_contact_duration_minutes", with: "45"
 end
