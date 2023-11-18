@@ -1,0 +1,18 @@
+<div class="row align-items-center">
+    <div class="input-style-1 col pl-0">
+    <%= form.number_field :duration_hours,
+                        min: 0,
+                        class: "cc-field",
+                        size: "10",
+                        value: hour_value,
+                        required: true %> &nbsp; <strong> hour(s)</strong>
+    </div>
+    <div class="input-style-1 col">
+    <%= form.number_field :duration_minutes,
+                            min: 0,
+                            class: "cc-field",
+                            size: "10",
+                            value: minute_value,
+                            required: true %> &nbsp; <strong> minute(s)</strong>
+    </div>
+</div>

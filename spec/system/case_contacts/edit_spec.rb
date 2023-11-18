@@ -39,8 +39,8 @@ RSpec.describe "case_contacts/edit", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
@@ -65,8 +65,8 @@ RSpec.describe "case_contacts/edit", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
@@ -123,8 +123,8 @@ you are trying to set the address for both of them. This is not currently possib
       end
 
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
