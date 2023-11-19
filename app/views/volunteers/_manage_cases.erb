@@ -22,9 +22,9 @@
                   <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
                   <td>
                     <% if @volunteer.active? && assignment.casa_case.active? && assignment.active? %>
-                      Volunteer is <span class="badge badge-success text-uppercase display-1 text-dark">Active</span>
+                      Volunteer is <span class="badge bg-success text-uppercase display-1">Active</span>
                     <% elsif @volunteer.active? && assignment.casa_case.active? && !assignment.active? %>
-                      Volunteer is <span class="badge badge-danger text-uppercase text-dark">Unassigned</span>
+                      Volunteer is <span class="badge bg-danger text-uppercase">Unassigned</span>
                     <% elsif @volunteer.active? %>
                       Case was deactivated
                       on: <%= I18n.l(assignment.casa_case.updated_at, format: :standard, default: nil) %>
