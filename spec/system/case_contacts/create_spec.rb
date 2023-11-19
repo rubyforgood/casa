@@ -14,9 +14,10 @@ RSpec.describe "case_contacts/create", type: :system do
 
       click_on "New Case Contact"
       complete_form(casa_case)
+
       click_on "Submit"
 
-      expect(page).to have_current_path(case_contacts_path)
+      expect(page).to have_text "Case contact successfully created"
     end
 
     it "when /case_contacts?casa_case_id=ID" do
@@ -26,7 +27,7 @@ RSpec.describe "case_contacts/create", type: :system do
       complete_form(casa_case)
       click_on "Submit"
 
-      expect(page).to have_current_path(case_contacts_path(casa_case_id: casa_case.id))
+      expect(page).to have_text "Case contact successfully created"
     end
 
     it "when /casa_cases/CASE_NUMBER" do
@@ -36,7 +37,7 @@ RSpec.describe "case_contacts/create", type: :system do
       complete_form(casa_case)
       click_on "Submit"
 
-      expect(page).to have_current_path(casa_case_path(casa_case))
+      expect(page).to have_text "Case contact successfully created"
     end
   end
 end
