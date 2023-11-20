@@ -44,7 +44,7 @@
     "strftime": "^0.10.2",
     "sweetalert2": "^11.3.5",
     "tom-select": "^2.3.0",
-    "trix": "^2.0.5",
+    "trix": "^2.0.8",
     "turbolinks": "^5.2.0"
   },
   "version": "0.1.0",
