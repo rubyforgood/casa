@@ -5385,10 +5385,10 @@ to-regex-range@^5.0.1:
   dependencies:
     is-number "^7.0.0"
 
-tom-select@^2.3.0:
-  version "2.3.0"
-  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.3.0.tgz#1be3a783a5b8b64408b0b60a2b0647d4a9fc1214"
-  integrity sha512-MGcdkXRbzBtEc913I2RWXhQ5JPEti9ZoTjSKLahg2ncvOOOzDRiaj+9A46Y4AVcjmYn/QqPz+U+XJ0uDvak3PQ==
+tom-select@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/tom-select/-/tom-select-2.3.1.tgz#df338d9082874cd0bceb3bee87ed0184447c47f1"
+  integrity sha512-QS4vnOcB6StNGqX4sGboGXL2fkhBF2gIBB+8Hwv30FZXYPn0CyYO8kkdATRvwfCTThxiR4WcXwKJZ3cOmtI9eg==
   dependencies:
     "@orchidjs/sifter" "^1.0.3"
     "@orchidjs/unicode-variants" "^1.0.4"
