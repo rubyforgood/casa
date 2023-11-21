@@ -739,6 +739,5 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(page).to have_selector("input[value='123 Main St']")
       end
     end
-
   end
 end
