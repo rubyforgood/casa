@@ -29,8 +29,8 @@
               <%= @learning_hour.duration_minutes %> min
             </td>
             <td>
-              <%= link_to edit_volunteer_learning_hour_path, class: "text-primary" do %><i class="lni lni-pencil-alt mr-5"></i>Edit<% end %> |
-              <%= link_to volunteer_learning_hour_path, class: "text-danger", method: :delete,
+              <%= link_to edit_learning_hour_path, class: "text-primary" do %><i class="lni lni-pencil-alt mr-5"></i>Edit<% end %> |
+              <%= link_to learning_hour_path, class: "text-danger", method: :delete,
         data: { confirm: "Are you sure to delete this learning record?" } do %><i class="lni lni-trash-can mr-5"></i>Delete<% end %>
             </td>
           </tr>
