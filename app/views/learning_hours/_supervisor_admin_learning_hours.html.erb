@@ -25,7 +25,7 @@
             <tbody>
             <% @learning_hours.each do |learning_hour| %>
               <tr>
-                <td><%= learning_hour.display_name %></td>
+                <td><%= link_to(learning_hour.display_name, volunteer_path(learning_hour.user_id)) %></td>
                 <td><%= format_time(learning_hour.total_time_spent) %></td>
               </tr>
             <% end %>
