@@ -21,7 +21,7 @@ class LearningHoursController < ApplicationController
 
     respond_to do |format|
       if @learning_hour.save
-        format.html { redirect_to volunteer_learning_hours_path(volunteer_id: current_user.id), notice: "New entry was successfully created." }
+        format.html { redirect_to volunteer_learning_hours_path(current_user), notice: "New entry was successfully created." }
       else
         format.html { render :new, status: 404 }
       end
@@ -36,7 +36,7 @@ class LearningHoursController < ApplicationController
     authorize @learning_hour
     respond_to do |format|
       if @learning_hour.update(update_learning_hours_params)
-        format.html { redirect_to volunteer_learning_hour_path, notice: "Entry was successfully updated." }
+        format.html { redirect_to volunteer_learning_hour_path(current_user, @learning_hour), notice: "Entry was successfully updated." }
       else
         format.html { render :edit, status: 404 }
       end
