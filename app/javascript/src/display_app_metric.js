@@ -98,8 +98,14 @@ function createChart (chartElement, dataset) {
         }
       },
       plugins: {
+        legend: {
+          display: false
+        },
         title: {
           display: true,
+          font: {
+            size: 18
+          },
           text: 'Case Contact Creation Times in the Past Week'
         },
         tooltip: {
