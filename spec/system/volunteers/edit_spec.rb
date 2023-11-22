@@ -739,19 +739,5 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(page).to have_selector("input[value='123 Main St']")
       end
     end
-
-    context "with mileage reimbursement turned off" do
-      it "won't show 'Mailing address' label" do
-        organization = create(:casa_org, show_driving_reimbursement: false)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-
-        sign_in admin
-        visit edit_volunteer_path(volunteer)
-
-        expect(page).not_to have_text "Mailing address"
-        expect(page).not_to have_selector "input[type=text][id=volunteer_address_attributes_content]"
-      end
-    end
   end
 end

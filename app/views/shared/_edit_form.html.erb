@@ -40,12 +40,7 @@
   <% end %>
 </div>
 
-<div class="form-check checkbox-style mb-20">
-  <%= f.check_box :receive_reimbursement_email, class: "form-check-input" %>
-  <%= f.label :receive_reimbursement_email, "Email Reimbursement Requests", class: "form-check-label" %>
-</div>
-
-<% if current_organization.show_driving_reimbursement && resource.role == "Volunteer" %>
+<% if resource.role == "Volunteer" %>
   <div class="input-style-1">
     <%= f.label :address_attributes_content, "Mailing address" %>
     <% if policy(resource).update_user_setting? %>
@@ -59,3 +54,8 @@
     <% end %>
   </div>
 <% end %>
+
+<div class="form-check checkbox-style mb-20">
+  <%= f.check_box :receive_reimbursement_email, class: "form-check-input" %>
+  <%= f.label :receive_reimbursement_email, "Email Reimbursement Requests", class: "form-check-label" %>
+</div>
