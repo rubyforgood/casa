@@ -74,61 +74,49 @@ function createChart (chartElement, dataset) {
     data: {
       datasets: [
         {
-          label: 'Case Contacts Creation Times in Last Week',
+          label: 'Case Contact Creation Times',
           data: dataset,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)'
         }
       ]
     },
-    options: getChartOptions()
-  })
-}
-
-function getChartOptions () {
-  return {
-    scales: {
-      x: getXScale(),
-      y: getYScale()
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: getTooltipLabelCallback()
+    options: {
+      scales: {
+        x: {
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          }
+        },
+        y: {
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1,
+            callback: getYTickCallback
+          }
+        }
+      },
+      plugins: {
+        title: {
+          display: true,
+          text: 'Case Contact Creation Times in the Past Week'
+        },
+        tooltip: {
+          callbacks: {
+            label: getTooltipLabelCallback
+          }
         }
       }
     }
-  }
+  })
 }
 
-function getXScale () {
-  return {
-    ticks: {
-      beginAtZero: true,
-      stepSize: 1
-    }
-  }
+function getYTickCallback (value, index, values) {
+  return days[value]
 }
 
-function getYScale () {
-  return {
-    ticks: {
-      beginAtZero: true,
-      stepSize: 1,
-      callback: getYTickCallback()
-    }
-  }
-}
-
-function getYTickCallback () {
-  return function (value, index, values) {
-    return days[value]
-  }
-}
-
-function getTooltipLabelCallback () {
-  return function (context) {
-    const datum = context.dataset.data[context.dataIndex]
-    return datum.count + ' case contacts created on ' + days[datum.y] + ' at ' + datum.x + ':00'
-  }
+function getTooltipLabelCallback (context) {
+  const datum = context.dataset.data[context.dataIndex]
+  return `${datum.count} case contacts created on ${days[datum.y]} at ${datum.x}:00`
 }
