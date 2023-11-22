@@ -41,8 +41,7 @@
   </div>
   <div class="field-card duration mt-4">
     <h5 class="mb-3">Learning Duration</h5>
-    <%= render "layouts/components/hour_minute_duration",
-      form: form, hour_value: @learning_hour.duration_hours, minute_value: @learning_hour.duration_minutes %>
+    <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: @learning_hour.duration_hours, minute_value: @learning_hour.duration_minutes)) %>
   </div>
   <div class="field-card mt-4">
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
