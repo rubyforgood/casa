@@ -5,13 +5,13 @@ class LearningHoursController < ApplicationController
   def index
     authorize LearningHour
 
-    @volunteer_duties = @learning_hours = if current_user.casa_admin?
-                          LearningHour.all_volunteers_learning_hours
-                        elsif current_user.supervisor?
-                          LearningHour.supervisor_volunteers_learning_hours(current_user.id)
-                        else # for volunteer user
-                          LearningHour.where(user_id: current_user.id)
-                        end
+    @learning_hours = if current_user.casa_admin?
+      LearningHour.all_volunteers_learning_hours
+    elsif current_user.supervisor?
+      LearningHour.supervisor_volunteers_learning_hours(current_user.id)
+    else # for volunteer user
+      LearningHour.where(user_id: current_user.id)
+    end
   end
 
   def show
@@ -29,7 +29,7 @@ class LearningHoursController < ApplicationController
 
     respond_to do |format|
       if @learning_hour.save
-        format.html { redirect_to learning_hours_path(volunteer_id: current_user.id), notice: "New entry was successfully created." }
+        format.html { redirect_to learning_hours_path, notice: "New entry was successfully created." }
       else
         format.html { render :new, status: 404 }
       end
@@ -44,7 +44,7 @@ class LearningHoursController < ApplicationController
     authorize @learning_hour
     respond_to do |format|
       if @learning_hour.update(update_learning_hours_params)
-        format.html { redirect_to learning_hour_path, notice: "Entry was successfully updated." }
+        format.html { redirect_to learning_hour_path(@learning_hour), notice: "Entry was successfully updated." }
       else
         format.html { render :edit, status: 404 }
       end
@@ -55,7 +55,7 @@ class LearningHoursController < ApplicationController
     authorize @learning_hour
     @learning_hour.destroy
     flash[:notice] = "Entry was successfully deleted."
-    redirect_to learning_hours_path(volunteer_id: current_user.id)
+    redirect_to learning_hours_path
   end
 
   private

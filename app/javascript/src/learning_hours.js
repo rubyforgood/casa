@@ -1,5 +1,5 @@
-import { initializeDataTable } from '../datatable';
+import { initializeDataTable } from '../datatable'
 
 $(() => {
-  initializeDataTable('table#learning-hours');
-});
+  initializeDataTable('table#learning-hours')
+})
