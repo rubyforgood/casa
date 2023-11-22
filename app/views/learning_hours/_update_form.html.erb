@@ -41,26 +41,8 @@
   </div>
   <div class="field-card duration mt-4">
     <h5 class="mb-3">Learning Duration</h5>
-    <div class="input-style-1 duration-hours">
-      <%= form.label :duration_hours, "Hour(s)" %>
-      <%= form.number_field :duration_hours,
-                          min: 0,
-                          class: "cc-field",
-                          size: "10",
-                          value: @learning_hour.duration_hours,
-                          placeholder: "1",
-                          required: true %>
-    </div>
-    <div class="input-style-1 duration-minutes">
-      <%= form.label :duration_minutes, "Minute(s)" %>
-      <%= form.number_field :duration_minutes,
-                          min: 0,
-                          class: "cc-field",
-                          size: "10",
-                          value: duration_minutes(@learning_hour),
-                          placeholder: "10",
-                          required: true %>
-    </div>
+    <%= render "layouts/components/hour_minute_duration",
+      form: form, hour_value: @learning_hour.duration_hours, minute_value: @learning_hour.duration_minutes %>
   </div>
   <div class="field-card mt-4">
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>

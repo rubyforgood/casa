@@ -76,26 +76,7 @@
 
     <div class="pr-50 ">
       <h5 class="mb-3"><label>d. Duration of Meeting</label></h5>
-      <div class="row align-items-center">
-        <div class="input-style-1 col pl-0">
-          <%= form.number_field :duration_hours,
-                              id: "case-contact-duration-hours-display",
-                              min: 0,
-                              class: "inline-fields cc-field",
-                              size: "10",
-                              value: duration_hours(case_contact),
-                              required: true %> &nbsp; <strong> hour(s)</strong>
-        </div>
-        <div class="input-style-1 col">
-          <%= form.number_field :duration_minutes,
-                                id: "case-contact-duration-minutes-display",
-                                min: 0,
-                                class: "inline-fields cc-field",
-                                size: "10",
-                                value: duration_minutes(case_contact),
-                                required: true %> &nbsp; <strong> minute(s)</strong>
-        </div>
-      </div>
+      <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(case_contact), minute_value: duration_minutes(case_contact))) %>
     </div>
   </div>
 
