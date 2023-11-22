@@ -15,6 +15,7 @@ def empty_ar_classes
     Supervisor,
     SupervisorVolunteer,
     User,
+    LearningHour,
     HearingType,
     Volunteer,
     CaseCourtOrder

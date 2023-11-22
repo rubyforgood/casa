@@ -39,8 +39,8 @@ RSpec.describe "case_contacts/new", type: :system do
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
 
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       expect {
@@ -71,8 +71,8 @@ RSpec.describe "case_contacts/new", type: :system do
       end
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       short_notes = "Hello world!"
@@ -109,8 +109,8 @@ RSpec.describe "case_contacts/new", type: :system do
       end
       choose "Video"
       fill_in "case_contact_occurred_at", with: "04/04/2020"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "case_contact_miles_driven", with: "0"
 
       long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
@@ -156,8 +156,8 @@ RSpec.describe "case_contacts/new", type: :system do
           choose "Yes"
         end
         fill_in "case_contact_occurred_at", with: "04/04/2020"
-        fill_in "case-contact-duration-hours-display", with: "0"
-        fill_in "case-contact-duration-minutes-display", with: "5"
+        fill_in "case_contact_duration_hours", with: "0"
+        fill_in "case_contact_duration_minutes", with: "5"
 
         expect {
           click_on "Submit"
@@ -259,8 +259,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       choose "case_contact_want_driving_reimbursement_false"
 
@@ -298,8 +298,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "2020/4/4"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
@@ -322,8 +322,8 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_checked_field("Therapist")
       expect(page).to have_checked_field("Yes")
       expect(page).to have_checked_field("In Person")
-      expect(page).to have_field("case-contact-duration-hours-display", with: "1")
-      expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
+      expect(page).to have_field("case_contact_duration_hours", with: "1")
+      expect(page).to have_field("case_contact_duration_minutes", with: "45")
       expect(page).to have_field("c. Occurred On", with: "2020-04-04")
       expect(page).to have_field("a. Miles Driven", with: "30")
       expect(page).to have_checked_field("case_contact_want_driving_reimbursement_false")
@@ -346,8 +346,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
       fill_in "Notes", with: "Hello world"
@@ -380,8 +380,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
@@ -411,8 +411,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
@@ -444,8 +444,8 @@ RSpec.describe "case_contacts/new", type: :system do
         choose "Yes"
       end
       choose "In Person"
-      fill_in "case-contact-duration-hours-display", with: "1"
-      fill_in "case-contact-duration-minutes-display", with: "45"
+      fill_in "case_contact_duration_hours", with: "1"
+      fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
@@ -526,8 +526,8 @@ RSpec.describe "case_contacts/new", type: :system do
           choose "Yes"
         end
         choose "In Person"
-        fill_in "case-contact-duration-hours-display", with: "1"
-        fill_in "case-contact-duration-minutes-display", with: "45"
+        fill_in "case_contact_duration_hours", with: "1"
+        fill_in "case_contact_duration_minutes", with: "45"
         fill_in "c. Occurred On", with: 2.days.ago.strftime("%Y/%m/%d\n")
         fill_in "a. Miles Driven", with: "0"
         choose "case_contact_want_driving_reimbursement_true"
@@ -547,8 +547,8 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_checked_field("Therapist")
         expect(page).to have_checked_field("Yes")
         expect(page).to have_checked_field("In Person")
-        expect(page).to have_field("case-contact-duration-hours-display", with: "1")
-        expect(page).to have_field("case-contact-duration-minutes-display", with: "45")
+        expect(page).to have_field("case_contact_duration_hours", with: "1")
+        expect(page).to have_field("case_contact_duration_minutes", with: "45")
         expect(page).to have_field("c. Occurred On", with: 2.days.ago.strftime("%Y-%m-%d"))
         expect(page).to have_field("a. Miles Driven", with: "0")
         expect(page).to have_checked_field("case_contact_want_driving_reimbursement_true")
