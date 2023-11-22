@@ -37,8 +37,8 @@ function getCountsByDayAndHour (timestamps) {
 
   for (let i = 0; i < timestamps.length; i++) {
     const timestamp = new Date(timestamps[i] * 1000)
-    const day = days[timestamp.getUTCDay()]
-    const hour = timestamp.getUTCHours()
+    const day = days[timestamp.getDay()]
+    const hour = timestamp.getHours()
     const key = day + ' ' + hour
     counts[key] = (counts[key] || 0) + 1
   }
