@@ -52,4 +52,44 @@ RSpec.describe LearningHour, type: :model do
     expect(learning_hour).to_not be_valid
     expect(learning_hour.errors[:learning_hour_topic]).to eq(["can't be blank"])
   end
+
+  describe "scopes" do
+    let(:supervisor) { create(:supervisor, display_name: 'Supervisor') }
+    let(:volunteer1) { create(:volunteer, display_name: 'Volunteer 1') }
+    let(:volunteer2) { create(:volunteer, display_name: 'Volunteer 2') }
+
+    before do
+      supervisor.volunteers << volunteer1
+    end
+
+    let!(:learning_hours) do
+      [
+        create(:learning_hour, user: volunteer1, duration_hours: 1, duration_minutes: 0),
+        create(:learning_hour, user: volunteer1, duration_hours: 2, duration_minutes: 0),
+        create(:learning_hour, user: volunteer2, duration_hours: 1, duration_minutes: 0),
+        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0),
+      ]
+    end
+
+    describe ".supervisor_volunteers_learning_hours" do
+      subject(:supervisor_volunteers_learning_hours) { described_class.supervisor_volunteers_learning_hours(supervisor.id) }
+      context "with specified supervisor" do
+        it "returns the total time spent for supervisor's volunteers" do
+          expect(supervisor_volunteers_learning_hours.length).to eq(1)
+          expect(supervisor_volunteers_learning_hours.first.total_time_spent).to eq(180)
+        end
+      end
+    end
+
+    describe ".all_volunteers_learning_hours" do
+      subject(:all_volunteers_learning_hours) { described_class.all_volunteers_learning_hours }
+
+      it "returns the total time spent for all volunteers" do
+        expect(all_volunteers_learning_hours.length).to eq(2)
+        expect(all_volunteers_learning_hours.last.total_time_spent).to eq(240)
+      end
+    end
+  end
+
+
 end
