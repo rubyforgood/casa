@@ -68,6 +68,7 @@ class SeederMain
       Supervisor,
       SupervisorVolunteer,
       User,
+      LearningHour,
       Volunteer
     ]
   end
