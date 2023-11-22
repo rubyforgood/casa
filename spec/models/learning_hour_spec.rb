@@ -54,9 +54,9 @@ RSpec.describe LearningHour, type: :model do
   end
 
   describe "scopes" do
-    let(:supervisor) { create(:supervisor, display_name: 'Supervisor') }
-    let(:volunteer1) { create(:volunteer, display_name: 'Volunteer 1') }
-    let(:volunteer2) { create(:volunteer, display_name: 'Volunteer 2') }
+    let(:supervisor) { create(:supervisor, display_name: "Supervisor") }
+    let(:volunteer1) { create(:volunteer, display_name: "Volunteer 1") }
+    let(:volunteer2) { create(:volunteer, display_name: "Volunteer 2") }
 
     before do
       supervisor.volunteers << volunteer1
@@ -67,7 +67,7 @@ RSpec.describe LearningHour, type: :model do
         create(:learning_hour, user: volunteer1, duration_hours: 1, duration_minutes: 0),
         create(:learning_hour, user: volunteer1, duration_hours: 2, duration_minutes: 0),
         create(:learning_hour, user: volunteer2, duration_hours: 1, duration_minutes: 0),
-        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0),
+        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0)
       ]
     end
 
@@ -90,6 +90,4 @@ RSpec.describe LearningHour, type: :model do
       end
     end
   end
-
-
 end
