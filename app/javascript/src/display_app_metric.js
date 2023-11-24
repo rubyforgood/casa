@@ -136,6 +136,7 @@ function getYTickCallback (value) {
 }
 
 function getTooltipLabelCallback (context) {
-  const datum = context.dataset.data[context.dataIndex]
-  return `${datum.count} case contacts created on ${days[datum.y]} at ${datum.x}:00`
+  const bubbleData = context.dataset.data[context.dataIndex]
+  const caseContactCountSqrt = bubbleData.r / 2
+  return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
 }
