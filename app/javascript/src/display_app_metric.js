@@ -40,7 +40,7 @@ function formatData (timestamps) {
     const day = contactCreationTime.getDay()
     const hour = contactCreationTime.getHours()
 
-    // Case contacts with the same hour and day creation time are represented by the same bubble
+    // Group case contacts with the same hour and day creation time into the same data point
 
     let dayData
 
@@ -57,6 +57,8 @@ function formatData (timestamps) {
       dayData[hour]++
     }
   }
+
+  // Flatten data points
 
   const bubbleDataAsArray = []
 
