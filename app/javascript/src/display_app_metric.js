@@ -1,6 +1,8 @@
 import { Chart, registerables } from 'chart.js'
 import 'chartjs-adapter-luxon'
 
+const { Notifier } = require('./notifier')
+
 Chart.register(...registerables)
 
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -9,61 +11,70 @@ $(() => { // JQuery's callback for the DOM loading
   const chartElement = document.getElementById('myChart')
 
   if (chartElement) {
+    const notificationsElement = $('#notifications')
+    const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+
     $.ajax({
       type: 'GET',
       url: '/health/case_contacts_creation_times_in_last_week',
       success: function (data) {
         const timestamps = data.timestamps
-        const counts = getCountsByDayAndHour(timestamps)
-        const dataset = getDatasetFromCounts(counts)
+        const graphData = formatData(timestamps)
 
-        createChart(chartElement, dataset)
+        createChart(chartElement, graphData)
       },
       error: function (xhr, status, error) {
         console.error('Failed to fetch data for case contact entry times chart display')
         console.error(error)
-        $('#chart-error-message').append(`
-          <div class="alert alert-danger" role="alert">
-            Failed to display metric chart. Check the console for error details.
-          </div>`)
-        $('.text-center').hide()
+        pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
       }
     })
   }
 })
 
-function getCountsByDayAndHour (timestamps) {
-  const counts = {}
+function formatData (timestamps) {
+  const bubbleDataAsObject = {}
 
-  for (let i = 0; i < timestamps.length; i++) {
-    const timestamp = new Date(timestamps[i] * 1000)
-    const day = days[timestamp.getUTCDay()]
-    const hour = timestamp.getUTCHours()
-    const key = day + ' ' + hour
-    counts[key] = (counts[key] || 0) + 1
+  for (const timestamp of timestamps) {
+    const contactCreationTime = new Date(timestamp * 1000)
+    const day = contactCreationTime.getDay()
+    const hour = contactCreationTime.getHours()
+
+    // Group case contacts with the same hour and day creation time into the same data point
+
+    let dayData
+
+    if (!(day in bubbleDataAsObject)) {
+      dayData = {}
+      bubbleDataAsObject[day] = dayData
+    } else {
+      dayData = bubbleDataAsObject[day]
+    }
+
+    if (!(hour in dayData)) {
+      dayData[hour] = 1
+    } else {
+      dayData[hour]++
+    }
   }
 
-  return counts
-}
+  // Flatten data points
 
-function getDatasetFromCounts (counts) {
-  const dataset = []
+  const bubbleDataAsArray = []
 
-  for (const key in counts) {
-    const parts = key.split(' ')
-    const day = parts[0]
-    const hour = parseInt(parts[1])
-    const count = counts[key]
+  for (const day in bubbleDataAsObject) {
+    const hours = bubbleDataAsObject[day]
 
-    dataset.push({
-      x: hour,
-      y: days.indexOf(day),
-      r: Math.sqrt(count) * 2,
-      count
-    })
+    for (const hour in hours) {
+      bubbleDataAsArray.push({
+        x: hour,
+        y: day,
+        r: Math.sqrt(hours[hour]) * 4
+      })
+    }
   }
 
-  return dataset
+  return bubbleDataAsArray
 }
 
 function createChart (chartElement, dataset) {
@@ -74,61 +85,60 @@ function createChart (chartElement, dataset) {
     data: {
       datasets: [
         {
-          label: 'Case Contacts Creation Times in Last Week',
+          label: 'Case Contact Creation Times',
           data: dataset,
           backgroundColor: 'rgba(255, 99, 132, 0.2)',
           borderColor: 'rgba(255, 99, 132, 1)'
         }
       ]
     },
-    options: getChartOptions()
-  })
-}
-
-function getChartOptions () {
-  return {
-    scales: {
-      x: getXScale(),
-      y: getYScale()
-    },
-    plugins: {
-      tooltip: {
-        callbacks: {
-          label: getTooltipLabelCallback()
+    options: {
+      scales: {
+        x: {
+          min: 0,
+          max: 23,
+          ticks: {
+            beginAtZero: true,
+            stepSize: 1
+          }
+        },
+        y: {
+          min: 0,
+          max: 6,
+          ticks: {
+            beginAtZero: true,
+            callback: getYTickCallback,
+            stepSize: 1
+          }
+        }
+      },
+      plugins: {
+        legend: {
+          display: false
+        },
+        title: {
+          display: true,
+          font: {
+            size: 18
+          },
+          text: 'Case Contact Creation Times in the Past Week'
+        },
+        tooltip: {
+          callbacks: {
+            label: getTooltipLabelCallback
+          }
         }
       }
     }
-  }
+  })
 }
 
-function getXScale () {
-  return {
-    ticks: {
-      beginAtZero: true,
-      stepSize: 1
-    }
-  }
+function getYTickCallback (value) {
+  return days[value]
 }
 
-function getYScale () {
-  return {
-    ticks: {
-      beginAtZero: true,
-      stepSize: 1,
-      callback: getYTickCallback()
-    }
-  }
-}
-
-function getYTickCallback () {
-  return function (value, index, values) {
-    return days[value]
-  }
-}
-
-function getTooltipLabelCallback () {
-  return function (context) {
-    const datum = context.dataset.data[context.dataIndex]
-    return datum.count + ' case contacts created on ' + days[datum.y] + ' at ' + datum.x + ':00'
-  }
+function getTooltipLabelCallback (context) {
+  const bubbleData = context.dataset.data[context.dataIndex]
+  const caseContactCountSqrt = bubbleData.r / 4
+  return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
 }
