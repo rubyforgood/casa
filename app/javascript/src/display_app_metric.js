@@ -11,7 +11,6 @@ $(() => { // JQuery's callback for the DOM loading
   const chartElement = document.getElementById('myChart')
 
   if (chartElement) {
-
     const notificationsElement = $('#notifications')
     const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
@@ -94,16 +93,20 @@ function createChart (chartElement, dataset) {
     options: {
       scales: {
         x: {
+          min: 0,
+          max: 23,
           ticks: {
             beginAtZero: true,
             stepSize: 1
           }
         },
         y: {
+          min: 0,
+          max: 6,
           ticks: {
             beginAtZero: true,
-            stepSize: 1,
-            callback: getYTickCallback
+            callback: getYTickCallback,
+            stepSize: 1
           }
         }
       },
@@ -128,7 +131,7 @@ function createChart (chartElement, dataset) {
   })
 }
 
-function getYTickCallback (value, index, values) {
+function getYTickCallback (value) {
   return days[value]
 }
 
