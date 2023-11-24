@@ -67,7 +67,7 @@ function formatData (timestamps) {
       bubbleDataAsArray.push({
         x: hour,
         y: day,
-        r: Math.sqrt(hours[hour]) * 2
+        r: Math.sqrt(hours[hour]) * 4
       })
     }
   }
@@ -137,6 +137,6 @@ function getYTickCallback (value) {
 
 function getTooltipLabelCallback (context) {
   const bubbleData = context.dataset.data[context.dataIndex]
-  const caseContactCountSqrt = bubbleData.r / 2
+  const caseContactCountSqrt = bubbleData.r / 4
   return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
 }
