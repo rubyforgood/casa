@@ -4,14 +4,7 @@ class LearningHoursController < ApplicationController
 
   def index
     authorize LearningHour
-
-    @learning_hours = if current_user.casa_admin?
-      LearningHour.all_volunteers_learning_hours
-    elsif current_user.supervisor?
-      LearningHour.supervisor_volunteers_learning_hours(current_user.id)
-    else # for volunteer user
-      LearningHour.where(user_id: current_user.id)
-    end
+    @learning_hours = policy_scope(LearningHour)
   end
 
   def show
