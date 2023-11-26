@@ -54,9 +54,14 @@ RSpec.describe LearningHour, type: :model do
   end
 
   describe "scopes" do
-    let(:supervisor) { create(:supervisor, display_name: "Supervisor") }
-    let(:volunteer1) { create(:volunteer, display_name: "Volunteer 1") }
-    let(:volunteer2) { create(:volunteer, display_name: "Volunteer 2") }
+    let(:casa_org_1) { build(:casa_org) }
+    let(:casa_org_2) { build(:casa_org) }
+
+    let(:casa_admin) { create(:casa_admin, display_name: "Supervisor", casa_org: casa_org_1) }
+    let(:supervisor) { create(:supervisor, display_name: "Supervisor", casa_org: casa_org_1) }
+    let(:volunteer1) { create(:volunteer, display_name: "Volunteer 1", casa_org: casa_org_1) }
+    let(:volunteer2) { create(:volunteer, display_name: "Volunteer 2", casa_org: casa_org_1) }
+    let(:volunteer3) { create(:volunteer, display_name: "Volunteer 3", casa_org: casa_org_2) }
 
     before do
       supervisor.volunteers << volunteer1
@@ -67,7 +72,8 @@ RSpec.describe LearningHour, type: :model do
         create(:learning_hour, user: volunteer1, duration_hours: 1, duration_minutes: 0),
         create(:learning_hour, user: volunteer1, duration_hours: 2, duration_minutes: 0),
         create(:learning_hour, user: volunteer2, duration_hours: 1, duration_minutes: 0),
-        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0)
+        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0),
+        create(:learning_hour, user: volunteer3, duration_hours: 1, duration_minutes: 0)
       ]
     end
 
@@ -82,7 +88,7 @@ RSpec.describe LearningHour, type: :model do
     end
 
     describe ".all_volunteers_learning_hours" do
-      subject(:all_volunteers_learning_hours) { described_class.all_volunteers_learning_hours }
+      subject(:all_volunteers_learning_hours) { described_class.all_volunteers_learning_hours(casa_admin.casa_org_id) }
 
       it "returns the total time spent for all volunteers" do
         expect(all_volunteers_learning_hours.length).to eq(2)

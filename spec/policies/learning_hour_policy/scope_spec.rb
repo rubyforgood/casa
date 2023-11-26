@@ -7,7 +7,7 @@ RSpec.describe LearningHourPolicy::Scope do
 
       scope = described_class.new(casa_admin, LearningHour)
 
-      expect(scope.resolve).to match_array(LearningHour.all_volunteers_learning_hours)
+      expect(scope.resolve).to match_array(LearningHour.all_volunteers_learning_hours(casa_admin.casa_org_id))
     end
 
     it "returns supervisor's volunteers learning hours when user is a Supervisor" do

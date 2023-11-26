@@ -27,7 +27,7 @@ class LearningHourPolicy < ApplicationPolicy
     def resolve
       case user
       when CasaAdmin
-        scope.all_volunteers_learning_hours
+        scope.all_volunteers_learning_hours(@user.casa_org_id)
       when Supervisor
         scope.supervisor_volunteers_learning_hours(@user.id)
       when Volunteer
