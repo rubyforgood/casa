@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   resources :banners, only: %i[index new edit create update destroy]
   resources :bulk_court_dates, only: %i[new create]
   resources :case_groups, only: %i[index new edit create update destroy]
+  resources :learning_hours, only: %i[index show new create edit update destroy]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -143,7 +144,6 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
-    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do

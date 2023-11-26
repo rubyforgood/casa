@@ -38,7 +38,7 @@
             <%= group.with_link(title: "All", path: case_contacts_path, nav_item: false) %>
             <% group.with_links(current_user.casa_cases.map { |cc| { title: cc.case_number, path: case_contacts_path(casa_case_id: cc.id), nav_item: false } }) %>
           <% end %>
-          <%= render(Sidebar::LinkComponent.new(title: "Learning Hours", icon: "timer", path: volunteer_learning_hours_path(volunteer_id: current_user.id || 0), render_check: current_user.volunteer?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Learning Hours", icon: "timer", path: learning_hours_path, render_check: policy(LearningHour).index?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Emancipation Checklist(s)", icon: "list", path: emancipation_checklists_path, render_check: current_user.serving_transition_aged_youth?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.volunteer?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Banners", icon: "flag", path: banners_path, render_check: policy(:application).see_banner_page?)) %>

@@ -1,5 +1,5 @@
 <%= form_with(model: learning_hour,
-              url: learning_hour.persisted? ? volunteer_learning_hour_path(current_user, learning_hour) : volunteer_learning_hours_path(current_user),
+              url: learning_hour.persisted? ? learning_hour_path(learning_hour) : learning_hours_path,
               local: true,
               html: { id: "learning-hours-form"}) do |form| %>
 

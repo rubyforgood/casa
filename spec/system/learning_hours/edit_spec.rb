@@ -8,7 +8,7 @@ RSpec.describe "learning_hours/edit", type: :system do
   before do
     sign_in volunteer
 
-    visit edit_volunteer_learning_hour_path(volunteer, learning_hours)
+    visit edit_learning_hour_path(learning_hours)
   end
 
   it "shows error message when future date entered" do

@@ -9,7 +9,7 @@ RSpec.describe "learning_hours/new", type: :system do
 
     sign_in volunteer
 
-    visit new_volunteer_learning_hour_path(volunteer)
+    visit new_learning_hour_path
   end
 
   it "errors without selected type of learning" do
