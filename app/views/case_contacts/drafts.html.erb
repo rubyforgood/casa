@@ -1,0 +1,25 @@
+<div class="row">
+  <%= render "casa_cases/thank_you_modal" %>
+  <div class="title-wrapper pt-30">
+    <div class="row align-items-center">
+      <div class="col-md-8">
+        <div class="title d-flex justify-content-between">
+          <h1 class="mb-10">Case Contact Drafts</h1>
+          <div>
+            <%= link_to new_case_contact_path, class: "main-btn secondary-btn btn-sm btn-hover" do %>
+              <i class="lni lni-plus mr-10"></i>
+              New Case Contact
+            <% end %>
+            <%= link_to "Completed Case Contacts", case_contacts_path, class: "main-btn secondary-btn-outline btn-sm btn-hover" %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card-style-1 my-4">
+  <div class="card-content">
+    <%= render partial: "case_contacts/case_contact", collection: @case_contacts, as: :contact %>
+  </div>
+</div>

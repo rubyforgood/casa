@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_02_181027) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -186,9 +186,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_181027) do
 
   create_table "case_contacts", force: :cascade do |t|
     t.bigint "creator_id", null: false
-    t.bigint "casa_case_id", null: false
-    t.integer "duration_minutes", null: false
-    t.datetime "occurred_at", precision: nil, null: false
+    t.bigint "casa_case_id"
+    t.integer "duration_minutes"
+    t.datetime "occurred_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "contact_made", default: false
@@ -198,6 +198,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_02_181027) do
     t.string "notes"
     t.datetime "deleted_at", precision: nil
     t.boolean "reimbursement_complete", default: false
+    t.integer "status", default: 0
+    t.integer "draft_case_ids", default: [], array: true
+    t.string "volunteer_address"
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"

@@ -6,10 +6,11 @@ class CaseContact < ApplicationRecord
 
   validate :contact_made_chosen
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
-  validates :medium_type, presence: true
-  validates :occurred_at, presence: true
+  validates :medium_type, presence: true, if: :active_or_details?
+  validates :occurred_at, presence: true, if: :active_or_details?
   validate :occurred_at_not_in_future
-  validate :reimbursement_only_when_miles_driven
+  validate :reimbursement_only_when_miles_driven, if: :active_or_travel?
+  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_travel?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -18,12 +19,34 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
-  belongs_to :casa_case
+  # Draft support requires the casa_case to be nil if the contact is in_progress
+  belongs_to :casa_case, optional: true
+  validates :casa_case_id, presence: true, if: :active?
+  validate :draft_case_ids_not_empty, if: :base_info?
 
   has_many :case_contact_contact_type
   has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
   has_many :additional_expenses
+
+  # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps
+  enum status: {
+    started: 0,
+    base_info: 1,
+    details: 2,
+    travel: 3,
+    notes: 4,
+    active: 10
+  }
+
+  def active_or_details?
+    details? || active?
+  end
+
+  def active_or_travel?
+    travel? || active?
+  end
+
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
   validates_associated :additional_expenses
 
@@ -171,9 +194,19 @@ class CaseContact < ApplicationRecord
     errors.add(:base, "Must enter miles driven to receive driving reimbursement.")
   end
 
+  def volunteer_address_when_reimbursement_wanted
+    return if !want_driving_reimbursement || !volunteer_address.empty?
+
+    errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+  end
+
   def contact_made_chosen
     errors.add(:base, "Must enter whether the contact was made.") if contact_made.nil?
     !contact_made.nil?
+  end
+
+  def draft_case_ids_not_empty
+    errors.add(:base, "You must select at least one casa case.") if draft_case_ids.empty?
   end
 
   def supervisor_id
@@ -233,16 +266,19 @@ end
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
 #  deleted_at                 :datetime
-#  duration_minutes           :integer          not null
+#  draft_case_ids             :integer          default([]), is an Array
+#  duration_minutes           :integer
 #  medium_type                :string
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
-#  occurred_at                :datetime         not null
+#  occurred_at                :datetime
 #  reimbursement_complete     :boolean          default(FALSE)
+#  status                     :integer          default("started")
+#  volunteer_address          :string
 #  want_driving_reimbursement :boolean          default(FALSE)
 #  created_at                 :datetime         not null
 #  updated_at                 :datetime         not null
-#  casa_case_id               :bigint           not null
+#  casa_case_id               :bigint
 #  creator_id                 :bigint           not null
 #
 # Indexes

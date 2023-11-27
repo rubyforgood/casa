@@ -14,6 +14,15 @@
     </div>
   </div>
 </div>
+
+<% if @drafts_count > 0 %>
+  <div class="alert-box primary-alert mt-3">
+    <div class="alert">
+      You have case contact drafts that will not show on this page. <%= link_to "Click here!", case_contact_drafts_path %>
+    </div>
+  </div>
+<% end %>
+
 <%= form_for_filterrific @filterrific, url: case_contacts_path do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
   <div class="card-style my-4">

@@ -6,16 +6,21 @@ class CaseContactDecorator < Draper::Decorator
   def duration_minutes
     minutes = object.duration_minutes
 
-    return "#{minutes} minutes" if minutes <= 60
-
-    formatted_hour_value = minutes / 60
-    formatted_minutes_value = minutes.remainder(60)
-
-    if formatted_minutes_value.zero?
-      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
+    str = if !minutes
+      "Duration not set"
+    elsif minutes <= 60
+      "#{minutes} minutes"
     else
-      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
+      formatted_hour_value = minutes / 60
+      formatted_minutes_value = minutes.remainder(60)
+
+      if formatted_minutes_value.zero?
+        "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
+      else
+        "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
+      end
     end
+    str
   end
 
   def report_duration_minutes
@@ -99,5 +104,13 @@ class CaseContactDecorator < Draper::Decorator
 
   def additional_expenses_count
     object.additional_expenses.any? ? object.additional_expenses.length : 0
+  end
+
+  def creator_address
+    volunteer_address || creator.address&.content
+  end
+
+  def draft_state
+    active? ? "Editing" : "New"
   end
 end

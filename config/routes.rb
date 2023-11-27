@@ -70,7 +70,8 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show] do
+  get "case_contacts/drafts", to: "case_contacts#drafts", as: "case_contact_drafts"
+  resources :case_contacts, except: %i[create] do
     member do
       post :restore
     end

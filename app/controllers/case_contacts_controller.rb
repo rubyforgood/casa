@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class CaseContactsController < ApplicationController
-  before_action :set_case_contact, only: %i[edit update destroy]
+  include Wicked::Wizard
+
   before_action :set_contact_types, only: %i[new edit update create]
   before_action :require_organization!
   after_action :verify_authorized
+  before_action :set_progress, only: %i[show update]
+
+  steps :base_info, :details, :travel, :notes
 
   def index
     authorize CaseContact
@@ -20,71 +24,45 @@ class CaseContactsController < ApplicationController
     ) || return
 
     case_contacts = @filterrific.find.group_by(&:casa_case_id)
+    @drafts_count = case_contact_drafts.count
 
     @presenter = CaseContactPresenter.new(case_contacts)
+  end
+
+  def drafts
+    authorize CaseContact
+
+    @case_contacts = case_contact_drafts
+  end
+
+  # wizard_path
+  def show
+    @case_contact = CaseContact.find(params[:case_contact_id])
+    authorize @case_contact
+    get_cases_and_contact_types
+
+    render_wizard
   end
 
   def new
     store_referring_location
     authorize CaseContact
-    @casa_cases = policy_scope(current_organization.casa_cases)
 
-    # Select the most likely case option
     # - If there are cases defined in the params, select those cases (often coming from the case page)
     # - If there is only one case, select that case
     # - If there are no hints, let them select their case
-    @selected_cases =
+    casa_cases = policy_scope(current_organization.casa_cases)
+    draft_case_ids =
       if params.dig(:case_contact, :casa_case_id).present?
-        @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
-      elsif @casa_cases.count == 1
-        @casa_cases[0, 1]
+        casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
+      elsif casa_cases.count == 1
+        casa_cases.first.id
       else
         []
       end
 
-    @case_contact = CaseContact.new
-
-    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
-
-    @current_organization_groups =
-      if @selected_case_contact_types.present?
-        @selected_case_contact_types.map(&:contact_type_group).uniq
-      else
-        current_organization
-          .contact_type_groups
-          .joins(:contact_types)
-          .where(contact_types: {active: true})
-          .alphabetically
-          .uniq
-      end
-  end
-
-  def create
-    # These variables are used to re-render the form (render :new) if there are
-    # validation errors so that the user does not lose inputs to fields that
-    # they did previously enter.
-
-    @casa_cases = policy_scope(current_organization.casa_cases)
-    @case_contact = CaseContact.new(create_case_contact_params.except(:casa_case_attributes))
-    authorize @case_contact
-    @current_organization_groups = current_organization.contact_type_groups
-
-    @selected_cases = @casa_cases.where(id: params.dig(:case_contact, :casa_case_id))
-    if @selected_cases.empty?
-      flash[:alert] = "At least one case must be selected"
-      render :new
-      return
-    end
-    # Create a case contact for every case that was checked
-    case_contacts = create_case_contact_for_every_selected_casa_case(@selected_cases)
-    if case_contacts.any?(&:new_record?)
-      @case_contact = case_contacts.first
-      @casa_cases = [@case_contact.casa_case]
-      render :new
-    else
-      flash[:notice] = "Case #{"contact".pluralize(@selected_cases.count)} successfully created"
-      redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
-    end
+    @case_contact = CaseContact.create!(creator: current_user, draft_case_ids: draft_case_ids)
+    redirect_to wizard_path(steps.first, case_contact_id: @case_contact.id)
   end
 
   def edit
@@ -96,25 +74,18 @@ class CaseContactsController < ApplicationController
   end
 
   def update
+    @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
-    @casa_cases = [@case_contact.casa_case]
-    @selected_cases = @casa_cases
-    @current_organization_groups = current_organization.contact_type_groups
-
-    if @case_contact.update_cleaning_contact_types(update_case_contact_params)
-      if additional_expense_params&.any? && policy(:case_contact).additional_expenses_allowed?
-        update_or_create_additional_expense(additional_expense_params, @case_contact)
+    params[:case_contact][:status] = step.to_s unless @case_contact.active?
+    remove_unwanted_contact_types
+    if @case_contact.update(case_contact_params)
+      if params[:complete]
+        finish_editing
       end
-      if @case_contact.valid?
-        created_at = @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")
-        flash[:notice] = "Case contact created at #{created_at}, was successfully updated."
-        send_reimbursement_email(@case_contact)
-        redirect_to casa_case_path(@case_contact.casa_case)
-      else
-        render :edit
-      end
+      render_wizard @case_contact, {}, { case_contact_id: @case_contact.id } if step != steps.last
     else
-      render :edit
+      get_cases_and_contact_types
+      render step
     end
   end
 
@@ -137,6 +108,41 @@ class CaseContactsController < ApplicationController
 
   private
 
+  def get_cases_and_contact_types
+    @casa_cases = policy_scope(current_organization.casa_cases)
+    @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+
+    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
+
+    @current_organization_groups =
+      if @selected_case_contact_types.present?
+        @selected_case_contact_types.map(&:contact_type_group).uniq
+      else
+        current_organization
+          .contact_type_groups
+          .joins(:contact_types)
+          .where(contact_types: {active: true})
+          .alphabetically
+          .uniq
+      end
+  end
+
+  def finish_editing
+    message = ""
+    if @case_contact.active?
+      message = "Case contact successfully updated"
+    else
+      message = "Case #{"contact".pluralize(@case_contact.draft_case_ids.count)} successfully created"
+      create_additional_case_contacts(@case_contact)
+      first_casa_case_id = @case_contact.draft_case_ids.slice(0)
+      @case_contact.update!(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
+    end
+    update_volunteer_address(@case_contact.creator, @case_contact.volunteer_address)
+    send_reimbursement_email(@case_contact)
+    flash[:notice] = message
+    redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
+  end
+
   def update_or_create_additional_expense(all_ae_params, cc)
     all_ae_params.each do |ae_params|
       id = ae_params[:id]
@@ -151,37 +157,28 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def save_or_add_error(obj, case_contact)
-    obj.valid? ? obj.save : case_contact.errors.add(:base, obj.errors.full_messages.to_sentence)
-  end
-
-  def create_case_contact_for_every_selected_casa_case(selected_cases)
-    selected_cases.map do |casa_case|
-      if policy(:case_contact).additional_expenses_allowed?
-        new_cc = casa_case.case_contacts.new(create_case_contact_params.except(:casa_case_attributes))
-        update_or_create_additional_expense(additional_expense_params, new_cc)
-        if new_cc.valid?
-          new_cc.save!
-        else
-          new_cc.errors
-        end
-      else
-        new_cc = casa_case.case_contacts.create(create_case_contact_params.except(:casa_case_attributes))
+  # Makes a copy of the draft for all selected cases not including the first one. The draft becomes the contact for
+  # the first case.
+  #
+  # Duplication does not duplicate associated records, so if other associations are made in the form, they need to be
+  # added here, explicitly (ie. case_contact_contact_type, additional_expenses). Alternatively, could look at a gem
+  # that does deep associations.
+  def create_additional_case_contacts(case_contact)
+    case_contact.draft_case_ids.drop(1).each do |casa_case_id|
+      new_case_contact = case_contact.dup
+      new_case_contact.status = "active"
+      new_case_contact.draft_case_ids = [casa_case_id]
+      new_case_contact.casa_case_id = casa_case_id
+      case_contact.case_contact_contact_type.each do |ccct|
+        new_case_contact.case_contact_contact_type.new(contact_type_id: ccct.contact_type_id)
       end
-
-      case_contact = @case_contact.dup
-
-      send_reimbursement_email(case_contact)
-
-      case_contact.casa_case = casa_case
-      if @selected_cases.count == 1 && case_contact.valid?
-        if current_role == "Volunteer"
-          update_volunteer_address
-        elsif ["Supervisor", "Casa Admin"].include?(current_role) && casa_case.volunteers.count == 1
-          update_volunteer_address(casa_case.volunteers[0])
-        end
+      case_contact.additional_expenses.each do |ae|
+        new_case_contact.additional_expenses.new(
+          other_expense_amount: ae.other_expense_amount,
+          other_expenses_describe: ae.other_expenses_describe
+        )
       end
-      new_cc
+      new_case_contact.save!
     end
   end
 
@@ -191,22 +188,14 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def update_volunteer_address(volunteer = current_user)
-    content = create_case_contact_params.dig(:casa_case_attributes, :volunteers_attributes, "0", :address_attributes, :content)
-    return if content.blank?
-    if volunteer.address
-      volunteer.address.update!(content: content)
-    else
-      volunteer.address = Address.new(content: content)
-      volunteer.save!
-    end
-  end
+  def update_volunteer_address(volunteer, address)
+    return unless address
 
-  def set_case_contact
-    if current_organization.case_contacts.exists?(params[:id])
-      @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
+    if volunteer.address
+      volunteer.address.update(content: address)
     else
-      redirect_to authenticated_user_root_path
+      volunteer.address = Address.new(content: address)
+      volunteer.save!
     end
   end
 
@@ -214,12 +203,7 @@ class CaseContactsController < ApplicationController
     @contact_types = ContactType.for_organization(current_organization)
   end
 
-  def create_case_contact_params
-    CaseContactParameters.new(params, creator: current_user)
-  end
-
-  def update_case_contact_params
-    # Updating a case contact should not change its original creator
+  def case_contact_params
     CaseContactParameters.new(params)
   end
 
@@ -241,5 +225,25 @@ class CaseContactsController < ApplicationController
 
   def additional_expense_params
     @additional_expense_params ||= AdditionalExpenseParamsService.new(params).calculate
+  end
+
+  # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
+  # the contact_type ids.
+  def remove_unwanted_contact_types
+    if params.dig(:case_contact, :case_contact_contact_type_attributes)
+      @case_contact.case_contact_contact_type.destroy_all
+    end
+  end
+
+  def set_progress
+    @progress = if wizard_steps.any? && wizard_steps.index(step).present?
+      ((wizard_steps.index(step) + 1).to_d / wizard_steps.count.to_d) * 100
+    else
+      0
+    end
+  end
+
+  def case_contact_drafts
+    CaseContact.where(creator: current_user).where.not(status: "active")
   end
 end
