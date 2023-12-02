@@ -126,7 +126,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    it { expect(rendered).to have_text("The following volunteers have not recently signed in, within 30 days") }
+    it { expect(rendered).to have_text("The following volunteers have not signed nor had case contacts in the last 30 days") }
     it { expect(rendered).to have_text("- #{volunteer.display_name}") }
   end
 end

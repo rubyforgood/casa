@@ -43,6 +43,28 @@ RSpec.describe Supervisor, type: :model do
     end
   end
 
+  describe "not_signed_in_nor_have_case_contacts_volunteers" do
+    let(:supervisor) { create(:supervisor) }
+    let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago) }
+    let(:other_volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
+
+    subject { supervisor.not_signed_in_nor_have_case_contacts_volunteers }
+
+    before do
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: other_volunteer)
+    end
+
+    it { is_expected.to contain_exactly(volunteer) }
+
+    context "when volunteer has a recent case_contact" do
+      let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
+      let!(:case_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 29.days.ago, creator: volunteer) }
+
+      it { is_expected.to be_empty }
+    end
+  end
+
   describe "change to admin" do
     it "returns true if the change was successful" do
       expect(subject.change_to_admin!).to be_truthy
