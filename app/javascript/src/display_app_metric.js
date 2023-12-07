@@ -174,30 +174,8 @@ function createLineChart (chartElement, dataset) {
         createDataset('Total Users', allUsersCount, '#FF0000', '#FF0000')
       ]
     },
-    options: {
-      legend: { display: true },
-      plugins: {
-        legend: { display: true, position: 'bottom' },
-        title: {
-          display: true,
-          font: { size: 18 },
-          text: 'Case Contact Creation Times in last 12 months'
-        },
-        tooltips: {
-          callbacks: {
-            label: function (tooltipItem, data) {
-              let label = data.datasets[tooltipItem.datasetIndex].label || ''
-              if (label) {
-                label += ': '
-              }
-              label += Math.round(tooltipItem.yLabel * 100) / 100
-              return label
-            }
-          }
-        }
-      }
-    }
-  })
+    options: createChartOptions()
+  });
 }
 
 function extractChartData (dataset, index) {
@@ -216,4 +194,30 @@ function createDataset (label, data, borderColor, pointBackgroundColor) {
     pointHoverBorderWidth: 2,
     lineTension: 0.05
   }
+}
+
+function createChartOptions() {
+  return {
+    legend: { display: true },
+    plugins: {
+      legend: { display: true, position: 'bottom' },
+      title: {
+        display: true,
+        font: { size: 18 },
+        text: 'Case Contact Creation Times in last 12 months'
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            if (label) {
+              label += ': ';
+            }
+            label += Math.round(tooltipItem.yLabel * 100) / 100;
+            return label;
+          }
+        }
+      }
+    }
+  };
 }
