@@ -30,6 +30,27 @@ $(() => { // JQuery's callback for the DOM loading
       }
     })
   }
+
+  const monthLineChart = document.getElementById('monthLineChart')
+
+  if (monthLineChart) {
+    const notificationsElement = $('#notifications')
+    const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+
+    $.ajax({
+      type: 'GET',
+      url: '/health/case_contacts_creation_times_in_last_year',
+      success: function (data) {
+        console.log(data)
+        createLineChart(monthLineChart, data)
+      },
+      error: function (xhr, status, error) {
+        console.error('Failed to fetch data for case contact entry times chart display')
+        console.error(error)
+        pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
+      }
+    })
+  }
 })
 
 function formatData (timestamps) {
@@ -141,4 +162,79 @@ function getTooltipLabelCallback (context) {
   const bubbleData = context.dataset.data[context.dataIndex]
   const caseContactCountSqrt = bubbleData.r / 4
   return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
+}
+
+function createLineChart (chartElement, dataset) {
+  const ctx = chartElement.getContext('2d')
+
+  const allMonths = dataset.map(([month]) => month)
+  const allCaseContactsCount = dataset.map(([_, caseContactsCount]) => caseContactsCount)
+  const allCaseContactNotesCount = dataset.map(([_, __, caseContactNotesCount]) => caseContactNotesCount)
+  const allUsersCount = dataset.map(([, , , usersCount]) => usersCount)
+
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: allMonths,
+      datasets: [{
+        label: 'Total Case Contacts',
+        data: allCaseContactsCount,
+        fill: false,
+        borderColor: '#308af3',
+        pointBackgroundColor: '#308af3',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderWidth: 2,
+        lineTension: 0.05
+      }, {
+        label: 'Total Case Contacts with Notes',
+        data: allCaseContactNotesCount,
+        fill: false,
+        borderColor: '#48ba16',
+        pointBackgroundColor: '#48ba16',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderWidth: 2,
+        lineTension: 0.05
+      }, {
+        label: 'Total Users',
+        data: allUsersCount,
+        fill: false,
+        borderColor: '#FF0000',
+        pointBackgroundColor: '#FF0000',
+        pointBorderWidth: 2,
+        pointHoverBackgroundColor: '#fff',
+        pointHoverBorderWidth: 2,
+        lineTension: 0.05
+      }]
+    },
+    options: {
+      legend: { display: true },
+      plugins: {
+        legend: {
+          display: true,
+          position: 'bottom'
+        },
+        title: {
+          display: true,
+          font: {
+            size: 18
+          },
+          text: 'Case Contact Creation Times in last 12 months'
+        },
+        tooltips: {
+          callbacks: {
+            label: function (tooltipItem, data) {
+              let label = data.datasets[tooltipItem.datasetIndex].label || ''
+              if (label) {
+                label += ': '
+              }
+              label += Math.round(tooltipItem.yLabel * 100) / 100
+              return label
+            }
+          }
+        }
+      }
+    }
+  })
 }
