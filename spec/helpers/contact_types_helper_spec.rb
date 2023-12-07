@@ -15,7 +15,7 @@ RSpec.describe ContactTypesHelper, type: :helper do
 
     context "when contact was made" do
       before do
-        contact = build_stubbed(:case_contact, casa_case: casa_case, created_at: 1.day.ago)
+        contact = build_stubbed(:case_contact, casa_case:, created_at: 2.days.ago, occurred_at: 1.day.ago)
         allow(helper).to receive(:last_contact_made_of).and_return(contact)
       end
 
@@ -29,15 +29,18 @@ RSpec.describe ContactTypesHelper, type: :helper do
     let(:casa_case) { create(:casa_case) }
     let(:contact_type) { create(:contact_type) }
 
-    let!(:contact_1) { create(:case_contact, casa_case: casa_case, contact_types: [contact_type]) }
+    let!(:contact1) do
+      create(:case_contact, casa_case:, contact_types: [contact_type],
+        created_at: 2.days.ago, occurred_at: 1.day.ago)
+    end
 
-    let!(:contact_2) do
-      create(:case_contact, casa_case: casa_case, contact_types: [contact_type],
-        created_at: 1.day.ago)
+    let!(:contact2) do
+      create(:case_contact, casa_case:, contact_types: [contact_type],
+        created_at: 1.day.ago, occurred_at: 2.days.ago)
     end
 
     it "returns the last contact made of the given type" do
-      expect(subject).to eq(contact_1)
+      expect(subject).to eq(contact1)
     end
 
     context "when casa_case is nil" do
