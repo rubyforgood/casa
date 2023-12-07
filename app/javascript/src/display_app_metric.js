@@ -9,47 +9,39 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 $(() => { // JQuery's callback for the DOM loading
   const chartElement = document.getElementById('myChart')
+  const monthLineChart = document.getElementById('monthLineChart')
+
+  const notificationsElement = $('#notifications')
+  const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
   if (chartElement) {
-    const notificationsElement = $('#notifications')
-    const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
-
-    $.ajax({
-      type: 'GET',
-      url: '/health/case_contacts_creation_times_in_last_week',
-      success: function (data) {
-        const timestamps = data.timestamps
-        const graphData = formatData(timestamps)
-
-        createChart(chartElement, graphData)
-      },
-      error: function (xhr, status, error) {
-        console.error('Failed to fetch data for case contact entry times chart display')
-        console.error(error)
-        pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
-      }
+    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_week', chartElement, function (data) {
+      const timestamps = data.timestamps
+      const graphData = formatData(timestamps)
+      createChart(chartElement, graphData)
     })
   }
 
-  const monthLineChart = document.getElementById('monthLineChart')
-
   if (monthLineChart) {
-    const notificationsElement = $('#notifications')
-    const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_year', monthLineChart, function (data) {
+      console.log(data)
+      createLineChart(monthLineChart, data)
+    })
+  }
 
+  function fetchDataAndCreateChart (url, chartElement, successCallback) {
     $.ajax({
       type: 'GET',
-      url: '/health/case_contacts_creation_times_in_last_year',
-      success: function (data) {
-        console.log(data)
-        createLineChart(monthLineChart, data)
-      },
-      error: function (xhr, status, error) {
-        console.error('Failed to fetch data for case contact entry times chart display')
-        console.error(error)
-        pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
-      }
+      url,
+      success: successCallback,
+      error: handleAjaxError
     })
+  }
+
+  function handleAjaxError (xhr, status, error) {
+    console.error('Failed to fetch data for case contact entry times chart display')
+    console.error(error)
+    pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
   }
 })
 
@@ -167,59 +159,28 @@ function getTooltipLabelCallback (context) {
 function createLineChart (chartElement, dataset) {
   const ctx = chartElement.getContext('2d')
 
-  const allMonths = dataset.map(([month]) => month)
-  const allCaseContactsCount = dataset.map(([_, caseContactsCount]) => caseContactsCount)
-  const allCaseContactNotesCount = dataset.map(([_, __, caseContactNotesCount]) => caseContactNotesCount)
-  const allUsersCount = dataset.map(([, , , usersCount]) => usersCount)
+  const allMonths = extractChartData(dataset, 0)
+  const allCaseContactsCount = extractChartData(dataset, 1)
+  const allCaseContactNotesCount = extractChartData(dataset, 2)
+  const allUsersCount = extractChartData(dataset, 3)
 
   return new Chart(ctx, {
     type: 'line',
     data: {
       labels: allMonths,
-      datasets: [{
-        label: 'Total Case Contacts',
-        data: allCaseContactsCount,
-        fill: false,
-        borderColor: '#308af3',
-        pointBackgroundColor: '#308af3',
-        pointBorderWidth: 2,
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderWidth: 2,
-        lineTension: 0.05
-      }, {
-        label: 'Total Case Contacts with Notes',
-        data: allCaseContactNotesCount,
-        fill: false,
-        borderColor: '#48ba16',
-        pointBackgroundColor: '#48ba16',
-        pointBorderWidth: 2,
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderWidth: 2,
-        lineTension: 0.05
-      }, {
-        label: 'Total Users',
-        data: allUsersCount,
-        fill: false,
-        borderColor: '#FF0000',
-        pointBackgroundColor: '#FF0000',
-        pointBorderWidth: 2,
-        pointHoverBackgroundColor: '#fff',
-        pointHoverBorderWidth: 2,
-        lineTension: 0.05
-      }]
+      datasets: [
+        createDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
+        createDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
+        createDataset('Total Users', allUsersCount, '#FF0000', '#FF0000')
+      ]
     },
     options: {
       legend: { display: true },
       plugins: {
-        legend: {
-          display: true,
-          position: 'bottom'
-        },
+        legend: { display: true, position: 'bottom' },
         title: {
           display: true,
-          font: {
-            size: 18
-          },
+          font: { size: 18 },
           text: 'Case Contact Creation Times in last 12 months'
         },
         tooltips: {
@@ -237,4 +198,22 @@ function createLineChart (chartElement, dataset) {
       }
     }
   })
+}
+
+function extractChartData (dataset, index) {
+  return dataset.map(data => data[index])
+}
+
+function createDataset (label, data, borderColor, pointBackgroundColor) {
+  return {
+    label,
+    data,
+    fill: false,
+    borderColor,
+    pointBackgroundColor,
+    pointBorderWidth: 2,
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderWidth: 2,
+    lineTension: 0.05
+  }
 }
