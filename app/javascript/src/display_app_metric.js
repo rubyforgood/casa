@@ -175,7 +175,7 @@ function createLineChart (chartElement, dataset) {
       ]
     },
     options: createChartOptions()
-  });
+  })
 }
 
 function extractChartData (dataset, index) {
@@ -196,7 +196,7 @@ function createDataset (label, data, borderColor, pointBackgroundColor) {
   }
 }
 
-function createChartOptions() {
+function createChartOptions () {
   return {
     legend: { display: true },
     plugins: {
@@ -209,15 +209,15 @@ function createChartOptions() {
       tooltips: {
         callbacks: {
           label: function (tooltipItem, data) {
-            let label = data.datasets[tooltipItem.datasetIndex].label || '';
+            let label = data.datasets[tooltipItem.datasetIndex].label || ''
             if (label) {
-              label += ': ';
+              label += ': '
             }
-            label += Math.round(tooltipItem.yLabel * 100) / 100;
-            return label;
+            label += Math.round(tooltipItem.yLabel * 100) / 100
+            return label
           }
         }
       }
     }
-  };
+  }
 }
