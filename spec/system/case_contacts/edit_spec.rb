@@ -41,7 +41,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       choose "In Person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
@@ -67,7 +67,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       choose "In Person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).not_to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
@@ -125,7 +125,7 @@ you are trying to set the address for both of them. This is not currently possib
       choose "In Person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
