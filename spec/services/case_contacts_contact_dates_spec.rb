@@ -41,15 +41,15 @@ RSpec.describe CaseContactsContactDates do
       it "returns formatted data" do
         expect(subject).to eq([
           {dates: "6/01*",
-           dates_by_medium_type: {"in-person" => "6/01*"},
+           dates_by_medium_type: {"in person" => "6/01*"},
            name: "Names of persons involved, starting with the child's name",
            type: "Mental therapist"},
           {dates: "4/01*, 5/01*, 6/01*",
-           dates_by_medium_type: {"in-person" => "5/01*, 6/01*", "text or email" => "4/01*"},
+           dates_by_medium_type: {"in person" => "5/01*, 6/01*", "text or email" => "4/01*"},
            name: "Names of persons involved, starting with the child's name",
            type: "Physical therapist"},
           {dates: "4/01*",
-           dates_by_medium_type: {"in-person" => "4/01*"},
+           dates_by_medium_type: {"in person" => "4/01*"},
            name: "Names of persons involved, starting with the child's name",
            type: "Aunt"}
         ])

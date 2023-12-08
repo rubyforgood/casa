@@ -78,9 +78,9 @@ RSpec.describe CaseContactDecorator do
   end
 
   describe "#medium_icon_classes" do
-    context "when medium type is in-person" do
+    context "when medium type is in person" do
       it "returns the proper font-awesome classes" do
-        case_contact.update_attribute(:medium_type, "in-person")
+        case_contact.update_attribute(:medium_type, "in person")
 
         expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-users")
       end
@@ -104,7 +104,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when medium type is voice-only" do
       it "returns the proper font-awesome classes" do
-        case_contact.update_attribute(:medium_type, "voice-only")
+        case_contact.update_attribute(:medium_type, "voice only")
 
         expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-phone")
       end

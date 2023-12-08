@@ -52,7 +52,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.casa_case.volunteers[0].address.content).to eq "123 str"
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
-      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.medium_type).to eq "in person"
       expect(case_contact.contact_made).to eq true
     end
 
@@ -139,7 +139,7 @@ you are trying to set the address for both of them. This is not currently possib
       expect(volunteer.address.content).to eq "123 str"
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
-      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.medium_type).to eq "in person"
       expect(case_contact.contact_made).to eq true
     end
 
