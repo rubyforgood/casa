@@ -38,7 +38,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -64,7 +64,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -122,7 +122,7 @@ you are trying to set the address for both of them. This is not currently possib
         choose "Yes"
       end
 
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"

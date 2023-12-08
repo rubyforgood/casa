@@ -86,9 +86,9 @@ RSpec.describe CaseContactDecorator do
       end
     end
 
-    context "when medium type is text/email" do
+    context "when medium type is text or email" do
       it "returns the proper font-awesome classes" do
-        case_contact.update_attribute(:medium_type, "text/email")
+        case_contact.update_attribute(:medium_type, "text or email")
 
         expect(case_contact.decorate.medium_icon_classes).to eql("lni lni-envelope")
       end

@@ -258,7 +258,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -297,7 +297,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "2020/4/4"
@@ -321,7 +321,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_checked_field("School")
       expect(page).to have_checked_field("Therapist")
       expect(page).to have_checked_field("Yes")
-      expect(page).to have_checked_field("In Person")
+      expect(page).to have_checked_field("In person")
       expect(page).to have_field("case_contact_duration_hours", with: "1")
       expect(page).to have_field("case_contact_duration_minutes", with: "45")
       expect(page).to have_field("c. Date of contact", with: "2020-04-04")
@@ -345,7 +345,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "a. Miles Driven", with: "30"
@@ -379,7 +379,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -410,7 +410,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -443,7 +443,7 @@ RSpec.describe "case_contacts/new", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "c. Date of contact", with: "04/04/2020"
@@ -492,7 +492,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
           fill_out_minimum_required_fields_for_case_contact_form
 
-          choose "Voice Only"
+          choose "Voice only"
           fill_in "a. Miles Driven", with: "5"
           find("body").click
 
@@ -525,7 +525,7 @@ RSpec.describe "case_contacts/new", type: :system do
         within "#enter-contact-details" do
           choose "Yes"
         end
-        choose "In Person"
+        choose "In person"
         fill_in "case_contact_duration_hours", with: "1"
         fill_in "case_contact_duration_minutes", with: "45"
         fill_in "c. Date of contact", with: 2.days.ago.strftime("%Y/%m/%d\n")
@@ -546,7 +546,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_checked_field("School")
         expect(page).to have_checked_field("Therapist")
         expect(page).to have_checked_field("Yes")
-        expect(page).to have_checked_field("In Person")
+        expect(page).to have_checked_field("In person")
         expect(page).to have_field("case_contact_duration_hours", with: "1")
         expect(page).to have_field("case_contact_duration_minutes", with: "45")
         expect(page).to have_field("c. Date of contact", with: 2.days.ago.strftime("%Y-%m-%d"))
