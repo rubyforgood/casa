@@ -17,7 +17,7 @@ RSpec.describe LearningHour, type: :model do
     it "has a duration in minutes that is greater than 0" do
       learning_hour = build_stubbed(:learning_hour, duration_hours: 0, duration_minutes: 0)
       expect(learning_hour).to_not be_valid
-      expect(learning_hour.errors[:duration_minutes]).to eq(["must be greater than 0"])
+      expect(learning_hour.errors[:duration_minutes]).to eq(["and hours (total duration) must be greater than 0"])
     end
   end
 

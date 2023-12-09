@@ -4,7 +4,7 @@ class LearningHour < ApplicationRecord
   belongs_to :learning_hour_topic, optional: true
 
   validates :duration_minutes, presence: true
-  validates :duration_minutes, numericality: {greater_than: 0, message: " and hours (total duration) must be greater than 0"}, if: :zero_duration_hours?
+  validates :duration_minutes, numericality: {greater_than: 0, message: "and hours (total duration) must be greater than 0"}, if: :zero_duration_hours?
   validates :name, presence: {message: "/ Title cannot be blank"}
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
