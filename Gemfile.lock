@@ -95,6 +95,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
+    bigdecimal (3.1.4)
     bindex (0.8.1)
     blueprinter (0.30.0)
     brakeman (6.0.1)
@@ -309,7 +310,8 @@ GEM
     noticed (1.6.3)
       http (>= 4.0.0)
       rails (>= 5.2.0)
-    oj (3.16.1)
+    oj (3.16.2)
+      bigdecimal (~> 3.1)
     orm_adapter (0.5.0)
     parallel (1.23.0)
     paranoia (2.6.3)
