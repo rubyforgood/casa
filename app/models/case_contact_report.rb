@@ -25,7 +25,6 @@ class CaseContactReport
       .contact_type(args[:contact_type_ids])
       .contact_type_groups(args[:contact_type_group_ids])
       .with_casa_case(args[:casa_case_ids])
-      .order(:id)
   end
 
   def filtered_columns(args)
