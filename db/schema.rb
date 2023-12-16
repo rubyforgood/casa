@@ -198,7 +198,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
     t.string "notes"
     t.datetime "deleted_at", precision: nil
     t.boolean "reimbursement_complete", default: false
-    t.integer "status", default: 0
+    t.string "status", default: "started"
     t.integer "draft_case_ids", default: [], array: true
     t.string "volunteer_address"
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"

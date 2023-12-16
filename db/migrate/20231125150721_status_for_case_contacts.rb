@@ -1,6 +1,6 @@
 class StatusForCaseContacts < ActiveRecord::Migration[7.0]
   def change
-    add_column :case_contacts, :status, :integer, default: 0
+    add_column :case_contacts, :status, :string, default: "started"
     add_column :case_contacts, :draft_case_ids, :integer, array: true, default: []
     add_column :case_contacts, :volunteer_address, :string
 

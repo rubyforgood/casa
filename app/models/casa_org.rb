@@ -44,8 +44,12 @@ class CasaOrg < ApplicationRecord
   end
 
   def case_contacts
-    CaseContact.where(
+    CaseContact.includes(:creator).where(
       casa_case_id: CasaCase.where(casa_org_id: id)
+    ).or(
+      CaseContact.includes(:creator).where(
+        casa_case_id: nil, creator: {casa_org: self}
+      )
     )
   end
 

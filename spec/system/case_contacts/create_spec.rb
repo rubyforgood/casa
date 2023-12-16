@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/create", type: :system do
+RSpec.describe "case_contacts/create", type: :system, js: true do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
   let(:casa_case) { volunteer.casa_cases.first }
 
@@ -13,8 +13,9 @@ RSpec.describe "case_contacts/create", type: :system do
       visit case_contacts_path
 
       click_on "New Case Contact"
-      complete_form(casa_case)
-
+      complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
+      complete_notes_page
+      fill_in_expenses_page
       click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
@@ -24,7 +25,9 @@ RSpec.describe "case_contacts/create", type: :system do
       visit case_contacts_path(casa_case_id: casa_case.id)
 
       click_on "New Case Contact"
-      complete_form(casa_case)
+      complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
+      complete_notes_page
+      fill_in_expenses_page
       click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
@@ -34,28 +37,12 @@ RSpec.describe "case_contacts/create", type: :system do
       visit casa_case_path(casa_case)
 
       click_on "New Case Contact"
-      complete_form(casa_case)
+      complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
+      complete_notes_page
+      fill_in_expenses_page
       click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
     end
   end
-end
-
-def complete_form(casa_case)
-  within ".casa-case-scroll" do
-    check casa_case.case_number
-  end
-
-  within "#contact-type-form" do
-    check casa_case.casa_org.contact_type_groups.first.contact_types.first.name
-  end
-
-  within "#enter-contact-details" do
-    choose "Yes"
-  end
-
-  choose "In Person"
-  fill_in "case_contact_duration_hours", with: "1"
-  fill_in "case_contact_duration_minutes", with: "45"
 end

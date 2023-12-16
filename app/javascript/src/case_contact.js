@@ -1,7 +1,6 @@
 /* global window */
 /* global $ */
 
-import { escape } from 'lodash'
 import Swal from 'sweetalert2'
 
 function enGBDateString (date) {
@@ -48,71 +47,18 @@ async function fireSwalFollowupAlert () {
   })
 }
 
-// $(() => { // JQuery's callback for the DOM loading
-//   const caseOccurredAt = $('#case_contact_occurred_at')
-//   const caseContactSubmit = $('#case-contact-submit')
-//   const volunteerAddressFieldState = (hide) => {
-//     if (hide) $('.field.volunteer-address').addClass('hide-field')
-//     else $('.field.volunteer-address').removeClass('hide-field')
-//     $('.field.volunteer-address input[type=text]').prop('disabled', hide)
-//     $('.field.volunteer-address input[type=hidden]').prop('disabled', hide)
-//     $('.field.volunteer-address input[type=text]').prop('required', !hide)
-//   }
-//
-//   if ($('.want-driving-reimbursement input.form-check-input[type="radio"][value=true]').prop('checked')) {
-//     volunteerAddressFieldState(false)
-//   } else {
-//     volunteerAddressFieldState(true)
-//   }
-//
-//   $('.want-driving-reimbursement input.form-check-input[type="radio"]').on('change', function () {
-//     if (this.value === 'true') {
-//       volunteerAddressFieldState(false)
-//     } else if (this.value === 'false') {
-//       volunteerAddressFieldState(true)
-//     }
-//   })
-//
-//   const timeZoneConvertedDate = enGBDateString(new Date())
-//
-//   if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.val())) === timeZoneConvertedDate) {
-//     caseOccurredAt.val(timeZoneConvertedDate)
-//   }
-//
-//   function validateNoteContent (e) {
-//     const noteContent = $('#case_contact_notes').val()
-//     if (noteContent) {
-//       e.preventDefault()
-//       $('#confirm-submit').modal('show')
-//       $('#note-content').html(escape(noteContent))
-//     }
-//   }
-//
-//   $('#casa-contact-form').on('submit', function (e) {
-//     validateNoteContent(e)
-//   })
-//
-//   $('#confirm-submit').on('focus', function () {
-//     $('#modal-case-contact-submit').prop('disabled', false)
-//   })
-//
-//   $('#confirm-submit').on('hide.bs.modal', function () {
-//     caseContactSubmit.prop('disabled', false)
-//   })
-//
-//   const caseContactSubmitFormModal = $('#modal-case-contact-submit')
-//   caseContactSubmitFormModal.on('click', () => {
-//     $('#casa-contact-form').off('submit')
-//   })
-//
-//   $('[data-toggle="tooltip"]').tooltip()
-//   $('.followup-button').on('click', displayFollowupAlert)
-//
-//   if (/\/case_contacts\/*.*\?.*success=true/.test(window.location.href)) {
-//     $('#thank_you').modal()
-//   }
-// })
-//
-// export {
-//   convertDateToSystemTimeZone
-// }
+$(() => { // JQuery's callback for the DOM loading
+  const caseOccurredAt = $('#case_contact_occurred_at')
+  const timeZoneConvertedDate = enGBDateString(new Date())
+
+  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.val())) === timeZoneConvertedDate) {
+    caseOccurredAt.val(timeZoneConvertedDate)
+  }
+
+  $('[data-toggle="tooltip"]').tooltip()
+  $('.followup-button').on('click', displayFollowupAlert)
+})
+
+export {
+  convertDateToSystemTimeZone
+}

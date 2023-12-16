@@ -108,7 +108,7 @@
         </div>
       <% end %>
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
-        <%= render "case_contacts/contact_types",
+        <%= render "case_contacts/form/contact_types",
                    form: form,
                    model: casa_case,
                    contact_type_groups: @contact_types.map(&:contact_type_group).sort_by(&:name).uniq,

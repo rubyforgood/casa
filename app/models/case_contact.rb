@@ -8,9 +8,10 @@ class CaseContact < ApplicationRecord
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
   validates :occurred_at, presence: true, if: :active_or_details?
+  validates :duration_minutes, presence: true, if: :active_or_details?
   validate :occurred_at_not_in_future
-  validate :reimbursement_only_when_miles_driven, if: :active_or_travel?
-  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_travel?
+  validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
+  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -22,29 +23,24 @@ class CaseContact < ApplicationRecord
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
   validates :casa_case_id, presence: true, if: :active?
-  validate :draft_case_ids_not_empty, if: :base_info?
+  validate :draft_case_ids_not_empty, if: :active_or_details?
 
   has_many :case_contact_contact_type
   has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
   has_many :additional_expenses
 
-  # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps
-  enum status: {
-    started: 0,
-    base_info: 1,
-    details: 2,
-    travel: 3,
-    notes: 4,
-    active: 10
-  }
+  # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
+  # These steps must be listed in order and have an html template in case_contacts/form.
+  FORM_STEPS = %i[details notes expenses].freeze
+  enum status: (%w[started active] + FORM_STEPS.map(&:to_s)).zip((%w[started active] + FORM_STEPS.map(&:to_s))).to_h
 
   def active_or_details?
-    details? || active?
+    status == "details" || active?
   end
 
-  def active_or_travel?
-    travel? || active?
+  def active_or_expenses?
+    status == "expenses" || active?
   end
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
@@ -140,6 +136,8 @@ class CaseContact < ApplicationRecord
     where(casa_case_id: case_ids) if case_ids.present?
   }
 
+  scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
+
   filterrific(
     default_filter_params: {sorted_by: "occurred_at_desc"},
     available_filters: [
@@ -149,7 +147,8 @@ class CaseContact < ApplicationRecord
       :contact_type,
       :contact_made,
       :contact_medium,
-      :want_driving_reimbursement
+      :want_driving_reimbursement,
+      :no_drafts
     ]
   )
 
@@ -195,7 +194,7 @@ class CaseContact < ApplicationRecord
   end
 
   def volunteer_address_when_reimbursement_wanted
-    return if !want_driving_reimbursement || !volunteer_address.empty?
+    return if !want_driving_reimbursement || !volunteer_address&.empty?
 
     errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
   end
@@ -230,17 +229,38 @@ class CaseContact < ApplicationRecord
   end
 
   def should_send_reimbursement_email?
-    want_driving_reimbursement_changed? && want_driving_reimbursement? && supervisor_active?
+    want_driving_reimbursement? && supervisor_active?
   end
 
   def supervisor_active?
     !supervisor.blank? && supervisor.active?
   end
 
+  def address_field_disabled?
+    !volunteer
+  end
+
+  def volunteer
+    if creator.is_a?(Volunteer)
+      creator
+    elsif CasaCase.find(draft_case_ids.first).volunteers.count == 1
+      CasaCase.find(draft_case_ids.first).volunteers.first
+    end
+  end
+
   def self.options_for_sorted_by
     sorted_by_params.map do |option|
       [I18n.t("models.case_contact.options_for_sorted_by.#{option}"), option]
     end
+  end
+
+  def self.case_hash_from_cases(cases)
+    casa_case_ids = cases.map(&:draft_case_ids).flatten.uniq.sort
+    hash = {}
+    casa_case_ids.each do |casa_case_id|
+      hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
+    end
+    hash
   end
 
   private_class_method def self.sorted_by_params
@@ -273,7 +293,7 @@ end
 #  notes                      :string
 #  occurred_at                :datetime
 #  reimbursement_complete     :boolean          default(FALSE)
-#  status                     :integer          default("started")
+#  status                     :string           default("started")
 #  volunteer_address          :string
 #  want_driving_reimbursement :boolean          default(FALSE)
 #  created_at                 :datetime         not null

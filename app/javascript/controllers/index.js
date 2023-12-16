@@ -2,28 +2,31 @@
 // Run that command whenever you add a new controller or create them with
 // ./bin/rails generate stimulus controllerName
 
-import { application } from "./application"
+import { application } from './application'
 
-import AutosaveNotificationController from "./autosave_notification_controller"
-application.register("autosave-notification", AutosaveNotificationController)
+import AlertController from './alert_controller'
 
-import DismissController from "./dismiss_controller"
-application.register("dismiss", DismissController)
+import AutosaveController from './autosave_controller'
 
-import ExtendedNestedFormController from "./extended_nested_form_controller"
-application.register("extended-nested-form", ExtendedNestedFormController)
+import DismissController from './dismiss_controller'
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
+import ExtendedNestedFormController from './extended_nested_form_controller'
 
-import MultipleSelectController from "./multiple_select_controller"
-application.register("multiple-select", MultipleSelectController)
+import HelloController from './hello_controller'
 
-import NavbarController from "./navbar_controller"
-application.register("navbar", NavbarController)
+import MultipleSelectController from './multiple_select_controller'
 
-import SidebarController from "./sidebar_controller"
-application.register("sidebar", SidebarController)
+import NavbarController from './navbar_controller'
 
-import SidebarGroupController from "./sidebar_group_controller"
-application.register("sidebar-group", SidebarGroupController)
+import SidebarController from './sidebar_controller'
+
+import SidebarGroupController from './sidebar_group_controller'
+application.register('alert', AlertController)
+application.register('autosave', AutosaveController)
+application.register('dismiss', DismissController)
+application.register('extended-nested-form', ExtendedNestedFormController)
+application.register('hello', HelloController)
+application.register('multiple-select', MultipleSelectController)
+application.register('navbar', NavbarController)
+application.register('sidebar', SidebarController)
+application.register('sidebar-group', SidebarGroupController)

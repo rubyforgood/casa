@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: set_case_contacts_as_active'
+  desc "Deployment task: set_case_contacts_as_active"
   task set_case_contacts_as_active: :environment do
     puts "Running deploy task 'set_case_contacts_as_active'"
 

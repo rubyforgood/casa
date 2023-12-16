@@ -6,7 +6,7 @@ class CaseContactDecorator < Draper::Decorator
   def duration_minutes
     minutes = object.duration_minutes
 
-    str = if !minutes
+    if !minutes
       "Duration not set"
     elsif minutes <= 60
       "#{minutes} minutes"
@@ -20,7 +20,6 @@ class CaseContactDecorator < Draper::Decorator
         "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
       end
     end
-    str
   end
 
   def report_duration_minutes
@@ -90,6 +89,15 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  def contact_groups
+    groups = contact_groups_with_types.keys
+    if groups.count > 0
+      groups.join(", ")
+    else
+      "Not Selected"
+    end
+  end
+
   def limited_notes
     object.notes.truncate(NOTES_CHARACTER_LIMIT)
   end
@@ -106,11 +114,29 @@ class CaseContactDecorator < Draper::Decorator
     object.additional_expenses.any? ? object.additional_expenses.length : 0
   end
 
-  def creator_address
-    volunteer_address || creator.address&.content
+  def address_of_volunteer
+    if volunteer_address && !volunteer_address.empty?
+      volunteer_address
+    elsif volunteer
+      volunteer.address&.content
+    else
+      "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
+    end
   end
 
-  def draft_state
-    active? ? "Editing" : "New"
+  def form_title
+    active? ? "Editing existing case contact" : "Record new case contact"
+  end
+
+  def form_page_notes
+    {
+      details: nil,
+      notes: "This question will be included in the court report for your assigned foster your. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
+      expenses: nil
+    }
+  end
+
+  def form_updated_message
+    "Case contact created at #{created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
   end
 end
