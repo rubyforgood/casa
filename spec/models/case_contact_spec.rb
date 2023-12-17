@@ -612,10 +612,12 @@ RSpec.describe CaseContact, type: :model do
 
       context "when casa case has more than 1 volunteer assigned" do
         let(:other_volunteer) { create(:volunteer, casa_org: casa_org) }
-        let!(:contact_assignments) { [
-          create(:case_assignment, volunteer: volunteer, casa_case: casa_case),
-          create(:case_assignment, volunteer: other_volunteer, casa_case: casa_case),
-        ] }
+        let!(:contact_assignments) {
+          [
+            create(:case_assignment, volunteer: volunteer, casa_case: casa_case),
+            create(:case_assignment, volunteer: other_volunteer, casa_case: casa_case)
+          ]
+        }
 
         it "volunteer is nil" do
           expect(case_contact.volunteer).to be nil
@@ -626,6 +628,5 @@ RSpec.describe CaseContact, type: :model do
         end
       end
     end
-
   end
 end
