@@ -214,13 +214,26 @@ readonly: true %>
     <% end %>
   </div>
 
-  <div class="card-style-1 pl-25 mb-10">
-    <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
-    <div class="cc-italic mb-3">
-      Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
+  <div class="card-style-1 pl-25 pr-25 mb-10">
+    <div class="d-flex justify-content-between mb-3" data-controller="icon-toggle">
+      <h2 class=""><%= form.label :notes, "7. Additional notes (optional)" %></h2>
+      <button class="bg-transparent border-0"
+              type="button"
+              data-action="click->icon-toggle#toggle"
+              data-bs-toggle="collapse"
+              data-bs-target="#additional-notes"
+              aria-expanded="false">
+        <i id="additional-notes-icon" class="lni lni-chevron-up" data-icon-toggle-target="icon"></i>
+      </button>
     </div>
-    <div class="input-style-1 pr-25">
-    <%= form.text_area :notes, :rows => 5, placeholder: "Enter notes here", class: "form-control" %>
+
+    <div class="collapse show" id="additional-notes">
+      <p class="mb-3">
+        Include any additional comments or notes that may assist in future case tracking or reporting.
+      </p>
+      <div class="input-style-1">
+        <%= form.text_area :notes, :rows => 5, placeholder: "Additional notes", class: "form-control" %>
+      </div>
     </div>
   </div>
 

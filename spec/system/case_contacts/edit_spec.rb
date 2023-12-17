@@ -152,7 +152,7 @@ you are trying to set the address for both of them. This is not currently possib
         choose "Yes"
       end
 
-      fill_in "Notes", with: "Hello world"
+      fill_in "Additional notes", with: "Hello world"
 
       find("button#profile").click
       click_on "Sign Out"
@@ -161,7 +161,7 @@ you are trying to set the address for both of them. This is not currently possib
 
       visit edit_case_contact_path(case_contact)
 
-      expect(page).to have_field("Notes", with: "Hello world")
+      expect(page).to have_field("Additional notes", with: "Hello world")
     end
   end
 end
