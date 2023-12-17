@@ -564,4 +564,68 @@ RSpec.describe CaseContact, type: :model do
       expect(case_contact.should_send_reimbursement_email?).to be false
     end
   end
+
+  describe "volunteer assignment" do
+    let(:casa_org) { create(:casa_org) }
+    let(:admin) { create(:casa_admin, casa_org: casa_org) }
+    let(:supervisor) { create(:supervisor, casa_org: casa_org) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+    let(:case_contact) { build(:case_contact, casa_case: casa_case, creator: creator) }
+
+    context "when creator is volunteer" do
+      let(:creator) { volunteer }
+
+      it "creator is the volunteer" do
+        expect(case_contact.volunteer).to eq volunteer
+      end
+
+      it "enables address field" do
+        expect(case_contact.address_field_disabled?).to be false
+      end
+    end
+
+    context "when creator is admin" do
+      let(:creator) { admin }
+
+      context "when casa case has one volunteer assigned" do
+        let!(:contact_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+
+        it "volunteer is the assigned volunteer" do
+          expect(case_contact.volunteer).to eq volunteer
+        end
+
+        it "enables address field" do
+          expect(case_contact.address_field_disabled?).to be false
+        end
+      end
+
+      context "when casa case has no volunteers assigned" do
+        it "volunteer is nil" do
+          expect(case_contact.volunteer).to be nil
+        end
+
+        it "disbales address field" do
+          expect(case_contact.address_field_disabled?).to be true
+        end
+      end
+
+      context "when casa case has more than 1 volunteer assigned" do
+        let(:other_volunteer) { create(:volunteer, casa_org: casa_org) }
+        let!(:contact_assignments) { [
+          create(:case_assignment, volunteer: volunteer, casa_case: casa_case),
+          create(:case_assignment, volunteer: other_volunteer, casa_case: casa_case),
+        ] }
+
+        it "volunteer is nil" do
+          expect(case_contact.volunteer).to be nil
+        end
+
+        it "disbales address field" do
+          expect(case_contact.address_field_disabled?).to be true
+        end
+      end
+    end
+
+  end
 end
