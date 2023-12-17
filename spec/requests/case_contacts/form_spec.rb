@@ -63,7 +63,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   describe "PATCH /update" do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let(:advance_form) { true }
-    let(:params) { {case_contact: attributes, complete: advance_form} }
+    let(:params) { {case_contact: attributes} }
 
     subject(:request) do
       patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params
@@ -191,7 +191,11 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
 
         context "when autosaving" do
-          let(:params) { {case_contact: attributes} }
+          subject(:request) do
+            patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params, as: :json
+
+            response
+          end
 
           it "updates the requested case_contact" do
             request

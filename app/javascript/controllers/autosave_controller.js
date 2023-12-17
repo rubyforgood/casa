@@ -35,15 +35,18 @@ export default class extends Controller {
   }
 
   autosaveAlert () {
-    this.alertTarget.classList.add(this.goodAlertClass)
-    this.alertTarget.classList.remove(this.badAlertClass)
+    this.removeBadAlert()
     this.alertTarget.innerHTML = 'Autosaving...'
   }
 
   goodAlert () {
+    this.removeBadAlert()
+    this.alertTarget.innerHTML = 'Saved!'
+  }
+
+  removeBadAlert () {
     this.alertTarget.classList.add(this.goodAlertClass)
     this.alertTarget.classList.remove(this.badAlertClass)
-    this.alertTarget.innerHTML = 'Saved!'
   }
 
   badAlert (message) {

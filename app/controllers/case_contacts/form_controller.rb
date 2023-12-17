@@ -26,20 +26,24 @@ class CaseContacts::FormController < ApplicationController
     remove_unwanted_contact_types
     remove_nil_draft_ids
     if @case_contact.update(case_contact_params)
-      if params[:complete]
-        if step == steps.last
-          finish_editing
-        else
-          render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-        end
-      else
-        head :ok
+      respond_to do |format|
+        format.html {
+          if step == steps.last
+            finish_editing
+          else
+            render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
+          end
+        }
+        format.json { head :ok }
       end
-    elsif params[:complete]
-      get_cases_and_contact_types
-      render step
     else
-      head :internal_server_error
+      respond_to do |format|
+        format.html {
+          get_cases_and_contact_types
+          render step
+        }
+        format.json { head :internal_server_error }
+      end
     end
   end
 
