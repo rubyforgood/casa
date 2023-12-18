@@ -171,7 +171,7 @@ function createLineChart (chartElement, dataset) {
       datasets: [
         createDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
         createDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
-        createDataset('Total Users', allUsersCount, '#FF0000', '#FF0000')
+        createDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
       ]
     },
     options: createChartOptions()
@@ -204,7 +204,7 @@ function createChartOptions () {
       title: {
         display: true,
         font: { size: 18 },
-        text: 'Case Contact Creation Times in last 12 months'
+        text: 'Case Contact Creation'
       },
       tooltips: {
         callbacks: {
