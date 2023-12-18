@@ -17,6 +17,9 @@ import NavbarController from './navbar_controller'
 import SidebarController from './sidebar_controller'
 
 import SidebarGroupController from './sidebar_group_controller'
+
+import SignoutCleanupController from './signout_cleanup_controller'
+
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)
@@ -24,3 +27,4 @@ application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
 application.register('sidebar', SidebarController)
 application.register('sidebar-group', SidebarGroupController)
+application.register('signout-cleanup', SignoutCleanupController)

@@ -91,8 +91,12 @@
                   Help
                 <% end %>
               </li>
-              <li>
-                <%= link_to destroy_user_session_path do %>
+              <li data-controller="signout-cleanup">
+                <%= link_to destroy_user_session_path,
+                            data: {
+                              action: 'click->signout-cleanup#cookies',
+                              'signout-cleanup-cookies-param' => active_banner? ? [dismiss_banner_cookie_name] : []
+                            } do %>
                   <i class="lni lni-exit"></i>
                   Sign Out
                 <% end %>
