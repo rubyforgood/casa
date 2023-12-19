@@ -8,7 +8,7 @@ module SidebarHelper
   def inbox_label
     unread_count = current_user.notifications.unread.count
     return "Inbox" if unread_count == 0
-    "Inbox <span class='badge badge-danger'>#{unread_count}</span>".html_safe
+    "Inbox <span class='badge bg-danger'>#{unread_count}</span>".html_safe
   end
 
   def menu_item(label:, path:, visible: false)

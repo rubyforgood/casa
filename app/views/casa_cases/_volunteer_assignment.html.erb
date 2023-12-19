@@ -19,9 +19,9 @@
         <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
         <td data-test="assigned">
           <% if assignment.active? %>
-            <span class='badge badge-success text-uppercase'>Assigned</span>
+            <span class='badge bg-success text-uppercase'>Assigned</span>
           <% else %>
-            <span class="badge badge-danger text-uppercase">
+            <span class="badge bg-danger text-uppercase">
               <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
             </span>
           <% end %>

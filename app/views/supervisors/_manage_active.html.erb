@@ -1,6 +1,6 @@
 <div class="field form-group my-3">
   <% if user.active? %>
-    Supervisor is <span class="badge success-bg text-uppercase display-1 mb-1 rounded-pill">Active</span>
+    Supervisor is <span class="badge bg-success text-uppercase display-1 mb-1 rounded-pill">Active</span><br>
     <% if current_user.casa_admin? %>
       <% if policy(user).deactivate? %>
         <%= link_to deactivate_supervisor_path(user), class: "btn-sm main-btn danger-btn-outline btn-hover", method: :patch, data: { confirm: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?" } do %>
