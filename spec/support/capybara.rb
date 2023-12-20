@@ -22,6 +22,7 @@ options.add_preference(:browser, set_download_behavior: {behavior: "allow"})
 Capybara.register_driver :selenium_chrome_headless_in_container do |app|
   options.add_argument("--headless")
   options.add_preference(:download, prompt_for_download: false, default_directory: "/home/seluser/Downloads")
+  options.add_argument("--disable-dev-shm-usage")
 
   Capybara::Selenium::Driver.new app,
     browser: :remote,

@@ -37,6 +37,7 @@
         gemset =
           if builtins.pathExists ./gemset.nix then import ./gemset.nix else { };
 
+        gemConfig = { };
         # See available versions here: https://github.com/bobvanderlinden/nixpkgs-ruby/blob/master/ruby/versions.json
         ruby = pkgs."ruby-3.2.2";
 
@@ -52,7 +53,7 @@
         devShells = rec {
           default = dev;
           dev = pkgs.mkShell {
-            BUNDLE_PATH = "~/.gems";
+            BUNDLE_FORCE_RUBY_PLATFORM = "true";
             shellHook = ''
               export PS1='\n\[\033[1;34m\][💎:\w]\$\[\033[0m\] '
 
@@ -72,10 +73,13 @@
               then
                 pg_ctl start -l $PGLOG -o "--unix_socket_directories='$PGHOST'"
               fi
+
+              trap 'pg_ctl stop -D "$PGDATA" -s -m fast' EXIT
             '';
 
             buildInputs = [
               env
+              bundixcli
               pkgs.bundix
               pkgs.bundler-audit
               pkgs.direnv

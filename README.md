@@ -24,7 +24,6 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
   - [Installation](#installation)
     - [General Setup Instructions](#general-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
-      - [Ubuntu and WSL](#ubuntu-and-wsl)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
@@ -38,7 +37,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in slack http://bit.ly/rubyforgood #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
+We highly recommend that you join us in [slack](http://bit.ly/3Quxc1Q) #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
 
 Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
 
@@ -83,23 +82,6 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.
 2. You can ask a [maintainer](https://github.com/rubyforgood/casa/wiki/Who's-who%3F) for permission to make a branch on this repo.
 3. You can also [create a fork on GitHub](https://docs.github.com/en/get-started/quickstart/fork-a-repo) and make a pull request from the fork.
-
-**Nix** 
-
-If you have [Nix](https://nixos.org) installed you can use
-the [flake.nix](flake.nix) configuration file located at the root of the
-project to build and develop within an environment without needing to install 
-`rvm`, `nodejs`, `yarn` or other tools separately. All you need is this file 
-to get the server up and running:
-
-1. Install [Nix](https://zero-to-nix.com/concepts/nix-installer)
-1. `cd` into casa
-1. `nix develop`
-1. `bundix` # to generate a a Gemfile lock that nix can understand
-1. `bundle install`
-
-Then you can setup the database and run the server.
-This will run on Linux and macOS.
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
@@ -152,25 +134,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
  - [Mac](doc/MAC_SETUP.md)
  - Windows(Help Wanted)
  - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
-
-#### Ubuntu and WSL
-
-1. Rbenv
-
-    If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
-
-    - `git clone https://github.com/rbenv/rbenv.git ~/.rbenv`
-    - `echo 'export PATH="$HOME/.rbenv/bin:$PATH"' >> ~/.bashrc`
-    - `echo 'eval "$(rbenv init -)"' >> ~/.bashrc`
-    - `exec $SHELL`
-    - `git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build`
-
-    You'll probably hit a problem where ruby-version reads `ruby-2.7.2` but the install available to you is called `2.7.2`. If you do, install [rbenv-alias](https://github.com/tpope/rbenv-aliases) and create an alias between the two.
-
-2. Chrome / Chromium
-
-    If you are on Ubuntu in Windows Subsystem for Linux (WSL) you may need to install google-chrome and chromedriver if your version of Ubuntu requires the chromium snap to be installed.
-    For instructions how to do this, check out our [WSL Setup docs](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md#google-chrome).
+ - [Nix](doc/NIX_SETUP.md)
 
 ### Common issues
 
@@ -258,7 +222,7 @@ Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard f
 
 # Communication and Collaboration
 
-Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: http://bit.ly/rubyforgood
+Most conversation happens in the #casa channel of the Ruby For Good slack. Get access here: http://bit.ly/3Quxc1Q
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 

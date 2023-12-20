@@ -43,6 +43,10 @@ class Volunteer < User
       .active
   }
 
+  scope :with_supervisor, -> {
+    joins(:supervisor_volunteer)
+  }
+
   scope :with_assigned_cases, -> {
     joins(:case_assignments)
       .where("case_assignments.active is true")
@@ -58,6 +62,10 @@ class Volunteer < User
                                      .distinct
                                      .order(:display_name)
                                  }
+
+  scope :birthday_next_month, -> {
+    where("EXTRACT(month from date_of_birth) = ?", DateTime.current.next_month.month)
+  }
 
   def self.send_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
@@ -149,6 +157,7 @@ end
 #  confirmed_at                  :datetime
 #  current_sign_in_at            :datetime
 #  current_sign_in_ip            :string
+#  date_of_birth                 :datetime
 #  display_name                  :string           default(""), not null
 #  email                         :string           default(""), not null
 #  encrypted_password            :string           default(""), not null

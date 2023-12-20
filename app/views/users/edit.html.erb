@@ -23,6 +23,14 @@
               <%= form.text_field :phone_number, class: "form-control" %>
             </div>
 
+            <div class="input-style-1">
+              <%= form.label :date_of_birth, "Date of birth" %>
+              <%= form.text_field :date_of_birth,
+                                  value: @user.decorate.formatted_date_of_birth,
+                                  data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+                                  class: "form-control label-font-weight" %>
+            </div>
+
             <% if current_user.address %>
               <% address = current_user.address %>
             <% else %>
@@ -31,7 +39,7 @@
 
             <div class="input-style-1">
               <%= form.fields_for :address, address do |f| %>
-                <%= f.label :address, "Address" %>
+                <%= f.label :content, "Address" %>
                 <%= f.text_field :content, class: "form-control" %>
               <% end %>
             </div>
@@ -73,7 +81,7 @@
               <%= form_for(@user, as: :user, url: {action: "update_password"}) do |f| %>
                 <div class="input-style-1">
                   <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id:"current_password" %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
                 </div>
                 <div class="input-style-1">
                   <%= f.label :password, "New Password" %><br>

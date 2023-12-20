@@ -44,4 +44,16 @@ class UserDecorator < Draper::Decorator
   def formatted_invitation_sent_at
     formatted_timestamp(:invitation_sent_at)
   end
+
+  def formatted_birthday
+    return "" unless object.date_of_birth.respond_to?(:strftime)
+
+    object.date_of_birth.to_date.to_fs(:short_ordinal)
+  end
+
+  def formatted_date_of_birth
+    return "" unless object.date_of_birth.respond_to?(:strftime)
+
+    object.date_of_birth.to_date.to_fs(:slashes)
+  end
 end

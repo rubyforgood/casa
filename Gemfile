@@ -9,7 +9,7 @@ gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 3.4" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.0" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.3" # compiles css
 gem "delayed_job_active_record"
@@ -20,7 +20,7 @@ gem "twilio-ruby" # twilio helper functions
 gem "draper" # adds decorators for cleaner presentation logic
 gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
-gem "friendly_id", "~> 5.5.0" # allows us to use a slug instead of casa case ids in their URLs
+gem "friendly_id", "~> 5.5.1" # allows us to use a slug instead of casa case ids in their URLs
 gem "image_processing", "~> 1.12" # Set of higher-level helper methods for image processing.
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jsbundling-rails"
@@ -62,7 +62,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "1.5.0" # 1.6.0 errors on all factorybot create variables
+  gem "standard", "~> 1.31.0"
 end
 
 group :development do

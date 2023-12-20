@@ -6,6 +6,7 @@ class UserParameters < SimpleDelegator
         :casa_org_id,
         :display_name,
         :phone_number,
+        :date_of_birth,
         :password,
         :active,
         :receive_reimbursement_email,
@@ -42,8 +43,8 @@ class UserParameters < SimpleDelegator
     self
   end
 
-  def with_only(*keys)
-    params.slice!(*keys)
+  def with_only(*)
+    params.slice!(*)
     self
   end
 

@@ -47,7 +47,7 @@ class CaseContactReportsController < ApplicationController
     if value == "true"
       true
     else
-      (value == "false" ? false : "")
+      ((value == "false") ? false : "")
     end
   end
 end

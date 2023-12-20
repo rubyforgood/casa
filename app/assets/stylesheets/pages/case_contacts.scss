@@ -49,16 +49,13 @@ legend {
 }
 
 .red-letter {
-    color: #ff2229;
+    color: #d50100;
     font-weight: 900;
+    display: inline;
 }
 
 .label-font-weight {
     font-weight: 900;
-}
-
-.inline-fields {
-    display: inline-block;
 }
 
 .cc-field {
@@ -132,22 +129,4 @@ legend {
 
 .cc-italic {
     font-style: italic;
-}
-
-.notes-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.5em;
-
-  h2 {
-    margin-bottom: 0;
-  }
-}
-
-.highlight-button {
-  background: none;
-  border: none;
-  color: var(--blue);
-  font-size: 1.1em;
 }

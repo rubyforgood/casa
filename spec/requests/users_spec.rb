@@ -33,11 +33,12 @@ RSpec.describe "/users", type: :request do
       volunteer = build(:volunteer)
       sign_in volunteer
 
-      patch users_path, params: {user: {display_name: "New Name", address_attributes: {content: "some address"}, phone_number: "+12223334444", sms_notification_event_ids: [SmsNotificationEvent.first.id]}}
+      patch users_path, params: {user: {display_name: "New Name", address_attributes: {content: "some address"}, phone_number: "+12223334444", date_of_birth: Date.new(1958, 12, 1), sms_notification_event_ids: [SmsNotificationEvent.first.id]}}
 
       expect(volunteer.address.content).to eq "some address"
       expect(volunteer.display_name).to eq "New Name"
       expect(volunteer.phone_number).to eq "+12223334444"
+      expect(volunteer.date_of_birth).to eq Date.new(1958, 12, 1)
       expect(volunteer.sms_notification_event_ids).to include SmsNotificationEvent.first.id
       expect(UserSmsNotificationEvent.count).to eq 1
     end

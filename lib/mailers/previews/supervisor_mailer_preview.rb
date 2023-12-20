@@ -38,6 +38,13 @@ class SupervisorMailerPreview < ActionMailer::Preview
       SupervisorMailer.weekly_digest(supervisor)
     end
   end
+
+  def reimbursement_request_email
+    volunteer = params.has_key?(:volunteer_id) ? Volunteer.find_by(id: params[:volunteer_id]) : Volunteer.last
+    supervisor = params.has_key?(:supervisor_id) ? Supervisor.find_by(id: params[:supervisor_id]) : Supervisor.last
+    supervisor.receive_reimbursement_email = true
+    SupervisorMailer.reimbursement_request_email(volunteer, supervisor)
+  end
 end
 
 # :nocov:

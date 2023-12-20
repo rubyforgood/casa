@@ -118,6 +118,7 @@ Rails.application.routes.draw do
   resources :banners, only: %i[index new edit create update destroy]
   resources :bulk_court_dates, only: %i[new create]
   resources :case_groups, only: %i[index new edit create update destroy]
+  resources :learning_hours, only: %i[index show new create edit update destroy]
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -146,7 +147,6 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
-    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
@@ -169,6 +169,8 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+
+    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
@@ -191,6 +193,10 @@ Rails.application.routes.draw do
   end
   resources :languages, only: %i[new create edit update] do
     delete :remove_from_volunteer
+  end
+
+  direct :help do
+    "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
   end
 
   get "/error", to: "error#index"

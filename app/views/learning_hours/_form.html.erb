@@ -1,8 +1,10 @@
-<%= form_with model: LearningHour, url: volunteer_learning_hours_path(volunteer_id: current_user.id), local: true,
-id: "learning-hours-form" do |form| %>
+<%= form_with(model: learning_hour,
+              url: learning_hour.persisted? ? learning_hour_path(learning_hour) : learning_hours_path,
+              local: true,
+              html: { id: "learning-hours-form"}) do |form| %>
 
   <div class="mt-2">
-    <%= render "/shared/error_messages", resource: @learning_hour %>
+    <%= render "/shared/error_messages", resource: learning_hour %>
   </div>
 
   <%= form.hidden_field :user_id, value: current_user.id %>
@@ -11,10 +13,10 @@ id: "learning-hours-form" do |form| %>
     <div class="input-style-1">
       <%= form.label :name, "Learning Hours Title" %>
       <%= form.text_field :name,
-                          id: "title",
                           placeholder: "-- Enter a title --",
-                          value: @learning_hour.name,
-                          class:"mr-5" %>
+                          value: learning_hour.name,
+                          class:"mr-5",
+                          required: true %>
     </div>
     <div class="select-style-1">
       <%= form.label :learning_hour_type_id, "Type of Learning" %>
@@ -24,7 +26,7 @@ id: "learning-hours-form" do |form| %>
                                    :id,
                                    :name,
                                    prompt: "Select learning type",
-                                   value: @learning_hour.learning_hour_type_id %>
+                                   value: learning_hour.learning_hour_type_id %>
       </div>
     </div>
     <% if current_user.casa_org.learning_topic_active %>
@@ -36,42 +38,20 @@ id: "learning-hours-form" do |form| %>
                                     :id,
                                     :name,
                                     prompt: "Select learning topic",
-                                    value: @learning_hour.learning_hour_topic_id %>
+                                    value: learning_hour.learning_hour_topic_id %>
         </div>
       </div>
     <% end %>
       </div>
   <div class="field-card duration mt-4">
     <h5 class="mb-3">Learning Duration</h5>
-      <div class="input-style-1 duration-hours">
-        <%= form.label :duration_hours, "Hour(s)" %>
-        <%= form.number_field :duration_hours,
-                            id: "learning-hours-duration-hours-display",
-                            min: 0,
-                            class: "cc-field",
-                            size: "10",
-                            value: @learning_hour.duration_hours,
-                            placeholder: "1",
-                            required: true %>
-      </div>
-      <div class="input-style-1 duration-minutes">
-        <%= form.label :duration__minutes, "Minute(s)" %>
-        <%= form.number_field :duration_minutes,
-                            id: "learning-minutes-duration-hours-display",
-                            min: 0,
-                            class: "cc-field",
-                            size: "10",
-                            value: @learning_hour.duration_minutes,
-                            placeholder: "10",
-                            required: true %>
-      </div>
+    <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: learning_hour.duration_hours, minute_value: learning_hour.duration_minutes)) %>
   </div>
   <div class="field-card mt-4">
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
-    <% occurred_at = @learning_hour.occurred_at || Time.zone.now %>
+    <% occurred_at = learning_hour.occurred_at || Time.zone.now %>
     <div class="input-style-1">
       <%= form.text_field :occurred_at,
-                          id:"learning-occurred-at",
                           value: occurred_at.to_date,
                           data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                           class: "form-control label-font-weight" %>
@@ -82,7 +62,11 @@ id: "learning-hours-form" do |form| %>
       type: "submit",
       class: "main-btn primary-btn btn-hover btn-sm wide_button"
     ) do %>
-      <i class="lni lni-check-box mr-10"></i><%= @learning_hour.persisted? ? "Edit Learning Hours Entry" : "Create New Learning Hours Entry" %>
+      <% if learning_hour.persisted? %>
+        <i class="lni lni-save mr-10"></i> Update Learning Hours Entry
+      <% else %>
+        <i class="lni lni-check-box mr-10"></i> Create New Learning Hours Entry
+      <% end %>
     <% end %>
   </div>
 <% end %>

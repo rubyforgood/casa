@@ -40,7 +40,7 @@ class ApplicationController < ActionController::Base
       short_io_service = ShortUrlService.new
       response = short_io_service.create_short_url(val)
       short_url = short_io_service.short_url
-      hash_of_short_urls[index] = response.code == 201 || response.code == 200 ? short_url : nil
+      hash_of_short_urls[index] = (response.code == 201 || response.code == 200) ? short_url : nil
     }
     hash_of_short_urls
   end
@@ -85,6 +85,14 @@ class ApplicationController < ActionController::Base
     when "sent"
       "New #{resource_name} created successfully. SMS has been sent!"
     end
+  end
+
+  def store_referring_location
+    session[:return_to] = request.referer
+  end
+
+  def redirect_back_to_referer(fallback_location:)
+    redirect_to(session[:return_to] || fallback_location)
   end
 
   private

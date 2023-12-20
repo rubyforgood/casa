@@ -1,0 +1,48 @@
+<div class="row my-3">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Learning Hours</h1>
+    <%= link_to new_learning_hour_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+      <i class="lni lni-check-box mr-10"></i>Record Learning Hours
+    <% end %>
+  </div>
+</div>
+
+<div class="card card-container">
+  <div class="card-body">
+    <div class="table-wrapper table-responsive">
+      <table class="table learning-hours-list" id="all-learning-hours">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Learning Type</th>
+            <% if current_user.casa_org.learning_topic_active %>
+              <th>Learning Topic</th>
+            <% end %>
+            <th>Date</th>
+            <th>Time Spent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% learning_hours.order(occurred_at: :desc).each do |learning_hour| %>
+            <tr>
+              <td>
+                <%= link_to learning_hour.name, learning_hour_path(id: learning_hour.id) %>
+              </td>
+              <td> <%= learning_hour.learning_hour_type.name %> </td>
+              <% if current_user.casa_org.learning_topic_active %>
+                <td> <%= learning_hour.learning_hour_topic&.name %> </td>
+              <% end %>
+              <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
+              <td>
+              <% if (learning_hour.duration_hours > 0) %>
+                <%= learning_hour.duration_hours %> hr
+              <% end %>
+              <%= learning_hour.duration_minutes %> min
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

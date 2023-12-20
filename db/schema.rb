@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_03_182657) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_02_181027) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -604,6 +604,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_03_182657) do
     t.boolean "receive_reimbursement_email", default: false
     t.string "token"
     t.boolean "monthly_learning_hours_report", default: false, null: false
+    t.datetime "date_of_birth"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true

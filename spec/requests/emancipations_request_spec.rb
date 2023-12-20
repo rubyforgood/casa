@@ -2,292 +2,255 @@ require "rails_helper"
 
 RSpec.describe "/casa_case/:id/emancipation", type: :request do
   let(:organization) { build(:casa_org) }
-  let(:organization_different) { create(:casa_org) }
+  let(:other_organization) { create(:casa_org) }
   let(:casa_case) { create(:casa_case, casa_org: organization, birth_month_year_youth: 15.years.ago) }
+  let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 
   describe "GET /show" do
-    before { sign_in user }
+    before { sign_in casa_admin }
 
-    context "when accessing the route" do
-      context "as an admin" do
-        let(:user) { create(:casa_admin, casa_org: organization) }
+    subject(:request) do
+      get casa_case_emancipation_path(casa_case, :docx)
 
-        context "when the user and case belong to the same org" do
-          it "renders a successful response" do
-            get casa_case_emancipation_path(casa_case)
-            expect(response).to be_successful
-          end
+      response
+    end
 
-          it "renders a successful response for docx format" do
-            get casa_case_emancipation_path(casa_case, format: :docx)
-            expect(response).to be_successful
-          end
-        end
+    it { is_expected.to be_successful }
 
-        context "when the user and case belong to different orgs" do
-          it "renders an unauthorized error" do
-            user.casa_org = organization_different
+    it "authorizes casa case" do
+      expect_any_instance_of(EmancipationsController).to receive(:authorize).with(casa_case).and_call_original
+      request
+    end
 
-            get casa_case_emancipation_path(casa_case)
-            expect(response).to_not be_successful
-            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-          end
-        end
+    it "populates and sends correct emancipation template" do
+      sablon_template = double("Sablon::Template")
+      allow(Sablon).to(
+        receive(:template).with(
+          File.expand_path("app/documents/templates/emancipation_checklist_template.docx")
+        ).and_return(sablon_template)
+      )
+      allow(Sablon).to receive(:content).and_return([])
+
+      expect(EmancipationChecklistDownloadHtml).to receive(:new).with(casa_case, []).and_call_original
+
+      expected_context = {case_number: casa_case.case_number, emancipation_checklist: []}
+      expect(sablon_template).to(
+        receive(:render_to_string).with(expected_context, type: :docx).and_return("rendered context")
+      )
+
+      expect_any_instance_of(EmancipationsController).to(
+        receive(:send_data).with(
+          "rendered context", filename: "#{casa_case.case_number} Emancipation Checklist.docx"
+        ).and_call_original
+      )
+      request
+    end
+
+    context "when request is not .docx" do
+      subject(:request) do
+        get casa_case_emancipation_path(casa_case)
+
+        response
       end
 
-      context "as a supervisor" do
-        let(:user) { create(:supervisor, casa_org: organization) }
+      it { is_expected.to be_successful }
 
-        context "when the user and case belong to the same org" do
-          it "renders a successful response" do
-            get casa_case_emancipation_path(casa_case)
-            expect(response).to be_successful
-          end
-        end
-
-        context "when the user and case belong to defferent orgs" do
-          it "renders an unauthorized error" do
-            user.casa_org = organization_different
-
-            get casa_case_emancipation_path(casa_case)
-            expect(response).to_not be_successful
-            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-          end
-        end
-      end
-
-      context "as a volunteer" do
-        let(:user) { create(:volunteer, casa_org: organization) }
-
-        context "when not assigned to the associated case" do
-          it "renders an unauthorized error" do
-            get casa_case_emancipation_path(casa_case)
-            expect(response).to_not be_successful
-            expect(flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
-          end
-        end
-
-        context "when assigned to the associated case" do
-          let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-
-          context "when the user and case belong to different orgs" do
-            it "renders an unauthorized error" do
-              user.casa_org = organization_different
-
-              get casa_case_emancipation_path(casa_case)
-              expect(response).to be_redirect
-              expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-            end
-          end
-
-          context "when the user and case belong the same org" do
-            it "renders a successful response" do
-              get casa_case_emancipation_path(casa_case)
-              expect(response).to be_successful
-            end
-          end
-        end
+      it "does not send any data" do
+        expect_any_instance_of(EmancipationsController).not_to receive(:send_data)
+        request
       end
     end
   end
 
   describe "POST /save" do
-    before { sign_in user }
+    before { sign_in casa_admin }
 
     let(:category) { create(:emancipation_category) }
     let(:option_a) { create(:emancipation_option, emancipation_category_id: category.id, name: "A") }
+    let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
 
-    context "when accessing the route" do
-      context "as an admin" do
-        let(:user) { create(:casa_admin, casa_org: organization) }
+    subject(:request) do
+      post save_casa_case_emancipation_path(casa_case), params: params
 
-        context "when the user and case belong to the same org" do
-          it "allows the admin to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(JSON.parse(response.body)).to eq "success"
-          end
-        end
+      response
+    end
 
-        context "when the user and case belong to different orgs" do
-          it "sends an unauthorized error" do
-            user.casa_org = organization_different
+    it { is_expected.to be_successful }
+    it "authorizes save_emancipation?" do
+      expect_any_instance_of(EmancipationsController).to(
+        receive(:authorize).with(CasaCase, :save_emancipation?).and_call_original
+      )
+      expect_any_instance_of(EmancipationsController).to(
+        receive(:authorize).with(casa_case, :update_emancipation_option?).and_call_original
+      )
+      request
+    end
 
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(response.body).to_not be_nil
-            expect(JSON.parse(response.body)).to have_key("error")
-            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
-          end
-        end
-      end
+    context "when check_item_id is invalid" do
+      let(:params) { {check_item_action: "add_option", check_item_id: -1} }
 
-      context "as a supervisor" do
-        let(:user) { create(:supervisor, casa_org: organization) }
-
-        context "when the user and case belong to the same org" do
-          it "allows the supervisor to make changes" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(JSON.parse(response.body)).to eq "success"
-          end
-        end
-
-        context "when the user and case belong to different orgs" do
-          it "sends an unauthorized error" do
-            user.casa_org = organization_different
-
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(response.body).to_not be_nil
-            expect(JSON.parse(response.body)).to have_key("error")
-            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
-          end
-        end
-      end
-
-      context "as a volunteer" do
-        let(:user) { create(:volunteer, casa_org: organization) }
-
-        context "as a volunteer not assigned to the associated case" do
-          it "sends an unauthorized error" do
-            post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-            expect(response.header["Content-Type"]).to match(/application\/json/)
-            expect(response.body).to_not be_nil
-            expect(JSON.parse(response.body)).to have_key("error")
-            expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
-          end
-        end
-
-        context "as a volunteer assigned to the associated case" do
-          let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-
-          context "when the user and case belong to the same org" do
-            it "allows the volunteer to make changes" do
-              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-              expect(response.header["Content-Type"]).to match(/application\/json/)
-              expect(JSON.parse(response.body)).to eq "success"
-            end
-          end
-
-          context "when the user and case belong to different orgs" do
-            it "sends an unauthorized error" do
-              user.casa_org = organization_different
-
-              post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-              expect(response.header["Content-Type"]).to match(/application\/json/)
-              expect(response.body).to_not be_nil
-              expect(JSON.parse(response.body)).to have_key("error")
-              expect(JSON.parse(response.body)["error"]).to match(/you are not authorized/)
-            end
-          end
-        end
+      it { is_expected.not_to be_successful }
+      it "shows correct error message" do
+        body = request.parsed_body
+        expect(body).to eq({"error" => "Tried to destroy an association that does not exist"})
       end
     end
 
-    context "when passing parameters" do
-      let(:mutually_exclusive_category) { create(:emancipation_category, mutually_exclusive: true, name: "mutex_category") }
-      let(:mutex_option_a) { build(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "A") }
-      let(:mutex_option_b) { create(:emancipation_option, emancipation_category_id: mutually_exclusive_category.id, name: "B") }
+    context "when check_item_action is invalid" do
+      let(:params) { {check_item_action: "invalid", check_item_id: option_a.id} }
 
-      let(:user) { create(:volunteer, casa_org: organization) }
-      let(:non_transitioning_casa_case) { build(:casa_case, casa_org: organization, birth_month_year_youth: 8.years.ago) }
-      let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
-      let!(:case_assignment_non_transitioning_case) { create(:case_assignment, volunteer: user, casa_case: non_transitioning_casa_case) }
+      it { is_expected.not_to be_successful }
+      it "shows correct error message" do
+        body = request.parsed_body
+        expect(body).to eq({"error" => "Check item action: invalid is not a supported action"})
+      end
+    end
 
-      it "sends an error when a required parameter is missing" do
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_id: option_a.id}
-        expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to eq("Check item action:  is not a supported action")
-
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option"}
-        expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to eq("Tried to destroy an association that does not exist")
+    context "when casa_case is not transitioning" do
+      let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
+      let(:casa_case) do
+        create(:casa_case,
+          casa_org: organization, emancipation_options: [], emancipation_categories: [],
+          birth_month_year_youth: 13.years.ago)
       end
 
-      it "sends an error when attempting to perform an action on a case that is not transitioning" do
-        post casa_case_emancipation_path(non_transitioning_casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-        expect(JSON.parse(response.body)).to have_key("error")
-        expect(JSON.parse(response.body)["error"]).to match(/not marked as transitioning/)
+      it { is_expected.not_to be_successful }
+      it "shows correct error message" do
+        body = request.parsed_body
+        expect(body).to eq({"error" => "The current case is not marked as transitioning"})
+      end
+    end
+
+    describe "each check_item_action" do
+      context "with the add_category action" do
+        let(:params) { {check_item_action: "add_category", check_item_id: category.id} }
+
+        it { is_expected.to be_successful }
+        it "adds the category" do
+          expect { request }.to change { casa_case.emancipation_categories.count }.by(1)
+        end
+
+        context "when the category is already added to the case" do
+          let(:casa_case) do
+            create(:casa_case, casa_org: organization, emancipation_categories: [category])
+          end
+
+          it { is_expected.not_to be_successful }
+
+          it "does not add the category" do
+            expect { request }.not_to change { casa_case.emancipation_categories.count }
+          end
+
+          it "shows correct error message" do
+            body = request.parsed_body
+            expect(body).to eq({"error" => "The record already exists as an association on the case"})
+          end
+        end
       end
 
-      it "associates an emancipation category with a case when passed \"add_category\" and the category id" do
-        expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_category", check_item_id: mutually_exclusive_category.id}
-        }.to change { casa_case.emancipation_categories.count }.from(0).to(1)
+      context "with the add_option action" do
+        let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
 
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
+        it { is_expected.to be_successful }
+        it "adds the option" do
+          expect { request }.to change { casa_case.emancipation_options.count }.by(1)
+        end
+
+        context "when the option is already added to the case" do
+          let(:casa_case) do
+            create(:casa_case, casa_org: organization, emancipation_options: [option_a])
+          end
+
+          it { is_expected.not_to be_successful }
+
+          it "does not add the option" do
+            expect { request }.not_to change { casa_case.emancipation_options.count }
+          end
+
+          it "shows correct error message" do
+            body = request.parsed_body
+            expect(body).to eq({"error" => "The record already exists as an association on the case"})
+          end
+        end
       end
 
-      it "associates an emancipation option with a case when passed \"add_option\" and the option id" do
-        expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "add_option", check_item_id: option_a.id}
-        }.to change { casa_case.emancipation_options.count }.from(0).to(1)
+      context "with the delete_category action" do
+        let(:params) { {check_item_action: "delete_category", check_item_id: category.id} }
+        let(:casa_case) do
+          create(:casa_case,
+            casa_org: organization, emancipation_categories: [category], emancipation_options: [option_a])
+        end
 
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
+        it { is_expected.to be_successful }
+
+        it "removes the category" do
+          expect { request }.to change { casa_case.emancipation_categories.count }.by(-1)
+        end
+
+        it "removes all options associated with the category" do
+          expect { request }.to change { casa_case.emancipation_options.count }.by(-1)
+        end
+
+        context "when the category is not added to the case" do
+          let(:casa_case) { create(:casa_case, casa_org: organization, emancipation_categories: []) }
+
+          it { is_expected.not_to be_successful }
+
+          it "does not remove anything" do
+            expect { request }.not_to change { casa_case.emancipation_categories.count }
+          end
+
+          it "shows correct error message" do
+            body = request.parsed_body
+            expect(body).to eq({"error" => "Tried to destroy an association that does not exist"})
+          end
+        end
       end
 
-      it "removes an emancipation category from a case when passed \"delete_category\" and the category id" do
-        casa_case.emancipation_categories << mutually_exclusive_category
+      context "with the delete_option action" do
+        let(:params) { {check_item_action: "delete_option", check_item_id: option_a.id} }
+        let(:casa_case) do
+          create(:casa_case, casa_org: organization, emancipation_options: [option_a])
+        end
 
-        expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
-        }.to change { casa_case.emancipation_categories.count }.from(1).to(0)
+        it { is_expected.to be_successful }
+        it "removes the option" do
+          expect { request }.to change { casa_case.emancipation_options.count }.by(-1)
+        end
 
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
+        context "when the option is not added to the case" do
+          let(:casa_case) do
+            create(:casa_case, casa_org: organization, emancipation_options: [])
+          end
+
+          it { is_expected.not_to be_successful }
+
+          it "does not remove anything" do
+            expect { request }.not_to change { casa_case.emancipation_options.count }
+          end
+
+          it "shows correct error message" do
+            body = request.parsed_body
+            expect(body).to eq({"error" => "Tried to destroy an association that does not exist"})
+          end
+        end
       end
 
-      it "removes all emancipation category options from a case when passed \"delete_category\" and the category id" do
-        casa_case.emancipation_categories << mutually_exclusive_category
-        casa_case.emancipation_options << mutex_option_a
-        casa_case.emancipation_options << mutex_option_b
+      context "with the set_option action" do
+        let(:other_category) { create(:emancipation_category) }
+        let(:options) { create_list(:emancipation_option, 3, emancipation_category_id: other_category.id) }
+        let(:option) { options.first }
+        let(:params) { {check_item_action: "set_option", check_item_id: option.id} }
 
-        expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_category", check_item_id: mutually_exclusive_category.id}
-        }.to change { casa_case.emancipation_options.count }.from(2).to(0)
+        let(:casa_case) do
+          create(:casa_case, casa_org: organization, emancipation_options: [option_a, *options])
+        end
 
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
-      end
-
-      it "removes an emancipation option from a case when passed \"delete_option\" and the option id" do
-        casa_case.emancipation_options << option_a
-
-        expect {
-          post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "delete_option", check_item_id: option_a.id}
-        }.to change { casa_case.emancipation_options.count }.from(1).to(0)
-
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
-      end
-
-      it "removes all emancipation options from the case belonging to the same category before adding the new option when passed \"set_option\" and the option id" do
-        casa_case.emancipation_options << mutex_option_a
-
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
-
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
-
-        expect(casa_case.emancipation_options.count).to eq 1
-        expect(casa_case.emancipation_options).to include(mutex_option_b)
-      end
-
-      it "does not remove emancipation options from the case belonging to different categories when passed \"set_option\" and the option id" do
-        casa_case.emancipation_options << mutex_option_a
-        casa_case.emancipation_options << option_a
-
-        post casa_case_emancipation_path(casa_case) + "/save", params: {check_item_action: "set_option", check_item_id: mutex_option_b.id}
-
-        expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(JSON.parse(response.body)).to eq "success"
-
-        expect(casa_case.emancipation_options.count).to eq 2
-        expect(casa_case.emancipation_options).to include(mutex_option_b)
-        expect(casa_case.emancipation_options).to include(option_a)
+        it { is_expected.to be_successful }
+        it "sets the option according to the right category" do
+          request
+          expect(casa_case.reload.emancipation_options).to contain_exactly(option_a, option)
+        end
       end
     end
   end

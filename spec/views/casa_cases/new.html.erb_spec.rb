@@ -13,7 +13,7 @@ RSpec.describe "casa_cases/new", type: :view do
 
       render template: "casa_cases/new"
 
-      expect(rendered).to include CGI.escapeHTML("Youth's Birth Month & Year")
+      expect(rendered).to include("Youth's Birth Month & Year")
     end
   end
 

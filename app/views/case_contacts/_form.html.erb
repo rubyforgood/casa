@@ -1,22 +1,22 @@
-<%= form_with(model: case_contact, local: true, id: "casa-contact-form") do |form| %>
+<%= form_with(model: case_contact, local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
   <%= render "/shared/error_messages", resource: case_contact %>
 
   <div class="card-style-1 pl-25 mb-10">
     <% if casa_cases.length > 1 %>
-      <h2><label for="case_contact_casa_case">1. Select all relevant CASA cases<span class="red-letter"> *</span></label></h2>
+      <h4 class="mb-20"><label for="case_contact_casa_case">1. Select all relevant cases for this contact <span class="red-letter">*</span></label></h4>
     <% else %>
-      <h2><label for="case_contact_casa_case">1. Select relevant CASA case<span class="red-letter"> *</span></label></h2>
+      <h4 class="mb-20"><label for="case_contact_casa_case">1. Select all relevant case for this contact <span class="red-letter">*</span></label></h4>
     <% end %>
     <div class="casa-case-scroll">
-      <% casa_cases.each_with_index do |casa_case, index| %>
+      <% casa_cases.each do |casa_case| %>
         <div class="form-check checkbox-style mb-10 ml-5">
           <%= check_box_tag "case_contact[casa_case_id][]",
                             casa_case.id,
                             @selected_cases.include?(casa_case),
-                            id: "case_contact_casa_case_id_#{index}",
+                            id: "case_contact_casa_case_id_#{casa_case.id}",
                             class: ["form-check-input", "casa-case-id"],
                             disabled: case_contact.persisted? %>
-          <label class="form-check-label" for="case_contact_casa_case_id_<%= index %>">
+          <label class="form-check-label" for="case_contact_casa_case_id_<%= casa_case.id %>">
             <%= casa_case.case_number %>
           </label>
         </div>
@@ -33,9 +33,9 @@
   </div>
 
   <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
-    <h2 class="mb-3"><label for="case_contact_casa_case">3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
+    <h2 class="mb-3"><label>3. Enter Contact Details</label><span class="red-letter"> *</span></h2>
     <div class="">
-      <h5 classs="mb-3"><%= form.label :contact_made, "a. Contact Made" %></h5>
+      <h5 classs="mb-3"><label>a. Contact Made</label></h5>
       <div class="form-check radio-style mb-20">
         <%= form.radio_button :contact_made, true,
                         checked: case_contact.contact_made,
@@ -55,7 +55,7 @@
     </div>
 
     <div class="field contact-medium form-group">
-      <h5 classs="mb-3"><%= form.label :medium_type, "b. Contact Medium" %></h5>
+      <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
       <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
         <div class="form-check radio-style mb-20">
           <%= b.radio_button(class: "form-check-input") %>
@@ -65,44 +65,23 @@
     </div>
 
     <div class="pr-50">
-
       <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
       <div class="input-style-1">
         <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
-        <%= form.text_field :occurred_at,
-                            value: occurred_at.to_date,
-                            data: {date_format: "yyyy/mm/dd", provide: "datepicker"},
-                            class: "card-style-1" %>
+        <%= render "layouts/components/ranged_date_picker",
+          form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
+          max_date: "today", component_name: "occurred on" %>
       </div>
     </div>
 
     <div class="pr-50 ">
-      <h5 class="mb-3"><label for="case_contact_casa_case">d. Duration of Meeting</label></h5>
-      <div class="row align-items-center">
-        <div class="input-style-1 col pl-0">
-          <%= form.number_field :duration_hours,
-                              id: "case-contact-duration-hours-display",
-                              min: 0,
-                              class: "inline-fields cc-field",
-                              size: "10",
-                              value: duration_hours(case_contact),
-                              required: true %> &nbsp; <strong> hour(s)</strong>
-        </div>
-        <div class="input-style-1 col">
-          <%= form.number_field :duration_minutes,
-                                id: "case-contact-duration-minutes-display",
-                                min: 0,
-                                class: "inline-fields cc-field",
-                                size: "10",
-                                value: duration_minutes(case_contact),
-                                required: true %> &nbsp; <strong> minute(s)</strong>
-        </div>
-      </div>
+      <h5 class="mb-3"><label>d. Duration of Meeting</label></h5>
+      <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(case_contact), minute_value: duration_minutes(case_contact))) %>
     </div>
   </div>
 
   <div class="card-style-1 pl-25 mb-10 pr-50">
-    <h2 class="mb-3"><label for="case_contact_casa_case">4. Enter Travel Details</label></h2>
+    <h2 class="mb-3"><label>4. Enter Travel Details</label></h2>
     <div class="field miles-driven form-group">
       <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>
       <div class="input-style-1">
@@ -116,7 +95,7 @@
 
     <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(casa_cases) %>
       <div class="field want-driving-reimbursement form-group">
-        <h5 class="mb-3"><%= form.label :want_driving_reimbursement, "b. Want Driving Reimbursement" %></h5>
+        <h5 class="mb-3"><label>b. Want Driving Reimbursement</label></h5>
         <div class="form-check radio-style mb-20">
           <%= form.radio_button :want_driving_reimbursement, true,
                           required: false,
@@ -133,7 +112,7 @@
         </div>
       </div>
       <div class="field volunteer-address form-group">
-        <h5 class="mb-3"><%= form.label :volunteer_address, "c. Volunteer Address" %></h5>
+        <h5 class="mb-3"><label>c. Volunteer Address</label></h5>
         <div class="input-style-1 mb-0">
         <%
           if current_role == "Volunteer"
@@ -236,12 +215,7 @@ readonly: true %>
   </div>
 
   <div class="card-style-1 pl-25 mb-10">
-    <div class="notes-header pr-25">
-      <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
-
-      <button id="open-highlight-modal" class="mb-3 btn-sm main-btn secondary-btn-outline btn-hover" data-bs-toggle="modal" data-target="#visibleColumns">+ Highlight</button>
-
-    </div>
+    <h2 class="mb-3"><%= form.label :notes, "5. Enter Notes" %></h2>
     <div class="cc-italic mb-3">
       Please refer to individuals by their roles instead of by their names. Ex: My supervisor joined me for a call with the social worker to discuss my youth.
     </div>
@@ -257,34 +231,3 @@ readonly: true %>
   </div>
   <%= render 'confirm_note_content_dialog', form: form %>
   <% end %>
-
-<div class="warning-modal">
-  <div class="modal fade" id="caseContactHighlight" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content card-style">
-        <div class="modal-header px-0 border-0">
-          <h5 class="text-bold">Highlight</h5>
-          <button
-            class="border-0 bg-transparent h1"
-            data-bs-dismiss="modal">
-            <i class="lni lni-cross-circle"></i>
-          </button>
-        </div>
-        <div class="modal-body px-0">
-          <div class="mb-30">
-            <h6 class="mb-20">
-              Coming Soon.
-            </h6>
-          </div>
-          <div class="action d-flex flex-wrap justify-content-end">
-            <button
-              data-bs-dismiss="modal"
-              class="main-btn danger-btn-outline btn-hover m-1"><i class="lni lni-ban mr-10"></i>
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>

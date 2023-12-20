@@ -26,10 +26,9 @@
           <%= form.text_field :case_number, class: "form-control", :required => 'required' %>
         </div>
       <% end %>
-      <h2><%= form.label :court_details, "Court Details" %></h2>
-      <% if policy(casa_case).update_birth_month_year_youth? %>
+      <h2><label>Court Details</label></h2>
         <div class="form-group my-3">
-          <%= form.label :birth_month_year_youth, "Youth's Birth Month & Year", class: 'my-2' %>
+          <label class="my-2">Youth's Birth Month & Year</label>
           <br>
           <span class="datetime-year-month">
             <%= form.date_select :birth_month_year_youth,
@@ -38,11 +37,11 @@
                                    start_year: Date.current.year,
                                    end_year: 1989,
                                    prompt: {month: "Month", year: "Year"},
-                                   discard_day: true
+                                   discard_day: true,
+                                   disabled: !policy(casa_case).update_birth_month_year_youth?
                                  }, class: "form-control select-style-2" %>
           </span>
         </div>
-      <% end %>
       <% if policy(casa_case).update_date_in_care_youth? %>
         <div class="field form-group">
           <%= form.label :date_in_care, "Youth's Date in Care", class: 'my-2' %>

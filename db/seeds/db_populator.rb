@@ -52,6 +52,7 @@ class DbPopulator
     create_mileage_rates(casa_org)
     create_learning_hour_types(casa_org)
     create_learning_hour_topics(casa_org)
+    create_learning_hours(casa_org)
     casa_org
   end
 
@@ -69,7 +70,7 @@ class DbPopulator
     # Org #1: volunteer1@example.com
     # Org #2: volunteer2-1@example.com
     email = ->(klass, n) do
-      org_fragment = @casa_org_counter > 1 ? "#{@casa_org_counter}-" : ""
+      org_fragment = (@casa_org_counter > 1) ? "#{@casa_org_counter}-" : ""
       klass.name.underscore + org_fragment + n.to_s + "@example.com"
     end
 
@@ -383,6 +384,29 @@ class DbPopulator
     learning_topics.each do |learning_topic|
       learning_hour_topic = casa_org.learning_hour_topics.new(name: learning_topic.humanize.capitalize)
       learning_hour_topic.save
+    end
+  end
+
+  def create_learning_hours(casa_org)
+    casa_org.volunteers.each do |user|
+      [1, 2, 3].sample.times do
+        learning_hour_topic = casa_org.learning_hour_topics.sample
+        learning_hour_type = casa_org.learning_hour_types.sample
+        # randomize between 30 to 180 minutes
+        duration_minutes = (2..12).to_a.sample * 15
+        duration_hours = duration_minutes / 60
+        duration_minutes = duration_minutes % 60
+        occurred_at = Time.current - (1..7).to_a.sample.days
+        LearningHour.create(
+          user:,
+          learning_hour_type:,
+          name: "#{learning_hour_type.name} on #{learning_hour_topic.name}",
+          duration_hours:,
+          duration_minutes:,
+          occurred_at:,
+          learning_hour_topic:
+        )
+      end
     end
   end
 

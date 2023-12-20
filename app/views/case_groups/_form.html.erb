@@ -22,15 +22,16 @@
       <%= form.text_field :name, required: true %>
     </div>
 
-    <div class="input-style-1">
+    <div class="input-style-1" data-controller="multiple-select">
       <%= form.label :casa_case_ids, 'Cases' %>
-      <%= form.collection_select(
-            :casa_case_ids,
-            current_organization.casa_cases,
-            :id, :case_number,
-            { include_hidden: false },
-            { class: "form-control", multiple: true }
-          ) %>
+      <%= form.select(
+        :casa_case_ids,
+        current_organization.casa_cases.pluck(:case_number, :id),
+        { include_hidden: false, autocomplete: "off" },
+        { class: "form-control", multiple: true,
+          data: { "multiple-select-target": "select" }
+        }
+      ) %>
     </div>
 
     <div class="actions mb-10">

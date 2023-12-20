@@ -151,6 +151,7 @@ class CasaCasesController < ApplicationController
     params.require(:casa_case).permit(
       :case_number,
       :birth_month_year_youth,
+      :date_in_care,
       :court_report_due_date,
       :empty_court_date,
       casa_case_contact_types_attributes: [:contact_type_id],

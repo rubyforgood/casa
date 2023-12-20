@@ -16,7 +16,7 @@ const defineCaseContactsTable = function () {
 $(() => { // JQuery's callback for the DOM loading
   const notificationsElement = $('#notifications')
 
-  if (notificationsElement.length) {
+  if (notificationsElement.length && ($('table#case_contacts').length || $('table#casa_cases').length || $('table#volunteers').length || $('table#supervisors').length)) {
     pageNotifier = new Notifier(notificationsElement)
   }
 

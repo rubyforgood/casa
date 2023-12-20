@@ -25,6 +25,7 @@ class CaseContactsController < ApplicationController
   end
 
   def new
+    store_referring_location
     authorize CaseContact
     @casa_cases = policy_scope(current_organization.casa_cases)
 
@@ -80,10 +81,9 @@ class CaseContactsController < ApplicationController
       @case_contact = case_contacts.first
       @casa_cases = [@case_contact.casa_case]
       render :new
-    elsif @selected_cases.count > 1
-      redirect_to case_contacts_path(success: true), notice: "Case contacts successfully created"
     else
-      redirect_to casa_case_path(CaseContact.last.casa_case, success: true), notice: "Case contact successfully created"
+      flash[:notice] = "Case #{"contact".pluralize(@selected_cases.count)} successfully created"
+      redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
     end
   end
 
@@ -108,6 +108,7 @@ class CaseContactsController < ApplicationController
       if @case_contact.valid?
         created_at = @case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")
         flash[:notice] = "Case contact created at #{created_at}, was successfully updated."
+        send_reimbursement_email(@case_contact)
         redirect_to casa_case_path(@case_contact.casa_case)
       else
         render :edit
@@ -169,6 +170,9 @@ class CaseContactsController < ApplicationController
       end
 
       case_contact = @case_contact.dup
+
+      send_reimbursement_email(case_contact)
+
       case_contact.casa_case = casa_case
       if @selected_cases.count == 1 && case_contact.valid?
         if current_role == "Volunteer"
@@ -178,6 +182,12 @@ class CaseContactsController < ApplicationController
         end
       end
       new_cc
+    end
+  end
+
+  def send_reimbursement_email(case_contact)
+    if case_contact.should_send_reimbursement_email?
+      SupervisorMailer.reimbursement_request_email(case_contact.creator, case_contact.supervisor).deliver_later
     end
   end
 

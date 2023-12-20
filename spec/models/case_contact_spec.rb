@@ -27,16 +27,14 @@ RSpec.describe CaseContact, type: :model do
     expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
   end
 
-  it "validates duration_minutes is only numeric values" do
+  it "validates duration_minutes to allow nil value" do
     case_contact = build_stubbed(:case_contact, duration_minutes: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
-  it "validates duration_minutes cannot be less than 15 minutes." do
+  it "validates duration_minutes can be less than 15 minutes." do
     case_contact = build_stubbed(:case_contact, duration_minutes: 10)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:duration_minutes]).to eq(["Minimum case contact duration should be 15 minutes."])
+    expect(case_contact).to be_valid
   end
 
   it "verifies occurred at is not in the future" do
@@ -490,6 +488,38 @@ RSpec.describe CaseContact, type: :model do
       it "is multiple of miles driven and mileage rate" do
         expect(case_contact.reimbursement_amount).to eq 2508
       end
+    end
+  end
+
+  describe "#should_send_reimbursement_email?" do
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
+    let(:case_contact) { build(:case_contact, :wants_reimbursement, creator: volunteer) }
+
+    it "returns true if wants reimbursement, reimbursement changed, and has active supervisor" do
+      expect(case_contact.should_send_reimbursement_email?).to be true
+    end
+
+    it "returns false if want reimbursement not changed" do
+      case_contact.save
+      expect(case_contact.want_driving_reimbursement_changed?).to be false
+      expect(case_contact.should_send_reimbursement_email?).to be false
+    end
+
+    it "returns false if doesn't want reimbursement" do
+      case_contact.want_driving_reimbursement = false
+      expect(case_contact.should_send_reimbursement_email?).to be false
+    end
+
+    it "returns false if creator doesn't have supervisor" do
+      volunteer.supervisor_volunteer = nil
+      expect(case_contact.supervisor.blank?).to be true
+      expect(case_contact.should_send_reimbursement_email?).to be false
+    end
+
+    it "returns false if creator's supervisor is inactive" do
+      supervisor.update(active: false)
+      expect(case_contact.should_send_reimbursement_email?).to be false
     end
   end
 end
