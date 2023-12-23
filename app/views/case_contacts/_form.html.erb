@@ -215,8 +215,8 @@ readonly: true %>
   </div>
 
   <div class="card-style-1 pl-25 pr-25 mb-10">
-    <div class="d-flex justify-content-between mb-3" data-controller="icon-toggle">
-      <h2 class=""><%= form.label :notes, "7. Additional notes (optional)" %></h2>
+    <div class="d-flex justify-content-between mb-3" data-controller="icon-toggle" data-icon-toggle-icons-value='["lni-chevron-up", "lni-chevron-down"]'>
+      <h2 class=""><%= form.label :notes, "5. Additional notes (optional)" %></h2>
       <button class="bg-transparent border-0"
               type="button"
               data-action="click->icon-toggle#toggle"
