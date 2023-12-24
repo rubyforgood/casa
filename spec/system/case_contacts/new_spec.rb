@@ -76,7 +76,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case_contact_miles_driven", with: "0"
 
       short_notes = "Hello world!"
-      fill_in "Notes", with: short_notes
+      fill_in "Additional notes", with: short_notes
       click_on "Submit"
 
       expect(page).to have_text("Confirm Note Content")
@@ -119,7 +119,7 @@ RSpec.describe "case_contacts/new", type: :system do
         "euismod diam pretium, mattis nibh. Fusce eget leo ex. Donec vitae lacus eu" \
         "magna tincidunt placerat. Mauris nibh nibh, venenatis sit amet libero in," \
 
-      fill_in "Notes", with: long_notes
+      fill_in "Additional notes", with: long_notes
       click_on "Submit"
 
       expect(page).to have_text("Confirm Note Content")
@@ -183,7 +183,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         note_content = "<h1>Hello world</h1>"
 
-        fill_in "Notes", with: note_content
+        fill_in "Additional notes", with: note_content
         click_on "Submit"
 
         expect(page).to have_text("Confirm Note Content")
@@ -264,7 +264,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       choose "case_contact_want_driving_reimbursement_false"
 
-      fill_in "Notes", with: "Hello world"
+      fill_in "Additional notes", with: "Hello world"
 
       expect(page).not_to have_text("error")
       expect(page).to_not have_text("Empty")
@@ -303,7 +303,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "2020/4/4"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
-      fill_in "Notes", with: "Hello world"
+      fill_in "Additional notes", with: "Hello world"
 
       click_on "Submit"
       expect(page).to have_text("Confirm Note Content")
@@ -328,7 +328,7 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_field("a. Miles Driven", with: "30")
       expect(page).to have_checked_field("case_contact_want_driving_reimbursement_false")
       expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_true")
-      expect(page).to have_field("Notes", with: "Hello world")
+      expect(page).to have_field("Additional notes", with: "Hello world")
     end
 
     it "delete local storage notes after successfuly submited", js: true do
@@ -350,7 +350,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "case_contact_duration_minutes", with: "45"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
-      fill_in "Notes", with: "Hello world"
+      fill_in "Additional notes", with: "Hello world"
 
       # Allow 5 seconds for the Notes to be saved in localstorage
       sleep 5
@@ -361,7 +361,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       visit new_case_contact_path
 
-      expect(page).to_not have_field("Notes", with: "Hello world")
+      expect(page).to_not have_field("Additional notes", with: "Hello world")
     end
 
     it "submits the form when no note was added", js: true do
@@ -385,7 +385,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
-      fill_in "Notes", with: ""
+      fill_in "Additional notes", with: ""
 
       expect(page).not_to have_text("error")
       expect {
@@ -416,7 +416,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
-      fill_in "Notes", with: "This is the note"
+      fill_in "Additional notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
       click_on "Submit"
@@ -449,7 +449,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in "c. Occurred On", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "30"
       choose "case_contact_want_driving_reimbursement_false"
-      fill_in "Notes", with: "This is the note"
+      fill_in "Additional notes", with: "This is the note"
 
       expect(page).not_to have_text("error")
       click_on "Submit"
@@ -532,7 +532,7 @@ RSpec.describe "case_contacts/new", type: :system do
         fill_in "a. Miles Driven", with: "0"
         choose "case_contact_want_driving_reimbursement_true"
         fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
-        fill_in "Notes", with: "Hello world"
+        fill_in "Additional notes", with: "Hello world"
 
         click_on "Submit"
         expect(page).to have_text("Confirm Note Content")
@@ -553,7 +553,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_field("a. Miles Driven", with: "0")
         expect(page).to have_checked_field("case_contact_want_driving_reimbursement_true")
         expect(page).not_to have_checked_field("case_contact_want_driving_reimbursement_false")
-        expect(page).to have_field("Notes", with: "Hello world")
+        expect(page).to have_field("Additional notes", with: "Hello world")
       end
     end
 
