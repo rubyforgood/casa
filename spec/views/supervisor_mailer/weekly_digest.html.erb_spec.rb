@@ -17,6 +17,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: Time.current - 6.days
       @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days
       assign :supervisor, supervisor
+      assign :inactive_volunteers, []
       sign_in supervisor
       @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
@@ -40,6 +41,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     before(:each) do
       sign_in supervisor
       assign :supervisor, supervisor
+      assign :inactive_volunteers, []
       @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
     end
@@ -55,6 +57,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       volunteer.casa_cases << casa_case
       sign_in supervisor
       assign :supervisor, supervisor
+      assign :inactive_volunteers, []
       @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
       render template: "supervisor_mailer/weekly_digest"
     end
@@ -74,6 +77,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
 
       sign_in supervisor
       assign :supervisor, supervisor
+      assign :inactive_volunteers, []
       render template: "supervisor_mailer/weekly_digest"
     end
 
@@ -91,7 +95,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       new_supervisor.volunteers << volunteer
       volunteer.supervisor_volunteer.update(is_active: true)
       assign :supervisor, supervisor
-      @inactive_messages = []
+      assign :inactive_volunteers, []
 
       render template: "supervisor_mailer/weekly_digest"
     end
@@ -107,6 +111,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor
+      assign :inactive_volunteers, []
       volunteer.supervisor_volunteer.update(is_active: false)
       @inactive_messages = []
       render template: "supervisor_mailer/weekly_digest"
@@ -123,10 +128,11 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor
+      assign :inactive_volunteers, supervisor.inactive_volunteers
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    it { expect(rendered).to have_text("The following volunteers have not signed nor had case contacts in the last 30 days") }
+    it { expect(rendered).to have_text("The following volunteers have not signed in or created case contacts in the last 30 days") }
     it { expect(rendered).to have_text("- #{volunteer.display_name}") }
   end
 end

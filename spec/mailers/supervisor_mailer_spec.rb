@@ -106,7 +106,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     it "does not display no_recent_sign_in section" do
-      expect(mail.body.encoded).not_to match("volunteers have not signed nor had case contacts in the last 30 days")
+      expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
     end
 
     context "when supervisor has a volunteer that has not been active for the last 30 days" do
@@ -115,7 +115,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       end
 
       it "display no_recent_sign_in section" do
-        expect(mail.body.encoded).to match("volunteers have not signed nor had case contacts in the last 30 days")
+        expect(mail.body.encoded).to match("volunteers have not signed in or created case contacts in the last 30 days")
       end
 
       context "but volunteer has a recent case_contact to its name" do
@@ -124,7 +124,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
         end
 
         it "does not display no_recent_sign_in section" do
-          expect(mail.body.encoded).not_to match("volunteers have not signed nor had case contacts in the last 30 days")
+          expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
         end
       end
     end

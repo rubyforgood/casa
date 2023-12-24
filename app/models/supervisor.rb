@@ -37,9 +37,9 @@ class Supervisor < User
     ).where(invitation_accepted_at: nil).where.not(invitation_created_at: nil)
   end
 
-  def not_signed_in_nor_have_case_contacts_volunteers
+  def inactive_volunteers
     recent_case_contact_volunteer_ids = volunteers.joins(:case_contacts).where(
-      case_contacts: {occurred_at: 30.days.ago..}
+      case_contacts: {created_at: 30.days.ago..}
     ).pluck(:id)
 
     volunteers.no_recent_sign_in.where.not(id: recent_case_contact_volunteer_ids)
