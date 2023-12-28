@@ -101,8 +101,32 @@ RSpec.describe SupervisorMailer, type: :mailer do
       expect(mail.body.encoded).to_not match("There are no additional notes.")
     end
 
-    it "displays no additional notes messsage when there are no additional notes" do
+    it "displays no additional notes message when there are no additional notes" do
       expect(mail.body.encoded).to match("There are no additional notes.")
+    end
+
+    it "does not display no_recent_sign_in section" do
+      expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
+    end
+
+    context "when supervisor has a volunteer that has not been active for the last 30 days" do
+      let!(:volunteer) do
+        create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor, last_sign_in_at: 31.days.ago)
+      end
+
+      it "display no_recent_sign_in section" do
+        expect(mail.body.encoded).to match("volunteers have not signed in or created case contacts in the last 30 days")
+      end
+
+      context "but volunteer has a recent case_contact to its name" do
+        let!(:recent_case_contact) do
+          create(:case_contact, casa_case: casa_case, occurred_at: 29.days.ago, creator: volunteer)
+        end
+
+        it "does not display no_recent_sign_in section" do
+          expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
+        end
+      end
     end
   end
 
