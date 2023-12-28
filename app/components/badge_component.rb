@@ -1,18 +1,18 @@
 class BadgeComponent < ViewComponent::Base
   DARK_TEXT_TYPES = [:warning, :light]
 
-  attr_reader :text, :type, :rounded
+  attr_reader :text, :type, :rounded, :margin
 
-  def initialize(text:, type:, rounded: false)
+  def initialize(text:, type:, rounded: false, margin: true)
     @text = text
     @type = type.to_sym
-    @rounded = rounded
+    @rounded = rounded ? "rounded-pill" : nil
+    @margin = margin ? "my-1" : nil
   end
 
   def style
-    badge_style = ["bg-#{type}"]
+    badge_style = ["bg-#{type}", rounded, margin]
     badge_style.push("text-dark") if DARK_TEXT_TYPES.include?(type)
-    badge_style.push("rounded-pill") if rounded
-    badge_style.join(" ")
+    badge_style.compact.join(" ")
   end
 end
