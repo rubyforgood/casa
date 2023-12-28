@@ -18,9 +18,9 @@
       <%= link_to(casa_case_emancipation_path(@casa_case),
               class: "main-btn primary-btn btn-sm pull-left casa-case-button") do %>
         Emancipation
-        <span class="badge bg-light text-dark">
-          <%= @casa_case.decorate.emancipation_checklist_count %>
-        </span>
+        <%= render BadgeComponent.new(text: @casa_case.decorate.emancipation_checklist_count,
+                                      type: :light,
+                                      margin: false) %>
       <% end %>
     <% end %>
     <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>

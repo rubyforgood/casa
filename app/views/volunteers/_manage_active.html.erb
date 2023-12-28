@@ -1,6 +1,6 @@
 <div class="field form-group">
   <% if user.active? %>
-    Volunteer is <span class="badge bg-success text-uppercase display-1">Active</span><br>
+    Volunteer is <%= render BadgeComponent.new(text: "Active", type: :success) %><br>
     <% if policy(user).deactivate? %>
       <%= link_to deactivate_volunteer_path(user),
                   method: :patch,
