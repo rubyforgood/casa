@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe Supervisor, type: :model do
+  include Devise::Test::IntegrationHelpers
+
   subject(:supervisor) { create :supervisor }
 
   describe "#role" do
@@ -40,6 +42,56 @@ RSpec.describe Supervisor, type: :model do
       volunteer.invite!
       assign_volunteer
       expect(supervisor.pending_volunteers).to eq([volunteer])
+    end
+  end
+
+  describe "not_signed_in_nor_have_case_contacts_volunteers" do
+    let(:supervisor) { create(:supervisor) }
+    let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago) }
+    let(:other_volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
+
+    subject { supervisor.inactive_volunteers }
+
+    before do
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
+      create(:supervisor_volunteer, supervisor: supervisor, volunteer: other_volunteer)
+    end
+
+    context "when volunteer has logged in in the last 30 days" do
+      let(:volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
+
+      it { is_expected.to be_empty }
+
+      context "when volunteer then logged out" do
+        it "is empty" do
+          sign_out volunteer
+
+          is_expected.to be_empty
+        end
+      end
+    end
+
+    context "when volunteer hasn't logged in in the last 30 days" do
+      it { is_expected.to contain_exactly(volunteer) }
+
+      context "when volunteer is inactive" do
+        let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago, active: false) }
+
+        it { is_expected.to be_empty }
+      end
+
+      context "when volunteer has never logged in" do
+        let(:volunteer) { create(:volunteer, last_sign_in_at: nil) }
+
+        it { is_expected.to contain_exactly(volunteer) }
+      end
+
+      context "when volunteer has a recent case_contact" do
+        let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
+        let!(:case_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 31.days.ago, creator: volunteer, created_at: 29.days.ago) }
+
+        it { is_expected.to be_empty }
+      end
     end
   end
 

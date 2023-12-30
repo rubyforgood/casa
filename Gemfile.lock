@@ -98,7 +98,8 @@ GEM
     bigdecimal (3.1.5)
     bindex (0.8.1)
     blueprinter (0.30.0)
-    brakeman (6.1.0)
+    brakeman (6.1.1)
+      racc
     bugsnag (6.26.0)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
@@ -288,7 +289,7 @@ GEM
     multipart-post (2.3.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.4.8)
+    net-imap (0.4.9)
       date
       net-protocol
     net-pop (0.1.2)
@@ -446,7 +447,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    shoulda-matchers (5.3.0)
+    shoulda-matchers (6.0.0)
       activesupport (>= 5.2.0)
     simplecov (0.22.0)
       docile (~> 1.1)
