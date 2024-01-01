@@ -229,6 +229,8 @@ GEM
       activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    groupdate (6.4.0)
+      activesupport (>= 6.1)
     hashdiff (1.0.1)
     htmlentities (4.3.4)
     http (5.1.1)
@@ -561,6 +563,7 @@ DEPENDENCIES
   faker
   filterrific
   friendly_id (~> 5.5.1)
+  groupdate
   httparty
   image_processing (~> 1.12)
   jbuilder

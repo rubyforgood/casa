@@ -9,26 +9,39 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 
 $(() => { // JQuery's callback for the DOM loading
   const chartElement = document.getElementById('myChart')
+  const monthLineChart = document.getElementById('monthLineChart')
+
+  const notificationsElement = $('#notifications')
+  const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
   if (chartElement) {
-    const notificationsElement = $('#notifications')
-    const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
+    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_week', chartElement, function (data) {
+      const timestamps = data.timestamps
+      const graphData = formatData(timestamps)
+      createChart(chartElement, graphData)
+    })
+  }
 
+  if (monthLineChart) {
+    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_year', monthLineChart, function (data) {
+      console.log(data)
+      createLineChart(monthLineChart, data)
+    })
+  }
+
+  function fetchDataAndCreateChart (url, chartElement, successCallback) {
     $.ajax({
       type: 'GET',
-      url: '/health/case_contacts_creation_times_in_last_week',
-      success: function (data) {
-        const timestamps = data.timestamps
-        const graphData = formatData(timestamps)
-
-        createChart(chartElement, graphData)
-      },
-      error: function (xhr, status, error) {
-        console.error('Failed to fetch data for case contact entry times chart display')
-        console.error(error)
-        pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
-      }
+      url,
+      success: successCallback,
+      error: handleAjaxError
     })
+  }
+
+  function handleAjaxError (xhr, status, error) {
+    console.error('Failed to fetch data for case contact entry times chart display')
+    console.error(error)
+    pageNotifier?.notify('Failed to display metric chart. Check the console for error details.', 'error')
   }
 })
 
@@ -141,4 +154,70 @@ function getTooltipLabelCallback (context) {
   const bubbleData = context.dataset.data[context.dataIndex]
   const caseContactCountSqrt = bubbleData.r / 4
   return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
+}
+
+function createLineChart (chartElement, dataset) {
+  const ctx = chartElement.getContext('2d')
+
+  const allMonths = extractChartData(dataset, 0)
+  const allCaseContactsCount = extractChartData(dataset, 1)
+  const allCaseContactNotesCount = extractChartData(dataset, 2)
+  const allUsersCount = extractChartData(dataset, 3)
+
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: allMonths,
+      datasets: [
+        createDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
+        createDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
+        createDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
+      ]
+    },
+    options: createChartOptions()
+  })
+}
+
+function extractChartData (dataset, index) {
+  return dataset.map(data => data[index])
+}
+
+function createDataset (label, data, borderColor, pointBackgroundColor) {
+  return {
+    label,
+    data,
+    fill: false,
+    borderColor,
+    pointBackgroundColor,
+    pointBorderWidth: 2,
+    pointHoverBackgroundColor: '#fff',
+    pointHoverBorderWidth: 2,
+    lineTension: 0.05
+  }
+}
+
+function createChartOptions () {
+  return {
+    legend: { display: true },
+    plugins: {
+      legend: { display: true, position: 'bottom' },
+      title: {
+        display: true,
+        font: { size: 18 },
+        text: 'Case Contact Creation'
+      },
+      tooltips: {
+        callbacks: {
+          label: function (tooltipItem, data) {
+            let label = data.datasets[tooltipItem.datasetIndex].label || ''
+            if (label) {
+              label += ': '
+            }
+            label += Math.round(tooltipItem.yLabel * 100) / 100
+            return label
+          }
+        }
+      }
+    }
+  }
 }
