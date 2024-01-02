@@ -13,11 +13,10 @@ class HealthController < ApplicationController
   end
 
   def case_contacts_creation_times_in_last_week
-    # Get the case contacts created in the last week
-    case_contacts = CaseContact.where("created_at >= ?", 10.week.ago)
+    case_contacts_created_in_last_week = CaseContact.where("created_at >= ?", 1.week.ago)
 
     # Extract the created_at timestamps and convert them to Unix time
-    timestamps = case_contacts.pluck(:created_at).map { |t| t.to_i }
+    timestamps = case_contacts_created_in_last_week.pluck(:created_at).map { |t| t.to_i }
 
     render json: {timestamps: timestamps}
   end
