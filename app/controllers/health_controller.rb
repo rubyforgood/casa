@@ -19,30 +19,25 @@ class HealthController < ApplicationController
     # Extract the created_at timestamps and convert them to Unix time
     timestamps = case_contacts.pluck(:created_at).map { |t| t.to_i }
 
-    # Return the timestamps as a JSON response
     render json: {timestamps: timestamps}
   end
 
   def case_contacts_creation_times_in_last_year
-    # Generate an array of the last 12 months
-    last_12_months = (11.months.ago.to_date..Date.current).map { |date| date.beginning_of_month }
+    first_day_of_last_12_months = (11.months.ago.to_date..Date.current).select{ |date| date.day == 1}.map { |date| date.beginning_of_month }
 
-    # Fetch case contact counts, counts with notes updated, and counts of users for each month
-    data = CaseContact.group_by_month(:created_at, last: 12).count
-    data_with_notes = CaseContact.where("notes != ''").group_by_month(:created_at, last: 12).count
-    users_data = CaseContact.select(:creator_id).distinct.group_by_month(:created_at, last: 12).count
+    monthly_counts_of_case_contacts_created = CaseContact.group_by_month(:created_at, last: 12).count
+    monthly_counts_of_case_contacts_with_notes_created = CaseContact.where("notes != ''").group_by_month(:created_at, last: 12).count
+    monthly_counts_of_users_who_have_created_case_contacts = CaseContact.select(:creator_id).distinct.group_by_month(:created_at, last: 12).count
 
-    # Combine the counts for each month
-    chart_data = last_12_months.map do |month|
-      count_all = data[month] || 0
-      count_with_notes = data_with_notes[month] || 0
-      count_users = users_data[month] || 0
-
-      [month.strftime("%b %Y"), count_all, count_with_notes, count_users]
+    monthly_line_graph_data = first_day_of_last_12_months.map do |month|
+      [
+        month.strftime("%b %Y"),
+        monthly_counts_of_case_contacts_created[month],
+        monthly_counts_of_case_contacts_with_notes_created[month],
+        monthly_counts_of_users_who_have_created_case_contacts[month]
+      ]
     end
 
-    chart_data = chart_data.uniq!
-
-    render json: chart_data
+    render json: monthly_line_graph_data
   end
 end
