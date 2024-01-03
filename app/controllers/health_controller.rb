@@ -21,7 +21,7 @@ class HealthController < ApplicationController
   end
 
   def monthly_line_graph_data
-    first_day_of_last_12_months = (11.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
+    first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
 
     binding.pry
 
