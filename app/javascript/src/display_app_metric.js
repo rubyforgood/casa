@@ -8,17 +8,17 @@ Chart.register(...registerables)
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 $(() => { // JQuery's callback for the DOM loading
-  const chartElement = document.getElementById('myChart')
+  const caseContactCreationTimesBubbleChart = document.getElementById('caseContactCreationTimeBubbleChart')
   const monthLineChart = document.getElementById('monthLineChart')
 
   const notificationsElement = $('#notifications')
   const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
-  if (chartElement) {
-    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_week', chartElement, function (data) {
+  if (caseContactCreationTimesBubbleChart) {
+    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_week', caseContactCreationTimesBubbleChart, function (data) {
       const timestamps = data.timestamps
-      const graphData = formatData(timestamps)
-      createChart(chartElement, graphData)
+      const graphData = formatTimestampsAsBubbleChartData(timestamps)
+      createChart(caseContactCreationTimesBubbleChart, graphData)
     })
   }
 
@@ -45,7 +45,7 @@ $(() => { // JQuery's callback for the DOM loading
   }
 })
 
-function formatData (timestamps) {
+function formatTimestampsAsBubbleChartData (timestamps) {
   const bubbleDataAsObject = {}
 
   for (const timestamp of timestamps) {
@@ -169,9 +169,9 @@ function createLineChart (chartElement, dataset) {
     data: {
       labels: allMonths,
       datasets: [
-        createDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
-        createDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
-        createDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
+        createLineChartDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
+        createLineChartDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
+        createLineChartDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
       ]
     },
     options: createChartOptions()
@@ -182,7 +182,7 @@ function extractChartData (dataset, index) {
   return dataset.map(data => data[index])
 }
 
-function createDataset (label, data, borderColor, pointBackgroundColor) {
+function createLineChartDataset (label, data, borderColor, pointBackgroundColor) {
   return {
     label,
     data,
