@@ -20,14 +20,16 @@ class HealthController < ApplicationController
     render json: {timestamps: unix_timestamps_of_case_contacts_created_in_last_week}
   end
 
-  def case_contacts_creation_times_in_last_year
+  def monthly_line_graph_data
     first_day_of_last_12_months = (11.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
+
+    binding.pry
 
     monthly_counts_of_case_contacts_created = CaseContact.group_by_month(:created_at, last: 12).count
     monthly_counts_of_case_contacts_with_notes_created = CaseContact.where("notes != ''").group_by_month(:created_at, last: 12).count
     monthly_counts_of_users_who_have_created_case_contacts = CaseContact.select(:creator_id).distinct.group_by_month(:created_at, last: 12).count
 
-    monthly_line_graph_data = first_day_of_last_12_months.map do |month|
+    monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
       [
         month.strftime("%b %Y"),
         monthly_counts_of_case_contacts_created[month],
@@ -36,6 +38,6 @@ class HealthController < ApplicationController
       ]
     end
 
-    render json: monthly_line_graph_data
+    render json: monthly_line_graph_combined_data
   end
 end

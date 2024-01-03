@@ -23,7 +23,7 @@ $(() => { // JQuery's callback for the DOM loading
   }
 
   if (monthLineChart) {
-    fetchDataAndCreateChart('/health/case_contacts_creation_times_in_last_year', monthLineChart, function (data) {
+    fetchDataAndCreateChart('/health/monthly_line_graph_data', monthLineChart, function (data) {
       console.log(data)
       createLineChart(monthLineChart, data)
     })

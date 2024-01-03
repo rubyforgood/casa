@@ -46,7 +46,7 @@ RSpec.describe "Health", type: :request do
     end
   end
 
-  describe "GET #case_contacts_creation_times_in_last_year" do
+  describe "GET #monthly_line_graph_data" do
     it "returns case contacts creation times in the last year" do
       # Create case contacts for testing
       create(:case_contact, notes: "Test Notes", created_at: 11.months.ago)
@@ -54,7 +54,7 @@ RSpec.describe "Health", type: :request do
       create(:case_contact, created_at: 10.months.ago)
       create(:case_contact, created_at: 9.months.ago)
 
-      get case_contacts_creation_times_in_last_year_health_index_path
+      get monthly_line_graph_data_health_index_path
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
 
