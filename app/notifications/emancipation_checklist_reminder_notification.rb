@@ -18,11 +18,16 @@ class EmancipationChecklistReminderNotification < BaseNotification
   # Define helper methods to make rendering easier.
 
   def message
-    t(".message", case_number: params[:casa_case].case_number)
+    casa_case = params[:casa_case]
+    msg = []
+    msg << "Your case #{casa_case.case_number} is a transition aged youth."
+    msg << "We want to make sure that along the way, we’re preparing our youth for emancipation."
+    msg << "Make sure to check the emancipation checklist."
+    msg.join(" ")
   end
 
   def title
-    t(".title")
+    "Emancipation Checklist Reminder"
   end
 
   def url
