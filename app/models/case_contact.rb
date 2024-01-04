@@ -205,24 +205,22 @@ class CaseContact < ApplicationRecord
   end
 
   def self.options_for_sorted_by
-    sorted_by_params.map do |option|
-      [I18n.t("models.case_contact.options_for_sorted_by.#{option}"), option]
-    end
+    sorted_by_params.each.map { |option_pair| option_pair.reverse }
   end
 
   private_class_method def self.sorted_by_params
-    %i[
-      occurred_at_asc
-      occurred_at_desc
-      contact_type_asc
-      contact_type_desc
-      medium_type_asc
-      medium_type_desc
-      want_driving_reimbursement_asc
-      want_driving_reimbursement_desc
-      contact_made_asc
-      contact_made_desc
-    ]
+    {
+      occurred_at_asc: "Date of contact (oldest first)",
+      occurred_at_desc: "Date of contact (newest first)",
+      contact_type_asc: "Contact type (A-z)",
+      contact_type_desc: "Contact type (z-A)",
+      medium_type_asc: "Contact medium (A-z)",
+      medium_type_desc: "Contact medium (z-A)",
+      want_driving_reimbursement_asc: "Want driving reimbursement ('no' first)",
+      want_driving_reimbursement_desc: "Want driving reimbursement ('yes' first)",
+      contact_made_asc: "Contact made ('no' first)",
+      contact_made_desc: "Contact made ('yes' first)"
+    }
   end
 end
 
