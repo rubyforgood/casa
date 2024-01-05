@@ -17,7 +17,7 @@ RSpec.describe "AllCasaAdmin::Dashboard", type: :request do
     it { is_expected.to have_http_status(:success) }
 
     it "shows casa orgs" do
-      # Code changes to fix response as earlier HTML String instead of Nokogiri::HTML4::Document object as received in Rails 7.1.0 to pass expectation
+      # Code changes to fix response as earlier HTML String instead of Nokogiri::HTML5::Document object as received in Rails 7.1.0 to pass expectation
       page = request.parsed_body.to_html
       expect(page).to include(*casa_orgs.map(&:name))
     end
