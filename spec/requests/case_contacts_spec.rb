@@ -22,7 +22,7 @@ RSpec.describe "/case_contacts", type: :request do
     it { is_expected.to have_http_status(:success) }
 
     it "returns all case contacts" do
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       expect(page).to include(past_contact.creator.display_name, recent_contact.creator.display_name)
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "/case_contacts", type: :request do
       let(:filterrific) { {occurred_starting_at: 1.week.ago} }
 
       it "returns all case contacts" do
-        page = request.parsed_body
+        page = request.parsed_body.to_html
         expect(page).to include(recent_contact.creator.display_name)
         expect(page).not_to include(past_contact.creator.display_name)
       end
@@ -70,7 +70,7 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     it "shows all contact types once" do
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
       expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
     end
@@ -85,7 +85,7 @@ RSpec.describe "/case_contacts", type: :request do
       end
 
       it "shows only contact types assigned to selected casa case" do
-        page = request.parsed_body
+        page = request.parsed_body.to_html
         expect(page).to include(*other_casa_case.contact_types.pluck(:name))
         expect(page).not_to include(*contact_types_a.pluck(:name))
         expect(page).not_to include(*contact_types_b.pluck(:name))
@@ -284,7 +284,7 @@ RSpec.describe "/case_contacts", type: :request do
     it { is_expected.to have_http_status(:success) }
 
     it "shows edit page with the correct case_contact" do
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       expect(page).to include(case_contact.notes)
     end
 
