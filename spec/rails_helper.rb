@@ -49,7 +49,8 @@ RSpec.configure do |config|
     end
   end
 
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # Changes to fix warning of Rails 7.1 has deprecated the singular fixture_path in favour of an array
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
   config.use_transactional_fixtures = true
 
