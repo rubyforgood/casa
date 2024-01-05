@@ -294,7 +294,7 @@ RSpec.describe "Edit CASA Case", type: :system do
           unassign_button = page.find("button.btn-outline-danger")
           expect(unassign_button.text).to eq "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-success")
+          assign_badge = page.find("span.bg-success")
           expect(assign_badge.text).to eq "ASSIGNED"
         end
 
@@ -316,7 +316,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-danger")
+          assign_badge = page.find("span.bg-danger")
           expect(assign_badge.text).to eq "UNASSIGNED"
 
           expected_start_and_end_date = "August 29, 2020"
@@ -339,7 +339,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-danger")
+          assign_badge = page.find("span.bg-danger")
           expect(assign_badge.text).to eq "UNASSIGNED"
         end
       end
