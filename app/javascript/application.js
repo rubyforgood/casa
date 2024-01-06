@@ -6,6 +6,7 @@ import './sweet-alert-confirm.js'
 import './controllers'
 import 'trix'
 import '@rails/actiontext'
+import './datatable.js'
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
@@ -34,3 +35,4 @@ require('./src/display_app_metric.js')
 require('./src/casa_org')
 require('./src/sms_reactivation_toggle')
 require('./src/validated_form')
+require('./src/learning_hours')

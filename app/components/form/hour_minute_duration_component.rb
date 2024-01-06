@@ -16,7 +16,9 @@ class Form::HourMinuteDurationComponent < ViewComponent::Base
       raise RangeError.new("Parameter hour_value must be positive")
     end
 
-    if hour_value.nil? || hour_value.is_a?(Integer)
+    if hour_value.nil?
+      @hour_value = 0
+    elsif hour_value.is_a?(Integer)
       @hour_value = hour_value
     else
       raise TypeError.new("Parameter hour_value must be an integer")
@@ -34,7 +36,9 @@ class Form::HourMinuteDurationComponent < ViewComponent::Base
       raise RangeError.new("Parameter minute_value must be positive")
     end
 
-    if minute_value.nil? || minute_value.is_a?(Integer)
+    if minute_value.nil?
+      @minute_value = 0
+    elsif minute_value.is_a?(Integer)
       @minute_value = minute_value
     else
       raise TypeError.new("Parameter minute_value must be an integer")

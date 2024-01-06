@@ -14,6 +14,8 @@ import ExtendedNestedFormController from './extended_nested_form_controller'
 
 import HelloController from './hello_controller'
 
+import IconToggleController from './icon_toggle_controller'
+
 import MultipleSelectController from './multiple_select_controller'
 
 import NavbarController from './navbar_controller'
@@ -26,6 +28,7 @@ application.register('autosave', AutosaveController)
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)
+application.register('icon-toggle', IconToggleController)
 application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
 application.register('sidebar', SidebarController)

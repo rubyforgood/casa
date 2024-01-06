@@ -35,14 +35,37 @@ RSpec.describe "Health", type: :request do
 
   describe "GET #case_contacts_creation_times_in_last_week" do
     it "returns timestamps of case contacts created in the last week" do
-      case_contact1 = create(:case_contact, created_at: 1.week.ago)
+      case_contact1 = create(:case_contact, created_at: 6.days.ago)
       case_contact2 = create(:case_contact, created_at: 2.weeks.ago)
       get case_contacts_creation_times_in_last_week_health_index_path
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
       timestamps = JSON.parse(response.body)["timestamps"]
       expect(timestamps).to include(case_contact1.created_at.to_i)
-      expect(timestamps).not_to include(case_contact2.created_at.iso8601(3))
+      expect(timestamps).not_to include(case_contact2.created_at.to_i)
+    end
+  end
+
+  describe "GET #monthly_line_graph_data" do
+    it "returns case contacts creation times in the last year" do
+      # Create case contacts for testing
+      create(:case_contact, notes: "Test Notes", created_at: 11.months.ago)
+      create(:case_contact, notes: "", created_at: 11.months.ago)
+      create(:case_contact, created_at: 10.months.ago)
+      create(:case_contact, created_at: 9.months.ago)
+
+      get monthly_line_graph_data_health_index_path
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("application/json")
+
+      chart_data = JSON.parse(response.body)
+      expect(chart_data).to be_an(Array)
+      expect(chart_data.length).to eq(12)
+
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 2])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 1])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 0, 1])
+      expect(chart_data[3]).to eq([8.months.ago.strftime("%b %Y"), 0, 0, 0])
     end
   end
 end

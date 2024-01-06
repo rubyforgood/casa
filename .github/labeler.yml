@@ -11,21 +11,21 @@
 # properly added.
 
 ruby:
-- "**/*.rb"
+- changed-files:
+  - any-glob-to-any-file: "**/*.rb"
 
 erb:
-- "**/*.erb"
+- changed-files:
+  - any-glob-to-any-file: "**/*.erb"
 
 javascript:
-- "**/*.js"
-- "package*.json"
-- "yarn.lock"
+- changed-files:
+  - any-glob-to-any-file: ["**/*.js", "package*.json", "yarn.lock"]
 
 Tests! 🎉💖👏:
-- "app/javascript/__tests__/**.test.js"
-- "spec/**/*_spec.rb"
+- changed-files:
+  - any-glob-to-any-file: ["app/javascript/__tests__/**.test.js", "spec/**/*_spec.rb"]
 
 dependencies:
-- "Gemfile*"
-- "package*.json"
-- "yarn.lock"
+- changed-files:
+  - any-glob-to-any-file: ["Gemfile*", "package*.json", "yarn.lock"]

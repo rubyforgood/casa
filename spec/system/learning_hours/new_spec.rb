@@ -9,7 +9,7 @@ RSpec.describe "learning_hours/new", type: :system, js: true do
 
     sign_in volunteer
 
-    visit new_volunteer_learning_hour_path(volunteer)
+    visit new_learning_hour_path
   end
 
   it "errors without selected type of learning" do
@@ -29,5 +29,31 @@ RSpec.describe "learning_hours/new", type: :system, js: true do
     click_on "Create New Learning Hours Entry"
 
     expect(page).to have_text("New entry was successfully created.")
+  end
+
+  it "creates learning hours entry without minutes duration" do
+    fill_in "Learning Hours Title", with: "Test title"
+    select "Book", from: "Type of Learning"
+    fill_in "Hour(s)", with: "3"
+    click_on "Create New Learning Hours Entry"
+
+    expect(page).to have_text("New entry was successfully created.")
+  end
+
+  it "creates learning hours entry without hours duration" do
+    fill_in "Learning Hours Title", with: "Test title"
+    select "Book", from: "Type of Learning"
+    fill_in "Minute(s)", with: "30"
+    click_on "Create New Learning Hours Entry"
+
+    expect(page).to have_text("New entry was successfully created.")
+  end
+
+  it "errors without hours and minutes duration" do
+    fill_in "Learning Hours Title", with: "Test title"
+    select "Book", from: "Type of Learning"
+    click_on "Create New Learning Hours Entry"
+
+    expect(page).to have_text("Duration minutes and hours (total duration) must be greater than 0")
   end
 end

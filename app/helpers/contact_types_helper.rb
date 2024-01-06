@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Helper methods for new/edit contact type form
 module ContactTypesHelper
   def set_group_options
@@ -9,7 +11,7 @@ module ContactTypesHelper
 
     return "never" if contact.nil?
 
-    "#{time_ago_in_words(contact.created_at)} ago"
+    "#{time_ago_in_words(contact.occurred_at)} ago"
   end
 
   def last_contact_made_of(contact_type_name, casa_case)
@@ -19,7 +21,7 @@ module ContactTypesHelper
       .case_contacts
       .joins(:contact_types)
       .where(contact_types: {name: contact_type_name})
-      .order(created_at: :desc)
+      .order(occurred_at: :desc)
       .first
   end
 end

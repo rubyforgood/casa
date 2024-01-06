@@ -29,7 +29,7 @@ module FillInCaseContactFields
 
   # @param notes [String]
   def complete_notes_page(notes: "", click_continue: true)
-    fill_in "Notes", with: notes
+    fill_in "Additional notes", with: notes
 
     click_on "Save and continue" if click_continue
   end

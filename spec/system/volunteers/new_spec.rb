@@ -56,7 +56,7 @@ RSpec.describe "volunteers/new", type: :system do
     volunteer = create(:volunteer, casa_org: organization)
 
     sign_in volunteer
-    visit new_volunteer_learning_hour_path(volunteer)
+    visit new_learning_hour_path
     expect(page).to have_text("Learning Topic")
   end
 
@@ -65,7 +65,7 @@ RSpec.describe "volunteers/new", type: :system do
     volunteer = create(:volunteer, casa_org: organization)
 
     sign_in volunteer
-    visit new_volunteer_learning_hour_path(volunteer)
+    visit new_learning_hour_path
     expect(page).to_not have_text("Learning Topic")
   end
 end

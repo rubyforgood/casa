@@ -20,6 +20,6 @@ class FundRequestMailerPreview < ActionMailer::Preview
       extra_information: "Sample Extra Information"
     )
 
-    FundRequestMailer.send_request(nil, fund_request)
+    FundRequestMailer.send_request(nil, fund_request, false)
   end
 end

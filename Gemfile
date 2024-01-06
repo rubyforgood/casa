@@ -51,6 +51,7 @@ gem "rswag-api"
 gem "rswag-ui"
 gem "blueprinter" # for JSON serialization
 gem "oj" # faster JSON parsing 🍊
+gem "groupdate" # Group Data
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
