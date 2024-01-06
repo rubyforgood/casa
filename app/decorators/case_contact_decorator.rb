@@ -131,12 +131,12 @@ class CaseContactDecorator < Draper::Decorator
   def form_page_notes
     {
       details: nil,
-      notes: "This question will be included in the court report for your assigned foster your. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
+      notes: "This question will be included in the court report for your assigned foster youth. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
       expenses: nil
     }
   end
 
   def form_updated_message
-    "Case contact created at #{created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
+    "Case contact created at #{I18n.l(created_at, format: :time_on_date)}, was successfully updated."
   end
 end

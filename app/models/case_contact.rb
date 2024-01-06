@@ -194,9 +194,9 @@ class CaseContact < ApplicationRecord
   end
 
   def volunteer_address_when_reimbursement_wanted
-    return if !want_driving_reimbursement || !volunteer_address&.empty?
-
-    errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+    if want_driving_reimbursement && volunteer_address&.empty?
+      errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+    end
   end
 
   def contact_made_chosen
@@ -256,11 +256,9 @@ class CaseContact < ApplicationRecord
 
   def self.case_hash_from_cases(cases)
     casa_case_ids = cases.map(&:draft_case_ids).flatten.uniq.sort
-    hash = {}
-    casa_case_ids.each do |casa_case_id|
+    casa_case_ids.each_with_object({}) do |casa_case_id, hash|
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
-    hash
   end
 
   private_class_method def self.sorted_by_params

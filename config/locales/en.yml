@@ -62,6 +62,7 @@ en:
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
       edit_profile: "%B %d, %Y at %I:%M %p %Z"
+      time_on_date: "%-I:%-M %p on %m-%e-%Y"
   notifications:
     emancipation_checklist_reminder_notification:
       title: "Emancipation Checklist Reminder"

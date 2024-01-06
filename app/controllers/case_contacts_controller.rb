@@ -47,7 +47,7 @@ class CaseContactsController < ApplicationController
         []
       end
 
-    @case_contact = CaseContact.create!(creator: current_user, draft_case_ids: draft_case_ids)
+    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids)
     redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
   end
 

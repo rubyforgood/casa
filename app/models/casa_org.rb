@@ -92,6 +92,10 @@ class CasaOrg < ApplicationRecord
     end
   end
 
+  def contact_types_by_group
+    contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
+  end
+
   # Given a specific date, returns the active mileage rate.
   # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
   # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:

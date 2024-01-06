@@ -59,12 +59,7 @@ class CaseContacts::FormController < ApplicationController
       if @selected_case_contact_types.present?
         @selected_case_contact_types.map(&:contact_type_group).uniq
       else
-        current_organization
-          .contact_type_groups
-          .joins(:contact_types)
-          .where(contact_types: {active: true})
-          .alphabetically
-          .uniq
+        current_organization.contact_types_by_group
       end
   end
 
@@ -77,7 +72,7 @@ class CaseContacts::FormController < ApplicationController
       message = "Case #{"contact".pluralize(@case_contact.draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
       first_casa_case_id = @case_contact.draft_case_ids.slice(0)
-      @case_contact.update!(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
+      @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end
     update_volunteer_address(@case_contact)
     flash[:notice] = message
@@ -91,14 +86,10 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update_volunteer_address(case_contact)
-    return unless case_contact.volunteer_address && !case_contact.address_field_disabled?
+    return unless case_contact.volunteer_address.present? && !case_contact.address_field_disabled?
 
-    if case_contact.volunteer.address
-      case_contact.volunteer.address.update!(content: case_contact.volunteer_address)
-    else
-      case_contact.volunteer.address = Address.new(content: case_contact.volunteer_address)
-      case_contact.volunteer.save!
-    end
+    address = case_contact.volunteer.address || case_contact.volunteer.build_address
+    address.update(content: case_contact.volunteer_address)
   end
 
   # Makes a copy of the draft for all selected cases not including the first one. The draft becomes the contact for

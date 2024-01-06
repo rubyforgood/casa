@@ -4,7 +4,7 @@ namespace :after_party do
     puts "Running deploy task 'set_case_contacts_as_active'"
 
     CaseContact.all.each do |cc|
-      cc.update(status: "active", draft_case_ids: [cc.casa_case_id])
+      cc.update!(status: "active", draft_case_ids: [cc.casa_case_id])
     end
 
     # Update task as completed.  If you remove the line below, the task will
