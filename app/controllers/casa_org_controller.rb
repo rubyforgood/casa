@@ -85,6 +85,6 @@ class CasaOrgController < ApplicationController
   end
 
   def set_active_storage_url_options
-    ActiveStorage::Current.url_options = { host: request.base_url }
+    ActiveStorage::Current.url_options = {host: request.base_url}
   end
 end
