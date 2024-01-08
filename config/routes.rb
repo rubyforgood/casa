@@ -116,7 +116,11 @@ Rails.application.routes.draw do
   resources :learning_hour_topics, only: %i[new create edit update]
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
-  resources :banners, only: %i[index new edit create update destroy]
+  resources :banners, except: %i[show] do
+    member do
+      get :dismiss
+    end
+  end
   resources :bulk_court_dates, only: %i[new create]
   resources :case_groups, only: %i[index new edit create update destroy]
   resources :learning_hours, only: %i[index show new create edit update destroy]
