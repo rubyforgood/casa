@@ -12,6 +12,7 @@ class CaseContact < ApplicationRecord
   validate :occurred_at_not_in_future
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
+  validate :volunteer_address_is_valid, if: :active_or_expenses?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -196,6 +197,14 @@ class CaseContact < ApplicationRecord
   def volunteer_address_when_reimbursement_wanted
     if want_driving_reimbursement && volunteer_address&.empty?
       errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+    end
+  end
+
+  def volunteer_address_is_valid
+    if volunteer_address&.present?
+      if Address.new(user_id: creator.id, content: volunteer_address).invalid?
+        errors.add(:base, "The volunteer's address is not valid.")
+      end
     end
   end
 

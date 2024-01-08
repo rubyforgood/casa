@@ -11,14 +11,7 @@ class CaseContactDecorator < Draper::Decorator
     elsif minutes <= 60
       "#{minutes} minutes"
     else
-      formatted_hour_value = minutes / 60
-      formatted_minutes_value = minutes.remainder(60)
-
-      if formatted_minutes_value.zero?
-        "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
-      else
-        "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
-      end
+      formatted_hours_and_minutes(minutes)
     end
   end
 
@@ -115,7 +108,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def address_of_volunteer
-    if volunteer_address && !volunteer_address.empty?
+    if volunteer_address&.present?
       volunteer_address
     elsif volunteer
       volunteer.address&.content
@@ -138,5 +131,18 @@ class CaseContactDecorator < Draper::Decorator
 
   def form_updated_message
     "Case contact created at #{I18n.l(created_at, format: :time_on_date)}, was successfully updated."
+  end
+
+  private
+
+  def formatted_hours_and_minutes(minutes)
+    formatted_hour_value = minutes / 60
+    formatted_minutes_value = minutes.remainder(60)
+
+    if formatted_minutes_value.zero?
+      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
+    else
+      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
+    end
   end
 end

@@ -4,7 +4,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   let(:organization) { build(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, casa_org: organization, supervisor: supervisor) }
+  let!(:volunteer) { create(:volunteer, casa_org: organization, supervisor: supervisor) }
   let(:creator) { admin }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
