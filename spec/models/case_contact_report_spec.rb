@@ -315,8 +315,7 @@ RSpec.describe CaseContactReport, type: :model do
         it "returns all case contacts with the casa case ids" do
           report = described_class.new({casa_case_ids: [casa_case.id]})
           expect(report.case_contacts.length).to eq(case_contacts.length)
-          expect(report.case_contacts).to include(*case_contacts)
-          expect(report.case_contacts.order(:id)).to eq(case_contacts)
+          expect(report.case_contacts).to match_array(case_contacts)
         end
       end
 
