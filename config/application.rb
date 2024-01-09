@@ -24,7 +24,7 @@ module Casa
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-    config.action_mailer.preview_paths << "#{Rails.root}/lib/mailer_previews"
+    config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
 
     config.eager_load_paths << Rails.root.join("app", "lib", "importers")
     config.assets.paths << Rails.root.join("app", "assets", "webfonts")
