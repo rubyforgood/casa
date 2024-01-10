@@ -374,7 +374,7 @@ RSpec.describe "/volunteers", type: :request do
 
       expect(volunteer.invitation_created_at.present?).to eq(true)
       expect(Devise.mailer.deliveries.count).to eq(1)
-      expect(Devise.mailer.deliveries.first.subject).to eq("CASA Console invitation instructions")
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_volunteer_path(volunteer))
     end
   end
