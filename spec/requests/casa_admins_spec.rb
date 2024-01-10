@@ -380,7 +380,7 @@ RSpec.describe "/casa_admins", type: :request do
 
       expect(casa_admin.invitation_created_at.present?).to eq(true)
       expect(Devise.mailer.deliveries.count).to eq(1)
-      expect(Devise.mailer.deliveries.first.subject).to eq("CASA Console invitation instructions")
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_casa_admin_path(casa_admin))
     end
   end
