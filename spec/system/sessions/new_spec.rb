@@ -43,7 +43,7 @@ RSpec.describe "sessions/new", type: :system do
           let!(:user) { create(user_type.to_sym, active: false) }
 
           it "does not allow them to sign in" do
-            expect(page).to have_text "Your account is currently inactive. Please contact your supervisor for more details."
+            expect(page).to have_text I18n.t("devise.failure.inactive")
           end
         end
       end
