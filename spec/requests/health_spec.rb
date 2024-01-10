@@ -35,18 +35,18 @@ RSpec.describe "Health", type: :request do
 
   describe "GET #case_contacts_creation_times_in_last_week" do
     it "returns timestamps of case contacts created in the last week" do
-      case_contact1 = create(:case_contact, created_at: 1.week.ago)
+      case_contact1 = create(:case_contact, created_at: 6.days.ago)
       case_contact2 = create(:case_contact, created_at: 2.weeks.ago)
       get case_contacts_creation_times_in_last_week_health_index_path
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
       timestamps = JSON.parse(response.body)["timestamps"]
       expect(timestamps).to include(case_contact1.created_at.to_i)
-      expect(timestamps).not_to include(case_contact2.created_at.iso8601(3))
+      expect(timestamps).not_to include(case_contact2.created_at.to_i)
     end
   end
 
-  describe "GET #case_contacts_creation_times_in_last_year" do
+  describe "GET #monthly_line_graph_data" do
     it "returns case contacts creation times in the last year" do
       # Create case contacts for testing
       create(:case_contact, notes: "Test Notes", created_at: 11.months.ago)
@@ -54,7 +54,7 @@ RSpec.describe "Health", type: :request do
       create(:case_contact, created_at: 10.months.ago)
       create(:case_contact, created_at: 9.months.ago)
 
-      get case_contacts_creation_times_in_last_year_health_index_path
+      get monthly_line_graph_data_health_index_path
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
 
