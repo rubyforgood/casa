@@ -1,6 +1,6 @@
 require "rails_helper"
-#require "contact_type_group"
-require './app/models/contact_type_group'
+# require "contact_type_group"
+require "./app/models/contact_type_group"
 
 RSpec.describe ContactTypeGroup, type: :model do
   it "does not have duplicate names" do
