@@ -294,6 +294,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       before do
         sign_in admin
         visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}")
         find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
         find("[data-select-all-target='button']").click
       end

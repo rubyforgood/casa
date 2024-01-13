@@ -43,19 +43,25 @@ export default class extends Controller {
     if (this.hasButtonTarget) {
       const numChecked = this.getNumberChecked()
       if (numChecked > 0) {
-        if (this.hasButtonLabelTarget) {
-          let label = this.buttonLabelValue
-          if (numChecked > 1) {
-            label += 's'
-          }
-          label += ' (' + numChecked + ')'
-          this.buttonLabelTarget.innerHTML = label
-        }
+        this.setButtonLabel(numChecked)
 
         this.buttonTarget.classList.remove(this.hiddenClass)
       } else {
         this.buttonTarget.classList.add(this.hiddenClass)
       }
+    }
+  }
+
+  setButtonLabel (numChecked) {
+    if (this.hasButtonLabelTarget) {
+      let label = this.buttonLabelValue
+
+      if (numChecked > 1) {
+        label += 's'
+      }
+      label += ' (' + numChecked + ')'
+
+      this.buttonLabelTarget.innerHTML = label
     }
   }
 
