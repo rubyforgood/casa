@@ -18,7 +18,7 @@ RSpec.describe "learning_hours/new", type: :system, js: true do
     fill_in "Minute(s)", with: "30"
     click_on "Create New Learning Hours Entry"
 
-    expect(page).to have_text("Type of Learning must exist")
+    expect(page).to have_text("Learning hour type must exist")
   end
 
   it "creates learning hours entry with valid data" do

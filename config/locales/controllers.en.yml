@@ -1,6 +1,0 @@
-en:
-  case_court_reports:
-    generate:
-      error:
-        template_not_found: Template is not found
-        report_not_found: Report %{case_number} is not found.
