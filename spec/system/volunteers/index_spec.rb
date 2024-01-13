@@ -240,10 +240,10 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       before do
         sign_in admin
         visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # wait for volunteers to be displayed
       end
 
       it "selects all volunteers" do
-        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # wait for volunteers to be displayed
         find("[data-select-all-target='checkboxAll']").click
 
         volunteers.each do |volunteer|
