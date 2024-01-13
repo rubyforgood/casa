@@ -135,18 +135,16 @@ $(() => { // JQuery's callback for the DOM loading
       })
     },
     order: [[7, 'desc']],
-    select: {
-      style: 'multi'
-    },
     columns: [
       {
         data: 'id',
         targets: 0,
         searchable: false,
         orderable: false,
-        checkboxes: {
-          selectRow: true,
-          stateSave: false
+        render: (data, type, row, meta) => {
+          return `
+            <input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_${row.id}" value="${row.id}" class="form-check-input" data-select-all-target="checkbox" data-action="select-all#toggleSingle">
+          `
         }
       },
       {
@@ -261,10 +259,10 @@ $(() => { // JQuery's callback for the DOM loading
         render: (data, type, row, meta) => {
           return `
           <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
+            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary text-white">
               Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
+            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary text-white">
               Impersonate
             </a>
           `
@@ -303,29 +301,6 @@ $(() => { // JQuery's callback for the DOM loading
     },
     drawCallback: function (settings) {
       $('[data-toggle=tooltip]').tooltip()
-    }
-  })
-
-  $('#form-bulk-assignment').on('submit', function (e) {
-    const form = this
-    const rowsSelected = volunteersTable.column(0).checkboxes.selected()
-
-    $.each(rowsSelected, function (index, rowId) {
-      $(form).append(
-        $('<input>')
-          .attr('type', 'hidden')
-          .attr('name', 'supervisor_volunteer[volunteer_ids][]')
-          .val(rowId)
-      )
-    })
-  })
-
-  volunteersTable.column(0).on('change', function () {
-    const rowsSelected = volunteersTable.column(0).checkboxes.selected()
-    if (rowsSelected.count() === 0) {
-      $('#volunteers-selected').html('')
-    } else {
-      $('#volunteers-selected').html('s (' + rowsSelected.count() + ')')
     }
   })
 

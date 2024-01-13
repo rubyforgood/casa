@@ -2344,21 +2344,6 @@ datatables.net-dt@^1.13.8:
     datatables.net "1.13.8"
     jquery ">=1.7"
 
-datatables.net-select@^1.7.0:
-  version "1.7.0"
-  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.7.0.tgz#a108752ee6109a49392d19fec7406c953be11665"
-  integrity sha512-ps8eL8S2gUV7EdzMraw8mfQlHXpfuc8TC2onBxdk0snP8eizPe85VhpI3r4ULvPRTTI7vcViz8E7JV8aayA2lw==
-  dependencies:
-    datatables.net ">=1.13.4"
-    jquery ">=1.7"
-
-datatables.net@>=1.10.8:
-  version "1.13.6"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.6.tgz#6e282adbbb2732e8df495611b8bb54e19f7a943e"
-  integrity sha512-rHNcnW+yEP9me82/KmRcid5eKrqPqW3+I/p1TwqCW3c/7GRYYkDyF6aJQOQ9DNS/pw+nyr4BVpjyJ3yoZXiFPg==
-  dependencies:
-    jquery ">=1.7"
-
 datatables.net@1.13.8:
   version "1.13.8"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.8.tgz#05a2fb5a036b0b65b66d1bb1eae0ba018aaea8a3"
@@ -4023,14 +4008,6 @@ joi@^17.11.0:
     "@sideway/address" "^4.1.3"
     "@sideway/formula" "^3.0.1"
     "@sideway/pinpoint" "^2.0.0"
-
-jquery-datatables-checkboxes@^1.2.14:
-  version "1.2.14"
-  resolved "https://registry.yarnpkg.com/jquery-datatables-checkboxes/-/jquery-datatables-checkboxes-1.2.14.tgz#5bada981140b9ba645e80d6c2caa8bbbb4123936"
-  integrity sha512-99B6PmS3ZdinDyqF5vBiykd8B+NohHRBBs/a5/hrYRlsBxbWqQ2KtigSvAc2qFdxPOyrcCV75nWBYnlrtdCGgg==
-  dependencies:
-    datatables.net ">=1.10.8"
-    jquery ">=1.7"
 
 jquery@>=1.7, "jquery@>=3.4.0 <4.0.0", jquery@^3.7.1:
   version "3.7.1"

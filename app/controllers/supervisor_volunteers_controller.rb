@@ -3,48 +3,42 @@ class SupervisorVolunteersController < ApplicationController
 
   def create
     authorize :supervisor_volunteer
-    supervisor_volunteer = supervisor_volunteer_parent.supervisor_volunteers.find_or_create_by!(supervisor_volunteer_params)
-    supervisor_volunteer.is_active = true unless supervisor_volunteer&.is_active?
-    volunteer = supervisor_volunteer.volunteer
-    supervisor = supervisor_volunteer.supervisor
-    supervisor_volunteer.save
-    flash_message = "#{volunteer.display_name} successfully assigned to #{supervisor.display_name}."
+    volunteer = Volunteer.find(supervisor_volunteer_params[:volunteer_id])
+    supervisor = set_supervisor
+    if assign_volunteer_to_supervisor(volunteer, supervisor)
+      flash[:notice] = "#{volunteer.display_name} successfully assigned to #{supervisor.display_name}."
+    else
+      flash[:alert] = "Something went wrong. Please try again."
+    end
 
-    redirect_to request.referer, notice: flash_message
+    redirect_to request.referer
   end
 
   def unassign
     authorize :supervisor_volunteer
     volunteer = Volunteer.find(params[:id])
-    supervisor_volunteer = volunteer.supervisor_volunteer
-    supervisor = volunteer.supervisor
-    supervisor_volunteer.is_active = false
-    supervisor_volunteer.save!
-    flash_message = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
+    supervisor = volunteer.supervisor_volunteer.supervisor
+    if unassign_volunteers_supervisor(volunteer)
+      flash[:notice] = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
+    else
+      flash[:alert] = "Something went wrong. Please try again."
+    end
 
-    redirect_to request.referer, notice: flash_message
+    redirect_to request.referer
   end
 
   def bulk_assignment
     authorize :supervisor_volunteer
-    if mass_assign_volunteers?
-      volunteer_ids = supervisor_volunteer_params[:volunteer_ids]
-      supervisor = supervisor_volunteer_params[:supervisor_id]
-      vol = "Volunteer".pluralize(volunteer_ids.length)
 
-      if supervisor == "unassign"
-        name_array = bulk_unassign!(volunteer_ids)
-        flash_message = "#{vol} #{name_array.to_sentence} successfully unassigned"
-      else
-        supervisor = supervisor_volunteer_parent
-        name_array = bulk_assign!(supervisor, volunteer_ids)
-        flash_message = "#{vol} #{name_array.to_sentence} successfully reassigned to #{supervisor.display_name}"
-      end
-
-      redirect_to volunteers_path, notice: flash_message
+    volunteers = policy_scope(current_organization.volunteers).where(id: params[:supervisor_volunteer][:volunteer_ids])
+    supervisor = policy_scope(current_organization.supervisors).where(id: params[:supervisor_volunteer][:supervisor_id]).first
+    if bulk_change_supervisor(supervisor, volunteers)
+      flash[:notice] = "#{"Volunteer".pluralize(volunteers.count)} successfully assigned to new supervisor."
     else
-      redirect_to volunteers_path, notice: "Please select at least one volunteer and one supervisor."
+      flash[:alert] = "Something went wrong. The #{"volunteer".pluralize(volunteers.count)} could not be assigned."
     end
+
+    redirect_to volunteers_path
   end
 
   private
@@ -53,39 +47,29 @@ class SupervisorVolunteersController < ApplicationController
     params.require(:supervisor_volunteer).permit(:supervisor_id, :volunteer_id, volunteer_ids: [])
   end
 
-  def supervisor_volunteer_parent
+  def set_supervisor
     Supervisor.find(params[:supervisor_id] || supervisor_volunteer_params[:supervisor_id])
   end
 
-  def mass_assign_volunteers?
-    supervisor_volunteer_params[:volunteer_ids] && supervisor_volunteer_params[:supervisor_id] ? true : false
-  end
-
-  def bulk_assign!(supervisor, volunteer_ids)
-    created_volunteers = []
-    volunteer_ids.each do |vol_id|
-      if (supervisor_volunteer = SupervisorVolunteer.find_by(volunteer_id: vol_id.to_i))
-        supervisor_volunteer.update!(supervisor_id: supervisor.id)
-      else
-        supervisor_volunteer = supervisor.supervisor_volunteers.create(volunteer_id: vol_id.to_i)
+  def bulk_change_supervisor(supervisor, volunteers)
+    if supervisor
+      volunteers.each do |volunteer|
+        assign_volunteer_to_supervisor(volunteer, supervisor)
       end
-      supervisor_volunteer.is_active = true
-      volunteer = supervisor_volunteer.volunteer
-      supervisor_volunteer.save
-      created_volunteers << volunteer.display_name.to_s
+    else
+      volunteers.each do |volunteer|
+        unassign_volunteers_supervisor(volunteer)
+      end
     end
-    created_volunteers
   end
 
-  def bulk_unassign!(volunteer_ids)
-    unassigned_volunteers = []
-    volunteer_ids.each do |vol_id|
-      supervisor_volunteer = SupervisorVolunteer.find_by(volunteer_id: vol_id.to_i)
-      supervisor_volunteer.update(is_active: false)
-      volunteer = supervisor_volunteer.volunteer
-      supervisor_volunteer.save
-      unassigned_volunteers << volunteer.display_name.to_s # take into account single assignments and give multiple assignments proper format
-    end
-    unassigned_volunteers
+  def assign_volunteer_to_supervisor(volunteer, supervisor)
+    unassign_volunteers_supervisor(volunteer)
+    supervisor_volunteer = supervisor.supervisor_volunteers.find_or_create_by!(volunteer: volunteer)
+    supervisor_volunteer.update!(is_active: true)
+  end
+
+  def unassign_volunteers_supervisor(volunteer)
+    volunteer.supervisor_volunteer&.update(is_active: false)
   end
 end

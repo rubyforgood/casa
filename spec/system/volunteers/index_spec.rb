@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", type: :system do
+RSpec.describe "view all volunteers", type: :system, js: true do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
@@ -175,52 +175,177 @@ RSpec.describe "view all volunteers", type: :system do
 
         expect(supervisor_cell.text).to eq ""
       end
+    end
 
-      context "when bulk assignments" do
-        it "displays supervisor's name when multiple volunteers assigned supervisor", js: true do
-          name = "Superduper Visor"
-          supervisor = create(:supervisor, display_name: name, casa_org: organization)
-          create(:volunteer, casa_org: organization)
-          create(:volunteer, casa_org: organization)
-          sign_in admin
+    describe "Manage Volunteers button" do
+      before do
+        sign_in admin
+        visit volunteers_path
+      end
 
-          visit volunteers_path
+      it "does not display by default" do
+        expect(page).not_to have_text "Manage Volunteer"
+      end
 
-          find("tr.odd").click
-          find("tr.even").click
-          click_on "Manage Volunteer"
-          select supervisor.display_name, from: "supervisor_volunteer[supervisor_id]"
+      context "when one or more volunteers selected" do
+        let!(:volunteers) {
+          [
+            create(:volunteer, casa_org: organization),
+            create(:volunteer, casa_org: organization),
+            create(:volunteer, casa_org: organization)
+          ]
+        }
 
-          click_on "Confirm"
+        it "is displayed" do
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
 
-          supervisor_cell1 = page.find("tbody .odd .supervisor-column")
-          supervisor_cell2 = page.find("tbody .even .supervisor-column")
-
-          expect(supervisor_cell1.text).to eq supervisor.display_name
-          expect(supervisor_cell2.text).to eq supervisor.display_name
+          expect(page).to have_text "Manage Volunteer"
         end
 
-        it "displays no supervisor name when multiple volunteers unassigned supervisor", js: true do
-          name = "Superduper Visor"
-          supervisor = create(:supervisor, display_name: name, casa_org: organization)
-          create(:volunteer, supervisor: supervisor, casa_org: organization)
-          create(:volunteer, supervisor: supervisor, casa_org: organization)
-          sign_in admin
+        it "displays number of volunteers selected" do
+          volunteers.each_with_index do |volunteer, index|
+            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+            button = find("[data-select-all-target='buttonLabel']")
+            expect(button).to have_text "(#{index + 1})"
+          end
+        end
 
-          visit volunteers_path
+        it "text matches pluralization of volunteers selected" do
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          expect(page).not_to have_text "Manage Volunteers"
 
-          find("tr.odd").click
-          find("tr.even").click
-          click_on "Manage Volunteer"
-          select "-- No Supervisor --", from: "supervisor_volunteer[supervisor_id]"
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
+          expect(page).to have_text "Manage Volunteers"
+        end
 
-          click_on "Confirm"
+        it "is hidden when all volunteers unchecked" do
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          expect(page).to have_text "Manage Volunteer"
 
-          supervisor_cell1 = page.find("tbody .odd .supervisor-column")
-          supervisor_cell2 = page.find("tbody .even .supervisor-column")
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          expect(page).not_to have_text "Manage Volunteer"
+        end
+      end
+    end
 
-          expect(supervisor_cell1.text).to eq ""
-          expect(supervisor_cell2.text).to eq ""
+    describe "Select All Checkbox" do
+      let!(:volunteers) {
+        [
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization)
+        ]
+      }
+
+      before do
+        sign_in admin
+        visit volunteers_path
+      end
+
+      it "selects all volunteers" do
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # wait for volunteers to be displayed
+        find("[data-select-all-target='checkboxAll']").click
+
+        volunteers.each do |volunteer|
+          expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be true
+        end
+      end
+
+      context "when all are checked" do
+        before do
+          volunteers.each do |volunteer|
+            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+          end
+        end
+
+        it "deselects all volunteers" do
+          find("[data-select-all-target='checkboxAll']").click
+
+          volunteers.each do |volunteer|
+            expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be false
+          end
+        end
+      end
+
+      context "when some are checked" do
+        before do
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+        end
+
+        it "is semi-checked (indeterminate)" do
+          expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
+          expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
+        end
+
+        it "selects all volunteers" do
+          find("[data-select-all-target='checkboxAll']").click
+
+          volunteers.each do |volunteer|
+            expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be true
+          end
+        end
+      end
+    end
+
+    describe "Select Supervisor Modal Submit button" do
+      let!(:volunteer) { create(:volunteer, casa_org: organization) }
+      let!(:supervisor) { create(:supervisor, casa_org: organization) }
+
+      before do
+        sign_in admin
+        visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+        find("[data-select-all-target='button']").click
+      end
+
+      it "is disabled by default" do
+        button = find("[data-disable-form-target='submitButton']")
+        expect(button.disabled?).to be true
+        expect(button[:class].include?("deactive-btn")).to be true
+        expect(button[:class].include?("dark-btn")).to be false
+        expect(button[:class].include?("btn-hover")).to be false
+      end
+
+      context "when none is selected" do
+        before do
+          select "None", from: "supervisor_volunteer_supervisor_id"
+        end
+
+        it "is enabled" do
+          button = find("[data-disable-form-target='submitButton']")
+          expect(button.disabled?).to be false
+          expect(button[:class].include?("deactive-btn")).to be false
+          expect(button[:class].include?("dark-btn")).to be true
+          expect(button[:class].include?("btn-hover")).to be true
+        end
+      end
+
+      context "when a supervisor is selected" do
+        before do
+          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+        end
+
+        it "is enabled" do
+          button = find("[data-disable-form-target='submitButton']")
+          expect(button.disabled?).to be false
+          expect(button[:class].include?("deactive-btn")).to be false
+          expect(button[:class].include?("dark-btn")).to be true
+          expect(button[:class].include?("btn-hover")).to be true
+        end
+      end
+
+      context "when Choose a supervisor is selected" do
+        before do
+          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+          select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
+        end
+
+        it "is disabled" do
+          button = find("[data-disable-form-target='submitButton']")
+          expect(button.disabled?).to be true
+          expect(button[:class].include?("deactive-btn")).to be true
+          expect(button[:class].include?("dark-btn")).to be false
+          expect(button[:class].include?("btn-hover")).to be false
         end
       end
     end
