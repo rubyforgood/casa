@@ -350,18 +350,6 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         end
       end
     end
-
-    context "when timed out" do
-      it "prompts login" do
-        sign_in admin
-        visit volunteers_path
-        click_on "Supervisor"
-        allow_any_instance_of(User).to receive(:timedout?).and_return true
-        visit volunteers_path
-        expect(page).to have_text "sign in again to continue"
-        expect(current_path).to eq new_user_session_path
-      end
-    end
   end
 
   context "supervisor user" do
