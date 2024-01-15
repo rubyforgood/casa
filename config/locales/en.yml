@@ -39,6 +39,7 @@ en:
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
       edit_profile: "%B %d, %Y at %I:%M %p %Z"
+      time_on_date: "%-I:%-M %p on %m-%e-%Y"
   date:
     formats:
       full: "%B %-d, %Y"

@@ -4,7 +4,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
   describe ".weekly_digest" do
     let(:supervisor) { build(:supervisor, :receive_reimbursement_attachment) }
     let(:volunteer) { build(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
-    let(:casa_case) { build(:casa_case, casa_org: supervisor.casa_org) }
+    let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
 
     let(:mail) { SupervisorMailer.weekly_digest(supervisor) }
 

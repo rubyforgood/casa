@@ -1,0 +1,30 @@
+<div class="title-wrapper pt-30">
+  <div class="title mb-30">
+    <div class="align-items-baseline d-md-flex gap-3">
+      <h1><%= @title %></h1>
+      <% if @autosave %>
+        <small data-autosave-target="alert"></small>
+      <% end %>
+    </div>
+
+    <div class="row align-items-center mt-5">
+      <h2 class="col-12 col-md-6"><%= @subtitle %></h2>
+      <% if @progress %>
+        <div class="col-12 col-md-6 align-items-center d-flex gap-2 mt-2 mt-md-0">
+          <p class="col-auto">
+            <%= @steps_in_text %>
+          </p>
+          <div class="col">
+            <div class="progress">
+              <div class="progress-bar primary-bg" role="progressbar" style="width: <%= @progress %>%" aria-valuenow="<%= @progress %>" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+    <p class="mt-2">
+      <%= @notes %>
+    </p>
+  </div>
+</div>

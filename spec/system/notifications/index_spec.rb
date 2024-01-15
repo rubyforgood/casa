@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "notifications/index", type: :system do
+RSpec.describe "notifications/index", type: :system, js: true do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
@@ -168,7 +168,7 @@ RSpec.describe "notifications/index", type: :system do
 
   context "ReimbursementCompleteNotification" do
     it "should display a notification on the notifications page" do
-      case_contact = create(:case_contact, :wants_reimbursement)
+      case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
       volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
       sign_in volunteer
       visit notifications_path

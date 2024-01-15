@@ -1,0 +1,92 @@
+<%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact details", step: @page, total_steps: @total_pages)) %>
+
+<div>
+  <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
+    <%= render "/shared/error_messages", resource: @case_contact %>
+
+    <div class="card-style-1 pl-25 mb-10">
+      <h4 class="mb-20"><label for="case_contact_casa_case">1. Select the relevant <%= "case".pluralize(@casa_cases.count) %> for this contact <span class="red-letter">*</span></label></h4>
+      <div class="casa-case-scroll">
+        <%= form.hidden_field :draft_case_ids, multiple: true, value: nil %>
+        <% @casa_cases.each do |casa_case| %>
+          <div class="form-check checkbox-style mb-10 ml-5">
+            <%= check_box_tag "case_contact[draft_case_ids][]",
+              casa_case.id,
+              @case_contact.draft_case_ids.include?(casa_case.id),
+              id: "case_contact_draft_case_id_#{casa_case.id}",
+              class: ["form-check-input", "casa-case-id"] %>
+            <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
+              <%= casa_case.case_number %>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="card-style-1 pl-25 mb-10">
+      <%= render "contact_types",
+        form: form,
+        model: @case_contact,
+        contact_type_groups:  @current_organization_groups,
+        selected_case_contact_types: @selected_case_contact_types,
+        checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
+    </div>
+
+    <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
+      <h4 class="mb-3"><label>3. Enter Contact Details</label><span class="red-letter"> *</span></h4>
+      <div class="">
+        <h5 classs="mb-3"><label>a. Contact Made</label></h5>
+        <div class="form-check radio-style mb-20">
+          <%= form.radio_button :contact_made, true,
+            checked: @case_contact.contact_made,
+            required: true,
+            class: 'form-check-input' %>
+          <%= form.label "Yes", class: "form-check-label",
+            for: "case_contact_contact_made_true" %>
+        </div>
+        <div class="form-check radio-style mb-20">
+          <%= form.radio_button :contact_made, false,
+            checked: set_contact_made_false(@case_contact),
+            required: true,
+            class: 'form-check-input' %>
+          <%= form.label "No", class: "form-check-label",
+            for: "case_contact_contact_made_false" %>
+        </div>
+      </div>
+
+      <div class="field contact-medium form-group">
+        <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
+        <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
+          <div class="form-check radio-style mb-20">
+            <%= b.radio_button(class: "form-check-input") %>
+            <%= b.label(class: "form-check-label") %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="pr-50">
+        <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
+        <div class="input-style-1">
+          <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
+          <%= render "layouts/components/ranged_date_picker",
+            form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
+            max_date: "today", component_name: "occurred on" %>
+        </div>
+      </div>
+
+      <div class="pr-50 ">
+        <h5 class="mb-3"><label>d. Duration of Meeting</label></h5>
+        <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
+      </div>
+    </div>
+
+    <div class="actions mb-10 d-flex justify-content-between">
+      <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
+        Back
+      <% end %>
+
+      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -13,10 +13,9 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
-      choose "Letter"
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Letter")
+      complete_notes_page
+      fill_in_expenses_page
 
       click_on "Submit"
 
@@ -35,17 +34,10 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
-      choose "In Person"
-      fill_in "case_contact_duration_hours", with: "1"
-      fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
-      fill_in "a. Miles Driven", with: "10"
-      choose "case_contact_want_driving_reimbursement_true"
-      expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
-      fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_notes_page
+      fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
+
       click_on "Submit"
       case_contact.reload
       expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
@@ -56,23 +48,16 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.contact_made).to eq true
     end
 
-    it "admin fails to edit volunteer address for case contact  with mileage reimbursement", js: true do
+    it "admin fails to edit volunteer address for case contact with mileage reimbursement", js: true do
       sign_in admin
 
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
-      choose "In Person"
-      fill_in "case_contact_duration_hours", with: "1"
-      fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
-      fill_in "a. Miles Driven", with: "10"
-      choose "case_contact_want_driving_reimbursement_true"
-      expect(page).not_to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
-      expect(find("#case_contact_no_address_content").value)
-        .to eq("There are two volunteers assigned to this case and \
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_notes_page
+
+      expect(find("#case_contact_volunteer_address").value)
+        .to eq("There are two or more volunteers assigned to this case and \
 you are trying to set the address for both of them. This is not currently possible.")
     end
 
@@ -98,10 +83,9 @@ you are trying to set the address for both of them. This is not currently possib
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
-      choose "Letter"
+      complete_details_page(contact_made: true, medium: "Letter")
+      complete_notes_page
+      fill_in_expenses_page
 
       click_on "Submit"
 
@@ -118,18 +102,9 @@ you are trying to set the address for both of them. This is not currently possib
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
-
-      choose "In Person"
-      fill_in "case_contact_duration_hours", with: "1"
-      fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
-      fill_in "a. Miles Driven", with: "10"
-      choose "case_contact_want_driving_reimbursement_true"
-      expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
-      fill_in "case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content",	with: "123 str"
+      complete_details_page(contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_notes_page
+      fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
       click_on "Submit"
 
@@ -148,20 +123,13 @@ you are trying to set the address for both of them. This is not currently possib
       sign_in volunteer
       visit edit_case_contact_path(case_contact)
 
-      within "#enter-contact-details" do
-        choose "Yes"
-      end
+      complete_details_page(contact_made: true)
+      expect(CaseContact.last.notes).not_to eq "Hello world"
 
-      fill_in "Additional notes", with: "Hello world"
-
-      find("button#profile").click
-      click_on "Sign Out"
-
-      sign_in volunteer
-
-      visit edit_case_contact_path(case_contact)
-
-      expect(page).to have_field("Additional notes", with: "Hello world")
+      complete_notes_page(notes: "Hello world", click_continue: false)
+      # Wait for autosave to work
+      sleep(2)
+      expect(CaseContact.last.notes).to eq "Hello world"
     end
   end
 end

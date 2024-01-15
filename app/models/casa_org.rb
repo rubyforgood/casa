@@ -44,8 +44,12 @@ class CasaOrg < ApplicationRecord
   end
 
   def case_contacts
-    CaseContact.where(
+    CaseContact.includes(:creator).where(
       casa_case_id: CasaCase.where(casa_org_id: id)
+    ).or(
+      CaseContact.includes(:creator).where(
+        casa_case_id: nil, creator: {casa_org: self}
+      )
     )
   end
 
@@ -86,6 +90,10 @@ class CasaOrg < ApplicationRecord
       ContactTypeGroup.generate_for_org!(self)
       HearingType.generate_for_org!(self)
     end
+  end
+
+  def contact_types_by_group
+    contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
   end
 
   # Given a specific date, returns the active mileage rate.

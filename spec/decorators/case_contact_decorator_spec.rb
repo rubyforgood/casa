@@ -5,18 +5,36 @@ RSpec.describe CaseContactDecorator do
 
   describe "#duration_minutes" do
     context "when duration_minutes is less than 60" do
-      it "returns only minutes" do
-        case_contact.update_attribute(:duration_minutes, 30)
+      let(:case_contact) { build(:case_contact, duration_minutes: 30) }
 
+      it "returns only minutes" do
         expect(case_contact.decorate.duration_minutes).to eq "30 minutes"
       end
     end
 
     context "when duration_minutes is greater than 60" do
+      let(:case_contact) { build(:case_contact, duration_minutes: 135) }
+
       it "returns minutes and hours" do
         case_contact.update_attribute(:duration_minutes, 135)
 
         expect(case_contact.decorate.duration_minutes).to eq "2 hours 15 minutes"
+      end
+
+      context "when is exactly on hour" do
+        let(:case_contact) { build(:case_contact, duration_minutes: 120) }
+
+        it "returns only hours" do
+          expect(case_contact.decorate.duration_minutes).to eq "2 hours"
+        end
+      end
+    end
+
+    context "when minutes is nil" do
+      let(:case_contact) { build(:case_contact, duration_minutes: nil) }
+
+      it "returns not set" do
+        expect(case_contact.decorate.duration_minutes).to eq "Duration not set"
       end
     end
   end

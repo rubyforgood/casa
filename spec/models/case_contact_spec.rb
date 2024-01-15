@@ -4,76 +4,122 @@ RSpec.describe CaseContact, type: :model do
   it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
-  it "belongs to a creator" do
-    case_contact = build_stubbed(:case_contact, creator: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:creator]).to eq(["must exist"])
+  context "status is active" do
+    it "belongs to a creator" do
+      case_contact = build_stubbed(:case_contact, creator: nil)
+      expect(case_contact).to_not be_valid
+      expect(case_contact.errors[:creator]).to eq(["must exist"])
+    end
+
+    it "belongs to a casa case" do
+      case_contact = build_stubbed(:case_contact, casa_case: nil)
+      expect(case_contact).to_not be_valid
+      expect(case_contact.errors[:casa_case_id]).to eq(["can't be blank"])
+    end
+
+    it "defaults miles_driven to zero" do
+      case_contact = build_stubbed(:case_contact)
+      expect(case_contact.miles_driven).to eq 0
+    end
+
+    it "validates presence of occurred_at" do
+      case_contact = build(:case_contact, occurred_at: nil)
+      expect(case_contact).to_not be_valid
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
+    end
+
+    it "validates duration_minutes can be less than 15 minutes." do
+      case_contact = build_stubbed(:case_contact, duration_minutes: 10)
+      expect(case_contact).to be_valid
+    end
+
+    it "verifies occurred at is not in the future" do
+      case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
+      expect(case_contact).to_not be_valid
+      expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
+    end
+
+    it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
+      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
+      expect(case_contact).to be_valid
+    end
+
+    it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
+      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+    end
+
+    it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
+      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+    end
+
+    it "validates that contact_made cannot be null" do
+      case_contact = build_stubbed(:case_contact, contact_made: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors[:base]).to eq(["Must enter whether the contact was made."])
+    end
+
+    it "can be updated even if it is old" do
+      case_contact = build_stubbed(:case_contact)
+      case_contact.occurred_at = Time.zone.now - 1.year
+      expect(case_contact).to be_valid
+    end
+
+    it "can be updated for 30 days after end of quarter" do
+      expect(build_stubbed(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
+    end
   end
 
-  it "belongs to a casa case" do
-    case_contact = build_stubbed(:case_contact, casa_case: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:casa_case]).to eq(["must exist"])
+  context "status is started" do
+    it "ignores some validations" do
+      case_contact = build_stubbed(:case_contact, :started_status, want_driving_reimbursement: true)
+      expect(case_contact.casa_case).to be_nil
+      expect(case_contact.medium_type).to be_nil
+      expect(case_contact.draft_case_ids).to eq []
+      expect(case_contact.occurred_at).to be_nil
+      expect(case_contact.miles_driven).to be 0
+      expect(case_contact.volunteer_address).to be_nil
+      expect(case_contact).to be_valid
+    end
   end
 
-  it "defaults miles_driven to zero" do
-    case_contact = build_stubbed(:case_contact)
-    expect(case_contact.miles_driven).to eq 0
+  context "status is details" do
+    it "ignores some validations" do
+      case_contact = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
+      expect(case_contact.casa_case).to be nil
+      expect(case_contact.miles_driven).to be 0
+      expect(case_contact.volunteer_address).to be_nil
+      expect(case_contact).to be_valid
+    end
+
+    it "requires medium type" do
+      expect(build_stubbed(:case_contact, :details_status, medium_type: nil)).not_to be_valid
+    end
+
+    it "requires a case to be selected" do
+      expect(build_stubbed(:case_contact, :details_status, draft_case_ids: [])).not_to be_valid
+    end
+
+    it "requires occurred at" do
+      expect(build_stubbed(:case_contact, :details_status, occurred_at: nil)).not_to be_valid
+    end
+
+    it "requires duration minutes" do
+      expect(build_stubbed(:case_contact, :details_status, duration_minutes: nil)).not_to be_valid
+    end
   end
 
-  it "validates presence of occurred_at" do
-    case_contact = build(:case_contact, occurred_at: nil)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
-  end
+  context "status is expenses" do
+    it "validates miles driven if want reimbursement" do
+      expect(build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)).not_to be_valid
+    end
 
-  it "validates duration_minutes to allow nil value" do
-    case_contact = build_stubbed(:case_contact, duration_minutes: nil)
-    expect(case_contact).to be_valid
-  end
-
-  it "validates duration_minutes can be less than 15 minutes." do
-    case_contact = build_stubbed(:case_contact, duration_minutes: 10)
-    expect(case_contact).to be_valid
-  end
-
-  it "verifies occurred at is not in the future" do
-    case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
-    expect(case_contact).to_not be_valid
-    expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
-  end
-
-  it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
-    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
-    expect(case_contact).to be_valid
-  end
-
-  it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
-    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
-    expect(case_contact).not_to be_valid
-    expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
-  end
-
-  it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
-    case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
-    expect(case_contact).not_to be_valid
-    expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
-  end
-
-  it "validates that contact_made cannot be null" do
-    case_contact = build_stubbed(:case_contact, contact_made: nil)
-    expect(case_contact).not_to be_valid
-    expect(case_contact.errors[:base]).to eq(["Must enter whether the contact was made."])
-  end
-
-  it "can be updated even if it is old" do
-    case_contact = build(:case_contact)
-    case_contact.update!(occurred_at: Time.zone.now - 1.year)
-    expect(case_contact).to be_valid
-  end
-
-  it "can be updated for 30 days after end of quarter" do
-    expect(build(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
+    it "validates volunteer address" do
+      expect(build_stubbed(:case_contact, :expenses_status, :wants_reimbursement)).not_to be_valid
+    end
   end
 
   describe "#update_cleaning_contact_types" do
@@ -494,16 +540,12 @@ RSpec.describe CaseContact, type: :model do
   describe "#should_send_reimbursement_email?" do
     let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
     let(:volunteer) { create(:volunteer, supervisor: supervisor) }
-    let(:case_contact) { build(:case_contact, :wants_reimbursement, creator: volunteer) }
+    let(:casa_case) { create(:casa_case) }
+    let(:case_contact) { build(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer) }
 
     it "returns true if wants reimbursement, reimbursement changed, and has active supervisor" do
+      expect(case_contact.want_driving_reimbursement_changed?).to be true
       expect(case_contact.should_send_reimbursement_email?).to be true
-    end
-
-    it "returns false if want reimbursement not changed" do
-      case_contact.save
-      expect(case_contact.want_driving_reimbursement_changed?).to be false
-      expect(case_contact.should_send_reimbursement_email?).to be false
     end
 
     it "returns false if doesn't want reimbursement" do
@@ -520,6 +562,71 @@ RSpec.describe CaseContact, type: :model do
     it "returns false if creator's supervisor is inactive" do
       supervisor.update(active: false)
       expect(case_contact.should_send_reimbursement_email?).to be false
+    end
+  end
+
+  describe "volunteer assignment" do
+    let(:casa_org) { create(:casa_org) }
+    let(:admin) { create(:casa_admin, casa_org: casa_org) }
+    let(:supervisor) { create(:supervisor, casa_org: casa_org) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org: casa_org) }
+    let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+    let(:case_contact) { build(:case_contact, casa_case: casa_case, creator: creator) }
+
+    context "when creator is volunteer" do
+      let(:creator) { volunteer }
+
+      it "creator is the volunteer" do
+        expect(case_contact.volunteer).to eq volunteer
+      end
+
+      it "enables address field" do
+        expect(case_contact.address_field_disabled?).to be false
+      end
+    end
+
+    context "when creator is admin" do
+      let(:creator) { admin }
+
+      context "when casa case has one volunteer assigned" do
+        let!(:contact_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+
+        it "volunteer is the assigned volunteer" do
+          expect(case_contact.volunteer).to eq volunteer
+        end
+
+        it "enables address field" do
+          expect(case_contact.address_field_disabled?).to be false
+        end
+      end
+
+      context "when casa case has no volunteers assigned" do
+        it "volunteer is nil" do
+          expect(case_contact.volunteer).to be nil
+        end
+
+        it "disbales address field" do
+          expect(case_contact.address_field_disabled?).to be true
+        end
+      end
+
+      context "when casa case has more than 1 volunteer assigned" do
+        let(:other_volunteer) { create(:volunteer, casa_org: casa_org) }
+        let!(:contact_assignments) {
+          [
+            create(:case_assignment, volunteer: volunteer, casa_case: casa_case),
+            create(:case_assignment, volunteer: other_volunteer, casa_case: casa_case)
+          ]
+        }
+
+        it "volunteer is nil" do
+          expect(case_contact.volunteer).to be nil
+        end
+
+        it "disbales address field" do
+          expect(case_contact.address_field_disabled?).to be true
+        end
+      end
     end
   end
 end

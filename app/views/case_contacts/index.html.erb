@@ -14,6 +14,7 @@
     </div>
   </div>
 </div>
+
 <%= form_for_filterrific @filterrific, url: case_contacts_path do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
   <div class="card-style my-4">
@@ -30,8 +31,19 @@
       </button>
     </div>
 
-    <% collapse_class = params[:filterrific] ? "" : "collapse" %>
+  <% collapse_class = params[:filterrific] ? "" : "collapse" %>
     <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
+      <div class="row">
+        <div class="col-12">
+          <h3 class="mt-10"><label>Draft status</label></h3>
+        </div>
+        <div class="col-md-4">
+          <div class="form-check checkbox-style">
+            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
+            <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
+          </div>
+        </div>
+      </div>
         <div class="row">
           <div class="col-12">
             <h3 class="mt-10"><label>Date of contact</label></h3>
