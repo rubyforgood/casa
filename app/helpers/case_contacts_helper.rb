@@ -14,7 +14,7 @@ module CaseContactsHelper
 
   def contact_mediums
     CaseContact::CONTACT_MEDIUMS.map { |contact_medium|
-      OpenStruct.new(value: contact_medium, label: contact_medium.titleize)
+      OpenStruct.new(value: contact_medium, label: contact_medium.capitalize)
     }
   end
 

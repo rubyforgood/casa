@@ -24,7 +24,7 @@ RSpec.describe "case_contacts/new", type: :view do
       sign_in_as_volunteer
     end
 
-    it { is_expected.to have_field("c. Occurred On", with: current_time) }
+    it { is_expected.to have_field("c. Date of contact", with: current_time) }
     it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
   end
 
@@ -36,7 +36,7 @@ RSpec.describe "case_contacts/new", type: :view do
     end
 
     context "when the case has no volunteers" do
-      it { is_expected.to have_field("c. Occurred On", with: current_time) }
+      it { is_expected.to have_field("c. Date of contact", with: current_time) }
       it { is_expected.to have_selector("textarea", id: "case_contact_notes") }
     end
   end

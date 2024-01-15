@@ -253,13 +253,13 @@ RSpec.describe CaseContact, type: :model do
 
       let!(:case_contacts) do
         [
-          create(:case_contact, medium_type: "in-person"),
+          create(:case_contact, medium_type: "in person"),
           create(:case_contact, medium_type: "letter")
         ]
       end
 
       describe "with specified medium parameter" do
-        let(:medium_type) { "in-person" }
+        let(:medium_type) { "in person" }
 
         it { is_expected.to contain_exactly case_contacts.first }
       end
@@ -348,8 +348,8 @@ RSpec.describe CaseContact, type: :model do
 
           let!(:case_contacts) do
             [
-              create(:case_contact, medium_type: "in-person"),
-              create(:case_contact, medium_type: "text/email"),
+              create(:case_contact, medium_type: "in person"),
+              create(:case_contact, medium_type: "text or email"),
               create(:case_contact, medium_type: "letter")
             ]
           end

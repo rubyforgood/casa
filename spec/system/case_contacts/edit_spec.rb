@@ -38,10 +38,10 @@ RSpec.describe "case_contacts/edit", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
@@ -52,7 +52,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.casa_case.volunteers[0].address.content).to eq "123 str"
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
-      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.medium_type).to eq "in person"
       expect(case_contact.contact_made).to eq true
     end
 
@@ -64,10 +64,10 @@ RSpec.describe "case_contacts/edit", type: :system do
       within "#enter-contact-details" do
         choose "Yes"
       end
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).not_to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
@@ -122,10 +122,10 @@ you are trying to set the address for both of them. This is not currently possib
         choose "Yes"
       end
 
-      choose "In Person"
+      choose "In person"
       fill_in "case_contact_duration_hours", with: "1"
       fill_in "case_contact_duration_minutes", with: "45"
-      fill_in "c. Occurred On", with: "04/04/2020"
+      fill_in "c. Date of contact", with: "04/04/2020"
       fill_in "a. Miles Driven", with: "10"
       choose "case_contact_want_driving_reimbursement_true"
       expect(page).to have_selector("#case_contact_casa_case_attributes_volunteers_attributes_0_address_attributes_content")
@@ -139,7 +139,7 @@ you are trying to set the address for both of them. This is not currently possib
       expect(volunteer.address.content).to eq "123 str"
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
-      expect(case_contact.medium_type).to eq "in-person"
+      expect(case_contact.medium_type).to eq "in person"
       expect(case_contact.contact_made).to eq true
     end
 

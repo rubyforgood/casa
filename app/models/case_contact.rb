@@ -130,10 +130,10 @@ class CaseContact < ApplicationRecord
     ]
   )
 
-  IN_PERSON = "in-person".freeze
-  TEXT_EMAIL = "text/email".freeze
+  IN_PERSON = "in person".freeze
+  TEXT_EMAIL = "text or email".freeze
   VIDEO = "video".freeze
-  VOICE_ONLY = "voice-only".freeze
+  VOICE_ONLY = "voice only".freeze
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
