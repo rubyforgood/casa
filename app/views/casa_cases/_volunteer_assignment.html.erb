@@ -19,11 +19,11 @@
         <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
         <td data-test="assigned">
           <% if assignment.active? %>
-            <span class='badge badge-success text-uppercase'>Assigned</span>
+            <%= render BadgeComponent.new(text: "Assigned", type: :success, margin: false) %>
           <% else %>
-            <span class="badge badge-danger text-uppercase">
-              <%= assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer" %>
-            </span>
+            <%= render BadgeComponent.new(text: assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer",
+                                          type: :danger,
+                                          margin: false) %>
           <% end %>
         </td>
         <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>

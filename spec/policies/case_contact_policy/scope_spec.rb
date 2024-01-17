@@ -36,7 +36,7 @@ RSpec.describe CaseContactPolicy::Scope do
     end
 
     def create_irrelevant_contacts(current_user, other_user)
-      irrelevant_case = build(:casa_case)
+      irrelevant_case = create(:casa_case)
 
       create_list(:case_contact, 2, casa_case: irrelevant_case, creator: current_user)
       build(:case_contact, casa_case: irrelevant_case, creator: other_user)

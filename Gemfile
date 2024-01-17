@@ -35,7 +35,7 @@ gem "pdf-forms" # filling in fund request PDFs with user input
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.4.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "6.4.2" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "rack-cors" # for allowing cross-origin resource sharing
@@ -46,6 +46,7 @@ gem "sprockets-rails" # The original asset pipeline for Rails [https://github.co
 gem "stimulus-rails"
 gem "strong_migrations"
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem "wicked"
 gem "rswag-api"
 gem "rswag-ui"
 gem "blueprinter" # for JSON serialization

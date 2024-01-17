@@ -1,5 +1,6 @@
 class BannersController < ApplicationController
-  after_action :verify_authorized
+  after_action :verify_authorized, except: %i[dismiss]
+  before_action :set_banner, only: %i[edit update destroy dismiss]
 
   def index
     authorize :application, :admin_or_supervisor?
@@ -15,8 +16,11 @@ class BannersController < ApplicationController
 
   def edit
     authorize :application, :admin_or_supervisor?
+  end
 
-    @banner = current_organization.banners.find(params[:id])
+  def dismiss
+    session[:dismissed_banner] = @banner.id
+    render json: {status: :ok}
   end
 
   def create
@@ -37,8 +41,6 @@ class BannersController < ApplicationController
   def update
     authorize :application, :admin_or_supervisor?
 
-    @banner = current_organization.banners.find(params[:id])
-
     Banner.transaction do
       deactivate_alternate_active_banner
       @banner.update!(banner_params)
@@ -52,11 +54,15 @@ class BannersController < ApplicationController
   def destroy
     authorize :application, :admin_or_supervisor?
 
-    current_organization.banners.find(params[:id]).destroy
+    @banner.destroy
     redirect_to banners_path
   end
 
   private
+
+  def set_banner
+    @banner = current_organization.banners.find(params[:id])
+  end
 
   def banner_params
     params.require(:banner).permit(:active, :content, :name).merge(user: current_user)

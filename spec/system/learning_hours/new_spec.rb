@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "learning_hours/new", type: :system do
+RSpec.describe "learning_hours/new", type: :system, js: true do
   let(:organization) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
 
@@ -18,7 +18,7 @@ RSpec.describe "learning_hours/new", type: :system do
     fill_in "Minute(s)", with: "30"
     click_on "Create New Learning Hours Entry"
 
-    expect(page).to have_text("Type of Learning must exist")
+    expect(page).to have_text("Learning hour type must exist")
   end
 
   it "creates learning hours entry with valid data" do

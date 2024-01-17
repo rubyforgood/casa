@@ -11,7 +11,7 @@ RSpec.describe "additional_expenses", type: :system do
     create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
   end
 
-  it "can be set per organization" do
+  it "can be set per organization", js: true do
     other_organization = build(:casa_org)
     other_volunteer = create(:volunteer, casa_org: other_organization)
     other_casa_case = create(:casa_case, casa_org: other_organization)
@@ -21,11 +21,17 @@ RSpec.describe "additional_expenses", type: :system do
     visit casa_case_path(casa_case.id)
     click_on "New Case Contact"
 
+    complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+    complete_notes_page
+
     expect(page).to have_text("Other Expenses")
 
     sign_in other_volunteer
     visit casa_case_path(other_casa_case.id)
     click_on "New Case Contact"
+
+    complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+    complete_notes_page
 
     expect(page).not_to have_text("Other Expenses")
   end
@@ -45,7 +51,8 @@ RSpec.describe "additional_expenses", type: :system do
 
       click_on "New Case Contact"
 
-      fill_out_minimum_required_fields_for_case_contact_form
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
@@ -55,10 +62,12 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(1)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-      expect(page).to have_text("Editing Case Contact")
+      complete_details_page(contact_made: true)
+      complete_notes_page
+
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "5.34")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Lunch")
       expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
@@ -73,7 +82,8 @@ RSpec.describe "additional_expenses", type: :system do
 
       click_on "New Case Contact"
 
-      fill_out_minimum_required_fields_for_case_contact_form
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
@@ -91,10 +101,12 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(2)
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(2)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-      expect(page).to have_text("Editing Case Contact")
+      complete_details_page(contact_made: true)
+      complete_notes_page
+
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "7.21")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
       expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
@@ -109,11 +121,12 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(1)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+      complete_details_page(contact_made: true)
+      complete_notes_page
 
-      expect(page).to have_text("Editing Case Contact")
       expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
       expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Breakfast")
@@ -131,7 +144,8 @@ RSpec.describe "additional_expenses", type: :system do
 
       click_on "New Case Contact"
 
-      fill_out_minimum_required_fields_for_case_contact_form
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
 
@@ -154,10 +168,12 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(10)
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(10)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-      expect(page).to have_text("Editing Case Contact")
+      complete_details_page(contact_made: true)
+      complete_notes_page
+
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "0.11")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "1 meal")
       expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "1.11")
@@ -191,7 +207,8 @@ RSpec.describe "additional_expenses", type: :system do
 
       click_on "New Case Contact"
 
-      fill_out_minimum_required_fields_for_case_contact_form
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
@@ -200,7 +217,7 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
+      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(0)
 
       expect(page).to have_text("error")
 
@@ -208,24 +225,26 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(1).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(1)
       expect(page).not_to have_text("error")
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
-      # Confirming validation and correct errors to user for update method
+      complete_details_page(contact_made: true)
+      complete_notes_page
 
+      # Confirming validation and correct errors to user for update method
       find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.45")
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(0)
+      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(0)
       expect(page).to have_text("error")
 
       find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "2nd meal")
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact, :count).by(0).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(1)
       expect(page).not_to have_text("error")
     end
   end

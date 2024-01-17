@@ -5,11 +5,14 @@
         <div class="mt-0">
           <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="">
-            <h5 class="pt-0 mb-10 card-title">
+            <h5 class="pt-0 mb-10 card-title d-flex align-items-center gap-2">
               <strong class="<%= "text-primary" %>">
                 <%= "[DELETE] " if policy(contact).restore? && contact.deleted? %>
-                <%= contact.contact_groups_with_types.keys.join(", ") %>
+                <%= contact.decorate.contact_groups %>
               </strong>
+              <% if !contact.active? %>
+                <span class="badge badge-pill light-bg text-black">Draft</span>
+              <% end %>
               <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post,
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>

@@ -4,6 +4,10 @@
 
 import { application } from './application'
 
+import AlertController from './alert_controller'
+
+import AutosaveController from './autosave_controller'
+
 import DismissController from './dismiss_controller'
 
 import ExtendedNestedFormController from './extended_nested_form_controller'
@@ -19,6 +23,8 @@ import NavbarController from './navbar_controller'
 import SidebarController from './sidebar_controller'
 
 import SidebarGroupController from './sidebar_group_controller'
+application.register('alert', AlertController)
+application.register('autosave', AutosaveController)
 application.register('dismiss', DismissController)
 application.register('extended-nested-form', ExtendedNestedFormController)
 application.register('hello', HelloController)

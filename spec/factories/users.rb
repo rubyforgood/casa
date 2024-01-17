@@ -23,6 +23,12 @@ FactoryBot.define do
       end
     end
 
+    trait :with_single_case do
+      after(:create) do |user, _|
+        create_list(:case_assignment, 1, volunteer: user)
+      end
+    end
+
     trait :with_case_contact do
       after(:create) do |user, _|
         create(:case_assignment, volunteer: user)

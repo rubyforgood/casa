@@ -9,6 +9,7 @@ class ApplicationController < ActionController::Base
   before_action :set_current_user
   before_action :set_timeout_duration
   before_action :set_current_organization
+  before_action :set_active_banner
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
@@ -28,6 +29,13 @@ class ApplicationController < ActionController::Base
     else
       root_path
     end
+  end
+
+  def set_active_banner
+    return nil unless current_organization
+
+    @active_banner = current_organization.banners.active.first
+    @active_banner = nil if session[:dismissed_banner] == @active_banner&.id
   end
 
   protected

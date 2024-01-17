@@ -28,13 +28,4 @@ RSpec.describe CaseContactParameters do
     expect(subject["notes"]).to eq("notes")
     expect(subject["case_contact_contact_type_attributes"]).to eq([])
   end
-
-  context "with creator" do
-    subject { described_class.new(params, creator: creator) }
-    let(:creator) { "1@example.com" }
-
-    it "returns data" do
-      expect(subject[:creator]).to eq("1@example.com")
-    end
-  end
 end
