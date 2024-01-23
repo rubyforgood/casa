@@ -38,7 +38,7 @@ RSpec.describe "LearningHours", type: :request do
 
       it "displays the time completed column" do
         get learning_hours_path
-        expect(response.body).to include("Time Completed")
+        expect(response.body).to include("Time Completed YTD")
       end
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe "LearningHours", type: :request do
 
       it "displays the time completed column" do
         get learning_hours_path
-        expect(response.body).to include("Time Completed")
+        expect(response.body).to include("Time Completed YTD")
       end
     end
   end
