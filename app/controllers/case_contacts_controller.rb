@@ -20,7 +20,7 @@ class CaseContactsController < ApplicationController
     ) || return
 
     case_contacts = CaseContact.case_hash_from_cases(@filterrific.find)
-    case_contacts = case_contacts.select { |k,_v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
+    case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
   end
