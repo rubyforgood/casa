@@ -49,13 +49,17 @@
   </div>
   <div class="field-card mt-4">
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
-    <% occurred_at = learning_hour.occurred_at || Time.zone.now %>
+    <div><%= "learning_hour.occurred_at = #{learning_hour.occurred_at}" %></div>
+    <div><%= "Time.now = #{Time.zone.now}" %></div>
+    <% occurred_at = learning_hour.occurred_at || Time.now %>
     <div class="input-style-1">
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,
                           data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                           class: "form-control label-font-weight" %>
     </div>
+    <div><%= "occurred_at = #{occurred_at}" %></div>
+    <div><%= "occurred_at.to_date = #{occurred_at.to_date}" %></div>
   </div>
   <div class="actions mt-3">
     <%= button_tag(
