@@ -20,6 +20,7 @@ class CaseContactsController < ApplicationController
     ) || return
 
     case_contacts = CaseContact.case_hash_from_cases(@filterrific.find)
+    case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
   end
@@ -107,11 +108,7 @@ class CaseContactsController < ApplicationController
   end
 
   def all_case_contacts
-    query = policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
-    if params[:casa_case_id].present?
-      query = query.where(casa_case_id: params[:casa_case_id])
-    end
-    query
+    policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
   end
 
   def additional_expense_params
