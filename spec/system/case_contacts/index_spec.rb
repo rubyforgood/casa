@@ -67,6 +67,27 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           end
         end
       end
+
+      describe "by casa_case_id" do
+        let!(:case_contact) { create(:case_contact, :details_status, creator: volunteer, draft_case_ids: [casa_case.id]) }
+        let!(:other_casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-2") }
+
+        it "displays the draft" do
+          sign_in volunteer
+          visit case_contacts_path(casa_case_id: casa_case.id)
+
+          expect(page).not_to have_content "You have no case contacts for this case."
+          expect(page).to have_content "Draft"
+        end
+
+        it "only displays the filtered case" do
+          sign_in volunteer
+          visit case_contacts_path(casa_case_id: casa_case.id)
+
+          expect(page).not_to have_content other_casa_case.case_number
+          expect(page).to have_content casa_case.case_number
+        end
+      end
     end
 
     describe "case contacts text color" do

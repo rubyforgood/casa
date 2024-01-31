@@ -44,25 +44,25 @@ RSpec.describe CaseContactReport, type: :model do
 
   describe "filter behavior" do
     describe "casa organization" do
-      it "includes case contacts from current org" do
-        casa_org = build(:casa_org)
-        casa_case = build(:casa_case, casa_org: casa_org)
-        case_contact = create(:case_contact, casa_case: casa_case)
+      let(:casa_org) { create(:casa_org) }
+      let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+      let(:case_contact) { create(:case_contact, casa_case: casa_case) }
 
+      it "includes case contacts from current org" do
         report = CaseContactReport.new(casa_org_id: casa_org.id)
 
         expect(report.case_contacts).to contain_exactly(case_contact)
       end
 
-      it "excludes case contacts from other orgs" do
-        casa_org = create(:casa_org)
-        other_casa_org = build(:casa_org)
-        casa_case = build(:casa_case, casa_org: other_casa_org)
-        build(:case_contact, casa_case: casa_case)
+      context "from other orgs" do
+        let(:other_casa_org) { create(:casa_org) }
+        let(:casa_case) { create(:casa_case, casa_org: other_casa_org) }
 
-        report = CaseContactReport.new(casa_org_id: casa_org.id)
+        it "excludes case contacts" do
+          report = CaseContactReport.new(casa_org_id: casa_org.id)
 
-        expect(report.case_contacts).to be_empty
+          expect(report.case_contacts).to be_empty
+        end
       end
     end
 
@@ -172,8 +172,8 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "has transitioned behavior" do
-      let(:case_case_1) { build(:casa_case, birth_month_year_youth: 15.years.ago) }
-      let(:case_case_2) { build(:casa_case, birth_month_year_youth: 10.years.ago) }
+      let(:case_case_1) { create(:casa_case, birth_month_year_youth: 15.years.ago) }
+      let(:case_case_2) { create(:casa_case, birth_month_year_youth: 10.years.ago) }
 
       before(:each) do
         create(:case_contact, {casa_case: case_case_1})
@@ -315,7 +315,7 @@ RSpec.describe CaseContactReport, type: :model do
         it "returns all case contacts with the casa case ids" do
           report = described_class.new({casa_case_ids: [casa_case.id]})
           expect(report.case_contacts.length).to eq(case_contacts.length)
-          expect(report.case_contacts).to eq(case_contacts)
+          expect(report.case_contacts).to match_array(case_contacts)
         end
       end
 
@@ -333,8 +333,8 @@ RSpec.describe CaseContactReport, type: :model do
         court = build(:contact_type, name: "Court")
         school = build(:contact_type, name: "School")
         therapist = build(:contact_type, name: "Therapist")
-        untransitioned_casa_case = build(:casa_case, :pre_transition)
-        transitioned_casa_case = build(:casa_case)
+        untransitioned_casa_case = create(:casa_case, :pre_transition)
+        transitioned_casa_case = create(:casa_case)
         contact1 = create(:case_contact, occurred_at: 20.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         build_stubbed(:case_contact, occurred_at: 40.days.ago, casa_case: transitioned_casa_case, contact_types: [court])
         build_stubbed(:case_contact, occurred_at: 20.days.ago, casa_case: untransitioned_casa_case, contact_types: [court])

@@ -6,15 +6,12 @@ class CaseContactDecorator < Draper::Decorator
   def duration_minutes
     minutes = object.duration_minutes
 
-    return "#{minutes} minutes" if minutes <= 60
-
-    formatted_hour_value = minutes / 60
-    formatted_minutes_value = minutes.remainder(60)
-
-    if formatted_minutes_value.zero?
-      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
+    if !minutes
+      "Duration not set"
+    elsif minutes <= 60
+      "#{minutes} minutes"
     else
-      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
+      formatted_hours_and_minutes(minutes)
     end
   end
 
@@ -85,6 +82,15 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  def contact_groups
+    groups = contact_groups_with_types.keys
+    if groups.count > 0
+      groups.join(", ")
+    else
+      "Not Selected"
+    end
+  end
+
   def limited_notes
     object.notes.truncate(NOTES_CHARACTER_LIMIT)
   end
@@ -99,5 +105,44 @@ class CaseContactDecorator < Draper::Decorator
 
   def additional_expenses_count
     object.additional_expenses.any? ? object.additional_expenses.length : 0
+  end
+
+  def address_of_volunteer
+    if volunteer_address&.present?
+      volunteer_address
+    elsif volunteer
+      volunteer.address&.content
+    else
+      "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
+    end
+  end
+
+  def form_title
+    active? ? "Editing existing case contact" : "Record new case contact"
+  end
+
+  def form_page_notes
+    {
+      details: nil,
+      notes: "This question will be included in the court report for your assigned foster youth. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
+      expenses: nil
+    }
+  end
+
+  def form_updated_message
+    "Case contact created at #{I18n.l(created_at, format: :time_on_date)}, was successfully updated."
+  end
+
+  private
+
+  def formatted_hours_and_minutes(minutes)
+    formatted_hour_value = minutes / 60
+    formatted_minutes_value = minutes.remainder(60)
+
+    if formatted_minutes_value.zero?
+      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)}"
+    else
+      "#{formatted_hour_value} #{"hour".pluralize(formatted_hour_value)} #{formatted_minutes_value} minutes"
+    end
   end
 end

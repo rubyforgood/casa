@@ -5,6 +5,6 @@
 <% else %>
   A CASA console admin account has been created for you. Your console account is associated with this email.
   If you are ready to get started, please set your password. This is the first step to accessing your new account.
-  <%= t 'devise.mailer.invitation_instructions.accept_until', due_date: l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format') %>
+  <%= "This invitation will be due in #{I18n.l(@resource.invitation_due_at, format: :'devise.mailer.invitation_instructions.accept_until_format')}." %>
 <% end %>
 <%= link_to "Set your password", accept_invitation_url(@resource, invitation_token: @token) %>

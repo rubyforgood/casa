@@ -6,5 +6,5 @@
   <%= render("recently_unassigned_volunteers", supervisor: @supervisor) %>
   <%= render("additional_notes", inactive_messages: @inactive_messages) %>
   <%= render("pending_volunteers", supervisor: @supervisor) %>
-  <%= render("no_recent_sign_in", supervisor: @supervisor) %>
+  <%= render("no_recent_sign_in", supervisor: @supervisor, inactive_volunteers: @inactive_volunteers) %>
 </table>

@@ -1,11 +1,15 @@
 require "rails_helper"
 
-RSpec.describe "followups/resolve", type: :system do
-  let(:admin) { create(:casa_admin) }
-  let(:case_contact) { build(:case_contact) }
-  let(:volunteer) { build(:volunteer) }
-  let(:supervisor) { build(:supervisor) }
-  let!(:followup) { create(:followup, case_contact: case_contact) }
+RSpec.describe "followups/resolve", type: :system, js: true do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: casa_org) }
+  let(:supervisor) { build(:supervisor, casa_org: casa_org) }
+  let(:volunteer) { build(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:cc_creator) { admin }
+  let(:followup_creator) { volunteer }
+  let(:case_contact) { build(:case_contact, casa_case: casa_case, creator: cc_creator) }
+  let!(:followup) { create(:followup, case_contact: case_contact, creator: followup_creator) }
 
   it "changes status of followup to resolved" do
     sign_in admin
@@ -18,8 +22,8 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as admin, followup created by volunteer" do
-    let(:case_contact) { build(:case_contact, creator: volunteer) }
-    let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
+    let(:cc_creator) { volunteer }
+    let(:followup_creator) { volunteer }
 
     it "changes status of followup to resolved" do
       sign_in admin
@@ -42,8 +46,8 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as supervisor, followup created by volunteer" do
-    let(:case_contact) { build(:case_contact, creator: supervisor) }
-    let!(:followup) { create(:followup, creator: volunteer, case_contact: case_contact) }
+    let(:cc_creator) { supervisor }
+    let(:followup_creator) { volunteer }
 
     it "changes status of followup to resolved" do
       sign_in supervisor
@@ -57,9 +61,8 @@ RSpec.describe "followups/resolve", type: :system do
   end
 
   context "logged in as volunteer, followup created by admin" do
-    let(:case_contact) { build(:case_contact, creator: volunteer) }
-    let(:volunteer) { build(:volunteer) }
-    let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
+    let(:cc_creator) { volunteer }
+    let(:followup_creator) { admin }
 
     before do
       case_contact.casa_case.assigned_volunteers << volunteer

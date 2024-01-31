@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   resources :health, only: %i[index] do
     collection do
       get :case_contacts_creation_times_in_last_week
+      get :monthly_line_graph_data
     end
   end
 
@@ -70,10 +71,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show] do
+  get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
+  resources :case_contacts, except: %i[create update] do
     member do
       post :restore
     end
+    resources :form, controller: "case_contacts/form"
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
@@ -115,7 +118,11 @@ Rails.application.routes.draw do
   resources :learning_hour_topics, only: %i[new create edit update]
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
-  resources :banners, only: %i[index new edit create update destroy]
+  resources :banners, except: %i[show] do
+    member do
+      get :dismiss
+    end
+  end
   resources :bulk_court_dates, only: %i[new create]
   resources :case_groups, only: %i[index new edit create update destroy]
   resources :learning_hours, only: %i[index show new create edit update destroy]

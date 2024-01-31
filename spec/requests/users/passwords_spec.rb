@@ -92,7 +92,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
 
       it "sets errors correctly" do
         request
-        expect(request.parsed_body).to include("Please enter at least one field.")
+        expect(request.parsed_body.to_html).to include("Please enter at least one field.")
       end
     end
 
@@ -101,7 +101,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
 
       it "sets errors correctly" do
         request
-        expect(request.parsed_body).to include("User does not exist.")
+        expect(request.parsed_body.to_html).to include("User does not exist.")
       end
     end
 

@@ -97,7 +97,7 @@ RSpec.describe "/volunteers", type: :request do
     it "shows correct volunteer", :aggregate_failures do
       create(:volunteer, casa_org: organization)
 
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       expect(page).to include(volunteer.email)
       expect(page).to include(volunteer.display_name)
       expect(page).to include(volunteer.phone_number)
@@ -106,7 +106,7 @@ RSpec.describe "/volunteers", type: :request do
     it "shows correct supervisor options", :aggregate_failures do
       supervisors = create_list(:supervisor, 3, casa_org: organization)
 
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       supervisors.each { |supervisor| expect(page).to include(CGI.escape_html(supervisor.display_name)) }
     end
   end

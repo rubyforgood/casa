@@ -49,7 +49,7 @@
   </div>
   <div class="field-card mt-4">
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
-    <% occurred_at = learning_hour.occurred_at || Time.zone.now %>
+    <% occurred_at = learning_hour.occurred_at || Date.today %>
     <div class="input-style-1">
       <%= form.text_field :occurred_at,
                           value: occurred_at.to_date,

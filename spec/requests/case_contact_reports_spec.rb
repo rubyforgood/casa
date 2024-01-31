@@ -53,7 +53,7 @@ RSpec.describe "/case_contact_reports", type: :request do
       context "with supervisor_ids filter" do
         it "renders csv with only the volunteer" do
           volunteer = create(:volunteer)
-          casa_case = build(:casa_case, casa_org: volunteer.casa_org)
+          casa_case = create(:casa_case, casa_org: volunteer.casa_org)
           contact = create(:case_contact, creator_id: volunteer.id, casa_case: casa_case)
           build_stubbed(:case_contact, creator_id: user.id, casa_case: casa_case)
 

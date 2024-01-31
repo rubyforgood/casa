@@ -15,6 +15,7 @@ class CaseContactPolicy < ApplicationPolicy
   alias_method :index?, :admin_or_supervisor_or_volunteer?
   alias_method :new?, :admin_or_supervisor_or_volunteer?
   alias_method :show?, :is_creator_or_casa_admin?
+  alias_method :drafts?, :admin_or_supervisor_or_volunteer?
   alias_method :create?, :is_creator_or_casa_admin?
   alias_method :destroy?, :admin_or_supervisor?
   alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
@@ -34,7 +35,7 @@ class CaseContactPolicy < ApplicationPolicy
       when CasaAdmin, Supervisor
         scope.joins(:casa_case).where(casa_case: {casa_org: @user&.casa_org})
       when Volunteer
-        scope.where(casa_case: CasaCase.actively_assigned_to(@user), creator: @user)
+        scope.where(casa_case: CasaCase.actively_assigned_to(@user) + [nil], creator: @user)
       else
         raise "unrecognized user type #{@user.type}"
       end
