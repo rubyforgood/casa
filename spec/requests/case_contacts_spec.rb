@@ -22,7 +22,7 @@ RSpec.describe "/case_contacts", type: :request do
     it { is_expected.to have_http_status(:success) }
 
     it "returns all case contacts" do
-      page = request.parsed_body
+      page = request.parsed_body.to_html
       expect(page).to include(past_contact.creator.display_name, recent_contact.creator.display_name)
     end
 
@@ -30,7 +30,7 @@ RSpec.describe "/case_contacts", type: :request do
       let(:filterrific) { {occurred_starting_at: 1.week.ago} }
 
       it "returns all case contacts" do
-        page = request.parsed_body
+        page = request.parsed_body.to_html
         expect(page).to include(recent_contact.creator.display_name)
         expect(page).not_to include(past_contact.creator.display_name)
       end

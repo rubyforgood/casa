@@ -115,7 +115,7 @@ RSpec.describe "/case_court_reports", type: :request do
     context "when no custom template is set" do
       it "sends response as a JSON string", :aggregate_failures do
         expect(request.content_type).to eq("application/json; charset=utf-8")
-        expect(request.parsed_body).to be_instance_of Hash
+        expect(request.parsed_body).to be_a(ActiveSupport::HashWithIndifferentAccess)
       end
 
       it "has keys ['link', 'status'] in JSON string", :aggregate_failures do
@@ -184,7 +184,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
       it "sends response as a JSON string", :aggregate_failures do
         expect(request.content_type).to eq("application/json; charset=utf-8")
-        expect(request.parsed_body).to be_instance_of Hash
+        expect(request.parsed_body).to be_a(ActiveSupport::HashWithIndifferentAccess)
       end
 
       it "has keys ['link','status','error_messages'] in JSON string", :aggregate_failures do

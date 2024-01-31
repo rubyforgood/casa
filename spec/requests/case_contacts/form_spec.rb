@@ -42,7 +42,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
 
       it "shows all contact types once" do
-        page = request.parsed_body
+        page = request.parsed_body.to_html
         expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
         expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
       end
@@ -51,7 +51,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         let!(:casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
 
         it "shows only contact types assigned to selected casa case" do
-          page = request.parsed_body
+          page = request.parsed_body.to_html
           expect(page).to include(*casa_case.contact_types.pluck(:name))
           expect(page).not_to include(*contact_types_a.pluck(:name))
           expect(page).not_to include(*contact_types_b.pluck(:name))
