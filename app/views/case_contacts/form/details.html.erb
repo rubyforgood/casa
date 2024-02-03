@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="actions mb-10 d-flex justify-content-between">
+    <div class="actions mb-10 d-flex justify-content-end gap-2">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
         Back
       <% end %>
