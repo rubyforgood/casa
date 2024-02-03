@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_31_210129) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -160,6 +160,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
     t.boolean "twilio_enabled", default: false
     t.boolean "additional_expenses_enabled", default: false
     t.boolean "learning_topic_active", default: false
+    t.jsonb "contact_topics", default: []
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -201,6 +202,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
     t.string "status", default: "started"
     t.integer "draft_case_ids", default: [], array: true
     t.string "volunteer_address"
+    t.jsonb "contact_topics", default: []
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"

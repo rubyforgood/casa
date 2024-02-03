@@ -71,6 +71,19 @@ RSpec.describe CaseContact, type: :model do
     it "can be updated for 30 days after end of quarter" do
       expect(build_stubbed(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
     end
+
+    it "wont save unpermitted topics" do
+      case_contact = build_stubbed(:case_contact, contact_topics: "")
+      expect(case_contact).to_not be_valid
+      expect(case_contact.errors[:contact_topics]).to include("must be a hash or array of hashes")
+    end
+
+    it "wont save unpermitted keys" do
+      stub_const("ContactTopics::PERMITTED_ATTRIBUTES", ["test"])
+
+      case_contact = build_stubbed(:case_contact, contact_topics: [{"test" => 1, "test2" => 2}])
+      expect(case_contact).to_not be_valid
+    end
   end
 
   context "status is started" do
@@ -627,6 +640,75 @@ RSpec.describe CaseContact, type: :model do
           expect(case_contact.address_field_disabled?).to be true
         end
       end
+    end
+  end
+
+  describe "contact_topics_from" do
+    let(:contact_topics) { [{"test" => "test"}] }
+    let(:casa_org) { build(:casa_org, contact_topics:) }
+    let(:case_contact) { create(:case_contact) }
+    let(:second_case_contact) { build(:case_contact, contact_topics:) }
+
+    before do
+      stub_const("ContactTopicsValidator::PERMITTED_ATTRIBUTES", ["test"])
+    end
+
+    it "sets the contact topics from the organization" do
+      expect(case_contact.contact_topics).to eq([])
+      case_contact.contact_topics_from(casa_org)
+      expect(case_contact.reload.contact_topics).to eq(contact_topics)
+    end
+
+    it "sets contact topics from another case contact" do
+      expect(case_contact.contact_topics).to eq([])
+      case_contact.contact_topics_from(second_case_contact)
+      expect(case_contact.reload.contact_topics).to eq(contact_topics)
+    end
+  end
+
+  describe "ContactTopicsValidator" do
+    let(:permitted_keys) { %w[title details active] }
+
+    before do
+      stub_const("ContactTopicsValidator::PERMITTED_ATTRIBUTES", permitted_keys)
+    end
+
+    it "accepts a hash with valid keys" do
+      contact_topics = {"title" => "hello"}
+      record = create(:case_contact, contact_topics:)
+
+      expect(record.valid?).to be true
+    end
+
+    it "accepts a array of hashes with valid keys" do
+      contact_topics = [{"title" => "hello"}]
+      record = create(:case_contact, contact_topics:)
+
+      expect(record.valid?).to be true
+    end
+
+    it "rejects if not hash or array of hashes" do
+      contact_topics = "a string"
+      record = build(:case_contact, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to include("must be a hash or array of hashes")
+    end
+
+    it "rejects if any hash has invalid keys" do
+      contact_topics = [{"invalid" => "hello"}, {"title" => "valid"}]
+      record = build(:case_contact, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to_not be_empty
+    end
+
+    it "rejects if any hash has invalid keys" do
+      contact_topics = [{"invalid" => "hello", "title" => "valid"}]
+      record = build(:case_contact, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to_not be_empty
     end
   end
 end

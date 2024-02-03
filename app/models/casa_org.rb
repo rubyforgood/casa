@@ -11,6 +11,7 @@ class CasaOrg < ApplicationRecord
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
   validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validates_with ContactTopicsValidator
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -85,11 +86,17 @@ class CasaOrg < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  def generate_contact_types_and_hearing_types
+  def generate_defaults
     ActiveRecord::Base.transaction do
       ContactTypeGroup.generate_for_org!(self)
       HearingType.generate_for_org!(self)
+      ContactTopics.generate_for_org!(self)
     end
+    # FIXME: is this needed? do we care about the case where the defaults
+    # are invalid?
+  rescue ActiveRecord::RecordInvalid => e
+    errors.add(:base,
+      "Failed to generate default contact type groups, hearing types, or contact topics: #{e.message}")
   end
 
   def contact_types_by_group
@@ -149,6 +156,7 @@ end
 #  id                          :bigint           not null, primary key
 #  additional_expenses_enabled :boolean          default(FALSE)
 #  address                     :string
+#  contact_topics              :jsonb
 #  display_name                :string
 #  footer_links                :string           default([]), is an Array
 #  learning_topic_active       :boolean          default(FALSE)

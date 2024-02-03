@@ -12,5 +12,13 @@ FactoryBot.define do
     trait :with_logo do
       logo { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "org_logo.jpeg")) }
     end
+
+    trait :no_twilio do
+      twilio_account_sid { nil }
+      twilio_api_key_secret { nil }
+      twilio_api_key_sid { nil }
+      twilio_phone_number { nil }
+      twilio_enabled { false }
+    end
   end
 end

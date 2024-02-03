@@ -51,6 +51,7 @@ services/fdf_inputs_service.rb
 validators/casa_org_validator.rb
 validators/court_report_validator.rb
 validators/user_validator.rb
+validators/contact_topics_validator.rb
 values/all_casa_admin_parameters.rb
 values/casa_admin_parameters.rb
 values/supervisor_parameters.rb

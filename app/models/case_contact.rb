@@ -13,6 +13,7 @@ class CaseContact < ApplicationRecord
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
   validate :volunteer_address_is_valid, if: :active_or_expenses?
+  validates_with ContactTopicsValidator
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -257,6 +258,11 @@ class CaseContact < ApplicationRecord
     end
   end
 
+  def contact_topics_from(source)
+    self.contact_topics = source.contact_topics
+    save!
+  end
+
   def self.options_for_sorted_by
     sorted_by_params.each.map { |option_pair| option_pair.reverse }
   end
@@ -290,6 +296,7 @@ end
 #
 #  id                         :bigint           not null, primary key
 #  contact_made               :boolean          default(FALSE)
+#  contact_topics             :jsonb
 #  deleted_at                 :datetime
 #  draft_case_ids             :integer          default([]), is an Array
 #  duration_minutes           :integer

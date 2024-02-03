@@ -38,6 +38,52 @@ RSpec.describe CasaOrg, type: :model do
     end
   end
 
+  describe "ContactTopicsValidator" do
+    let(:permitted_keys) { %w[title details active] }
+
+    before do
+      stub_const("ContactTopicsValidator::PERMITTED_ATTRIBUTES", permitted_keys)
+    end
+
+    it "accepts a hash with valid keys" do
+      contact_topics = {"title" => "hello"}
+      record = build(:casa_org, contact_topics:)
+
+      expect(record.valid?).to be true
+    end
+
+    it "accepts a array of hashes with valid keys" do
+      contact_topics = [{"title" => "hello"}]
+      record = build(:casa_org, contact_topics:)
+
+      expect(record.valid?).to be true
+    end
+
+    it "rejects if not hash or array of hashes" do
+      contact_topics = "a string"
+      record = build(:casa_org, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to include("must be a hash or array of hashes")
+    end
+
+    it "rejects if any hash has invalid keys" do
+      contact_topics = [{"invalid" => "hello"}, {"title" => "valid"}]
+      record = build(:casa_org, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to_not be_empty
+    end
+
+    it "rejects if any hash has invalid keys" do
+      contact_topics = [{"invalid" => "hello", "title" => "valid"}]
+      record = build(:casa_org, contact_topics:)
+
+      expect(record.valid?).to be false
+      expect(record.errors[:contact_topics]).to_not be_empty
+    end
+  end
+
   describe "Attachment" do
     it "is valid" do
       aggregate_failures do
@@ -80,19 +126,26 @@ RSpec.describe CasaOrg, type: :model do
     before do
       5.times do
         casa_case = create(:casa_case, casa_org: org)
-        3.times { create(:case_contact, casa_case: casa_case) }
+        3.times { create(:case_contact, casa_case:) }
       end
     end
     it { is_expected.to eq 15 }
   end
 
-  describe "generate_contact_types_and_hearing_types" do
-    let(:org) { create(:casa_org) }
+  describe "generate_defaults" do
+    let(:org) { create(:casa_org, :no_twilio) }
+    let(:contact_topics) { [{"test" => "test"}] }
 
-    before { org.generate_contact_types_and_hearing_types }
+    before do
+      allow(ContactTopics).to receive(:default_contact_topics).and_return(contact_topics)
+      stub_const("ContactTopicsValidator::PERMITTED_ATTRIBUTES", ["test"])
+      org.generate_defaults
+    end
 
     describe "generates default contact type groups" do
-      let(:groups) { ContactTypeGroup.where(casa_org: org).joins(:contact_types).pluck(:name, "contact_types.name").sort }
+      let(:groups) do
+        ContactTypeGroup.where(casa_org: org).joins(:contact_types).pluck(:name, "contact_types.name").sort
+      end
 
       it "matches default contact type groups" do
         expect(groups).to eq([["CASA", "Supervisor"],
@@ -128,52 +181,56 @@ RSpec.describe CasaOrg, type: :model do
       end
     end
 
-    describe "mileage rate for a given date" do
-      let(:casa_org) { build(:casa_org) }
+    it "generates default contact topics" do
+      expect(org.contact_topics).to eq(contact_topics)
+    end
+  end
 
-      describe "with a casa org with no rates" do
-        it "is nil" do
-          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
-        end
+  describe "mileage rate for a given date" do
+    let(:casa_org) { build(:casa_org) }
+
+    describe "with a casa org with no rates" do
+      it "is nil" do
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
+
+    describe "with a casa org with inactive dates" do
+      let!(:mileage_rates) do
+        [
+          create(:mileage_rate, casa_org:, effective_date: 10.days.ago, is_active: false),
+          create(:mileage_rate, casa_org:, effective_date: 3.days.ago, is_active: false)
+        ]
       end
 
-      describe "with a casa org with inactive dates" do
-        let!(:mileage_rates) do
-          [
-            create(:mileage_rate, casa_org: casa_org, effective_date: 10.days.ago, is_active: false),
-            create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.ago, is_active: false)
-          ]
-        end
+      it "is nil" do
+        expect(casa_org.mileage_rates.count).to eq 2
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
 
-        it "is nil" do
-          expect(casa_org.mileage_rates.count).to eq 2
-          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
-        end
+    describe "with active dates in the future" do
+      let!(:mileage_rate) { create(:mileage_rate, casa_org:, effective_date: 3.days.from_now) }
+
+      it "is nil" do
+        expect(casa_org.mileage_rates.count).to eq 1
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
+
+    describe "with active dates in the past" do
+      let!(:mileage_rates) do
+        [
+          create(:mileage_rate, casa_org:, amount: 4.50, effective_date: 20.days.ago),
+          create(:mileage_rate, casa_org:, amount: 5.50, effective_date: 10.days.ago),
+          create(:mileage_rate, casa_org:, amount: 6.50, effective_date: 3.days.ago)
+        ]
       end
 
-      describe "with active dates in the future" do
-        let!(:mileage_rate) { create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.from_now) }
-
-        it "is nil" do
-          expect(casa_org.mileage_rates.count).to eq 1
-          expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
-        end
-      end
-
-      describe "with active dates in the past" do
-        let!(:mileage_rates) do
-          [
-            create(:mileage_rate, casa_org: casa_org, amount: 4.50, effective_date: 20.days.ago),
-            create(:mileage_rate, casa_org: casa_org, amount: 5.50, effective_date: 10.days.ago),
-            create(:mileage_rate, casa_org: casa_org, amount: 6.50, effective_date: 3.days.ago)
-          ]
-        end
-
-        it "uses the most recent date" do
-          expect(casa_org.mileage_rate_for_given_date(12.days.ago.to_date)).to eq 4.50
-          expect(casa_org.mileage_rate_for_given_date(5.days.ago.to_date)).to eq 5.50
-          expect(casa_org.mileage_rate_for_given_date(Date.today)).to eq 6.50
-        end
+      it "uses the most recent date" do
+        expect(casa_org.mileage_rate_for_given_date(12.days.ago.to_date)).to eq 4.50
+        expect(casa_org.mileage_rate_for_given_date(5.days.ago.to_date)).to eq 5.50
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to eq 6.50
       end
     end
   end
