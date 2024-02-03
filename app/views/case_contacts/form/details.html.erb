@@ -14,7 +14,7 @@
               casa_case.id,
               @case_contact.draft_case_ids.include?(casa_case.id),
               id: "case_contact_draft_case_id_#{casa_case.id}",
-              class: ["form-check-input", "casa-case-id"] %>
+              class: ["form-check-input", "casa-case-id", "case-contact-form-check"] %>
             <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
               <%= casa_case.case_number %>
             </label>
@@ -39,7 +39,7 @@
           <%= form.radio_button :contact_made, true,
             checked: @case_contact.contact_made,
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contact-form-check"] %>
           <%= form.label "Yes", class: "form-check-label",
             for: "case_contact_contact_made_true" %>
         </div>
@@ -47,7 +47,7 @@
           <%= form.radio_button :contact_made, false,
             checked: set_contact_made_false(@case_contact),
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contact-form-check"] %>
           <%= form.label "No", class: "form-check-label",
             for: "case_contact_contact_made_false" %>
         </div>
@@ -57,7 +57,7 @@
         <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
           <div class="form-check radio-style mb-20">
-            <%= b.radio_button(class: "form-check-input") %>
+            <%= b.radio_button(class: ["form-check-input", "case-contact-form-check"]) %>
             <%= b.label(class: "form-check-label") %>
           </div>
         <% end %>

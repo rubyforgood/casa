@@ -23,14 +23,14 @@
           <div class="form-check radio-style mb-20">
             <%= form.radio_button :want_driving_reimbursement, true,
               required: false,
-              class: 'form-check-input' %>
+              class: ["form-check-input", "case-contact-form-check"] %>
             <%= form.label "Yes", class: "form-check-label",
               for: "case_contact_want_driving_reimbursement_true" %>
           </div>
           <div class="form-check radio-style mb-20">
             <%= form.radio_button :want_driving_reimbursement, false,
               required: false,
-              class: 'form-check-input' %>
+              class: ["form-check-input", "case-contact-form-check"] %>
             <%= form.label "No", class: "form-check-label",
               for: "case_contact_want_driving_reimbursement_false" %>
           </div>

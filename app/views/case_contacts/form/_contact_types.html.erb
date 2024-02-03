@@ -28,7 +28,7 @@
                   model.decorate.show_contact_type?(contact_type.id),
                   checked: contact_type_exists,
                   id: dom_id(contact_type, :case_contact),
-                  class: ["form-check-input", "case-contact-contact-type"]
+                  class: ["form-check-input", "case-contact-contact-type", "case-contact-form-check"]
               %>
               <label class="form-check-label" for="<%= dom_id(contact_type, :case_contact) %>">
                 <%= contact_type.name %>
