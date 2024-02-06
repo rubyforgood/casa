@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_25_150721) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -395,7 +395,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
@@ -648,7 +647,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases"
+  add_foreign_key "placements", "casa_cases", validate: false
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
