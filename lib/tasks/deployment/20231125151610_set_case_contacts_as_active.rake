@@ -7,6 +7,11 @@ namespace :after_party do
       begin
         cc.update!(status: "active", draft_case_ids: [cc.casa_case_id])
       rescue => e
+        begin
+          Bugsnag.notify(e)
+        rescue => e2
+          p e2
+        end
         p e
       end
     end
