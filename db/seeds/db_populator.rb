@@ -395,7 +395,7 @@ class DbPopulator
         # randomize between 30 to 180 minutes
         duration_minutes = (2..12).to_a.sample * 15
         duration_hours = duration_minutes / 60
-        duration_minutes = duration_minutes % 60
+        duration_minutes %= 60
         occurred_at = Time.current - (1..7).to_a.sample.days
         LearningHour.create(
           user:,
