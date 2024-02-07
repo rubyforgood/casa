@@ -52,7 +52,6 @@ end
 #  id                     :bigint           not null, primary key
 #  duration_hours         :integer          not null
 #  duration_minutes       :integer          not null
-#  learning_type          :integer          default(5)
 #  name                   :string           not null
 #  occurred_at            :datetime         not null
 #  created_at             :datetime         not null
