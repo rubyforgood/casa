@@ -207,7 +207,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           visit volunteers_path
           volunteers.each_with_index do |volunteer, index|
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
-            button = find("[data-select-all-target='buttonLabel']")
+            button = find("[data-select-all-target='buttonLabel']", wait: 3)
             expect(button).to have_text "(#{index + 1})"
           end
         end
