@@ -312,14 +312,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when none is selected" do
-        before do
-        end
-
         it "is enabled" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
           find("[data-select-all-target='button']").click
           select "None", from: "supervisor_volunteer_supervisor_id"
+
+          button = find("[data-disable-form-target='submitButton']")
 
           expect(button.disabled?).to be false
           expect(button[:class].include?("deactive-btn")).to be false
@@ -329,11 +328,12 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when a supervisor is selected" do
-        before do
-          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
-        end
-
         it "is enabled" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']").click
+
+          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
           button = find("[data-disable-form-target='submitButton']")
           expect(button.disabled?).to be false
           expect(button[:class].include?("deactive-btn")).to be false
@@ -343,12 +343,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when Choose a supervisor is selected" do
-        before do
+        it "is disabled" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']").click
+
           select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
           select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
-        end
-
-        it "is disabled" do
           button = find("[data-disable-form-target='submitButton']")
           expect(button.disabled?).to be true
           expect(button[:class].include?("deactive-btn")).to be true
