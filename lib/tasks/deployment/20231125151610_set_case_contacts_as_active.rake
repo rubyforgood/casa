@@ -3,7 +3,7 @@ namespace :after_party do
   task set_case_contacts_as_active: :environment do
     puts "Running deploy task 'set_case_contacts_as_active'"
 
-    CaseContact.all.each do |cc|
+    CaseContact.where.not(casa_case_id: nil).each do |cc|
       cc.additional_expenses.each do |additional_expense|
         additional_expense.update(other_expenses_describe: "No description given") unless additional_expense.other_expenses_describe
       end
