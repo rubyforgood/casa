@@ -297,13 +297,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
       before do
         sign_in admin
-        visit volunteers_path
-        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}")
-        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-        find("[data-select-all-target='button']").click
       end
 
       it "is disabled by default" do
+        visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+        find("[data-select-all-target='button']").click
+
         button = find("[data-disable-form-target='submitButton']")
         expect(button.disabled?).to be true
         expect(button[:class].include?("deactive-btn")).to be true
@@ -313,11 +313,14 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
       context "when none is selected" do
         before do
-          select "None", from: "supervisor_volunteer_supervisor_id"
         end
 
         it "is enabled" do
-          button = find("[data-disable-form-target='submitButton']")
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']").click
+          select "None", from: "supervisor_volunteer_supervisor_id"
+
           expect(button.disabled?).to be false
           expect(button[:class].include?("deactive-btn")).to be false
           expect(button[:class].include?("dark-btn")).to be true
