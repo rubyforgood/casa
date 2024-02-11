@@ -180,10 +180,10 @@ RSpec.describe "view all volunteers", type: :system, js: true do
     describe "Manage Volunteers button" do
       before do
         sign_in admin
-        visit volunteers_path
       end
 
       it "does not display by default" do
+        visit volunteers_path
         expect(page).not_to have_text "Manage Volunteer"
       end
 
@@ -197,21 +197,24 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         }
 
         it "is displayed" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
 
           expect(page).to have_text "Manage Volunteer"
         end
 
         it "displays number of volunteers selected" do
+          visit volunteers_path
           volunteers.each_with_index do |volunteer, index|
-            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
             button = find("[data-select-all-target='buttonLabel']")
             expect(button).to have_text "(#{index + 1})"
           end
         end
 
         it "text matches pluralization of volunteers selected" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
           expect(page).not_to have_text "Manage Volunteers"
 
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
@@ -219,7 +222,8 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         end
 
         it "is hidden when all volunteers unchecked" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
           expect(page).to have_text "Manage Volunteer"
 
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
