@@ -263,6 +263,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           end
 
           find("[data-select-all-target='checkboxAll']").click
+          sleep(1)
 
           volunteers.each do |volunteer|
             expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be false
@@ -274,6 +275,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         it "is semi-checked (indeterminate)" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          sleep(1)
 
           expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
           expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
@@ -315,7 +317,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         it "is enabled" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
-          find("[data-select-all-target='button']").click
+          find("[data-select-all-target='button']", wait: 3).click
           select "None", from: "supervisor_volunteer_supervisor_id"
 
           button = find("[data-disable-form-target='submitButton']")
@@ -331,7 +333,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         it "is enabled" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
-          find("[data-select-all-target='button']").click
+          find("[data-select-all-target='button']", wait: 3).click
 
           select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
           button = find("[data-disable-form-target='submitButton']")
@@ -346,7 +348,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         it "is disabled" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
-          find("[data-select-all-target='button']").click
+          find("[data-select-all-target='button']", wait: 3).click
 
           select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
           select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
