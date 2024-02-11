@@ -4,6 +4,10 @@ namespace :after_party do
     puts "Running deploy task 'set_case_contacts_as_active'"
 
     CaseContact.all.each do |cc|
+      cc.additional_expenses.each do |additional_expense|
+        additional_expense.update(other_expenses_describe: "No description given") unless additional_expense.other_expenses_describe
+      end
+
       cc.update!(status: "active", draft_case_ids: [cc.casa_case_id])
     rescue => e
       begin
