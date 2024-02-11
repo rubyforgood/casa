@@ -178,6 +178,14 @@ RSpec.describe "view all volunteers", type: :system, js: true do
     end
 
     describe "Manage Volunteers button" do
+      let!(:volunteers) {
+        [
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization)
+        ]
+      }
+
       before do
         sign_in admin
       end
@@ -188,14 +196,6 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when one or more volunteers selected" do
-        let!(:volunteers) {
-          [
-            create(:volunteer, casa_org: organization),
-            create(:volunteer, casa_org: organization),
-            create(:volunteer, casa_org: organization)
-          ]
-        }
-
         it "is displayed" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
