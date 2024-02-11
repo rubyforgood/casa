@@ -243,11 +243,11 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
       before do
         sign_in admin
-        visit volunteers_path
-        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # wait for volunteers to be displayed
       end
 
       it "selects all volunteers" do
+        visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # Wait for data table to be loaded
         find("[data-select-all-target='checkboxAll']").click
 
         volunteers.each do |volunteer|
@@ -256,13 +256,12 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when all are checked" do
-        before do
+        it "deselects all volunteers" do
+          visit volunteers_path
           volunteers.each do |volunteer|
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           end
-        end
 
-        it "deselects all volunteers" do
           find("[data-select-all-target='checkboxAll']").click
 
           volunteers.each do |volunteer|
@@ -272,16 +271,17 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when some are checked" do
-        before do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-        end
-
         it "is semi-checked (indeterminate)" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+
           expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
           expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
         end
 
         it "selects all volunteers" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
           find("[data-select-all-target='checkboxAll']").click
 
           volunteers.each do |volunteer|
