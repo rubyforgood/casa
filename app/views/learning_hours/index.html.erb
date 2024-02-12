@@ -1,5 +1,5 @@
 <% if current_user.volunteer? %>
   <%= render "volunteer_learning_hours", learning_hours: @learning_hours %>
 <% else %>
-  <%= render "supervisor_admin_learning_hours" %>
+  <%= render "supervisor_admin_learning_hours", learning_hours: @learning_hours %>
 <% end %>

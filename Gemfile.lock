@@ -109,7 +109,7 @@ GEM
     blueprinter (0.30.0)
     brakeman (6.1.1)
       racc
-    bugsnag (6.26.1)
+    bugsnag (6.26.3)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (7.1.4)
@@ -411,7 +411,7 @@ GEM
     regexp_parser (2.8.1)
     reline (0.4.2)
       io-console (~> 0.5)
-    request_store (1.5.1)
+    request_store (1.6.0)
       rack (>= 1.4)
     responders (3.1.1)
       actionpack (>= 5.2)
