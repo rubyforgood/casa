@@ -1,6 +1,10 @@
 module CaseContactPopulator
   def self.populate
     CaseContact.find_each do |case_contact|
+      # Get rid of drafts
+      unless case_contact.casa_case
+        case_contact.destroy
+      end
       casa_org = case_contact.casa_case.casa_org
       case_contact.contact_types&.each do |contact_type|
         ct_name = contact_type.name
