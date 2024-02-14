@@ -2318,10 +2318,10 @@ data-urls@^3.0.2:
     whatwg-mimetype "^3.0.0"
     whatwg-url "^11.0.0"
 
-datatables.net-dt@^1.13.8:
-  version "1.13.8"
-  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.13.8.tgz#6e875d97407cc605f0dadb3452cf477361000176"
-  integrity sha512-/ZPzr1hQ+domerlg/MbcQHqeeqxK9fsZmpRs1YeKxsdfr+UyHQTUiiOO7RqekppSLc7MPqxGnzKkCX9vAgqm0w==
+datatables.net-dt@^1.13.10:
+  version "1.13.10"
+  resolved "https://registry.yarnpkg.com/datatables.net-dt/-/datatables.net-dt-1.13.10.tgz#85604f0db9ceeb67228047bebbaa9cdc4ac652d4"
+  integrity sha512-7Yujk3WGZjUBkQJzlRS2ResAtVXkODXLG73MEsC3tabyCiVXH42eA/79jwDBidmZWD8uvAfpAzWHTxjba4+QIQ==
   dependencies:
     datatables.net "1.13.8"
     jquery ">=1.7"
