@@ -2,7 +2,7 @@
 
 class CaseContactsController < ApplicationController
   before_action :set_case_contact, only: %i[edit destroy]
-  before_action :set_contact_types, only: %i[new edit update create]
+  before_action :set_contact_types, only: %i[new edit create]
   before_action :require_organization!
   after_action :verify_authorized, except: %i[leave]
 
