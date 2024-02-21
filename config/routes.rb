@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     collection do
       get :case_contacts_creation_times_in_last_week
       get :monthly_line_graph_data
+      get :monthly_unique_users_graph_data
     end
   end
 

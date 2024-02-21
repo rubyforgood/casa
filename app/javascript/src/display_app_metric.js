@@ -10,6 +10,7 @@ const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 
 $(() => { // JQuery's callback for the DOM loading
   const caseContactCreationTimesBubbleChart = document.getElementById('caseContactCreationTimeBubbleChart')
   const monthLineChart = document.getElementById('monthLineChart')
+  const uniqueUsersMonthLineChart = document.getElementById('uniqueUsersMonthLineChart')
 
   const notificationsElement = $('#notifications')
   const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
@@ -26,6 +27,13 @@ $(() => { // JQuery's callback for the DOM loading
     fetchDataAndCreateChart('/health/monthly_line_graph_data', monthLineChart, function (data) {
       console.log(data)
       createLineChart(monthLineChart, data)
+    })
+  }
+
+  if (uniqueUsersMonthLineChart) {
+    fetchDataAndCreateChart('/health/monthly_unique_users_graph_data', uniqueUsersMonthLineChart, function (data) {
+      console.log(data)
+      createUniqueUsersMonthLineChart(uniqueUsersMonthLineChart, data)
     })
   }
 
@@ -172,6 +180,28 @@ function createLineChart (chartElement, dataset) {
         createLineChartDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
         createLineChartDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
         createLineChartDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
+      ]
+    },
+    options: createChartOptions()
+  })
+}
+
+function createUniqueUsersMonthLineChart(chartElement, dataset) {
+  const ctx = chartElement.getContext('2d')
+
+  const allMonths = extractChartData(dataset, 0)
+  const monthlyCountOfVolunteers = extractChartData(dataset, 1)
+  const monthlyCountOfSupervisors = extractChartData(dataset, 2)
+  const monthlyCountOfAdmins = extractChartData(dataset, 3)
+
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: allMonths,
+      datasets: [
+        createLineChartDataset('Total Volunteers', monthlyCountOfVolunteers, '#308af3', '#308af3'),
+        createLineChartDataset('Total Supervisors', monthlyCountOfSupervisors, '#48ba16', '#48ba16'),
+        createLineChartDataset('Total Admins', monthlyCountOfAdmins, '#FF0000', '#FF0000')
       ]
     },
     options: createChartOptions()
