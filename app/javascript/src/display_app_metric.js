@@ -26,14 +26,14 @@ $(() => { // JQuery's callback for the DOM loading
   if (monthLineChart) {
     fetchDataAndCreateChart('/health/monthly_line_graph_data', monthLineChart, function (data) {
       console.log(data)
-      createLineChart(monthLineChart, data)
+      createLineChartForCaseContacts(monthLineChart, data)
     })
   }
 
   if (uniqueUsersMonthLineChart) {
     fetchDataAndCreateChart('/health/monthly_unique_users_graph_data', uniqueUsersMonthLineChart, function (data) {
       console.log(data)
-      createUniqueUsersMonthLineChart(uniqueUsersMonthLineChart, data)
+      createLineChartForUniqueUsersMonthly(uniqueUsersMonthLineChart, data)
     })
   }
 
@@ -164,47 +164,36 @@ function getTooltipLabelCallback (context) {
   return `${Math.round(caseContactCountSqrt * caseContactCountSqrt)} case contacts created on ${days[bubbleData.y]} at ${bubbleData.x}:00`
 }
 
-function createLineChart (chartElement, dataset) {
-  const ctx = chartElement.getContext('2d')
-
-  const allMonths = extractChartData(dataset, 0)
-  const allCaseContactsCount = extractChartData(dataset, 1)
-  const allCaseContactNotesCount = extractChartData(dataset, 2)
-  const allUsersCount = extractChartData(dataset, 3)
-
-  return new Chart(ctx, {
-    type: 'line',
-    data: {
-      labels: allMonths,
-      datasets: [
-        createLineChartDataset('Total Case Contacts', allCaseContactsCount, '#308af3', '#308af3'),
-        createLineChartDataset('Total Case Contacts with Notes', allCaseContactNotesCount, '#48ba16', '#48ba16'),
-        createLineChartDataset('Total Case Contact Users', allUsersCount, '#FF0000', '#FF0000')
-      ]
-    },
-    options: createChartOptions()
-  })
+function createLineChartForCaseContacts (chartElement, dataset) {
+  const datasetLabels = ['Total Case Contacts', 'Total Case Contacts with Notes', 'Total Case Contact Users']
+  return createLineChart(chartElement, dataset, 'Case Contact Creation', datasetLabels)
 }
 
-function createUniqueUsersMonthLineChart(chartElement, dataset) {
-  const ctx = chartElement.getContext('2d')
+function createLineChartForUniqueUsersMonthly (chartElement, dataset) {
+  const datasetLabels = ['Total Volunteers', 'Total Supervisors', 'Total Admins']
+  return createLineChart(chartElement, dataset, 'Monthly Active Users', datasetLabels)
+}
 
+function createLineChart (chartElement, dataset, chartTitle, datasetLabels) {
+  const ctx = chartElement.getContext('2d')
   const allMonths = extractChartData(dataset, 0)
-  const monthlyCountOfVolunteers = extractChartData(dataset, 1)
-  const monthlyCountOfSupervisors = extractChartData(dataset, 2)
-  const monthlyCountOfAdmins = extractChartData(dataset, 3)
+  const datasets = []
+  const colors = ['#308af3', '#48ba16', '#FF0000']
+
+  for (let i = 1; i < dataset[0].length; i++) {
+    const data = extractChartData(dataset, i)
+    const label = datasetLabels[i - 1]
+    const color = colors[i - 1]
+    datasets.push(createLineChartDataset(label, data, color, color))
+  }
 
   return new Chart(ctx, {
     type: 'line',
     data: {
       labels: allMonths,
-      datasets: [
-        createLineChartDataset('Total Volunteers', monthlyCountOfVolunteers, '#308af3', '#308af3'),
-        createLineChartDataset('Total Supervisors', monthlyCountOfSupervisors, '#48ba16', '#48ba16'),
-        createLineChartDataset('Total Admins', monthlyCountOfAdmins, '#FF0000', '#FF0000')
-      ]
+      datasets
     },
-    options: createChartOptions()
+    options: createChartOptions(chartTitle)
   })
 }
 
@@ -226,7 +215,7 @@ function createLineChartDataset (label, data, borderColor, pointBackgroundColor)
   }
 }
 
-function createChartOptions () {
+function createChartOptions (label) {
   return {
     legend: { display: true },
     plugins: {
@@ -234,7 +223,7 @@ function createChartOptions () {
       title: {
         display: true,
         font: { size: 18 },
-        text: 'Case Contact Creation'
+        text: label
       },
       tooltips: {
         callbacks: {
