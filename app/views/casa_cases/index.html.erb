@@ -78,7 +78,6 @@
             <% @casa_cases.each do |casa_case| %>
               <tr class="<%= casa_case.decorate.inactive_class %>">
                 <td class="min-width"><%= link_to(casa_case.case_number, casa_case) %>
-                  <%= render AssignedVolunteersComponent.new(casa_case, current_user) %>
                 </td>
                 <td class="min-width"><%= casa_case.hearing_type_name %></td>
                 <td class="min-width"><%= casa_case.judge_name %></td>
