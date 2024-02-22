@@ -5,21 +5,11 @@
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <div class="card-style-1 pl-25 mb-10 pr-50">
-      <h4 class="mb-3"><label>1. Enter Travel Details</label></h4>
-      <div class="field miles-driven form-group">
-        <h5 class="mb-3"><%= form.label :miles_driven, "a. Miles Driven" %></h5>
-        <div class="input-style-1">
-          <% if form.object.new_record? && @case_contact.miles_driven == 0 %>
-            <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
-          <% else %>
-            <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
-          <% end %>
-        </div>
-      </div>
+      <h4 class="mb-3"><label>1. Travel Details (optional)</label></h4>
 
       <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(@casa_cases) %>
         <div class="field want-driving-reimbursement form-group">
-          <h5 class="mb-3"><label>b. Want Driving Reimbursement</label></h5>
+          <h5 class="mb-3"><label>a. Do you require driving reimbursement for this case contact?</label></h5>
           <div class="form-check radio-style mb-20">
             <%= form.radio_button :want_driving_reimbursement, true,
               required: false,
@@ -35,8 +25,20 @@
               for: "case_contact_want_driving_reimbursement_false" %>
           </div>
         </div>
+
+        <div class="field miles-driven form-group">
+          <h5 class="mb-3"><%= form.label :miles_driven, "b. Total miles driven" %></h5>
+          <div class="input-style-1">
+            <% if form.object.new_record? && @case_contact.miles_driven == 0 %>
+              <input class="form-control" min="0" max="10000" type="number" value="0" name="case_contact[miles_driven]" autocomplete="off" id="case_contact_miles_driven">
+            <% else %>
+              <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
+            <% end %>
+          </div>
+        </div>
+
         <div class="field volunteer-address form-group">
-          <h5 class="mb-3"><label>c. Volunteer Address</label></h5>
+          <h5 class="mb-3"><label>c. Your current address (for reimbursement check)</label></h5>
           <div class="input-style-1 mb-0">
             <%= form.text_field :volunteer_address, value: @case_contact.decorate.address_of_volunteer, disabled: @case_contact.address_field_disabled?, class: "input-style-1" %>
           </div>
