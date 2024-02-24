@@ -26,7 +26,7 @@
       <%= form.label :casa_case_ids, 'Cases' %>
       <%= form.select(
         :casa_case_ids,
-        current_organization.casa_cases.pluck(:case_number, :id),
+        current_organization.casa_cases.map { |casa_case| ["#{casa_case.case_number} - #{render AssignedVolunteersComponent.new(casa_case, current_user) }".html_safe, casa_case.id] },
         { include_hidden: false, autocomplete: "off" },
         { class: "form-control", multiple: true,
           data: { "multiple-select-target": "select" }
