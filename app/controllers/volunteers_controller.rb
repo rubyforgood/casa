@@ -6,6 +6,7 @@ class VolunteersController < ApplicationController
 
   def index
     authorize Volunteer
+    @supervisors = policy_scope(current_organization.supervisors)
   end
 
   def show

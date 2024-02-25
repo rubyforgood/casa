@@ -129,18 +129,14 @@
             <table id="active_volunteers" class="table">
               <thead>
               <tr>
-                <th></th>
                 <th><h6>Active volunteers not assigned to supervisors</h6></th>
                 <th><h6>Assigned to Case(s)</h6></th>
               </tr>
               <!-- end table row-->
               </thead>
               <tbody>
-              <% @available_volunteers.each_with_index do |volunteer, index| %>
+              <% @available_volunteers.each do |volunteer| %>
                 <tr>
-                  <td>
-                    <%= index + 1 %>
-                  </td>
                   <td>
                     <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
                   </td>
