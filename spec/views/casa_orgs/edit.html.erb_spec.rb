@@ -9,6 +9,7 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:learning_hour_types, [])
     assign(:learning_hour_topics, [])
     assign(:sent_emails, [])
+    assign(:contact_topics, [])
 
     sign_in build_stubbed(:casa_admin)
   end
@@ -22,6 +23,25 @@ RSpec.describe "casa_org/edit", type: :view do
     expect(rendered).to have_text "Editing CASA Organization"
     expect(rendered).to_not have_text "sign in before continuing"
     expect(rendered).to have_selector("input[required=required]", id: "casa_org_name")
+  end
+
+  it "has contact topic content" do
+    organization = build_stubbed(:casa_org)
+    allow(view).to receive(:current_organization).and_return(organization)
+    contact_topic = build_stubbed(:contact_topic)
+    allow(contact_topic).to receive(:question).and_return("Test Question")
+    allow(contact_topic).to receive(:details).and_return("Test details")
+    assign(:contact_topics, [contact_topic])
+
+    render template: "casa_org/edit"
+
+    expect(rendered).to have_text("Test Question")
+    expect(rendered).to have_text("Test details")
+    expect(rendered).to have_table("contact-topics",
+      with_rows:
+      [
+        ["Test Question", "Test details", "Edit"]
+      ])
   end
 
   it "has contact types content" do
