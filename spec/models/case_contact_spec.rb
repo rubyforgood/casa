@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
+  it { should have_many(:contact_topic_answers).dependent(:destroy) }
   it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
@@ -137,6 +138,28 @@ RSpec.describe CaseContact, type: :model do
 
       expect(case_contact.case_contact_contact_type.count).to eq 1
       expect(case_contact.contact_types.reload).to match_array([type2])
+    end
+  end
+
+  describe "#create_contact_topic_answers!" do
+    let(:inactive_list) { create_list(:contact_topic, 2, active: false) }
+    let(:active_list) { create_list(:contact_topic, 2, active: true) }
+    let(:contact_topics) { [*active_list, *inactive_list] }
+    let(:org) { create(:casa_org, contact_topics:) }
+    let(:casa_case) { create(:casa_case, casa_org: org) }
+    let(:case_contact) { create(:case_contact, casa_case:) }
+
+    it "creates case contact topics after creation" do
+      org
+
+      expect {
+        case_contact.create_contact_topic_answers!(org)
+      }.to change(ContactTopicAnswer, :count).from(0).to(2)
+
+      case_contact.reload
+      topics = case_contact.contact_topic_answers.map(&:contact_topic)
+
+      expect(topics).to match_array(active_list)
     end
   end
 
