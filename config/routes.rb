@@ -136,6 +136,9 @@ Rails.application.routes.draw do
     end
   end
   resources :supervisor_volunteers, only: %i[create] do
+    collection do
+      post :bulk_assignment
+    end
     member do
       patch :unassign
     end
