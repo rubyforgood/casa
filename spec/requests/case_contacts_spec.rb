@@ -51,6 +51,17 @@ RSpec.describe "/case_contacts", type: :request do
         request
       }.to change(CaseContact, :count).by(1)
     end
+
+    context "when current org has contact topics" do
+      let(:contact_topics) { build_list(:contact_topic, 3) }
+      let(:organization) { create(:casa_org, contact_topics:) }
+
+      it "should set empty contact topic answers for new case contact to org topics" do
+        expect { request }.to change(ContactTopicAnswer, :count).by(3)
+        expect(CaseContact.last.contact_topic_answers.count).to eq(3)
+        expect(CaseContact.last.contact_topic_answers.pluck(:value)).to be_all(nil)
+      end
+    end
   end
 
   describe "GET /edit" do
