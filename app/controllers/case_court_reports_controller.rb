@@ -69,6 +69,7 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
+  # TODO: Add contact topics here somewhere?
   def generate_report_to_string(casa_case, time_zone)
     return unless casa_case
 

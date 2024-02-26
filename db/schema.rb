@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -243,6 +243,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hearing_type_id"], name: "index_checklist_items_on_hearing_type_id"
+  end
+
+  create_table "contact_topic_answers", force: :cascade do |t|
+    t.text "value"
+    t.bigint "case_contact_id", null: false
+    t.bigint "contact_topic_id", null: false
+    t.boolean "selected", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["case_contact_id"], name: "index_contact_topic_answers_on_case_contact_id"
+    t.index ["contact_topic_id"], name: "index_contact_topic_answers_on_contact_topic_id"
+  end
+
+  create_table "contact_topics", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.boolean "active", default: true, null: false
+    t.text "details"
+    t.string "question"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_contact_topics_on_casa_org_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -637,6 +658,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
   add_foreign_key "case_group_memberships", "casa_cases"
   add_foreign_key "case_group_memberships", "case_groups"
   add_foreign_key "case_groups", "casa_orgs"
+  add_foreign_key "contact_topic_answers", "case_contacts"
+  add_foreign_key "contact_topic_answers", "contact_topics"
+  add_foreign_key "contact_topics", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
@@ -646,14 +670,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_150721) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
-  add_foreign_key "mileage_rates", "casa_orgs"
+  add_foreign_key "mileage_rates", "casa_orgs", validate: false
   add_foreign_key "mileage_rates", "users"
-  add_foreign_key "notes", "users", column: "creator_id"
+  add_foreign_key "notes", "users", column: "creator_id", validate: false
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases"
+  add_foreign_key "placements", "casa_cases", validate: false
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"

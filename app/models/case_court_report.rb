@@ -7,6 +7,7 @@ class CaseCourtReport
 
   def initialize(path_to_template:, context:)
     @context = context
+    # NOTE: this is what is used for docx templates
     @template = Sablon.template(path_to_template)
   end
 

@@ -1,7 +1,7 @@
 import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static targets = ['icon']
+  static targets = ['icon', 'margin']
   static values = {
     icons: Array
   }
@@ -10,5 +10,6 @@ export default class extends Controller {
     this.iconsValue.forEach((icon) => {
       this.iconTarget.classList.toggle(icon)
     })
+    this.marginTarget.classList.toggle('mb-3')
   }
 }

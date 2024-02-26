@@ -1,0 +1,35 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div><!-- ==== end title ==== -->
+
+<!-- ========== card start ========== -->
+<div class="card-style mb-30">
+  <%= form_with(model: contact_topic, local: true) do |form| %>
+    <%= form.hidden_field :casa_org_id %>
+    <div class="alert-box danger-alert">
+      <%= render "/shared/error_messages", resource: contact_topic %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :question, "Question" %>
+      <%= form.text_field :question, class: "form-control", required: true %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :details, "Details?" %>
+      <%= form.text_area :details, rows: 5, class: "form-control", required: true %>
+    </div>
+    <div class="actions mb-10">
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<!-- card end -->
