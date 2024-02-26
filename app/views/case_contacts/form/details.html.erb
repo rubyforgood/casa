@@ -14,7 +14,7 @@
               casa_case.id,
               @case_contact.draft_case_ids.include?(casa_case.id),
               id: "case_contact_draft_case_id_#{casa_case.id}",
-              class: ["form-check-input", "casa-case-id"] %>
+              class: ["form-check-input", "casa-case-id", "case-contacts-form-checkbox"] %>
             <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
               <%= casa_case.case_number %>
             </label>
@@ -39,7 +39,7 @@
           <%= form.radio_button :contact_made, true,
             checked: @case_contact.contact_made,
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contacts-form-checkbox"] %>
           <%= form.label "Yes", class: "form-check-label",
             for: "case_contact_contact_made_true" %>
         </div>
@@ -47,7 +47,7 @@
           <%= form.radio_button :contact_made, false,
             checked: set_contact_made_false(@case_contact),
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contacts-form-checkbox"] %>
           <%= form.label "No", class: "form-check-label",
             for: "case_contact_contact_made_false" %>
         </div>
@@ -57,7 +57,7 @@
         <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
           <div class="form-check radio-style mb-20">
-            <%= b.radio_button(class: "form-check-input") %>
+            <%= b.radio_button(class: ["form-check-input", "case-contacts-form-checkbox"]) %>
             <%= b.label(class: "form-check-label") %>
           </div>
         <% end %>
@@ -79,13 +79,13 @@
       </div>
     </div>
 
-    <div class="actions mb-10 d-flex justify-content-between">
+    <div class="actions mb-10 case-contacts-form-buttons">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
         Back
       <% end %>
 
       <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-        <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+        <i class="lni lni-checkmark-circle mr-5"></i> Save and Continue
       <% end %>
     </div>
   <% end %>

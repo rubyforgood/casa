@@ -28,13 +28,13 @@
         </div>
       </div>
 
-      <div class="actions mb-10 d-flex justify-content-between">
+      <div class="actions mb-10 case-contacts-form-buttons">
         <%= link_to previous_wizard_path(case_contact_id: @case_contact.id), class: "btn-sm main-btn primary-btn-outline btn-hover" do %>
           Back
         <% end %>
 
         <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-          <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+          <i class="lni lni-checkmark-circle mr-5"></i> Save and Continue
         <% end %>
       </div>
     <% end %>
