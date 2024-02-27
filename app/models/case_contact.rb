@@ -30,6 +30,7 @@ class CaseContact < ApplicationRecord
   has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
 
   has_many :additional_expenses
+  has_many :contact_topic_answers, dependent: :destroy
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order and have an html template in case_contacts/form.
@@ -49,6 +50,7 @@ class CaseContact < ApplicationRecord
 
   accepts_nested_attributes_for :case_contact_contact_type
   accepts_nested_attributes_for :casa_case
+  accepts_nested_attributes_for :contact_topic_answers, update_only: true
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
@@ -255,6 +257,14 @@ class CaseContact < ApplicationRecord
     elsif CasaCase.find(draft_case_ids.first).volunteers.count == 1
       CasaCase.find(draft_case_ids.first).volunteers.first
     end
+  end
+
+  def create_contact_topic_answers!(casa_org)
+    casa_org.contact_topics.active.each do |topic|
+      contact_topic_answers << ContactTopicAnswer.new(contact_topic: topic)
+    end
+
+    save!
   end
 
   def self.options_for_sorted_by
