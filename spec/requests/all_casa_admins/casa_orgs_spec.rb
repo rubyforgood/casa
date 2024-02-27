@@ -47,9 +47,23 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         {casa_org: {name: "New Org", display_name: "New org display",
                     address: "29207 Weimann Canyon, New Andrew, PA 40510-7416"}}
       end
+      let(:contact_topics) { [{"question" => "Title 1", "details" => "details 1"}, {"question" => "Title 2", "details" => "details 2"}] }
+
+      before do
+        allow(ContactTopic).to receive(:default_contact_topics).and_return(contact_topics)
+      end
 
       it "creates a new CASA org" do
         expect { post_create }.to change(CasaOrg, :count).by(1)
+      end
+
+      it "generates correct defaults during creation" do
+        expect { post_create }.to change(ContactTopic, :count).by(2)
+
+        casa_org = CasaOrg.last
+        expect(casa_org.contact_topics.map(&:question)).to eq contact_topics.map { |t| t["question"] }
+        expect(casa_org.contact_topics.map(&:details)).to eq contact_topics.map { |t| t["details"] }
+        expect(casa_org.contact_topics.pluck(:active)).to be_all true
       end
 
       it "redirects to CASA org show page, with notice flash", :aggregate_failures do

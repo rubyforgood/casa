@@ -55,7 +55,7 @@ class ApplicationPolicy
     case record
     when CasaOrg
       user.casa_org == record
-    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup
+    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup, ContactTopic
       user.casa_org == record.casa_org
     when CourtDate, CaseContact
       user.casa_org == record&.casa_case&.casa_org
