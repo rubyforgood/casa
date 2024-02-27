@@ -44,28 +44,38 @@
           </div>
         </div>
       <% end %>
+    </div>
+
+    <div class="card-style-1 pl-25 mb-10 pr-50">
+      <h4 class="mb-3"><label>1. Other Expenses (optional)</label></h4>
 
       <% if Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
+        <div class="field other-expenses form-group">
+            <!-- THere should be only one row with two columns -->
+            <col class="col-2">
+              <row class="row">
+              <h5 class="mb-3"><label>a. Expense Amount</label></h5>
+
+              <div class="input-style-1 mb-0 col-sm-6">
+                <%= form.text_field :volunteer_address, value: @case_contact.decorate.address_of_volunteer, disabled: @case_contact.address_field_disabled?, class: "input-style-1" %>
+              </div>
+              <h5 class="mb-3"><label>a. Expense Amount</label></h5>
+              <div class="input-style-1 mb-0 col-sm-6">
+                <%= form.text_field :volunteer_address, value: @case_contact.decorate.address_of_volunteer, disabled: @case_contact.address_field_disabled?, class: "input-style-1" %>
+              </div>
+              </row>
+            </col>
+        </div>
         <div class="other-expenses">
-          <h5 class="mb-3"><%= form.label :additional_expense, "d. Other Expenses" %></h5>
+          <h5 class="mb-3"><%= form.label :additional_expense, "a. Expense Amount" %></h5>
           <ol>
             <% @case_contact.decorate.additional_expenses_count %>
             <% if @case_contact.additional_expenses.any? %>
               <%= form.fields_for :additional_expenses do |ff| %>
-                <li>
-                  <div class="row align-items-center">
-                    <div class="col input-style-1">
-                      <%= ff.number_field :other_expense_amount,
-                        placeholder: "Enter amount",
-                        class: "cc-italic cc-field other-expense-amount w-25 co",
-                        min: "0", max: 1000, step: 0.01 %>
-                    </div>
-                    <div class="col input-style-1">
-                      <%= ff.text_field :other_expenses_describe, placeholder: "Describe the expense",
-                        class: "cc-italic cc-field other-expenses-describe" %>
-                    </div>
-                  </div>
-                </li>
+                <div class="input-style-1 mb-0">
+                  <%= ff.number_field :other_expense_amount, class: "form-control",
+                  min: "0", max: 1000, step: 0.01 %>
+                </div>
               <% end %>
             <% end %>
             <% if @case_contact.decorate.additional_expenses_count < 10 %>
