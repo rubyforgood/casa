@@ -79,6 +79,17 @@
       </div>
     </div>
 
+    <div class="card-style-1 pl-25 mb-10">
+      <h4 class="mb-20 details__topics-label">Court report <%= "topic".pluralize(@case_contact.contact_topic_answers.count) %> <span class="content-1">(optional)</span></label></h4>
+      <div class="">
+        <%= form.fields_for(:contact_topic_answers) do |f| %>
+          <div class="form-check checkbox-style mb-10 ml-5">
+            <%= f.check_box :selected, class: ["form-check-input", "casa-case-id"] %>
+            <%= f.label :selected, f.object.contact_topic.question, class: "form-check-label" %>
+          </div>
+        <% end %>
+      </div>
+    </div>
     <div class="actions mb-10 d-flex justify-content-between">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
         Back

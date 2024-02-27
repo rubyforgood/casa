@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "case_contacts/create", type: :system, js: true do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
+  let(:contact_topics) { [build(:contact_topic, question: "q1"), build(:contact_topic, question: "q2")] }
+  let(:org) { create(:casa_org, contact_topics: contact_topics) }
+  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, casa_org: org) }
   let(:casa_case) { volunteer.casa_cases.first }
 
   context "redirects to where new case contact started from" do
@@ -43,6 +45,72 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
+    end
+  end
+
+  describe "notes page" do
+    before(:each) do
+      sign_in volunteer
+      visit case_contacts_path
+      click_on "New Case Contact"
+
+      complete_details_page(
+        case_numbers: [casa_case.case_number],
+        medium: "In Person",
+        contact_made: true,
+        hours: 1,
+        minutes: 45,
+        contact_topics: [contact_topics.first.question]
+      )
+    end
+
+    it "has selected topics expanded" do
+      expect(page).to have_text contact_topics.first.question
+      expect(page).to have_text contact_topics.first.details
+      expect(page).to have_text contact_topics.last.question
+      expect(page).to_not have_text contact_topics.last.details
+    end
+
+    it "expands to show and hide the text field and details", js: true do
+      topic_id = contact_topics.first.question.parameterize.underscore
+
+      expect(page).to have_text(contact_topics.first.question)
+      expect(page).to have_text(contact_topics.first.details)
+      expect(page).to have_selector("##{topic_id} textarea")
+
+      find("##{topic_id}_button").click
+
+      expect(page).to have_text(contact_topics.first.question)
+      expect(page).to_not have_text(contact_topics.first.details)
+      expect(page).to_not have_selector("##{topic_id} textarea")
+
+      sleep 0.4 # BUG: have to wait for the animation to finish
+      find("##{topic_id}_button").click
+
+      expect(page).to have_text(contact_topics.first.question)
+      expect(page).to have_text(contact_topics.first.details)
+      expect(page).to have_selector("##{topic_id} textarea")
+    end
+
+    it "expands to show/hide details", js: true do
+      topic_id = contact_topics.first.question.parameterize.underscore
+
+      expect(page).to have_text(contact_topics.first.question)
+
+      within("##{topic_id}") do
+        expect(page).to have_text(contact_topics.first.details)
+        expect(page).to have_selector("##{topic_id} textarea")
+
+        click_on "read less"
+
+        expect(page).to_not have_text(contact_topics.first.details)
+        expect(page).to have_selector("##{topic_id} textarea")
+
+        click_on "read more"
+
+        expect(page).to have_text(contact_topics.first.details)
+        expect(page).to have_selector("##{topic_id} textarea")
+      end
     end
   end
 end
