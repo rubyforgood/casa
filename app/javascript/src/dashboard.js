@@ -134,8 +134,19 @@ $(() => { // JQuery's callback for the DOM loading
         }
       })
     },
-    order: [[6, 'desc']],
+    order: [[7, 'desc']],
     columns: [
+      {
+        data: 'id',
+        targets: 0,
+        searchable: false,
+        orderable: false,
+        render: (data, type, row, meta) => {
+          return `
+            <input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_${row.id}" value="${row.id}" class="form-check-input" data-select-all-target="checkbox" data-action="select-all#toggleSingle">
+          `
+        }
+      },
       {
         name: 'display_name',
         render: (data, type, row, meta) => {
@@ -248,10 +259,10 @@ $(() => { // JQuery's callback for the DOM loading
         render: (data, type, row, meta) => {
           return `
           <span class="mobile-label">Actions</span>
-            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary">
+            <a href="${editVolunteerPath(row.id)}" class="btn btn-primary text-white">
               Edit
             </a>
-            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary">
+            <a href="${impersonateVolunteerPath(row.id)}" class="btn btn-secondary text-white">
               Impersonate
             </a>
           `
