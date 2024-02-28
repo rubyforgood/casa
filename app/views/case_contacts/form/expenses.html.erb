@@ -5,7 +5,10 @@
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <div class="card-style-1 pl-25 mb-10 pr-50">
-      <h4 class="mb-3"><label>1. Travel Details (optional)</label></h4>
+      <div class="d-flex gap-1">
+        <h4 class="mb-3"><label>1. Travel Details</label></h4>
+        <p class="text-dark">(optional)</p>
+      </div>
 
       <% if current_organization.show_driving_reimbursement && show_volunteer_reimbursement(@casa_cases) %>
         <div class="field want-driving-reimbursement form-group">
@@ -47,7 +50,10 @@
     </div>
 
     <div class="card-style-1 pl-25 mb-10 pr-50">
-      <h4 class="mb-3"><label>2. Other Expenses (optional)</label></h4>
+      <div class="d-flex gap-1">
+        <h4 class="mb-3"><label>2. Other Expenses</label></h4>
+        <p class="text-dark">(optional)</p>
+      </div>
 
       <% if Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
         <div class="other-expenses">
