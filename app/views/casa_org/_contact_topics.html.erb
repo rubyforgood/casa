@@ -19,42 +19,48 @@
       <div class="table-wrapper table-responsive">
         <table class="table striped-table" id="contact-topics">
           <thead>
-          <tr>
-            <th>Question</th>
-            <th>Details</th>
-            <th>Active?</th>
-            <th>Actions</th>
-          </tr>
+            <tr>
+              <th>Question</th>
+              <th>Details</th>
+              <th>Active?</th>
+            </tr>
           </thead>
           <tbody>
-          <% @contact_topics.each do |contact_topic| %>
-            <tr id="contact_topic-<%= contact_topic.id %>">
-              <td scope="row" class="min-width">
-                <%= contact_topic.question %>
-              </td>
-              <td scope="row" class="min-width pre-line"><%= contact_topic.details %></td>
-              <td scope="row" class="min-width">
-                <%= contact_topic.active ? "Yes" : "No" %>
-              </td>
-              <td>
-                <%= link_to edit_contact_topic_path(contact_topic) do %>
-                  <div class="action">
-                    <button class="text-danger">
-                      <i class="lni lni-pencil-alt"></i> Edit
-                    </button>
-                  </div>
+            <% @contact_topics.each do |contact_topic| %>
+              <tr id="contact_topic-<%= contact_topic.id %>">
+                <td scope="row" class="min-width">
+                  <%= contact_topic.question %>
+                </td>
+                <td scope="row" class="min-width pre-line"><%= contact_topic.details %></td>
+                <td scope="row" class="min-width">
+                  <%= contact_topic.active ? "Yes" : "No" %>
+                </td>
+                <td>
+                  <%= render(KebabMenuComponent.new(menu_title: "Actions Menu")) do %>
+                    <li><%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "dropdown-item" %></li>
+                    <li><%= render(ModalComponent.new( id: "contact_topic-#{contact_topic.id}", modal: false, button_value: "Delete")) %></li>
+                  <% end %>
+                </td>
+              </tr>
+              <%= render(ModalComponent.new(
+                id: "contact_topic-#{contact_topic.id}",
+                button: false,
+                header_text: "Delete Court Report Topic?"
+              )) do |component| %>
+                <% component.with_modal_footer do %>
+                  <%= link_to soft_delete_contact_topic_path(contact_topic), method: :delete,
+                    class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
+                    <i class="lni lni-trash-can mr-10"></i>
+                    Delete Court Report Topic
+                  <% end %>
                 <% end %>
-                <%= link_to soft_delete_contact_topic_path(contact_topic),
-                  method: :delete, data: { confirm: "Are you sure that you want to delete this court topic item?" } do %>
-                  <div class="action">
-                    <button class="text-danger">
-                      <i class="lni lni-trash-can"></i> Delete
-                    </button>
-                  </div>
+                <% component.with_modal_content do %>
+                  <p>This topic and its related questions will be deleted and will no longer be presented while filling out case contacts.</p>
+                  <br>
+                  <p>This will not affect case contacts that have already been created.</p>
                 <% end %>
-              </td>
-            </tr>
-          <% end %>
+              <% end %>
+            <% end %>
           </tbody>
         </table>
       </div>

@@ -64,14 +64,25 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       )
     end
 
-    it "has selected topics expanded" do
+    it "has selected topics expanded but no details expanded" do
+      topic_one_id = contact_topics.first.question.parameterize.underscore
+      topic_two_id = contact_topics.last.question.parameterize.underscore
+
       expect(page).to have_text contact_topics.first.question
-      expect(page).to have_text contact_topics.first.details
+      expect(page).to_not have_text contact_topics.first.details
+
+      within("##{topic_one_id}") do
+        expect(page).to have_text("read more")
+        expect(page).to have_selector("##{topic_one_id} textarea")
+      end
+
       expect(page).to have_text contact_topics.last.question
       expect(page).to_not have_text contact_topics.last.details
+      expect(page).to_not have_selector("##{topic_two_id}")
     end
 
     it "expands to show and hide the text field and details", js: true do
+      click_on "read more"
       topic_id = contact_topics.first.question.parameterize.underscore
 
       expect(page).to have_text(contact_topics.first.question)
@@ -92,23 +103,24 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       expect(page).to have_selector("##{topic_id} textarea")
     end
 
-    it "expands to show/hide details", js: true do
+    it "expands to show/hide details", js: true, debug: true do
       topic_id = contact_topics.first.question.parameterize.underscore
 
       expect(page).to have_text(contact_topics.first.question)
 
       within("##{topic_id}") do
-        expect(page).to have_text(contact_topics.first.details)
-        expect(page).to have_selector("##{topic_id} textarea")
-
-        click_on "read less"
-
         expect(page).to_not have_text(contact_topics.first.details)
         expect(page).to have_selector("##{topic_id} textarea")
 
         click_on "read more"
 
         expect(page).to have_text(contact_topics.first.details)
+        expect(page).to have_selector("##{topic_id} textarea")
+
+        sleep 0.4 # BUG: have to wait for the animation to finish
+        click_on "read less"
+
+        expect(page).to_not have_text(contact_topics.first.details)
         expect(page).to have_selector("##{topic_id} textarea")
       end
     end

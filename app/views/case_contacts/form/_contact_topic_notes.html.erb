@@ -24,15 +24,15 @@
       <div class="topic-questions collapse <%= f.object.selected ? "show" : nil %>"
            id="<%= answer_id %>">
            <span class="content-2">Court report questions:
-             <span class="content-3 collapse read-more <%= answer_id %>_details">
+             <span class="content-3 collapse show read-more <%= answer_id %>_details">
                ... <a class="content-2"
                       href=".<%= answer_id %>_details"
                       data-bs-toggle="collapse"
                       role="button">[read more]</a>
              </span>
            </span>
-           <p class="pre-line content-3 collapse show <%= answer_id %>_details"><%= topic.details %></p>
-           <span class="content-2 collapse show <%= answer_id %>_details">
+           <p class="pre-line content-3 collapse <%= answer_id %>_details"><%= topic.details %></p>
+           <span class="content-2 collapse <%= answer_id %>_details">
              <a class="content-2"
                  data-bs-toggle="collapse"
                 data-bs-parent=".topic-questions"
