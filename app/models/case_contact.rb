@@ -259,12 +259,14 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  def create_contact_topic_answers!(casa_org)
-    casa_org.contact_topics.active.each do |topic|
-      contact_topic_answers << ContactTopicAnswer.new(contact_topic: topic)
+  def self.create_with_answers(casa_org, **kwargs)
+    create(kwargs).tap do |case_contact|
+      casa_org.contact_topics.active.each do |topic|
+        unless case_contact.contact_topic_answers << ContactTopicAnswer.new(contact_topic: topic)
+          case_contact.errors.add(:contact_topic_answers, "could not create topic #{topic&.question.inspect}")
+        end
+      end
     end
-
-    save!
   end
 
   def self.options_for_sorted_by

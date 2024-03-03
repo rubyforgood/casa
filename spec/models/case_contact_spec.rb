@@ -141,25 +141,48 @@ RSpec.describe CaseContact, type: :model do
     end
   end
 
-  describe "#create_contact_topic_answers!" do
+  describe "#create_with_answers" do
     let(:inactive_list) { create_list(:contact_topic, 2, active: false) }
     let(:active_list) { create_list(:contact_topic, 2, active: true) }
     let(:contact_topics) { [*active_list, *inactive_list] }
     let(:org) { create(:casa_org, contact_topics:) }
+    let(:admin) { create(:casa_admin, casa_org: org) }
     let(:casa_case) { create(:casa_case, casa_org: org) }
-    let(:case_contact) { create(:case_contact, casa_case:) }
+    # let(:case_contact) { create(:case_contact, casa_case:) }
 
-    it "creates case contact topics after creation" do
-      org
+    context "when creation is successful" do
+      it "create a case_contact" do
+        org
+        expect {
+          CaseContact.create_with_answers(org, creator: admin)
+        }.to change(CaseContact, :count).from(0).to(1)
+      end
 
-      expect {
-        case_contact.create_contact_topic_answers!(org)
-      }.to change(ContactTopicAnswer, :count).from(0).to(2)
+      it "creates contact_topic_answers" do
+        org
+        expect {
+          CaseContact.create_with_answers(org, creator: admin)
+        }.to change(ContactTopicAnswer, :count).from(0).to(2)
 
-      case_contact.reload
-      topics = case_contact.contact_topic_answers.map(&:contact_topic)
+        case_contact = CaseContact.last
+        topics = case_contact.contact_topic_answers.map(&:contact_topic)
 
-      expect(topics).to match_array(active_list)
+        expect(topics).to match_array(active_list)
+      end
+    end
+
+    context "when a topic answer creation fails" do
+      it "does not create a case contact" do
+        expect {
+          CaseContact.create_with_answers(org)
+        }.to_not change(CaseContact, :count)
+      end
+
+      it "adds errors from contact_topic_answers" do
+        allow(org.contact_topics).to receive(:active).and_return([nil])
+        result = CaseContact.create_with_answers(org, creator: admin)
+        expect(result.errors[:contact_topic_answers]).to include("could not create topic nil")
+      end
     end
   end
 

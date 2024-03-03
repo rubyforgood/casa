@@ -48,7 +48,7 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
     end
   end
 
-  describe "notes page" do
+  describe "notes page", js: true do
     before(:each) do
       sign_in volunteer
       visit case_contacts_path
@@ -103,7 +103,7 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       expect(page).to have_selector("##{topic_id} textarea")
     end
 
-    it "expands to show/hide details", js: true, debug: true do
+    it "expands to show/hide details", js: true do
       topic_id = contact_topics.first.question.parameterize.underscore
 
       expect(page).to have_text(contact_topics.first.question)

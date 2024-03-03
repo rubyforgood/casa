@@ -17,7 +17,7 @@
                    type="button"
                    id="<%= answer_id %>_button"
                    aria-expanded="false">
-             <i class="lni lni-chevron-up" data-icon-toggle-target="icon"></i>
+             <i class="lni <%= f.object.selected ? "lni-chevron-up" : "lni-chevron-down" %>" data-icon-toggle-target="icon"></i>
            </button>
       </div>
 
