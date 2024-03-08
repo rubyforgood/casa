@@ -10,6 +10,7 @@ controllers/mileage_reports_controller.rb
 controllers/placements_controller.rb
 controllers/users/sessions_controller.rb
 controllers/learning_hour_topics_controller.rb
+controllers/learning_hours/volunteers_controller.rb
 datatables/application_datatable.rb
 decorators/application_decorator.rb
 decorators/case_assignment_decorator.rb

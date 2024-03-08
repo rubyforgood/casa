@@ -4,7 +4,7 @@ class LearningHourPolicy < ApplicationPolicy
   end
 
   def show?
-    @user.casa_admin? || @user.supervisor? || record.user_id == @user.id
+    record.user_id == @user.id
   end
 
   def new?
