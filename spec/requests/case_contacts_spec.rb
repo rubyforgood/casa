@@ -53,13 +53,23 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     context "when current org has contact topics" do
-      let(:contact_topics) { build_list(:contact_topic, 3) }
+      let(:contact_topics) {
+        [
+          build(:contact_topic, active: true, soft_delete: false),
+          build(:contact_topic, active: false, soft_delete: false),
+          build(:contact_topic, active: true, soft_delete: true),
+          build(:contact_topic, active: false, soft_delete: true)
+        ]
+      }
       let(:organization) { create(:casa_org, contact_topics:) }
 
-      it "should set empty contact topic answers for new case contact to org topics" do
-        expect { request }.to change(ContactTopicAnswer, :count).by(3)
-        expect(CaseContact.last.contact_topic_answers.count).to eq(3)
-        expect(CaseContact.last.contact_topic_answers.pluck(:value)).to be_all(nil)
+      it "should set empty contact topic answers for new case contact to active/non-softdelet org topics" do
+        expect { request }.to change(ContactTopicAnswer, :count).by(1)
+
+        got = CaseContact.last.contact_topic_answers.first.contact_topic.question
+        expect(got).to eq(contact_topics[0].question)
+
+        expect(CaseContact.last.contact_topic_answers.first.value).to be_nil
       end
     end
   end

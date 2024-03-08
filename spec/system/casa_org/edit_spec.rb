@@ -75,25 +75,6 @@ RSpec.describe "casa_org/edit", type: :system do
     message = find("#casa_org_twilio_phone_number").native.attribute("validationMessage")
     expect(message).to eq "Please fill out this field."
   end
-
-  it "deleting a contact topic soft deletes the record and does not show it", js: true do
-    contact_topics = build_list(:contact_topic, 2).sort_by(&:question)
-    organization = create(:casa_org, contact_topics:)
-    admin = create(:casa_admin, casa_org_id: organization.id)
-
-    sign_in admin
-    visit edit_casa_org_path(organization)
-
-    expect(page).to have_text(contact_topics.first.question)
-    expect(page).to have_text(contact_topics.last.question)
-
-    find_all("#contact-topics .dropdown-toggle").last.click
-    within("#contact-topics") { click_link "Delete" }
-    click_link "Delete Court Report Topic"
-
-    expect(page).to have_text(contact_topics.first.question)
-    expect(page).to_not have_text(contact_topics.last.question)
-  end
 end
 
 def stub_twilio

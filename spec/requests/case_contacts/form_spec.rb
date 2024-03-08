@@ -58,7 +58,26 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
       end
 
-      # TODO: Test that contact topics are shown
+      context "when the org has topics assigned" do
+        let(:contact_topics) {
+          [
+            build(:contact_topic, active: true, soft_delete: false),
+            build(:contact_topic, active: false, soft_delete: false),
+            build(:contact_topic, active: true, soft_delete: true),
+            build(:contact_topic, active: false, soft_delete: true)
+          ]
+        }
+        let(:organization) { create(:casa_org, contact_topics:) }
+        let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
+
+        it "shows contact topics" do
+          page = request.parsed_body.to_html
+          expect(page).to include(contact_topics[0].question)
+          expect(page).to_not include(contact_topics[1].question)
+          expect(page).to_not include(contact_topics[2].question)
+          expect(page).to_not include(contact_topics[3].question)
+        end
+      end
     end
   end
 

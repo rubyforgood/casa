@@ -142,13 +142,17 @@ RSpec.describe CaseContact, type: :model do
   end
 
   describe "#create_with_answers" do
-    let(:inactive_list) { create_list(:contact_topic, 2, active: false) }
-    let(:active_list) { create_list(:contact_topic, 2, active: true) }
-    let(:contact_topics) { [*active_list, *inactive_list] }
+    let(:contact_topics) {
+      [
+        build(:contact_topic, active: true, soft_delete: false),
+        build(:contact_topic, active: false, soft_delete: false),
+        build(:contact_topic, active: true, soft_delete: true),
+        build(:contact_topic, active: false, soft_delete: true)
+      ]
+    }
     let(:org) { create(:casa_org, contact_topics:) }
     let(:admin) { create(:casa_admin, casa_org: org) }
     let(:casa_case) { create(:casa_case, casa_org: org) }
-    # let(:case_contact) { create(:case_contact, casa_case:) }
 
     context "when creation is successful" do
       it "create a case_contact" do
@@ -158,16 +162,16 @@ RSpec.describe CaseContact, type: :model do
         }.to change(CaseContact, :count).from(0).to(1)
       end
 
-      it "creates contact_topic_answers" do
+      it "creates only active and non-deleted contact_topic_answers" do
         org
         expect {
           CaseContact.create_with_answers(org, creator: admin)
-        }.to change(ContactTopicAnswer, :count).from(0).to(2)
+        }.to change(ContactTopicAnswer, :count).from(0).to(1)
 
         case_contact = CaseContact.last
         topics = case_contact.contact_topic_answers.map(&:contact_topic)
 
-        expect(topics).to match_array(active_list)
+        expect(topics).to include(contact_topics.first)
       end
     end
 

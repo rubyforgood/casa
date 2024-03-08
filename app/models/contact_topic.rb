@@ -10,7 +10,6 @@ class ContactTopic < ApplicationRecord
   validates :details, presence: true
 
   scope :active, -> { where(active: true, soft_delete: false) }
-  default_scope { order(:question) }
 
   class << self
     def generate_for_org!(casa_org)
