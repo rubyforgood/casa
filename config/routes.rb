@@ -37,6 +37,7 @@ Rails.application.routes.draw do
     collection do
       get :case_contacts_creation_times_in_last_week
       get :monthly_line_graph_data
+      get :monthly_unique_users_graph_data
     end
   end
 
@@ -126,6 +127,9 @@ Rails.application.routes.draw do
   resources :bulk_court_dates, only: %i[new create]
   resources :case_groups, only: %i[index new edit create update destroy]
   resources :learning_hours, only: %i[index show new create edit update destroy]
+  namespace :learning_hours do
+    resources :volunteers, only: :show
+  end
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -202,8 +206,12 @@ Rails.application.routes.draw do
     delete :remove_from_volunteer
   end
 
-  direct :help do
+  direct :help_admins_supervisors do
     "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
+  end
+
+  direct :help_volunteers do
+    "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-Volunteers-c24d9d2ef8b249bbbda8192191365039?pvs=4"
   end
 
   get "/error", to: "error#index"

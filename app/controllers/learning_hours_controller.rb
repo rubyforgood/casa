@@ -55,6 +55,8 @@ class LearningHoursController < ApplicationController
 
   def set_learning_hour
     @learning_hour = LearningHour.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to learning_hours_path
   end
 
   def learning_hours_params

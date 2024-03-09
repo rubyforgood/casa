@@ -38,4 +38,23 @@ class HealthController < ApplicationController
 
     render json: monthly_line_graph_combined_data
   end
+
+  def monthly_unique_users_graph_data
+    first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
+
+    monthly_counts_of_volunteers = User.where(type: "Volunteer").group_by_month(:current_sign_in_at, format: "%b %Y").count
+    monthly_counts_of_supervisors = User.where(type: "Supervisor").group_by_month(:current_sign_in_at, format: "%b %Y").count
+    monthly_counts_of_casa_admins = User.where(type: "CasaAdmin").group_by_month(:current_sign_in_at, format: "%b %Y").count
+
+    monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
+      [
+        month.strftime("%b %Y"),
+        monthly_counts_of_volunteers[month.strftime("%b %Y")] || 0,
+        monthly_counts_of_supervisors[month.strftime("%b %Y")] || 0,
+        monthly_counts_of_casa_admins[month.strftime("%b %Y")] || 0
+      ]
+    end
+
+    render json: monthly_line_graph_combined_data
+  end
 end
