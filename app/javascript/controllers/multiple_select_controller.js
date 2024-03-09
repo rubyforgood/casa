@@ -18,7 +18,7 @@ export default class extends Controller {
                         this.hasLabelFieldValue
     if (isGrouped) {
       /* eslint-disable no-new */
-      return new TomSelect("#case_contact_casa_case_ids", {
+      return new TomSelect(this.selectTarget, {
         plugins: {
           remove_button: {
             title: 'Remove this item',
@@ -58,13 +58,13 @@ export default class extends Controller {
         }
       })
     }
-      /* eslint-disable no-new */
-      new TomSelect(this.selectTarget, {
-        plugins: {
-          remove_button: {
-            title: 'Remove this item'
-          }
+    /* eslint-disable no-new */
+    new TomSelect(this.selectTarget, {
+      plugins: {
+        remove_button: {
+          title: 'Remove this item'
         }
-      })
+      }
+    })
   }
 }
