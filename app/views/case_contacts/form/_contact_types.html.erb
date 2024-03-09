@@ -18,15 +18,13 @@
     data-multiple-select-option-groups-value="<%= contact_type_groups.pluck(:name).map {|name| { value: name, label: name }}.to_json %>"
     data-multiple-select-label-field-value="label"
     data-multiple-select-optgroup-field-value="group"
-    data-multiple-select-default-selected-value="<%= @case_contact.contact_types.pluck(:id) %>"
-  >
+    data-multiple-select-default-selected-value="<%= @case_contact.contact_types.pluck(:id) %>">
     <select
       class="form-control-lg form-select form-select-lg input-group-lg"
       data-multiple-select-target="select"
       multiple="multiple"
       name="case_contact[case_contact_contact_type_attributes][][contact_type_id]"
       id="case_contact_casa_case_ids"
-      placeholder="Select or search for contacts"
-      ></select>
+      placeholder="Select or search for contacts"></select>
   </div>
 </div>
