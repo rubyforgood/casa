@@ -74,10 +74,12 @@
                     <div class="input-style-1 col-sm-3">
                       <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
                       <div class="input-group">
-                        <%= ff.number_field :other_expense_amount,
-                          placeholder: "0",
-                          class: "form-control other-expense-amount",
-                          min: "0", max: 1000, step: 0.01 %>
+                        <span class="dollar-sign">
+                          <%= ff.number_field :other_expense_amount,
+                            placeholder: "0",
+                            class: "form-control other-expense-amount",
+                            min: "0", max: 1000, step: 0.01 %>
+                        </span>
                       </div>
                     </div>
                     <div class="input-style-1 col">
