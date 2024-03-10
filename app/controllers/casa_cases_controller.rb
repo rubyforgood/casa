@@ -17,7 +17,6 @@ class CasaCasesController < ApplicationController
 
     respond_to do |format|
       format.html {}
-      # TODO: add contact topic for generation
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts).perform

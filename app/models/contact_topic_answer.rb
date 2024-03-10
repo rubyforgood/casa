@@ -3,6 +3,8 @@ class ContactTopicAnswer < ApplicationRecord
   belongs_to :contact_topic
 
   validates :selected, inclusion: [true, false]
+
+  default_scope { joins(:contact_topic).order("contact_topics.id") }
 end
 
 # == Schema Information
