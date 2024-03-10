@@ -1,9 +1,11 @@
 <div class="row">
   <div class="col-sm-12 dashboard-table-header my-4">
     <h1>Other Duties</h1>
-    <%= link_to new_other_duty_path, class: "main-btn btn-sm primary-btn btn-hover" do %>
-      <i class="lni lni-plus"></i>
-      New Duty
+    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_OTHER_DUTIES_FLAG) %>
+      <%= link_to new_other_duty_path, class: "main-btn btn-sm primary-btn btn-hover" do %>
+        <i class="lni lni-plus"></i>
+        New Duty
+      <% end %>
     <% end %>
   </div>
 </div>

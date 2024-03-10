@@ -93,6 +93,4 @@
     </div>
   </div>
 </div>
-<% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_OTHER_DUTIES_FLAG) %>
-  <%= render 'other_duties' %>
-<% end %>
+<%= render 'other_duties' %>
