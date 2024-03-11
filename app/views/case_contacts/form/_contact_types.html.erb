@@ -1,7 +1,7 @@
 <div id="contact-type-form" class="d-flex flex-column gap-4">
   <h4 id="contact-type-label"><label>2. Select All Contact Types</label><span class="red-letter"> *</span></h4>
   <p>Choose from the available options below by searching or selecting from the dropdown menu.</p>
-  <% last_case = @casa_cases.sort_by(&:created_at).last %>
+  <% last_case = @casa_case || @casa_cases.sort_by(&:created_at).last %>
   <% selection_options = contact_type_groups.flat_map do |group| %>
     <% group.contact_types.pluck(:id, :name).map do |id, name| %>
       <% {
@@ -18,7 +18,7 @@
     data-multiple-select-option-groups-value="<%= contact_type_groups.pluck(:name).map {|name| { value: name, label: name }}.to_json %>"
     data-multiple-select-label-field-value="label"
     data-multiple-select-optgroup-field-value="group"
-    data-multiple-select-default-selected-value="<%= @case_contact.contact_types.pluck(:id) %>">
+    data-multiple-select-default-selected-value="<%= @casa_case&.contact_types&.pluck(:id) || @case_contact.contact_types.pluck(:id) %>">
     <select
       class="form-control-lg form-select form-select-lg input-group-lg"
       data-multiple-select-target="select"
