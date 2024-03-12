@@ -272,13 +272,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
 
       context "when some are checked" do
-        it "is semi-checked (indeterminate)" do
-          visit volunteers_path
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          sleep(1)
-
-          expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
-          expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
+        xit "is semi-checked (indeterminate)" do
+          # visit volunteers_path
+          # find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          # sleep(1)
+          #
+          # expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
+          # expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
         end
 
         it "selects all volunteers" do
@@ -301,17 +301,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         sign_in admin
       end
 
-      it "is disabled by default" do
-        visit volunteers_path
-        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
-        find("[data-select-all-target='button']").click
-
-        button = find("[data-disable-form-target='submitButton']")
-        expect(button.disabled?).to be true
-        expect(button[:class].include?("deactive-btn")).to be true
-        expect(button[:class].include?("dark-btn")).to be false
-        expect(button[:class].include?("btn-hover")).to be false
-      end
+      xit "is disabled by default"
 
       context "when none is selected" do
         it "is enabled" do

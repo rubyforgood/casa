@@ -27,10 +27,6 @@ class CasaOrg < ApplicationRecord
   has_one_attached :logo
   has_one_attached :court_report_template
 
-  encrypts :twilio_account_sid
-  encrypts :twilio_api_key_sid
-  encrypts :twilio_api_key_secret
-
   def casa_admins
     CasaAdmin.in_organization(self)
   end
