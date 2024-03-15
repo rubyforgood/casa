@@ -1,4 +1,5 @@
 class CasaOrg < ApplicationRecord
+  # NOTE: location of the default report template
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
 
@@ -24,6 +25,7 @@ class CasaOrg < ApplicationRecord
   has_many :learning_hour_types, dependent: :destroy
   has_many :learning_hour_topics, dependent: :destroy
   has_many :case_groups, dependent: :destroy
+  has_many :contact_topics
   has_one_attached :logo
   has_one_attached :court_report_template
 
@@ -81,8 +83,9 @@ class CasaOrg < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  def generate_contact_types_and_hearing_types
+  def generate_defaults
     ActiveRecord::Base.transaction do
+      ContactTopic.generate_for_org!(self)
       ContactTypeGroup.generate_for_org!(self)
       HearingType.generate_for_org!(self)
     end
