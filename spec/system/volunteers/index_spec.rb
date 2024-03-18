@@ -263,7 +263,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           end
 
           find("[data-select-all-target='checkboxAll']").click
-          sleep(1)
+          expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
 
           volunteers.each do |volunteer|
             expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be false
