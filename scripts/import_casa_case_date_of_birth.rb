@@ -31,7 +31,6 @@ def update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatchin
     
     process_casa_case_date(cc, import_date, case_number, already_has_nonmatching_date, no_edit_made, updated_casa_cases, case_not_found)
   end
-  { not_found: case_not_found, nonmatching: already_has_nonmatching_date, no_edit_made: no_edit_made, updated_casa_cases: updated_casa_cases }
 end
 
 def process_casa_case_date(cc, import_date, case_number, already_has_nonmatching_date, no_edit_made, updated_casa_cases, case_not_found)
@@ -47,6 +46,7 @@ def process_casa_case_date(cc, import_date, case_number, already_has_nonmatching
   else
     case_not_found << case_number
   end
+  { not_found: case_not_found, nonmatching: already_has_nonmatching_date, no_edit_made: no_edit_made, updated_casa_cases: updated_casa_cases }
 end
 
 # data = """
