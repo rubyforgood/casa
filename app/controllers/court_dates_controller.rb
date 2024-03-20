@@ -2,7 +2,7 @@ class CourtDatesController < ApplicationController
   include CourtDateParams
 
   before_action :set_casa_case
-  before_action :set_court_date, only: %i[edit show generate update destroy]
+  before_action :set_court_date, only: %i[edit show update destroy]
   before_action :require_organization!
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }

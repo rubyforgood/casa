@@ -133,7 +133,7 @@ RSpec.describe User, type: :model do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 1.week.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
@@ -143,8 +143,8 @@ RSpec.describe User, type: :model do
 
         case_of_interest_1 = volunteer_1.casa_cases.first
         case_of_interest_2 = volunteer_2.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
-        create(:case_contact, creator: volunteer_2, casa_case: case_of_interest_2, contact_made: true, occurred_at: 3.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 1.week.ago)
+        create(:case_contact, creator: volunteer_2, casa_case: case_of_interest_2, contact_made: true, created_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
@@ -158,12 +158,12 @@ RSpec.describe User, type: :model do
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
-      it "returns one for a volunteer who has attempted contact in at least one contact_case with occurred_at after 2 weeks" do
+      it "returns one for a volunteer who has attempted contact in at least one contact_case with created_at after 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
 
-        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 3.weeks.ago)
+        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 

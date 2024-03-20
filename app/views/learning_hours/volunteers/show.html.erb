@@ -1,0 +1,7 @@
+<div class="row my-3">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1><%= @volunteer.display_name %>'s Learning Hours</h1>
+  </div>
+</div>
+
+<%= render "learning_hours/learning_hours_table", learning_hours: @learning_hours %>

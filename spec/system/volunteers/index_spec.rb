@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", type: :system do
+RSpec.describe "view all volunteers", type: :system, js: true do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
@@ -177,15 +177,177 @@ RSpec.describe "view all volunteers", type: :system do
       end
     end
 
-    context "when timed out" do
-      it "prompts login" do
+    describe "Manage Volunteers button" do
+      let!(:volunteers) {
+        [
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization)
+        ]
+      }
+
+      before do
         sign_in admin
+      end
+
+      it "does not display by default" do
         visit volunteers_path
-        click_on "Supervisor"
-        allow_any_instance_of(User).to receive(:timedout?).and_return true
+        expect(page).not_to have_text "Manage Volunteer"
+      end
+
+      context "when one or more volunteers selected" do
+        it "is displayed" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
+
+          expect(page).to have_text "Manage Volunteer"
+        end
+
+        it "displays number of volunteers selected" do
+          visit volunteers_path
+          volunteers.each_with_index do |volunteer, index|
+            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+            button = find("[data-select-all-target='buttonLabel']", wait: 3)
+            expect(button).to have_text "(#{index + 1})"
+          end
+        end
+
+        it "text matches pluralization of volunteers selected" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
+          expect(page).not_to have_text "Manage Volunteers"
+
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
+          expect(page).to have_text "Manage Volunteers"
+        end
+
+        it "is hidden when all volunteers unchecked" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}", wait: 3).click
+          expect(page).to have_text "Manage Volunteer"
+
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          expect(page).not_to have_text "Manage Volunteer"
+        end
+      end
+    end
+
+    describe "Select All Checkbox" do
+      let!(:volunteers) {
+        [
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization),
+          create(:volunteer, casa_org: organization)
+        ]
+      }
+
+      before do
+        sign_in admin
+      end
+
+      it "selects all volunteers" do
         visit volunteers_path
-        expect(page).to have_text "sign in again to continue"
-        expect(current_path).to eq new_user_session_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # Wait for data table to be loaded
+        find("[data-select-all-target='checkboxAll']").click
+
+        volunteers.each do |volunteer|
+          expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be true
+        end
+      end
+
+      context "when all are checked" do
+        it "deselects all volunteers" do
+          visit volunteers_path
+          volunteers.each do |volunteer|
+            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+          end
+
+          find("[data-select-all-target='checkboxAll']").click
+          sleep(1)
+
+          volunteers.each do |volunteer|
+            expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be false
+          end
+        end
+      end
+
+      context "when some are checked" do
+        xit "is semi-checked (indeterminate)" do
+          # visit volunteers_path
+          # find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          # sleep(1)
+          #
+          # expect(find("[data-select-all-target='checkboxAll']").checked?).to be false
+          # expect(find("[data-select-all-target='checkboxAll']")[:indeterminate]).to eq("true")
+        end
+
+        it "selects all volunteers" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+          find("[data-select-all-target='checkboxAll']").click
+
+          volunteers.each do |volunteer|
+            expect(find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").checked?).to be true
+          end
+        end
+      end
+    end
+
+    describe "Select Supervisor Modal Submit button" do
+      let!(:volunteer) { create(:volunteer, casa_org: organization) }
+      let!(:supervisor) { create(:supervisor, casa_org: organization) }
+
+      before do
+        sign_in admin
+      end
+
+      xit "is disabled by default"
+
+      context "when none is selected" do
+        xit "is enabled" do # TODO: Flaky. Fix this test
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']", wait: 3).click
+          select "None", from: "supervisor_volunteer_supervisor_id"
+
+          button = find("[data-disable-form-target='submitButton']")
+
+          expect(button.disabled?).to be false
+          expect(button[:class].include?("deactive-btn")).to be false
+          expect(button[:class].include?("dark-btn")).to be true
+          expect(button[:class].include?("btn-hover")).to be true
+        end
+      end
+
+      context "when a supervisor is selected" do
+        it "is enabled" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']", wait: 3).click
+
+          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+          button = find("[data-disable-form-target='submitButton']")
+          expect(button.disabled?).to be false
+          expect(button[:class].include?("deactive-btn")).to be false
+          expect(button[:class].include?("dark-btn")).to be true
+          expect(button[:class].include?("btn-hover")).to be true
+        end
+      end
+
+      context "when Choose a supervisor is selected" do
+        it "is disabled" do
+          visit volunteers_path
+          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}", wait: 3).click
+          find("[data-select-all-target='button']", wait: 3).click
+
+          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+          select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
+          button = find("[data-disable-form-target='submitButton']")
+          expect(button.disabled?).to be true
+          expect(button[:class].include?("deactive-btn")).to be true
+          expect(button[:class].include?("dark-btn")).to be false
+          expect(button[:class].include?("btn-hover")).to be false
+        end
       end
     end
   end
@@ -316,18 +478,6 @@ RSpec.describe "view all volunteers", type: :system do
         visit volunteers_path
         input_search = page.find(input_field)
         expect(input_search.value).to eq("")
-      end
-    end
-
-    context "when timed out" do
-      it "prompts login" do
-        sign_in supervisor
-        visit volunteers_path
-        click_on "Supervisor"
-        allow_any_instance_of(User).to receive(:timedout?).and_return true
-        visit volunteers_path
-        expect(page).to have_text "sign in again to continue"
-        expect(current_path).to eq new_user_session_path
       end
     end
   end

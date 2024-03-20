@@ -86,6 +86,7 @@
                 </li>
               <% end %>
               <li>
+                <% help_url = current_user.volunteer? ? help_volunteers_url : help_admins_supervisors_url %>
                 <%= link_to help_url, target: :_blank do %>
                   <i class="lni lni-question-circle"></i>
                   Help

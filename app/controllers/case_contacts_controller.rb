@@ -2,7 +2,7 @@
 
 class CaseContactsController < ApplicationController
   before_action :set_case_contact, only: %i[edit destroy]
-  before_action :set_contact_types, only: %i[new edit update create]
+  before_action :set_contact_types, only: %i[new edit create]
   before_action :require_organization!
   after_action :verify_authorized, except: %i[leave]
 
@@ -48,8 +48,15 @@ class CaseContactsController < ApplicationController
         []
       end
 
-    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids)
-    redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
+    @case_contact = CaseContact.create_with_answers(current_organization,
+      creator: current_user, draft_case_ids: draft_case_ids)
+
+    if @case_contact.errors.any?
+      flash[:alert] = @case_contact.errors.full_messages.join("\n")
+      redirect_to request.referer
+    else
+      redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
+    end
   end
 
   def edit
