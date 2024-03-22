@@ -4,6 +4,7 @@ class ApplicationController < ActionController::Base
   include Users::TimeZone
 
   protect_from_forgery
+  before_action :remove_www_subdomain
   before_action :store_user_location!, if: :storable_location?
   before_action :authenticate_user!
   before_action :set_current_user
@@ -140,5 +141,11 @@ class ApplicationController < ActionController::Base
       notice += " Confirmation Email Sent."
     end
     notice
+  end
+
+  def remove_www_subdomain
+    if /^www/.match?(request.host)
+      redirect_to request.url.sub("www.", ""), allow_other_host: true
+    end
   end
 end
