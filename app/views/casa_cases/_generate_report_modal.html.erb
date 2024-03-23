@@ -1,0 +1,56 @@
+<%= form_with url: generate_case_court_reports_path, local: false do |form| %>
+  <% id = "generate-docx-report-modal" %>
+  <%= render(Modal::OpenButtonComponent.new(
+    target: id,
+    klass: "d-inline main-btn btn-hover btn-sm success-btn pull-right mb-2")) do %>
+    Generate Report
+  <% end %>
+  <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
+    <% component.with_header(text: "Download Court Report as a .docx", id: id, klass: "content-1") %>
+    <% component.with_body do %>
+      <div class="docx-report__modal-body">
+      <p class="content-3 md-10">
+      To download a court report specify the date range.
+      </p>
+      <div class="input-style-1" id="case_select_body">
+        <%= form.hidden_field :case_number, value: @casa_case.case_number %>
+        <%= form.hidden_field :time_zone, id: "user-time-zone" %>
+        <h4 class="mb-10">Casa Case:</h4>
+        <p><%= @casa_case.decorate.court_report_select_option.first %></p>
+      </div>
+      <div class="dates-container">
+        <div class="field form-group mb-20">
+          <h6><label class="form-label" for="start_date">Starting From</label></h6>
+          <%= form.text_field :start_date,
+            value: Time.zone.now.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+            data: { provide: "datepicker",
+                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                    class: "form-control" %>
+        </div>
+
+        <div class="field form-group mb-20">
+          <h6><label class="form-label" for="end_date">Ending At</label></h6>
+          <%= form.text_field :end_date,
+            value: Time.zone.now.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+            data: { provide: "datepicker",
+                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                    class: "form-control" %>
+        </div>
+      </div>
+      </div>
+    <% end %>
+    <% component.with_footer do %>
+        <%= button_tag type: :submit,
+          data: {
+            button_name: "Generate Report"
+          },
+          id: "btnGenerateReport",
+          class: "main-btn primary-btn btn-hover btn-sm",
+          onclick: "setTimeZone()" do %>
+          <i class="lni lni-download mr-10"></i>
+          <i id="spinner" class='fas fa-spin d-none mr-10'>⏳</i>
+          Generate Report
+        <% end %>
+    <% end %>
+  <% end %>
+<% end %>

@@ -41,6 +41,58 @@ RSpec.describe "casa_cases/show", type: :system do
     end
   end
 
+  describe "Report Generation", js: true do
+    let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
+    let(:user) { volunteer }
+
+    before do
+      travel_to Date.new(2021, 1, 1)
+      sign_in user
+      visit casa_case_path(casa_case.id)
+    end
+
+    context "when first arriving to 'Generate Court Report' page" do
+      it "generation modal hidden" do
+        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
+        expect(page).not_to have_selector ".select2"
+      end
+    end
+
+    context "after opening 'Download Court Report' modal" do
+      before do
+        page.find(modal_selector).click
+      end
+
+      # putting all this in the same system test shaves 3 seconds off the test suite
+      it "modal has correct contents" do
+        start_date = page.find("#start_date").value
+        expect(start_date).to eq("January 01, 2021") # default date
+
+        end_date = page.find("#end_date").value
+        expect(end_date).to eq("January 01, 2021") # default date
+
+        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
+        expect(page).to_not have_selector ".select2"
+
+        expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
+        expect(page).to_not have_selector("#btnGenerateReport[disabled]")
+        expect(page).to have_selector("#spinner", visible: :hidden)
+
+        within("#generate-docx-report-modal") do
+          expect(page).to have_content(casa_case.case_number)
+
+          # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen"
+          # should have disabled generate button, download icon and no spinner
+          click_button "Generate Report"
+        end
+
+        expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :hidden)
+        expect(page).to have_selector("#btnGenerateReport[disabled]")
+        expect(page).to have_selector("#spinner", visible: true)
+      end
+    end
+  end
+
   context "admin user" do
     let(:user) { admin }
 
@@ -135,28 +187,6 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
-    end
-
-    context "when generating a report, supervisor sees waiting page", js: true do
-      before do
-        click_button "Generate Report"
-      end
-
-      describe "'Generate Report' button" do
-        it "has been disabled" do
-          options = {visible: :visible}
-
-          expect(page).to have_selector "#btnGenerateReport[disabled]", **options
-        end
-      end
-
-      describe "Spinner" do
-        it "becomes visible" do
-          options = {visible: :visible}
-
-          expect(page).to have_selector "#spinner", **options
-        end
-      end
     end
 
     context "when old case contacts are hidden" do

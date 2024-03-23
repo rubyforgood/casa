@@ -28,11 +28,12 @@ class CaseCourtReportsController < ApplicationController
 
   def generate
     authorize CaseCourtReport
-    casa_case = CasaCase.find_by(case_params)
+    casa_case = CasaCase.find_by(case_number: case_params[:case_number])
+
     respond_to do |format|
       format.json do
         if casa_case
-          report_data = generate_report_to_string(casa_case, params[:time_zone])
+          report_data = generate_report_to_string(casa_case, date_range_params)
           save_report(report_data, casa_case)
 
           render json: {link: case_court_report_path(casa_case.case_number, format: "docx"), status: :ok}
@@ -53,6 +54,10 @@ class CaseCourtReportsController < ApplicationController
 
   private
 
+  def date_range_params
+    params.permit(:time_zone, case_court_report: %i[start_date end_date])
+  end
+
   def case_params
     params.require(:case_court_report).permit(:case_number)
   end
@@ -69,7 +74,7 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  def generate_report_to_string(casa_case, time_zone)
+  def generate_report_to_string(casa_case, time_range)
     return unless casa_case
 
     casa_case.casa_org.open_org_court_report_template do |template_docx_file|
@@ -77,7 +82,9 @@ class CaseCourtReportsController < ApplicationController
         volunteer_id: current_user.volunteer? ? current_user.id : casa_case.assigned_volunteers.first&.id,
         case_id: casa_case.id,
         path_to_template: template_docx_file.to_path,
-        time_zone: time_zone
+        time_zone: time_range[:time_zone],
+        start_date: time_range[:case_court_report][:start_date],
+        end_date: time_range[:case_court_report][:end_date]
       }
       context = CaseCourtReportContext.new(args).context
       court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)

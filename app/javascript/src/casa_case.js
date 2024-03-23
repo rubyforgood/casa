@@ -56,20 +56,24 @@ function copyOrdersFromCaseAction (id, caseNumber) {
 }
 
 function showBtn (el) {
+  if (!el) return
   el.classList.remove('d-none')
 }
 
 function hideBtn (el) {
+  if (!el) return
   el.classList.add('d-none')
 }
 
 function disableBtn (el) {
+  if (!el) return
   el.disabled = true
   el.classList.add('disabled')
   el.setAttribute('aria-disabled', true)
 }
 
 function enableBtn (el) {
+  if (!el) return
   el.disabled = false
   el.classList.remove('disabled')
   el.removeAttribute('aria-disabled')
@@ -101,6 +105,7 @@ function handleGenerateReport (e) {
     body: JSON.stringify(formData)
   }
   showBtn(spinner)
+  hideBtn($('#btnGenerateReport .lni-download')[0])
   window.fetch(url, options)
     .then(response => {
       return response.json()
@@ -113,6 +118,7 @@ function handleGenerateReport (e) {
         return
       }
       hideBtn(spinner)
+      showBtn($('#btnGenerateReport .lni-download')[0])
       enableBtn(generateBtn)
       window.open(data.link, '_blank')
     })

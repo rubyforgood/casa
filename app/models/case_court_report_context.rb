@@ -3,7 +3,7 @@
 require "date"
 
 class CaseCourtReportContext
-  attr_reader :report_path, :template
+  attr_reader :report_path, :template, :date_range
 
   def initialize(args = {})
     @casa_case = CasaCase.friendly.find(args[:case_id])
@@ -12,6 +12,7 @@ class CaseCourtReportContext
     @path_to_template = args[:path_to_template]
     @court_date = args[:court_date] || @casa_case.next_court_date
     @case_court_orders = args[:case_court_orders] || @casa_case.case_court_orders
+    @date_range = calculate_date_range(args)
   end
 
   def context
@@ -35,8 +36,7 @@ class CaseCourtReportContext
   #   - :dates [Array<String>]
   #   - :dates_by_medium_type [Array<String>]
   def case_contacts
-    cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
-    interviewees = filter_out_old_case_contacts(cccts)
+    interviewees = filtered_interviewees
     return [] unless interviewees.size.positive?
 
     CaseContactsContactDates.new(interviewees).contact_dates_details
@@ -56,13 +56,11 @@ class CaseCourtReportContext
     end
   end
 
-  def filter_out_old_case_contacts(interviewees)
-    most_recent_court_date = @casa_case.most_recent_past_court_date&.date
-    if most_recent_court_date
-      interviewees.where("occurred_at >= ?", most_recent_court_date)
-    else
-      interviewees
-    end
+  def filtered_interviewees
+    # this query is slow
+    CaseContactContactType.includes(:case_contact, :contact_type)
+      .where("case_contacts.casa_case_id": @casa_case.id)
+      .where("case_contacts.occurred_at": @date_range)
   end
 
   def case_details
@@ -88,5 +86,18 @@ class CaseCourtReportContext
   def org_address(path_to_template)
     is_default_template = path_to_template.end_with?("default_report_template.docx")
     @volunteer.casa_org.address if @volunteer && is_default_template
+  end
+
+  private
+
+  def calculate_date_range(args)
+    zone = args[:time_zone] ? ActiveSupport::TimeZone.new(args[:time_zone]) : Time.zone
+
+    start_date = @casa_case.most_recent_past_court_date&.date&.in_time_zone(zone)
+    start_date = zone.parse(args[:start_date]) if args[:start_date]&.present?
+
+    end_date = args[:end_date]&.present? ? zone.parse(args[:end_date]) : nil
+
+    start_date..end_date
   end
 end
