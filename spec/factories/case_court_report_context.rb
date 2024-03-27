@@ -15,13 +15,13 @@ FactoryBot.define do
       volunteer_for_context = volunteer.nil? ? create(:volunteer) : volunteer
       casa_case_for_context = casa_case.nil? ? create(:casa_case) : casa_case
 
-      unless volunteer_for_context.casa_cases.where(id: casa_case_for_context.id).exists?
+      if volunteer_for_context && volunteer_for_context.casa_cases.where(id: casa_case_for_context.id).none?
         volunteer_for_context.casa_cases << casa_case_for_context
       end
 
       new(
         case_id: casa_case_for_context.id,
-        volunteer_id: volunteer_for_context.id,
+        volunteer_id: volunteer_for_context.try(:id),
         path_to_report: path_to_report,
         path_to_template: path_to_template,
         court_date: court_date,

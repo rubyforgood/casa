@@ -15,28 +15,26 @@ class CaseCourtReportContext
   end
 
   def context
-    prepare_context(@path_to_template.end_with?("default_report_template.docx"))
-  end
-
-  private
-
-  def prepare_context(is_default_template)
-    latest_hearing_date = @casa_case.most_recent_past_court_date
-
     {
       created_date: I18n.l(Time.current.in_time_zone(@time_zone).to_date, format: :full, default: nil),
-      casa_case: prepare_case_details,
-      case_contacts: prepare_case_contacts,
-      case_court_orders: prepare_case_orders,
-      case_mandates: prepare_case_orders, # backwards compatible with old Montgomery template - keep this! TODO test full generation
-      latest_hearing_date: latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil),
-      org_address: org_address(is_default_template),
+      casa_case: case_details,
+      case_contacts: case_contacts,
+      case_court_orders: case_orders(@case_court_orders),
+      case_mandates: case_orders(@case_court_orders), # backwards compatible with old Montgomery template - keep this! TODO test full generation
+      latest_hearing_date: latest_hearing_date,
+      org_address: org_address(@path_to_template),
       volunteer: volunteer_info,
       hearing_type_name: @court_date&.hearing_type&.name || "None"
     }
   end
 
-  def prepare_case_contacts
+  # @return [Array<Hash>]
+  #   Each hash includes:
+  #   - :name [String]
+  #   - :type [String]
+  #   - :dates [Array<String>]
+  #   - :dates_by_medium_type [Array<String>]
+  def case_contacts
     cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
     interviewees = filter_out_old_case_contacts(cccts)
     return [] unless interviewees.size.positive?
@@ -44,8 +42,13 @@ class CaseCourtReportContext
     CaseContactsContactDates.new(interviewees).contact_dates_details
   end
 
-  def prepare_case_orders
-    @case_court_orders.map do |case_order|
+  def latest_hearing_date
+    latest_hearing_date = @casa_case.most_recent_past_court_date
+    latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil)
+  end
+
+  def case_orders(orders)
+    orders.map do |case_order|
       {
         order: case_order.text,
         status: case_order.implementation_status&.humanize
@@ -62,7 +65,7 @@ class CaseCourtReportContext
     end
   end
 
-  def prepare_case_details
+  def case_details
     {
       court_date: I18n.l(@court_date&.date, format: :full, default: nil),
       case_number: @casa_case.case_number,
@@ -82,7 +85,8 @@ class CaseCourtReportContext
     end
   end
 
-  def org_address(is_default_template)
+  def org_address(path_to_template)
+    is_default_template = path_to_template.end_with?("default_report_template.docx")
     @volunteer.casa_org.address if @volunteer && is_default_template
   end
 end
