@@ -1,9 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "Learning Hours Index", type: :system do
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor) }
-  let(:learning_hours) { create_list(:learning_hour, 5, user: volunteer) }
+  let!(:supervisor) { create(:supervisor, :with_volunteers) }
+  let!(:volunteer) { supervisor.volunteers.first }
+  let!(:learning_hours) { create_list(:learning_hour, 2, user: volunteer) }
 
   before do
     login_as user, scope: :user
@@ -28,10 +28,17 @@ RSpec.describe "Learning Hours Index", type: :system do
       visit learning_hours_path
     end
 
-    it "displays the supervisor/admin learning hours", js: true do
+    it "displays a list of volunteers and the learning hours they completed", js: true do
       expect(page).to have_content("Learning Hours")
       expect(page).to have_content("Volunteer")
+      expect(page).to have_content(volunteer.display_name)
       expect(page).to have_content("Time Completed")
+      expect(page).to have_content("#{volunteer.learning_hours.sum(:duration_hours)} hours")
+    end
+
+    it "when clicking on a volunteer's name it redirects to the `learning_hours_volunteer_path` for the volunteer" do
+      click_on volunteer.display_name
+      expect(page).to have_current_path(learning_hours_volunteer_path(volunteer.id))
     end
 
     shared_examples_for "functioning sort buttons" do
