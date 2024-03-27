@@ -58,7 +58,6 @@ FactoryBot.define do
     end
 
     trait :expenses_status do
-      casa_case { nil }
       draft_case_ids { [1] }
     end
 

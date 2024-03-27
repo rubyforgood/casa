@@ -12,7 +12,7 @@ FactoryBot.define do
     token { "verysecuretoken" }
 
     trait :inactive do
-      volunteer
+      type { "Volunteer" }
       active { false }
       role { :inactive }
     end
