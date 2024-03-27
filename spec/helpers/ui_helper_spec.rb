@@ -5,6 +5,8 @@ RSpec.describe UiHelper do
     before(:each) do
       @casa_cases = create_list(:casa_case, 4)
       @volunteer = create(:volunteer, casa_org: @casa_cases[0].casa_org)
+      current_user = create(:supervisor)
+      allow(helper).to receive(:current_user).and_return(current_user)
     end
 
     it "does not render duplicate casa_case" do

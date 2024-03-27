@@ -1,0 +1,9 @@
+<% unless @current_user.volunteer? %>
+  <span class="badge badge-pill light-bg text-black fs-6 fw-medium">
+    <% if @casa_case.assigned_volunteers.present? %>
+      <%= @casa_case.assigned_volunteers.map(&:display_name).join(", ") %>
+    <% else %>
+      Unassigned
+    <% end %>
+  </span>
+<% end %>

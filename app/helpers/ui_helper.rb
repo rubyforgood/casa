@@ -6,14 +6,14 @@ module UiHelper
         CasaCase
           .not_assigned(@volunteer.casa_org).active
           .uniq { |casa_case| casa_case.case_number }
-          .map { |casa_case| [casa_case.case_number, casa_case.id] }
+          .map { |casa_case| ["#{casa_case.case_number} - #{render AssignedVolunteersComponent.new(casa_case, current_user)}".html_safe, casa_case.id] }
       ],
       [
         "Assigned",
         CasaCase
           .actively_assigned_excluding_volunteer(@volunteer)
           .uniq { |casa_case| casa_case.case_number }
-          .map { |casa_case| [casa_case.case_number, casa_case.id] }
+          .map { |casa_case| ["#{casa_case.case_number} - #{render AssignedVolunteersComponent.new(casa_case, current_user)}".html_safe, casa_case.id] }
       ]
     ]
   end
