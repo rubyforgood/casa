@@ -61,5 +61,16 @@ FactoryBot.define do
       casa_case { nil }
       draft_case_ids { [1] }
     end
+
+    trait :with_org_topics do
+      after(:create) do |case_contact, _|
+        return if case_contact.casa_case.nil?
+
+        casa_org = case_contact.casa_case.casa_org
+        casa_org.contact_topics.active.each do |contact_topic|
+          case_contact.contact_topic_answers << build(:contact_topic_answer, contact_topic: contact_topic)
+        end
+      end
+    end
   end
 end

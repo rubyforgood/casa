@@ -12,6 +12,7 @@ require_relative "seeds/db_populator"
 require_relative "../lib/tasks/data_post_processors/case_contact_populator"
 require_relative "../lib/tasks/data_post_processors/contact_type_populator"
 require_relative "../lib/tasks/data_post_processors/sms_notification_event_populator"
+require_relative "../lib/tasks/data_post_processors/contact_topic_populator"
 
 class SeederMain
   attr_reader :db_populator, :rng
@@ -76,6 +77,7 @@ class SeederMain
   def post_process_data
     ContactTypePopulator.populate
     CaseContactPopulator.populate
+    ContactTopicPopulator.populate
   end
 
   def get_seed_specification

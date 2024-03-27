@@ -1,0 +1,6 @@
+<button type="button" class="btn <%= @class %>" data-bs-toggle="modal" data-bs-target="<%= "##{@target}" %>">
+  <% if @icon %>
+    <i class="lni mr-10 lni-<%= @icon %>"></i>
+  <% end %>
+  <%= open_button %>
+</button>

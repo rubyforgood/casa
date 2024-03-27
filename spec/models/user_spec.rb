@@ -264,11 +264,15 @@ RSpec.describe User, type: :model do
   end
 
   describe ".no_recent_sign_in" do
-    let!(:old_sign_in_user) { create(:user, last_sign_in_at: 39.days.ago) }
-    let!(:recently_signed_in_user) { create(:user, last_sign_in_at: 5.days.ago) }
-
     it "returns users who haven't signed in in 30 days" do
+      old_sign_in_user = create(:user, last_sign_in_at: 39.days.ago)
+      create(:user, last_sign_in_at: 5.days.ago)
       expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
+    end
+
+    it "returns users who haven't signed in ever" do
+      user = create(:user, last_sign_in_at: nil)
+      expect(User.no_recent_sign_in).to contain_exactly(user)
     end
   end
 

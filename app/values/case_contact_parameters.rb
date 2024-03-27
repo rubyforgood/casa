@@ -14,7 +14,8 @@ class CaseContactParameters < SimpleDelegator
         :volunteer_address,
         draft_case_ids: [],
         case_contact_contact_type_attributes: [:contact_type_id],
-        additional_expenses_attributes: [:id, :other_expense_amount, :other_expenses_describe]
+        additional_expenses_attributes: %i[id other_expense_amount other_expenses_describe],
+        contact_topic_answers_attributes: %i[id value selected]
       )
     if params.dig(:case_contact, :duration_minutes)
       new_params[:duration_minutes] = convert_duration_minutes(params)

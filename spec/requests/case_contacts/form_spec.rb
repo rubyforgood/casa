@@ -57,11 +57,33 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect(page).not_to include(*contact_types_b.pluck(:name))
         end
       end
+
+      context "when the org has topics assigned" do
+        let(:contact_topics) {
+          [
+            build(:contact_topic, active: true, soft_delete: false),
+            build(:contact_topic, active: false, soft_delete: false),
+            build(:contact_topic, active: true, soft_delete: true),
+            build(:contact_topic, active: false, soft_delete: true)
+          ]
+        }
+        let(:organization) { create(:casa_org, contact_topics:) }
+        let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
+
+        it "shows contact topics" do
+          page = request.parsed_body.to_html
+          expect(page).to include(contact_topics[0].question)
+          expect(page).to_not include(contact_topics[1].question)
+          expect(page).to_not include(contact_topics[2].question)
+          expect(page).to_not include(contact_topics[3].question)
+        end
+      end
     end
   end
 
   describe "PATCH /update" do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
     let(:advance_form) { true }
     let(:params) { {case_contact: attributes} }
 
@@ -72,7 +94,8 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting details step" do
-      let!(:case_contact) { create(:case_contact, :started_status, creator: creator) }
+      let!(:case_contact) { create(:case_contact, :started_status, creator: creator, contact_topic_answers: topic_answers) }
+      let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:step) { :details }
       let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
       let!(:contact_types_b) do
@@ -98,13 +121,22 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             duration_minutes: 50,
             contact_made: true,
             medium_type: CaseContact::CONTACT_MEDIUMS.second,
-            case_contact_contact_type_attributes: contact_type_attributes
+            case_contact_contact_type_attributes: contact_type_attributes,
+            contact_topic_answers_attributes: topic_answers_attributes
           }
         end
         let(:contact_type_attributes) do
           {
             "0" => {contact_type_id: contact_type_group_a.contact_types.first.id},
             "1" => {contact_type_id: contact_type_group_a.contact_types.second.id}
+          }
+        end
+
+        let(:topic_answers_attributes) do
+          {
+            "0" => {id: topic_answers.first.id, value: "test", selected: true},
+            "1" => {id: topic_answers.second.id, value: "test", selected: true},
+            "2" => {id: topic_answers.third.id, value: "test", selected: true}
           }
         end
 
@@ -115,6 +147,14 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect(case_contact.duration_minutes).to eq(50)
           expect(case_contact.contact_made).to eq(true)
           expect(case_contact.medium_type).to eq(CaseContact::CONTACT_MEDIUMS.second)
+        end
+
+        it "updates only answer field for contact topics" do
+          request
+          case_contact.reload
+
+          expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
+          expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
         end
 
         context "contact types" do
@@ -159,6 +199,52 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           request
           expect(case_contact.duration_minutes).not_to eq(50)
           expect(case_contact.contact_made).not_to eq(true)
+        end
+      end
+    end
+
+    context "submitting notes step: contact topics" do
+      let!(:case_contact) { create(:case_contact, :details_status, creator: creator, contact_topic_answers: topic_answers) }
+      let(:topic_answers) { build_list(:contact_topic_answer, 3) }
+      let(:topic_answers_attributes) do
+        {
+          "0" => {id: topic_answers.first.id, value: "test", selected: true},
+          "1" => {id: topic_answers.second.id, value: "test", selected: true},
+          "2" => {id: topic_answers.third.id, value: "test", selected: true}
+        }
+      end
+      let(:step) { :notes }
+      let(:attributes) do
+        {contact_topic_answers_attributes: topic_answers_attributes}
+      end
+
+      context "with valid contact topic answers" do
+        context "when submitting via button" do
+          it "updates the requested case_contact" do
+            request
+            case_contact.reload
+
+            expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
+            expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
+          end
+        end
+
+        context "when autosaving" do
+          subject(:request) do
+            patch "/case_contacts/#{case_contact.id}/form/#{step}", params:, as: :json
+
+            response
+          end
+
+          it "updates the requested case_contact" do
+            request
+            case_contact.reload
+
+            expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
+            expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
+          end
+
+          it { is_expected.to have_http_status(:success) }
         end
       end
     end
@@ -215,7 +301,16 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting expenses step" do
-      let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator: creator) }
+      let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator: creator, contact_topic_answers: topic_answers) }
+      let(:case_contact_topics) { build_list(:contact_topic_answer, 3) }
+      let(:topic_answers) { build_list(:contact_topic_answer, 3) }
+      let(:topic_answers_attributes) do
+        {
+          "0" => {id: topic_answers.first.id, value: "test", selected: true},
+          "1" => {id: topic_answers.second.id, value: "test", selected: true},
+          "2" => {id: topic_answers.third.id, value: "test", selected: true}
+        }
+      end
       let(:additional_expenses) do
         {
           "0" => {other_expense_amount: 50, other_expenses_describe: "meal"},
@@ -230,7 +325,8 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             want_driving_reimbursement: true,
             miles_driven: 60,
             volunteer_address: "123 str",
-            additional_expenses_attributes: additional_expenses
+            additional_expenses_attributes: additional_expenses,
+            contact_topic_answers_attributes: topic_answers_attributes
           }
         end
 
@@ -245,6 +341,8 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect(case_contact.additional_expenses.first.other_expenses_describe).to eq "meal"
           expect(case_contact.additional_expenses.last.other_expense_amount).to eq 100
           expect(case_contact.additional_expenses.last.other_expenses_describe).to eq "hotel"
+          expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
+          expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
         end
 
         it "sets the case_contact's status to active" do
@@ -288,7 +386,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
         context "with multiple cases selected" do
           let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
-          let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id, other_casa_case.id], creator: admin) }
+          let!(:case_contact) {
+            create(:case_contact, :notes_status, draft_case_ids: [casa_case.id, other_casa_case.id],
+              creator: admin, contact_topic_answers: topic_answers)
+          }
 
           it "creates a copy of the draft for each case" do
             expect {
@@ -297,6 +398,12 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             expect(CaseContact.last.casa_case_id).to eq other_casa_case.id
             expect(CaseContact.last.draft_case_ids).to eq [other_casa_case.id]
             expect(CaseContact.last.status).to eq "active"
+          end
+
+          it "sets contact_topics for all cases" do
+            expect { request }.to change(ContactTopicAnswer, :count).by(3)
+            expect(CaseContact.last.contact_topic_answers.pluck(:value)).to be_all("test")
+            expect(CaseContact.last.contact_topic_answers.pluck(:selected)).to be_all(true)
           end
 
           it "sets the draft_case_ids of the draft to only the first case" do

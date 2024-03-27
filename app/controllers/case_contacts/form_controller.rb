@@ -113,6 +113,10 @@ class CaseContacts::FormController < ApplicationController
           other_expenses_describe: ae.other_expenses_describe
         )
       end
+      case_contact.contact_topic_answers.each do |cta|
+        new_case_contact.contact_topic_answers << cta.dup
+      end
+
       new_case_contact.save!
     end
   end

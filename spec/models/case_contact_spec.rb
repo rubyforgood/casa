@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
+  it { should have_many(:contact_topic_answers).dependent(:destroy) }
   it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
@@ -137,6 +138,55 @@ RSpec.describe CaseContact, type: :model do
 
       expect(case_contact.case_contact_contact_type.count).to eq 1
       expect(case_contact.contact_types.reload).to match_array([type2])
+    end
+  end
+
+  describe "#create_with_answers" do
+    let(:contact_topics) {
+      [
+        build(:contact_topic, active: true, soft_delete: false),
+        build(:contact_topic, active: false, soft_delete: false),
+        build(:contact_topic, active: true, soft_delete: true),
+        build(:contact_topic, active: false, soft_delete: true)
+      ]
+    }
+    let(:org) { create(:casa_org, contact_topics:) }
+    let(:admin) { create(:casa_admin, casa_org: org) }
+    let(:casa_case) { create(:casa_case, casa_org: org) }
+
+    context "when creation is successful" do
+      it "create a case_contact" do
+        org
+        expect {
+          CaseContact.create_with_answers(org, creator: admin)
+        }.to change(CaseContact, :count).from(0).to(1)
+      end
+
+      it "creates only active and non-deleted contact_topic_answers" do
+        org
+        expect {
+          CaseContact.create_with_answers(org, creator: admin)
+        }.to change(ContactTopicAnswer, :count).from(0).to(1)
+
+        case_contact = CaseContact.last
+        topics = case_contact.contact_topic_answers.map(&:contact_topic)
+
+        expect(topics).to include(contact_topics.first)
+      end
+    end
+
+    context "when a topic answer creation fails" do
+      it "does not create a case contact" do
+        expect {
+          CaseContact.create_with_answers(org)
+        }.to_not change(CaseContact, :count)
+      end
+
+      it "adds errors from contact_topic_answers" do
+        allow(org.contact_topics).to receive(:active).and_return([nil])
+        result = CaseContact.create_with_answers(org, creator: admin)
+        expect(result.errors[:contact_topic_answers]).to include("could not create topic nil")
+      end
     end
   end
 
