@@ -51,7 +51,7 @@ class CaseContacts::FormController < ApplicationController
 
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases)
-    @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+    @casa_cases = @casa_cases.find(@case_contact.casa_case_id) if @case_contact.active?
 
     @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
 

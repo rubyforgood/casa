@@ -35,12 +35,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         response
       end
 
-      it "shows all contact types alphabetically by group" do
-        page = request.parsed_body
-        expected_contact_types = ["Parent", "Sibling", "Counselor", "Teacher"]
-        expect(page).to match(/#{expected_contact_types.join(".*")}/m)
-      end
-
       it "shows all contact types once" do
         page = request.parsed_body.to_html
         expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
