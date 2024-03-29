@@ -56,7 +56,7 @@ RSpec.describe "Health", type: :request do
 
       # Create associated contact_topic_answers
       create(:contact_topic_answer, case_contact: CaseContact.first)
-      create(:contact_topic_answer, case_contact: CaseContact.last) 
+      create(:contact_topic_answer, case_contact: CaseContact.last)
 
       get monthly_line_graph_data_health_index_path
       expect(response).to have_http_status(:ok)
