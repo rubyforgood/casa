@@ -56,20 +56,32 @@
           <p class="text-dark">(optional)</p>
         </div>
 
-      <% if Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
         <div class="other-expenses">
           <ol>
             <% @case_contact.decorate.additional_expenses_count %>
             <% if @case_contact.additional_expenses.any? %>
               <%= form.fields_for :additional_expenses do |ff| %>
-                <div class="input-group">
-                  <span class="dollar-sign">
-                    <%= ff.number_field :other_expense_amount,
-                      placeholder: "0",
-                      class: "form-control other-expense-amount",
-                      min: "0", max: 1000, step: 0.01 %>
-                  </span>
-                </div>
+                <li>
+                  <div class="expense-container row">
+                    <div class="input-style-1 col-sm-3">
+                      <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
+                      <div class="input-group">
+                        <span class="dollar-sign">
+                          <%= ff.number_field :other_expense_amount,
+                            placeholder: "0",
+                            class: "form-control other-expense-amount",
+                            min: "0", max: 1000, step: 0.01 %>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="input-style-1 col">
+                      <h5><%= form.label :other_expenses_describe, "b. Expense details" %></h5>
+                      <%= ff.text_field :other_expenses_describe,
+                        placeholder: "Enter additional details",
+                        class: "form-control other-expenses-describe" %>
+                    </div>
+                  </div>
+                </li>
               <% end %>
             <% end %>
             <% if @case_contact.decorate.additional_expenses_count < 10 %>
