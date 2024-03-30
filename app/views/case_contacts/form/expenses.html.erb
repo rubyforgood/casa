@@ -49,11 +49,12 @@
       <% end %>
     </div>
 
-    <div class="card-style-1 pl-25 mb-10 pr-50">
-      <div class="d-flex gap-1">
-        <h4 class="mb-3"><label>2. Other Expenses</label></h4>
-        <p class="text-dark">(optional)</p>
-      </div>
+    <% if Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
+      <div class="card-style-1 pl-25 mb-10 pr-50">
+        <div class="d-flex gap-1">
+          <h4 class="mb-3"><label>2. Other Expenses</label></h4>
+          <p class="text-dark">(optional)</p>
+        </div>
 
       <% if Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
         <div class="other-expenses">
