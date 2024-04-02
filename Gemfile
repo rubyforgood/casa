@@ -64,7 +64,10 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.31.0"
+  gem "standard", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rails", require: false
+  gem "rubocop-rake", require: false
 end
 
 group :development do
@@ -88,6 +91,7 @@ group :test do
   gem "rake"
   gem "selenium-webdriver"
   gem "simplecov"
+  gem "fuubar"
   gem "docx"
 end
 

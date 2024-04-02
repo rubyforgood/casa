@@ -7,6 +7,8 @@ class CreateActiveStorageVariantRecords < ActiveRecord::Migration[6.0]
 
       t.index %i[blob_id variation_digest], name: "index_active_storage_variant_records_uniqueness", unique: true
       t.foreign_key :active_storage_blobs, column: :blob_id
+
+      t.timestamps
     end
   end
 end
