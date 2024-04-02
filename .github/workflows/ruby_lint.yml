@@ -30,4 +30,4 @@ jobs:
           bundler-cache: true
 
       - name: lint
-        run: bundle exec standardrb
+        run: bundle exec rubocop
