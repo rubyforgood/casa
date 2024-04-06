@@ -388,6 +388,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
+  create_table "jwt_denylist", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.bigint "casa_org_id", null: false
@@ -417,7 +423,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
@@ -666,14 +671,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
-  add_foreign_key "mileage_rates", "casa_orgs", validate: false
+  add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
-  add_foreign_key "notes", "users", column: "creator_id", validate: false
+  add_foreign_key "notes", "users", column: "creator_id"
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases", validate: false
+  add_foreign_key "placements", "casa_cases"
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
