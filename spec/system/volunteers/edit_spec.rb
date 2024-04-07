@@ -13,7 +13,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
         fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_phone_number", with: "+14163248967"
-        fill_in "volunteer_date_of_birth", with: "1988/07/01"
+        fill_in "volunteer_date_of_birth", with: Date.new(1998, 7, 1)
         click_on "Submit"
 
         expect(page).to have_text "Volunteer was successfully updated."
@@ -85,7 +85,7 @@ RSpec.describe "volunteers/edit", type: :system do
           sign_in admin
           visit edit_volunteer_path(volunteer)
 
-          fill_in "volunteer_date_of_birth", with: 5.days.from_now.strftime("%Y/%m/%d")
+          fill_in "volunteer_date_of_birth", with: 5.days.from_now
           click_on "Submit"
 
           expect(page).to have_text "Date of birth must be in the past."

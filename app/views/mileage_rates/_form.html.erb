@@ -18,10 +18,9 @@
     </div>
     <div class="input-style-1">
       <%= form.label :effective_date, 'Effective date' %>
-      <%= form.text_field :effective_date, value: effective_date_parser(mileage_rate.effective_date),
-                                        data: { provide: "datepicker",
-                                        date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
-                                        class: "form-control" %>
+      <%= form.date_field :effective_date,
+                          value: mileage_rate.effective_date,
+                          class: "form-control" %>
     </div>
     <div class="input-style-1">
       <%= form.label :amount, 'Amount' %>

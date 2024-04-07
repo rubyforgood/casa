@@ -32,7 +32,7 @@
 en:
   time:
     formats:
-      day_and_date: "%A, %d-%b-%Y"
+      day_and_date: "%A, %b %d, %Y"
       standard: "%m-%d-%Y"
       contact_occurred_at: "%Y%m%d%H%M%s"
       full: "%B %-d, %Y"

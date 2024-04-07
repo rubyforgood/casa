@@ -30,14 +30,13 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       expect(page).to_not have_text("Hidden")
 
       click_on "New Case Contact"
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: Date.new(2020, 4, 5), hours: 1, minutes: 45)
       complete_notes_page
       fill_in_expenses_page
 
       expect {
         click_on "Submit"
       }.to change(CaseContact.where(status: "active"), :count).by(1)
-
       expect(CaseContact.first.casa_case_id).to eq casa_case.id
       expect(CaseContact.first.contact_types).to match_array([school, therapist])
       expect(CaseContact.first.duration_minutes).to eq 105
@@ -55,7 +54,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       visit casa_case_path(casa_case.id)
       click_on "New Case Contact"
 
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/05/2020", hours: 1, minutes: 45)
       short_notes = "Hello world!"
       complete_notes_page(notes: short_notes)
       fill_in_expenses_page
@@ -176,7 +175,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
       visit new_case_contact_path(volunteer_casa_case_one.id)
 
-      complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School Therapist], contact_made: true, medium: "In Person", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School Therapist], contact_made: true, medium: "In Person", occurred_on: Date.new(2020, 0o4, 0o6), hours: 1, minutes: 45)
       complete_notes_page(notes: "Hello world")
       fill_in_expenses_page
 
