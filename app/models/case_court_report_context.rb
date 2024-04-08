@@ -57,8 +57,8 @@ class CaseCourtReportContext
   end
 
   def filtered_interviewees
-    # this query is slow
-    CaseContactContactType.includes(:case_contact, :contact_type)
+    CaseContactContactType
+      .joins(:contact_type, case_contact: :casa_case)
       .where("case_contacts.casa_case_id": @casa_case.id)
       .where("case_contacts.occurred_at": @date_range)
   end
