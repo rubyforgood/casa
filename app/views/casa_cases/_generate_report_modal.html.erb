@@ -22,7 +22,7 @@
         <div class="field form-group mb-20">
           <h6><label class="form-label" for="start_date">Starting From</label></h6>
           <%= form.text_field :start_date,
-            value: Time.zone.now.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+            value: @casa_case.formatted_latest_court_date,
             data: { provide: "datepicker",
                     date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
                     class: "form-control" %>
