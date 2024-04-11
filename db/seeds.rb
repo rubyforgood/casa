@@ -6,13 +6,13 @@
 # If you specify the string 'random' (e.g. `export DB_SEEDS_RANDOM_SEED=random`), a random seed will be assigned for you.
 # If you don't specify anything, 0 will be used as the seed, ensuring consistent data across hosts and runs.
 
-require "faker"
-require_relative "seeds/casa_org_populator_presets"
-require_relative "seeds/db_populator"
-require_relative "../lib/tasks/data_post_processors/case_contact_populator"
-require_relative "../lib/tasks/data_post_processors/contact_type_populator"
-require_relative "../lib/tasks/data_post_processors/sms_notification_event_populator"
-require_relative "../lib/tasks/data_post_processors/contact_topic_populator"
+require 'faker'
+require_relative 'seeds/casa_org_populator_presets'
+require_relative 'seeds/db_populator'
+require_relative '../lib/tasks/data_post_processors/case_contact_populator'
+require_relative '../lib/tasks/data_post_processors/contact_type_populator'
+require_relative '../lib/tasks/data_post_processors/sms_notification_event_populator'
+require_relative '../lib/tasks/data_post_processors/contact_topic_populator'
 
 class SeederMain
   attr_reader :db_populator, :rng
@@ -22,21 +22,21 @@ class SeederMain
     @rng = Random.new(random_seed) # rng = random number generator
     @db_populator = DbPopulator.new(rng)
     Faker::Config.random = rng
-    Faker::Config.locale = "en-US" # only allow US phone numbers
+    Faker::Config.locale = 'en-US' # only allow US phone numbers
   end
 
   def seed
-    log "NOTE: CASA seed does not delete anything anymore! Run rake db:seed:replant to delete everything and re-seed"
-    log "Creating the objects in the database..."
-    db_populator.create_all_casa_admin("allcasaadmin@example.com")
-    db_populator.create_all_casa_admin("all_casa_admin1@example.com")
-    db_populator.create_all_casa_admin("admin1@example.com")
-    db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
+    log 'NOTE: CASA seed does not delete anything anymore! Run rake db:seed:replant to delete everything and re-seed'
+    log 'Creating the objects in the database...'
+    db_populator.create_all_casa_admin('allcasaadmin@example.com')
+    db_populator.create_all_casa_admin('all_casa_admin1@example.com')
+    db_populator.create_all_casa_admin('admin1@example.com')
+    db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({ org_name: 'Prince George CASA' }))
     db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
     SmsNotificationEventPopulator.populate
     2.times do
       DbPopulator.new(rng, case_fourteen_years_old: true)
-        .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+                 .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
     end
 
     post_process_data
@@ -54,6 +54,8 @@ class SeederMain
       CasaOrg,
       CasaCase,
       CaseContact,
+      ContactTopic,
+      ContactTopicAnswer,
       CaseCourtOrder,
       CaseAssignment,
       ChecklistItem,
@@ -81,12 +83,12 @@ class SeederMain
   end
 
   def get_seed_specification
-    seed_environment_value = ENV["DB_SEEDS_RANDOM_SEED"]
+    seed_environment_value = ENV['DB_SEEDS_RANDOM_SEED']
 
     if seed_environment_value.blank?
       seed = 0
       log "\nENV['DB_SEEDS_RANDOM_SEED'] not set to 'random' or a number; setting seed to 0.\n\n"
-    elsif seed_environment_value.casecmp("random") == 0
+    elsif seed_environment_value.casecmp('random') == 0
       seed = Random.new_seed
       log "\n'random' specified in ENV['DB_SEEDS_RANDOM_SEED']; setting seed to randomly generated value #{seed}.\n\n"
     else
@@ -99,7 +101,7 @@ class SeederMain
   def report_object_counts
     log "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
     active_record_classes.each do |klass|
-      log "%5d  %s" % [klass.count, klass.name]
+      log format('%5d  %s', klass.count, klass.name)
     end
     log "\n\nVolunteers, Supervisors and CasaAdmins are types of Users"
   end
@@ -113,9 +115,9 @@ end
 
 SeederMain.new.seed
 
-load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
+load(Rails.root.join('db', 'seeds', 'emancipation_data.rb'))
 begin
-  load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
-rescue => e
+  load(Rails.root.join('db', 'seeds', 'emancipation_options_prune.rb'))
+rescue StandardError => e
   puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
 end
