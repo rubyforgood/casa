@@ -27,7 +27,7 @@ class CaseContact < ApplicationRecord
   validate :draft_case_ids_not_empty, if: :active_or_details?
 
   has_many :case_contact_contact_type
-  has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
+  has_and_belongs_to_many :contact_types, join_table: "case_contact_contact_types"
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy

@@ -388,12 +388,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
     t.index ["casa_org_id"], name: "index_judges_on_casa_org_id"
   end
 
-  create_table "jwt_denylist", force: :cascade do |t|
-    t.string "jti", null: false
-    t.datetime "exp", null: false
-    t.index ["jti"], name: "index_jwt_denylist_on_jti"
-  end
-
   create_table "languages", force: :cascade do |t|
     t.string "name"
     t.bigint "casa_org_id", null: false
@@ -423,6 +417,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
+    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false

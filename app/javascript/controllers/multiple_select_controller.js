@@ -2,23 +2,22 @@ import { Controller } from '@hotwired/stimulus'
 import TomSelect from 'tom-select'
 
 export default class extends Controller {
-  static targets = ['select']
+  static targets = ['select', 'option', 'item']
   static values = {
     options: Array,
-    optionGroups: Array,
-    optgroupField: String,
-    labelField: String,
-    defaultSelected: Array
+    selectedItems: Array,
+    withOptions: Boolean
   }
 
   connect () {
-    const isGrouped = this.hasOptionsValue &&
-                        this.hasOptionGroupsValue &&
-                        this.hasOptgroupFieldValue &&
-                        this.hasLabelFieldValue
-    if (isGrouped) {
-      return this._createMultiSelectWithOptionGroups()
+    if (this.withOptionsValue) {
+      this.createMultiSelectWithOptionGroups()
+    } else {
+      this.createBasicMultiSelect()
     }
+  }
+
+  createBasicMultiSelect () {
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
       plugins: {
@@ -29,46 +28,38 @@ export default class extends Controller {
     })
   }
 
-  _createMultiSelectWithOptionGroups () {
+  createMultiSelectWithOptionGroups () {
+    const optionTemplate = this.optionTarget.innerHTML
+    const itemTemplate = this.itemTarget.innerHTML
+
     /* eslint-disable no-new */
-    return new TomSelect(this.selectTarget, {
+    new TomSelect(this.selectTarget, {
       plugins: {
         remove_button: {
           title: 'Remove this item',
-          className: 'text-primary p-1 mx-2 deactive-bg rounded-circle',
-          label: '<i class="lni lni-close p-1"></i>'
+          className: 'btn text-white rounded-circle',
+          label: '<i class="lni lni-cross-circle"></i>'
+        },
+        checkbox_options: {
+          checkedClassNames: ['form-check-input'],
+          uncheckedClassNames: ['form-check-input']
         }
       },
       loadThrottle: 0,
       refreshThrottle: 0,
       options: this.optionsValue,
-      optgroups: this.optionGroupsValue,
-      optgroupField: this.optgroupFieldValue,
-      labelField: this.labelFieldValue,
-      items: this.defaultSelectedValue,
-      searchField: [this.labelFieldValue, this.optgroupFieldValue],
+      items: this.selectedItemsValue,
+      placeholder: 'Select or search for contacts',
+      hidePlaceholder: true,
+      searchField: ['text', 'group'],
       render: {
         option: function (data, escape) {
-          return `
-              <div class='d-flex gap-1'>
-                <span class='d-flex gap-1'>${escape(data.label)}</span>
-                <span class="fst-italic text-muted">${escape(data.inline_option)}</span>
-              </div>
-            `.replace(/(\r\n|\n|\r)/gm, '')
-        },
-        optgroup_header: function (data, escape) {
-          return `
-            <span class='d-flex optgroup-header'>
-              ${escape(data.label)}
-            </span>
-          `.replace(/(\r\n|\n|\r)/gm, '')
+          let html = optionTemplate.replace(/DATA_LABEL/g, escape(data.text))
+          html = html.replace(/DATA_SUB_TEXT/g, escape(data.sub_text))
+          return html
         },
         item: function (data, escape) {
-          return `
-            <div class="badge rounded-pill primary-bg py-2 px-3 active form-check-label">
-              ${escape(data.label)}
-            </div>
-          `.replace(/(\r\n|\n|\r)/gm, '')
+          return itemTemplate.replace(/DATA_LABEL/g, escape(data.text))
         }
       }
     })

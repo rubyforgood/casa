@@ -23,12 +23,7 @@
       </div>
     </div>
     <div class="card-style-1 pl-25 pr-25 mb-10">
-      <%= render "contact_types",
-        form: form,
-        model: @case_contact,
-        contact_type_groups:  @current_organization_groups,
-        selected_case_contact_types: @selected_case_contact_types,
-        checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
+      <%= render "contact_types", form: form, options: @contact_type_options, selected_items: @contact_type_selected_items %>
     </div>
 
     <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">

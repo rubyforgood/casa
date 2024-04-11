@@ -139,6 +139,8 @@ class CasaCasesController < ApplicationController
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:id])
+    @contact_type_options = current_organization.contact_types_as_hash_map
+    @contact_type_selected_items = @casa_case.contact_type_ids
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
       format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
@@ -154,7 +156,7 @@ class CasaCasesController < ApplicationController
       :date_in_care,
       :court_report_due_date,
       :empty_court_date,
-      casa_case_contact_types_attributes: [:contact_type_id],
+      contact_type_ids: [],
       court_dates_attributes: [:date]
     )
   end

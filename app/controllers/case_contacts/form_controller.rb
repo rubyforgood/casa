@@ -14,6 +14,7 @@ class CaseContacts::FormController < ApplicationController
     get_cases_and_contact_types
     @page = wizard_steps.index(step) + 1
     @total_pages = steps.count
+    @current_org = current_organization
 
     render_wizard
     wizard_path
@@ -61,6 +62,9 @@ class CaseContacts::FormController < ApplicationController
       else
         current_organization.contact_types_by_group
       end
+
+    @contact_type_options = current_organization.contact_types_as_hash_map
+    @contact_type_selected_items = @case_contact.contact_type_ids
   end
 
   def finish_editing
@@ -128,7 +132,7 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    if params.dig(:case_contact, :case_contact_contact_type_attributes)
+    if params.dig(:case_contact, :contact_type_ids)
       @case_contact.case_contact_contact_type.destroy_all
     end
   end

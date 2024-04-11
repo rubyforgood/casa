@@ -43,10 +43,8 @@ class CasaCase < ApplicationRecord
   belongs_to :judge, optional: true
   belongs_to :casa_org
   validates :birth_month_year_youth, presence: true
-  validates_presence_of :casa_case_contact_types, message: ": At least one contact type must be selected", if: :validate_contact_type
   has_many :casa_case_contact_types
-  has_many :contact_types, through: :casa_case_contact_types, source: :contact_type
-  accepts_nested_attributes_for :casa_case_contact_types
+  has_and_belongs_to_many :contact_types, join_table: "casa_case_contact_types"
   accepts_nested_attributes_for :court_dates
   accepts_nested_attributes_for :volunteers
 
