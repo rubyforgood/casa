@@ -34,6 +34,10 @@ export default class extends Controller {
 
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
+      onItemAdd: function () {
+        this.setTextboxValue('')
+        this.refreshOptions()
+      },
       plugins: {
         remove_button: {
           title: 'Remove this item',
@@ -45,8 +49,6 @@ export default class extends Controller {
           uncheckedClassNames: ['form-check-input']
         }
       },
-      loadThrottle: 0,
-      refreshThrottle: 0,
       options: this.optionsValue,
       items: this.selectedItemsValue,
       placeholder: 'Select or search for contacts',
@@ -55,7 +57,7 @@ export default class extends Controller {
       render: {
         option: function (data, escape) {
           let html = optionTemplate.replace(/DATA_LABEL/g, escape(data.text))
-          html = html.replace(/DATA_SUB_TEXT/g, escape(data.sub_text))
+          html = html.replace(/DATA_SUB_TEXT/g, escape(data.subtext))
           return html
         },
         item: function (data, escape) {

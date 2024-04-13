@@ -26,8 +26,8 @@ class CaseContact < ApplicationRecord
   validates :casa_case_id, presence: true, if: :active?
   validate :draft_case_ids_not_empty, if: :active_or_details?
 
-  has_many :case_contact_contact_type
-  has_and_belongs_to_many :contact_types, join_table: "case_contact_contact_types"
+  has_many :case_contact_contact_types
+  has_many :contact_types, through: :case_contact_contact_types
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
@@ -48,7 +48,6 @@ class CaseContact < ApplicationRecord
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
   validates_associated :additional_expenses
 
-  accepts_nested_attributes_for :case_contact_contact_type
   accepts_nested_attributes_for :casa_case
   accepts_nested_attributes_for :contact_topic_answers, update_only: true
 
@@ -164,7 +163,7 @@ class CaseContact < ApplicationRecord
 
   def update_cleaning_contact_types(args)
     transaction do
-      case_contact_contact_type.destroy_all
+      contact_types.clear
       update(args)
     end
   end

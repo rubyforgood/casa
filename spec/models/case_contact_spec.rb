@@ -131,12 +131,12 @@ RSpec.describe CaseContact, type: :model do
 
       case_contact = create(:case_contact, contact_types: [type1])
 
-      expect(case_contact.case_contact_contact_type.count).to be 1
+      expect(case_contact.case_contact_contact_types.count).to be 1
       expect(case_contact.contact_types).to match_array([type1])
 
-      case_contact.update_cleaning_contact_types({case_contact_contact_type_attributes: [{contact_type_id: type2.id}]})
+      case_contact.update_cleaning_contact_types(contact_type_ids: [type2.id])
 
-      expect(case_contact.case_contact_contact_type.count).to eq 1
+      expect(case_contact.case_contact_contact_types.count).to eq 1
       expect(case_contact.contact_types.reload).to match_array([type2])
     end
   end

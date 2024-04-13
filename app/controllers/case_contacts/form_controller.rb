@@ -14,7 +14,6 @@ class CaseContacts::FormController < ApplicationController
     get_cases_and_contact_types
     @page = wizard_steps.index(step) + 1
     @total_pages = steps.count
-    @current_org = current_organization
 
     render_wizard
     wizard_path
@@ -54,16 +53,14 @@ class CaseContacts::FormController < ApplicationController
     @casa_cases = policy_scope(current_organization.casa_cases)
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
+    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types).uniq
 
-    @current_organization_groups =
+    @contact_type_options =
       if @selected_case_contact_types.present?
-        @selected_case_contact_types.map(&:contact_type_group).uniq
+        @selected_case_contact_types.map(&:hash_for_multiple_select)
       else
-        current_organization.contact_types_by_group
+        current_organization.contact_types_as_hash_map
       end
-
-    @contact_type_options = current_organization.contact_types_as_hash_map
     @contact_type_selected_items = @case_contact.contact_type_ids
   end
 
@@ -108,8 +105,8 @@ class CaseContacts::FormController < ApplicationController
       new_case_contact.status = "active"
       new_case_contact.draft_case_ids = [casa_case_id]
       new_case_contact.casa_case_id = casa_case_id
-      case_contact.case_contact_contact_type.each do |ccct|
-        new_case_contact.case_contact_contact_type.new(contact_type_id: ccct.contact_type_id)
+      case_contact.case_contact_contact_types.each do |ccct|
+        new_case_contact.case_contact_contact_types.new(contact_type_id: ccct.contact_type_id)
       end
       case_contact.additional_expenses.each do |ae|
         new_case_contact.additional_expenses.new(
@@ -133,7 +130,7 @@ class CaseContacts::FormController < ApplicationController
   # the contact_type ids.
   def remove_unwanted_contact_types
     if params.dig(:case_contact, :contact_type_ids)
-      @case_contact.case_contact_contact_type.destroy_all
+      @case_contact.contact_types.clear
     end
   end
 

@@ -5,10 +5,10 @@
      data-multiple-select-with-options-value="true">
 
   <template data-multiple-select-target="option">
-    <div class='d-flex gap-1'>
-      <span class='d-flex gap-1'>DATA_LABEL</span>
-      <% if @option_sub_text %>
-        <span class="fst-italic text-muted">DATA_SUB_TEXT</span>
+    <div class="d-flex align-items-baseline">
+      <span class='mr-5'>DATA_LABEL</span>
+      <% if @render_option_subtext %>
+        <small class="fst-italic fw-lighter"><em>DATA_SUB_TEXT</em></small>
       <% end %>
     </div>
   </template>
@@ -17,7 +17,7 @@
     <div class="badge rounded-pill bg-primary active px-3">DATA_LABEL</div>
   </template>
 
-  <%= @form.select :contact_type_ids, {}, { multiple: true } , {
+  <%= @form.select @name, {}, { multiple: true } , {
     data: { "multiple-select-target": "select",  } , class: "form-control-lg form-select form-select-lg input-group-lg"
   } %>
 </div>

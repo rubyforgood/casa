@@ -115,15 +115,12 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             duration_minutes: 50,
             contact_made: true,
             medium_type: CaseContact::CONTACT_MEDIUMS.second,
-            case_contact_contact_type_attributes: contact_type_attributes,
+            contact_type_ids: contact_type_ids,
             contact_topic_answers_attributes: topic_answers_attributes
           }
         end
-        let(:contact_type_attributes) do
-          {
-            "0" => {contact_type_id: contact_type_group_a.contact_types.first.id},
-            "1" => {contact_type_id: contact_type_group_a.contact_types.second.id}
-          }
+        let(:contact_type_ids) do
+          [contact_type_group_a.contact_types.first.id, contact_type_group_a.contact_types.second.id]
         end
 
         let(:topic_answers_attributes) do

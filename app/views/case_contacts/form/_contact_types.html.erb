@@ -1,10 +1,8 @@
-<div id="contact-type-form" class="d-flex flex-column gap-4">
-  <h4 id="contact-type-label"><label>2. Select All Contact Types</label><span class="red-letter"> *</span></h4>
-  <p>Choose from the available options below by searching or selecting from the dropdown menu.</p>
-  <%= render(Form::MultipleSelectComponent.new(
-    form: form,
-    name: :contact_type_ids,
-    options: options,
-    selected_items: selected_items
-  )) %>
-</div>
+<p>Choose from the available options below by searching or selecting from the dropdown menu.</p>
+<%= render(Form::MultipleSelectComponent.new(
+  form: form,
+  name: :contact_type_ids,
+  options: options,
+  selected_items: selected_items,
+  render_option_subtext: true
+)) %>

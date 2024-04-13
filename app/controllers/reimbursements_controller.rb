@@ -69,7 +69,7 @@ class ReimbursementsController < ApplicationController
   def fetch_reimbursements
     case_contacts = CaseContact.joins(:casa_case).includes(
       :creator,
-      :case_contact_contact_type,
+      :case_contact_contact_types,
       contact_types: [:contact_type_group]
     ).preload(:casa_case)
     policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)

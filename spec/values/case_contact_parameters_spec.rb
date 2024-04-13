@@ -14,7 +14,7 @@ RSpec.describe CaseContactParameters do
         miles_driven: "123",
         want_driving_reimbursement: "want_driving_reimbursement",
         notes: "notes",
-        case_contact_contact_type_attributes: [:contact_type_id],
+        contact_type_ids: [],
         contact_topic_answers_attributes:
       )
     )
@@ -32,7 +32,7 @@ RSpec.describe CaseContactParameters do
     expect(subject["miles_driven"]).to eq(123)
     expect(subject["want_driving_reimbursement"]).to eq("want_driving_reimbursement")
     expect(subject["notes"]).to eq("notes")
-    expect(subject["case_contact_contact_type_attributes"]).to eq([])
+    expect(subject["contact_type_ids"]).to eq([])
 
     expected_attrs = contact_topic_answers_attributes["0"].except("question")
     expect(subject["contact_topic_answers_attributes"]["0"].to_h).to eq(expected_attrs)

@@ -131,33 +131,6 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
     end
   end
 
-  context "mutliple contact type groups" do
-    it "shows the contact type groups, and their contact type alphabetically", js: true do
-      organization = build(:casa_org)
-      admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-      group_1 = build(:contact_type_group, name: "Placement", casa_org: organization)
-      group_2 = build(:contact_type_group, name: "Education", casa_org: organization)
-      create(:contact_type, name: "School", contact_type_group: group_1)
-      create(:contact_type, name: "Sports", contact_type_group: group_1)
-      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
-      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
-
-      sign_in admin
-
-      visit(new_case_contact_path(casa_case.id))
-
-      expect(index_of("Education")).to be < index_of("Placement")
-      expect(index_of("School")).to be < index_of("Sports")
-      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
-      expect(index_of("School")).to be > index_of("Caregiver Family")
-    end
-
-    def index_of(text)
-      page.text.index(text)
-    end
-  end
-
   context "volunteer user" do
     let(:volunteer) { create(:volunteer, :with_casa_cases) }
     let(:volunteer_casa_case_one) { volunteer.casa_cases.first }
@@ -262,9 +235,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find("#case_contact_contact_type_ids-ts-control").click
+        expect(page).to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 
@@ -279,9 +253,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).not_to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find(".ts-control").click
+        expect(page).not_to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 

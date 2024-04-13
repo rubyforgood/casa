@@ -334,7 +334,7 @@ RSpec.describe CasaCase, type: :model do
       expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types).to match_array([type1])
 
-      casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{contact_type_id: type2.id}]})
+      casa_case.update_cleaning_contact_types({contact_type_ids: [type2.id]})
 
       expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types.reload).to match_array([type2])

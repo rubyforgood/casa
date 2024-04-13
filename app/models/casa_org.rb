@@ -95,6 +95,12 @@ class CasaOrg < ApplicationRecord
     contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
   end
 
+  # Returns contact types that are active and tied to the CasaOrg as a an array of hashes that can be used by the multiple select component
+  # @return [Array<Hash>]
+  # * :value [Integer] the value for the option
+  # * :text [String] the label for the option and the selected item
+  # * :group [String] the name of the group the option belongs to, for searching
+  # * :subtext [String] the text to display next to the option
   def contact_types_as_hash_map
     ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name).map(&:hash_for_multiple_select)
   end

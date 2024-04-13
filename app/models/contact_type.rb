@@ -12,7 +12,7 @@ class ContactType < ApplicationRecord
   scope :alphabetically, -> { order(:name) }
 
   def hash_for_multiple_select
-    {value: id, text: name, group: contact_type_group.name}
+    {value: id, text: name, group: contact_type_group.name, subtext: "test - need to change"}
   end
 end
 
