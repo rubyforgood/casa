@@ -1998,10 +1998,10 @@ bootstrap-datepicker@^1.10.0:
   dependencies:
     jquery ">=3.4.0 <4.0.0"
 
-bootstrap-scss@^5.3.0:
-  version "5.3.2"
-  resolved "https://registry.yarnpkg.com/bootstrap-scss/-/bootstrap-scss-5.3.2.tgz#131e0cf4a9ae522d8c4b2c1e1a128bdea940d93a"
-  integrity sha512-i/8Spm3jULeFZk+Qno2NCARkkGEN1YNbLBWp7nbSAiZUW1DEAkeP8NT4t0j0y6ZOw/91HxwTsBoa+E2McYauEw==
+bootstrap-scss@^5.3.3:
+  version "5.3.3"
+  resolved "https://registry.yarnpkg.com/bootstrap-scss/-/bootstrap-scss-5.3.3.tgz#f2ac341b296aa0ddadc0560c2f6f57d9b705bd64"
+  integrity sha512-WvhlXd/ZAAc7nXm2uGMZqPuNxMPE1o97mGKKkJ1duyKsR2vzmc4YO1QoaJQCR27dHbF9yJnNacESdDFVVZkWHQ==
 
 bootstrap-select@^1.13.18:
   version "1.13.18"
