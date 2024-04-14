@@ -54,6 +54,10 @@ RSpec.describe "Health", type: :request do
       create(:case_contact, created_at: 10.months.ago)
       create(:case_contact, created_at: 9.months.ago)
 
+      # Create associated contact_topic_answers
+      create(:contact_topic_answer, case_contact: CaseContact.first)
+      create(:contact_topic_answer, case_contact: CaseContact.last)
+
       get monthly_line_graph_data_health_index_path
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
@@ -64,7 +68,33 @@ RSpec.describe "Health", type: :request do
 
       expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 2])
       expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 1])
-      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 0, 1])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
+      expect(chart_data[3]).to eq([8.months.ago.strftime("%b %Y"), 0, 0, 0])
+    end
+  end
+
+  describe "GET #monthly_unique_users_graph_data" do
+    it "returns monthly unique users data for volunteers, supervisors, and admins in the last year" do
+      create(:user, type: "Volunteer", current_sign_in_at: 11.months.ago)
+      create(:user, type: "Volunteer", current_sign_in_at: 11.months.ago)
+      create(:user, type: "Supervisor", current_sign_in_at: 11.months.ago)
+      create(:user, type: "CasaAdmin", current_sign_in_at: 11.months.ago)
+      create(:user, type: "Volunteer", current_sign_in_at: 10.months.ago)
+      create(:user, type: "Volunteer", current_sign_in_at: 9.months.ago)
+      create(:user, type: "Supervisor", current_sign_in_at: 9.months.ago)
+      create(:user, type: "CasaAdmin", current_sign_in_at: 9.months.ago)
+
+      get monthly_unique_users_graph_data_health_index_path
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("application/json")
+
+      chart_data = JSON.parse(response.body)
+      expect(chart_data).to be_an(Array)
+      expect(chart_data.length).to eq(12)
+
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
       expect(chart_data[3]).to eq([8.months.ago.strftime("%b %Y"), 0, 0, 0])
     end
   end

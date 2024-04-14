@@ -6,7 +6,7 @@ module FillInCaseContactFields
   # @param occurred_on [String], date in the format MM/dd/YYYY
   # @param hours [Integer]
   # @param minutes [Integer]
-  def complete_details_page(contact_made:, medium: nil, occurred_on: nil, hours: nil, minutes: nil, case_numbers: [], contact_types: [])
+  def complete_details_page(contact_made:, medium: nil, occurred_on: nil, hours: nil, minutes: nil, case_numbers: [], contact_types: [], contact_topics: [])
     case_numbers.each do |case_number|
       check case_number
     end
@@ -23,6 +23,10 @@ module FillInCaseContactFields
 
     fill_in "case_contact_duration_hours", with: hours if hours
     fill_in "case_contact_duration_minutes", with: minutes if minutes
+
+    contact_topics.each do |contact_topic|
+      check contact_topic
+    end
 
     click_on "Save and Continue"
   end

@@ -17,6 +17,7 @@ on:
 jobs:
   docker:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       RAILS_ENV: test
     steps:

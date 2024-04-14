@@ -79,7 +79,7 @@ RSpec.describe "layout/header", type: :view do
 
     it "renders help issue link on the header" do
       render partial: "layouts/header"
-      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-Volunteers-c24d9d2ef8b249bbbda8192191365039?pvs=4")
     end
   end
 

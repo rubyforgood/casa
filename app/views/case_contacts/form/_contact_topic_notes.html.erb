@@ -1,0 +1,49 @@
+  <%= render "/shared/error_messages", resource: @case_contact %>
+  <%= form.fields_for(:contact_topic_answers) do |f| %>
+    <% topic = f.object.contact_topic %>
+    <% answer_id = topic.question.parameterize.underscore %>
+    <div class="card-style-1 pl-25 pr-25 mb-10">
+      <div class="d-flex justify-content-between <%= f.object.selected ? "mb-3" : nil %>"
+           data-action="click->icon-toggle#toggle"
+           data-bs-toggle="collapse"
+           data-bs-target="#<%= answer_id %>"
+           data-icon-toggle-target="margin"
+           data-controller="icon-toggle"
+           data-icon-toggle-icons-value='["lni-chevron-up", "lni-chevron-down"]'>
+           <h4 class="details__topics-label">
+             <%= f.label :question, "#{f.index + 1}. #{topic.question}" %> <span class="content-1">(optional)</span>
+           </h4>
+           <button class="bg-transparent border-0"
+                   type="button"
+                   id="<%= answer_id %>_button"
+                   aria-expanded="false">
+             <i class="lni <%= f.object.selected ? "lni-chevron-up" : "lni-chevron-down" %>" data-icon-toggle-target="icon"></i>
+           </button>
+      </div>
+
+      <div class="topic-questions collapse <%= f.object.selected ? "show" : nil %>"
+           id="<%= answer_id %>">
+           <span class="content-2">Court report questions:
+             <span class="content-3 collapse show read-more <%= answer_id %>_details">
+               ... <a class="content-2"
+                      href=".<%= answer_id %>_details"
+                      data-bs-toggle="collapse"
+                      role="button">[read more]</a>
+             </span>
+           </span>
+           <p class="pre-line content-3 collapse <%= answer_id %>_details"><%= topic.details %></p>
+           <span class="content-2 collapse <%= answer_id %>_details">
+             <a class="content-2"
+                 data-bs-toggle="collapse"
+                data-bs-parent=".topic-questions"
+                href=".<%= answer_id %>_details"
+                role="button">
+                [read less]
+             </a></span>
+           <div class="input-style-1 mt-3">
+             <%= f.text_area :value, :rows => 5, placeholder: "#{topic.question} notes", class: "form-control", data: { action: "input->autosave#save" } %>
+           </div>
+      </div>
+
+    </div>
+  <% end %>
