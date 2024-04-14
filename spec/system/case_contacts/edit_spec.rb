@@ -129,7 +129,7 @@ you are trying to set the address for both of them. This is not currently possib
       complete_notes_page(notes: "Hello world", click_continue: false)
       # Wait for autosave to work
       sleep(2)
-      expect(CaseContact.last.notes).to eq "Hello world"
+      expect(CaseContact.where(notes: "Hello world").count).to eq(1)
     end
   end
 end
