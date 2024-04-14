@@ -109,17 +109,23 @@ RSpec.describe CaseContact, type: :model do
     end
 
     it "requires duration minutes" do
-      expect(build_stubbed(:case_contact, :details_status, duration_minutes: nil)).not_to be_valid
+      obj = build_stubbed(:case_contact, :details_status, duration_minutes: nil)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Duration minutes can't be blank")
     end
   end
 
   context "status is expenses" do
     it "validates miles driven if want reimbursement" do
-      expect(build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)).not_to be_valid
+      obj = build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
 
-    it "validates volunteer address" do
-      expect(build_stubbed(:case_contact, :expenses_status, :wants_reimbursement)).not_to be_valid
+    it "validates casa case present" do
+      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, casa_case: nil)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Casa case can't be blank")
     end
   end
 
