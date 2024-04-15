@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.24.4",
-    "@fortawesome/fontawesome-free": "^6.5.1",
+    "@fortawesome/fontawesome-free": "^6.5.2",
     "@hotwired/stimulus": "^3.2.2",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^7.1.3",
