@@ -113,9 +113,16 @@ RSpec.describe SupervisorMailer, type: :mailer do
       let!(:volunteer) do
         create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor, last_sign_in_at: 31.days.ago)
       end
+      let(:casa_org) { volunteer.casa_org }
+      let(:other_org) { create(:casa_org) }
+      let!(:volunteer_for_other_supervisor_same_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: casa_org, supervisor: create(:supervisor, casa_org: casa_org)) }
+      let!(:volunteer_for_other_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: other_org, supervisor: create(:supervisor, casa_org: other_org)) }
 
       it "display no_recent_sign_in section" do
         expect(mail.body.encoded).to match("volunteers have not signed in or created case contacts in the last 30 days")
+        expect(mail.body.encoded).to match(volunteer.display_name)
+        expect(mail.body.encoded).not_to match(volunteer_for_other_supervisor_same_org.display_name)
+        expect(mail.body.encoded).not_to match(volunteer_for_other_org.display_name)
       end
 
       context "but volunteer has a recent case_contact to its name" do
