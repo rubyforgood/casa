@@ -10,6 +10,7 @@ Resolves #XXXX
 - Admin permissions:
 
 ### How is this tested? (please write tests!) 💖💪
+Note: if you see a flake in your test build in github actions, please add to https://github.com/rubyforgood/casa/wiki/Flaky-tests or post in slack #casa
 
 
 ### Screenshots please :)
