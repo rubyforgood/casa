@@ -113,3 +113,52 @@ body.casa_cases-show {
     display: block;
   }
 }
+
+#generate-docx-report-modal {
+  .dates-container {
+    display: flex;
+  }
+
+  .docx-report__modal-body {
+    display: flex;
+    flex-direction: column;
+    row-gap: 1rem;
+
+  }
+
+  .modal-footer {
+    [data-bs-dismiss="modal"] {
+      padding-block: 11px;
+    }
+  }
+}
+
+.generate-report-button {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  border: solid 1px var(--silver);
+  padding: 1.2rem;
+  column-gap: 1.2rem;
+
+  &:hover {
+    border-color: black;
+  }
+
+  svg {
+    min-inline-size: 40px;
+    width: 40px;
+    height: auto;
+  }
+
+  div {
+    text-align: left;
+    h3 {
+      margin-block-end: .25rem;
+
+    }
+    p {
+
+    }
+  }
+}

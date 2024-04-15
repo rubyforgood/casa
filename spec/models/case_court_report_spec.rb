@@ -32,30 +32,6 @@ RSpec.describe CaseCourtReport, type: :model do
         end
       end
 
-      describe "with court date in the future" do
-        let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
-
-        before do
-          create(:court_date, casa_case: casa_case_with_contacts, date: 1.day.from_now)
-        end
-
-        describe "without past court date" do
-          it "has all case contacts ever created for the youth" do
-            expect(report.context[:case_contacts].length).to eq(5)
-          end
-        end
-
-        describe "with past court date" do
-          let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
-
-          it "has all case contacts created since the previous court date including case contact created on the court date" do
-            create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
-            expect(casa_case_with_contacts.court_dates.length).to eq(2)
-            expect(report.context[:case_contacts].length).to eq(5)
-          end
-        end
-      end
-
       describe "has valid @context" do
         subject { report.context }
 

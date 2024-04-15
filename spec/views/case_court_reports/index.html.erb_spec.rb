@@ -16,28 +16,16 @@ RSpec.describe "case_court_reports/index", type: :view do
     end
 
     it "has a card with card title 'Generate Court Report'", :aggregate_failures do
+      expect(rendered).to have_selector("h6", text: "Court Reports", count: 1)
       expect(rendered).to have_selector("div", class: "card-style", count: 1)
-      expect(rendered).to have_selector("h6", text: "Generate Court Report", count: 1)
     end
 
-    it "displays a form" do
-      expect(rendered).to have_selector("form", count: 1)
+    it "page has title 'Gererate Reports'" do
+      expect(rendered).to have_selector("h1", text: "Generate Reports", count: 1)
     end
 
-    it "has a dropdown select with shows 2 options" do
-      expect(rendered).to have_selector("select#case-selection option", count: 3)
-    end
-
-    it "has a drowndown select element for CASA case" do
-      expect(rendered).to have_selector("select#case-selection")
-    end
-
-    it "has a 'Generate Report' button" do
-      expect(rendered).to have_selector("button[@type='submit']", text: "Generate Report", id: "btnGenerateReport")
-    end
-
-    it "has a 'Spinner' button" do
-      expect(rendered).to have_selector("i#spinner")
+    it "has button with 'Download Court Report as .docx' text" do
+      expect(rendered).to have_selector("button", text: /Download Court Report as \.docx/i, count: 1)
     end
   end
 end

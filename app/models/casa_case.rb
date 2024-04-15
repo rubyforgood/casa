@@ -158,6 +158,12 @@ class CasaCase < ApplicationRecord
     court_dates.where("date < ?", Date.today).order(:date).last
   end
 
+  def formatted_latest_court_date
+    most_recent = most_recent_past_court_date&.date&.in_time_zone || Time.zone.now
+
+    most_recent.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT)
+  end
+
   def has_judge_name?
     judge_name
   end
