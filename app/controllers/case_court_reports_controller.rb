@@ -28,7 +28,7 @@ class CaseCourtReportsController < ApplicationController
 
   def generate
     authorize CaseCourtReport
-    casa_case = CasaCase.find_by(case_number: case_params[:case_number])
+    casa_case = CasaCase.find_by(case_number: case_params[:case_number], casa_org: current_user.casa_org)
 
     respond_to do |format|
       format.json do
@@ -63,7 +63,7 @@ class CaseCourtReportsController < ApplicationController
   end
 
   def set_casa_case
-    @casa_case = CasaCase.find_by(case_number: params[:id])
+    @casa_case = CasaCase.find_by(case_number: params[:id], casa_org: current_user.casa_org)
   end
 
   def assigned_cases
