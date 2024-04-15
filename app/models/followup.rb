@@ -1,4 +1,5 @@
 class Followup < ApplicationRecord
+  belongs_to :followupable, polymorphic: true
   belongs_to :case_contact
   belongs_to :creator, class_name: "User"
 
@@ -28,18 +29,21 @@ end
 #
 # Table name: followups
 #
-#  id              :bigint           not null, primary key
-#  note            :text
-#  status          :integer          default("requested")
-#  created_at      :datetime         not null
-#  updated_at      :datetime         not null
-#  case_contact_id :bigint
-#  creator_id      :bigint
+#  id                :bigint           not null, primary key
+#  followupable_type :string
+#  note              :text
+#  status            :integer          default("requested")
+#  created_at        :datetime         not null
+#  updated_at        :datetime         not null
+#  case_contact_id   :bigint
+#  creator_id        :bigint
+#  followupable_id   :bigint
 #
 # Indexes
 #
-#  index_followups_on_case_contact_id  (case_contact_id)
-#  index_followups_on_creator_id       (creator_id)
+#  index_followups_on_case_contact_id                        (case_contact_id)
+#  index_followups_on_creator_id                             (creator_id)
+#  index_followups_on_followupable_type_and_followupable_id  (followupable_type,followupable_id)
 #
 # Foreign Keys
 #
