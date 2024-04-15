@@ -86,9 +86,8 @@ RSpec.describe "casa_cases/show", type: :system do
           click_button "Generate Report"
         end
 
-        expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :hidden)
-        expect(page).to have_selector("#btnGenerateReport[disabled]")
-        expect(page).to have_selector("#spinner", visible: true)
+        wait_for_download
+        expect(download_file_name).to match(/#{casa_case.case_number}.docx/)
       end
     end
   end
