@@ -127,9 +127,12 @@ you are trying to set the address for both of them. This is not currently possib
       expect(CaseContact.last.notes).not_to eq "Hello world"
 
       complete_notes_page(notes: "Hello world", click_continue: false)
-      # Wait for autosave to work
-      sleep(2)
-      expect(CaseContact.where(notes: "Hello world").count).to eq(1)
+
+      within 'div[data-controller="autosave"]' do
+        find('small[data-autosave-target="alert"]', text: "Saved!")
+      end
+
+      expect(CaseContact.last.notes).to eq "Hello world"
     end
   end
 end

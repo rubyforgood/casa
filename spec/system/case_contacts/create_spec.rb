@@ -95,7 +95,6 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       expect(page).to_not have_text(contact_topics.first.details)
       expect(page).to_not have_selector("##{topic_id} textarea")
 
-      sleep 0.4 # BUG: have to wait for the animation to finish
       find("##{topic_id}_button").click
 
       expect(page).to have_text(contact_topics.first.question)
@@ -117,7 +116,6 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
         expect(page).to have_text(contact_topics.first.details)
         expect(page).to have_selector("##{topic_id} textarea")
 
-        sleep 0.4 # BUG: have to wait for the animation to finish
         click_on "read less"
 
         expect(page).to_not have_text(contact_topics.first.details)
