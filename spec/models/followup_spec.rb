@@ -3,19 +3,36 @@ require "rails_helper"
 RSpec.describe Followup, type: :model do
   subject { build(:followup) }
 
-  it { is_expected.to belong_to(:case_contact) }
+  it { is_expected.to belong_to(:case_contact) } #TOOD polymorph remove after migraion complete
   it { is_expected.to belong_to(:creator).class_name("User") }
+  it { is_expected.to belong_to(:followupable).optional }
+
+  it "should have polymorphic fields" do
+    expect(Followup.new).to respond_to(:followupable_id)
+    expect(Followup.new).to respond_to(:followupable_type)
+  end
+
+  # TODO polymorph temporary test for dual writing
+  it 'writes to case_contact_id and both polymorphic columns when creating new followups' do
+    case_contact = create(:case_contact)
+    followup = create(:followup, :with_note, case_contact: case_contact)
+
+    expect(followup.case_contact_id).to_not be_nil
+    expect(followup.followupable_id).to_not be_nil
+    expect(followup.followupable_type).to eq 'CaseContact'
+    expect(followup.followupable_id).to eq followup.case_contact_id
+  end
 
   it "only allows 1 followup in requested status" do
     case_contact = build_stubbed(:case_contact)
-    create(:followup, status: :requested, case_contact: case_contact)
+    create(:followup, case_contact: case_contact)
     invalid_followup = build(:followup, status: :requested, case_contact: case_contact)
 
     expect(invalid_followup).to be_invalid
   end
 
   it "allows followup to be flipped to resolved" do
-    followup = create(:followup, status: :requested)
+    followup = create(:followup, :with_note)
 
     expect(followup.resolved!).to be_truthy
   end
@@ -43,4 +60,18 @@ RSpec.describe Followup, type: :model do
       expect(subject).to_not include(followup_first_org)
     end
   end
+
+  # TODO polymorph remove after migrations completed
+  # describe 'dual writing' do
+  #   it 'writes to case_contact_id and both polymorphic columns when creating new followups' do
+  #     case_contact = build_stubbed(:case_contact)
+  #     followup = create(:followup, status: :requested, case_contact: case_contact)
+  #     # followup = build(:followup, status: :requested, case_contact: case_contact)
+
+  #     expect(followup.case_contact_id).to_not be_nil
+  #     expect(followup.followupable_id).to_not be_nil
+  #     expect(followup.followupable_type).to eq 'CaseContact'
+  #     expect(followup.followupable_id).to eq followup.case_contact_id
+  #   end
+  # end
 end
