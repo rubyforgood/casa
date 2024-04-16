@@ -21,7 +21,7 @@
         <%= form_for SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
           <div class="select-style-1">
             <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
-            <select name='supervisor_volunteer[supervisor_id]' class='form-control select2'>
+            <select name='supervisor_volunteer[supervisor_id]' id="supervisor_volunteer_supervisor_id" class='form-control select2'>
               <% @supervisors.each do |supervisor| %>
                 <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
               <% end %>
