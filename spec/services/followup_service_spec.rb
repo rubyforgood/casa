@@ -12,7 +12,7 @@ RSpec.describe FollowupService do
       allow(notification_double).to receive(:deliver)
     end
 
-    it 'successfully creates a followup and sends notification' do
+    it "successfully creates a followup and sends notification" do
       expect {
         FollowupService.create_followup(case_contact, creator, note)
       }.to change(Followup, :count).by(1)
@@ -30,12 +30,12 @@ RSpec.describe FollowupService do
       expect(notification_double).to have_received(:deliver)
     end
 
-    context 'when followup fails to save' do
+    context "when followup fails to save" do
       before do
         allow_any_instance_of(Followup).to receive(:save).and_return(false)
       end
 
-      it 'does not send a notification' do
+      it "does not send a notification" do
         expect(FollowupService.create_followup(case_contact, creator, note)).to be_a_new(Followup)
         expect(FollowupNotification).not_to have_received(:with)
       end

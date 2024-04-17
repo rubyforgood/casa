@@ -16,7 +16,7 @@ class FollowupService
     followup
   end
 
-  private
+  private_class_method
 
   def self.send_notification(followup, creator)
     FollowupNotification
@@ -24,4 +24,3 @@ class FollowupService
       .deliver(followup.case_contact.creator)
   end
 end
-
