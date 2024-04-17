@@ -60,18 +60,4 @@ RSpec.describe Followup, type: :model do
       expect(subject).to_not include(followup_first_org)
     end
   end
-
-  # TODO polymorph remove after migrations completed
-  # describe 'dual writing' do
-  #   it 'writes to case_contact_id and both polymorphic columns when creating new followups' do
-  #     case_contact = build_stubbed(:case_contact)
-  #     followup = create(:followup, status: :requested, case_contact: case_contact)
-  #     # followup = build(:followup, status: :requested, case_contact: case_contact)
-
-  #     expect(followup.case_contact_id).to_not be_nil
-  #     expect(followup.followupable_id).to_not be_nil
-  #     expect(followup.followupable_type).to eq 'CaseContact'
-  #     expect(followup.followupable_id).to eq followup.case_contact_id
-  #   end
-  # end
 end
