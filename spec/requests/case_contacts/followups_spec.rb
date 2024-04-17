@@ -6,7 +6,7 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
 
   describe "POST /create" do
     let(:notification_double) { double("FollowupNotification") }
-    let(:params) { {note: "Hello, world!"} }
+    let(:params) { { followup: { note: "Hello, world!" } } }
 
     subject(:request) do
       post case_contact_followups_path(case_contact), params: params

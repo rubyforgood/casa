@@ -4,15 +4,7 @@ class CaseContacts::FollowupsController < ApplicationController
   def create
     authorize Followup
     case_contact = CaseContact.find(params[:case_contact_id])
-
-    followup = case_contact.followups.new(creator: current_user, status: :requested, note: params[:note])
-    # dual write data to polymorphic columns that will replace case_contact_id after safe migration is completed
-    followup.followupable = case_contact  # TODO update after polymorph
-    followup.save
-
-    FollowupNotification
-      .with(followup: case_contact.requested_followup, created_by: current_user)
-      .deliver(case_contact.creator)
+    followup = FollowupService.create_followup(case_contact, current_user, followup_params[:note])
 
     redirect_to casa_case_path(case_contact.casa_case)
   end
@@ -28,6 +20,10 @@ class CaseContacts::FollowupsController < ApplicationController
   end
 
   private
+
+  def followup_params
+    params.require(:followup).permit(:note)
+  end
 
   def create_notification
     return if current_user == @followup.creator
