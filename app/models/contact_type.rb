@@ -1,6 +1,9 @@
 class ContactType < ApplicationRecord
   belongs_to :contact_type_group
 
+  has_many :casa_case_contact_types
+  has_many :casa_cases, through: :casa_case_contact_types
+
   validates :name, presence: true, uniqueness: {scope: :contact_type_group_id,
                                                 message: "should be unique per contact type group"}
 
@@ -10,10 +13,6 @@ class ContactType < ApplicationRecord
   }
 
   scope :alphabetically, -> { order(:name) }
-
-  def hash_for_multiple_select
-    {value: id, text: name, group: contact_type_group.name, subtext: "test - need to change"}
-  end
 end
 
 # == Schema Information

@@ -25,7 +25,7 @@
     <div class="card-style-1 pl-25 pr-25 mb-10">
       <div id="contact-type-form" class="d-flex flex-column gap-4">
         <h4 id="contact-type-label"><label>2. Select All Contact Types</label><span class="red-letter"> *</span></h4>
-        <%= render "contact_types", form: form, options: @contact_type_options, selected_items: @contact_type_selected_items %>
+        <%= render "contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: @casa_cases %>
       </div>
     </div>
 

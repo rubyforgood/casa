@@ -96,13 +96,9 @@ class CasaOrg < ApplicationRecord
   end
 
   # Returns contact types that are active and tied to the CasaOrg as a an array of hashes that can be used by the multiple select component
-  # @return [Array<Hash>]
-  # * :value [Integer] the value for the option
-  # * :text [String] the label for the option and the selected item
-  # * :group [String] the name of the group the option belongs to, for searching
-  # * :subtext [String] the text to display next to the option
-  def contact_types_as_hash_map
-    ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name).map(&:hash_for_multiple_select)
+  # @return [ActiveRecord::Relation<ContactType>]
+  def contact_types
+    ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name)
   end
 
   # Given a specific date, returns the active mileage rate.

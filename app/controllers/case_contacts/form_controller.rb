@@ -53,15 +53,13 @@ class CaseContacts::FormController < ApplicationController
     @casa_cases = policy_scope(current_organization.casa_cases)
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types).uniq
+    @contact_types = ContactType.joins(:casa_case_contact_types).where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
+    unless @contact_types.present?
+      @contact_types = current_organization.contact_types
+    end
+    @contact_types.order(name: :asc)
 
-    @contact_type_options =
-      if @selected_case_contact_types.present?
-        @selected_case_contact_types.map(&:hash_for_multiple_select)
-      else
-        current_organization.contact_types_as_hash_map
-      end
-    @contact_type_selected_items = @case_contact.contact_type_ids
+    @selected_contact_type_ids = @case_contact.contact_type_ids
   end
 
   def finish_editing

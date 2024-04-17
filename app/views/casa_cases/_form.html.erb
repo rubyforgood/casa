@@ -109,7 +109,7 @@
       <% end %>
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
         <label for="casa_case_contact_type_ids">Contact Types</label>
-        <%= render "case_contacts/form/contact_types", form: form, options: @contact_type_options, selected_items: @contact_type_selected_items %>
+        <%= render "case_contacts/form/contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: [@casa_case] %>
       <% end %>
       <br>
       <div class="actions-cc">

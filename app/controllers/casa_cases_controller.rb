@@ -175,8 +175,8 @@ class CasaCasesController < ApplicationController
   end
 
   def set_contact_types
-    @contact_type_options = current_organization.contact_types_as_hash_map
-    @contact_type_selected_items = (!@casa_case.nil?) ? @casa_case.contact_type_ids : []
+    @contact_types = current_organization.contact_types
+    @selected_contact_type_ids = (!@casa_case.nil?) ? @casa_case.contact_type_ids : []
   end
 
   def case_contact_csv_name(case_contacts)
