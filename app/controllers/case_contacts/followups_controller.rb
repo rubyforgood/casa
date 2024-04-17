@@ -4,7 +4,8 @@ class CaseContacts::FollowupsController < ApplicationController
   def create
     authorize Followup
     case_contact = CaseContact.find(params[:case_contact_id])
-    followup = FollowupService.create_followup(case_contact, current_user, followup_params[:note])
+    note = simple_followup_params[:note]
+    FollowupService.create_followup(case_contact, current_user, note)
 
     redirect_to casa_case_path(case_contact.casa_case)
   end
@@ -21,8 +22,8 @@ class CaseContacts::FollowupsController < ApplicationController
 
   private
 
-  def followup_params
-    params.require(:followup).permit(:note)
+  def simple_followup_params
+    params.permit(:note)
   end
 
   def create_notification
