@@ -6,7 +6,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
   let(:task_name) { "after_party:backfill_followup_followupable_id_and_type_from_case_contact_id" }
   let(:rake_task) { Rake::Task[task_name].invoke }
 
-  before(:each)  do
+  before(:each) do
     Rake::Task.clear
     Casa::Application.load_tasks
   end
@@ -17,7 +17,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
 
     it "updates followupable_id and followupable_type correctly" do
       expect { rake_task }.to change { followup.reload.followupable_id }.from(nil).to(case_contact.id)
-      .and change { followup.reload.followupable_type }.from(nil).to("CaseContact")
+        .and change { followup.reload.followupable_type }.from(nil).to("CaseContact")
     end
 
     context "when an error occurs during update" do
@@ -30,7 +30,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
         expect(Rails.logger).to receive(:error).with(/Failed to update Followup/)
         expect {
           rake_task
-}.to_not change { followup.reload.followupable_id }
+        }.to_not change { followup.reload.followupable_id }
       end
     end
   end
