@@ -9,7 +9,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
 
   let(:task_name) { "after_party:backfill_followup_followupable_id_and_type_from_case_contact_id" }
 
-  before do
+  after(:each)  do
     Rake::Task[task_name].reenable # Ensures the task can be run multiple times
   end
 
