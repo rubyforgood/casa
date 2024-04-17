@@ -5,7 +5,8 @@ FactoryBot.define do
 
     trait :with_casa_cases do
       after(:create) do |user, _|
-        create_list(:case_assignment, 2, volunteer: user)
+        volunteer = create(:volunteer)
+        create_list(:case_assignment, 2, volunteer: volunteer)
       end
     end
 

@@ -28,20 +28,23 @@ def update_casa_case_dates_of_birth(data, case_not_found, already_has_nonmatchin
     p d2
     case_number = chunks.last
     cc = CasaCase.find_by(case_number: case_number, casa_org_id: casa_org.id)
-    if cc
-      if cc.birth_month_year_youth
-        if !dates_match(cc, d2)
-          already_has_nonmatching_date << {case_number: case_number, prev_date: cc.birth_month_year_youth, import_date: d2}
-        else
-          no_edit_made << case_number
-        end
-      else
-        update_casa_case_birth_month_year_youth(cc, d2)
-        updated_casa_cases << case_number
-      end
+
+    process_casa_case_date(cc, import_date, case_number, already_has_nonmatching_date, no_edit_made, updated_casa_cases, case_not_found)
+  end
+end
+
+def process_casa_case_date(cc, import_date, case_number, already_has_nonmatching_date, no_edit_made, updated_casa_cases, case_not_found)
+  if cc&.birth_month_year_youth
+    if !dates_match(cc, d2)
+      already_has_nonmatching_date << {case_number: case_number, prev_date: cc.birth_month_year_youth, import_date: d2}
     else
-      case_not_found << case_number
+      no_edit_made << cc.case_number
     end
+  elsif cc
+    update_casa_case_birth_month_year_youth(cc, d2)
+    updated_casa_cases << cc.case_number
+  else
+    case_not_found << case_number
   end
   {not_found: case_not_found, nonmatching: already_has_nonmatching_date, no_edit_made: no_edit_made, updated_casa_cases: updated_casa_cases}
 end

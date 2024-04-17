@@ -77,7 +77,8 @@
           <tbody>
             <% @casa_cases.each do |casa_case| %>
               <tr class="<%= casa_case.decorate.inactive_class %>">
-                <td class="min-width"><%= link_to(casa_case.case_number, casa_case) %></td>
+                <td class="min-width"><%= link_to(casa_case.case_number, casa_case) %>
+                </td>
                 <td class="min-width"><%= casa_case.hearing_type_name %></td>
                 <td class="min-width"><%= casa_case.judge_name %></td>
                 <td class="min-width"><%= casa_case.decorate.status %></td>
@@ -93,7 +94,7 @@
                     <% end %>
                   </td>
                 <% end %>
-                <td>
+                <td class="min-width">
                   <i class="lni lni-pencil-alt text-danger"></i>
                   <%= link_to "Edit", edit_casa_case_path(casa_case), class: 'text-danger' %>
                 </td>

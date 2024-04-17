@@ -172,8 +172,11 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       expect(CaseContact.last.notes).not_to eq "Hello world"
 
       complete_notes_page(notes: "Hello world", click_continue: false)
-      # Wait for autosave to work
-      sleep(2)
+
+      within 'div[data-controller="autosave"]' do
+        find('small[data-autosave-target="alert"]', text: "Saved!")
+      end
+
       expect(CaseContact.last.notes).to eq "Hello world"
     end
 

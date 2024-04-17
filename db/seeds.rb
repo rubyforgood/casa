@@ -54,6 +54,8 @@ class SeederMain
       CasaOrg,
       CasaCase,
       CaseContact,
+      ContactTopic,
+      ContactTopicAnswer,
       CaseCourtOrder,
       CaseAssignment,
       ChecklistItem,
@@ -99,7 +101,7 @@ class SeederMain
   def report_object_counts
     log "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
     active_record_classes.each do |klass|
-      log "%5d  %s" % [klass.count, klass.name]
+      log format("%5d  %s", klass.count, klass.name)
     end
     log "\n\nVolunteers, Supervisors and CasaAdmins are types of Users"
   end

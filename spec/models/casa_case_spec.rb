@@ -297,6 +297,34 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
+  describe "#formatted_latest_court_date" do
+    let(:casa_case) { create(:casa_case) }
+
+    before do
+      travel_to Date.new(2021, 1, 1)
+    end
+
+    context "with a past court date" do
+      it "returns the latest past court date as a formatted string" do
+        most_recent_past_court_date = create(:court_date, date: 3.months.ago)
+
+        casa_case.court_dates << create(:court_date, date: 9.months.ago)
+        casa_case.court_dates << most_recent_past_court_date
+        casa_case.court_dates << create(:court_date, date: 15.months.ago)
+
+        expect(casa_case.formatted_latest_court_date).to eq("October 01, 2020") # 3 months before 1/1/21
+      end
+    end
+
+    context "without a past court date" do
+      it "returns the current day as a formatted string" do
+        allow(casa_case).to receive(:most_recent_past_court_date).and_return(nil)
+
+        expect(casa_case.formatted_latest_court_date).to eq("January 01, 2021")
+      end
+    end
+  end
+
   context "#remove_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { build(:emancipation_category) }
