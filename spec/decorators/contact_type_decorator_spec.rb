@@ -43,7 +43,6 @@ RSpec.describe ContactTypeDecorator do
           case_contact2.contact_types << contact_type
           expect(contact_type.decorate.last_time_used_with_cases(casa_case_ids)).to eq "3 days ago"
         end
-
       end
     end
   end
