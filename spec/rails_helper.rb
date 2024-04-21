@@ -85,7 +85,7 @@ RSpec.configure do |config|
   if ENV["CI"]
     config.quarantine_record_tests = true
     config.quarantine_release_at_consecutive_passes = 5
-    config.test_statusus_table = ENV["QUARANTINE_DB_TABLE_NAME"]
+    config.test_statuses_table_name = ENV["QUARANTINE_DB_TABLE_NAME"]
 
     config.around(:each) do |example|
       example.run_with_retry(retry: 3)
