@@ -16,6 +16,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RAILS_ENV: test
+      CI: true
+      QUARANTINE_SERVICE_ACCOUNT_JSON: ${{ secrets.ServiceAccountJson }}
+      QUARANTINE_SHEET_ID: ${{ env.QuarantineSheetId }}
 
     services:
       db:
