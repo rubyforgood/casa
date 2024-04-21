@@ -8,6 +8,8 @@ require "pundit/rspec"
 require "view_component/test_helpers"
 require "capybara/rspec"
 require "action_text/system_test_helper"
+require "quarantine"
+require "rspec/retry"
 
 # Require all support folder files
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
@@ -18,6 +20,9 @@ rescue ActiveRecord::PendingMigrationError => e
   puts e.to_s.strip
   exit 1
 end
+
+Quarantine::RSpecAdapter.bind if ENV["CI"]
+WebMock.disable_net_connect!(allow: %w[www.googleapis.com sheets.googleapis.com])
 
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
@@ -75,5 +80,26 @@ RSpec.configure do |config|
 
   def pre_transition_aged_youth_age
     Date.current - CasaCase::TRANSITION_AGE.years
+  end
+
+  if ENV["CI"]
+    config.quarantine_record_tests = true
+    config.quarantine_release_at_consecutive_passes = 2
+
+    config.around(:each) do |example|
+      example.run_with_retry(retry: 3)
+    end
+
+    file = Tempfile.new
+    file.write(ENV["QUARANTINE_SERVICE_ACCOUNT_JSON"].to_json)
+    file.rewind
+    config.quarantine_database = {
+      type: :google_sheets,
+      authorization: {type: :service_account_key, file: file.path},
+      spreadsheet: {
+        type: :by_key,
+        key: ENV["QUARANTINE_SHEET_ID"]
+      }
+    }
   end
 end
