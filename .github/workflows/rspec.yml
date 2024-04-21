@@ -18,7 +18,6 @@ jobs:
       RAILS_ENV: test
       CI: true
       QUARANTINE_SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
-      QUARANTINE_SHEET_ID: ${{ env.QUARANTINE_SHEET_ID }}
 
     services:
       db:
