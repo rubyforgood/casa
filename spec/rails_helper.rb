@@ -96,7 +96,7 @@ RSpec.configure do |config|
       authorization: {type: :service_account_key, file: Rails.root.join("spec", "quarantine", "service-account.json")},
       spreadsheet: {
         type: :by_key,
-        key: ENV["QUARANTINE_SHEET_ID"]
+        key: "1ESkNNS_rgIdirM5DW9QEiXBixl2kdr6Q0azZjS9eBPw"
       }
     }
   end
