@@ -82,7 +82,7 @@ RSpec.configure do |config|
     Date.current - CasaCase::TRANSITION_AGE.years
   end
 
-  if ENV["CI"]
+  if ENV["QUARANTINE"]
     config.quarantine_record_tests = true
     config.quarantine_release_at_consecutive_passes = 5
 
