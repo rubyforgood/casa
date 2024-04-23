@@ -93,7 +93,7 @@ RSpec.configure do |config|
 
     config.quarantine_database = {
       type: :google_sheets,
-      authorization: {type: :service_account_key, file: "$HOME/secrets/service-account.json"},
+      authorization: {type: :service_account_key, file: Rails.root.join("spec", "quarantine", "service-account.json")},
       spreadsheet: {
         type: :by_key,
         key: ENV["QUARANTINE_SHEET_ID"]
