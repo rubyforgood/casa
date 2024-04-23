@@ -40,6 +40,8 @@ jobs:
 
       - name: Decrypt service-account.json
         run: ./spec/quarantine/decrypt_secret.sh
+        env:
+          QUARANTINE_SERVICE_ACCOUNT_PASSPHRASE: ${{ secrets.QUARANTINE_SERVICE_ACCOUNT_PASSPHRASE }}
 
       - name: Install PostgreSQL client
         run: |
