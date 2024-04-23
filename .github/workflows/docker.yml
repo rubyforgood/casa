@@ -26,6 +26,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+      - name: Decrypt service-account.json
+        run: ./spec/quarantine/decrypt_secret.sh
+        env:
+          QUARANTINE_SERVICE_ACCOUNT_PASSPHRASE: ${{ secrets.QUARANTINE_SERVICE_ACCOUNT_PASSPHRASE }}
       - name: Create downloads folder
         run: |
           mkdir -p tmp/downloads
@@ -40,6 +44,9 @@ jobs:
         run: docker-compose exec -T web bundle exec rails javascript:build
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec
+        env:
+          CI: false
+          QUARANTINE_SHEET_ID: id
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
