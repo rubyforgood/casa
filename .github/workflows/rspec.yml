@@ -38,6 +38,9 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Decrypt service-account.json
+        run: ./spec/quarantine/decrypt_secret.sh
+
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
@@ -66,8 +69,8 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-          QUARANTINE_SERVICE_ACCOUNT_JSON: ${{ secrets.SERVICE_ACCOUNT_JSON }}
           QUARANTINE_DB_TABLE_NAME: rspec_test_statuses
+          CI: true
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter

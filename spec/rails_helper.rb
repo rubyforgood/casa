@@ -91,12 +91,9 @@ RSpec.configure do |config|
       example.run_with_retry(retry: 3)
     end
 
-    file = Tempfile.new
-    file.write(ENV["QUARANTINE_SERVICE_ACCOUNT_JSON"].to_json)
-    file.rewind
     config.quarantine_database = {
       type: :google_sheets,
-      authorization: {type: :service_account_key, file: file.path},
+      authorization: {type: :service_account_key, file: "$HOME/secrets/service-account.json"},
       spreadsheet: {
         type: :by_key,
         key: ENV["QUARANTINE_SHEET_ID"]
