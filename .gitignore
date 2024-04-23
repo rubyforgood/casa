@@ -65,3 +65,6 @@ npm-debug.log
 
 # In case we want to keep something in the compiled assets directory
 !/app/assets/builds/.keep
+
+# Quarantine service-account
+spec/quarantine/service-account.json
