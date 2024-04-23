@@ -42,7 +42,7 @@ jobs:
       - name: Test
         run: docker-compose exec -T web bundle exec rspec spec
         env:
-          CI: false
+          QUARANTINE: false
           QUARANTINE_SHEET_ID: id
 
       - name: Archive selenium screenshots
