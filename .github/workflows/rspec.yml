@@ -71,8 +71,8 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-          CI: true
-          QUARANTINE_SHEET_ID: 1ESkNNS_rgIdirM5DW9QEiXBixl2kdr6Q0azZjS9eBPw
+          CI: false
+          QUARANTINE_SHEET_ID: id
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
