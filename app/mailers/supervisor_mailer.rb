@@ -10,7 +10,7 @@ class SupervisorMailer < UserMailer
     @supervisor = supervisor
     @casa_organization = supervisor.casa_org
     @inactive_messages = InactiveMessagesService.new(supervisor).inactive_messages
-    @inactive_volunteers = supervisor.inactive_volunteers
+    @inactive_volunteers = supervisor.inactive_volunteers.where(casa_org_id: @casa_organization.id)
     if supervisor.receive_reimbursement_email
       mileage_report_attachment = MileageReport.new(@casa_organization.id).to_csv
       attachments["mileage-report-#{Time.current.strftime("%Y-%m-%d")}.csv"] = mileage_report_attachment
