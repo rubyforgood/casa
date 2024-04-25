@@ -18,10 +18,10 @@ RSpec.describe "case_contact_reports/index", type: :system do
     excluded_by_contact_type = create(:case_contact, occurred_at: 20.days.ago, contact_types: [school], notes: "Excluded by Contact Type")
 
     visit reports_path
-    start_date = 30.days.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT)
-    end_date = 10.days.ago.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT)
-    page.execute_script("document.getElementById('report_start_date').setAttribute('value', '#{start_date}')")
-    page.execute_script("document.getElementById('report_end_date').setAttribute('value', '#{end_date}')")
+    start_date = 30.days.ago
+    end_date = 10.days.ago
+    fill_in "report_start_date", with: start_date
+    fill_in "report_end_date", with: end_date
     select court.name, from: "multiple-select-field3"
     click_button "Download Report"
     wait_for_download

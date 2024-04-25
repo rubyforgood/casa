@@ -20,7 +20,6 @@ module FillInCaseContactFields
     end
     choose medium if medium
     fill_in "case_contact_occurred_at", with: occurred_on if occurred_on
-
     fill_in "case_contact_duration_hours", with: hours if hours
     fill_in "case_contact_duration_minutes", with: minutes if minutes
 

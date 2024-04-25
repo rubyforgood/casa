@@ -26,7 +26,7 @@
       <dt>
         <h6>Court Report Due Date:</h6>
       </dt>
-      <dd class="mb-3"><%= @court_date.court_report_due_date&.to_date || "None" %></dd>
+      <dd class="mb-3"><%= I18n.l(@court_date.court_report_due_date, format: :full, default: "None") %></dd>
       <dt>
         <h6>Judge:</h6>
       </dt>
