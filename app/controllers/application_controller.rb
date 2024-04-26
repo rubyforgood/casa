@@ -96,7 +96,7 @@ class ApplicationController < ActionController::Base
   end
 
   def store_referring_location
-    session[:return_to] = request.referer
+    session[:return_to] = request.referer unless request.referer.end_with?("users/sign_in")
   end
 
   def redirect_back_to_referer(fallback_location:)
