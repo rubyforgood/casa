@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_15_160842) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -345,8 +345,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "note"
+    t.bigint "followupable_id"
+    t.string "followupable_type"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
+    t.index ["followupable_type", "followupable_id"], name: "index_followups_on_followupable_type_and_followupable_id"
   end
 
   create_table "fund_requests", force: :cascade do |t|
