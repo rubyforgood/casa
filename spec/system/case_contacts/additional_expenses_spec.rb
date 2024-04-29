@@ -197,6 +197,7 @@ RSpec.describe "additional_expenses", type: :system do
 
       expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount")
       expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expenses_describe")
+      expect(casa_case.case_contacts.last.additional_expenses.count).to eq(10)
       expect(page).to have_no_text("Add Another Expense")
     end
 
