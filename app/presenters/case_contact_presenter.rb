@@ -8,8 +8,8 @@ class CaseContactPresenter < BasePresenter
   end
 
   def display_case_number(casa_case_id)
-    if casa_case_id
-      "#{casa_cases[casa_case_id]&.decorate&.transition_aged_youth_icon} #{casa_cases[casa_case_id]&.case_number}"
+    if casa_cases[casa_case_id]&.case_number.present?
+      "#{casa_cases[casa_case_id].decorate.transition_aged_youth_icon} #{casa_cases[casa_case_id].case_number}"
     else
       ""
     end
