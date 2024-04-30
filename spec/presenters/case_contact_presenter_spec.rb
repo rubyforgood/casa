@@ -11,34 +11,34 @@ RSpec.describe CaseContactPresenter do
     allow_any_instance_of(described_class).to receive(:current_organization).and_return(organization)
   end
 
-  describe '#display_case_number' do
-    context 'with transition aged youth' do
+  describe "#display_case_number" do
+    context "with transition aged youth" do
       let(:casa_case) { create(:casa_case, birth_month_year_youth: 15.years.ago, casa_org: organization) }
 
-      it 'displays the case number with correct icon' do
+      it "displays the case number with correct icon" do
         casa_case_id = casa_case.id
         case_number = casa_case.case_number
 
         expect(presenter.display_case_number(casa_case_id)).to eql("🦋 #{case_number}")
       end
 
-      it 'does not error when case number is nil' do
-        expect(presenter.display_case_number(nil)).to eql('')
+      it "does not error when case number is nil" do
+        expect(presenter.display_case_number(nil)).to eql("")
       end
     end
 
-    context 'with non-transition aged youth' do
+    context "with non-transition aged youth" do
       let(:casa_case) { create(:casa_case, birth_month_year_youth: 12.years.ago, casa_org: organization) }
 
-      it 'displays the case number with correct icon' do
+      it "displays the case number with correct icon" do
         casa_case_id = casa_case.id
         case_number = casa_case.case_number
 
         expect(presenter.display_case_number(casa_case_id)).to eql("🐛 #{case_number}")
       end
 
-      it 'does not error when case number is nil' do
-        expect(presenter.display_case_number(nil)).to eql('')
+      it "does not error when case number is nil" do
+        expect(presenter.display_case_number(nil)).to eql("")
       end
     end
   end
