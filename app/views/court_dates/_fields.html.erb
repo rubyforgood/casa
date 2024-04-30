@@ -1,15 +1,13 @@
 <div class="input-style-1">
   <%= form.label :date, "Add Court Date" %>
-  <%= form.text_field :date,
+  <%= form.date_field :date,
                       value: court_date.date&.to_date || Time.zone.now,
-                      data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                       class: "form-control" %>
 </div>
 <div class="input-style-1">
   <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
-  <%= form.text_field :court_report_due_date,
+  <%= form.date_field :court_report_due_date,
                       value: court_date.court_report_due_date&.to_date,
-                      data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                       class: "form-control" %>
 </div>
 <div class="select-style-1">

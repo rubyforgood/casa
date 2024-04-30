@@ -56,4 +56,15 @@ RSpec.describe "learning_hours/new", type: :system, js: true do
 
     expect(page).to have_text("Duration minutes and hours (total duration) must be greater than 0")
   end
+
+  it "errors if occured on date set in the future" do
+    fill_in "Learning Hours Title", with: "Test title"
+    select "Book", from: "Type of Learning"
+    fill_in "Hour(s)", with: "2"
+    fill_in "Minute(s)", with: "30"
+    fill_in "Occurred On", with: Date.tomorrow
+    click_on "Create New Learning Hours Entry"
+
+    expect(page).to have_text("Date cannot be in the future")
+  end
 end

@@ -109,7 +109,7 @@ GEM
     blueprinter (0.30.0)
     brakeman (6.1.2)
       racc
-    bugsnag (6.26.3)
+    bugsnag (6.26.4)
       concurrent-ruby (~> 1.0)
     builder (3.2.4)
     bullet (7.1.6)
@@ -131,7 +131,7 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    caxlsx (4.0.0)
+    caxlsx (4.1.0)
       htmlentities (~> 4.3, >= 4.3.4)
       marcel (~> 1.0)
       nokogiri (~> 1.10, >= 1.10.4)
@@ -299,7 +299,7 @@ GEM
     method_source (1.0.0)
     mini_magick (4.11.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.5)
+    mini_portile2 (2.8.6)
     minitest (5.22.3)
     multi_xml (0.6.0)
     multipart-post (2.3.0)
@@ -316,14 +316,14 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.1)
-    nokogiri (1.16.3)
+    nokogiri (1.16.4)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.3-arm64-darwin)
+    nokogiri (1.16.4-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.3-x86_64-darwin)
+    nokogiri (1.16.4-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.3-x86_64-linux)
+    nokogiri (1.16.4-x86_64-linux)
       racc (~> 1.4)
     noticed (1.6.3)
       http (>= 4.0.0)
@@ -578,7 +578,7 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  caxlsx (~> 4.0)
+  caxlsx (~> 4.1)
   caxlsx_rails (~> 0.6.3)
   cssbundling-rails (~> 1.4)
   database_cleaner-active_record

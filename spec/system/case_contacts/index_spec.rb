@@ -56,8 +56,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
             visit case_contacts_path
             click_button "Show / Hide"
 
-            fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday.to_s
-            fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow.to_s
+            fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
+            fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
             click_button "Filter"
 
@@ -150,8 +150,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
         # filtering to only show case 2
         click_button "Show / Hide"
-        fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday.to_s
-        fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow.to_s
+        fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
+        fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
         click_button "Filter"
         expect(page).to have_text("Case 2 Notes")
         expect(page).to_not have_text("Case 1 Notes")

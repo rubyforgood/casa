@@ -21,7 +21,7 @@ RSpec.describe "casa_cases/new", type: :system do
           fourteen_years = (Date.today.year - 14).to_s
           fill_in "Case number", with: case_number
 
-          fill_in "Court Date", with: court_date.strftime("%Y/%m/%d")
+          fill_in "Court Date", with: court_date
 
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
@@ -56,7 +56,7 @@ RSpec.describe "casa_cases/new", type: :system do
         visit new_casa_case_path
 
         fill_in "Case number", with: case_number
-        fill_in "Next Court Date", with: DateTime.now.next_month.strftime("%Y/%m/%d")
+        fill_in "Next Court Date", with: DateTime.now.next_month
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
@@ -67,7 +67,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date:")
+        expect(page).to have_content("Next Court Date: ")
         expect(page).not_to have_content("Court Report Due Date:")
         expect(page).to have_content("Transition Aged Youth: No")
       end
