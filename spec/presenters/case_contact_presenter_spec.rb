@@ -29,7 +29,7 @@ RSpec.describe CaseContactPresenter do
 
     context 'with non-transition aged youth' do
       let(:casa_case) { create(:casa_case, birth_month_year_youth: 12.years.ago, casa_org: organization) }
-      
+
       it 'displays the case number with correct icon' do
         casa_case_id = casa_case.id
         case_number = casa_case.case_number
