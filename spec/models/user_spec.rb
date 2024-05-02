@@ -17,6 +17,8 @@ RSpec.describe User, type: :model do
 
   it { is_expected.to have_many(:notes) }
 
+  it { is_expected.to have_many(:login_activities) }  
+
   describe "model validations" do
     it "requires display name" do
       user = build(:user, display_name: "")

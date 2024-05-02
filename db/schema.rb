@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_15_160842) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_01_164936) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -432,6 +432,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_15_160842) do
     t.index ["learning_hour_topic_id"], name: "index_learning_hours_on_learning_hour_topic_id"
     t.index ["learning_hour_type_id"], name: "index_learning_hours_on_learning_hour_type_id"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
+  end
+
+  create_table "login_activities", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "email"
+    t.datetime "current_sign_in_at"
+    t.string "current_sign_in_ip"
+    t.string "user_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_login_activities_on_user_id"
   end
 
   create_table "mileage_rates", force: :cascade do |t|
