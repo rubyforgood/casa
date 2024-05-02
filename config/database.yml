@@ -13,7 +13,7 @@ development:
 
 test:
   <<: *default
-  database: casa_test
+  database: casa_test<%= ENV["TEST_ENV_NUMBER"] %>
   host: <%= ENV.fetch("DATABASE_HOST") { } %>
 
 production:
