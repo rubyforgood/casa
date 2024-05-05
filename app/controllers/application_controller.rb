@@ -13,9 +13,9 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
+  rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
-  rescue_from StandardError, with: :log_and_reraise
 
   impersonates :user
 
@@ -139,7 +139,7 @@ class ApplicationController < ActionController::Base
 
   def log_and_reraise(error)
     Bugsnag.notify(error)
-    raise error
+    raise
   end
 
   def check_unconfirmed_email_notice(user)
