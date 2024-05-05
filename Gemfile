@@ -64,7 +64,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.31.0"
+  gem "standard", "~> 1.35.1"
 end
 
 group :development do
