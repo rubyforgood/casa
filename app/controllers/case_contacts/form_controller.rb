@@ -26,7 +26,7 @@ class CaseContacts::FormController < ApplicationController
       # do nothing
     else
       params[:case_contact] ||= []
-      params[:case_contact][:status] = step.to_s
+      params[:case_contact][:status] = step.to_s # TODO: where is this used?? what is it for??
     end
 
     remove_unwanted_contact_types
