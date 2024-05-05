@@ -43,4 +43,6 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
-          path: ${{ github.workspace }}/tmp/capybara/*.png
+          path: |
+            ${{ github.workspace }}/tmp/capybara/*.png
+            ${{ github.workspace }}/tmp/capybara/*.html
