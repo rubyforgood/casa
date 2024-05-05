@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "CaseContacts::Forms", type: :request do
+RSpec.describe "CaseContacts::FormController", type: :request do
   let(:organization) { build(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
@@ -318,6 +318,23 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         }
       end
       let(:step) { :expenses }
+
+      context "without expenses" do
+        it "works" do
+          params = {
+            "_method": "patch",
+            "authenticity_token": "9Tca3rlxbuO06MCrqN88ijrAgGKeY0O4X7AsRZipvA6T-COiep9YvWGXoqDws6cv38gBjUKrKljh2j0bFugCug",
+            "button": "",
+            "controller": "case_contacts/form",
+            "action": "update",
+            "case_contact_id": case_contact.id,
+            "id": "expenses"
+          }
+          patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params
+
+          expect(response.status).to eq("??")
+        end
+      end
 
       context "with valid attributes" do
         let(:attributes) do

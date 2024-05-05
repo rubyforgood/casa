@@ -36,7 +36,7 @@ class CaseContacts::FormController < ApplicationController
 
     remove_unwanted_contact_types
     remove_nil_draft_ids
-    if @case_contact.update(case_contact_params)
+    if params[:case_contact] && @case_contact.update(case_contact_params)
       respond_to do |format|
         format.html {
           if step == steps.last
