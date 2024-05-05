@@ -39,14 +39,17 @@ class CaseContacts::FormController < ApplicationController
       remove_nil_draft_ids
     end
     if params[:case_contact].empty?
-      format.html {
-        if step == steps.last
-          finish_editing
-        else
-          render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-        end
-      }
-      format.json { head :ok }
+      respond_to do |format|
+        format.html {
+          if step == steps.last
+            finish_editing
+          else
+            render_wizard @case_contact, {}, { case_contact_id: @case_contact.id }
+          end
+        }
+        format.json { head :ok }
+      end
+      return
     end
     if @case_contact.update!(CaseContactParameters.new(params))
       respond_to do |format|

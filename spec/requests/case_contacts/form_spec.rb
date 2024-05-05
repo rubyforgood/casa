@@ -332,7 +332,7 @@ RSpec.describe "CaseContacts::FormController", type: :request do
           }
           patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params
 
-          expect(response.status).to eq("??")
+          expect(response.status).to eq(302)
         end
       end
 
