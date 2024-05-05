@@ -34,9 +34,21 @@ class CaseContacts::FormController < ApplicationController
       end
     end
 
-    remove_unwanted_contact_types
-    remove_nil_draft_ids
-    if params[:case_contact] && @case_contact.update(case_contact_params)
+    if params[:case_contact]
+      remove_unwanted_contact_types
+      remove_nil_draft_ids
+    end
+    if params[:case_contact].empty?
+      format.html {
+        if step == steps.last
+          finish_editing
+        else
+          render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
+        end
+      }
+      format.json { head :ok }
+    end
+    if @case_contact.update!(CaseContactParameters.new(params))
       respond_to do |format|
         format.html {
           if step == steps.last
@@ -130,10 +142,6 @@ class CaseContacts::FormController < ApplicationController
 
       new_case_contact.save!
     end
-  end
-
-  def case_contact_params
-    CaseContactParameters.new(params)
   end
 
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
