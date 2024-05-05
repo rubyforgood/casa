@@ -13,6 +13,7 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
+  KNOWN_ERRORS = [Pundit::NotAuthorizedError, Organizational::UnknownOrganization]
   rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
@@ -138,7 +139,9 @@ class ApplicationController < ActionController::Base
   end
 
   def log_and_reraise(error)
-    Bugsnag.notify(error)
+    unless KNOWN_ERRORS.include?(error.class)
+      Bugsnag.notify(error)
+    end
     raise
   end
 

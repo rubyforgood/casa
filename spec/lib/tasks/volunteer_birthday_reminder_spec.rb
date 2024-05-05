@@ -4,12 +4,17 @@ Rake.application.rake_require "tasks/volunteer_birthday_reminder"
 
 RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
   let(:rake_task) { Rake::Task["volunteer_birthday_reminder"].invoke }
+  let(:now) { Date.new(2022, 10, 15) }
+  let(:this_month) { now.month }
+  let(:this_month_15th) { Date.new(now.year, now.month, 15) }
+  let(:next_month) { Date.new(1988, this_month + 1, 1) }
+  let(:not_next_month) { Date.new(1998, this_month - 1, 1) }
 
   before do
     Rake::Task.clear
     Casa::Application.load_tasks
 
-    travel_to Date.new(2022, 10, 15)
+    travel_to now
   end
 
   after do
@@ -18,7 +23,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
 
   context "there is a volunteer with a birthday next month" do
     let!(:volunteer) do
-      create(:volunteer, :with_assigned_supervisor, date_of_birth: Date.new(1988, 11, 30))
+      create(:volunteer, :with_assigned_supervisor, date_of_birth: next_month)
     end
 
     it "creates a notification" do
@@ -29,7 +34,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
   context "there are many volunteers with birthdays next month" do
     volunteer_count = 10
     let!(:volunteer) do
-      create_list(:volunteer, volunteer_count, :with_assigned_supervisor, date_of_birth: Date.new(1988, 11, 30))
+      create_list(:volunteer, volunteer_count, :with_assigned_supervisor, date_of_birth: next_month)
     end
 
     it "creates many notifications" do
@@ -39,7 +44,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
 
   context "there is an unsupervised volunteer with a birthday next month" do
     let!(:volunteer) do
-      create(:volunteer, date_of_birth: Date.new(1988, 11, 30))
+      create(:volunteer, date_of_birth: next_month)
     end
 
     it "does not create a notification" do
@@ -59,7 +64,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
 
   context "there is a volunteer with a birthday that is not next month" do
     let!(:volunteer) do
-      create(:volunteer, :with_assigned_supervisor, date_of_birth: Date.new(1998, 7, 16))
+      create(:volunteer, :with_assigned_supervisor, date_of_birth: not_next_month)
     end
 
     it "does not create a notification" do
@@ -68,10 +73,10 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
   end
 
   context "when today is the 15th" do
-    before { travel_to(Date.new(2022, 10, 15)) }
+    before { travel_to(this_month_15th) }
 
     let!(:volunteer) do
-      create(:volunteer, :with_assigned_supervisor, date_of_birth: Date.new(1988, 11, 30))
+      create(:volunteer, :with_assigned_supervisor, date_of_birth: next_month)
     end
 
     it "runs the rake task" do
@@ -80,7 +85,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
   end
 
   context "when today is not the 15th" do
-    before { travel_to(Date.new(2022, 10, 1)) }
+    before { travel_to(this_month_15th + 2.days) }
 
     it "skips the rake task" do
       expect { rake_task }.to change { Notification.count }.by(0)
