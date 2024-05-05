@@ -27,7 +27,7 @@
               <% if current_user.casa_org.learning_topic_active %>
                 <td> <%= learning_hour.learning_hour_topic&.name %> </td>
               <% end %>
-              <td> <%= learning_hour.occurred_at.strftime("%B %d, %Y") %> </td>
+              <td> <%= learning_hour.occurred_at.strftime("%B %-d, %Y") %> </td>
               <td>
               <% if (learning_hour.duration_hours > 0) %>
                 <%= learning_hour.duration_hours %> hr
