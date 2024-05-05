@@ -26,20 +26,47 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     all_casa_admin = create(:all_casa_admin)
     sign_in all_casa_admin
 
-    visit new_all_casa_admins_casa_org_path
-    expect(page).to have_text "Create a new CASA Organization"
+    visit "/"
+    expect(page).to have_text "All CASA Admin"
+    expect(page).to have_text "New CASA Organization"
+    expect(page).to have_text "New All CASA Admin"
+    expect(page).to have_text "CASA Organizations"
 
-    org_name = "Cool Org Name"
-    fill_in "Name", with: org_name
+    # left sidebar
+    expect(page).to have_text "Patch Notes"
+    expect(page).to have_text "Edit Profile"
+    expect(page).to have_text "Feature Flags"
+    expect(page).to have_text "Log Out"
+
+    # footer
+    expect(page).to have_link("Ruby For Good", href: "https://rubyforgood.org/")
+    expect(page).to have_link("Report a site issue", href: "https://form.typeform.com/to/iXY4BubB")
+    expect(page).to have_link("SMS Terms & Conditions", href: "/sms-terms-conditions.html")
+
+    # create new org
+    click_on "New CASA Organization"
+    expect(current_path).to eq "/all_casa_admins/casa_orgs/new"
+    expect(page).to have_text "Create a new CASA Organization"
+    fill_in "Name", with: "Cool Org Name"
     fill_in "Display name", with: "display name"
     fill_in "Address", with: "123 Main St"
     click_on "Create CASA Organization"
     expect(page).to have_text "CASA Organization was successfully created."
-
-    organization = CasaOrg.find_by(name: org_name)
-
-    visit all_casa_admins_casa_org_path(id: organization.id)
+    organization = CasaOrg.find_by(name: "Cool Org Name")
+    expect(current_path).to eq "/all_casa_admins/casa_orgs/#{organization.id}"
     expect(page).to have_content "Administrators"
+    expect(page).to have_content "Details"
+    expect(page).to have_content "Number of admins: 0"
+    expect(page).to have_content "Number of supervisors: 0"
+    expect(page).to have_content "Number of active volunteers: 0"
+    expect(page).to have_content "Number of inactive volunteers: 0"
+    expect(page).to have_content "Number of active cases: 0"
+    expect(page).to have_content "Number of inactive cases: 0"
+    expect(page).to have_content "Number of all case contacts including inactives: 0"
+    expect(page).to have_content "Number of active supervisor to volunteer assignments: 0"
+    expect(page).to have_content "Number of active case assignments: 0"
+
+    # create new admin
     click_on "New CASA Admin"
     expect(page).to have_content "New CASA Admin for Cool Org Name"
 
