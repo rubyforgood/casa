@@ -25,8 +25,13 @@ class CaseContacts::FormController < ApplicationController
     if @case_contact.active?
       # do nothing
     else
+      begin
       params[:case_contact] ||= []
       params[:case_contact][:status] = step.to_s # TODO: where is this used?? what is it for??
+      rescue => e
+        # TODO https://app.bugsnag.com/ruby-for-good/casa/errors/6637007c6857010008cfc9dd
+        Bugsnag.notify(e)
+      end
     end
 
     remove_unwanted_contact_types
