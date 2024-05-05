@@ -67,9 +67,9 @@ class CasaOrg < ApplicationRecord
     end
   end
 
-  def open_org_court_report_template(&block)
+  def open_org_court_report_template(&)
     if court_report_template.attached?
-      court_report_template.open(&block)
+      court_report_template.open(&)
     else
       yield CASA_DEFAULT_COURT_REPORT
     end
