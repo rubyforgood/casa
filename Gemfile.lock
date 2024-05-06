@@ -79,7 +79,7 @@ GEM
       minitest (>= 5.1)
       mutex_m
       tzinfo (~> 2.0)
-    addressable (2.8.5)
+    addressable (2.8.6)
       public_suffix (>= 2.0.2, < 6.0)
     after_party (1.11.2)
     amazing_print (1.6.0)
@@ -276,10 +276,10 @@ GEM
     jwt (2.8.1)
       base64
     language_server-protocol (3.17.0.3)
-    launchy (2.5.0)
-      addressable (~> 2.7)
-    letter_opener (1.9.0)
-      launchy (>= 2.2, < 3)
+    launchy (2.5.2)
+      addressable (~> 2.8)
+    letter_opener (1.10.0)
+      launchy (>= 2.2, < 4)
     lint_roller (1.1.0)
     llhttp-ffi (0.4.0)
       ffi-compiler (~> 1.0)
@@ -356,7 +356,7 @@ GEM
       pry (>= 0.13, < 0.15)
     psych (5.1.2)
       stringio
-    public_suffix (5.0.4)
+    public_suffix (5.0.5)
     puma (6.4.2)
       nio4r (~> 2.0)
     pundit (2.3.1)
