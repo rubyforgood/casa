@@ -87,6 +87,9 @@ GEM
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
+    authtrail (0.5.0)
+      railties (>= 6.1)
+      warden
     azure-storage-blob (2.0.3)
       azure-storage-common (~> 2.0)
       nokogiri (~> 1, >= 1.10.8)
@@ -573,6 +576,7 @@ DEPENDENCIES
   after_party
   amazing_print
   annotate
+  authtrail
   azure-storage-blob
   blueprinter
   brakeman
