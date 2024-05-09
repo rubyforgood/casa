@@ -1,6 +1,4 @@
 class ReimbursementCompleteNotifier < Noticed::Event
-  deliver_by :database
-
   param :case_contact
 
   def title

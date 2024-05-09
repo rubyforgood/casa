@@ -4,9 +4,6 @@
 # FollowupResolvedNotification.with(followup: @followup).deliver(current_user)
 
 class FollowupResolvedNotifier < Noticed::Event
-  # Add your delivery methods
-  #
-  deliver_by :database
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"

@@ -4,7 +4,6 @@
 # FollowupNotification.with(followup: @followup).deliver(current_user)
 
 class FollowupNotifier < Noticed::Event
-  deliver_by :database
   # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
