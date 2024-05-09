@@ -1,13 +1,9 @@
 FactoryBot.define do
   factory :notification do
-    association :recipient, factory: :volunteer
     recipient_type { "User" }
     type { "Notification" }
 
     trait :followup_with_note do
-      transient do
-        creator { build(:user) }
-      end
       type { "FollowupNotification" }
       params {
         {
@@ -75,6 +71,36 @@ FactoryBot.define do
         }
       }
       initialize_with { new(params: params) }
+    end
+    trait :followup_with_note_notification do
+      type { "FollowupNotification" }
+      params do
+        {
+          followup: { id: 1, note: "This is a sample followup note" },
+          created_by: { id: 1, name: "John Doe" }
+        }
+      end
+    end
+
+    trait :followup_read_notification do
+      type { "FollowupNotification" }
+      read_at { DateTime.current }
+      params do
+        {
+          followup: { id: 1, note: "This is a sample followup note" },
+          created_by: { id: 1, name: "John Doe" }
+        }
+      end
+    end
+
+    trait :followup_without_note_notification do
+      type { "FollowupNotification" }
+      params do
+        {
+          followup: { id: 1 },
+          created_by: { id: 1, name: "John Doe" }
+        }
+      end
     end
   end
 end

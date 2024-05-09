@@ -3,7 +3,7 @@
 # EmancipationChecklistNotification.with(post: @post).deliver_later(current_user)
 # EmancipationChecklistNotification.with(post: @post).deliver(current_user)
 
-class EmancipationChecklistReminderNotification < BaseNotification
+class EmancipationChecklistReminderNotifier < Noticed::Event
   # Add your delivery methods
   #
   deliver_by :database
@@ -20,8 +20,8 @@ class EmancipationChecklistReminderNotification < BaseNotification
   def message
     casa_case = params[:casa_case]
     "Your case #{casa_case.case_number} is a transition aged youth. " \
-    "We want to make sure that along the way, we’re preparing our youth for emancipation. " \
-    "Make sure to check the emancipation checklist."
+      "We want to make sure that along the way, we’re preparing our youth for emancipation. " \
+      "Make sure to check the emancipation checklist."
   end
 
   def title

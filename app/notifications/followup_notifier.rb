@@ -3,9 +3,7 @@
 # FollowupNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupNotification < BaseNotification
-  # Add your delivery methods
-  #
+class FollowupNotifier < Noticed::Event
   deliver_by :database
   # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?

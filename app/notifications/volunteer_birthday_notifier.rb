@@ -3,7 +3,7 @@
 # VolunteerBirthdayNotification.with(post: @post).deliver_later(current_user)
 # VolunteerBirthdayNotification.with(post: @post).deliver(current_user)
 
-class VolunteerBirthdayNotification < BaseNotification
+class VolunteerBirthdayNotifier < Noticed::Event
   # Add your delivery methods
   #
   deliver_by :database

@@ -3,7 +3,7 @@
 # FollowupResolvedNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupResolvedNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupResolvedNotification < BaseNotification
+class FollowupResolvedNotifier < Noticed::Event
   # Add your delivery methods
   #
   deliver_by :database
