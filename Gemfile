@@ -52,6 +52,7 @@ gem "rswag-ui"
 gem "blueprinter" # for JSON serialization
 gem "oj" # faster JSON parsing 🍊
 gem "groupdate" # Group Data
+gem "authtrail" # Track Devise login activity
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries

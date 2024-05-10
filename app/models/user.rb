@@ -43,6 +43,7 @@ class User < ApplicationRecord
   has_one :address, dependent: :destroy
   has_many :user_languages
   has_many :languages, through: :user_languages
+  has_many :login_activities, as: :user
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
