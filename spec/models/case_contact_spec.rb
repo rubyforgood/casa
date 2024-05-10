@@ -97,15 +97,21 @@ RSpec.describe CaseContact, type: :model do
     end
 
     it "requires medium type" do
-      expect(build_stubbed(:case_contact, :details_status, medium_type: nil)).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, medium_type: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("Medium type can't be blank")
     end
 
     it "requires a case to be selected" do
-      expect(build_stubbed(:case_contact, :details_status, draft_case_ids: [])).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [])
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("You must select at least one casa case.")
     end
 
     it "requires occurred at" do
-      expect(build_stubbed(:case_contact, :details_status, occurred_at: nil)).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("Occurred at can't be blank")
     end
 
     it "requires duration minutes" do
