@@ -25,7 +25,7 @@ RSpec.describe "casa_org/edit", type: :system do
     sign_in admin
     visit edit_casa_org_path(organization)
 
-    page.attach_file("Logo", "spec/fixtures/company_logo.png", make_visible: true)
+    page.attach_file("Logo", "spec/fixtures/company_logo.png", visible: :visible)
 
     expect(organization.logo).to_not be_attached
 
