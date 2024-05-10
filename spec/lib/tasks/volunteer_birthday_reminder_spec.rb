@@ -2,7 +2,7 @@ require "rails_helper"
 require "rake"
 Rake.application.rake_require "tasks/volunteer_birthday_reminder"
 
-RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake" do
+RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
   let(:rake_task) { Rake::Task["volunteer_birthday_reminder"].invoke }
   let(:now) { Date.new(2022, 10, 15) }
   let(:this_month) { now.month }

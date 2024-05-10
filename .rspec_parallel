@@ -1,0 +1,5 @@
+--format RspecJunitFormatter
+--out tmp/reports/rspec_<%= ENV["GROUPS_UNDERSCORE"] %>_<%= ENV["TEST_ENV_NUMBER"] %>.xml
+--format ParallelTests::RSpec::RuntimeLogger --out tmp/parallel_runtime.log
+--format ParallelTests::RSpec::SummaryLogger --out tmp/spec_summary.log
+--format ParallelTests::RSpec::FailuresLogger --out tmp/failing_specs.log

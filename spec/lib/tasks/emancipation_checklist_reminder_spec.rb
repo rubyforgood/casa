@@ -2,7 +2,7 @@ require "rails_helper"
 require "rake"
 Rake.application.rake_require "tasks/emancipation_checklist_reminder"
 
-RSpec.describe "lib/tasks/emancipation_checklist_reminder.rake" do
+RSpec.describe "lib/tasks/emancipation_checklist_reminder.rake", ci_only: true do
   let(:rake_task) { Rake::Task["emancipation_checklist_reminder"].invoke }
 
   before do
