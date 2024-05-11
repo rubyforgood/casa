@@ -20,7 +20,7 @@ RSpec.describe "mileage_rates/new", type: :system, js: true do
 
     expect(page).to have_text("Mileage Rates")
     expect(page).to have_text("Effective date")
-    expect(page).to have_text("February 1, 2020")
+    expect(page).to have_text("January 2, 2020")
     expect(page).to have_text("Amount")
     expect(page).to have_text("$1.35")
     expect(page).to have_text("Active?")
