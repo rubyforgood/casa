@@ -22,12 +22,7 @@ class CaseContacts::FormController < ApplicationController
   def update
     @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
-    if @case_contact.active?
-      # do nothing
-    else
-      params[:case_contact][:status] = step.to_s
-    end
-
+    params[:case_contact][:status] = step.to_s if !@case_contact.active? && params.key?(:case_contact)
     remove_unwanted_contact_types
     remove_nil_draft_ids
     if @case_contact.update(case_contact_params)
