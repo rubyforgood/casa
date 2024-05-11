@@ -2,7 +2,6 @@
 
 <div>
   <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
-    <%= form.hidden_field :placeholder, value: true %>
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <div class="card-style-1 pl-25 mb-10 pr-50">
