@@ -3,13 +3,13 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :set_progress
   before_action :require_organization!
+  before_action :set_case_contact, only: [:show, :update]
   after_action :verify_authorized
 
   steps(*CaseContact::FORM_STEPS)
 
   # wizard_path
   def show
-    @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
     get_cases_and_contact_types
     @page = wizard_steps.index(step) + 1
@@ -20,7 +20,6 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update
-    @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
     params[:case_contact][:status] = step.to_s if !@case_contact.active? && params.key?(:case_contact)
     remove_unwanted_contact_types
@@ -48,6 +47,10 @@ class CaseContacts::FormController < ApplicationController
   end
 
   private
+
+  def set_case_contact
+    @case_contact = CaseContact.find(params[:case_contact_id])
+  end
 
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases)
