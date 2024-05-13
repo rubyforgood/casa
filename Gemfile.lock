@@ -313,7 +313,7 @@ GEM
     mutex_m (0.2.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.4.10)
+    net-imap (0.4.11)
       date
       net-protocol
     net-pop (0.1.2)
