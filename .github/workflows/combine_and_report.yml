@@ -41,7 +41,7 @@ jobs:
         #         In this step we set the status of the job. Normally in case of failures, the next steps fail, so we have to
         #         use `if: always()` to make sure the next steps run.
         if: ${{ steps.test_summary.outputs.failed > 0 }}
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           script: |
             core.setFailed('There are test failures')
