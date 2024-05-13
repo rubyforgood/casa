@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_13_155246) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -298,6 +298,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
     t.index ["judge_id"], name: "index_court_dates_on_judge_id"
   end
 
+  create_table "custom_links", force: :cascade do |t|
+    t.string "text"
+    t.text "url"
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_custom_links_on_casa_org_id"
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -420,7 +429,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
@@ -684,6 +692,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
   add_foreign_key "contact_topic_answers", "contact_topics"
   add_foreign_key "contact_topics", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
+  add_foreign_key "custom_links", "casa_orgs"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
