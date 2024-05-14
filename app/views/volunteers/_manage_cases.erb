@@ -20,7 +20,7 @@
                 <tr id="<%= dom_id(assignment) %>">
                   <td>
                     <%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %>
-                    <%= render AssignedVolunteersComponent.new(assignment.casa_case, current_user) %>
+                    <%= volunteer_badge(assignment.casa_case, current_user) %>
                   </td>
                   <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
                   <td>

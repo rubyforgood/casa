@@ -19,6 +19,10 @@ RSpec.describe ApplicationController, type: :controller do
       super
     end
 
+    def store_referring_location
+      super
+    end
+
     def not_authorized_error
       raise Pundit::NotAuthorizedError
     end
@@ -113,6 +117,26 @@ RSpec.describe ApplicationController, type: :controller do
 
     it "sms status is sent" do
       expect(controller.send(:sms_acct_creation_notice, "admin", "sent")).to eq("New admin created successfully. SMS has been sent!")
+    end
+  end
+
+  describe "#store_referring_location" do
+    it "stores referring location in session if referer is present and not sign in page" do
+      request.env["HTTP_REFERER"] = "http://example.com"
+      controller.store_referring_location
+      expect(session[:return_to]).to eq("http://example.com")
+    end
+
+    it "does not store referring location if referer is sign in page" do
+      request.env["HTTP_REFERER"] = "http://example.com/users/sign_in"
+      controller.store_referring_location
+      expect(session[:return_to]).to be_nil
+    end
+
+    it "does not store referring location if referer is not present" do
+      request.env["HTTP_REFERER"] = nil
+      controller.store_referring_location
+      expect(session[:return_to]).to be_nil
     end
   end
 end

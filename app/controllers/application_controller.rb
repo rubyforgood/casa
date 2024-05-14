@@ -13,6 +13,8 @@ class ApplicationController < ActionController::Base
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
+  KNOWN_ERRORS = [Pundit::NotAuthorizedError, Organizational::UnknownOrganization]
+  rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
 
@@ -134,6 +136,13 @@ class ApplicationController < ActionController::Base
     session[:user_return_to] = nil
     flash[:notice] = "Sorry, you are not authorized to perform this action."
     redirect_to(root_url)
+  end
+
+  def log_and_reraise(error)
+    unless KNOWN_ERRORS.include?(error.class)
+      Bugsnag.notify(error)
+    end
+    raise
   end
 
   def check_unconfirmed_email_notice(user)
