@@ -42,14 +42,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download parallel runtime log from Azure Blob Storage
-        if: github.repository == github.event.pull_request.head.repo.full_name
         env:
           AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
           AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
           STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
+        if: env.AZURE_STORAGE_KEY != ''
         run: |
-          echo $STORAGE_CONTAINER
-          echo ${{ secrets.STORAGE_CONTAINER }}
           az storage blob download \
           -c $STORAGE_CONTAINER \
           --file old_parallel_runtime.log \
@@ -116,6 +114,7 @@ jobs:
           --runtime-log old_parallel_runtime.log \
           --verbose-command ./spec
 
+          echo 'Tests completed. Uploading to Code Climate'
           ./cc-test-reporter after-build --exit-code $?
           cat tmp/spec_summary.log
 
@@ -124,7 +123,7 @@ jobs:
           zip -r test_reports_${{ env.GROUPS_UNDERSCORE }}.zip tmp/reports
 
       - name: Compress log
-        if: github.repository == github.event.pull_request.head.repo.full_name
+        if: env.AZURE_STORAGE_KEY != ''
         run: |
           mv tmp/parallel_runtime.log parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
 
@@ -135,7 +134,7 @@ jobs:
           path: test_reports_${{ env.GROUPS_UNDERSCORE }}.zip
 
       - name: Upload file parallel tests runtime log
-        if: github.repository == github.event.pull_request.head.repo.full_name
+        if: env.AZURE_STORAGE_KEY != ''
         uses: actions/upload-artifact@v4
         with:
           name: parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log

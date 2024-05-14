@@ -15,15 +15,15 @@ jobs:
           find artifacts -name "test_reports*.zip" -exec unzip -d test_reports {} \;
           find test_reports -name "**/test_reports*.zip" -exec unzip -d test_reports {} \;
       - name: Merge parallel runtime log parts
-        if: github.repository == github.event.pull_request.head.repo.full_name
+        if: env.AZURE_STORAGE_KEY != ''
         run: |
           cat artifacts/**/parallel_runtime_rspec*.log > parallel_runtime.log
       - name: Upload log file to Azure Blob Storage
-        if: github.repository == github.event.pull_request.head.repo.full_name
         env:
           AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
           AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
           STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
+        if: env.AZURE_STORAGE_KEY != ''
         run: |
           az storage blob upload \
           -c $STORAGE_CONTAINER \
