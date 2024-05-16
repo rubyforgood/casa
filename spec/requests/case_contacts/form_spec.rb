@@ -58,6 +58,15 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
       end
 
+      context "when an org has no topics" do
+        let(:organization) { create(:casa_org) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+
+        it "does not show contact topic card" do
+          page = request.parsed_body.to_html
+          expect(page).to_not include("Court report topics")
+        end
+      end
       context "when the org has topics assigned" do
         let(:contact_topics) {
           [

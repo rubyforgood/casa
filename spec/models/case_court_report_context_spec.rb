@@ -26,6 +26,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       allow(context).to receive(:org_address).and_return(nil)
       allow(context).to receive(:volunteer_info).and_return({})
       allow(context).to receive(:latest_hearing_date).and_return("")
+      allow(context).to receive(:court_topics).and_return({})
 
       expected_shape = {
         created_date: "January 1, 2021",
@@ -36,7 +37,8 @@ RSpec.describe CaseCourtReportContext, type: :model do
         latest_hearing_date: "",
         org_address: nil,
         volunteer: {},
-        hearing_type_name: court_date.hearing_type.name
+        hearing_type_name: court_date.hearing_type.name,
+        case_topics: []
       }
 
       expect(context.context).to eq(expected_shape)
@@ -172,6 +174,82 @@ RSpec.describe CaseCourtReportContext, type: :model do
         context = build_context(start_date: nil, end_date: 2.day.ago, court_date: nil, time_zone: nil)
 
         expect(context.date_range).to eq(nil..days_ago(2))
+      end
+    end
+  end
+
+  describe "#court_topics" do
+    let(:org) { create(:casa_org) }
+    let(:casa_case) { create(:casa_case, casa_org: org) }
+    let(:topics) { [1, 2, 3].map { |i| create(:contact_topic, casa_org: org, question: "Question #{i}", details: "Details #{i}") } }
+    let(:contacts) do
+      [1, 2, 3, 4].map do |i|
+        create(:case_contact,
+          casa_case: casa_case,
+          occurred_at: 1.month.ago + i.days,
+          contact_types: [
+            create(:contact_type, name: "Type A#{i}"),
+            create(:contact_type, name: "Type B#{i}")
+          ])
+      end
+    end
+    # let(:contacts) { create_list(:case_contact, 4, casa_case: casa_case, occurred_at: 1.month.ago)  }
+
+    context "when given data" do
+      # Add some values that should get filtered out
+      before do
+        contact_one = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 1.day.ago)
+        create_list(:contact_topic_answer, 2, case_contact: contact_one, contact_topic: topics[0], value: "Not included")
+
+        contact_two = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 50.day.ago)
+        create_list(:contact_topic_answer, 2, case_contact: contact_two, contact_topic: topics[0], value: "Not included")
+
+        other_case = create(:casa_case, casa_org: org)
+        contact_three = create(:case_contact, casa_case: other_case, medium_type: "in-person", occurred_at: 50.day.ago)
+        create_list(:contact_topic_answer, 2, case_contact: contact_three, contact_topic: topics[0], value: "Not included")
+      end
+
+      it "generates correctly shaped data" do
+        # Contact 1 Answers
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[0], value: "Answer 1")
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[1], value: "Answer 2")
+
+        # Contact 2 Answers
+        create(:contact_topic_answer, case_contact: contacts[1], contact_topic: topics[0], value: "Answer 3")
+        create(:contact_topic_answer, case_contact: contacts[1], contact_topic: topics[2], value: nil)
+
+        # Contact 3 Answers
+        create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[1], value: "Answer 5")
+        create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[2], value: "")
+
+        # Contact 4 Answers
+        # No Answers
+
+        expected_topics = {
+          "Question 1" => {topic: "Question 1", details: "Details 1", answers: [
+            {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
+            {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"}
+          ]},
+          "Question 2" => {topic: "Question 2", details: "Details 2", answers: [
+            {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
+            {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
+          ]},
+          "Question 3" => {topic: "Question 3", details: "Details 3", answers: [
+            {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
+            {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
+          ]}
+        }
+
+        court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+
+        expect(court_report_context.court_topics).to eq(expected_topics)
+      end
+    end
+
+    context "when there are no contact topics" do
+      it "returns an empty hash" do
+        court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+        expect(court_report_context.court_topics).to eq({})
       end
     end
   end
