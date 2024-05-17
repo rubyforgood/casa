@@ -1,9 +1,13 @@
 require "pry"
 require "webmock/rspec"
+require "email_spec"
+require "email_spec/rspec"
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
   SimpleCov.start do
+    command_name "Job #{ENV["TEST_ENV_NUMBER"]}" if ENV["TEST_ENV_NUMBER"]
+
     add_filter "/spec/"
     add_filter "/lib/tasks/auto_annotate_models.rake"
     add_group "Models", "/app/models"

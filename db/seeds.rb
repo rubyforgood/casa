@@ -12,6 +12,7 @@ require_relative "seeds/db_populator"
 require_relative "../lib/tasks/data_post_processors/case_contact_populator"
 require_relative "../lib/tasks/data_post_processors/contact_type_populator"
 require_relative "../lib/tasks/data_post_processors/sms_notification_event_populator"
+require_relative "../lib/tasks/data_post_processors/contact_topic_populator"
 
 class SeederMain
   attr_reader :db_populator, :rng
@@ -53,6 +54,8 @@ class SeederMain
       CasaOrg,
       CasaCase,
       CaseContact,
+      ContactTopic,
+      ContactTopicAnswer,
       CaseCourtOrder,
       CaseAssignment,
       ChecklistItem,
@@ -62,10 +65,13 @@ class SeederMain
       HearingType,
       Judge,
       Language,
+      LearningHourType,
+      LearningHourTopic,
       MileageRate,
       Supervisor,
       SupervisorVolunteer,
       User,
+      LearningHour,
       Volunteer
     ]
   end
@@ -73,6 +79,7 @@ class SeederMain
   def post_process_data
     ContactTypePopulator.populate
     CaseContactPopulator.populate
+    ContactTopicPopulator.populate
   end
 
   def get_seed_specification
@@ -94,7 +101,7 @@ class SeederMain
   def report_object_counts
     log "\nRecords written to the DB:\n\nCount  Class Name\n-----  ----------\n\n"
     active_record_classes.each do |klass|
-      log "%5d  %s" % [klass.count, klass.name]
+      log format("%5d  %s", klass.count, klass.name)
     end
     log "\n\nVolunteers, Supervisors and CasaAdmins are types of Users"
   end

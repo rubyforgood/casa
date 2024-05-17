@@ -1,6 +1,6 @@
 /* global $ */
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   const { groupBy, map, mapValues } = require('lodash')
 
   const formatOccurredAtDate = (record) => new Date(record.occurred_at.replaceAll('-', ' ')).toDateString()
@@ -60,7 +60,7 @@ $('document').ready(() => {
         contentType: 'application/json'
       }).then(() => reimbursementsTable.draw())
     } catch (error) {
-      console.log(error)
+      console.error(error)
       event.target.checked = !event.target.checked
       window.alert('Failed to update reimbursement complete setting')
     }
@@ -78,20 +78,18 @@ $('document').ready(() => {
   $('[data-filter="occurred_at"] input').on('change', () => reimbursementsTable.draw())
 
   const handleAjaxError = e => {
-    if (e.status === 401) {
-      window.location.reload()
-    } else {
-      console.log(e)
-      if (e.responseJSON && e.responseJSON.error) {
-        window.alert(e.responseJSON.error)
-      } else {
-        const responseErrorMessage = e.response.statusText
-          ? `\n${e.response.statusText}\n`
-          : ''
+    console.error('AJAX Error:')
+    console.error(e)
 
-        window.alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
-        link to the bottom left near your email address.`)
-      }
+    if (e.responseJSON && e.responseJSON.error) {
+      window.alert(e.responseJSON.error)
+    } else {
+      const responseErrorMessage = e.response.statusText
+        ? `\n${e.response.statusText}\n`
+        : ''
+
+      window.alert(`Sorry, try that again?\n${responseErrorMessage}\nIf you're seeing a problem, please fill out the Report A Site Issue
+      link to the bottom left near your email address.`)
     }
   }
 

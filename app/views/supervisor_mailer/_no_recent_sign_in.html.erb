@@ -1,0 +1,13 @@
+<% if inactive_volunteers.any? %>
+  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0; text-align: left;">
+    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+      <b><%= "The following volunteers have not signed in or created case contacts in the last 30 days" %></b>
+      <br>
+
+      <% inactive_volunteers.each do |volunteer| %>
+        - <%= volunteer.display_name %>
+        <br>
+      <% end %>
+    </td>
+  </tr>
+<% end %>

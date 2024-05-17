@@ -1,0 +1,10 @@
+<% if @active_banner %>
+  <div class="bg-secondary-100 text-xl p-5 d-flex" data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>">
+    <div class="">
+      <%= @active_banner.content %>
+    </div>
+    <div class="ms-auto">
+      <a href="#" data-action="click->dismiss#dismiss">Dismiss</a>
+    </div>
+  </div>
+<% end %>

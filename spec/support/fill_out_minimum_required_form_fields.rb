@@ -6,7 +6,7 @@ module FillOutMinimumRequiredFields
     end
     choose "Video"
 
-    fill_in "case-contact-duration-hours-display", with: "1"
+    fill_in "case_contact_duration_hours", with: "1"
   end
 end
 

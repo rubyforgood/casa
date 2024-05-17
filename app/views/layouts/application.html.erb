@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= translate('page.meta.title') %></title>
+  <title>CASA Volunteer Tracking</title>
 
-  <meta name="description" content="<%= translate('page.meta.description') %>">
+  <meta name="description" content="Volunteer activity tracking for CASA volunteers, supervisors, and administrators.">
   <meta name="viewport" content="width=device-width,initial-scale=1">
 
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
-  <%= og_tag :title, content: translate('page.meta.title') %>
-  <%= og_tag :description, content: translate('page.meta.description') %>
+  <%= og_tag :title, content: "CASA Volunteer Tracking" %>
+  <%= og_tag :description, content: "Volunteer activity tracking for CASA volunteers, supervisors, and administrators." %>
   <%= og_tag :url, content: root_url %>
   <%= og_tag :image, content: image_url('login.jpg') %>
 
   <%= render 'shared/favicons' %>
+  <script>
+    window.timeout = <%= @timeout_duration.to_json %>
+  </script>
 
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= stylesheet_link_tag "application", "data-turbo-track": "reload" %>
@@ -58,6 +61,8 @@
       <%= yield %>
     </div>
   </section>
+
+  <%= render "layouts/components/notifier" %>
 
   <footer class="footer">
     <div class="container-fluid">

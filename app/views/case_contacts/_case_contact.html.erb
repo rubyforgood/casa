@@ -1,15 +1,18 @@
 <div class="container-fluid mb-1">
-  <div class="card-style-1 mb-15 pt-0 pb-5">
+  <div class="card-style-1 mb-15 pt-0 pb-3 full-card">
     <div class="card-content">
       <div class="col-8">
         <div class="mt-0">
           <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="">
-            <h5 class="pt-0 mb-10 card-title">
+            <h5 class="pt-0 mb-10 card-title d-flex align-items-center gap-2">
               <strong class="<%= "text-primary" %>">
                 <%= "[DELETE] " if policy(contact).restore? && contact.deleted? %>
-                <%= contact.contact_groups_with_types.keys.join(", ") %>
+                <%= contact.decorate.contact_groups %>
               </strong>
+              <% if !contact.active? %>
+                <span class="badge badge-pill light-bg text-black">Draft</span>
+              <% end %>
               <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post,
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>
@@ -39,7 +42,7 @@
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "text-danger h5" do %>
+            <%= link_to edit_case_contact_path(contact), class: "text-danger" do %>
               <i class="lni lni-pencil-alt"></i> Edit
             <% end %>
           </div>
@@ -52,11 +55,8 @@
         <% end %>
         </div>
       </div>
-
     </div>
-  </div>
-  <div>
-    <h6 class="mb-2 text-primary ml-5">
+    <h6 class="mb-1 text-primary ml-30 mt-3">
       Created by:
       <% if policy(contact).edit? %>
         <% if current_user.volunteer? %>

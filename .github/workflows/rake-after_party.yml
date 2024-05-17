@@ -34,7 +34,7 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -58,6 +58,6 @@ jobs:
           PGUSER: postgres
           RAILS_ENV: test
         run: |
-          rake db:create
-          rake db:schema:load
-          rake after_party:run
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
+          bundle exec rake after_party:run

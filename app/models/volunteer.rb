@@ -3,6 +3,7 @@
 class Volunteer < User
   devise :invitable, invite_for: 1.year
 
+  BULK_COLUMN = "bulk"
   NAME_COLUMN = "name"
   EMAIL_COLUMN = "email"
   SUPERVISOR_COLUMN = "supervisor"
@@ -16,6 +17,7 @@ class Volunteer < User
   EXTRA_LANGUAGES_COLUMN = "has_any_extra_languages"
   ACTIONS_COLUMN = "actions"
   TABLE_COLUMNS = [
+    BULK_COLUMN,
     NAME_COLUMN,
     EMAIL_COLUMN,
     SUPERVISOR_COLUMN,
@@ -41,6 +43,10 @@ class Volunteer < User
       .active
   }
 
+  scope :with_supervisor, -> {
+    joins(:supervisor_volunteer)
+  }
+
   scope :with_assigned_cases, -> {
     joins(:case_assignments)
       .where("case_assignments.active is true")
@@ -56,6 +62,10 @@ class Volunteer < User
                                      .distinct
                                      .order(:display_name)
                                  }
+
+  scope :birthday_next_month, -> {
+    where("EXTRACT(month from date_of_birth) = ?", DateTime.current.next_month.month)
+  }
 
   def self.send_court_report_reminder
     active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
@@ -140,38 +150,42 @@ end
 #
 # Table name: users
 #
-#  id                          :bigint           not null, primary key
-#  active                      :boolean          default(TRUE)
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string
-#  confirmed_at                :datetime
-#  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string
-#  display_name                :string           default(""), not null
-#  email                       :string           default(""), not null
-#  encrypted_password          :string           default(""), not null
-#  invitation_accepted_at      :datetime
-#  invitation_created_at       :datetime
-#  invitation_limit            :integer
-#  invitation_sent_at          :datetime
-#  invitation_token            :string
-#  invitations_count           :integer          default(0)
-#  invited_by_type             :string
-#  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string
-#  old_emails                  :string           default([]), is an Array
-#  phone_number                :string           default("")
-#  receive_email_notifications :boolean          default(TRUE)
-#  receive_sms_notifications   :boolean          default(FALSE), not null
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string
-#  sign_in_count               :integer          default(0), not null
-#  type                        :string
-#  unconfirmed_email           :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  id                            :bigint           not null, primary key
+#  active                        :boolean          default(TRUE)
+#  confirmation_sent_at          :datetime
+#  confirmation_token            :string
+#  confirmed_at                  :datetime
+#  current_sign_in_at            :datetime
+#  current_sign_in_ip            :string
+#  date_of_birth                 :datetime
+#  display_name                  :string           default(""), not null
+#  email                         :string           default(""), not null
+#  encrypted_password            :string           default(""), not null
+#  invitation_accepted_at        :datetime
+#  invitation_created_at         :datetime
+#  invitation_limit              :integer
+#  invitation_sent_at            :datetime
+#  invitation_token              :string
+#  invitations_count             :integer          default(0)
+#  invited_by_type               :string
+#  last_sign_in_at               :datetime
+#  last_sign_in_ip               :string
+#  monthly_learning_hours_report :boolean          default(FALSE), not null
+#  old_emails                    :string           default([]), is an Array
+#  phone_number                  :string           default("")
+#  receive_email_notifications   :boolean          default(TRUE)
+#  receive_reimbursement_email   :boolean          default(FALSE)
+#  receive_sms_notifications     :boolean          default(FALSE), not null
+#  reset_password_sent_at        :datetime
+#  reset_password_token          :string
+#  sign_in_count                 :integer          default(0), not null
+#  token                         :string
+#  type                          :string
+#  unconfirmed_email             :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  casa_org_id                   :bigint           not null
+#  invited_by_id                 :bigint
 #
 # Indexes
 #

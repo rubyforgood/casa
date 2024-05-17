@@ -34,19 +34,13 @@ class CasaCaseDecorator < Draper::Decorator
     volunteer_names = object.assigned_volunteers.map(&:display_name).join(",")
 
     [
-      "#{object.case_number} - #{object.in_transition_age? ? "transition" : "non-transition"}(assigned to #{volunteer_names.length > 0 ? volunteer_names : "no one"})",
+      "#{object.case_number} - #{object.in_transition_age? ? "transition" : "non-transition"}(assigned to #{(volunteer_names.length > 0) ? volunteer_names : "no one"})",
       object.case_number,
       {
         "data-transitioned": object.in_transition_age?,
         "data-lookup": volunteer_names
       }
     ]
-  end
-
-  def court_order_select_options
-    CaseCourtOrder.implementation_statuses.map do |status|
-      [status[0].humanize, status[0]]
-    end
   end
 
   def date_in_care
@@ -78,7 +72,7 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def inactive_class
-    !object.active ? "table-secondary" : ""
+    (!object.active) ? "table-secondary" : ""
   end
 
   def status

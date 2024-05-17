@@ -6,8 +6,6 @@
 
 import Swal from 'sweetalert2'
 
-const CourtOrderList = require('./court_order_list.js')
-
 function copyOrdersFromCaseWithConfirmation () {
   const id = $(this).next().val()
   const caseNumber = $('select.siblings-casa-cases').find(':selected').text()
@@ -58,20 +56,24 @@ function copyOrdersFromCaseAction (id, caseNumber) {
 }
 
 function showBtn (el) {
+  if (!el) return
   el.classList.remove('d-none')
 }
 
 function hideBtn (el) {
+  if (!el) return
   el.classList.add('d-none')
 }
 
 function disableBtn (el) {
+  if (!el) return
   el.disabled = true
   el.classList.add('disabled')
   el.setAttribute('aria-disabled', true)
 }
 
 function enableBtn (el) {
+  if (!el) return
   el.disabled = false
   el.classList.remove('disabled')
   el.removeAttribute('aria-disabled')
@@ -103,6 +105,7 @@ function handleGenerateReport (e) {
     body: JSON.stringify(formData)
   }
   showBtn(spinner)
+  hideBtn($('#btnGenerateReport .lni-download')[0])
   window.fetch(url, options)
     .then(response => {
       return response.json()
@@ -115,6 +118,7 @@ function handleGenerateReport (e) {
         return
       }
       hideBtn(spinner)
+      showBtn($('#btnGenerateReport .lni-download')[0])
       enableBtn(generateBtn)
       window.open(data.link, '_blank')
     })
@@ -123,9 +127,7 @@ function handleGenerateReport (e) {
     })
 }
 
-$('document').ready(() => {
-  const courtOrdersListContainer = $('#court-orders-list-container')
-
+$(() => { // JQuery's callback for the DOM loading
   $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
 
   if ($('button.copy-court-button').length) {
@@ -139,19 +141,6 @@ $('document').ready(() => {
       disableBtn($('button.copy-court-button')[0])
     }
   })
-
-  if (courtOrdersListContainer.length) {
-    const courtOrders = new CourtOrderList(courtOrdersListContainer)
-
-    $('button#add-court-order-button').on('click', () => {
-      courtOrders.addCourtOrder()
-    })
-
-    $('button.remove-court-order-button').on('click', (event) => {
-      const orderHTML = $(event.target).parent()
-      courtOrders.removeCourtOrderWithConfirmation(orderHTML)
-    })
-  }
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 

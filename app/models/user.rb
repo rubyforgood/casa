@@ -9,6 +9,7 @@ class User < ApplicationRecord
   before_update :record_previous_email
   after_create :skip_email_confirmation_upon_creation
   before_save :normalize_phone_number
+  has_secure_token :token, length: 36
 
   validates_with UserValidator
 
@@ -42,6 +43,7 @@ class User < ApplicationRecord
   has_one :address, dependent: :destroy
   has_many :user_languages
   has_many :languages, through: :user_languages
+  has_many :login_activities, as: :user
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
 
@@ -55,7 +57,9 @@ class User < ApplicationRecord
     where(casa_org_id: org.id)
   }
 
-  scope :no_recent_sign_in, -> { active.where("last_sign_in_at <= ?", 30.days.ago) }
+  scope :no_recent_sign_in, -> {
+    active.where("last_sign_in_at <= ? or last_sign_in_at is null", 30.days.ago)
+  }
 
   def casa_admin?
     is_a?(CasaAdmin)
@@ -118,7 +122,7 @@ class User < ApplicationRecord
       if volunteer.supervisor.active? &&
           volunteer.case_assignments.any? { |assignment| assignment.active? } &&
           (volunteer.case_contacts.none? ||
-          volunteer.case_contacts.maximum(:occurred_at) < (Time.zone.now - 14.days))
+          volunteer.case_contacts.maximum(:created_at) < (Time.zone.now - 14.days))
 
         no_attempt_count += 1
       end
@@ -185,38 +189,42 @@ end
 #
 # Table name: users
 #
-#  id                          :bigint           not null, primary key
-#  active                      :boolean          default(TRUE)
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string
-#  confirmed_at                :datetime
-#  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string
-#  display_name                :string           default(""), not null
-#  email                       :string           default(""), not null
-#  encrypted_password          :string           default(""), not null
-#  invitation_accepted_at      :datetime
-#  invitation_created_at       :datetime
-#  invitation_limit            :integer
-#  invitation_sent_at          :datetime
-#  invitation_token            :string
-#  invitations_count           :integer          default(0)
-#  invited_by_type             :string
-#  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string
-#  old_emails                  :string           default([]), is an Array
-#  phone_number                :string           default("")
-#  receive_email_notifications :boolean          default(TRUE)
-#  receive_sms_notifications   :boolean          default(FALSE), not null
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string
-#  sign_in_count               :integer          default(0), not null
-#  type                        :string
-#  unconfirmed_email           :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  id                            :bigint           not null, primary key
+#  active                        :boolean          default(TRUE)
+#  confirmation_sent_at          :datetime
+#  confirmation_token            :string
+#  confirmed_at                  :datetime
+#  current_sign_in_at            :datetime
+#  current_sign_in_ip            :string
+#  date_of_birth                 :datetime
+#  display_name                  :string           default(""), not null
+#  email                         :string           default(""), not null
+#  encrypted_password            :string           default(""), not null
+#  invitation_accepted_at        :datetime
+#  invitation_created_at         :datetime
+#  invitation_limit              :integer
+#  invitation_sent_at            :datetime
+#  invitation_token              :string
+#  invitations_count             :integer          default(0)
+#  invited_by_type               :string
+#  last_sign_in_at               :datetime
+#  last_sign_in_ip               :string
+#  monthly_learning_hours_report :boolean          default(FALSE), not null
+#  old_emails                    :string           default([]), is an Array
+#  phone_number                  :string           default("")
+#  receive_email_notifications   :boolean          default(TRUE)
+#  receive_reimbursement_email   :boolean          default(FALSE)
+#  receive_sms_notifications     :boolean          default(FALSE), not null
+#  reset_password_sent_at        :datetime
+#  reset_password_token          :string
+#  sign_in_count                 :integer          default(0), not null
+#  token                         :string
+#  type                          :string
+#  unconfirmed_email             :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  casa_org_id                   :bigint           not null
+#  invited_by_id                 :bigint
 #
 # Indexes
 #

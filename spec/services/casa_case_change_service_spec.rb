@@ -20,7 +20,6 @@ RSpec.describe CasaCaseChangeService do
         "Changed Case number",
         "Changed Created at",
         "Changed Birth month year youth",
-        "Changed Slug",
         "1 Court order added or updated"
       ])
     end

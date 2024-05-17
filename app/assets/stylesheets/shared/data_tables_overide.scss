@@ -1,0 +1,11 @@
+/**
+  Needed to display the prev, next, number, and ellipsis buttons on the same line. This causes issues on mobile with
+  lots of pages, but there is no current way to change the number of pages in a view or in JS based on window size.
+ */
+.dataTables_paginate {
+  white-space: nowrap !important;
+
+  span {
+    display: inline-block !important;
+  }
+}

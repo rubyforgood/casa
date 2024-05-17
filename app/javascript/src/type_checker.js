@@ -22,7 +22,7 @@ module.exports = {
   //  @throws {TypeError} If variable is not a string
   //  @throws {RangeError} If variable is empty string
   checkNonEmptyString (variable, varName) {
-    this.checkNonEmptyString(variable, varName)
+    this.checkString(variable, varName)
 
     if (!(variable.length)) {
       throw new RangeError(`Param ${varName} cannot be empty string`)

@@ -1,15 +1,20 @@
 class ApplicationController < ActionController::Base
   include Pundit::Authorization
   include Organizational
+  include Users::TimeZone
 
   protect_from_forgery
   before_action :store_user_location!, if: :storable_location?
   before_action :authenticate_user!
   before_action :set_current_user
+  before_action :set_timeout_duration
   before_action :set_current_organization
+  before_action :set_active_banner
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
+  KNOWN_ERRORS = [Pundit::NotAuthorizedError, Organizational::UnknownOrganization]
+  rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
 
@@ -28,6 +33,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def set_active_banner
+    return nil unless current_organization
+
+    @active_banner = current_organization.banners.active.first
+    @active_banner = nil if session[:dismissed_banner] == @active_banner&.id
+  end
+
   protected
 
   def handle_short_url(url_list)
@@ -38,7 +50,7 @@ class ApplicationController < ActionController::Base
       short_io_service = ShortUrlService.new
       response = short_io_service.create_short_url(val)
       short_url = short_io_service.short_url
-      hash_of_short_urls[index] = response.code == 201 || response.code == 200 ? short_url : nil
+      hash_of_short_urls[index] = (response.code == 201 || response.code == 200) ? short_url : nil
     }
     hash_of_short_urls
   end
@@ -46,17 +58,15 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    if resource.phone_number.blank?
+    if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
       return "blank"
     end
-    acc_sid = current_user.casa_org.twilio_account_sid
-    api_key = current_user.casa_org.twilio_api_key_sid
-    api_secret = current_user.casa_org.twilio_api_key_secret
+
     body = body_msg
     to = resource.phone_number
     from = current_user.casa_org.twilio_phone_number
 
-    twilio = TwilioService.new(api_key, api_secret, acc_sid)
+    @twilio = TwilioService.new(current_user.casa_org)
     req_params = {
       From: from,
       Body: body,
@@ -64,23 +74,37 @@ class ApplicationController < ActionController::Base
     }
 
     begin
-      twilio_res = twilio.send_sms(req_params)
+      twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-    rescue Twilio::REST::RestError
+    rescue Twilio::REST::RestError => error
+      @error = error
+      "error"
+    rescue # unverfied error isnt picked up by Twilio::Rest::RestError
+      # https://www.twilio.com/docs/errors/21608
+      @error = "Phone number is unverifiied"
       "error"
     end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)
-    if sms_status === "blank"
-      return "New #{resource_name} created successfully."
-    end
-    if sms_status === "error"
-      return "New #{resource_name} created successfully. SMS not sent due to error."
-    end
-    if sms_status === "sent"
+    case sms_status
+    when "blank"
+      "New #{resource_name} created successfully."
+    when "error"
+      "New #{resource_name} created successfully. SMS not sent. Error: #{@error}."
+    when "sent"
       "New #{resource_name} created successfully. SMS has been sent!"
     end
+  end
+
+  def store_referring_location
+    if request.referer && !request.referer.end_with?("users/sign_in")
+      session[:return_to] = request.referer
+    end
+  end
+
+  def redirect_back_to_referer(fallback_location:)
+    redirect_to(session[:return_to] || fallback_location)
   end
 
   private
@@ -98,6 +122,12 @@ class ApplicationController < ActionController::Base
     RequestStore.store[:current_user] = current_user
   end
 
+  def set_timeout_duration
+    return unless current_user
+
+    @timeout_duration = current_user.timeout_in
+  end
+
   def set_current_organization
     RequestStore.store[:current_organization] = current_organization
   end
@@ -106,6 +136,13 @@ class ApplicationController < ActionController::Base
     session[:user_return_to] = nil
     flash[:notice] = "Sorry, you are not authorized to perform this action."
     redirect_to(root_url)
+  end
+
+  def log_and_reraise(error)
+    unless KNOWN_ERRORS.include?(error.class)
+      Bugsnag.notify(error)
+    end
+    raise
   end
 
   def check_unconfirmed_email_notice(user)

@@ -10,13 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/stale@v8
+    - uses: actions/stale@v9
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: "This issue has been open without changes for a long time! What's up?"
         stale-pr-message: "This PR has been open for a long time without any pushes or comments! What's up?"
         stale-issue-label: 'no-issue-activity'
         stale-pr-label: 'no-pr-activity'
-        days-before-issue-close: 9999 # don't do it
+        days-before-issue-close: 9999  # don't do it
         days-before-pr-close: 30
-  # https://github.com/actions/stale

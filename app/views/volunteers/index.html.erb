@@ -2,7 +2,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>Volunteers</h2>
+        <h1>Volunteers</h1>
       </div>
     </div>
     <!-- end col -->
@@ -39,7 +39,7 @@
                               class: "form-check-input",
                               data: { value: "" },
                               id: "unassigned-vol-filter" %>
-            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label" %>
+            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
           </div>
           <% current_organization.supervisors.where(active: true).each do |supervisor| %>
             <div class="dropdown-item form-check checkbox-style">
@@ -157,37 +157,93 @@
   </div>
 </div>
 
-<div class="tables-wrapper">
+<div class="tables-wrapper" data-controller="select-all" data-select-all-hidden-class="d-none" data-select-all-button-label-value="Manage Volunteer">
   <div class="row">
     <div class="col-lg-12">
       <div class="card-style mb-30">
-        <h6 class="mb-10">Responsive Data Table</h6>
+        <div class="mb-3">
+          <button type="button" class="main-btn dark-btn btn-sm mb-2 mb-md-0 d-none" data-bs-toggle="modal" data-bs-target="#bulk-assigment-modal" data-select-all-target="button">
+            <i class="lni lni-users mr-10"></i>
+            <span class="d-inline" data-select-all-target="buttonLabel"></span>
+          </button>
+        </div>
         <div class="table-responsive">
-          <table
-            class="table"
-            id="volunteers"
-            data-source="<%= datatable_volunteers_path format: :json %>">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Supervisor</th>
-              <th>Status</th>
-              <th>Assigned To Transition Aged Youth</th>
-              <th>Case Number(s)</th>
-              <th>Last Attempted Contact</th>
-              <th>Contacts Made in Past 60 Days</th>
-              <th>Hours spent in last 30 days</th>
-              <th>Extra Languages</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
+          <%= form_with(url: bulk_assignment_supervisor_volunteers_path, id: "form-bulk-assignment", data: { controller: "disable-form", "disable-form-unallowed-value": '["unselected"]', "disable-form-disabled-class": "deactive-btn", "disable-form-enabled-class": "btn-hover dark-btn" }) do |form| %>
+            <table
+              class="table hover"
+              id="volunteers"
+              data-source="<%= datatable_volunteers_path format: :json %>">
+              <thead>
+              <tr>
+                <th>
+                  <input type="checkbox" class="form-check-input" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
+                </th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Supervisor</th>
+                <th>Status</th>
+                <th>Assigned To Transition Aged Youth</th>
+                <th>Case Number(s)</th>
+                <th>Last Attempted Contact</th>
+                <th>Contacts Made in Past 60 Days</th>
+                <th>Hours spent in last 30 days</th>
+                <th>Extra Languages</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              </tbody>
+            </table>
+
+            <div class="warning-modal">
+              <div class="modal fade" id="bulk-assigment-modal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                  <div class="modal-content card-style">
+                    <div class="modal-header px-0 border-0">
+                      <h5 class="text-bold">Bulk Volunteer Assignment</h5>
+                      <button
+                        class="border-0 bg-transparent h1"
+                        data-bs-dismiss="modal"
+                        type="button">
+                        <i class="lni lni-cross-circle"></i>
+                      </button>
+                    </div>
+                    <div class="modal-body px-0">
+                      <div class="mb-30">
+                       <div class="select-style-1">
+                        <label for='supervisor_volunteer_supervisor_id'>
+                           Choose a new supervisor from the dropdown below to reassign selected volunteers. Once you're ready, click the "Confirm" button to apply the changes.
+                        </label>
+                        <select name='supervisor_volunteer[supervisor_id]' id="supervisor_volunteer_supervisor_id" class='supervisor-bulk-assignment form-control' required="required" data-disable-form-target="input" data-action="disable-form#validate">
+                          <option value="unselected">Choose a supervisor</option>
+                          <option value="">None</option>
+                          <% @supervisors&.active&.each do |supervisor| %>
+                            <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+                          <% end %>
+                       </select>
+                       </div>
+                      </div>
+                      <div class="action d-flex flex-wrap justify-content-end">
+                        <button
+                          data-bs-dismiss="modal"
+                          class="main-btn danger-btn-outline btn-hover m-1"
+                          type="button"><i class="lni lni-ban mr-10"></i>
+                          Close
+                        </button>
+                        <%= form.button type: :submit, class: "main-btn deactive-btn m-1", data: { "disable-form-target": "submitButton" }, disabled: true do %>
+                          Confirm
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
         </div>
       </div>
-    </div>
   </div>
+  </div>
+
 </div>
 </div>

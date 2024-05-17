@@ -1,177 +1,69 @@
-<aside class="sidebar-nav-wrapper">
-  <div class="navbar-logo">
-    <% if current_organization&.logo&.attached? %>
-      <%= link_to image_tag(current_organization.logo,
-                            width: 200,
-                            height: 100,
-                            alt: "CASA Logo"),
-                  "/" %>
-    <% else %>
-      <%= link_to image_tag("default-logo.png",
-                            id: "casa-logo",
-                            alt: "CASA Logo",
-                            class: "d-inline-block align-text-bottom"),
-                  "/" %>
-    <% end %>
-  </div>
-  <nav class="sidebar-nav">
-    <nav class="sidebar-nav">
-      <ul>
-        <li class="<%= active_class(notifications_path) %> nav-item">
-          <%= link_to notifications_path do %>
-            <i class="lni lni-envelope mr-10"></i>
-            Inbox
-          <% end %>
-        </li>
-        <% if policy(Supervisor).index? %>
-          <li class="<%= active_class(supervisors_path) %> nav-item">
-            <%= link_to supervisors_path do %>
-              <i class="lni lni-network mr-10"></i>
-              Supervisors
-            <% end %>
-          </li>
-        <% end %>
-        <% if policy(Volunteer).index? %>
-          <li class="<%= active_class(volunteers_path) %> nav-item">
-            <%= link_to volunteers_path do %>
-              <i class="lni lni-heart-filled mr-10"></i>
-              Volunteers
-            <% end %>
-          </li>
-        <% end %>
-        <% if policy(OtherDuty).index? %>
-          <li class="<%= active_class(other_duties_path) %> nav-item">
-            <%= link_to other_duties_path do %>
-              <i class="lni lni-agenda mr-10"></i>
-              Other Duties
-            <% end %>
-          </li>
-        <% end %>
-        <li class="<%= active_class(casa_cases_path) %> nav-item">
-          <%= link_to casa_cases_path do %>
-            <i class="lni lni-folder mr-10"></i>
-            <%= cases_index_title %>
-          <% end %>
-        </li>
-        <% if policy(CasaAdmin).index? %>
-          <li class="<%= active_class(casa_admins_path) %> nav-item">
-            <%= link_to casa_admins_path do %>
-              <i class="lni lni-star-filled mr-10"></i>
-              Admins
-            <% end %>
-          </li>
-        <% end %>
-        <% if all_casa_admin_signed_in? %>
-          <li class="<%= active_class(all_casa_admins_patch_notes_path) %> nav-item">
-            <%= link_to all_casa_admins_patch_notes_path do %>
-              <i class="lni lni-notepad mr-10"></i>
-              Patch Notes
-            <% end %>
-          </li>
-        <% end %>
-        <% if current_user.volunteer? %>
-          <li class="<%= active_class(case_contacts_path) %> nav-item">
-            <%= link_to case_contacts_path do %>
-              <i class="lni lni-users mr-10"></i>
-              Case Contacts
-            <% end %>
-          </li>
-          <li class="<%= active_class(volunteer_learning_hours_path(volunteer_id: current_user.id || 0)) %> nav-item">
-            <%= link_to volunteer_learning_hours_path(volunteer_id: current_user.id || 0) do %>
-              <i class="lni lni-timer mr-10"></i>
-              Learning Hours
-            <% end %>
-          </li>
-        <% end %>
-        <% if current_user.serving_transition_aged_youth? %>
-          <li class="<%= active_class(emancipation_checklists_path) %> nav-item">
-            <%= link_to emancipation_checklists_path do %>
-              <i class="lni lni-list mr-10"></i>
-              Emancipation Checklist(s)
-            <% end %>
-          </li>
-        <% end %>
-        <li class="nav-item nav-item-has-children">
-          <a
-            href="#0"
-            class=""
-            data-bs-toggle="collapse"
-            data-bs-target="#ddmenu_55"
-            aria-controls="ddmenu_55"
-            aria-expanded="true"
-            aria-label="Toggle navigation">
-              <span class="icon">
-                <i class="lni lni-list mr-10"></i>
-              </span>
-            <span class="text">Group Actions</span>
-          </a>
-          <ul id="ddmenu_55" class="collapse dropdown-nav">
-            <% if policy(:application).see_court_reports_page? %>
-              <li>
-                <%= link_to case_court_reports_path, class: "#{active_class(case_court_reports_path)}" do %>
-                  <i class="lni lni-paperclip mr-10"></i>
-                  Generate Court Reports
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:reimbursement).index? %>
-              <li>
-                <%= link_to reimbursements_path, class: "#{active_class(reimbursements_path)}" do %>
-                  <i class="lni lni-money-location mr-10"></i>
-                  Reimbursement Queue
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:application).see_reports_page? %>
-              <li>
-                <%= link_to reports_path, class: "#{active_class(reports_path)}" do %>
-                  <i class="lni lni-folder mr-10"></i>
-                  Export Data
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:application).see_import_page? %>
-              <li>
-                <%= link_to imports_path, class: "#{active_class(imports_path)}" do %>
-                  <i class="lni lni-archive mr-10"></i>
-                  System Imports
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:application).see_mileage_rate? %>
-              <li>
-                <%= link_to mileage_rates_path, class: "#{active_class(mileage_rates_path)}" do %>
-                  <i class="lni lni-car mr-10"></i>
-                  Mileage Rates
-                <% end %>
-              </li>
-            <% end %>
-
-            <% if policy(:application).modify_organization? %>
-              <li>
-                <%= link_to edit_casa_org_path(current_organization), class: "#{active_class(edit_casa_org_path(current_organization))}" do %>
-                  <i class="lni lni-cogs mr-10"></i>
-                  Edit Organization
-                <% end %>
-              </li>
-            <% end %>
-          </ul>
-        </li>
-        <li>
-          <% if current_user != true_user %>
-            <%= link_to stop_impersonating_volunteers_path, method: :post, class: "mr-10 ml-10" do %>
-              You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
-              Click here to stop impersonating.
+<div class="sidebar-controller" data-controller="sidebar" data-sidebar-open-value="true" data-sidebar-sidebar-group-outlet=".group-item">
+  <aside class="sidebar-nav-wrapper" data-sidebar-target="sidebar">
+    <div class="container d-flex logo-div">
+      <div class="d-flex flex-fill">
+        <div>
+          <button type="button" class="btn btn-sidebar" data-action="click->sidebar#click">
+            <i class="lni lni-menu"></i>
+          </button>
+        </div>
+        <div class="flex-grow-1 d-flex justify-content-center" data-sidebar-target="logo">
+          <%= link_to "/", class: "d-flex" do %>
+            <% if current_organization&.logo&.attached? %>
+              <%= image_tag(current_organization.logo, alt: "CASA Logo", class: "img-fluid flex-fill") %>
+            <% else %>
+              <%= image_tag("default-logo.png", id: "casa-logo", alt: "CASA Logo", class: "img-fluid flex-fill align-text-bottom") %>
             <% end %>
           <% end %>
+        </div>
+      </div>
+    </div>
+    <nav class="sidebar-nav" data-action="mouseover->sidebar#hoverOn mouseout->sidebar#hoverOff">
+      <nav class="sidebar-nav">
+        <ul>
+          <%= render(Sidebar::LinkComponent.new(title: "Supervisors", icon: "network", path: supervisors_path, render_check: policy(Supervisor).index?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Volunteers", icon: "heart-filled", path: volunteers_path, render_check: policy(Volunteer).index?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.casa_admin? || current_user.supervisor?)) %>
+          <!-- Renders Cases for Volunteers -->
+          <%= render(Sidebar::GroupComponent.new(title: cases_index_title, icon: "folder", render_check: current_user.volunteer?)) do |group| %>
+            <% group.with_link(title: "All", path: casa_cases_path, nav_item: false) %>
+            <% group.with_links(current_user.casa_cases.map { |cc| { title: cc.case_number, path: casa_case_path(cc), nav_item: false }}) %>
+          <% end %>
+          <!-- Renders Cases for Non-Volunteers -->
+          <%= render(Sidebar::LinkComponent.new(title: cases_index_title, icon: "folder", path: casa_cases_path, render_check: !current_user.volunteer?)) %>
 
-        </li>
-      </ul>
+          <%= render(Sidebar::LinkComponent.new(title: "Admins", icon: "star-filled", path: casa_admins_path, render_check: policy(CasaAdmin).index?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Patch Notes", icon: "notepad", path: all_casa_admins_patch_notes_path, render_check: all_casa_admin_signed_in?)) %>
+          <%= render(Sidebar::GroupComponent.new(title: "Case Contacts", icon: "users", render_check: current_user.volunteer?)) do |group| %>
+            <%= group.with_link(title: "All", path: case_contacts_path, nav_item: false) %>
+            <% group.with_links(current_user.casa_cases.map { |cc| { title: cc.case_number, path: case_contacts_path(casa_case_id: cc.id), nav_item: false } }) %>
+          <% end %>
+          <%= render(Sidebar::LinkComponent.new(title: "Learning Hours", icon: "timer", path: learning_hours_path, render_check: policy(LearningHour).index?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Emancipation Checklist(s)", icon: "list", path: emancipation_checklists_path, render_check: current_user.serving_transition_aged_youth?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.volunteer?)) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Banners", icon: "flag", path: banners_path, render_check: policy(:application).see_banner_page?)) %>
+          <%= render(Sidebar::GroupComponent.new(title: "Group Actions", icon: "list")) do |group| %>
+            <% group.with_links([
+              { title: "Generate Court Reports", icon: "paperclip", path: case_court_reports_path, render_check: policy(:application).see_court_reports_page? },
+              { title: "Reimbursement Queue", icon: "money-location", path: reimbursements_path, render_check: policy(:reimbursement).index? },
+              { title: "Export Data", icon: "folder", path: reports_path, render_check: policy(:application).see_reports_page? },
+              { title: "System Imports", icon: "archive", path: imports_path, render_check: policy(:application).see_reports_page? },
+              { title: "Mileage Rates", icon: "car", path: mileage_rates_path, render_check: policy(:application).see_mileage_rate? },
+              { title: "Edit Organization", icon: "cogs", path: edit_casa_org_path(current_organization), render_check: policy(:application).modify_organization? }
+            ]) %>
+          <% end %>
+          <li>
+            <% if current_user != true_user %>
+              <%= link_to stop_impersonating_volunteers_path, method: :post, class: "mr-10 ml-10" do %>
+                You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
+                Click here to stop impersonating.
+              <% end %>
+            <% end %>
+          </li>
+        </ul>
+      </nav>
     </nav>
-  </nav>
-</aside>
-<div class="overlay"></div>
+  </aside>
+
+  <div class="overlay" data-action="click->sidebar#click"></div>
+</div>

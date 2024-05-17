@@ -1,11 +1,8 @@
 # Calculate values when using case contact parameters
 class CaseContactParameters < SimpleDelegator
-  def initialize(params, creator: nil)
-    duration_minutes = convert_duration_minutes(params)
-    miles_driven = convert_miles_driven(params)
-
+  def initialize(params)
     new_params =
-      params.require(:case_contact).permit(
+      params.fetch(:case_contact, {}).permit(
         :duration_minutes,
         :occurred_at,
         :contact_made,
@@ -13,14 +10,18 @@ class CaseContactParameters < SimpleDelegator
         :miles_driven,
         :want_driving_reimbursement,
         :notes,
+        :status,
+        :volunteer_address,
+        draft_case_ids: [],
         case_contact_contact_type_attributes: [:contact_type_id],
-        additional_expense_attributes: [:id, :other_expense_amount, :other_expenses_describe],
-        casa_case_attributes: [:id, volunteers_attributes: [:id, address_attributes: [:id, :content]]]
+        additional_expenses_attributes: %i[id other_expense_amount other_expenses_describe],
+        contact_topic_answers_attributes: %i[id value selected]
       )
-    new_params[:duration_minutes] = duration_minutes
-    new_params[:miles_driven] = miles_driven
-    if creator
-      new_params[:creator] = creator
+    if params.dig(:case_contact, :duration_minutes)
+      new_params[:duration_minutes] = convert_duration_minutes(params)
+    end
+    if params.dig(:case_contact, :miles_driven)
+      new_params[:miles_driven] = convert_miles_driven(params)
     end
 
     super(new_params)

@@ -30,97 +30,17 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
-  pundit:
-    default: "Sorry, you are not authorized to perform this action."
-    casa_case_policy:
-      new?: "Sorry, you are not authorized to create CASA cases."
-    case_contact_policy:
-      edit?: "Sorry, you can only edit case contacts that you have logged."
-      update?: "Sorry, you can only edit case contacts that you have logged."
-  forms:
-    casa_admin:
-      mark_inactive_warning: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"
-    supervisor:
-      mark_inactive_warning: "WARNING: Marking a supervisor inactive will make them unable to login. Are you sure you want to do this?"
-    volunteer:
-      mark_inactive_warning: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"
-  page:
-    meta:
-      title: CASA Volunteer Tracking
-      description: Volunteer activity tracking for CASA volunteers, supervisors, and administrators.
   time:
     formats:
-      day_and_date: "%A, %v"
+      day_and_date: "%A, %b %d, %Y"
       standard: "%m-%d-%Y"
       contact_occurred_at: "%Y%m%d%H%M%s"
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
-      edit_profile: "%B %d, %Y at %-l:%M %p"
-  notifications:
-    emancipation_checklist_reminder_notification:
-      title: "Emancipation Checklist Reminder"
-      message: "Your case %{case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
-    followup_resolved_notification:
-      title: "Followup resolved"
-      message: "%{created_by_name} resolved a follow up. Click to see more."
-    followup_notification:
-      title: "New followup"
-      message: "%{created_by_name} has flagged a Case Contact that needs follow up."
-      note: "Note: \"%{note}\""
-      more_info: "Click to see more."
-    youth_birthday_notification:
-      title: "Youth Birthday Notification"
-      message: "Your youth, case number: %{case_number} has a birthday next month."
-  button:
-    delete: Delete
-    undelete: undelete
-    edit: Edit
-    back: Back
-    submit: Submit
-    resolve: Resolve Reminder
-    follow_up: Make Reminder
-    go_back_to_form: Go Back to Form
-    continue_submitting: Continue Submitting
-    close: Close
-    detail_view: Detail View
-  common:
-    yes_text: "Yes"
-    no_text: "No"
-    both_text: Both
-    active: Active
-    inactive: Inactive
-    status: Status
-    day: Day
-    month: Month
-    year: Year
-    none: None
-    email: Email
-    name: Name
-    display_name: Display name
-    phone_number: Phone number
-    address: Address
+      long_date: "%m/%d/%y"
+      edit_profile: "%B %d, %Y at %I:%M %p %Z"
+      time_on_date: "%-I:%-M %p on %m-%e-%Y"
   date:
     formats:
       full: "%B %-d, %Y"
-  case_contact:
-    create: Case contact was successfully created.
-    update: "Case contact created at %{created_at}, was successfully updated."
-    destroy: Contact is successfully deleted.
-    restore: Contact is successfully restored.
-    case_min_validation: At least one case must be selected
-    thank_you_1: Thanks for all you do!
-    thank_you_2: Thank you for your hard work!
-    thank_you_3: Thank you for a job well done!
-    thank_you_4: Thank you for volunteering!
-    thank_you_5: Thanks for being a great volunteer!
-    thank_you_6: One of the greatest gifts you can give is your time!
-    thank_you_7: Those who can do, do. Those who can do more, volunteer.
-    thank_you_8: Volunteers do not necessarily have the time, they just have the heart.
-  communication_preferences:
-    header: "Communication Preferences"
-    paragraph: "Tell us how you'd like to receive notifications."
-    email_me: "Email Me"
-    text_me: "Text Me"
-    save_preferences: "Save Preferences"

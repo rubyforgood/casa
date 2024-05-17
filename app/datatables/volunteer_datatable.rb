@@ -165,7 +165,7 @@ class VolunteerDatatable < ApplicationDatatable
         filter = additional_filters[:transition_aged_youth]
 
         bool_filter filter do
-          "transition_aged_youth_cases.volunteer_id IS #{filter[0] == "true" ? "NOT" : nil} NULL"
+          "transition_aged_youth_cases.volunteer_id IS #{(filter[0] == "true") ? "NOT" : nil} NULL"
         end
       }.call
   end

@@ -25,7 +25,7 @@ function displayPopUpIfPreferencesIsInvalid () {
   }
 }
 
-$('document').ready(() => {
+$(() => { // JQuery's callback for the DOM loading
   const smsToggle = $(`.${SMS_TOGGLE_CLASS}`)[0]
   const emailToggle = $(`.${EMAIL_TOGGLE_CLASS}`)[0]
 

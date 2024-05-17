@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
+  include DownloadHelpers
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { court_date.casa_case }
   let(:court_date) { create(:court_date) }
@@ -37,7 +38,12 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   describe "GET /show" do
     subject(:show) { get casa_case_court_date_path(casa_case, court_date) }
 
-    before { show }
+    before do
+      casa_org = court_date.casa_case.casa_org
+      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files", "default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
+      casa_org.court_report_template.save!
+      show
+    end
 
     context "when the request is authenticated" do
       it { expect(response).to have_http_status(:success) }
@@ -61,9 +67,9 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       it "displays the court date" do
         show
 
-        document_inspector = DocxInspector.new(docx_contents: response.body)
+        docx_response = Docx::Document.open(StringIO.new(response.body))
 
-        expect(document_inspector.word_list_document_contains?(court_date.date.to_s)).to eq(true)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/December 25, 2020/)
       end
 
       context "when a judge is attached" do
@@ -73,9 +79,9 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "includes the judge's name in the document" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?(judge.name)).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/#{judge.name}/)
         end
       end
 
@@ -86,11 +92,11 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "includes None for the judge's name in the document" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?(judge.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Judge:")).to eq(true) # Judge: None
-          expect(document_inspector.word_list_document_contains?("None")).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).not_to include(/#{judge.name}/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Judge:/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/None/)
         end
       end
 
@@ -101,9 +107,9 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "includes the hearing type in the document" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/#{hearing_type.name}/)
         end
       end
 
@@ -114,11 +120,11 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "includes None for the hearing type in the document" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?(hearing_type.name)).to eq(false)
-          expect(document_inspector.word_list_document_contains?("Hearing Type:")).to eq(true) # Hearing Type: None
-          expect(document_inspector.word_list_document_contains?("None")).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).not_to include(/#{hearing_type.name}/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Hearing Type:/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/None/)
         end
       end
 
@@ -129,11 +135,11 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "includes court order info" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?("Court Orders:")).to eq(true) # Court Orders:
-          expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.text)).to eq(true)
-          expect(document_inspector.word_list_document_contains?(court_date.case_court_orders.first.implementation_status.humanize)).to eq(true)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Court Orders/)
+          expect(table_text(docx_response)).to include(/#{court_date.case_court_orders.first.text}/)
+          expect(table_text(docx_response)).to include(/#{court_date.case_court_orders.first.implementation_status.humanize}/)
         end
       end
 
@@ -144,9 +150,9 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "does not include court orders section" do
           show
 
-          document_inspector = DocxInspector.new(docx_contents: response.body)
+          docx_response = Docx::Document.open(StringIO.new(response.body))
 
-          expect(document_inspector.word_list_document_contains?("Court Orders:")).to eq(false) # Court Orders:
+          expect(docx_response.paragraphs.map(&:to_s)).not_to include(/Court Orders/)
         end
       end
     end

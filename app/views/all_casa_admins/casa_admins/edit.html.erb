@@ -1,6 +1,6 @@
 <div class="col-md-6">
   <div class="title mb-30 mt-30">
-    <h2>Edit Admin</h2>
+    <h1>Edit Admin</h1>
   </div>
 </div>
 <%= render 'layouts/flash_messages' %>
@@ -16,7 +16,7 @@
       <% if @casa_admin.persisted? %>
         <div class="field form-group">
           <% if @casa_admin.active? %>
-            Admin is <span class="badge success-bg text-uppercase display-1 mb-1 rounded-pill">Active</span>
+            Admin is <%= render BadgeComponent.new(text: "Active", type: :success, rounded: true) %>
               <%= link_to "Deactivate",
                           deactivate_all_casa_admins_casa_org_casa_admin_path,
                           method: :patch,

@@ -10,6 +10,7 @@ RSpec.describe CasaOrg, type: :model do
   it { is_expected.to have_many(:case_assignments).through(:users) }
   it { is_expected.to have_one_attached(:logo) }
   it { is_expected.to have_one_attached(:court_report_template) }
+  it { is_expected.to have_many(:contact_topics) }
 
   it "has unique name" do
     org = create(:casa_org)
@@ -41,11 +42,17 @@ RSpec.describe CasaOrg, type: :model do
   describe "Attachment" do
     it "is valid" do
       aggregate_failures do
+        subject = build(:casa_org, twilio_enabled: false)
+
         expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+
         subject.logo.attach(
           io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
           filename: "company_logo.png", content_type: "image/png"
         )
+
+        subject.save!
+
         expect(subject.logo).to be_an_instance_of(ActiveStorage::Attached::One)
         expect(subject.org_logo).to eq("/rails/active_storage/blobs/redirect/#{subject.logo.signed_id}/#{subject.logo.filename}")
       end
@@ -80,10 +87,14 @@ RSpec.describe CasaOrg, type: :model do
     it { is_expected.to eq 15 }
   end
 
-  describe "generate_contact_types_and_hearing_types" do
+  describe "generate_defaults" do
     let(:org) { create(:casa_org) }
+    let(:fake_topics) { [{"question" => "Test Title", "details" => "Test details"}] }
 
-    before { org.generate_contact_types_and_hearing_types }
+    before do
+      allow(ContactTopic).to receive(:default_contact_topics).and_return(fake_topics)
+      org.generate_defaults
+    end
 
     describe "generates default contact type groups" do
       let(:groups) { ContactTypeGroup.where(casa_org: org).joins(:contact_types).pluck(:name, "contact_types.name").sort }
@@ -119,6 +130,64 @@ RSpec.describe CasaOrg, type: :model do
 
       it "matches default hearing types" do
         expect(hearing_types_names).to include(*HearingType::DEFAULT_HEARING_TYPES)
+      end
+    end
+
+    describe "generates default contact topics" do
+      let(:contact_topics) { ContactTopic.where(casa_org: org).map(&:question) }
+
+      it "matches default contact topics" do
+        expected = fake_topics.map { |topic| topic["question"] }
+        expect(contact_topics).to include(*expected)
+      end
+    end
+  end
+
+  describe "mileage rate for a given date" do
+    let(:casa_org) { build(:casa_org) }
+
+    describe "with a casa org with no rates" do
+      it "is nil" do
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
+
+    describe "with a casa org with inactive dates" do
+      let!(:mileage_rates) do
+        [
+          create(:mileage_rate, casa_org: casa_org, effective_date: 10.days.ago, is_active: false),
+          create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.ago, is_active: false)
+        ]
+      end
+
+      it "is nil" do
+        expect(casa_org.mileage_rates.count).to eq 2
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
+
+    describe "with active dates in the future" do
+      let!(:mileage_rate) { create(:mileage_rate, casa_org: casa_org, effective_date: 3.days.from_now) }
+
+      it "is nil" do
+        expect(casa_org.mileage_rates.count).to eq 1
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to be_nil
+      end
+    end
+
+    describe "with active dates in the past" do
+      let!(:mileage_rates) do
+        [
+          create(:mileage_rate, casa_org: casa_org, amount: 4.50, effective_date: 20.days.ago),
+          create(:mileage_rate, casa_org: casa_org, amount: 5.50, effective_date: 10.days.ago),
+          create(:mileage_rate, casa_org: casa_org, amount: 6.50, effective_date: 3.days.ago)
+        ]
+      end
+
+      it "uses the most recent date" do
+        expect(casa_org.mileage_rate_for_given_date(12.days.ago.to_date)).to eq 4.50
+        expect(casa_org.mileage_rate_for_given_date(5.days.ago.to_date)).to eq 5.50
+        expect(casa_org.mileage_rate_for_given_date(Date.today)).to eq 6.50
       end
     end
   end

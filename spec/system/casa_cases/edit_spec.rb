@@ -41,7 +41,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
       check contact_type.name
 
-      page.find("#add-court-order-button").click
+      page.find('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do
@@ -211,17 +211,15 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
-      check "Youth"
 
-      # fill_in "Court Report Due Date", with: Date.new(next_year.to_i, 9, 8).strftime("%Y/%m/%d\n")
-
-      page.find("#add-court-order-button").click
+      scroll_to('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
       expect(page).to have_text("Set Implementation Status")
 
+      check "Youth"
       within ".actions-cc" do
         click_on "Update CASA Case"
       end
@@ -296,7 +294,7 @@ RSpec.describe "Edit CASA Case", type: :system do
           unassign_button = page.find("button.btn-outline-danger")
           expect(unassign_button.text).to eq "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-success")
+          assign_badge = page.find("span.bg-success")
           expect(assign_badge.text).to eq "ASSIGNED"
         end
 
@@ -318,7 +316,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-danger")
+          assign_badge = page.find("span.bg-danger")
           expect(assign_badge.text).to eq "UNASSIGNED"
 
           expected_start_and_end_date = "August 29, 2020"
@@ -341,7 +339,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.badge-danger")
+          assign_badge = page.find("span.bg-danger")
           expect(assign_badge.text).to eq "UNASSIGNED"
         end
       end
@@ -352,7 +350,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         sign_in_and_assign_volunteer
 
-        expect(find("select[name='case_assignment[volunteer_id]']").all("option").count).to eq 1
+        expect(find("select[name='case_assignment[volunteer_id]']").all("option").count { |option| option[:value].present? }).to eq 1
       end
     end
 
@@ -373,10 +371,26 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_1.display_name)
 
+        # Attempt to assign a second volunteer without selecting one
+        click_on "Assign Volunteer"
+        expect(page).to have_text("Unable to assign volunteer to case: Volunteer must exist. Volunteer can't be blank.")
+
         select volunteer_2.display_name, from: "Select a Volunteer"
         click_on "Assign Volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_2.display_name)
+      end
+    end
+
+    describe "form behavior" do
+      it "displays 'Please select volunteer' in the dropdown" do
+        sign_in supervisor
+        visit edit_casa_case_path(casa_case.id)
+
+        select_element = find("#case_assignment_casa_case_id")
+
+        # Check if the default option exists and has the expected text
+        expect(select_element).to have_selector("option[value='']", text: "Please Select Volunteer")
       end
     end
 
@@ -389,13 +403,11 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         expect(page).to have_text(text)
 
-        find("button.remove-court-order-button").click
+        find('button[data-action="click->extended-nested-form#remove"]').click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
 of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
-        expect(page).to have_text("Court order has been removed.")
-        click_on "OK"
         expect(page).to_not have_text(text)
 
         within ".actions-cc" do
@@ -549,7 +561,7 @@ of it unless it was included in a previous court report.")
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).to have_css("#add-court-order-button")
+      expect(page).to have_css('button[data-action="extended-nested-form#add"]')
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")

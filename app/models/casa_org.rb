@@ -1,6 +1,9 @@
 class CasaOrg < ApplicationRecord
+  # NOTE: location of the default report template
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app", "documents", "templates", "default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.root.join("public", "logo.jpeg")
+
+  scope :with_logo, -> { joins(:logo_attachment) }
 
   before_create :set_slug
   before_update :sanitize_svg
@@ -8,7 +11,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> { twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -18,12 +21,13 @@ class CasaOrg < ApplicationRecord
   has_many :case_assignments, through: :users, source: :casa_cases
   has_many :languages, dependent: :destroy
   has_many :placements, through: :casa_cases
+  has_many :banners, dependent: :destroy
+  has_many :learning_hour_types, dependent: :destroy
+  has_many :learning_hour_topics, dependent: :destroy
+  has_many :case_groups, dependent: :destroy
+  has_many :contact_topics
   has_one_attached :logo
   has_one_attached :court_report_template
-
-  encrypts :twilio_account_sid
-  encrypts :twilio_api_key_sid
-  encrypts :twilio_api_key_secret
 
   def casa_admins
     CasaAdmin.in_organization(self)
@@ -38,8 +42,12 @@ class CasaOrg < ApplicationRecord
   end
 
   def case_contacts
-    CaseContact.where(
+    CaseContact.includes(:creator).where(
       casa_case_id: CasaCase.where(casa_org_id: id)
+    ).or(
+      CaseContact.includes(:creator).where(
+        casa_case_id: nil, creator: {casa_org: self}
+      )
     )
   end
 
@@ -59,9 +67,9 @@ class CasaOrg < ApplicationRecord
     end
   end
 
-  def open_org_court_report_template(&block)
+  def open_org_court_report_template(&)
     if court_report_template.attached?
-      court_report_template.open(&block)
+      court_report_template.open(&)
     else
       yield CASA_DEFAULT_COURT_REPORT
     end
@@ -75,11 +83,31 @@ class CasaOrg < ApplicationRecord
     self.slug = name.parameterize
   end
 
-  def generate_contact_types_and_hearing_types
+  def generate_defaults
     ActiveRecord::Base.transaction do
+      ContactTopic.generate_for_org!(self)
       ContactTypeGroup.generate_for_org!(self)
       HearingType.generate_for_org!(self)
     end
+  end
+
+  def contact_types_by_group
+    contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
+  end
+
+  # Given a specific date, returns the active mileage rate.
+  # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
+  # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:
+  # then the active rate for the given date of January 5, 1970 would be the January 3 rate.
+  # If no rates are active for the given date, will return nil.
+  # @param date [Date]
+  # @return [BigDecimal, nil]
+  def mileage_rate_for_given_date(date)
+    mileage_rates.where(is_active: true, effective_date: ..date).order(effective_date: :desc).first&.amount
+  end
+
+  def has_alternate_active_banner?(current_banner_id)
+    banners.where(active: true).where.not(id: current_banner_id).exists?
   end
 
   private
@@ -117,20 +145,23 @@ end
 #
 # Table name: casa_orgs
 #
-#  id                         :bigint           not null, primary key
-#  address                    :string
-#  display_name               :string
-#  footer_links               :string           default([]), is an Array
-#  name                       :string           not null
-#  show_driving_reimbursement :boolean          default(TRUE)
-#  show_fund_request          :boolean          default(FALSE)
-#  slug                       :string
-#  twilio_account_sid         :string
-#  twilio_api_key_secret      :string
-#  twilio_api_key_sid         :string
-#  twilio_phone_number        :string
-#  created_at                 :datetime         not null
-#  updated_at                 :datetime         not null
+#  id                          :bigint           not null, primary key
+#  additional_expenses_enabled :boolean          default(FALSE)
+#  address                     :string
+#  display_name                :string
+#  footer_links                :string           default([]), is an Array
+#  learning_topic_active       :boolean          default(FALSE)
+#  name                        :string           not null
+#  show_driving_reimbursement  :boolean          default(TRUE)
+#  show_fund_request           :boolean          default(FALSE)
+#  slug                        :string
+#  twilio_account_sid          :string
+#  twilio_api_key_secret       :string
+#  twilio_api_key_sid          :string
+#  twilio_enabled              :boolean          default(FALSE)
+#  twilio_phone_number         :string
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
 #
 # Indexes
 #

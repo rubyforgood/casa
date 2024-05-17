@@ -10,6 +10,11 @@ form {
     input {
       border: 1px solid globals.$red;
     }
+
+  }
+
+  .read-more {
+    display: inline;
   }
 
   .alert.alert-danger {
@@ -26,4 +31,11 @@ form {
 #cc-check {
   margin-left: 30px;
   display: initial;
+}
+
+.details__topics-label {
+  span {
+    display: initial;
+  }
+
 }

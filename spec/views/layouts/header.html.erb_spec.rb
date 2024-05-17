@@ -12,8 +12,10 @@ RSpec.describe "layout/header", type: :view do
     enable_pundit(view, user)
     allow(view).to receive(:true_user).and_return(user)
     allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_organization).and_return(1)
     allow(view).to receive(:current_role).and_return(user.role)
+
+    casa_org = build_stubbed :casa_org
+    allow(view).to receive(:current_organization).and_return(casa_org)
   end
 
   context "when logged in as a casa admin" do
@@ -28,6 +30,11 @@ RSpec.describe "layout/header", type: :view do
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
     end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
+    end
   end
 
   context "when logged in as a supervisor" do
@@ -41,6 +48,11 @@ RSpec.describe "layout/header", type: :view do
       expect(rendered).to match "<strong>Role: Supervisor</strong>"
       expect(rendered).to match CGI.escapeHTML user.display_name
       expect(rendered).to match CGI.escapeHTML user.email
+    end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
     end
   end
 
@@ -63,6 +75,11 @@ RSpec.describe "layout/header", type: :view do
       render partial: "layouts/header"
 
       expect(rendered).to_not have_link("Edit Organization")
+    end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-Volunteers-c24d9d2ef8b249bbbda8192191365039?pvs=4")
     end
   end
 

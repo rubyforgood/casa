@@ -1,0 +1,5 @@
+<%= form.date_field model_field,
+    value: initial_value,
+    data: { max_date: local_assigns.has_key?(:max_date) ? max_date : nil, min_date: local_assigns.has_key?(:min_date) ? min_date : nil },
+    class: "card-style-1 component-date-picker-range",
+    "component-name": component_name %>

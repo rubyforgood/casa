@@ -18,6 +18,7 @@
                 <th>Start Date</th>
                 <th>End Date</th>
               <% end %>
+              <th>Enable Reimbursement</th>
               <% if local_assigns[:button_text] == "Hide unassigned" %>
                 <th>Currently Assigned To</th>
               <% end %>
@@ -35,6 +36,7 @@
         <div class='form-group'>
           <label for="<%= select_id %>" class="mt-2">Select a Volunteer</label>
           <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select-style-2 mt-1'>
+            <option value="">Please Select Volunteer</option>
             <% available_volunteers.each do |volunteer| %>
               <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
             <% end %>

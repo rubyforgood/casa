@@ -50,6 +50,7 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
+      expect(rendered).to_not have_link("System Settings", href: "/settings")
     end
   end
 
@@ -69,13 +70,14 @@ RSpec.describe "layout/sidebar", type: :view do
 
       render partial: "layouts/sidebar"
 
-      expect(rendered).to have_link("My Cases", href: "/casa_cases")
-      expect(rendered).to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).to have_link("All", href: "/casa_cases")
+      expect(rendered).to have_link("All", href: "/case_contacts")
       expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
       expect(rendered).to_not have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+      expect(rendered).to_not have_link("System Settings", href: "/settings")
     end
 
     context "when the volunteer does not have a transitioning case" do

@@ -1,19 +1,23 @@
 <div id="patch-note-notification" class="list-group-item">
   <div class="d-flex flex-row">
+    <div class="d-flex-shrink-0">
+      <i class='fas fa-bell'></i>
+    </div>
     <div class="ml-2 flex-grow-1">
       <div class="d-flex justify-content-between">
-        <h3 class="mb-1">Patch Notes for <%= deploy_time.strftime("%B %e") %></h3>
+        <h4 class="mb-1">Patch Notes</h4>
+        <small><%= time_ago_in_words(deploy_time) %> ago</small>
       </div>
-      <div class="my-1">
-        <% patch_notes.each do |type, notes_per_type| %>
-          <h5 class="ml-4"><%= type %></h5>
+      <% patch_notes.each do |type, notes_per_type| %>
+        <div class="my-1">
+          <h5 class="ml-4 fw-bold"><%= type %></h5>
           <ul>
             <% notes_per_type.each do |note_text| %>
-              <li><%= note_text %></li>
+              <li><%= simple_format note_text %></li>
             <% end %>
           </ul>
-        <% end %>
-      </div>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>

@@ -3,27 +3,32 @@ require "rails_helper"
 RSpec.describe Volunteer, type: :model do
   describe ".email_court_report_reminder" do
     let!(:casa_org) { build(:casa_org) }
-
+    let!(:casa_org_twilio_disabled) { build(:casa_org, twilio_enabled: false) }
     # Should send email for this case
     let!(:casa_case1) { create(:casa_case, casa_org: casa_org) }
     let!(:court_date1) { create(:court_date, casa_case: casa_case1, court_report_due_date: Date.current + 7.days) }
 
-    # Should NOT send emails for these two cases
+    # Should NOT send emails for these cases
     let!(:casa_case2) { build(:casa_case, casa_org: casa_org) }
     let!(:court_date2) { create(:court_date, casa_case: casa_case2, court_report_due_date: Date.current + 8.days) }
     let!(:casa_case3) { build(:casa_case, casa_org: casa_org, court_report_submitted_at: Time.current, court_report_status: :submitted) }
     let!(:court_date3) { create(:court_date, casa_case: casa_case3, court_report_due_date: Date.current + 7.days) }
     let!(:casa_case4) { build(:casa_case, casa_org: casa_org) }
     let!(:court_date4) { create(:court_date, casa_case: casa_case4, court_report_due_date: Date.current + 7.days) }
+    let!(:casa_case5) { create(:casa_case, casa_org: casa_org_twilio_disabled) }
+    let!(:court_date5) { create(:court_date, casa_case: casa_case5, court_report_due_date: Date.current + 7.days) }
 
     let(:case_assignment1) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case1) }
     let(:case_assignment2) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case2) }
     let(:case_assignment3) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case3) }
     let(:case_assignment_unassigned) { build(:case_assignment, casa_org: casa_org, casa_case: casa_case4, active: false) }
+    let(:case_assignment5) { build(:case_assignment, casa_org: casa_org_twilio_disabled, casa_case: casa_case5) }
+
     let!(:v1) { create(:volunteer, casa_org: casa_org, case_assignments: [case_assignment1, case_assignment2, case_assignment3]) }
     let!(:v2) { build_stubbed(:volunteer, casa_org: casa_org, active: false) }
     let!(:v3) { build_stubbed(:volunteer, casa_org: casa_org) }
     let!(:v4) { build_stubbed(:volunteer, casa_org: casa_org, case_assignments: [case_assignment_unassigned]) }
+    let!(:v5) { create(:volunteer, casa_org: casa_org_twilio_disabled, case_assignments: [case_assignment5]) }
 
     before do
       stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
@@ -53,6 +58,11 @@ RSpec.describe Volunteer, type: :model do
     it "should not send sms about unassigned cases" do
       expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v4, anything)
       described_class.send_court_report_reminder
+    end
+
+    it "should return nil when twilio is disabled" do
+      response = CourtReportDueSmsReminderService.court_report_reminder(v5, Date.current + 7.days)
+      expect(response).to eq(nil)
     end
   end
 
@@ -278,6 +288,63 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
+  describe ".with_supervisor" do
+    subject { Volunteer.with_supervisor }
+
+    context "no volunteers" do
+      it { is_expected.to be_empty }
+    end
+
+    context "volunteers" do
+      let!(:unassigned1) { create(:volunteer, display_name: "aaa") }
+      let!(:unassigned2) { create(:volunteer, display_name: "bbb") }
+
+      let!(:supervisor1) { create(:supervisor, display_name: "supe1") }
+      let!(:assigned1) { create(:volunteer, display_name: "ccc") }
+      let!(:assignment1) { create(:supervisor_volunteer, volunteer: assigned1, supervisor: supervisor1) }
+
+      let!(:supervisor2) { create(:supervisor, display_name: "supe2") }
+      let!(:assigned2) { create(:volunteer, display_name: "ddd") }
+      let!(:assignment2) { create(:supervisor_volunteer, volunteer: assigned2, supervisor: supervisor2) }
+
+      let!(:assigned3) { create(:volunteer, display_name: "eee") }
+      let!(:assignment3) { create(:supervisor_volunteer, volunteer: assigned3, supervisor: supervisor2) }
+
+      it { is_expected.to contain_exactly(assigned1, assigned2, assigned3) }
+    end
+  end
+
+  describe ".birthday_next_month" do
+    subject { Volunteer.birthday_next_month }
+    before do
+      travel_to Date.new(2022, 10, 1)
+    end
+
+    after do
+      travel_back
+    end
+
+    context "there are volunteers whose birthdays are not next month" do
+      let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(1990, 9, 1)) }
+      let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1998, 10, 15)) }
+      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1919, 12, 1)) }
+
+      it { is_expected.to be_empty }
+    end
+
+    context "there are volunteers whose birthdays are next month" do
+      let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(2001, 11, 1)) }
+      let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1920, 11, 15)) }
+      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1989, 11, 30)) }
+
+      let!(:volunteer4) { create(:volunteer, date_of_birth: Date.new(2001, 6, 1)) }
+      let!(:volunteer5) { create(:volunteer, date_of_birth: Date.new(1920, 1, 15)) }
+      let!(:volunteer6) { create(:volunteer, date_of_birth: Date.new(1967, 2, 21)) }
+
+      it { is_expected.to contain_exactly(volunteer1, volunteer2, volunteer3) }
+    end
+  end
+
   describe "#with_assigned_cases" do
     let!(:volunteers) { create_list(:volunteer, 3) }
     let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
@@ -331,11 +398,12 @@ RSpec.describe Volunteer, type: :model do
 
   describe "#learning_hours_spent_in_one_year" do
     let(:volunteer) { create :volunteer }
-    let!(:leraning_hours) do
+    let(:learning_hour_type) { create :learning_hour_type }
+    let!(:learning_hours) do
       [
-        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30),
-        create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45),
-        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago)
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, learning_hour_type: learning_hour_type),
+        create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45, learning_hour_type: learning_hour_type),
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago, learning_hour_type: learning_hour_type)
       ]
     end
 

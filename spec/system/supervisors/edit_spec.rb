@@ -44,6 +44,10 @@ RSpec.describe "supervisors/edit", type: :system do
         visit edit_supervisor_path(supervisor)
       end
       it_should_behave_like "shows error for invalid phone numbers"
+
+      it "shows error for invalid date of birth" do
+        fill_in "Date of birth", with: 5.days.from_now.strftime("%Y/%m/%d")
+      end
     end
 
     it "can go to the supervisor edit page and see red message when there are no active volunteers" do
@@ -125,7 +129,9 @@ RSpec.describe "supervisors/edit", type: :system do
 
       sign_in user
 
+      visit supervisors_path
       visit edit_supervisor_path(supervisor)
+
       click_on "Change to Admin"
 
       expect(page).to have_text("Supervisor was changed to Admin.")
@@ -162,12 +168,14 @@ RSpec.describe "supervisors/edit", type: :system do
         @old_email = @supervisor.email
         visit edit_supervisor_path(@supervisor)
         fill_in "supervisor_email", with: "new_supervisor_email@example.com"
+        fill_in "supervisor_phone_number", with: "+14155556876"
+        fill_in "supervisor_date_of_birth", with: "2003/05/06"
 
         click_on "Submit"
         @supervisor.reload
       end
 
-      it "sends a confirmaton email to the supervisor and displays current email" do
+      it "sends a confirmation email to the supervisor and displays current email" do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
@@ -185,6 +193,25 @@ RSpec.describe "supervisors/edit", type: :system do
 
         expect(page).to have_field("Email", with: "new_supervisor_email@example.com")
         expect(@supervisor.old_emails).to match([@old_email])
+      end
+    end
+
+    context "when entering invalid information" do
+      before do
+        sign_in user
+        @supervisor = create(:supervisor)
+        visit edit_supervisor_path(@supervisor)
+      end
+
+      it "shows error message for invalid phone number" do
+        fill_in "supervisor_phone_number", with: "+1415555676"
+        click_on "Submit"
+        expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+      end
+      it "shows error message for invalid date of birth" do
+        fill_in "supervisor_date_of_birth", with: 5.days.from_now.strftime("%Y/%m/%d")
+        click_on "Submit"
+        expect(page).to have_text "Date of birth must be in the past."
       end
     end
 
@@ -248,6 +275,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
         it "does not error out when adding non-existent volunteer" do
           visit edit_supervisor_path(supervisor)
+          select volunteer_1.display_name, from: "Select a Volunteer"
           click_on "Assign Volunteer"
           expect(page.find_button("Assign Volunteer", disabled: true)).to be_present
           expect(page).to have_text("There are no active, unassigned volunteers available.")

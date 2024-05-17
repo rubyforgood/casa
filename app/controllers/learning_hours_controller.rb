@@ -3,7 +3,8 @@ class LearningHoursController < ApplicationController
   after_action :verify_authorized, except: :index # TODO add this back and fix all tests
 
   def index
-    @learning_hours = LearningHour.where(user_id: current_user.id)
+    authorize LearningHour
+    @learning_hours = policy_scope(LearningHour)
   end
 
   def show
@@ -21,7 +22,7 @@ class LearningHoursController < ApplicationController
 
     respond_to do |format|
       if @learning_hour.save
-        format.html { redirect_to volunteer_learning_hours_path(volunteer_id: current_user.id), notice: "New entry was successfully created." }
+        format.html { redirect_to learning_hours_path, notice: "New entry was successfully created." }
       else
         format.html { render :new, status: 404 }
       end
@@ -36,7 +37,7 @@ class LearningHoursController < ApplicationController
     authorize @learning_hour
     respond_to do |format|
       if @learning_hour.update(update_learning_hours_params)
-        format.html { redirect_to volunteer_learning_hour_path, notice: "Entry was successfully updated." }
+        format.html { redirect_to learning_hour_path(@learning_hour), notice: "Entry was successfully updated." }
       else
         format.html { render :edit, status: 404 }
       end
@@ -47,20 +48,24 @@ class LearningHoursController < ApplicationController
     authorize @learning_hour
     @learning_hour.destroy
     flash[:notice] = "Entry was successfully deleted."
-    redirect_to volunteer_learning_hours_path(volunteer_id: current_user.id)
+    redirect_to learning_hours_path
   end
 
   private
 
   def set_learning_hour
     @learning_hour = LearningHour.find(params[:id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to learning_hours_path
   end
 
   def learning_hours_params
-    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :user_id, :learning_type)
+    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :user_id,
+      :learning_hour_type_id, :learning_hour_topic_id)
   end
 
   def update_learning_hours_params
-    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name, :learning_type)
+    params.require(:learning_hour).permit(:occurred_at, :duration_minutes, :duration_hours, :name,
+      :learning_hour_type_id, :learning_hour_topic_id)
   end
 end

@@ -43,6 +43,11 @@ RSpec.describe User, type: :model do
       expect(user.valid?).to be false
     end
 
+    it "requires date of birth to be in the past" do
+      user = build(:user, date_of_birth: 10.days.from_now)
+      expect(user.valid?).to be false
+    end
+
     it "has an empty old_emails array when initialized" do
       user = build(:user)
       expect(user.old_emails).to eq([])
@@ -128,7 +133,7 @@ RSpec.describe User, type: :model do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 1.week.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
@@ -138,8 +143,8 @@ RSpec.describe User, type: :model do
 
         case_of_interest_1 = volunteer_1.casa_cases.first
         case_of_interest_2 = volunteer_2.casa_cases.first
-        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 1.week.ago)
-        create(:case_contact, creator: volunteer_2, casa_case: case_of_interest_2, contact_made: true, occurred_at: 3.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 1.week.ago)
+        create(:case_contact, creator: volunteer_2, casa_case: case_of_interest_2, contact_made: true, created_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
@@ -153,12 +158,12 @@ RSpec.describe User, type: :model do
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
-      it "returns one for a volunteer who has attempted contact in at least one contact_case with occurred_at after 2 weeks" do
+      it "returns one for a volunteer who has attempted contact in at least one contact_case with created_at after 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         case_of_interest_1 = volunteer_1.casa_cases.first
 
-        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, occurred_at: 3.weeks.ago)
+        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
@@ -259,11 +264,15 @@ RSpec.describe User, type: :model do
   end
 
   describe ".no_recent_sign_in" do
-    let!(:old_sign_in_user) { create(:user, last_sign_in_at: 39.days.ago) }
-    let!(:recently_signed_in_user) { create(:user, last_sign_in_at: 5.days.ago) }
-
     it "returns users who haven't signed in in 30 days" do
+      old_sign_in_user = create(:user, last_sign_in_at: 39.days.ago)
+      create(:user, last_sign_in_at: 5.days.ago)
       expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
+    end
+
+    it "returns users who haven't signed in ever" do
+      user = create(:user, last_sign_in_at: nil)
+      expect(User.no_recent_sign_in).to contain_exactly(user)
     end
   end
 

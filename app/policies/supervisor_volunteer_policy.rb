@@ -6,4 +6,8 @@ class SupervisorVolunteerPolicy < ApplicationPolicy
   def unassign?
     user.casa_admin? || user.supervisor?
   end
+
+  def bulk_assignment?
+    user.casa_admin? || user.supervisor?
+  end
 end

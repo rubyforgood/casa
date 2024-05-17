@@ -70,8 +70,7 @@ RSpec.describe "casa_cases/edit", type: :view do
 
       render template: "casa_cases/edit"
 
-      expect(rendered).to have_select("case_assignment_casa_case_id",
-        options: [unassigned_volunteer.display_name])
+      expect(rendered).to have_select("case_assignment_casa_case_id", options: ["Please Select Volunteer", unassigned_volunteer.display_name])
     end
   end
 end

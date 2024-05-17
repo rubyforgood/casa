@@ -117,6 +117,7 @@ RSpec.describe "/supervisors", type: :request do
     context "different org" do
       let(:diff_org) { create(:casa_org) }
       let(:supervisor_diff_org) { create(:supervisor, casa_org: diff_org) }
+
       it "admin cannot view the edit supervisor page" do
         sign_in_as_admin
 
@@ -125,6 +126,7 @@ RSpec.describe "/supervisors", type: :request do
         expect(response).to redirect_to root_path
         expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
       end
+
       it "supervisor cannot view the edit supervisor page" do
         sign_in_as_supervisor
 
@@ -239,12 +241,6 @@ RSpec.describe "/supervisors", type: :request do
   end
 
   describe "POST /create" do
-    before do
-      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("supervisor")
-      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("supervisor")
-      @short_io_stub = WebMockHelper.short_io_stub_sms
-    end
-
     let(:params) do
       {
         supervisor: {
@@ -255,6 +251,9 @@ RSpec.describe "/supervisors", type: :request do
     end
 
     it "sends an invitation email" do
+      org = create(:casa_org, twilio_enabled: true)
+      admin = build(:casa_admin, casa_org: org)
+
       sign_in admin
 
       post supervisors_url, params: params
@@ -265,9 +264,16 @@ RSpec.describe "/supervisors", type: :request do
     end
 
     it "sends a SMS when a phone number exists" do
-      sign_in admin
+      org = create(:casa_org, twilio_enabled: true)
+      admin = build(:casa_admin, casa_org: org)
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("supervisor")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("supervisor")
+      @short_io_stub = WebMockHelper.short_io_stub_sms
       params[:supervisor][:phone_number] = "+12222222222"
+
+      sign_in admin
       post supervisors_url, params: params
+
       expect(@short_io_stub).to have_been_requested.times(2)
       expect(@twilio_activation_success_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
@@ -276,8 +282,15 @@ RSpec.describe "/supervisors", type: :request do
     end
 
     it "does not send a SMS if phone number not given" do
+      org = create(:casa_org, twilio_enabled: true)
+      admin = build(:casa_admin, casa_org: org)
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("supervisor")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("supervisor")
+      @short_io_stub = WebMockHelper.short_io_stub_sms
+
       sign_in admin
       post supervisors_url, params: params
+
       expect(@short_io_stub).to have_been_requested.times(0)
       expect(@twilio_activation_success_stub).to have_been_requested.times(0)
       expect(@twilio_activation_error_stub).to have_been_requested.times(0)
@@ -288,8 +301,11 @@ RSpec.describe "/supervisors", type: :request do
 
     it "does not send a SMS if Twilio has an error" do
       # ex. credentials entered wrong
-      org = create(:casa_org, twilio_account_sid: "articuno31")
-      admin = build(:casa_admin, casa_org: org)
+      org = create(:casa_org, twilio_account_sid: "articuno31", twilio_enabled: true)
+      admin = create(:casa_admin, casa_org: org)
+      @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("supervisor")
+      @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("supervisor")
+      @short_io_stub = WebMockHelper.short_io_stub_sms
 
       sign_in admin
 
@@ -298,7 +314,20 @@ RSpec.describe "/supervisors", type: :request do
       expect(@twilio_activation_error_stub).to have_been_requested.times(1)
       expect(response).to have_http_status(:redirect)
       follow_redirect!
-      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent due to error./)
+      expect(flash[:notice]).to match(/New supervisor created successfully. SMS not sent. Error: ./)
+    end
+
+    it "does not send a SMS if the casa_org does not have Twilio enabled" do
+      org = create(:casa_org, twilio_enabled: false)
+      admin = build(:casa_admin, casa_org: org)
+
+      sign_in admin
+
+      params[:supervisor][:phone_number] = "+12222222222"
+      post supervisors_url, params: params
+      expect(response).to have_http_status(:redirect)
+      follow_redirect!
+      expect(flash[:notice]).to match(/New supervisor created successfully./)
     end
   end
 

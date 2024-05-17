@@ -8,23 +8,25 @@
 @use "@fortawesome/fontawesome-free/scss/fontawesome";
 @use "@fortawesome/fontawesome-free/scss/solid";
 @use "select2/dist/css/select2";
-@use "select2-bootstrap-5-theme/dist/select2-bootstrap-5-theme";
+@use "tom-select/dist/css/tom-select.bootstrap5.css";
 
 // custom css for the app
 @use "base/breakpoints";
 
-@use "shared/async_notifier";
+@use "shared/notifier";
 @use "shared/dashboard";
+@use "shared/data_tables_overide";
 @use "shared/flashes";
 @use "shared/footer";
 @use "shared/form";
 @use "shared/layout";
 @use "shared/navbar";
+@use "shared/noscript";
 @use "shared/select2_additional_styles";
 @use "shared/sidebar";
 @use "shared/typography";
 @use "shared/utilities";
-@use "shared/noscript";
+@use "shared/validated_form_component";
 
 @use "pages/all_casa_admin_dashboard";
 @use "pages/casa_cases";
@@ -32,9 +34,13 @@
 @use "pages/case_contacts";
 @use "pages/court_dates";
 @use "pages/emancipation";
+@use "pages/feature_flags";
 @use "pages/login";
 @use "pages/password";
 @use "pages/patch_notes";
 @use "pages/reimbursements";
 @use "pages/supervisors";
 @use "pages/volunteers";
+
+@use 'trix/dist/trix.css';
+@use "actiontext";

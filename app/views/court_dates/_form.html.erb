@@ -1,5 +1,6 @@
 <div class="card-style mb-30">
-  <%= form_with(model: court_date, url: [casa_case, court_date], local: true) do |form| %>
+  <%= form_with(model: court_date, url: [casa_case, court_date], local: true,
+    data: { controller: "extended-nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
     <%= render "/shared/error_messages", resource: court_date %>
     <div class="row align-items-center">
       <div class="col-md-6">
@@ -25,48 +26,7 @@
       </div>
     </div>
     <div class="row align-items-center">
-      <div class="input-style-1">
-        <%= form.label :date, "Add Court Date" %>
-        <%= form.text_field :date,
-                        value: court_date.date&.to_date || Time.zone.now,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                        class: "form-control" %>
-      </div>
-      <div class="input-style-1">
-        <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
-        <%= form.text_field :court_report_due_date,
-                        value: court_date.court_report_due_date&.to_date,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                        class: "form-control" %>
-      </div>
-      <div class="select-style-1">
-        <%= form.label :judge_id, "Judge" %>
-        <div class="select-position">
-          <%= form.collection_select(
-                :judge_id,
-                Judge.for_organization(current_organization),
-                :id, :name,
-                {include_hidden: false, include_blank: "-Select Judge-"},
-                {class: "form-control"}
-            ) %>
-        </div>
-      </div>
-      <div class="select-style-1">
-        <%= form.label :hearing_type_id, "Hearing type" %>
-        <div class="select-position">
-          <%= form.collection_select(
-                :hearing_type_id,
-                HearingType.active.for_organization(current_organization),
-                :id, :name,
-                {include_hidden: false, include_blank: "-Select Hearing Type-"},
-                {class: "form-control"}
-            ) %>
-        </div>
-      </div>
-      <div class="field form-group court-orders">
-        <%= render partial: "shared/court_order_list",
-        locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form, resource: 'court_date'} %>
-      </div>
-    <% end %>
-  </div>
+      <%= render 'court_dates/fields', court_date: court_date, form: form, casa_case: casa_case %>
+    </div>
+  <% end %>
 </div>

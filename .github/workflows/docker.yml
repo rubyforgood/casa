@@ -13,15 +13,19 @@ on:
     paths-ignore:
       - "doc/**"
       - "**/*.md"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   docker:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     env:
       RAILS_ENV: test
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Create downloads folder
         run: |
           mkdir -p tmp/downloads
@@ -39,7 +43,9 @@ jobs:
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-screenshots
-          path: ${{ github.workspace }}/tmp/capybara/*.png
+          path: |
+            ${{ github.workspace }}/tmp/capybara/*.png
+            ${{ github.workspace }}/tmp/capybara/*.html

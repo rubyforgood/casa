@@ -55,7 +55,7 @@ class ApplicationPolicy
     case record
     when CasaOrg
       user.casa_org == record
-    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup
+    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup, ContactTopic
       user.casa_org == record.casa_org
     when CourtDate, CaseContact
       user.casa_org == record&.casa_case&.casa_org
@@ -143,4 +143,5 @@ class ApplicationPolicy
 
   alias_method :modify_organization?, :is_admin?
   alias_method :see_import_page?, :is_admin?
+  alias_method :see_banner_page?, :admin_or_supervisor?
 end

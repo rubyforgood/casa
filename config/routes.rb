@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => "/api-docs"
+  mount Rswag::Api::Engine => "/api-docs"
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
 
@@ -24,7 +26,20 @@ Rails.application.routes.draw do
     root to: "all_casa_admins/sessions#new", as: :unauthenticated_all_casa_root
   end
 
-  resources :health, only: %i[index]
+  resources :preference_sets, only: [] do
+    collection do
+      post "/table_state_update/:table_name", to: "preference_sets#table_state_update", as: :table_state_update
+      get "/table_state/:table_name", to: "preference_sets#table_state", as: :table_state
+    end
+  end
+
+  resources :health, only: %i[index] do
+    collection do
+      get :case_contacts_creation_times_in_last_week
+      get :monthly_line_graph_data
+      get :monthly_unique_users_graph_data
+    end
+  end
 
   get "/.well-known/assetlinks.json", to: "android_app_associations#index"
   resources :casa_cases, except: %i[destroy] do
@@ -57,10 +72,12 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :case_contacts, except: %i[show] do
+  get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
+  resources :case_contacts, except: %i[create update] do
     member do
       post :restore
     end
+    resources :form, controller: "case_contacts/form"
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
@@ -98,8 +115,26 @@ Rails.application.routes.draw do
   resources :other_duties, only: %i[new create edit index update]
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]
+  resources :learning_hour_types, only: %i[new create edit update]
+  resources :learning_hour_topics, only: %i[new create edit update]
+
+  resources :contact_topics, except: %i[index show delete] do
+    delete "soft_delete", on: :member
+  end
+
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
+  resources :banners, except: %i[show] do
+    member do
+      get :dismiss
+    end
+  end
+  resources :bulk_court_dates, only: %i[new create]
+  resources :case_groups, only: %i[index new edit create update destroy]
+  resources :learning_hours, only: %i[index show new create edit update destroy]
+  namespace :learning_hours do
+    resources :volunteers, only: :show
+  end
 
   resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
     member do
@@ -110,6 +145,9 @@ Rails.application.routes.draw do
     end
   end
   resources :supervisor_volunteers, only: %i[create] do
+    collection do
+      post :bulk_assignment
+    end
     member do
       patch :unassign
     end
@@ -125,13 +163,13 @@ Rails.application.routes.draw do
       get :impersonate
     end
     resources :notes, only: %i[create edit update destroy]
-    resources :learning_hours, only: %i[index show new create edit update destroy]
   end
   resources :case_assignments, only: %i[create destroy] do
     member do
       get :unassign
       patch :unassign
       patch :show_hide_contacts
+      patch :reimbursement
     end
   end
   resources :case_court_orders, only: %i[destroy]
@@ -147,6 +185,8 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+
+    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
@@ -171,5 +211,22 @@ Rails.application.routes.draw do
     delete :remove_from_volunteer
   end
 
+  direct :help_admins_supervisors do
+    "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
+  end
+
+  direct :help_volunteers do
+    "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-Volunteers-c24d9d2ef8b249bbbda8192191365039?pvs=4"
+  end
+
   get "/error", to: "error#index"
+
+  namespace :api do
+    namespace :v1 do
+      namespace :users do
+        post "sign_in", to: "sessions#create"
+        # get 'sign_out', to: 'sessions#destroy'
+      end
+    end
+  end
 end

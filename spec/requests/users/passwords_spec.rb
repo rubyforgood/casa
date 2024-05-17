@@ -10,7 +10,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
   before do
     allow(TwilioService).to(
       receive(:new).with(
-        org.twilio_api_key_sid, org.twilio_api_key_secret, org.twilio_account_sid
+        org
       ).and_return(twillio_service_double)
     )
 
@@ -92,7 +92,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
 
       it "sets errors correctly" do
         request
-        expect(request.parsed_body).to include("Please enter at least one field.")
+        expect(request.parsed_body.to_html).to include("Please enter at least one field.")
       end
     end
 
@@ -101,7 +101,23 @@ RSpec.describe "Users::PasswordsController", type: :request do
 
       it "sets errors correctly" do
         request
-        expect(request.parsed_body).to include("User does not exist.")
+        expect(request.parsed_body.to_html).to include("User does not exist.")
+      end
+    end
+
+    context "when twilio is disabled" do
+      let(:params) { {user: {email: user.email, phone_number: user.phone_number}} }
+
+      before do
+        org.update(twilio_enabled: false)
+      end
+
+      it "does not send an sms, only an email" do
+        expect_any_instance_of(User).to receive(:send_reset_password_instructions).once
+        request
+        expect(flash[:notice]).to(
+          eq("You will receive an email or SMS with instructions on how to reset your password in a few minutes.")
+        )
       end
     end
   end

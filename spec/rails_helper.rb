@@ -5,9 +5,9 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
 require "pundit/rspec"
-require "webdrivers" unless ENV["DOCKER"]
 require "view_component/test_helpers"
 require "capybara/rspec"
+require "action_text/system_test_helper"
 
 # Require all support folder files
 Dir[Rails.root.join("spec", "support", "**", "*.rb")].sort.each { |f| require f }
@@ -31,12 +31,12 @@ RSpec.configure do |config|
   config.include PunditHelper, type: :view
   config.include SessionHelper, type: :view
   config.include SessionHelper, type: :request
-  config.include CsvExporterHelper, type: :model
   config.include TemplateHelper
   config.include Warden::Test::Helpers
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
+  config.include ActionText::SystemTestHelper, type: :system
 
   config.after do
     Warden.test_reset!
@@ -49,7 +49,8 @@ RSpec.configure do |config|
     end
   end
 
-  config.fixture_path = "#{::Rails.root}/spec/fixtures"
+  # Changes to fix warning of Rails 7.1 has deprecated the singular fixture_path in favour of an array
+  config.fixture_paths = ["#{::Rails.root}/spec/fixtures"]
 
   config.use_transactional_fixtures = true
 
@@ -74,5 +75,14 @@ RSpec.configure do |config|
 
   def pre_transition_aged_youth_age
     Date.current - CasaCase::TRANSITION_AGE.years
+  end
+
+  config.around do |example|
+    Capybara.server_port = 7654 + ENV["TEST_ENV_NUMBER"].to_i
+    example.run
+  end
+
+  unless ENV["GITHUB_ACTIONS"]
+    config.filter_run_excluding :ci_only
   end
 end

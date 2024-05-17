@@ -1,9 +1,14 @@
 <div class="title-wrapper pt-30">
   <div class="row align-items-center">
     <div class="col-md-6">
-      <div class="title mb-30">
-        <h2>Other Duties
-        </h2>
+      <div class="col-sm-12 dashboard-table-header mb-30">
+        <h1>Other Duties</h1>
+        <% if current_user.volunteer? %>
+          <%= link_to new_other_duty_path, class: "main-btn btn-sm primary-btn btn-hover" do %>
+            <i class="lni lni-plus"></i>
+            New Duty
+          <% end %>
+        <% end %>
       </div>
     </div>
   </div>
@@ -17,7 +22,9 @@
         <% else %>
           <% @volunteer_duties.each do |volunteer| %>
             <% if volunteer[:other_duties].any? %>
-                <%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %>
+                <% unless current_user.id == volunteer[:volunteer].id %>
+                  <%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %>
+                <% end %>
                 <div class="table-wrapper table-responsive">
                   <table class="table">
                     <thead>
@@ -34,6 +41,9 @@
                       <td><%= I18n.l(duty.created_at, format: :full, default: nil) %></td>
                       <td><%= duty.duration_in_minutes %></td>
                       <td><%= duty.truncate_notes %></td>
+                      <% if current_user.volunteer? %>
+                        <td><%= link_to "Edit", edit_other_duty_path(duty) %></td>
+                      <% end %>
                       </tr>
                     <% end %>
                     </tbody>

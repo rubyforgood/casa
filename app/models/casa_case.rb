@@ -3,7 +3,7 @@ class CasaCase < ApplicationRecord
   include DateHelper
   extend FriendlyId
 
-  self.ignored_columns = %w[hearing_type_id judge_id transition_aged_youth court_report_due_date]
+  self.ignored_columns = %w[transition_aged_youth court_report_due_date]
 
   attr_accessor :validate_contact_type
 
@@ -34,6 +34,8 @@ class CasaCase < ApplicationRecord
   has_many :emancipation_options, through: :casa_cases_emancipation_options
   has_many :court_dates, dependent: :destroy
   has_many :placements, dependent: :destroy
+  has_many :case_group_memberships
+  has_many :case_groups, through: :case_group_memberships
   has_many_attached :court_reports
 
   validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
@@ -49,7 +51,7 @@ class CasaCase < ApplicationRecord
   accepts_nested_attributes_for :volunteers
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
-  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank
+  accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
 
   enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
 
@@ -156,6 +158,12 @@ class CasaCase < ApplicationRecord
     court_dates.where("date < ?", Date.today).order(:date).last
   end
 
+  def formatted_latest_court_date
+    most_recent = most_recent_past_court_date&.date&.in_time_zone || Time.zone.now
+
+    most_recent.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT)
+  end
+
   def has_judge_name?
     judge_name
   end
@@ -208,6 +216,10 @@ class CasaCase < ApplicationRecord
   def contact_type_validation?
     validate_update
   end
+
+  def should_generate_new_friendly_id?
+    case_number_changed? || super
+  end
 end
 
 # == Schema Information
@@ -230,8 +242,6 @@ end
 #
 #  index_casa_cases_on_casa_org_id                  (casa_org_id)
 #  index_casa_cases_on_case_number_and_casa_org_id  (case_number,casa_org_id) UNIQUE
-#  index_casa_cases_on_hearing_type_id              (hearing_type_id)
-#  index_casa_cases_on_judge_id                     (judge_id)
 #  index_casa_cases_on_slug                         (slug)
 #
 # Foreign Keys

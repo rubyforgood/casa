@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "/casa_cases", type: :request do
+  let(:date_in_care) { Date.today }
   let(:organization) { build(:casa_org) }
   let(:group) { build(:contact_type_group) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
@@ -8,6 +9,9 @@ RSpec.describe "/casa_cases", type: :request do
     {
       case_number: "1234",
       birth_month_year_youth: pre_transition_aged_youth_age,
+      "date_in_care(3i)": date_in_care.day,
+      "date_in_care(2i)": date_in_care.month,
+      "date_in_care(1i)": date_in_care.year,
       casa_org_id: organization.id,
       casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
     }
@@ -158,6 +162,7 @@ RSpec.describe "/casa_cases", type: :request do
           casa_case = CasaCase.last
           expect(casa_case.casa_org).to eq organization
           expect(casa_case.birth_month_year_youth).to eq pre_transition_aged_youth_age
+          expect(casa_case.date_in_care.to_date).to eq date_in_care
         end
 
         it "also responds as json", :aggregate_failures do
@@ -255,6 +260,7 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes2}
           casa_case.reload
           expect(casa_case.case_number).to eq "12345"
+          expect(casa_case.slug).to eq "12345"
           expect(casa_case.case_court_orders[0].text).to eq texts[0]
           expect(casa_case.case_court_orders[0].implementation_status).to eq implementation_statuses[0]
           expect(casa_case.case_court_orders[1].text).to eq texts[1]
@@ -492,6 +498,17 @@ RSpec.describe "/casa_cases", type: :request do
       end
     end
 
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "denies access" do
+          post casa_cases_url, params: {casa_case: valid_attributes}
+
+          expect(response).not_to be_successful
+          expect(flash[:notice]).to match(/you are not authorized/)
+        end
+      end
+    end
+
     describe "GET /edit" do
       it "render a successful response" do
         get edit_casa_case_url(casa_case)
@@ -629,6 +646,17 @@ RSpec.describe "/casa_cases", type: :request do
         get new_casa_case_url
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+      end
+    end
+
+    describe "POST /create" do
+      context "with valid parameters" do
+        it "denies access" do
+          post casa_cases_url, params: {casa_case: valid_attributes}
+
+          expect(response).not_to be_successful
+          expect(flash[:notice]).to match(/you are not authorized/)
+        end
       end
     end
 

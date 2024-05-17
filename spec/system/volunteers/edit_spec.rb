@@ -1,97 +1,190 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/edit", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
-
-  it "shows invite and login info" do
-    sign_in admin
-    visit edit_volunteer_path(volunteer)
-    expect(page).to have_text "Added to system "
-    expect(page).to have_text "Invitation email sent never"
-    expect(page).to have_text "Last logged in"
-    expect(page).to have_text "Invitation accepted never"
-    expect(page).to have_text "Password reset last sent never"
-    expect(page).to have_text "Learning Hours This Year 0h 0min"
-  end
-
   describe "updating volunteer personal data" do
-    before do
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-      fill_in "volunteer_display_name", with: "Kamisato Ayato"
-    end
-
     context "with valid data" do
       it "updates successfully" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "volunteer_display_name", with: "Kamisato Ayato"
+        fill_in "volunteer_phone_number", with: "+14163248967"
+        fill_in "volunteer_date_of_birth", with: Date.new(1998, 7, 1)
         click_on "Submit"
+
         expect(page).to have_text "Volunteer was successfully updated."
       end
     end
 
     context "with invalid data" do
-      let(:role) { "volunteer" }
+      context "shows error for invalid phone number" do
+        it "shows error message for phone number < 12 digits" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
 
-      it_should_behave_like "shows error for invalid phone numbers"
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632489"
+          click_on "Submit"
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for phone number > 12 digits" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632180923"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for bad phone number" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+141632u809o"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for phone number without country code" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_phone_number", with: "+24163218092"
+          click_on "Submit"
+
+          expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
+        end
+
+        it "shows error message for invalid date of birth" do
+          organization = create(:casa_org)
+          admin = create(:casa_admin, casa_org_id: organization.id)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+          sign_in admin
+          visit edit_volunteer_path(volunteer)
+
+          fill_in "volunteer_date_of_birth", with: 5.days.from_now
+          click_on "Submit"
+
+          expect(page).to have_text "Date of birth must be in the past."
+        end
+      end
 
       it "shows error message for duplicate email" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
         volunteer.supervisor = build(:supervisor)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
         click_on "Submit"
+
         expect(page).to have_text "already been taken"
       end
 
       it "shows error message for empty fields" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
         volunteer.supervisor = create(:supervisor)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
         click_on "Submit"
+
         expect(page).to have_text "can't be blank"
       end
     end
   end
 
   describe "updating a volunteer's email" do
-    before do
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-      @old_email = volunteer.email
-      fill_in "Email", with: "newemail@example.com"
-      click_on "Submit"
-      volunteer.reload
-    end
-
     context "with a valid email" do
       it "sends volunteer a confirmation email and does not change the displayed email" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        old_email = volunteer.email
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "Email", with: "newemail@example.com"
+        click_on "Submit"
+        volunteer.reload
+
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("You can confirm your account email through the link below:")
 
         expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: @old_email)
+        expect(page).to have_field("Email", with: old_email)
         expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
       end
 
       it "succesfully displays the new email once the user confirms" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        old_email = volunteer.email
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "Email", with: "newemail@example.com"
+        click_on "Submit"
         volunteer.reload
         volunteer.confirm
 
         visit edit_volunteer_path(volunteer)
+
         expect(page).to have_field("Email", with: "newemail@example.com")
-        expect(page).to_not have_field("Email", with: @old_email)
-        expect(volunteer.old_emails).to eq([@old_email])
+        expect(page).to_not have_field("Email", with: old_email)
+        expect(volunteer.old_emails).to eq([old_email])
       end
     end
   end
 
   it "saves the user as inactive, but only if the admin confirms", js: true do
+    organization = create(:casa_org)
+    admin = create(:casa_admin, casa_org: organization)
+    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
     sign_in admin
     visit edit_volunteer_path(volunteer)
 
     dismiss_confirm do
+      scroll_to(".actions")
       click_on "Deactivate volunteer"
     end
     expect(page).not_to have_text("Volunteer was deactivated on")
@@ -105,7 +198,9 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows an admin to reactivate a volunteer" do
-    inactive_volunteer = build(:volunteer, casa_org_id: organization.id)
+    organization = create(:casa_org)
+    admin = create(:casa_admin, casa_org: organization)
+    inactive_volunteer = build(:volunteer, casa_org: organization)
     inactive_volunteer.deactivate
 
     sign_in admin
@@ -120,11 +215,12 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
+    organization = create(:casa_org)
     supervisor = build(:supervisor, display_name: "Haka Haka", casa_org: organization)
     volunteer = create(:volunteer, display_name: "Bolu Bolu", supervisor: supervisor, casa_org: organization)
+    admin = create(:casa_admin, casa_org: organization)
 
     sign_in admin
-
     visit edit_volunteer_path(volunteer)
 
     expect(page).to have_content("Current Supervisor: Haka Haka")
@@ -135,13 +231,15 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   it "shows the admin the option to assign an unassigned volunteer to a different active supervisor" do
+    organization = create(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
     deactivated_supervisor = create(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
     active_supervisor = create(:supervisor, active: true, casa_org: organization, display_name: "Active Supervisor")
+    admin = create(:casa_admin, casa_org: organization)
 
     sign_in admin
-
     visit edit_volunteer_path(volunteer)
+
     expect(page).not_to have_select("supervisor_volunteer[supervisor_id]", with_options: [deactivated_supervisor.display_name])
     expect(page).to have_select("supervisor_volunteer[supervisor_id]", options: [active_supervisor.display_name])
     expect(page).to have_content("Select a Supervisor")
@@ -149,27 +247,36 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "when the volunteer is unassigned from all of their cases" do
-    let!(:casa_case_1) { create(:casa_case, casa_org: organization, case_number: "CINA1") }
-    let!(:casa_case_2) { create(:casa_case, casa_org: organization, case_number: "CINA2") }
-    let!(:case_assignment_1) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1) }
-    let!(:case_assignment_2) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2) }
-
-    before do
-      case_assignment_1.active = false
-      case_assignment_2.active = false
-      case_assignment_1.save
-      case_assignment_2.save
-    end
-
     it "does not show any active assignment status in the Manage Cases section" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
+      casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
+      casa_case_1.update!(active: false)
+      casa_case_2.update!(active: false)
+
       sign_in admin
       visit edit_volunteer_path(volunteer)
+
       within "#manage_cases" do
         expect(page).not_to have_content("Volunteer is Active")
       end
     end
 
     it "shows the unassigned cases in the Manage Cases section" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
+      casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
+      case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
+      case_assignment_2 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
+      casa_case_1.update!(active: false)
+      casa_case_2.update!(active: false)
+
       sign_in admin
       visit edit_volunteer_path(volunteer)
 
@@ -183,6 +290,19 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "shows assignment status as 'Volunteer is Unassigned' for each unassigned case" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
+      casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
+      case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
+      case_assignment_2 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
+
+      case_assignment_1.active = false
+      case_assignment_2.active = false
+      case_assignment_1.save
+      case_assignment_2.save
+
       sign_in admin
       visit edit_volunteer_path(volunteer)
 
@@ -198,24 +318,28 @@ RSpec.describe "volunteers/edit", type: :system do
 
   context "with a deactivated case" do
     it "displays inactive message" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
-      sign_in admin
 
+      sign_in admin
       visit edit_volunteer_path(volunteer)
+
       expect(page).to have_text "Case was deactivated on: #{I18n.l(deactivated_casa_case.updated_at, format: :standard, default: nil)}"
     end
   end
 
   context "when volunteer is assigned to multiple cases" do
-    let(:casa_org) { build(:casa_org) }
-    let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
-    let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
-    let!(:casa_case_1) { create(:casa_case, casa_org: casa_org, case_number: "CINA1") }
-    let!(:casa_case_2) { create(:casa_case, casa_org: casa_org, case_number: "CINA2") }
-
     it "supervisor assigns multiple cases to the same volunteer" do
+      casa_org = build(:casa_org)
+      supervisor = create(:casa_admin, casa_org: casa_org)
+      volunteer = create(:volunteer, casa_org: casa_org, display_name: "AAA")
+      casa_case_1 = create(:casa_case, casa_org: casa_org, case_number: "CINA1")
+      casa_case_2 = create(:casa_case, casa_org: casa_org, case_number: "CINA2")
+
       sign_in supervisor
-      visit edit_volunteer_path(volunteer.id)
+      visit edit_volunteer_path(volunteer)
 
       select casa_case_1.case_number, from: "Select a Case"
       click_on "Assign Case"
@@ -230,18 +354,16 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "with previously assigned cases" do
-    let(:casa_org) { build(:casa_org) }
-    let!(:supervisor) { create(:casa_admin, casa_org: casa_org) }
-    let!(:volunteer) { create(:volunteer, casa_org: casa_org, display_name: "AAA") }
-    let!(:casa_case_1) { build(:casa_case, casa_org: casa_org, case_number: "CINA1") }
-    let!(:casa_case_2) { build(:casa_case, casa_org: casa_org, case_number: "CINA2") }
-
     it "shows the unassign button for assigned cases and not for unassigned cases" do
-      sign_in supervisor
-
+      casa_org = build(:casa_org)
+      supervisor = create(:casa_admin, casa_org: casa_org)
+      volunteer = create(:volunteer, casa_org: casa_org, display_name: "AAA")
+      casa_case_1 = build(:casa_case, casa_org: casa_org, case_number: "CINA1")
+      casa_case_2 = build(:casa_case, casa_org: casa_org, case_number: "CINA2")
       assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, active: true)
       assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, active: false)
 
+      sign_in supervisor
       visit edit_volunteer_path(volunteer)
 
       within("#case_assignment_#{assignment1.id}") do
@@ -265,12 +387,13 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "inactive case visibility" do
-    let!(:active_casa_case) { create(:casa_case, casa_org: organization, case_number: "ACTIVE") }
-    let!(:inactive_casa_case) { create(:casa_case, casa_org: organization, active: false, case_number: "INACTIVE") }
-    let!(:volunteer) { create(:volunteer, display_name: "Awesome Volunteer", casa_org: organization) }
-    let(:supervisor) { build(:casa_admin, casa_org: organization) }
-
     it "supervisor does not have inactive cases as an option to assign to a volunteer" do
+      organization = build(:casa_org)
+      active_casa_case = create(:casa_case, casa_org: organization, case_number: "ACTIVE")
+      inactive_casa_case = create(:casa_case, casa_org: organization, active: false, case_number: "INACTIVE")
+      volunteer = create(:volunteer, display_name: "Awesome Volunteer", casa_org: organization)
+      supervisor = build(:casa_admin, casa_org: organization)
+
       sign_in supervisor
       visit edit_volunteer_path(volunteer)
 
@@ -280,11 +403,12 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "resend invite" do
-    let(:supervisor) { create(:supervisor, casa_org: organization) }
+    it "allows a supervisor resend invitation to a volunteer" do
+      organization = create(:casa_org)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      supervisor = create(:supervisor, casa_org: organization)
 
-    it "allows a supervisor resend invitation to a volunteer", js: true do
       sign_in supervisor
-
       visit edit_volunteer_path(volunteer)
 
       click_on "Resend Invitation"
@@ -297,9 +421,12 @@ RSpec.describe "volunteers/edit", type: :system do
     end
   end
 
-  it "allows an administrator resend invitation to a volunteer", js: true do
-    sign_in admin
+  it "allows an administrator resend invitation to a volunteer" do
+    organization = create(:casa_org)
+    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+    admin = create(:casa_admin, casa_org: organization)
 
+    sign_in admin
     visit edit_volunteer_path(volunteer)
 
     click_on "Resend Invitation"
@@ -311,14 +438,42 @@ RSpec.describe "volunteers/edit", type: :system do
     expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
   end
 
-  describe "send reminder as a supervisor", js: true do
-    let(:supervisor) { create(:supervisor, casa_org: organization) }
+  describe "Send Reactivation (SMS)" do
+    it "allows admin to send a reactivation SMS to a volunteer if their org has twilio enabled" do
+      organization = create(:casa_org, twilio_enabled: true)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
 
-    before(:each) do
-      sign_in supervisor
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+
+      expect(page).to have_content("Send Reactivation Alert (SMS)")
+      expect(page).not_to have_content("Enable Twilio")
+      expect(page).to have_selector("#twilio_enabled")
     end
 
+    context " admin's organization does not have twilio enabled" do
+      it "displays a disabed (SMS) button with appropriate message" do
+        org_twilio = create(:casa_org, twilio_enabled: false)
+        admin_twilio = create(:casa_admin, casa_org: org_twilio)
+        volunteer_twilio = create(:volunteer, casa_org: org_twilio)
+
+        sign_in admin_twilio
+        visit edit_volunteer_path(volunteer_twilio)
+
+        expect(page).to have_content("Enable Twilio To Send Reactivation Alert (SMS)")
+        expect(page).to have_selector("#twilio_disabled")
+      end
+    end
+  end
+
+  describe "send reminder as a supervisor" do
     it "emails the volunteer" do
+      organization = create(:casa_org)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      supervisor = create(:supervisor, casa_org: organization)
+
+      sign_in supervisor
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_button("Send Reminder")
@@ -331,6 +486,11 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "emails volunteer and cc's the supervisor" do
+      organization = create(:casa_org)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      supervisor = create(:supervisor, casa_org: organization)
+
+      sign_in supervisor
       visit edit_volunteer_path(volunteer)
 
       check "with_cc"
@@ -341,7 +501,11 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "emails the volunteer without a supervisor" do
+      organization = create(:casa_org)
       volunteer_without_supervisor = create(:volunteer)
+      supervisor = create(:supervisor, casa_org: organization)
+
+      sign_in supervisor
       visit edit_volunteer_path(volunteer_without_supervisor)
 
       check "with_cc"
@@ -353,12 +517,14 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "send reminder as admin" do
-    before(:each) do
+    it "emails the volunteer" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
       sign_in admin
       visit edit_volunteer_path(volunteer)
-    end
 
-    it "emails the volunteer" do
       expect(page).to have_button("Send Reminder")
       expect(page).to have_text("Send CC to Supervisor and Admin")
 
@@ -368,6 +534,12 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "emails the volunteer and cc's their supervisor and admin" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
       check "with_cc"
       click_on "Send Reminder"
 
@@ -378,26 +550,19 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   describe "impersonate button" do
-    let(:volunteer) { create(:volunteer, casa_org: organization, display_name: "John Doe") }
-
-    before do
-      sign_in user
-      visit edit_volunteer_path(volunteer)
-    end
-
     context "when user is an admin" do
-      let(:user) { create(:casa_admin, casa_org: organization) }
-
-      it "shows the impersonate button" do
-        expect(page).to have_link("Impersonate")
-      end
-
       it "impersonates the volunteer" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, casa_org: organization, display_name: "John Doe")
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
         click_on "Impersonate"
 
         within(".sidebar-nav-wrapper") do
           expect(page).to have_text(
-            "You (#{user.display_name}) are signed in as John Doe. " \
+            "You (#{admin.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."
           )
         end
@@ -405,18 +570,18 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "when user is a supervisor" do
-      let(:user) { create(:supervisor, casa_org: organization) }
-
-      it "shows the impersonate button" do
-        expect(page).to have_link("Impersonate")
-      end
-
       it "impersonates the volunteer" do
+        organization = create(:casa_org)
+        supervisor = create(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, casa_org: organization, display_name: "John Doe")
+        sign_in supervisor
+        visit edit_volunteer_path(volunteer)
+
         click_on "Impersonate"
 
         within(".sidebar-nav-wrapper") do
           expect(page).to have_text(
-            "You (#{user.display_name}) are signed in as John Doe. " \
+            "You (#{supervisor.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."
           )
         end
@@ -424,9 +589,14 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "when user is a volunteer" do
-      let(:user) { create(:volunteer, casa_org: organization) }
-
       it "does not show the impersonate button", :aggregate_failures do
+        organization = create(:casa_org)
+        volunteer = create(:volunteer, casa_org: organization)
+        user = create(:volunteer, casa_org: organization)
+
+        sign_in user
+        visit edit_volunteer_path(volunteer)
+
         expect(page).not_to have_link("Impersonate")
         expect(current_path).not_to eq(edit_volunteer_path(volunteer))
       end
@@ -434,16 +604,17 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "logged in as an admin" do
-    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
-    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
-    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
+    it "can save notes about a volunteer" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer.notes.create(creator: admin, content: "Note_1")
+      volunteer.notes.create(creator: admin, content: "Note_2")
+      volunteer.notes.create(creator: admin, content: "Note_3")
 
-    before do
       sign_in admin
       visit edit_volunteer_path(volunteer)
-    end
 
-    it "can save notes about a volunteer" do
       freeze_time do
         current_date = Date.today
         fill_in("note[content]", with: "Great job today.")
@@ -461,6 +632,16 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "can delete notes about a volunteer" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer.notes.create(creator: admin, content: "Note_1")
+      volunteer.notes.create(creator: admin, content: "Note_2")
+      volunteer.notes.create(creator: admin, content: "Note_3")
+
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+
       expect(page).to have_css ".notes .table tbody tr", count: 3
 
       click_on("Delete", match: :first)
@@ -470,17 +651,18 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "logged in as a supervisor" do
-    let!(:note_1) { volunteer.notes.create(creator: admin, content: "Note_1") }
-    let!(:note_2) { volunteer.notes.create(creator: admin, content: "Note_2") }
-    let!(:note_3) { volunteer.notes.create(creator: admin, content: "Note_3") }
-
-    before do
-      volunteer.supervisor = create(:supervisor)
-      sign_in volunteer.supervisor
-      visit edit_volunteer_path(volunteer)
-    end
-
     it "can save notes about a volunteer" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      supervisor = volunteer.supervisor
+      volunteer.notes.create(creator: admin, content: "Note_1")
+      volunteer.notes.create(creator: admin, content: "Note_2")
+      volunteer.notes.create(creator: admin, content: "Note_3")
+
+      sign_in supervisor
+      visit edit_volunteer_path(volunteer)
+
       freeze_time do
         current_date = Date.today
         fill_in("note[content]", with: "Great job today.")
@@ -498,6 +680,17 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     it "can delete notes about a volunteer" do
+      organization = create(:casa_org)
+      admin = create(:casa_admin, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      supervisor = volunteer.supervisor
+      volunteer.notes.create(creator: admin, content: "Note_1")
+      volunteer.notes.create(creator: admin, content: "Note_2")
+      volunteer.notes.create(creator: admin, content: "Note_3")
+
+      sign_in supervisor
+      visit edit_volunteer_path(volunteer)
+
       expect(page).to have_css ".notes .table tbody tr", count: 3
 
       click_on("Delete", match: :first)
@@ -507,43 +700,43 @@ RSpec.describe "volunteers/edit", type: :system do
   end
 
   context "logged in as volunteer" do
-    before do
+    it "can't see the notes section" do
+      organization = create(:casa_org)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       sign_in volunteer
       visit edit_volunteer_path(volunteer)
-    end
 
-    it "can't see the notes section" do
       expect(page).not_to have_selector(".notes")
       expect(page).to have_content("Sorry, you are not authorized to perform this action.")
     end
   end
 
   describe "updating volunteer address" do
-    before do
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-    end
-
     context "with mileage reimbursement turned on" do
       it "shows 'Mailing address' label" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
         expect(page).to have_text "Mailing address"
         expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_content]"
       end
 
       it "updates successfully" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
         fill_in "volunteer_address_attributes_content", with: "123 Main St"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
         expect(page).to have_selector("input[value='123 Main St']")
-      end
-    end
-
-    context "with mileage reimbursement turned off" do
-      let(:organization) { create(:casa_org, show_driving_reimbursement: false) }
-      let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
-      it "won't show 'Mailing address' label" do
-        expect(page).not_to have_text "Mailing address"
-        expect(page).not_to have_selector "input[type=text][id=volunteer_address_attributes_content]"
       end
     end
   end

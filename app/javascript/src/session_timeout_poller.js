@@ -1,8 +1,7 @@
-
-const deviseTimeoutInMinutes = 180
-const twoMinuteWarning = deviseTimeoutInMinutes - 2
+const timeout = window.timeout || 180
+const twoMinuteWarning = timeout - 2
 const totalTimerAmount = twoMinuteWarning * 60 * 1000
-const deviseTimeoutInMilliseconds = deviseTimeoutInMinutes * 60 * 1000
+const deviseTimeoutInMilliseconds = timeout * 60 * 1000
 const startTime = new Date().getTime()
 let lastTime = new Date().getTime()
 let currentTime
@@ -18,7 +17,6 @@ setInterval(myTimer, 1000)
 function myTimer () {
   timeElapsed = Math.abs(lastTime - startTime)
   currentTime = new Date().getTime()
-  // console.log('Should go up by 1 second', timeElapsed)
   if (timeElapsed > deviseTimeoutInMilliseconds) {
     window.location.reload()
   } else if (timeElapsed > totalTimerAmount) {

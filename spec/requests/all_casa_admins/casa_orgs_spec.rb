@@ -5,6 +5,30 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
 
   before { sign_in all_casa_admin }
 
+  describe "GET /show" do
+    let!(:casa_org) { create(:casa_org) }
+    let!(:other_casa_org) { create(:casa_org) }
+
+    subject(:request) do
+      get all_casa_admins_casa_org_path(casa_org)
+
+      response
+    end
+
+    it { is_expected.to be_successful }
+
+    it "shows casa org correctly", :aggregate_failures do
+      page = request.body
+      expect(page).to include(casa_org.name)
+      expect(page).not_to include(other_casa_org.name)
+    end
+
+    it "load metrics correctly" do
+      expect(AllCasaAdmins::CasaOrgMetrics).to receive(:new).with(casa_org).and_call_original
+      request
+    end
+  end
+
   describe "GET /new" do
     subject(:get_new) { get new_all_casa_admins_casa_org_path }
 
@@ -12,18 +36,6 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
       get_new
 
       expect(response).to have_http_status(:success)
-    end
-  end
-
-  describe "GET /show" do
-    subject(:get_show) { get all_casa_admins_casa_org_path(casa_org) }
-
-    let(:casa_org) { create(:casa_org) }
-
-    it "returns http success" do
-      get_show
-
-      expect(response).to have_http_status(:ok)
     end
   end
 
@@ -35,9 +47,23 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         {casa_org: {name: "New Org", display_name: "New org display",
                     address: "29207 Weimann Canyon, New Andrew, PA 40510-7416"}}
       end
+      let(:contact_topics) { [{"question" => "Title 1", "details" => "details 1"}, {"question" => "Title 2", "details" => "details 2"}] }
+
+      before do
+        allow(ContactTopic).to receive(:default_contact_topics).and_return(contact_topics)
+      end
 
       it "creates a new CASA org" do
         expect { post_create }.to change(CasaOrg, :count).by(1)
+      end
+
+      it "generates correct defaults during creation" do
+        expect { post_create }.to change(ContactTopic, :count).by(2)
+
+        casa_org = CasaOrg.last
+        expect(casa_org.contact_topics.map(&:question)).to eq contact_topics.map { |t| t["question"] }
+        expect(casa_org.contact_topics.map(&:details)).to eq contact_topics.map { |t| t["details"] }
+        expect(casa_org.contact_topics.pluck(:active)).to be_all true
       end
 
       it "redirects to CASA org show page, with notice flash", :aggregate_failures do

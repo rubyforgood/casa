@@ -1,12 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "/supervisor_volunteers", type: :request do
-  let!(:admin) { build(:casa_admin) }
   let!(:casa_org) { build(:casa_org) }
+  let!(:admin) { build(:casa_admin, casa_org: casa_org) }
   let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
-  let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
-  context "POST /create" do
+  describe "POST /create" do
+    let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
+
     context "when no pre-existing association between supervisor and volunteer exists" do
       it "creates a new supervisor_volunteers association" do
         valid_parameters = {
@@ -89,8 +90,7 @@ RSpec.describe "/supervisor_volunteers", type: :request do
 
       it "will still set the association as active" do
         valid_parameters = {
-          supervisor_volunteer: {supervisor_id: supervisor.id},
-          volunteer_id: volunteer.id
+          supervisor_volunteer: {supervisor_id: supervisor.id, volunteer_id: volunteer.id}
         }
         sign_in(admin)
 
@@ -105,7 +105,8 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     end
   end
 
-  context "PATCH /unassign" do
+  describe "PATCH /unassign" do
+    let!(:volunteer) { create(:volunteer, casa_org: casa_org) }
     let!(:association) do
       create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
     end
@@ -154,6 +155,84 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         association.reload
 
         expect(association.is_active?).to be(true)
+      end
+    end
+  end
+
+  describe "POST /bulk_assignment" do
+    let!(:volunteer_1) { create(:volunteer, casa_org: casa_org) }
+    let!(:volunteer_2) { create(:volunteer, casa_org: casa_org) }
+    let!(:volunteer_3) { create(:volunteer, casa_org: casa_org) }
+    let(:supervisor_id) { supervisor.id }
+    let(:params) do
+      {
+        supervisor_volunteer: {
+          supervisor_id: supervisor_id,
+          volunteer_ids: [volunteer_1.id, volunteer_2.id, volunteer_3.id]
+        }
+      }
+    end
+
+    subject do
+      post bulk_assignment_supervisor_volunteers_url, params: params
+    end
+
+    it "creates an association for each volunteer" do
+      sign_in(admin)
+
+      expect { subject }.to change(SupervisorVolunteer, :count).by(3)
+    end
+
+    context "when association already exists" do
+      let!(:associations) do
+        [
+          create(:supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer_1),
+          create(:supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer_2),
+          create(:supervisor_volunteer, :inactive, supervisor: supervisor, volunteer: volunteer_3)
+        ]
+      end
+
+      it "sets to active" do
+        sign_in(admin)
+        subject
+
+        associations.each do |association|
+          association.reload
+          expect(association.is_active?).to be true
+        end
+      end
+
+      it "does not create new associations" do
+        sign_in(admin)
+
+        expect { subject }.to change(SupervisorVolunteer, :count).by(0)
+      end
+    end
+
+    context "when none passed as supervisor" do
+      let(:supervisor_id) { "" }
+      let!(:associations) do
+        [
+          create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_1),
+          create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_2),
+          create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_3)
+        ]
+      end
+
+      it "sets associations to inactive" do
+        sign_in(admin)
+        subject
+
+        associations.each do |association|
+          association.reload
+          expect(association.is_active?).to be false
+        end
+      end
+
+      it "does not remove associations" do
+        sign_in(admin)
+
+        expect { subject }.to change(SupervisorVolunteer, :count).by(0)
       end
     end
   end

@@ -37,6 +37,14 @@ class Supervisor < User
     ).where(invitation_accepted_at: nil).where.not(invitation_created_at: nil)
   end
 
+  def inactive_volunteers
+    recent_case_contact_volunteer_ids = volunteers.joins(:case_contacts).where(
+      case_contacts: {created_at: 30.days.ago..}
+    ).pluck(:id)
+
+    volunteers.no_recent_sign_in.where.not(id: recent_case_contact_volunteer_ids)
+  end
+
   def recently_unassigned_volunteers
     unassigned_supervisor_volunteers.joins(:volunteer).includes(:volunteer)
       .where(updated_at: 1.week.ago..Time.zone.now).map(&:volunteer)
@@ -47,38 +55,42 @@ end
 #
 # Table name: users
 #
-#  id                          :bigint           not null, primary key
-#  active                      :boolean          default(TRUE)
-#  confirmation_sent_at        :datetime
-#  confirmation_token          :string
-#  confirmed_at                :datetime
-#  current_sign_in_at          :datetime
-#  current_sign_in_ip          :string
-#  display_name                :string           default(""), not null
-#  email                       :string           default(""), not null
-#  encrypted_password          :string           default(""), not null
-#  invitation_accepted_at      :datetime
-#  invitation_created_at       :datetime
-#  invitation_limit            :integer
-#  invitation_sent_at          :datetime
-#  invitation_token            :string
-#  invitations_count           :integer          default(0)
-#  invited_by_type             :string
-#  last_sign_in_at             :datetime
-#  last_sign_in_ip             :string
-#  old_emails                  :string           default([]), is an Array
-#  phone_number                :string           default("")
-#  receive_email_notifications :boolean          default(TRUE)
-#  receive_sms_notifications   :boolean          default(FALSE), not null
-#  reset_password_sent_at      :datetime
-#  reset_password_token        :string
-#  sign_in_count               :integer          default(0), not null
-#  type                        :string
-#  unconfirmed_email           :string
-#  created_at                  :datetime         not null
-#  updated_at                  :datetime         not null
-#  casa_org_id                 :bigint           not null
-#  invited_by_id               :bigint
+#  id                            :bigint           not null, primary key
+#  active                        :boolean          default(TRUE)
+#  confirmation_sent_at          :datetime
+#  confirmation_token            :string
+#  confirmed_at                  :datetime
+#  current_sign_in_at            :datetime
+#  current_sign_in_ip            :string
+#  date_of_birth                 :datetime
+#  display_name                  :string           default(""), not null
+#  email                         :string           default(""), not null
+#  encrypted_password            :string           default(""), not null
+#  invitation_accepted_at        :datetime
+#  invitation_created_at         :datetime
+#  invitation_limit              :integer
+#  invitation_sent_at            :datetime
+#  invitation_token              :string
+#  invitations_count             :integer          default(0)
+#  invited_by_type               :string
+#  last_sign_in_at               :datetime
+#  last_sign_in_ip               :string
+#  monthly_learning_hours_report :boolean          default(FALSE), not null
+#  old_emails                    :string           default([]), is an Array
+#  phone_number                  :string           default("")
+#  receive_email_notifications   :boolean          default(TRUE)
+#  receive_reimbursement_email   :boolean          default(FALSE)
+#  receive_sms_notifications     :boolean          default(FALSE), not null
+#  reset_password_sent_at        :datetime
+#  reset_password_token          :string
+#  sign_in_count                 :integer          default(0), not null
+#  token                         :string
+#  type                          :string
+#  unconfirmed_email             :string
+#  created_at                    :datetime         not null
+#  updated_at                    :datetime         not null
+#  casa_org_id                   :bigint           not null
+#  invited_by_id                 :bigint
 #
 # Indexes
 #

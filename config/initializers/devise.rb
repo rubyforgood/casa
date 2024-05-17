@@ -10,6 +10,9 @@ Devise.setup do |config|
   # by default. You can change it below and use your own secret key.
   # config.secret_key = 'a42b150b56c158d6e064aa257c8434390c921811007f42c5aa16c7455b78e3777087c5a4bcf18bfb0886fdd9296dec34eaa02fc0b47bed58417347eba971ee2d'
 
+  # Fixes rspec triggering Rails.application.secrets deprecation warning for Rails 7.1.0 upgrade
+  config.secret_key = Rails.application.secret_key_base
+
   # ==> Controller configuration
   # Configure the parent class to the devise controllers.
   # config.parent_controller = 'DeviseController'

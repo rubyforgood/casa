@@ -16,6 +16,13 @@
     <%= form.telephone_field :phone_number, placeholder: "Phone Number", class: "form-control" %>
   </div>
 
+  <div class="input-style-1">
+    <%= form.label :date_of_birth, "Date of birth" %>
+    <%= form.date_field :date_of_birth,
+                        value: @volunteer.date_of_birth,
+                        class: "form-control label-font-weight" %>
+  </div>
+
   <div class="actions">
     <%= button_tag(
       type: "submit",

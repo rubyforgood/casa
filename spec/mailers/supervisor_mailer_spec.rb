@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe SupervisorMailer, type: :mailer do
   describe ".weekly_digest" do
-    let(:supervisor) { build(:supervisor) }
+    let(:supervisor) { build(:supervisor, :receive_reimbursement_attachment) }
     let(:volunteer) { build(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
-    let(:casa_case) { build(:casa_case, casa_org: supervisor.casa_org) }
+    let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
 
     let(:mail) { SupervisorMailer.weekly_digest(supervisor) }
 
@@ -26,6 +26,10 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
         expect(mail.body.encoded).to_not match("Notes: #{other_contact.notes}")
+      end
+
+      it "has a CSV attachment" do
+        expect(mail.attachments.count).to eq(1)
       end
     end
 
@@ -97,8 +101,39 @@ RSpec.describe SupervisorMailer, type: :mailer do
       expect(mail.body.encoded).to_not match("There are no additional notes.")
     end
 
-    it "displays no additional notes messsage when there are no additional notes" do
+    it "displays no additional notes message when there are no additional notes" do
       expect(mail.body.encoded).to match("There are no additional notes.")
+    end
+
+    it "does not display no_recent_sign_in section" do
+      expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
+    end
+
+    context "when supervisor has a volunteer that has not been active for the last 30 days" do
+      let!(:volunteer) do
+        create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor, last_sign_in_at: 31.days.ago)
+      end
+      let(:casa_org) { volunteer.casa_org }
+      let(:other_org) { create(:casa_org) }
+      let!(:volunteer_for_other_supervisor_same_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: casa_org, supervisor: create(:supervisor, casa_org: casa_org)) }
+      let!(:volunteer_for_other_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: other_org, supervisor: create(:supervisor, casa_org: other_org)) }
+
+      it "display no_recent_sign_in section" do
+        expect(mail.body.encoded).to match("volunteers have not signed in or created case contacts in the last 30 days")
+        expect(mail.body.encoded).to match(volunteer.display_name)
+        expect(mail.body.encoded).not_to match(volunteer_for_other_supervisor_same_org.display_name)
+        expect(mail.body.encoded).not_to match(volunteer_for_other_org.display_name)
+      end
+
+      context "but volunteer has a recent case_contact to its name" do
+        let!(:recent_case_contact) do
+          create(:case_contact, casa_case: casa_case, occurred_at: 29.days.ago, creator: volunteer)
+        end
+
+        it "does not display no_recent_sign_in section" do
+          expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
+        end
+      end
     end
   end
 
@@ -110,6 +145,20 @@ RSpec.describe SupervisorMailer, type: :mailer do
     it "informs the correct expiration date" do
       email_body = mail.html_part.body.to_s.squish
       expect(email_body).to include("This invitation will expire on #{expiration_date} (two weeks).")
+    end
+  end
+
+  describe ".reimbursement_request_email" do
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
+    let(:casa_organization) { volunteer.casa_org }
+
+    let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }
+
+    it "sends email reminder" do
+      expect(mail.subject).to eq("New reimbursement request from #{volunteer.display_name}")
+      expect(mail.to).to eq([supervisor.email])
+      expect(mail.body.encoded).to match("#{volunteer.display_name} has submitted a reimbursement request")
     end
   end
 end

@@ -13,8 +13,10 @@ body {
   overflow: auto;
 }
 
-label {
-  font-weight: 900;
+.casa-case-scroll {
+  width: 13rem;
+  height: auto;
+  overflow-y: auto;
 }
 
 // This may effect other pages than the case contact form!!!

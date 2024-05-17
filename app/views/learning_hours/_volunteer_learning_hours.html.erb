@@ -1,0 +1,10 @@
+<div class="row my-3">
+  <div class="col-sm-12 dashboard-table-header">
+    <h1>Learning Hours</h1>
+    <%= link_to new_learning_hour_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+      <i class="lni lni-check-box mr-10"></i>Record Learning Hours
+    <% end %>
+  </div>
+</div>
+
+<%= render "learning_hours_table", learning_hours: %>

@@ -1,0 +1,45 @@
+<td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+  <b>
+    Case <%= link_to casa_case.case_number, casa_case_url(casa_case) %>
+  </b>
+  <br>
+  <% successful_contacts = recently_unassigned ?
+                               casa_case.decorate.successful_contacts_this_week_before(case_assignment.updated_at) :
+                               casa_case.decorate.successful_contacts_this_week %>
+  <% unsuccessful_contacts = recently_unassigned ?
+                                 casa_case.decorate.unsuccessful_contacts_this_week_before(case_assignment.updated_at) :
+                                 casa_case.decorate.unsuccessful_contacts_this_week %>
+  <% if successful_contacts + unsuccessful_contacts > 0 %>
+    <%= "Number of successful case contacts made this week: #{successful_contacts}" %>
+    <br>
+    <%= "Number of unsuccessful case contacts made this week: #{unsuccessful_contacts} " %>
+    <br>
+    <% recent_contact = recently_unassigned ?
+                            casa_case.decorate.case_contacts_latest_before(case_assignment.updated_at) :
+                            casa_case.decorate.case_contacts_latest %>
+    <%= "Most recent contact attempted:" %>
+    <br>
+    <%= " - Date: #{I18n.l(recent_contact&.occurred_at, format: :full, default: nil)}" %>
+    <br>
+    <%= " - Type: #{recent_contact&.decorate.contact_types}" %>
+    <br>
+    <%= " - Duration: #{recent_contact&.duration_minutes}" %>
+    <br>
+    <%= " - Contact Made: #{recent_contact&.contact_made}" %>
+    <br>
+    <%= " - Medium Type: #{recent_contact&.medium_type}" %>
+    <br>
+    <%= " - Notes: #{recent_contact&.notes}" %>
+  <% else %>
+    No contact attempts were logged for this week.
+  <% end %>
+  <% if recently_unassigned %>
+    <br>
+    This case was unassigned from <%= volunteer_display_name %> on
+    <%= case_assignment.updated_at.to_date.to_fs(:long_ordinal) %>
+    <% if successful_contacts + unsuccessful_contacts > 0 %>
+      The above activity only describes the part of the week when the case was still assigned to
+      <% volunteer_display_name %>
+    <% end %>
+  <% end %>
+</td>

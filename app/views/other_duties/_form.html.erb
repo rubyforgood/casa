@@ -2,8 +2,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2><%= title %>
-        </h2>
+        <h1><%= title %></h1>
       </div>
     </div>
   </div>
@@ -16,13 +15,11 @@
   <div class="input-style-1">
     <%= form.label :occurred_at, "Occurred On" %>
     <% occurred_at = @other_duty.occurred_at || Time.zone.now %>
-    <%= form.text_field :occurred_at,
-                        value: occurred_at.to_date,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"} %>
+    <%= form.date_field :occurred_at, value: occurred_at.to_date %>
   </div>
 
     <div class="row input-style-1">
-      <%= form.label :duration_meeting, "Duty Duration" %>
+      <label>Duty Duration</label>
       <div class="col-sm-6">
         <div class="input-style-1 duration-hours">
           <%= form.number_field :duration_hours,

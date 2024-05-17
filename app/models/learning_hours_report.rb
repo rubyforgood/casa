@@ -4,6 +4,7 @@ class LearningHoursReport
   def initialize(casa_org_id)
     @learning_hours = LearningHour.includes(:user)
       .where(user: {casa_org_id: casa_org_id})
+      .order(:id)
   end
 
   def to_csv

@@ -1,0 +1,41 @@
+<div class="pt-30">
+  <div class="row">
+    <div class="col-md-6">
+      <div class="mb-30">
+        <h1>Learning Hours</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== tables-wrapper start ========== -->
+<div class="tables-wrapper">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card-style mb-30">
+        <div class="table-wrapper table-responsive">
+          <table class="table" id="learning-hours">
+            <thead>
+            <tr>
+              <th><h6>Volunteer</h6></th>
+              <th><h6>Time Completed YTD</h6></th>
+            </tr>
+            <!-- end table row-->
+            </thead>
+            <tbody>
+            <% @learning_hours.each do |learning_hour| %>
+              <tr>
+                <td><%= link_to(learning_hour.display_name, learning_hours_volunteer_path(learning_hour.user_id)) %></td>
+                <td><%= format_time(learning_hour.total_time_spent) %></td>
+              </tr>
+            <% end %>
+            </tbody>
+          </table>
+          <!-- end table -->
+        </div>
+      </div>
+      <!-- end card -->
+    </div>
+    <!-- end col -->
+  </div>
+</div>

@@ -4,18 +4,19 @@ about: 🔨What needs building? ✨
 labels: ["✨ New Feature", "Help Wanted"]
 ---
 
-**What type(s) of user does this feature affect?**
+## What type(s) of user does this feature affect?
  - volunteers?
  - supervisors?
  - admins?
  - all casa admins?
 
-**Description**
+## Description
 
 
-**Screenshots of current behavior, if any**  
+## Screenshots of current behavior, if any
 You can paste images on the clipboard here
 
+## How to access the QA site
 _Login Details:_  
 [Link to QA site](https://casa-qa.herokuapp.com/)  
 
@@ -30,4 +31,4 @@ password for all users: 12345678
 
 ### Questions? Join Slack!
 
-We highly recommend that you join us in slack https://rubyforgood.herokuapp.com/ #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
+We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) #casa channel to ask questions quickly. And [discord](https://discord.gg/qJcw2RZH8Q) for office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.

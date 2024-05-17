@@ -227,7 +227,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the volunteer" do
         volunteer = create(:volunteer, casa_org: different_organization)
         casa_case = build(:casa_case, casa_org: organization)
-        expect { volunteer.casa_cases << casa_case } \
+        expect { volunteer.casa_cases << casa_case }
           .to raise_error(
             ActiveRecord::RecordInvalid,
             /must belong to the same organization/
@@ -295,7 +295,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the volunteer" do
         volunteer = create(:volunteer, casa_org: different_organization)
         casa_case = build(:casa_case, casa_org: organization)
-        expect { volunteer.casa_cases << casa_case } \
+        expect { volunteer.casa_cases << casa_case }
           .to raise_error(
             ActiveRecord::RecordInvalid,
             /must belong to the same organization/
@@ -352,7 +352,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the volunteer" do
         volunteer = create(:volunteer, casa_org: different_organization)
         casa_case = build(:casa_case, casa_org: organization)
-        expect { volunteer.casa_cases << casa_case } \
+        expect { volunteer.casa_cases << casa_case }
           .to raise_error(
             ActiveRecord::RecordInvalid,
             /must belong to the same organization/
@@ -407,7 +407,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the volunteer" do
         volunteer = create(:volunteer, casa_org: different_organization)
         casa_case = build(:casa_case, casa_org: organization)
-        expect { volunteer.casa_cases << casa_case } \
+        expect { volunteer.casa_cases << casa_case }
           .to raise_error(
             ActiveRecord::RecordInvalid,
             /must belong to the same organization/

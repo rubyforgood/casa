@@ -10,9 +10,19 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "action_text_rich_texts", force: :cascade do |t|
+    t.string "name", null: false
+    t.text "body"
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
+  end
 
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
@@ -78,6 +88,17 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
+  create_table "banners", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.bigint "user_id", null: false
+    t.string "name"
+    t.boolean "active", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_banners_on_casa_org_id"
+    t.index ["user_id"], name: "index_banners_on_user_id"
+  end
+
   create_table "casa_case_contact_types", force: :cascade do |t|
     t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
@@ -104,17 +125,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.bigint "casa_org_id", null: false
     t.datetime "birth_month_year_youth", precision: nil
     t.datetime "court_report_due_date", precision: nil
-    t.bigint "hearing_type_id"
     t.boolean "active", default: true, null: false
-    t.bigint "judge_id"
     t.datetime "court_report_submitted_at", precision: nil
     t.integer "court_report_status", default: 0
     t.string "slug"
     t.datetime "date_in_care"
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
-    t.index ["hearing_type_id"], name: "index_casa_cases_on_hearing_type_id"
-    t.index ["judge_id"], name: "index_casa_cases_on_judge_id"
     t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
@@ -140,6 +157,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.string "twilio_account_sid"
     t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.boolean "twilio_enabled", default: false
+    t.boolean "additional_expenses_enabled", default: false
+    t.boolean "learning_topic_active", default: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
@@ -150,6 +170,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "hide_old_contacts", default: false
+    t.boolean "allow_reimbursement", default: true
     t.index ["casa_case_id"], name: "index_case_assignments_on_casa_case_id"
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
@@ -165,9 +186,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
 
   create_table "case_contacts", force: :cascade do |t|
     t.bigint "creator_id", null: false
-    t.bigint "casa_case_id", null: false
-    t.integer "duration_minutes", null: false
-    t.datetime "occurred_at", precision: nil, null: false
+    t.bigint "casa_case_id"
+    t.integer "duration_minutes"
+    t.datetime "occurred_at", precision: nil
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "contact_made", default: false
@@ -177,6 +198,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.string "notes"
     t.datetime "deleted_at", precision: nil
     t.boolean "reimbursement_complete", default: false
+    t.string "status", default: "started"
+    t.integer "draft_case_ids", default: [], array: true
+    t.string "volunteer_address"
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"
@@ -194,6 +218,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
   end
 
+  create_table "case_group_memberships", force: :cascade do |t|
+    t.bigint "case_group_id", null: false
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_case_id"], name: "index_case_group_memberships_on_casa_case_id"
+    t.index ["case_group_id"], name: "index_case_group_memberships_on_case_group_id"
+  end
+
+  create_table "case_groups", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_case_groups_on_casa_org_id"
+  end
+
   create_table "checklist_items", force: :cascade do |t|
     t.integer "hearing_type_id"
     t.text "description", null: false
@@ -202,6 +243,28 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["hearing_type_id"], name: "index_checklist_items_on_hearing_type_id"
+  end
+
+  create_table "contact_topic_answers", force: :cascade do |t|
+    t.text "value"
+    t.bigint "case_contact_id", null: false
+    t.bigint "contact_topic_id", null: false
+    t.boolean "selected", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["case_contact_id"], name: "index_contact_topic_answers_on_case_contact_id"
+    t.index ["contact_topic_id"], name: "index_contact_topic_answers_on_contact_topic_id"
+  end
+
+  create_table "contact_topics", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.boolean "active", default: true, null: false
+    t.boolean "soft_delete", default: false, null: false
+    t.text "details"
+    t.string "question"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_contact_topics_on_casa_org_id"
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
@@ -282,8 +345,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "note"
+    t.bigint "followupable_id"
+    t.string "followupable_type"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
+    t.index ["followupable_type", "followupable_id"], name: "index_followups_on_followupable_type_and_followupable_id"
   end
 
   create_table "fund_requests", force: :cascade do |t|
@@ -333,11 +399,23 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.index ["casa_org_id"], name: "index_languages_on_casa_org_id"
   end
 
-  create_table "languages_users", id: false, force: :cascade do |t|
-    t.bigint "language_id", null: false
-    t.bigint "user_id", null: false
-    t.index ["language_id"], name: "index_languages_users_on_language_id"
-    t.index ["user_id"], name: "index_languages_users_on_user_id"
+  create_table "learning_hour_topics", force: :cascade do |t|
+    t.string "name", null: false
+    t.bigint "casa_org_id", null: false
+    t.integer "position", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_learning_hour_topics_on_casa_org_id"
+  end
+
+  create_table "learning_hour_types", force: :cascade do |t|
+    t.bigint "casa_org_id", null: false
+    t.string "name"
+    t.boolean "active", default: true
+    t.integer "position", default: 1
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_learning_hour_types_on_casa_org_id"
   end
 
   create_table "learning_hours", force: :cascade do |t|
@@ -349,7 +427,34 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "learning_hour_type_id"
+    t.bigint "learning_hour_topic_id"
+    t.index ["learning_hour_topic_id"], name: "index_learning_hours_on_learning_hour_topic_id"
+    t.index ["learning_hour_type_id"], name: "index_learning_hours_on_learning_hour_type_id"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
+  end
+
+  create_table "login_activities", force: :cascade do |t|
+    t.string "scope"
+    t.string "strategy"
+    t.string "identity"
+    t.boolean "success"
+    t.string "failure_reason"
+    t.string "user_type"
+    t.bigint "user_id"
+    t.string "context"
+    t.string "ip"
+    t.text "user_agent"
+    t.text "referrer"
+    t.string "city"
+    t.string "region"
+    t.string "country"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at"
+    t.index ["identity"], name: "index_login_activities_on_identity"
+    t.index ["ip"], name: "index_login_activities_on_ip"
+    t.index ["user_type", "user_id"], name: "index_login_activities_on_user"
   end
 
   create_table "mileage_rates", force: :cascade do |t|
@@ -542,6 +647,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
     t.datetime "confirmation_sent_at"
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
+    t.boolean "receive_reimbursement_email", default: false
+    t.string "token"
+    t.boolean "monthly_learning_hours_report", default: false, null: false
+    t.datetime "date_of_birth"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
@@ -556,6 +665,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
   add_foreign_key "addresses", "users"
+  add_foreign_key "banners", "casa_orgs"
+  add_foreign_key "banners", "users"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
   add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
   add_foreign_key "casa_cases", "casa_orgs"
@@ -566,17 +677,29 @@ ActiveRecord::Schema[7.0].define(version: 2023_04_20_212437) do
   add_foreign_key "case_contacts", "casa_cases"
   add_foreign_key "case_contacts", "users", column: "creator_id"
   add_foreign_key "case_court_orders", "casa_cases"
+  add_foreign_key "case_group_memberships", "casa_cases"
+  add_foreign_key "case_group_memberships", "case_groups"
+  add_foreign_key "case_groups", "casa_orgs"
+  add_foreign_key "contact_topic_answers", "case_contacts"
+  add_foreign_key "contact_topic_answers", "contact_topics"
+  add_foreign_key "contact_topics", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
   add_foreign_key "languages", "casa_orgs"
+  add_foreign_key "learning_hour_topics", "casa_orgs"
+  add_foreign_key "learning_hour_types", "casa_orgs"
+  add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
+  add_foreign_key "mileage_rates", "casa_orgs", validate: false
   add_foreign_key "mileage_rates", "users"
+  add_foreign_key "notes", "users", column: "creator_id", validate: false
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
+  add_foreign_key "placements", "casa_cases", validate: false
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"

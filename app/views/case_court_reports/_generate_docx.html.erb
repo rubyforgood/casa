@@ -1,0 +1,75 @@
+<%= form_with url: generate_case_court_reports_path, local: false do |form| %>
+  <% id = "generate-docx-report-modal" %>
+  <%= render(Modal::OpenButtonComponent.new(target: id, klass: "btn generate-report-button")) do %>
+    <svg viewBox="0 0 40 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <title>Word Document Logo</title>
+      <path d="M25 0H5C3.67392 0 2.40215 0.526784 1.46447 1.46447C0.526784 2.40215 0 3.67392 0 5V45C0 46.3261 0.526784 47.5979 1.46447 48.5355C2.40215 49.4732 3.67392 50 5 50H35C36.3261 50 37.5979 49.4732 38.5355 48.5355C39.4732 47.5979 40 46.3261 40 45V15L25 0ZM28 45H24.5L20 28L15.5 45H12L6.5 22.5H10.25L13.75 39.5L18.25 22.5H21.5L26 39.5L29.5 22.5H33.25L28 45ZM22.5 17.5V3.75L36.25 17.5H22.5Z" fill="#4A6CF7" />
+    </svg>
+    <div>
+      <h3 class="content-1">Download Court Report as .docx</h3>
+      <p class="content-2">
+      The Court Report is pre-filled with information for your case. You can select among currently active cases assigned to you. The document is in Microsoft Word format (.docx).
+      </p>
+    </div>
+  <% end %>
+  <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
+    <% component.with_header(text: "Download Court Report as a .docx", id: id, klass: "content-1") %>
+    <% component.with_body do %>
+      <div class="docx-report__modal-body">
+      <p class="content-3 md-10">
+      To download a court report, choose an active case and specify the date range.
+      </p>
+      <div class="input-style-1" id="case_select_body">
+        <%= form.label :case_selection, "Case" %>
+        <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
+
+        <% show_search = !current_user.volunteer? %>
+
+        <% select_case_prompt = show_search ? "Search by volunteer name or case number" : "Select case number" %>
+        <% select2_class = show_search ? " select2" : "" %>
+        <%= select_tag :case_number,
+          options_for_select(select_options),
+          prompt: select_case_prompt,
+          include_blank: false,
+          id: "case-selection",
+          class: "custom-select#{select2_class}",
+          data: { dropdown_parent: "##{id}" } %>
+
+      <%= form.hidden_field :time_zone, id: "user-time-zone" %>
+      </div>
+      <div class="dates-container">
+        <div class="field form-group mb-20">
+          <h6><label class="form-label" for="start_date">Starting From</label></h6>
+          <%= form.text_field :start_date,
+            value: Time.zone.now.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+            data: { provide: "datepicker",
+                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                    class: "form-control" %>
+        </div>
+
+        <div class="field form-group mb-20">
+          <h6><label class="form-label" for="end_date">Ending At</label></h6>
+          <%= form.text_field :end_date,
+            value: Time.zone.now.strftime(::DateHelper::RUBY_MONTH_DAY_YEAR_FORMAT),
+            data: { provide: "datepicker",
+                    date_format: ::DateHelper::JQUERY_MONTH_DAY_YEAR_FORMAT },
+                    class: "form-control" %>
+        </div>
+      </div>
+      </div>
+    <% end %>
+    <% component.with_footer do %>
+        <%= button_tag type: :submit,
+          data: {
+            button_name: "Generate Report"
+          },
+          id: "btnGenerateReport",
+          class: "main-btn primary-btn btn-hover btn-sm",
+          onclick: "setTimeZone()" do %>
+          <i class="lni lni-download mr-10"></i>
+          <i id="spinner" class='fas fa-spin d-none mr-10'>⏳</i>
+          Generate Report
+        <% end %>
+    <% end %>
+  <% end %>
+<% end %>

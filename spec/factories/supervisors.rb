@@ -5,7 +5,8 @@ FactoryBot.define do
 
     trait :with_casa_cases do
       after(:create) do |user, _|
-        create_list(:case_assignment, 2, volunteer: user)
+        volunteer = create(:volunteer)
+        create_list(:case_assignment, 2, volunteer: volunteer)
       end
     end
 
@@ -31,6 +32,10 @@ FactoryBot.define do
 
     trait :inactive do
       active { false }
+    end
+
+    trait :receive_reimbursement_attachment do
+      receive_reimbursement_email { true }
     end
   end
 end

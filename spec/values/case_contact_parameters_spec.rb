@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe CaseContactParameters do
   subject { described_class.new(params) }
+
   let(:params) {
     ActionController::Parameters.new(
       case_contact: ActionController::Parameters.new(
@@ -13,10 +14,15 @@ RSpec.describe CaseContactParameters do
         miles_driven: "123",
         want_driving_reimbursement: "want_driving_reimbursement",
         notes: "notes",
-        case_contact_contact_type_attributes: [:contact_type_id]
+        case_contact_contact_type_attributes: [:contact_type_id],
+        contact_topic_answers_attributes:
       )
     )
   }
+  let(:contact_topic_answers_attributes) do
+    {"0" => {"id" => 1, "value" => "test",
+             "question" => "question", "selected" => true}}
+  end
 
   it "returns data" do
     expect(subject["duration_minutes"]).to eq(62)
@@ -27,14 +33,8 @@ RSpec.describe CaseContactParameters do
     expect(subject["want_driving_reimbursement"]).to eq("want_driving_reimbursement")
     expect(subject["notes"]).to eq("notes")
     expect(subject["case_contact_contact_type_attributes"]).to eq([])
-  end
 
-  context "with creator" do
-    subject { described_class.new(params, creator: creator) }
-    let(:creator) { "1@example.com" }
-
-    it "returns data" do
-      expect(subject[:creator]).to eq("1@example.com")
-    end
+    expected_attrs = contact_topic_answers_attributes["0"].except("question")
+    expect(subject["contact_topic_answers_attributes"]["0"].to_h).to eq(expected_attrs)
   end
 end
