@@ -1,5 +1,5 @@
-class ReimbursementCompleteNotifier < Noticed::Event
-  param :case_contact
+class ReimbursementCompleteNotifier < BaseNotifier
+  required_param :case_contact
 
   def title
     "Reimbursement Approved"

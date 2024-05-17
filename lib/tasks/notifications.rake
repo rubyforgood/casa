@@ -1,7 +1,7 @@
 # Temporarily define the Notification model to access the old table
-class Notification < ActiveRecord::Base
-  self.inheritance_column = nil
-end
+# class Notification < ActiveRecord::Base
+#   self.inheritance_column = nil
+# end
 
 namespace :notifications do
   desc "Migrates existing notifications to new tables for noticed gem v2.x"
@@ -29,14 +29,14 @@ namespace :notifications do
       # attributes[:record] = attributes[:params].delete(:user) || attributes[:params].delete(:account)
 
       attributes[:notifications_attributes] = [{
-                                                 type: "#{attributes[:type]}::Notification",
-                                                 recipient_type: notification.recipient_type,
-                                                 recipient_id: notification.recipient_id,
-                                                 read_at: notification.read_at,
-                                                 seen_at: notification.read_at,
-                                                 created_at: notification.created_at,
-                                                 updated_at: notification.updated_at
-                                               }]
+        type: "#{attributes[:type]}::Notification",
+        recipient_type: notification.recipient_type,
+        recipient_id: notification.recipient_id,
+        read_at: notification.read_at,
+        seen_at: notification.read_at,
+        created_at: notification.created_at,
+        updated_at: notification.updated_at
+      }]
       Noticed::Event.create!(attributes)
     end
 
@@ -67,5 +67,3 @@ namespace :notifications do
     puts "Finished seeding #{count} records. (#{(Time.now - start).round(2)} seconds)"
   end
 end
-
-

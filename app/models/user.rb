@@ -24,7 +24,7 @@ class User < ApplicationRecord
 
   has_many :followups, foreign_key: "creator_id"
 
-  has_many :notifications, as: :recipient
+  has_many :notifications, as: :recipient, dependent: :destroy, class_name: "Noticed::Notification"
   has_many :sent_emails, dependent: :destroy
 
   has_many :other_duties, foreign_key: "creator_id", dependent: :destroy
