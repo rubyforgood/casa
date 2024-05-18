@@ -24,7 +24,11 @@ class FollowupNotifier < BaseNotifier
   end
 
   def url
-    edit_case_contact_path(params[:followup][:case_contact_id], notification_id: self.id)
+    if params[:followup][:id].present?
+      edit_case_contact_path(params[:followup][:id], notification_id: self.id)
+    else
+      root_path
+    end
   end
 
   private

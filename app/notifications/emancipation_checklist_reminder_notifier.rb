@@ -16,7 +16,7 @@ class EmancipationChecklistReminderNotifier < BaseNotifier
 
   def message
     casa_case = params[:casa_case]
-    "Your case #{casa_case.case_number} is a transition aged youth. " \
+    "Your case #{casa_case[:case_number]} is a transition aged youth. " \
       "We want to make sure that along the way, we’re preparing our youth for emancipation. " \
       "Make sure to check the emancipation checklist."
   end
@@ -26,6 +26,6 @@ class EmancipationChecklistReminderNotifier < BaseNotifier
   end
 
   def url
-    casa_case_emancipation_path(params[:casa_case].id)
+    casa_case_emancipation_path(params[:casa_case][:id])
   end
 end

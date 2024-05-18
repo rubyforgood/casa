@@ -30,7 +30,7 @@ class BaseNotifier < Noticed::Event
   end
 
   def muted_display
-    return "" unless record.read?
+    return "" unless record&.read?
 
     "bg-light text-muted"
   end

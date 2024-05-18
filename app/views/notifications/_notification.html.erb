@@ -1,15 +1,15 @@
 <a
-  href="<%= notification.to_notification.url %>"
+  href="<%= event.url %>"
   class="<%= notification_row_class(notification) %> list-group-item list-group-item-action flex-column align-items-start">
   <div class="d-flex flex-row">
     <div class="d-flex-shrink-0"><%= notification_icon(notification) %></div>
     <div class="ml-2 flex-grow-1">
       <div class="d-flex justify-content-between">
-        <h5 class="mb-1"><%= notification.to_notification.title %></h5>
+        <h5 class="mb-1"><%= event.title %></h5>
         <small><%= time_ago_in_words(notification.created_at) %> ago</small>
       </div>
       <div class="my-1">
-        <%= simple_format notification.to_notification.message %>
+        <%= simple_format event.message %>
       </div>
     </div>
   </div>
