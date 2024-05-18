@@ -3,7 +3,7 @@
 # VolunteerBirthdayNotifier.with(post: @post).deliver_later(current_user)
 # VolunteerBirthdayNotifier.with(post: @post).deliver(current_user)
 
-class VolunteerBirthdayNotifier < BaseNotifier
+class VolunteerBirthdayNotifier < BaseNotification
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"

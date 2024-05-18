@@ -12,7 +12,7 @@ class EmancipationChecklistReminderTask
 
   def send_reminders
     cases.each do |assignment|
-      ::EmancipationChecklistReminderNotifier
+      ::EmancipationChecklistReminderNotification
         .with(casa_case: assignment.casa_case)
         .deliver(assignment.volunteer)
     end

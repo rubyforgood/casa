@@ -3,7 +3,7 @@
 # EmancipationChecklistNotification.with(post: @post).deliver_later(current_user)
 # EmancipationChecklistNotification.with(post: @post).deliver(current_user)
 
-class EmancipationChecklistReminderNotifier < BaseNotifier
+class EmancipationChecklistReminderNotification < BaseNotification
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"

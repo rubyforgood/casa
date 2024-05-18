@@ -37,8 +37,8 @@ FactoryBot.define do
   end
 
   factory :emancipation_checklist_reminder_notifier do
-    type { "EmancipationChecklistReminderNotifier" }
-    record_type { "EmancipationChecklistReminderNotifier::Notification" }
+    type { "EmancipationChecklistReminderNotification" }
+    record_type { "EmancipationChecklistReminderNotification::Notification" }
     association :record, factory: :notification
     params do
       {

@@ -13,7 +13,7 @@ namespace :notifications do
     Notification.find_each do |notification|
       attributes = notification.attributes.slice("type", "created_at", "updated_at").with_indifferent_access
 
-      attributes[:type] = attributes[:type].sub("EmancipationChecklistReminderNotification", "EmancipationChecklistReminderNotifier")
+      attributes[:type] = attributes[:type].sub("EmancipationChecklistReminderNotification", "EmancipationChecklistReminderNotification")
       attributes[:type] = attributes[:type].sub("FollowupNotification", "FollowupNotifier")
       attributes[:type] = attributes[:type].sub("FollowupResolvedNotification", "FollowupResolvedNotifier")
       attributes[:type] = attributes[:type].sub("ReimbursementCompleteNotification", "ReimbursementCompleteNotifier")

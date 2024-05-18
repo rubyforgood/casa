@@ -19,8 +19,8 @@ RSpec.describe EmancipationChecklistReminderTask, type: :model do
     end
 
     it "#send_reminders also sends the notifications" do
-      instance = instance_double(EmancipationChecklistReminderNotifier)
-      expect(EmancipationChecklistReminderNotifier).to receive(:new) { instance }.twice
+      instance = instance_double(EmancipationChecklistReminderNotification)
+      expect(EmancipationChecklistReminderNotification).to receive(:new) { instance }.twice
       expect(instance).to receive(:deliver).twice
       task.send_reminders
     end

@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe EmancipationChecklistReminderNotifier, type: :model do
+RSpec.describe EmancipationChecklistReminderNotification, type: :model do
   let(:casa_case) { create :casa_case }
 
-  let(:notification) { EmancipationChecklistReminderNotifier.with(casa_case: casa_case) }
+  let(:notification) { EmancipationChecklistReminderNotification.with(casa_case: casa_case) }
 
   describe "message" do
     it "contains the case number" do
