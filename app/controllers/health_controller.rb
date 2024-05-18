@@ -42,9 +42,9 @@ class HealthController < ApplicationController
   def monthly_unique_users_graph_data
     first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month.strftime("%b %Y") }
 
-    monthly_counts_of_volunteers = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: { type: "Volunteer" }, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    monthly_counts_of_supervisors = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: { type: "Supervisor" }, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    monthly_counts_of_casa_admins = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: { type: "CasaAdmin" }, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
+    monthly_counts_of_volunteers = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Volunteer"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
+    monthly_counts_of_supervisors = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Supervisor"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
+    monthly_counts_of_casa_admins = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "CasaAdmin"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
 
     monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
       [
