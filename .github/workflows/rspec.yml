@@ -1,31 +1,22 @@
 name: rspec
 
 on:
-  workflow_call:
-    inputs:
-      groups:
-        required: true
-        type: string
-      group_count:
-        required: true
-        type: number
-      parallel_processes_count:
-        required: true
-        type: number
-env:
-  GROUPS_COMMA: ${{ join(fromJSON(inputs.groups), ',') }}
-  GROUPS_UNDERSCORE: ${{ join(fromJSON(inputs.groups), '_') }}
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "doc/**"
+      - "**/*.md"
+  pull_request:
+    branches:
+      - main
 
 jobs:
   rspec:
-    name: RSpec Groups ${{ inputs.groups }}
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     env:
       RAILS_ENV: test
-      BUNDLE_WITHOUT: "development"
-      CI_TOTAL_JOBS: ${{ inputs.group_count }}
-      CI_JOB_INDEX: ${{ inputs.groups }}
+
     services:
       db:
         image: postgres:14.8
@@ -38,40 +29,21 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+
     steps:
       - uses: actions/checkout@v4
-
-      - name: Download parallel runtime log from Azure Blob Storage
-        env:
-          AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
-          AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
-          STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
-        if: env.AZURE_STORAGE_KEY != ''
-        run: |
-          az storage blob download \
-          -c $STORAGE_CONTAINER \
-          --file old_parallel_runtime.log \
-          -n parallel_runtime.log
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           bundler-cache: true
 
-      - name: Set up JS
-        uses: actions/setup-node@v4
-        with:
-          node-version: lts/gallium
-          cache: 'yarn'
-      - run: yarn
-
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
 
-      - name: Setup Parallel Database
+      - name: Build App
         env:
-          RAILS_ENV: test
           POSTGRES_HOST: localhost
           DATABASE_HOST: localhost
           POSTGRES_USER: postgres
@@ -80,69 +52,32 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
         run: |
-          echo "setting up database"
-          bundle exec rake parallel:create
-          bundle exec rake parallel:rake[db:schema:load]
-          echo "done"
-
-      - name: Build App
-        run: |
+          yarn
+          bundle exec rake db:create
+          bundle exec rake db:schema:load
           bundle exec rails css:build
           bundle exec rails javascript:build
 
-      - name: Run rspec group ${{ inputs.group }}
+      - name: Run rspec and upload code coverage
         env:
-          RAILS_ENV: test
-          POSTGRES_HOST: localhost
           DATABASE_HOST: localhost
           POSTGRES_USER: postgres
           CASA_DATABASE_PASSWORD: password
-          POSTGRES_PASSWORD: password
           POSTGRES_HOST_AUTH_METHOD: trust
-          POSTGRES_PORT: 5432
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-        continue-on-error: true
         run: |
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec parallel_rspec \
-          -n "${CI_TOTAL_JOBS}" \
-          --only-group "${CI_JOB_INDEX}" \
-          --runtime-log old_parallel_runtime.log \
-          --verbose-command ./spec
-
-          echo 'Tests completed. Uploading to Code Climate'
+          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
           ./cc-test-reporter after-build --exit-code $?
-          cat tmp/spec_summary.log
 
-      - name: Compress reports
-        run: |
-          zip -r test_reports_${{ env.GROUPS_UNDERSCORE }}.zip tmp/reports
-
-      - name: Compress log
-        if: env.AZURE_STORAGE_KEY != ''
-        run: |
-          mv tmp/parallel_runtime.log parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
-
-      - name: Upload test reports
+      - name: Archive selenium screenshots
+        if: ${{ failure() }}
         uses: actions/upload-artifact@v4
         with:
-          name: test_reports_${{ env.GROUPS_UNDERSCORE }}.zip
-          path: test_reports_${{ env.GROUPS_UNDERSCORE }}.zip
-
-      - name: Upload file parallel tests runtime log
-        if: env.AZURE_STORAGE_KEY != ''
-        uses: actions/upload-artifact@v4
-        with:
-          name: parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
-          path: parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
-
-      - name: Upload Selenium Screenshots
-        uses: actions/upload-artifact@v4
-        with:
-          name: screenshots_${{ env.GROUPS_UNDERSCORE }}
-          path: ${{ github.workspace }}/tmp/screenshots${{ env.GROUPS_UNDERSCORE }}/
-          if-no-files-found: ignore
+          name: selenium-screenshots
+          path: |
+            ${{ github.workspace }}/tmp/capybara/*.png
+            ${{ github.workspace }}/tmp/capybara/*.html
