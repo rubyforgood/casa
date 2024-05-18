@@ -1,9 +1,9 @@
 # To deliver this notification:
 #
-# YouthBirthdayNotifier.with(post: @post).deliver_later(current_user)
-# YouthBirthdayNotifier.with(post: @post).deliver(current_user)
+# YouthBirthdayNotification.with(post: @post).deliver_later(current_user)
+# YouthBirthdayNotification.with(post: @post).deliver(current_user)
 
-class YouthBirthdayNotifier < BaseNotification
+class YouthBirthdayNotification < BaseNotification
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"

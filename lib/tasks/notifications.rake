@@ -14,11 +14,11 @@ namespace :notifications do
       attributes = notification.attributes.slice("type", "created_at", "updated_at").with_indifferent_access
 
       attributes[:type] = attributes[:type].sub("EmancipationChecklistReminderNotification", "EmancipationChecklistReminderNotification")
-      attributes[:type] = attributes[:type].sub("FollowupNotification", "FollowupNotifier")
-      attributes[:type] = attributes[:type].sub("FollowupResolvedNotification", "FollowupResolvedNotifier")
-      attributes[:type] = attributes[:type].sub("ReimbursementCompleteNotification", "ReimbursementCompleteNotifier")
-      attributes[:type] = attributes[:type].sub("VolunteerBirthdayNotification", "VolunteerBirthdayNotifier")
-      attributes[:type] = attributes[:type].sub("YouthBirthdayNotification", "YouthBirthdayNotifier")
+      attributes[:type] = attributes[:type].sub("FollowupNotification", "FollowupNotification")
+      attributes[:type] = attributes[:type].sub("FollowupResolvedNotification", "FollowupResolvedNotification")
+      attributes[:type] = attributes[:type].sub("ReimbursementCompleteNotification", "ReimbursementCompleteNotification")
+      attributes[:type] = attributes[:type].sub("VolunteerBirthdayNotification", "VolunteerBirthdayNotification")
+      attributes[:type] = attributes[:type].sub("YouthBirthdayNotification", "YouthBirthdayNotification")
       attributes[:type] = attributes[:type].sub("Notification", "Notifier")
 
       attributes[:params] = Noticed::Coder.load(notification.params)

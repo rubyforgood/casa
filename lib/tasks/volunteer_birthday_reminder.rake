@@ -3,7 +3,7 @@ task volunteer_birthday_reminder: :environment do
   # Check if the current day of the month is the 15th
   if Date.today.day == 15
     Volunteer.active.with_supervisor.birthday_next_month.each do |volunteer|
-      VolunteerBirthdayNotifier
+      VolunteerBirthdayNotification
         .with(volunteer: volunteer)
         .deliver(volunteer.supervisor)
     end

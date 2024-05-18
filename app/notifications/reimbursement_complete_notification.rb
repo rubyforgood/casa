@@ -1,4 +1,4 @@
-class ReimbursementCompleteNotifier < BaseNotification
+class ReimbursementCompleteNotification < BaseNotification
   required_param :case_contact
 
   def title

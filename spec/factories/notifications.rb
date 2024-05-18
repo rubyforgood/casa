@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :followup_notifier do
-    type { "FollowupNotifier" }
-    record_type { "FollowupNotifier::Notification" }
+    type { "FollowupNotification" }
+    record_type { "FollowupNotification::Notification" }
     params do
       {
         created_by: attributes_for(:user)
@@ -48,8 +48,8 @@ FactoryBot.define do
   end
 
   factory :youth_birthday_notifier do
-    type { "YouthBirthdayNotifier" }
-    record_type { "YouthBirthdayNotifier::Notification" }
+    type { "YouthBirthdayNotification" }
+    record_type { "YouthBirthdayNotification::Notification" }
     association :record, factory: :notification
     params do
       {

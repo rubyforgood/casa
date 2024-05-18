@@ -8,7 +8,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
 
   before { casa_case.assigned_volunteers << volunteer }
 
-  # context "FollowupResolvedNotifier" do
+  # context "FollowupResolvedNotification" do
   #   let(:notification_message) { "#{volunteer.display_name} resolved a follow up. Click to see more." }
   #   let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
   #
@@ -48,7 +48,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   #   end
   # end
 
-  context "FollowupNotifier", js: true do
+  context "FollowupNotification", js: true do
     let(:note) { "Lorem ipsum dolor sit amet." }
 
     let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
@@ -151,7 +151,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "YouthBirthdayNotifier" do
+  context "YouthBirthdayNotification" do
     before do
       volunteer.notifications << create(:notification, :youth_birthday, params: {casa_case: casa_case})
       sign_in volunteer
@@ -166,7 +166,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "ReimbursementCompleteNotifier" do
+  context "ReimbursementCompleteNotification" do
     it "should display a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
       volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
