@@ -11,9 +11,11 @@ module FillInCaseContactFields
       check case_number
     end
 
+    find(".ts-control").click
     contact_types.each do |contact_type|
-      check contact_type
+      find("span", text: contact_type).click
     end
+    find(".ts-control").click
 
     within "#enter-contact-details" do
       choose contact_made ? "Yes" : "No"

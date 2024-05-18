@@ -13,7 +13,7 @@ RSpec.describe "/casa_cases", type: :request do
       "date_in_care(2i)": date_in_care.month,
       "date_in_care(1i)": date_in_care.year,
       casa_org_id: organization.id,
-      casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+      contact_type_ids: [type1.id]
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
@@ -180,7 +180,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "1234",
           birth_month_year_youth: pre_transition_aged_youth_age,
           casa_org_id: other_org.id,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
 
         expect { post casa_cases_url, params: {casa_case: attributes} }.to(
@@ -251,7 +251,7 @@ RSpec.describe "/casa_cases", type: :request do
         {
           case_number: "12345",
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
       end
 
@@ -677,7 +677,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "12345",
           court_report_status: :completed,
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
       end
 

@@ -1,6 +1,9 @@
 class ContactType < ApplicationRecord
   belongs_to :contact_type_group
 
+  has_many :casa_case_contact_types
+  has_many :casa_cases, through: :casa_case_contact_types
+
   validates :name, presence: true, uniqueness: {scope: :contact_type_group_id,
                                                 message: "should be unique per contact type group"}
 

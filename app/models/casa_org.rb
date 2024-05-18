@@ -95,6 +95,12 @@ class CasaOrg < ApplicationRecord
     contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
   end
 
+  # Returns contact types that are active and tied to the CasaOrg as a an array of hashes that can be used by the multiple select component
+  # @return [ActiveRecord::Relation<ContactType>]
+  def contact_types
+    ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name)
+  end
+
   # Given a specific date, returns the active mileage rate.
   # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
   # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:
