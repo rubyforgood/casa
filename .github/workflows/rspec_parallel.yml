@@ -26,6 +26,9 @@ jobs:
       BUNDLE_WITHOUT: "development"
       CI_TOTAL_JOBS: ${{ inputs.group_count }}
       CI_JOB_INDEX: ${{ inputs.groups }}
+      AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
+      STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
     services:
       db:
         image: postgres:14.8
@@ -42,10 +45,6 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download parallel runtime log from Azure Blob Storage
-        env:
-          AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
-          AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
-          STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
         if: env.AZURE_STORAGE_KEY != ''
         run: |
           az storage blob download \
@@ -104,9 +103,9 @@ jobs:
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
         continue-on-error: true
         run: |
-          curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
-          chmod +x ./cc-test-reporter
-          ./cc-test-reporter before-build
+          # curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+          # chmod +x ./cc-test-reporter
+          # ./cc-test-reporter before-build
 
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec parallel_rspec \
           -n "${CI_TOTAL_JOBS}" \
@@ -114,8 +113,8 @@ jobs:
           --runtime-log old_parallel_runtime.log \
           --verbose ./spec
 
-          echo 'Tests completed. Uploading to Code Climate'
-          ./cc-test-reporter after-build --exit-code $?
+          # echo 'Tests completed. Uploading to Code Climate'
+          # ./cc-test-reporter after-build --exit-code $?
           cat tmp/spec_summary.log
 
       - name: Compress reports
