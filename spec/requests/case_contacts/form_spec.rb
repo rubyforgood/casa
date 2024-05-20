@@ -35,12 +35,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         response
       end
 
-      it "shows all contact types alphabetically by group" do
-        page = request.parsed_body
-        expected_contact_types = ["Parent", "Sibling", "Counselor", "Teacher"]
-        expect(page).to match(/#{expected_contact_types.join(".*")}/m)
-      end
-
       it "shows all contact types once" do
         page = request.parsed_body.to_html
         expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
@@ -58,6 +52,15 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
       end
 
+      context "when an org has no topics" do
+        let(:organization) { create(:casa_org) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+
+        it "does not show contact topic card" do
+          page = request.parsed_body.to_html
+          expect(page).to_not include("Court report topics")
+        end
+      end
       context "when the org has topics assigned" do
         let(:contact_topics) {
           [
@@ -121,15 +124,12 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             duration_minutes: 50,
             contact_made: true,
             medium_type: CaseContact::CONTACT_MEDIUMS.second,
-            case_contact_contact_type_attributes: contact_type_attributes,
+            contact_type_ids: contact_type_ids,
             contact_topic_answers_attributes: topic_answers_attributes
           }
         end
-        let(:contact_type_attributes) do
-          {
-            "0" => {contact_type_id: contact_type_group_a.contact_types.first.id},
-            "1" => {contact_type_id: contact_type_group_a.contact_types.second.id}
-          }
+        let(:contact_type_ids) do
+          [contact_type_group_a.contact_types.first.id, contact_type_group_a.contact_types.second.id]
         end
 
         let(:topic_answers_attributes) do

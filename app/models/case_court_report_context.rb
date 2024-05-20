@@ -3,7 +3,7 @@
 require "date"
 
 class CaseCourtReportContext
-  attr_reader :report_path, :template
+  attr_reader :report_path, :template, :date_range
 
   def initialize(args = {})
     @casa_case = CasaCase.friendly.find(args[:case_id])
@@ -12,6 +12,7 @@ class CaseCourtReportContext
     @path_to_template = args[:path_to_template]
     @court_date = args[:court_date] || @casa_case.next_court_date
     @case_court_orders = args[:case_court_orders] || @casa_case.case_court_orders
+    @date_range = calculate_date_range(args)
   end
 
   def context
@@ -24,7 +25,8 @@ class CaseCourtReportContext
       latest_hearing_date: latest_hearing_date,
       org_address: org_address(@path_to_template),
       volunteer: volunteer_info,
-      hearing_type_name: @court_date&.hearing_type&.name || "None"
+      hearing_type_name: @court_date&.hearing_type&.name || "None",
+      case_topics: court_topics.values
     }
   end
 
@@ -35,8 +37,7 @@ class CaseCourtReportContext
   #   - :dates [Array<String>]
   #   - :dates_by_medium_type [Array<String>]
   def case_contacts
-    cccts = CaseContactContactType.includes(:case_contact, :contact_type).where("case_contacts.casa_case_id": @casa_case.id)
-    interviewees = filter_out_old_case_contacts(cccts)
+    interviewees = filtered_interviewees
     return [] unless interviewees.size.positive?
 
     CaseContactsContactDates.new(interviewees).contact_dates_details
@@ -56,13 +57,11 @@ class CaseCourtReportContext
     end
   end
 
-  def filter_out_old_case_contacts(interviewees)
-    most_recent_court_date = @casa_case.most_recent_past_court_date&.date
-    if most_recent_court_date
-      interviewees.where("occurred_at >= ?", most_recent_court_date)
-    else
-      interviewees
-    end
+  def filtered_interviewees
+    CaseContactContactType
+      .joins(:contact_type, case_contact: :casa_case)
+      .where("case_contacts.casa_case_id": @casa_case.id)
+      .where("case_contacts.occurred_at": @date_range)
   end
 
   def case_details
@@ -88,5 +87,63 @@ class CaseCourtReportContext
   def org_address(path_to_template)
     is_default_template = path_to_template.end_with?("default_report_template.docx")
     @volunteer.casa_org.address if @volunteer && is_default_template
+  end
+
+  # Sample output
+  #
+  # expected_topics = {
+  # "Question 1" => {topic: "Question 1", details: "Details 1", answers: [
+  #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
+  #   {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"}
+  # ]},
+  # "Question 2" => {topic: "Question 2", details: "Details 2", answers: [
+  #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
+  #   {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
+  # ]},
+  # "Question 3" => {topic: "Question 3", details: "Details 3", answers: [
+  #   {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
+  #   {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
+  # ]}
+  # }
+  def court_topics
+    topics = ContactTopic
+      .joins(contact_topic_answers: {case_contact: [:casa_case, :contact_types]}).distinct
+      .where("casa_cases.id": @casa_case.id)
+      .where("case_contacts.occurred_at": @date_range)
+      .order(:occurred_at, :value)
+      .select(:details, :question, :occurred_at, :value, :contact_made,
+        "STRING_AGG(contact_types.name, ', ' ORDER BY contact_types.name) AS medium_types")
+      .group(:details, :question, :occurred_at, :value, :contact_made)
+
+    topics.each_with_object({}) do |topic, hash|
+      hash[topic.question] ||= {
+        answers: [],
+        topic: topic.question,
+        details: topic.details
+      }
+
+      formatted_date = CourtReportFormatContactDate.new(topic).format_long
+      answer_value = topic.value.blank? ? "No Answer Provided" : topic.value
+      answer = {
+        date: formatted_date,
+        medium: topic.medium_types,
+        value: answer_value
+      }
+
+      hash[topic.question][:answers].push(answer)
+    end
+  end
+
+  private
+
+  def calculate_date_range(args)
+    zone = args[:time_zone] ? ActiveSupport::TimeZone.new(args[:time_zone]) : Time.zone
+
+    start_date = @casa_case.most_recent_past_court_date&.date&.in_time_zone(zone)
+    start_date = zone.parse(args[:start_date]) if args[:start_date]&.present?
+
+    end_date = args[:end_date]&.present? ? zone.parse(args[:end_date]) : nil
+
+    start_date..end_date
   end
 end

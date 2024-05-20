@@ -51,9 +51,8 @@
     <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
     <% occurred_at = learning_hour.occurred_at || Date.today %>
     <div class="input-style-1">
-      <%= form.text_field :occurred_at,
+      <%= form.date_field :occurred_at,
                           value: occurred_at.to_date,
-                          data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
                           class: "form-control label-font-weight" %>
     </div>
   </div>

@@ -67,9 +67,9 @@ class CasaOrg < ApplicationRecord
     end
   end
 
-  def open_org_court_report_template(&block)
+  def open_org_court_report_template(&)
     if court_report_template.attached?
-      court_report_template.open(&block)
+      court_report_template.open(&)
     else
       yield CASA_DEFAULT_COURT_REPORT
     end
@@ -93,6 +93,12 @@ class CasaOrg < ApplicationRecord
 
   def contact_types_by_group
     contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
+  end
+
+  # Returns contact types that are active and tied to the CasaOrg as a an array of hashes that can be used by the multiple select component
+  # @return [ActiveRecord::Relation<ContactType>]
+  def contact_types
+    ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name)
   end
 
   # Given a specific date, returns the active mileage rate.

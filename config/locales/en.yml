@@ -32,12 +32,13 @@
 en:
   time:
     formats:
-      day_and_date: "%A, %d-%b-%Y"
+      day_and_date: "%A, %b %d, %Y"
       standard: "%m-%d-%Y"
       contact_occurred_at: "%Y%m%d%H%M%s"
       full: "%B %-d, %Y"
       youth_date_of_birth: "%B %Y"
       short_date: "%-m/%d"
+      long_date: "%m/%d/%y"
       edit_profile: "%B %d, %Y at %I:%M %p %Z"
       time_on_date: "%-I:%-M %p on %m-%e-%Y"
   date:

@@ -64,9 +64,7 @@
             <%= cdf.label :date, "Next Court Date" %>
             <br>
             <div class="input-style-1">
-              <%= cdf.text_field :date,
-                                 data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
-                                 class: "form-control" %>
+              <%= cdf.date_field :date, class: "form-control" %>
             </div>
           </div>
         <% end %>
@@ -108,12 +106,8 @@
         </div>
       <% end %>
       <% if Pundit.policy(current_user, casa_case).update_contact_types? %>
-        <%= render "case_contacts/form/contact_types",
-                   form: form,
-                   model: casa_case,
-                   contact_type_groups: @contact_types.map(&:contact_type_group).sort_by(&:name).uniq,
-                   selected_case_contact_types: [],
-                   checkbox_tag_name: "casa_case[casa_case_contact_types_attributes][][contact_type_id]" %>
+        <label for="casa_case_contact_type_ids">Contact Types</label>
+        <%= render "case_contacts/form/contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: [@casa_case] %>
       <% end %>
       <br>
       <div class="actions-cc">

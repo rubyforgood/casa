@@ -97,29 +97,41 @@ RSpec.describe CaseContact, type: :model do
     end
 
     it "requires medium type" do
-      expect(build_stubbed(:case_contact, :details_status, medium_type: nil)).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, medium_type: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("Medium type can't be blank")
     end
 
     it "requires a case to be selected" do
-      expect(build_stubbed(:case_contact, :details_status, draft_case_ids: [])).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [])
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("You must select at least one casa case.")
     end
 
     it "requires occurred at" do
-      expect(build_stubbed(:case_contact, :details_status, occurred_at: nil)).not_to be_valid
+      case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil)
+      expect(case_contact).not_to be_valid
+      expect(case_contact.errors.full_messages).to include("Occurred at can't be blank")
     end
 
     it "requires duration minutes" do
-      expect(build_stubbed(:case_contact, :details_status, duration_minutes: nil)).not_to be_valid
+      obj = build_stubbed(:case_contact, :details_status, duration_minutes: nil)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Duration minutes can't be blank")
     end
   end
 
   context "status is expenses" do
     it "validates miles driven if want reimbursement" do
-      expect(build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)).not_to be_valid
+      obj = build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
 
-    it "validates volunteer address" do
-      expect(build_stubbed(:case_contact, :expenses_status, :wants_reimbursement)).not_to be_valid
+    it "validates casa case present" do
+      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, casa_case: nil)
+      expect(obj).not_to be_valid
+      expect(obj.errors.full_messages).to include("Casa case can't be blank")
     end
   end
 
@@ -131,12 +143,12 @@ RSpec.describe CaseContact, type: :model do
 
       case_contact = create(:case_contact, contact_types: [type1])
 
-      expect(case_contact.case_contact_contact_type.count).to be 1
+      expect(case_contact.case_contact_contact_types.count).to be 1
       expect(case_contact.contact_types).to match_array([type1])
 
-      case_contact.update_cleaning_contact_types({case_contact_contact_type_attributes: [{contact_type_id: type2.id}]})
+      case_contact.update_cleaning_contact_types(contact_type_ids: [type2.id])
 
-      expect(case_contact.case_contact_contact_type.count).to eq 1
+      expect(case_contact.case_contact_contact_types.count).to eq 1
       expect(case_contact.contact_types.reload).to match_array([type2])
     end
   end

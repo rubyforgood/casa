@@ -8,7 +8,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
   it "renders the button with text and icon" do
     render_inline(Modal::OpenButtonComponent.new(target: "myModal", text: "Example Text", icon: "example-icon", klass: "example-class"))
 
-    expect(page).to have_css("button[type='button'][class='btn example-class'][data-bs-toggle='modal'][data-bs-target='#myModal']")
+    expect(page).to have_css("button[type='button'][class='example-class'][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).to have_css("button i.lni.mr-10.lni-example-icon")
     expect(page).to have_text("Example Text")
   end
@@ -16,7 +16,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
   it "renders the button with only text" do
     render_inline(Modal::OpenButtonComponent.new(target: "myModal", text: "Example Text"))
 
-    expect(page).to have_css("button[type='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
+    expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).not_to have_css("button i")
     expect(page).to have_text("Example Text")
   end
@@ -26,7 +26,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
       "Example Text"
     end
 
-    expect(page).to have_css("button[type='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
+    expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).not_to have_css("button i")
     expect(page).to have_text("Example Text")
   end
@@ -36,7 +36,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
       "Example Text"
     end
 
-    expect(page).to have_css("button[type='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
+    expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).not_to have_css("button i")
     expect(page).to have_text("Example Text")
     expect(page).to_not have_text("Overwritten")

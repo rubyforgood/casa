@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_07_022441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -345,8 +345,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "note"
+    t.bigint "followupable_id"
+    t.string "followupable_type"
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
     t.index ["creator_id"], name: "index_followups_on_creator_id"
+    t.index ["followupable_type", "followupable_id"], name: "index_followups_on_followupable_type_and_followupable_id"
   end
 
   create_table "fund_requests", force: :cascade do |t|
@@ -429,6 +432,29 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
     t.index ["learning_hour_topic_id"], name: "index_learning_hours_on_learning_hour_topic_id"
     t.index ["learning_hour_type_id"], name: "index_learning_hours_on_learning_hour_type_id"
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
+  end
+
+  create_table "login_activities", force: :cascade do |t|
+    t.string "scope"
+    t.string "strategy"
+    t.string "identity"
+    t.boolean "success"
+    t.string "failure_reason"
+    t.string "user_type"
+    t.bigint "user_id"
+    t.string "context"
+    t.string "ip"
+    t.text "user_agent"
+    t.text "referrer"
+    t.string "city"
+    t.string "region"
+    t.string "country"
+    t.float "latitude"
+    t.float "longitude"
+    t.datetime "created_at"
+    t.index ["identity"], name: "index_login_activities_on_identity"
+    t.index ["ip"], name: "index_login_activities_on_ip"
+    t.index ["user_type", "user_id"], name: "index_login_activities_on_user"
   end
 
   create_table "mileage_rates", force: :cascade do |t|
@@ -666,14 +692,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_16_013254) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
-  add_foreign_key "mileage_rates", "casa_orgs", validate: false
+  add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
-  add_foreign_key "notes", "users", column: "creator_id", validate: false
+  add_foreign_key "notes", "users", column: "creator_id"
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases", validate: false
+  add_foreign_key "placements", "casa_cases"
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"

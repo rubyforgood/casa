@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "court_dates/new", type: :system do
-  let(:now) { Date.new(2021, 1, 1) }
+  let(:now) { Date.new(2021, 1, 2) }
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let!(:casa_case) { create(:casa_case, casa_org: casa_org) }
@@ -23,8 +23,8 @@ RSpec.describe "court_dates/new", type: :system do
     it "is successful", js: true do
       expect(page).to have_content(casa_case.case_number)
 
-      fill_in "court_date_date", with: :now
-      fill_in "court_date_court_report_due_date", with: :now
+      fill_in "court_date_date", with: now
+      fill_in "court_date_court_report_due_date", with: now
       select judge.name, from: "Judge"
       select hearing_type.name, from: "Hearing type"
 
@@ -39,7 +39,7 @@ RSpec.describe "court_dates/new", type: :system do
 
       expect(page).to have_content("Court date was successfully created.")
       expect(page).to have_content(casa_case.case_number)
-      expect(page).to have_content("Court Report Due Date:")
+      expect(page).to have_content("Court Report Due Date:\nJanuary 2, 2021")
       expect(page).to have_content(judge.name)
       expect(page).to have_content(hearing_type.name)
       expect(page).to have_content(text)

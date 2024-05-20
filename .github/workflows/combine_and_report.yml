@@ -1,0 +1,47 @@
+on:
+  workflow_call:
+jobs:
+  combine_and_report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Project
+        uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Decompress chunk test reports
+        run: |
+          find artifacts -name "test_reports*.zip" -exec unzip -d test_reports {} \;
+          find test_reports -name "**/test_reports*.zip" -exec unzip -d test_reports {} \;
+      - name: Merge parallel runtime log parts
+        if: env.AZURE_STORAGE_KEY != ''
+        run: |
+          cat artifacts/**/parallel_runtime_rspec*.log > parallel_runtime.log
+      - name: Upload log file to Azure Blob Storage
+        env:
+          AZURE_STORAGE_KEY: ${{ secrets.STORAGE_ACCESS_KEY }}
+          AZURE_STORAGE_ACCOUNT: ${{ secrets.ACCOUNT_NAME }}
+          STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
+        if: env.AZURE_STORAGE_KEY != ''
+        run: |
+          az storage blob upload \
+          -c $STORAGE_CONTAINER \
+          --file parallel_runtime.log \
+          -n parallel_runtime.log \
+          --overwrite true
+
+      - name: Test Summary
+        id: test_summary
+        uses: test-summary/action@v2
+        with:
+          paths: |
+            test_reports/**/rspec*.xml
+      - name: Set job status
+        #         In this step we set the status of the job. Normally in case of failures, the next steps fail, so we have to
+        #         use `if: always()` to make sure the next steps run.
+        if: ${{ steps.test_summary.outputs.failed > 0 }}
+        uses: actions/github-script@v7
+        with:
+          script: |
+            core.setFailed('There are test failures')

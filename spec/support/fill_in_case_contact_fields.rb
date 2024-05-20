@@ -11,16 +11,17 @@ module FillInCaseContactFields
       check case_number
     end
 
+    find(".ts-control").click
     contact_types.each do |contact_type|
-      check contact_type
+      find("span", text: contact_type).click
     end
+    find(".ts-control").click
 
     within "#enter-contact-details" do
       choose contact_made ? "Yes" : "No"
     end
     choose medium if medium
     fill_in "case_contact_occurred_at", with: occurred_on if occurred_on
-
     fill_in "case_contact_duration_hours", with: hours if hours
     fill_in "case_contact_duration_minutes", with: minutes if minutes
 

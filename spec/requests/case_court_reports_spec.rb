@@ -99,7 +99,15 @@ RSpec.describe "/case_court_reports", type: :request do
   # case_court_reports#generate
   describe "POST /case_court_reports" do
     let(:casa_case) { volunteer.casa_cases.first }
-    let(:params) { {case_court_report: {case_number: casa_case.case_number.to_s}} }
+    let(:params) {
+      {
+        case_court_report: {
+          case_number: casa_case.case_number.to_s,
+          start_date: "January 1, 2020",
+          end_date: "January 1, 2021"
+        }
+      }
+    }
 
     subject(:request) do
       post generate_case_court_reports_path, params: params, headers: {ACCEPT: "application/json"}
@@ -175,7 +183,9 @@ RSpec.describe "/case_court_reports", type: :request do
 
         docx_response = Docx::Document.open(StringIO.new(followed_link_response.body))
 
-        expect(docx_response.paragraphs.map(&:to_s)).to include("Date Written: #{I18n.l(user_different_timezone.at(server_time).to_date, format: :full, default: nil)}")
+        expect(docx_response.paragraphs.map(&:to_s))
+          .to include("Date Written: #{I18n.l(user_different_timezone.at(server_time)
+            .to_date, format: :full, default: nil)}")
       end
     end
 

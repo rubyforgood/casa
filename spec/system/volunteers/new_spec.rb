@@ -10,7 +10,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       fill_in "Email", with: "new_volunteer@example.com"
       fill_in "Display name", with: "New Volunteer Display Name"
-      fill_in "Date of birth", with: "08/08/2001"
+      fill_in "Date of birth", with: Date.new(2001, 8, 8)
 
       click_on "Create Volunteer"
 
@@ -31,7 +31,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       fill_in "Email", with: "new_volunteer2@example.com"
       fill_in "Display name", with: "New Volunteer Display Name 2"
-      fill_in "Date of birth", with: "01/01/2000"
+      fill_in "Date of birth", with: Date.new(2000, 1, 2)
 
       expect do
         click_on "Create Volunteer"

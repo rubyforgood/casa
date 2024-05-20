@@ -30,14 +30,13 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       expect(page).to_not have_text("Hidden")
 
       click_on "New Case Contact"
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: Date.new(2020, 4, 5), hours: 1, minutes: 45)
       complete_notes_page
       fill_in_expenses_page
 
       expect {
         click_on "Submit"
       }.to change(CaseContact.where(status: "active"), :count).by(1)
-
       expect(CaseContact.first.casa_case_id).to eq casa_case.id
       expect(CaseContact.first.contact_types).to match_array([school, therapist])
       expect(CaseContact.first.duration_minutes).to eq 105
@@ -55,7 +54,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       visit casa_case_path(casa_case.id)
       click_on "New Case Contact"
 
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/05/2020", hours: 1, minutes: 45)
       short_notes = "Hello world!"
       complete_notes_page(notes: short_notes)
       fill_in_expenses_page
@@ -131,33 +130,6 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
     end
   end
 
-  context "mutliple contact type groups" do
-    it "shows the contact type groups, and their contact type alphabetically", js: true do
-      organization = build(:casa_org)
-      admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-      group_1 = build(:contact_type_group, name: "Placement", casa_org: organization)
-      group_2 = build(:contact_type_group, name: "Education", casa_org: organization)
-      create(:contact_type, name: "School", contact_type_group: group_1)
-      create(:contact_type, name: "Sports", contact_type_group: group_1)
-      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
-      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
-
-      sign_in admin
-
-      visit(new_case_contact_path(casa_case.id))
-
-      expect(index_of("Education")).to be < index_of("Placement")
-      expect(index_of("School")).to be < index_of("Sports")
-      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
-      expect(index_of("School")).to be > index_of("Caregiver Family")
-    end
-
-    def index_of(text)
-      page.text.index(text)
-    end
-  end
-
   context "volunteer user" do
     let(:volunteer) { create(:volunteer, :with_casa_cases) }
     let(:volunteer_casa_case_one) { volunteer.casa_cases.first }
@@ -176,7 +148,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
       visit new_case_contact_path(volunteer_casa_case_one.id)
 
-      complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School Therapist], contact_made: true, medium: "In Person", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School Therapist], contact_made: true, medium: "In Person", occurred_on: Date.new(2020, 0o4, 0o6), hours: 1, minutes: 45)
       complete_notes_page(notes: "Hello world")
       fill_in_expenses_page
 
@@ -199,8 +171,11 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       expect(CaseContact.last.notes).not_to eq "Hello world"
 
       complete_notes_page(notes: "Hello world", click_continue: false)
-      # Wait for autosave to work
-      sleep(2)
+
+      within 'div[data-controller="autosave"]' do
+        find('small[data-autosave-target="alert"]', text: "Saved!")
+      end
+
       expect(CaseContact.last.notes).to eq "Hello world"
     end
 
@@ -262,9 +237,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find("#case_contact_contact_type_ids-ts-control").click
+        expect(page).to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 
@@ -279,9 +255,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).not_to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find(".ts-control").click
+        expect(page).not_to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 

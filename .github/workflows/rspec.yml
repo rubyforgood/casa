@@ -38,6 +38,13 @@ jobs:
         with:
           bundler-cache: true
 
+      - name: Set up JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/gallium
+          cache: "yarn"
+      - run: yarn
+
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
@@ -52,7 +59,6 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
         run: |
-          yarn
           bundle exec rake db:create
           bundle exec rake db:schema:load
           bundle exec rails css:build

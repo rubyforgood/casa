@@ -9,7 +9,7 @@ gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "azure-storage-blob", require: false
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 4.0" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.1" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.3" # excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # compiles css
 gem "delayed_job_active_record"
@@ -52,6 +52,7 @@ gem "rswag-ui"
 gem "blueprinter" # for JSON serialization
 gem "oj" # faster JSON parsing 🍊
 gem "groupdate" # Group Data
+gem "authtrail" # Track Devise login activity
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
@@ -64,7 +65,9 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.31.0"
+  gem "standard", "~> 1.35.1"
+  gem "parallel_tests"
+  gem "rspec_junit_formatter"
 end
 
 group :development do

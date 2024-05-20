@@ -21,15 +21,15 @@ RSpec.describe "casa_cases/new", type: :system do
           fourteen_years = (Date.today.year - 14).to_s
           fill_in "Case number", with: case_number
 
-          fill_in "Court Date", with: court_date.strftime("%Y/%m/%d")
+          fill_in "Court Date", with: court_date
 
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
 
           select "Submitted", from: "casa_case_court_report_status"
 
-          expect(page).to have_content(contact_type_group.name)
-          check contact_type.name
+          find(".ts-control").click
+          find("span", text: contact_type.name).click
 
           within ".top-page-actions" do
             click_on "Create CASA Case"
@@ -45,21 +45,24 @@ RSpec.describe "casa_cases/new", type: :system do
     end
 
     context "when non-mandatory fields are not filled" do
-      it "is successful" do
+      it "is successful", js: true do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        create(:contact_type, contact_type_group: contact_type_group)
+        contact_type = create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
 
         sign_in admin
         visit new_casa_case_path
 
         fill_in "Case number", with: case_number
-        fill_in "Next Court Date", with: DateTime.now.next_month.strftime("%Y/%m/%d")
+        fill_in "Next Court Date", with: DateTime.now.next_month
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
+
+        find(".ts-control").click
+        find("span", text: contact_type.name).click
 
         within ".actions-cc" do
           click_on "Create CASA Case"
@@ -67,7 +70,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date:")
+        expect(page).to have_content("Next Court Date: ")
         expect(page).not_to have_content("Court Report Due Date:")
         expect(page).to have_content("Transition Aged Youth: No")
       end
@@ -92,11 +95,11 @@ RSpec.describe "casa_cases/new", type: :system do
 
     context "when the court date field is not filled" do
       context "when empty court date checkbox is checked" do
-        it "creates a new case" do
+        it "creates a new case", js: true do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)
-          create(:contact_type, contact_type_group: contact_type_group)
+          contact_type = create(:contact_type, contact_type_group: contact_type_group)
           case_number = "12345"
 
           sign_in admin
@@ -107,6 +110,9 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
+
+          find(".ts-control").click
+          find("span", text: contact_type.name).click
 
           within ".actions-cc" do
             click_on "Create CASA Case"

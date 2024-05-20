@@ -31,9 +31,8 @@
 <div class="input-style-1">
   <%= f.label :date_of_birth, "Date of birth" %>
   <% if policy(resource).update_user_setting? %>
-    <%= f.text_field :date_of_birth,
-                     value: resource.decorate.formatted_date_of_birth,
-                     data: {provide: "datepicker", date_format: "yyyy/mm/dd"},
+    <%= f.date_field :date_of_birth,
+                     value: resource.date_of_birth,
                      class: "form-control label-font-weight" %>
   <% else %>
     <input type="text" placeholder="<%= resource.decorate.formatted_date_of_birth %>" autocomplete="off" readonly>

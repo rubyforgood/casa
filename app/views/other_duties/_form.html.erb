@@ -15,9 +15,7 @@
   <div class="input-style-1">
     <%= form.label :occurred_at, "Occurred On" %>
     <% occurred_at = @other_duty.occurred_at || Time.zone.now %>
-    <%= form.text_field :occurred_at,
-                        value: occurred_at.to_date,
-                        data: {provide: "datepicker", date_format: "yyyy/mm/dd"} %>
+    <%= form.date_field :occurred_at, value: occurred_at.to_date %>
   </div>
 
     <div class="row input-style-1">

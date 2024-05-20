@@ -31,12 +31,12 @@ RSpec.describe "LearningHours::Volunteers #show", type: :system do
 
     it "displays the volunteer's first learning hours", js: true do
       expect(page).to have_content(learning_hours.first.name)
-      expect(page).to have_content(learning_hours.first.occurred_at.strftime("%B %d, %Y"))
+      expect(page).to have_content(learning_hours.first.occurred_at.strftime("%B %-d, %Y"))
     end
 
     it "displays the volunteer's last learning hours", js: true do
       expect(page).to have_content(learning_hours.last.name)
-      expect(page).to have_content(learning_hours.last.occurred_at.strftime("%B %d, %Y"))
+      expect(page).to have_content(learning_hours.last.occurred_at.strftime("%B %-d, %Y"))
     end
   end
 end

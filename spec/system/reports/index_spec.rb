@@ -21,8 +21,8 @@ RSpec.describe "reports", type: :system, js: true do
       visit reports_path
 
       expect(page).to have_text "Case Contacts Report"
-      expect(page).to have_text I18n.l(6.months.ago.to_date, format: :day_and_date, default: "")
-      expect(page).to have_text I18n.l(Date.today.to_date, format: :day_and_date, default: "")
+      expect(page).to have_field("report_start_date", with: 6.months.ago.strftime("%Y-%m-%d"))
+      expect(page).to have_field("report_end_date", with: Date.today)
       expect(page).to have_text "Assigned To"
       expect(page).to have_text "Volunteers"
       expect(page).to have_text "Contact Type"
@@ -54,8 +54,8 @@ RSpec.describe "reports", type: :system, js: true do
       visit reports_path
 
       expect(page).to have_text "Case Contacts Report"
-      expect(page).to have_text I18n.l(6.months.ago.to_date, format: :day_and_date, default: "")
-      expect(page).to have_text I18n.l(Date.today.to_date, format: :day_and_date, default: "")
+      expect(page).to have_field("report_start_date", with: 6.months.ago.strftime("%Y-%m-%d"))
+      expect(page).to have_field("report_end_date", with: Date.today)
       expect(page).to have_text "Assigned To"
       expect(page).to have_text "Volunteers"
       expect(page).to have_text "Contact Type"

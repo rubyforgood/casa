@@ -39,7 +39,6 @@ policies/learning_hour_topic_policy.rb
 policies/learning_hour_type_policy.rb
 policies/note_policy.rb
 presenters/base_presenter.rb
-presenters/case_contact_presenter.rb
 services/case_contacts_export_csv_service.rb
 services/court_report_format_contact_date.rb
 services/create_all_casa_admin_service.rb

@@ -9,6 +9,9 @@ FactoryBot.define do
       case_court_orders { nil }
       path_to_report { Rails.root.join("tmp", "test_report.docx").to_s }
       path_to_template { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
+      start_date { nil }
+      end_date { nil }
+      time_zone { nil }
     end
 
     initialize_with {
@@ -25,7 +28,10 @@ FactoryBot.define do
         path_to_report: path_to_report,
         path_to_template: path_to_template,
         court_date: court_date,
-        case_court_orders: case_court_orders
+        case_court_orders: case_court_orders,
+        start_date: start_date,
+        end_date: end_date,
+        time_zone: time_zone
       )
     }
   end

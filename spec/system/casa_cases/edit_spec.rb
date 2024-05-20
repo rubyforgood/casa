@@ -39,7 +39,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
       select "Submitted", from: "casa_case_court_report_status"
-      check contact_type.name
+
+      find(".ts-control").click
+      find("span", text: contact_type.name).click
 
       page.find('button[data-action="extended-nested-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
@@ -219,7 +221,9 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Set Implementation Status")
 
-      check "Youth"
+      find(".ts-control").click
+      find("span", text: "Youth").click
+
       within ".actions-cc" do
         click_on "Update CASA Case"
       end
@@ -395,7 +399,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "deleting court orders", js: true do
-      let(:casa_case) { create(:casa_case, :with_one_court_order) }
+      let(:casa_case) { create(:casa_case, :with_one_court_order, :with_casa_case_contact_types) }
       let(:text) { casa_case.case_court_orders.first.text }
 
       it "can delete a court order" do
@@ -417,15 +421,6 @@ of it unless it was included in a previous court report.")
       end
     end
 
-    it "has all boxes checked by default" do
-      visit edit_casa_case_path(casa_case)
-      expect(page).to have_text("Select All Contact Types")
-      expect(all("input[type=checkbox][class~=case-contact-contact-type]")).not_to be_empty
-      all("input[type=checkbox][class~=case-contact-contact-type]").each do |checkbox|
-        expect(checkbox).to be_checked
-      end
-    end
-
     context "a casa case with contact type" do
       let(:organization) { build(:casa_org) }
       let(:casa_case_with_contact_type) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
@@ -440,41 +435,6 @@ of it unless it was included in a previous court report.")
           end
         end
       end
-    end
-
-    it "has all contact types checked on click trigger 'Check All' button", js: true do
-      visit edit_casa_case_path(casa_case)
-      expect(page).to have_text("Select All Contact Types")
-      expect(casa_case.contact_types).to be_empty
-      find("a#check_all").click
-      expect(all("input[type=checkbox][class~=case-contact-contact-type]")).not_to be_empty
-      all("input[type=checkbox][class~=case-contact-contact-type]").each do |checkbox|
-        expect(checkbox).to be_checked
-      end
-    end
-
-    it "has all contact types checked on click trigger 'Uncheck All' button", js: true do
-      visit edit_casa_case_path(casa_case)
-      expect(page).to have_text("Select All Contact Types")
-      expect(casa_case.contact_types).to be_empty
-      find("a#uncheck_all").click
-      expect(all("input[type=checkbox][class~=case-contact-contact-type]")).not_to be_empty
-      all("input[type=checkbox][class~=case-contact-contact-type]").each do |checkbox|
-        expect(checkbox).not_to be_checked
-      end
-    end
-
-    it "raise an error if no contact type is checked", js: true do
-      visit edit_casa_case_path(casa_case)
-      expect(page).to have_text("Select All Contact Types")
-      find("a#uncheck_all").click
-      expect(all("input[type=checkbox][class~=case-contact-contact-type]")).not_to be_empty
-
-      within ".actions-cc" do
-        click_on "Update CASA Case"
-      end
-
-      expect(page).to have_text("At least one contact type must be selected")
     end
 
     context "when trying to assign a volunteer to a case" do

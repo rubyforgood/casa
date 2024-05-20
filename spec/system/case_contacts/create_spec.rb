@@ -95,7 +95,6 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       expect(page).to_not have_text(contact_topics.first.details)
       expect(page).to_not have_selector("##{topic_id} textarea")
 
-      sleep 0.4 # BUG: have to wait for the animation to finish
       find("##{topic_id}_button").click
 
       expect(page).to have_text(contact_topics.first.question)
@@ -117,12 +116,31 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
         expect(page).to have_text(contact_topics.first.details)
         expect(page).to have_selector("##{topic_id} textarea")
 
-        sleep 0.4 # BUG: have to wait for the animation to finish
         click_on "read less"
 
         expect(page).to_not have_text(contact_topics.first.details)
         expect(page).to have_selector("##{topic_id} textarea")
       end
+    end
+  end
+
+  context "when the org has neither reimbursable expenses nor travel" do
+    before do
+      FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      allow_any_instance_of(CasaOrg).to receive(:show_driving_reimbursement).and_return(false)
+      sign_in volunteer
+    end
+
+    it "should create a case contact" do
+      visit case_contacts_path
+
+      click_on "New Case Contact"
+      complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
+      complete_notes_page
+
+      click_on "Submit"
+
+      expect(page).to have_text "Case contact successfully created"
     end
   end
 end

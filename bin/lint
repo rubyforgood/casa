@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+bundle exec standardrb --fix --format progress
+bundle exec erblint --lint-all --autocorrect
+yarn lint:fix
+echo "Linting Factories"
+rails factory_bot:lint

@@ -23,14 +23,7 @@
                                       margin: false) %>
       <% end %>
     <% end %>
-    <%= form_with url: generate_case_court_reports_path, local: false, class: "d-inline" do |form| %>
-      <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-      <%= button_tag "Generate Report", type: :submit,
-                     data: {button_name: "Generate Report"},
-                     id: "btnGenerateReport",
-                     class: "main-btn success-btn btn-hover btn-sm pull-right mb-2" %>
-      <i id="spinner" class='fas fa-spin d-none pull-right'>⏳</i>
-    <% end %>
+    <%= render "casa_cases/generate_report_modal" %>
     <% if @casa_case.casa_org.show_fund_request %>
       <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case),
 class: "btn btn-primary pull-left casa-case-button") %>
@@ -44,7 +37,7 @@ class: "btn btn-primary pull-left casa-case-button") %>
     <% end %>
     <p>
       <h6><strong>Case number:</strong> <%= @casa_case.case_number %>
-        <%= render AssignedVolunteersComponent.new(@casa_case, current_user) %>
+        <%= volunteer_badge(@casa_case, current_user) %>
       </h6>
     </p>
     <% if @casa_case.hearing_type %>
@@ -158,4 +151,39 @@ class: "btn btn-primary pull-left casa-case-button") %>
       window.localStorage.removeItem('casa-contact-form')
     }
   });
+  const ELEMENTS = {
+    'caseSelect': '#case-selection',
+    'generateBtn': '#btnGenerateReport',
+  }
+  const showBtn = el => el.classList.remove('d-none')
+  const enableBtn = (el) => {
+    el.disabled = false
+    el.classList.remove('disabled')
+    el.removeAttribute('aria-disabled')
+  }
+
+  const handleSelect = (e) => {
+    const selectEl = e.target
+    const generateBtn = selectEl.form.querySelector(ELEMENTS.generateBtn)
+
+    // when selecting a case, reset buttons to initial state
+    enableBtn(generateBtn)
+    showBtn(generateBtn)
+  }
+
+  const bindElements = () => {
+    const caseSelectEl = document.querySelector(ELEMENTS.caseSelect)
+
+    if (caseSelectEl)
+      caseSelectEl.addEventListener('change', handleSelect)
+  }
+
+  const setTimeZone = () => {
+    const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
+    document.getElementById("user-time-zone").value = timeZone
+  }
+
+  window.onload = function () {
+    bindElements()
+  }
 </script>

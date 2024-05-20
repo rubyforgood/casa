@@ -9,6 +9,114 @@ RSpec.describe CaseCourtReport, type: :model do
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
 
   context "#generate_to_string" do
+    let(:full_context) do
+      {
+        created_date: "April 9, 2024",
+        casa_case: {
+          court_date: "April 23, 2024",
+          case_number: "A-CASA-CASE-NUMBER-12345",
+          dob: "April 2012",
+          is_transitioning: false,
+          judge_name: "Judge Judy"
+        },
+        case_contacts: [
+          {name: "Some Name", type: "Type 1", dates: "4/09*", dates_by_medium_type: {"in-person" => "4/09*"}},
+          {name: "Some Other Name", type: "Type 4", dates: "4/09*", dates_by_medium_type: {"in-person" => "4/09*"}}
+        ],
+        case_court_orders: [
+          {order: "case_court_order_text", status: "Partially implemented"}
+        ],
+        case_mandates: [
+          {order: "case_mandates_text", status: "Partially implemented"}
+        ],
+        latest_hearing_date: "___<LATEST HEARING DATE>____",
+        org_address: "596 Unique Avenue Seattle, Washington",
+        volunteer: {
+          name: "name_of_volunteer",
+          supervisor_name: "name_of_supervisor",
+          assignment_date: "February 9, 2024"
+        },
+        hearing_type_name: "None",
+        case_topics: [
+          {topic: "Question 1", details: "Details 1", answers: [
+            {date: "12/01/20", medium: "Type A1, Type B1", value: "Answer 1"},
+            {date: "12/02/20", medium: "Type A2, Type B2", value: "Answer 3"}
+          ]},
+          {topic: "Question 2", details: "Details 2", answers: [
+            {date: "12/01/20", medium: "Type A1, Type B1", value: "Answer 2"},
+            {date: "12/02/20", medium: "Type A3, Type B3", value: "Answer 5"}
+          ]},
+          {topic: "Question 3", details: "Details 3", answers: [
+            {date: "12/01/20", medium: "Type A3, Type B3", value: "No Answer Provided"},
+            {date: "12/02/20", medium: "Type A2, Type B2", value: "No Answer Provided"}
+          ]}
+        ]
+      }
+    end
+    describe "contact_topics" do
+      it "all contact topics are present in the report" do
+        docx_response = generate_doc(full_context, path_to_template)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 1.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 2.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 3.*/)
+      end
+
+      it "all topic details are present in the report" do
+        docx_response = generate_doc(full_context, path_to_template)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 1.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 2.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 3.*/)
+      end
+
+      it "all answers are present with correct format" do
+        docx_response = generate_doc(full_context, path_to_template)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A1, Type B1 \(12\/01\/20\): Answer 1.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A2, Type B2 \(12\/02\/20\): Answer 3.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A1, Type B1 \(12\/01\/20\): Answer 2.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A3, Type B3 \(12\/02\/20\): Answer 5.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A3, Type B3 \(12\/01\/20\): No Answer Provided.*/)
+        expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A2, Type B2 \(12\/02\/20\): No Answer Provided.*/)
+      end
+
+      context "when there are topics but no answers" do
+        let(:curr_context) do
+          full_context[:case_topics] = [
+            {topic: "Question 1", details: "Details 1", answers: []},
+            {topic: "Question 2", details: "Details 2", answers: []},
+            {topic: "Question 3", details: "Details 3", answers: []}
+          ]
+        end
+
+        it "all contact topics are present in the report" do
+          docx_response = generate_doc(full_context, path_to_template)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 1.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 2.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 3.*/)
+        end
+        it "all topic details are present in the report" do
+          docx_response = generate_doc(full_context, path_to_template)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 1.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 2.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 3.*/)
+        end
+      end
+
+      context "when there no topics" do
+        it "report does not error and puts old defaults" do
+          full_context[:case_topics] = []
+          docx_response = nil
+          expect {
+            docx_response = generate_doc(full_context, path_to_template)
+          }.not_to raise_error
+
+          expect(docx_response).not_to be_nil
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Placement.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Education\/Vocation.*/)
+          expect(docx_response.paragraphs.map(&:to_s)).to include(/Objective Information.*/)
+        end
+      end
+    end
+
     describe "when receiving valid case, volunteer, and path_to_template" do
       let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
@@ -29,30 +137,6 @@ RSpec.describe CaseCourtReport, type: :model do
 
         it "has supervisor name placeholder" do
           expect(report.context[:volunteer][:supervisor_name]).to eq("")
-        end
-      end
-
-      describe "with court date in the future" do
-        let!(:far_past_case_contact) { create :case_contact, occurred_at: 5.days.ago, casa_case_id: casa_case_with_contacts.id }
-
-        before do
-          create(:court_date, casa_case: casa_case_with_contacts, date: 1.day.from_now)
-        end
-
-        describe "without past court date" do
-          it "has all case contacts ever created for the youth" do
-            expect(report.context[:case_contacts].length).to eq(5)
-          end
-        end
-
-        describe "with past court date" do
-          let!(:court_date) { create(:court_date, date: 2.days.ago, casa_case_id: casa_case_with_contacts.id) }
-
-          it "has all case contacts created since the previous court date including case contact created on the court date" do
-            create(:case_contact, casa_case: casa_case_with_contacts, created_at: court_date.date, notes: "created ON most recent court date")
-            expect(casa_case_with_contacts.court_dates.length).to eq(2)
-            expect(report.context[:case_contacts].length).to eq(5)
-          end
         end
       end
 
@@ -390,4 +474,9 @@ RSpec.describe CaseCourtReport, type: :model do
       end
     end
   end
+end
+
+def generate_doc(context, path_to_template)
+  report = CaseCourtReport.new(path_to_template: path_to_template, context: context)
+  Docx::Document.open(StringIO.new(report.generate_to_string))
 end

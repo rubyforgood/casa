@@ -105,9 +105,11 @@ RSpec.describe "/volunteers", type: :request do
 
     it "shows correct supervisor options", :aggregate_failures do
       supervisors = create_list(:supervisor, 3, casa_org: organization)
+      supervisors.append(create(:supervisor, casa_org: organization, display_name: "O'Hara")) # test for HTML escaping
 
-      page = request.parsed_body.to_html
-      supervisors.each { |supervisor| expect(page).to include(CGI.escape_html(supervisor.display_name)) }
+      page = Nokogiri::HTML(subject.body)
+      names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text)
+      expect(supervisors.map(&:display_name)).to match_array(names)
     end
   end
 

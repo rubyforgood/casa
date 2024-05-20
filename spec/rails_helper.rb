@@ -76,4 +76,13 @@ RSpec.configure do |config|
   def pre_transition_aged_youth_age
     Date.current - CasaCase::TRANSITION_AGE.years
   end
+
+  config.around do |example|
+    Capybara.server_port = 7654 + ENV["TEST_ENV_NUMBER"].to_i
+    example.run
+  end
+
+  unless ENV["GITHUB_ACTIONS"]
+    config.filter_run_excluding :ci_only
+  end
 end
