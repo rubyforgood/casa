@@ -112,22 +112,6 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 
 ...check out the instructions on [installing google-chrome and chromedriver for WSL Ubuntu](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md#google-chrome).
 
-**Installing Packages**
-1. `cd casa/`
-1. `bundle install` install ruby dependencies.
-1. `yarn` install javascript dependencies.
-
-**Database Setup**
-1. `bin/rails db:setup` create schema
-    requires running local postgres, with a role created for whatever user you're running rails as
-1. `bin/rails db:seed:replant` generates test data (can be rerun to regenerate test data)
-
-**Compile Assets**
-1.  `yarn build` compile javascript
-&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files
-3.  `yarn build:css` compile css
-&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files
-
 ### Platform Specific Installation Instructions
  - [Docker](doc/DOCKER.md)
  - [Linux](doc/LINUX_SETUP.md)
@@ -144,7 +128,9 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
 
 ## Running the App / Verifying Installation
-1. `bin/rails server` or `bin/rails s` to start the local webserver
+1. `cd casa/`
+1. Run `bin/setup`
+1. Run `bin/dev` and visit http://localhost:3000/ to see the app running.
 
 **Logging in with seed users**
 
@@ -175,6 +161,9 @@ If you have trouble running tests, check out CI scripts in [`.github/workflows/`
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 **Cleaning up before you pull request**
+
+Run `bin/lint` to run all linters and fix issues. This will run:
+
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues

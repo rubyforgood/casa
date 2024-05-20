@@ -32,4 +32,10 @@ chdir APP_ROOT do
 
   puts "\n== Restarting application server =="
   system! 'bin/rails restart'
+
+  puts "\n==Building assets =="
+  system!('yarn build')
+  system!('yarn build:css')
+
+  puts "\n== Done =="
 end
