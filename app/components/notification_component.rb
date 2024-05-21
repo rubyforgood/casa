@@ -1,10 +1,9 @@
 # frozen_string_literal: true
 
 class NotificationComponent < ViewComponent::Base
-  attr_reader :notification, :event
+  attr_reader :notification
 
-  def initialize(notification:, event:)
+  def initialize(notification:)
     @notification = notification
-    @event = event
   end
 end

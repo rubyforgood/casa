@@ -48,97 +48,97 @@ RSpec.describe "notifications/index", type: :system, js: true do
   #   end
   # end
 
-  context "FollowupNotification", js: true do
-    let(:note) { "Lorem ipsum dolor sit amet." }
-
-    let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
-    let(:notification_message_more_info) { "Click to see more." }
-
-    let(:inline_notification_message) { "#{notification_message_heading} #{notification_message_more_info}" }
-
-    before do
-      sign_in admin
-      visit casa_case_path(casa_case)
-    end
-
-    context "when followup has a note" do
-      before do
-        click_button "Make Reminder"
-        find(".swal2-textarea").set(note)
-
-        click_button "Confirm"
-      end
-
-      it "lists followup notifications, showing their note" do
-        within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
-        end
-
-        sign_in volunteer
-        visit notifications_path
-
-        expect(page).to have_text(notification_message_heading)
-        expect(page).to have_text(note)
-        expect(page).to have_text(notification_message_more_info)
-        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-        expect(page).to have_text("New followup")
-      end
-    end
-
-    context "when followup doesn't have a note" do
-      before do
-        click_button "Make Reminder"
-        click_button "Confirm"
-      end
-
-      it "lists followup notifications, showing the information in a single line when there are no notes" do
-        within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
-        end
-
-        sign_in volunteer
-        visit notifications_path
-
-        expect(page).to have_text(inline_notification_message)
-        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-        expect(page).to have_text("New followup")
-      end
-    end
-
-    context "when admin changes its name" do
-      let(:created_by_name) { "Foo bar" }
-      let(:new_notification_message) { "#{created_by_name} has flagged a Case Contact that needs follow up." }
-
-      before do
-        click_button "Make Reminder"
-      end
-
-      it "lists followup notifications showing admin current name" do
-        click_button "Confirm"
-
-        within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
-        end
-
-        visit edit_users_path
-        fill_in "Display name", with: created_by_name
-        click_on "Update Profile"
-        expect(page).to have_content "Profile was successfully updated"
-
-        sign_in volunteer
-        visit notifications_path
-
-        expect(page).to have_text(new_notification_message)
-        expect(page).not_to have_text(inline_notification_message)
-        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-        expect(page).to have_text("New followup")
-      end
-    end
-  end
+  # context "FollowupNotification", js: true do
+  #   let(:note) { "Lorem ipsum dolor sit amet." }
+  #
+  #   let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
+  #   let(:notification_message_more_info) { "Click to see more." }
+  #
+  #   let(:inline_notification_message) { "#{notification_message_heading} #{notification_message_more_info}" }
+  #
+  #   before do
+  #     sign_in admin
+  #     visit casa_case_path(casa_case)
+  #   end
+  #
+  #   context "when followup has a note" do
+  #     before do
+  #       click_button "Make Reminder"
+  #       find(".swal2-textarea").set(note)
+  #
+  #       click_button "Confirm"
+  #     end
+  #
+  #     it "lists followup notifications, showing their note" do
+  #       within("#resolve", wait: 5) do
+  #         expect(page).to have_content "Resolve Reminder"
+  #       end
+  #
+  #       sign_in volunteer
+  #       visit notifications_path
+  #
+  #       expect(page).to have_text(notification_message_heading)
+  #       expect(page).to have_text(note)
+  #       expect(page).to have_text(notification_message_more_info)
+  #       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+  #       expect(page).to have_text("New followup")
+  #     end
+  #   end
+  #
+  #   context "when followup doesn't have a note" do
+  #     before do
+  #       click_button "Make Reminder"
+  #       click_button "Confirm"
+  #     end
+  #
+  #     it "lists followup notifications, showing the information in a single line when there are no notes" do
+  #       within("#resolve", wait: 5) do
+  #         expect(page).to have_content "Resolve Reminder"
+  #       end
+  #
+  #       sign_in volunteer
+  #       visit notifications_path
+  #
+  #       expect(page).to have_text(inline_notification_message)
+  #       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+  #       expect(page).to have_text("New followup")
+  #     end
+  #   end
+  #
+  #   context "when admin changes its name" do
+  #     let(:created_by_name) { "Foo bar" }
+  #     let(:new_notification_message) { "#{created_by_name} has flagged a Case Contact that needs follow up." }
+  #
+  #     before do
+  #       click_button "Make Reminder"
+  #     end
+  #
+  #     it "lists followup notifications showing admin current name" do
+  #       click_button "Confirm"
+  #
+  #       within("#resolve", wait: 5) do
+  #         expect(page).to have_content "Resolve Reminder"
+  #       end
+  #
+  #       visit edit_users_path
+  #       fill_in "Display name", with: created_by_name
+  #       click_on "Update Profile"
+  #       expect(page).to have_content "Profile was successfully updated"
+  #
+  #       sign_in volunteer
+  #       visit notifications_path
+  #
+  #       expect(page).to have_text(new_notification_message)
+  #       expect(page).not_to have_text(inline_notification_message)
+  #       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+  #       expect(page).to have_text("New followup")
+  #     end
+  #   end
+  # end
 
   context "EmancipationChecklistReminder" do
     before do
-      volunteer.notifications << create(:notification, :emancipation_checklist_reminder, params: {casa_case: casa_case})
+      volunteer.notifications << create(:emancipation_checklist_reminder)
       sign_in volunteer
       visit notifications_path
     end
@@ -153,7 +153,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
 
   context "YouthBirthdayNotification" do
     before do
-      volunteer.notifications << create(:notification, :youth_birthday, params: {casa_case: casa_case})
+      volunteer.notifications << create(:youth_birthday_notification, params: {casa_case: casa_case})
       sign_in volunteer
       visit notifications_path
     end

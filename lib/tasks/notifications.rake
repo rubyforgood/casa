@@ -1,7 +1,7 @@
 # Temporarily define the Notification model to access the old table
-# class Notification < ActiveRecord::Base
-#   self.inheritance_column = nil
-# end
+class Notification < ActiveRecord::Base
+  self.inheritance_column = nil
+end
 
 namespace :notifications do
   desc "Migrates existing notifications to new tables for noticed gem v2.x"
@@ -12,14 +12,6 @@ namespace :notifications do
     # Migrate each record to the new tables
     Notification.find_each do |notification|
       attributes = notification.attributes.slice("type", "created_at", "updated_at").with_indifferent_access
-
-      attributes[:type] = attributes[:type].sub("EmancipationChecklistReminderNotification", "EmancipationChecklistReminderNotification")
-      attributes[:type] = attributes[:type].sub("FollowupNotification", "FollowupNotification")
-      attributes[:type] = attributes[:type].sub("FollowupResolvedNotification", "FollowupResolvedNotification")
-      attributes[:type] = attributes[:type].sub("ReimbursementCompleteNotification", "ReimbursementCompleteNotification")
-      attributes[:type] = attributes[:type].sub("VolunteerBirthdayNotification", "VolunteerBirthdayNotification")
-      attributes[:type] = attributes[:type].sub("YouthBirthdayNotification", "YouthBirthdayNotification")
-      attributes[:type] = attributes[:type].sub("Notification", "Notifier")
 
       attributes[:params] = Noticed::Coder.load(notification.params)
       attributes[:params] = {} if attributes[:params].try(:has_key?, "noticed_error") # Skip invalid records
@@ -45,11 +37,7 @@ namespace :notifications do
 
   desc "Seed fake notification records locally for testing purposes"
   task seed: :environment do
-    if Rails.env.local?
-      puts "Seeding fake notification records..."
-    else
-      raise "Seeding only available in test environments."
-    end
+    Rails.env.local? ? puts("Seeding fake notification records...") : raise("Seeding only available in test environments.")
 
     start = Time.now
     count = 0
@@ -57,9 +45,9 @@ namespace :notifications do
     User.all.to_a.each_with_index do |user, i|
       next if i.even?
 
-      FactoryBot.create(:notification, :followup_with_note_notification, recipient_id: user.id)
-      FactoryBot.create(:notification, :followup_read_notification, recipient_id: user.id)
-      FactoryBot.create(:notification, :followup_without_note_notification, recipient_id: user.id)
+      FactoryBot.create(:followup_notification, :with_note)
+      FactoryBot.create(:followup_notification, :without_note)
+      FactoryBot.create(:followup_notification, :read)
 
       count += 3
     end

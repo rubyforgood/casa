@@ -420,7 +420,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_09_104734) do
 
   create_table "learning_hours", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.integer "learning_type", default: 5
     t.string "name", null: false
     t.integer "duration_minutes", null: false
     t.integer "duration_hours", null: false
@@ -693,14 +692,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_09_104734) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
-  add_foreign_key "mileage_rates", "casa_orgs"
+  add_foreign_key "mileage_rates", "casa_orgs", validate: false
   add_foreign_key "mileage_rates", "users"
-  add_foreign_key "notes", "users", column: "creator_id"
+  add_foreign_key "notes", "users", column: "creator_id", validate: false
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases"
+  add_foreign_key "placements", "casa_cases", validate: false
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
