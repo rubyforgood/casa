@@ -15,6 +15,7 @@ on:
 env:
   GROUPS_COMMA: ${{ join(fromJSON(inputs.groups), ',') }}
   GROUPS_UNDERSCORE: ${{ join(fromJSON(inputs.groups), '_') }}
+  ACTIONS_RUNNER_DEBUG: true
 
 jobs:
   rspec_parallel:
