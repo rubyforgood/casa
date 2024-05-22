@@ -137,6 +137,13 @@ class CasaOrg < ApplicationRecord
       client.messages.list(limit: 1)
     rescue Twilio::REST::RestError
       errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
+    rescue URI::InvalidURIError => e
+      Bugsnag.notify("Invalid Twilio URI: #{e.message}.
+        org: #{id} #{name} =>
+        twilio_enabled: #{twilio_enabled}
+        key_sid: #{twilio_api_key_sid.present?}
+        account_sid: #{twilio_account_sid.present?}
+        key_secret: #{twilio_api_key_secret.present?}")
     end
   end
 
