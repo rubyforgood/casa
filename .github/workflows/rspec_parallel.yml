@@ -102,7 +102,7 @@ jobs:
           POSTGRES_PORT: 5432
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
-        continue-on-error: true
+        # continue-on-error: true
         run: |
           # curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           # chmod +x ./cc-test-reporter
@@ -116,31 +116,34 @@ jobs:
 
           # echo 'Tests completed. Uploading to Code Climate'
           # ./cc-test-reporter after-build --exit-code $?
-          cat tmp/spec_summary.log
+          # cat tmp/spec_summary.log
 
       - name: Compress reports
+        if: ${{ !cancelled() }}
         run: |
           zip -r test_reports_${{ env.GROUPS_UNDERSCORE }}.zip tmp/reports
 
       - name: Compress log
-        if: env.AZURE_STORAGE_KEY != ''
+        if: ${{ !cancelled() && env.AZURE_STORAGE_KEY != '' }}
         run: |
           mv tmp/parallel_runtime.log parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
 
       - name: Upload test reports
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: test_reports_${{ env.GROUPS_UNDERSCORE }}.zip
           path: test_reports_${{ env.GROUPS_UNDERSCORE }}.zip
 
       - name: Upload file parallel tests runtime log
-        if: env.AZURE_STORAGE_KEY != ''
+        if: ${{ !cancelled() && env.AZURE_STORAGE_KEY != '' }}
         uses: actions/upload-artifact@v4
         with:
           name: parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
           path: parallel_runtime_rspec_${{ env.GROUPS_UNDERSCORE }}.log
 
       - name: Upload Selenium Screenshots
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: screenshots_${{ env.GROUPS_UNDERSCORE }}
