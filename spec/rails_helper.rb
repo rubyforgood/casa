@@ -86,3 +86,11 @@ RSpec.configure do |config|
     config.filter_run_excluding :ci_only
   end
 end
+
+def stub_twillio
+  twillio_client = instance_double(Twilio::REST::Client)
+  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
+  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
+  allow(twillio_client).to receive(:messages).and_return(messages)
+  allow(messages).to receive(:list).and_return([])
+end
