@@ -29,14 +29,14 @@ module FillInCaseContactFields
       check contact_topic
     end
 
-    click_on "Save and continue"
+    click_on "Save and Continue"
   end
 
   # @param notes [String]
   def complete_notes_page(notes: "", click_continue: true)
     fill_in "Additional notes", with: notes
 
-    click_on "Save and continue" if click_continue
+    click_on "Save and Continue" if click_continue
   end
 
   # This intentionally does not submit the form
