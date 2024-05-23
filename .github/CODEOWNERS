@@ -1,2 +1,4 @@
 # https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
-*       @compwron @FireLemons @littleforest
+*       @compwron @FireLemons @littleforest @elasticspoon
+
+/app/javascript/     @schoork @FireLemons @elasticspoon
