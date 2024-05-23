@@ -28,13 +28,38 @@ RSpec.describe CasaOrg, type: :model do
   end
 
   describe "validate validate_twilio_credentials" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { create(:casa_org, twilio_enabled: true) }
 
     it "validates twillio credentials on update", :aggregate_failures do
-      %i[twilio_account_sid twilio_api_key_sid].each do |field|
+      %i[twilio_account_sid twilio_api_key_sid twilio_api_key_secret].each do |field|
         update_successful = casa_org.update(field => "")
-        expect(update_successful).to be false
+        aggregate_failures do
+          expect(update_successful).to be false
+          expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
+        end
+      end
+    end
+
+    it "returns error if credentials form invalid URI" do
+      twillio_client = instance_double(Twilio::REST::Client)
+      allow(Twilio::REST::Client).to receive(:new).and_return(twillio_client)
+      allow(twillio_client).to receive_message_chain(:messages, :list).and_raise(URI::InvalidURIError)
+
+      casa_org.update(twilio_account_sid: "some bad value")
+
+      aggregate_failures do
+        expect(casa_org).to_not be_valid
         expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
+      end
+    end
+
+    context "org with disabled twilio" do
+      let(:casa_org) { create(:casa_org, twilio_enabled: false) }
+
+      it "validates twillio credentials on update", :aggregate_failures do
+        %i[twilio_account_sid twilio_api_key_sid twilio_api_key_secret].each do |field|
+          expect(casa_org.update(field => "")).to be true
+        end
       end
     end
   end

@@ -37,6 +37,8 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActionText::SystemTestHelper, type: :system
+  config.include TwilioHelper, type: :request
+  config.include TwilioHelper, type: :system
 
   config.after do
     Warden.test_reset!
@@ -82,7 +84,5 @@ RSpec.configure do |config|
     example.run
   end
 
-  unless ENV["GITHUB_ACTIONS"]
-    config.filter_run_excluding :ci_only
-  end
+  config.filter_run_excluding :ci_only unless ENV["GITHUB_ACTIONS"]
 end
