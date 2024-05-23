@@ -1,16 +1,14 @@
 <div class="title-wrapper pt-30">
   <div class="title mb-30">
     <div class="align-items-baseline d-md-flex gap-3">
-      <h1 class="case-contacts-form desktop-title"><%= @title %></h1>
-      <h2 class="case-contacts-form mobile-title"><%= @title %></h2>
+      <h1 class="case-contacts-form-title"><%= @title %></h1>
       <% if @autosave %>
         <small data-autosave-target="alert"></small>
       <% end %>
     </div>
 
     <div class="row align-items-center mt-5">
-      <h2 class="col-12 col-md-6 case-contacts-form desktop-title"><%= @subtitle %></h2>
-      <h3 class="col-12 col-md-6 case-contacts-form mobile-title"><%= @subtitle %></h3>
+      <h2 class="col-12 col-md-6 case-contacts-form-subtitle"><%= @subtitle %></h2>
       <% if @progress %>
         <div class="col-12 col-md-6 align-items-center d-flex gap-2 mt-2 mt-md-0">
           <p class="col-auto">

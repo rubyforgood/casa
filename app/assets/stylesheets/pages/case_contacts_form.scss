@@ -15,21 +15,17 @@
 
   &-checkbox {
     border-color: #757575;
-}
-
-  &.desktop-title {
-    display: none;
-
-    @media only screen and (min-width: screen-sizes.$mobile) {
-      display: block;
-    }
   }
 
-  &.mobile-title {
-    display: block;
+  &-title {
+    @media only screen and (max-width: screen-sizes.$mobile) {
+      font-size: 28px;
+    } 
+  }
 
-    @media only screen and (min-width: screen-sizes.$mobile) {
-      display: none;
-    }
+  &-subtitle {
+    @media only screen and (max-width: screen-sizes.$mobile) {
+      font-size: 24px;
+    } 
   }
 }
