@@ -5,7 +5,7 @@ RSpec.describe "CasaOrg", type: :request do
   let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
 
   before {
-    stub_twillio
+    stub_twilio
     sign_in create(:casa_admin, casa_org: casa_org)
   }
 

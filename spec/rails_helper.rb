@@ -37,6 +37,8 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActionText::SystemTestHelper, type: :system
+  config.include TwilioHelper, type: :request
+  config.include TwilioHelper, type: :system
 
   config.after do
     Warden.test_reset!
@@ -82,15 +84,5 @@ RSpec.configure do |config|
     example.run
   end
 
-  unless ENV["GITHUB_ACTIONS"]
-    config.filter_run_excluding :ci_only
-  end
-end
-
-def stub_twillio
-  twillio_client = instance_double(Twilio::REST::Client)
-  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
-  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
-  allow(twillio_client).to receive(:messages).and_return(messages)
-  allow(messages).to receive(:list).and_return([])
+  config.filter_run_excluding :ci_only unless ENV["GITHUB_ACTIONS"]
 end

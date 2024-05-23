@@ -208,7 +208,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     it_behaves_like "shows court dates links"
 
     it "edits case", js: true do
-      stub_twillio
+      stub_twilio
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
       visit edit_casa_case_path(casa_case)
