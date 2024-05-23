@@ -1,1 +1,1 @@
-See https://github.com/rubyforgood/casa/wiki/deploy-checklist
+See [the deploy checklist](https://github.com/rubyforgood/casa/wiki/deploy-checklist)
