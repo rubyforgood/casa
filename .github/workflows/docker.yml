@@ -39,7 +39,7 @@ jobs:
       - name: compile js
         run: docker-compose exec -T web bundle exec rails javascript:build
       - name: Test
-        run: docker-compose exec -T web bundle exec rspec spec
+        run: docker-compose exec -T web bundle exec rspec spec --format documentation
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
