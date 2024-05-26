@@ -61,8 +61,7 @@ jobs:
         run: |
           bundle exec rake db:create
           bundle exec rake db:schema:load
-          bundle exec rails css:build
-          bundle exec rails javascript:build
+          bundle exec rails assets:precompile
 
       - name: Run rspec and upload code coverage
         env:

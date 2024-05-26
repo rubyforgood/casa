@@ -87,8 +87,7 @@ jobs:
 
       - name: Build App
         run: |
-          bundle exec rails css:build
-          bundle exec rails javascript:build
+          bundle exec rails assets:precompile
 
       - name: Run rspec group ${{ inputs.group }}
         env:
