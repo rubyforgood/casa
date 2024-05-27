@@ -42,7 +42,8 @@
           <%= render(Sidebar::LinkComponent.new(title: "Emancipation Checklist(s)", icon: "list", path: emancipation_checklists_path, render_check: current_user.serving_transition_aged_youth?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.volunteer?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Banners", icon: "flag", path: banners_path, render_check: policy(:application).see_banner_page?)) %>
-          <%= render(Sidebar::GroupComponent.new(title: "Group Actions", icon: "list")) do |group| %>
+          <%= render(Sidebar::LinkComponent.new(title: "Generate Court Reports", icon: "paperclip", path: case_court_reports_path, render_check: policy(:application).see_court_reports_page? && current_user.volunteer?)) %>
+          <%= render(Sidebar::GroupComponent.new(title: "Group Actions", icon: "list", render_check: !current_user.volunteer?)) do |group| %>
             <% group.with_links([
               { title: "Generate Court Reports", icon: "paperclip", path: case_court_reports_path, render_check: policy(:application).see_court_reports_page? },
               { title: "Reimbursement Queue", icon: "money-location", path: reimbursements_path, render_check: policy(:reimbursement).index? },
