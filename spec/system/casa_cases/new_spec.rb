@@ -83,11 +83,13 @@ RSpec.describe "casa_cases/new", type: :system do
 
         sign_in admin
         visit new_casa_case_path
+        check "casa_case_empty_court_date"
 
         within ".actions-cc" do
           click_on "Create CASA Case"
         end
 
+        expect(find('#casa_case_empty_court_date')).to be_checked
         expect(page).to have_current_path(casa_cases_path, ignore_query: true)
         expect(page).to have_content("Case number can't be blank")
       end
