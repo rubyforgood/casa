@@ -64,7 +64,7 @@
             <%= cdf.label :date, "Next Court Date" %>
             <br>
             <div class="input-style-1">
-              <%= cdf.date_field :date, class: "form-control" %>
+              <%= cdf.date_field :date, class: "form-control", hidden: @empty_court_date %>
             </div>
           </div>
         <% end %>
