@@ -483,7 +483,7 @@ GEM
     safe_shell (1.1.0)
     scout_apm (5.3.8)
       parser
-    selenium-webdriver (4.20.1)
+    selenium-webdriver (4.21.1)
       base64 (~> 0.2)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
