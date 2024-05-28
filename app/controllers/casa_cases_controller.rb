@@ -55,7 +55,7 @@ class CasaCasesController < ApplicationController
       end
     else
       set_contact_types
-      @empty_court_date = params[:casa_case][:empty_court_date] == "1"
+      @empty_court_date = court_date_unknown?
       respond_to do |format|
         format.html { render :new }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
