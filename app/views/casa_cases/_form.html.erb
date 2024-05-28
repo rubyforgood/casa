@@ -68,7 +68,7 @@
             </div>
           </div>
         <% end %>
-        <%= form.check_box :empty_court_date, class: "toggle-court-date-input" %>
+        <%= form.check_box :empty_court_date, checked: @empty_court_date, class: "toggle-court-date-input" %>
         <%= form.label :empty_court_date, "I don't know the court date yet" %>
       <% end %>
       <div class="select-style-1">
