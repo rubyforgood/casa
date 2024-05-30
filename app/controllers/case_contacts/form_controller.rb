@@ -4,9 +4,8 @@ class CaseContacts::FormController < ApplicationController
   before_action :set_progress
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
+  prepend_before_action :set_steps, only: [:show, :update]
   after_action :verify_authorized
-
-  steps(*CaseContact::FORM_STEPS)
 
   # wizard_path
   def show
@@ -147,5 +146,9 @@ class CaseContacts::FormController < ApplicationController
     else
       0
     end
+  end
+
+  def set_steps
+    self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end
