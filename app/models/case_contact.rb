@@ -278,6 +278,11 @@ class CaseContact < ApplicationRecord
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
   end
+  def form_steps
+    steps = FORM_STEPS.dup
+    steps.delete(:expenses) unless creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
+    steps.freeze
+  end
 
   private_class_method def self.sorted_by_params
     {
