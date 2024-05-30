@@ -1,6 +1,6 @@
 module NotificationsHelper
   def read_when_seen_notifications
-    ["YouthBirthdayNotification", "VolunteerBirthdayNotification", "EmancipationChecklistReminderNotification"]
+    %w[YouthBirthdayNotification::Notification VolunteerBirthdayNotification::Notification EmancipationChecklistReminderNotification::Notification]
   end
 
   def notifications_after_and_including_deploy(notifications)

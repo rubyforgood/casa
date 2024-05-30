@@ -9,13 +9,13 @@
 </div>
 <div class="list-group">
   <% notifications_after_and_including_deploy(@notifications).each do | notification | %>
-    <%= render NotificationComponent.new(notification: notification, event: notification.event) %>
+    <%= render NotificationComponent.new(notification: notification) %>
   <% end %>
   <% unless (@deploy_time.nil? or @patch_notes.empty?) %>
     <%= render partial: "patch_notes", locals: {deploy_time: @deploy_time, patch_notes: patch_notes_as_hash_keyed_by_type_name(@patch_notes)} %>
   <% end %>
   <% notifications_before_deploy(@notifications).each do | notification | %>
-    <%= render NotificationComponent.new(notification: notification, event: notification.event) %>
+    <%= render NotificationComponent.new(notification: notification) %>
   <% end %>
 
   <% if @notifications.empty? and (@patch_notes.empty? or @deploy_time.nil?) %>

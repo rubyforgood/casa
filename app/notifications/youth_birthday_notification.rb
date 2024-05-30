@@ -3,7 +3,7 @@
 # YouthBirthdayNotification.with(post: @post).deliver_later(current_user)
 # YouthBirthdayNotification.with(post: @post).deliver(current_user)
 
-class YouthBirthdayNotification < BaseNotification
+class YouthBirthdayNotification < Notification
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
@@ -15,7 +15,7 @@ class YouthBirthdayNotification < BaseNotification
   # Define helper methods to make rendering easier.
 
   def message
-    "Your youth, case number: #{params[:casa_case].case_number} has a birthday next month."
+    "Your youth, case number: #{params[:casa_case][:case_number]} has a birthday next month."
   end
 
   def title
@@ -23,6 +23,6 @@ class YouthBirthdayNotification < BaseNotification
   end
 
   def url
-    casa_case_path(params[:casa_case].id)
+    casa_case_path(params[:casa_case][:id])
   end
 end

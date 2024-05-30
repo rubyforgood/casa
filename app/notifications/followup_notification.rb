@@ -3,18 +3,16 @@
 # FollowupNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupNotification < BaseNotification
+class FollowupNotification < Notification
   # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
   # Add required params
-  #
   required_param :followup, :created_by
 
   # Define helper methods to make rendering easier.
-  #
   def title
     "New followup"
   end

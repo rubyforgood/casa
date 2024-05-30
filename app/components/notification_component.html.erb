@@ -1,6 +1,6 @@
 <a
-  href="<%= notification.url %>"
-  class="<%= notification.muted_display %> list-group-item list-group-item-action flex-column align-items-start">
+  href="<%= notification.event.url %>"
+  class="<%= "bg-light text-muted" if notification.read? %> list-group-item list-group-item-action flex-column align-items-start">
   <div class="d-flex flex-row">
     <div class="d-flex-shrink-0">
       <% unless notification.read? %>
@@ -9,11 +9,11 @@
     </div>
     <div class="ml-2 flex-grow-1">
       <div class="d-flex justify-content-between">
-        <h5 class="mb-1"><%= notification.title %></h5>
+        <h5 class="mb-1"><%= notification.event.title %></h5>
         <small><%= time_ago_in_words(notification.updated_at) %> ago</small>
       </div>
       <div class="my-1">
-        <%= simple_format notification.message %>
+        <%= simple_format notification.event.message %>
       </div>
     </div>
   </div>

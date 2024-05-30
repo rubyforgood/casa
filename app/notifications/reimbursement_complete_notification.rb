@@ -1,4 +1,4 @@
-class ReimbursementCompleteNotification < BaseNotification
+class ReimbursementCompleteNotification < Notification
   required_param :case_contact
 
   def title
@@ -14,6 +14,6 @@ class ReimbursementCompleteNotification < BaseNotification
   end
 
   def url
-    case_contacts_path(casa_case_id: params[:case_contact].casa_case_id)
+    case_contacts_path(casa_case_id: params[:case_contact][:casa_case_id])
   end
 end

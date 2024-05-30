@@ -1,4 +1,4 @@
-class BaseNotification < Noticed::Event
+class Notification < Noticed::Event
   # Require title, url and message methods to be implemented on children
   def title
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}"
@@ -30,7 +30,7 @@ class BaseNotification < Noticed::Event
   end
 
   def muted_display
-    return "" unless record.read?
+    return "" unless read?
 
     "bg-light text-muted"
   end

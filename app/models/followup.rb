@@ -2,7 +2,7 @@ class Followup < ApplicationRecord
   belongs_to :followupable, polymorphic: true, optional: true # TODO polymorph: remove optional after data is safely migrated
   belongs_to :case_contact
   belongs_to :creator, class_name: "User"
-
+  has_many :noticed_events, as: :record, dependent: :destroy, class_name: "Noticed::Event"
   enum status: {requested: 0, resolved: 1}
 
   validate :uniqueness_of_requested
