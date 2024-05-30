@@ -4,7 +4,7 @@ RSpec.describe "layout/footer", type: :view do
   context "when not logged in" do
     it "renders report issue link on the footer" do
       render partial: "layouts/footers/not_logged_in"
-      expect(rendered).to have_link("Report a site issue", href: "https://form.typeform.com/to/iXY4BubB")
+      expect(rendered).to have_link("Report a site issue", href: "https://docs.google.com/forms/d/e/1FAIpQLSfM6dA5KkCuzIcdikete7C3wusoQ8p-EAyGyb38DFBlxzZjrg/viewform")
     end
 
     it "renders SMS terms and conditions link on the footer" do
@@ -21,7 +21,7 @@ RSpec.describe "layout/footer", type: :view do
   context "when logged in" do
     it "renders report issue link on the footer" do
       render partial: "layouts/footers/logged_in"
-      expect(rendered).to have_link("Report a site issue", href: "https://form.typeform.com/to/iXY4BubB")
+      expect(rendered).to have_link("Report a site issue", href: "https://docs.google.com/forms/d/e/1FAIpQLSfM6dA5KkCuzIcdikete7C3wusoQ8p-EAyGyb38DFBlxzZjrg/viewform")
     end
 
     it "renders SMS terms and conditions link on the footer" do

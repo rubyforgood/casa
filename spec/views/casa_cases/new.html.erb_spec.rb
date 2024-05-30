@@ -1,15 +1,19 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/new", type: :view do
+  let(:casa_org) { create(:casa_org) }
+  let(:user) { create(:casa_admin, casa_org: casa_org) }
+  let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+  let(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+
   context "while signed in as admin" do
     it "has youth birth month and year" do
-      user = build_stubbed(:casa_admin)
       enable_pundit(view, user)
       allow(view).to receive(:current_user).and_return(user)
-      allow(view).to receive(:current_organization).and_return(user.casa_org)
+      allow(view).to receive(:current_organization).and_return(casa_org)
 
-      assign :casa_case, build(:casa_case, casa_org: user.casa_org)
-      assign :contact_types, []
+      assign :casa_case, build(:casa_case, casa_org: casa_org)
+      assign :contact_types, casa_org.contact_types
 
       render template: "casa_cases/new"
 
@@ -19,13 +23,12 @@ RSpec.describe "casa_cases/new", type: :view do
 
   context "when trying to assign a volunteer to a case" do
     it "should not be able to assign volunteers" do
-      user = build_stubbed(:casa_admin)
       enable_pundit(view, user)
       allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(user.casa_org)
 
       assign :casa_case, build(:casa_case, casa_org: user.casa_org)
-      assign :contact_types, []
+      assign :contact_types, casa_org.contact_types
 
       render template: "casa_cases/new"
 

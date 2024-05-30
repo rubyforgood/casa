@@ -3,13 +3,13 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :set_progress
   before_action :require_organization!
+  before_action :set_case_contact, only: [:show, :update]
   after_action :verify_authorized
 
   steps(*CaseContact::FORM_STEPS)
 
   # wizard_path
   def show
-    @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
     get_cases_and_contact_types
     @page = wizard_steps.index(step) + 1
@@ -20,14 +20,8 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update
-    @case_contact = CaseContact.find(params[:case_contact_id])
     authorize @case_contact
-    if @case_contact.active?
-      # do nothing
-    else
-      params[:case_contact][:status] = step.to_s
-    end
-
+    params[:case_contact][:status] = step.to_s if !@case_contact.active? && params.key?(:case_contact)
     remove_unwanted_contact_types
     remove_nil_draft_ids
     if @case_contact.update(case_contact_params)
@@ -54,18 +48,21 @@ class CaseContacts::FormController < ApplicationController
 
   private
 
+  def set_case_contact
+    @case_contact = CaseContact.find(params[:case_contact_id])
+  end
+
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases)
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @selected_case_contact_types = @casa_cases.flat_map(&:contact_types)
+    @contact_types = ContactType.joins(:casa_case_contact_types).where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
+    unless @contact_types.present?
+      @contact_types = current_organization.contact_types
+    end
+    @contact_types.order(name: :asc)
 
-    @current_organization_groups =
-      if @selected_case_contact_types.present?
-        @selected_case_contact_types.map(&:contact_type_group).uniq
-      else
-        current_organization.contact_types_by_group
-      end
+    @selected_contact_type_ids = @case_contact.contact_type_ids
   end
 
   def finish_editing
@@ -109,8 +106,8 @@ class CaseContacts::FormController < ApplicationController
       new_case_contact.status = "active"
       new_case_contact.draft_case_ids = [casa_case_id]
       new_case_contact.casa_case_id = casa_case_id
-      case_contact.case_contact_contact_type.each do |ccct|
-        new_case_contact.case_contact_contact_type.new(contact_type_id: ccct.contact_type_id)
+      case_contact.case_contact_contact_types.each do |ccct|
+        new_case_contact.case_contact_contact_types.new(contact_type_id: ccct.contact_type_id)
       end
       case_contact.additional_expenses.each do |ae|
         new_case_contact.additional_expenses.new(
@@ -133,8 +130,8 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    if params.dig(:case_contact, :case_contact_contact_type_attributes)
-      @case_contact.case_contact_contact_type.destroy_all
+    if params.dig(:case_contact, :contact_type_ids)
+      @case_contact.contact_types.clear
     end
   end
 

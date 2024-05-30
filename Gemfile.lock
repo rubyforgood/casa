@@ -1,35 +1,35 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    actioncable (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actioncable (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       nio4r (~> 2.0)
       websocket-driver (>= 0.6.1)
       zeitwerk (~> 2.6)
-    actionmailbox (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      activejob (= 7.1.3.2)
-      activerecord (= 7.1.3.2)
-      activestorage (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actionmailbox (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      activejob (= 7.1.3.3)
+      activerecord (= 7.1.3.3)
+      activestorage (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       mail (>= 2.7.1)
       net-imap
       net-pop
       net-smtp
-    actionmailer (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      actionview (= 7.1.3.2)
-      activejob (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actionmailer (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      actionview (= 7.1.3.3)
+      activejob (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       mail (~> 2.5, >= 2.5.4)
       net-imap
       net-pop
       net-smtp
       rails-dom-testing (~> 2.2)
-    actionpack (7.1.3.2)
-      actionview (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actionpack (7.1.3.3)
+      actionview (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       nokogiri (>= 1.8.5)
       racc
       rack (>= 2.2.4)
@@ -37,39 +37,39 @@ GEM
       rack-test (>= 0.6.3)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    actiontext (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      activerecord (= 7.1.3.2)
-      activestorage (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actiontext (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      activerecord (= 7.1.3.3)
+      activestorage (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       globalid (>= 0.6.0)
       nokogiri (>= 1.8.5)
-    actionview (7.1.3.2)
-      activesupport (= 7.1.3.2)
+    actionview (7.1.3.3)
+      activesupport (= 7.1.3.3)
       builder (~> 3.1)
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    activejob (7.1.3.2)
-      activesupport (= 7.1.3.2)
+    activejob (7.1.3.3)
+      activesupport (= 7.1.3.3)
       globalid (>= 0.3.6)
-    activemodel (7.1.3.2)
-      activesupport (= 7.1.3.2)
+    activemodel (7.1.3.3)
+      activesupport (= 7.1.3.3)
     activemodel-serializers-xml (1.0.2)
       activemodel (> 5.x)
       activesupport (> 5.x)
       builder (~> 3.1)
-    activerecord (7.1.3.2)
-      activemodel (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    activerecord (7.1.3.3)
+      activemodel (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       timeout (>= 0.4.0)
-    activestorage (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      activejob (= 7.1.3.2)
-      activerecord (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    activestorage (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      activejob (= 7.1.3.3)
+      activerecord (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       marcel (~> 1.0)
-    activesupport (7.1.3.2)
+    activesupport (7.1.3.3)
       base64
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
@@ -87,6 +87,9 @@ GEM
       activerecord (>= 3.2, < 8.0)
       rake (>= 10.4, < 14.0)
     ast (2.4.2)
+    authtrail (0.5.0)
+      railties (>= 6.1)
+      warden
     azure-storage-blob (2.0.3)
       azure-storage-common (~> 2.0)
       nokogiri (~> 1, >= 1.10.8)
@@ -319,6 +322,8 @@ GEM
       bigdecimal (>= 3.0)
     orm_adapter (0.5.0)
     parallel (1.24.0)
+    parallel_tests (4.7.1)
+      parallel
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
     parser (3.3.1.0)
@@ -357,20 +362,20 @@ GEM
     rackup (1.0.0)
       rack (< 3)
       webrick
-    rails (7.1.3.2)
-      actioncable (= 7.1.3.2)
-      actionmailbox (= 7.1.3.2)
-      actionmailer (= 7.1.3.2)
-      actionpack (= 7.1.3.2)
-      actiontext (= 7.1.3.2)
-      actionview (= 7.1.3.2)
-      activejob (= 7.1.3.2)
-      activemodel (= 7.1.3.2)
-      activerecord (= 7.1.3.2)
-      activestorage (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    rails (7.1.3.3)
+      actioncable (= 7.1.3.3)
+      actionmailbox (= 7.1.3.3)
+      actionmailer (= 7.1.3.3)
+      actionpack (= 7.1.3.3)
+      actiontext (= 7.1.3.3)
+      actionview (= 7.1.3.3)
+      activejob (= 7.1.3.3)
+      activemodel (= 7.1.3.3)
+      activerecord (= 7.1.3.3)
+      activestorage (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       bundler (>= 1.15.0)
-      railties (= 7.1.3.2)
+      railties (= 7.1.3.3)
     rails-controller-testing (1.0.5)
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
@@ -382,9 +387,9 @@ GEM
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
       nokogiri (~> 1.14)
-    railties (7.1.3.2)
-      actionpack (= 7.1.3.2)
-      activesupport (= 7.1.3.2)
+    railties (7.1.3.3)
+      actionpack (= 7.1.3.3)
+      activesupport (= 7.1.3.3)
       irb
       rackup (>= 1.0.0)
       rake (>= 12.2)
@@ -421,6 +426,8 @@ GEM
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
     rspec-support (3.13.1)
+    rspec_junit_formatter (0.6.0)
+      rspec-core (>= 2, < 4, != 2.12.0)
     rswag-api (2.13.0)
       activesupport (>= 3.1, < 7.2)
       railties (>= 3.1, < 7.2)
@@ -432,7 +439,7 @@ GEM
     rswag-ui (2.13.0)
       actionpack (>= 3.1, < 7.2)
       railties (>= 3.1, < 7.2)
-    rubocop (1.62.1)
+    rubocop (1.63.5)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -483,12 +490,12 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    standard (1.35.1)
+    standard (1.36.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
-      rubocop (~> 1.62.0)
+      rubocop (~> 1.63.0)
       standard-custom (~> 1.0.0)
-      standard-performance (~> 1.3)
+      standard-performance (~> 1.4)
     standard-custom (1.0.2)
       lint_roller (~> 1.0)
       rubocop (~> 1.50)
@@ -550,6 +557,7 @@ DEPENDENCIES
   after_party
   amazing_print
   annotate
+  authtrail
   azure-storage-blob
   blueprinter
   brakeman
@@ -587,6 +595,7 @@ DEPENDENCIES
   net-smtp
   noticed
   oj
+  parallel_tests
   paranoia
   pdf-forms
   pg
@@ -597,12 +606,13 @@ DEPENDENCIES
   pundit
   rack-attack
   rack-cors
-  rails (= 7.1.3.2)
+  rails (= 7.1.3.3)
   rails-controller-testing
   rake
   request_store
   rexml
   rspec-rails
+  rspec_junit_formatter
   rswag-api
   rswag-specs
   rswag-ui
@@ -614,7 +624,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  standard (~> 1.35.1)
+  standard (~> 1.36.0)
   stimulus-rails
   strong_migrations
   traceroute

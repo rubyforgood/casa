@@ -14,7 +14,7 @@
               casa_case.id,
               @case_contact.draft_case_ids.include?(casa_case.id),
               id: "case_contact_draft_case_id_#{casa_case.id}",
-              class: ["form-check-input", "casa-case-id"] %>
+              class: ["form-check-input", "casa-case-id", "case-contacts-form-checkbox"] %>
             <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
               <%= casa_case.case_number %>
             </label>
@@ -22,24 +22,22 @@
         <% end %>
       </div>
     </div>
-    <div class="card-style-1 pl-25 mb-10">
-      <%= render "contact_types",
-        form: form,
-        model: @case_contact,
-        contact_type_groups:  @current_organization_groups,
-        selected_case_contact_types: @selected_case_contact_types,
-        checkbox_tag_name: "case_contact[case_contact_contact_type_attributes][][contact_type_id]" %>
+    <div class="card-style-1 pl-25 pr-25 mb-10">
+      <div id="contact-type-form" class="d-flex flex-column gap-4">
+        <h4 id="contact-type-label"><label>2. Select All Contact Types</label><span class="red-letter"> *</span></h4>
+        <%= render "contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: @casa_cases %>
+      </div>
     </div>
 
     <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
-      <h4 class="mb-3"><label>3. Enter Contact Details</label><span class="red-letter"> *</span></h4>
+      <h4 class="mb-3"><label>3. Record contact details</label><span class="red-letter"> *</span></h4>
       <div class="">
-        <h5 classs="mb-3"><label>a. Contact Made</label></h5>
+        <h5 classs="mb-3"><label>a. Was contact made?</label></h5>
         <div class="form-check radio-style mb-20">
           <%= form.radio_button :contact_made, true,
             checked: @case_contact.contact_made,
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contacts-form-checkbox"] %>
           <%= form.label "Yes", class: "form-check-label",
             for: "case_contact_contact_made_true" %>
         </div>
@@ -47,24 +45,24 @@
           <%= form.radio_button :contact_made, false,
             checked: set_contact_made_false(@case_contact),
             required: true,
-            class: 'form-check-input' %>
+            class: ["form-check-input", "case-contacts-form-checkbox"] %>
           <%= form.label "No", class: "form-check-label",
             for: "case_contact_contact_made_false" %>
         </div>
       </div>
 
       <div class="field contact-medium form-group">
-        <h5 classs="mb-3"><label>b. Contact Medium</label></h5>
+        <h5 classs="mb-3"><label>b. How was contact made?</label></h5>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
           <div class="form-check radio-style mb-20">
-            <%= b.radio_button(class: "form-check-input") %>
+            <%= b.radio_button(class: ["form-check-input", "case-contacts-form-checkbox"]) %>
             <%= b.label(class: "form-check-label") %>
           </div>
         <% end %>
       </div>
 
       <div class="pr-50">
-        <h5 class="mb-3"><%= form.label :occurred_at, "c. Occurred On" %></h5>
+        <h5 class="mb-3"><%= form.label :occurred_at, "c. Date of contact" %></h5>
         <div class="input-style-1">
           <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
           <%= render "layouts/components/ranged_date_picker",
@@ -74,11 +72,12 @@
       </div>
 
       <div class="pr-50 ">
-        <h5 class="mb-3"><label>d. Duration of Meeting</label></h5>
+        <h5 class="mb-3"><label>d. Duration of contact</label></h5>
         <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
       </div>
     </div>
 
+    <% if @case_contact.contact_topic_answers.any? %>
     <div class="card-style-1 pl-25 mb-10">
       <h4 class="mb-20 details__topics-label">Court report <%= "topic".pluralize(@case_contact.contact_topic_answers.count) %> <span class="content-1">(optional)</span></label></h4>
       <div class="">
@@ -90,13 +89,14 @@
         <% end %>
       </div>
     </div>
-    <div class="actions mb-10 d-flex justify-content-between">
+    <% end %>
+    <div class="actions mb-10 case-contacts-form-buttons">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
         Back
       <% end %>
 
       <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-        <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+        <i class="lni lni-checkmark-circle mr-5"></i> Save and Continue
       <% end %>
     </div>
   <% end %>

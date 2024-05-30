@@ -67,7 +67,7 @@ class CasaCasePolicy < ApplicationPolicy
     common_attrs = [
       :court_report_submitted,
       :court_report_status,
-      casa_case_contact_types_attributes: [:contact_type_id]
+      contact_type_ids: []
     ]
 
     case @user

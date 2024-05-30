@@ -37,6 +37,8 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
   config.include ActionText::SystemTestHelper, type: :system
+  config.include TwilioHelper, type: :request
+  config.include TwilioHelper, type: :system
 
   config.after do
     Warden.test_reset!
@@ -76,4 +78,11 @@ RSpec.configure do |config|
   def pre_transition_aged_youth_age
     Date.current - CasaCase::TRANSITION_AGE.years
   end
+
+  config.around do |example|
+    Capybara.server_port = 7654 + ENV["TEST_ENV_NUMBER"].to_i
+    example.run
+  end
+
+  config.filter_run_excluding :ci_only unless ENV["GITHUB_ACTIONS"]
 end

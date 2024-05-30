@@ -1,0 +1,31 @@
+@use "../base/breakpoints.scss" as screen-sizes;
+
+.case-contacts-form {
+  &-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+
+    @media only screen and (max-width: screen-sizes.$mobile) {
+      & > a, & > button {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  &-checkbox {
+    border-color: #757575;
+  }
+
+  &-title {
+    @media only screen and (max-width: screen-sizes.$mobile) {
+      font-size: 28px;
+    } 
+  }
+
+  &-subtitle {
+    @media only screen and (max-width: screen-sizes.$mobile) {
+      font-size: 24px;
+    } 
+  }
+}

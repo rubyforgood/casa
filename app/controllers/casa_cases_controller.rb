@@ -54,6 +54,8 @@ class CasaCasesController < ApplicationController
         format.json { render json: @casa_case, status: :created }
       end
     else
+      set_contact_types
+      @empty_court_date = court_date_unknown?
       respond_to do |format|
         format.html { render :new }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_entity }
@@ -154,7 +156,7 @@ class CasaCasesController < ApplicationController
       :date_in_care,
       :court_report_due_date,
       :empty_court_date,
-      casa_case_contact_types_attributes: [:contact_type_id],
+      contact_type_ids: [],
       court_dates_attributes: [:date]
     )
   end
@@ -175,7 +177,8 @@ class CasaCasesController < ApplicationController
   end
 
   def set_contact_types
-    @contact_types = ContactType.for_organization(current_organization)
+    @contact_types = current_organization.contact_types
+    @selected_contact_type_ids = (!@casa_case.nil?) ? @casa_case.contact_type_ids : []
   end
 
   def case_contact_csv_name(case_contacts)

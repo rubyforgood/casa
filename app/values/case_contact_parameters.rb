@@ -2,7 +2,7 @@
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
     new_params =
-      params.require(:case_contact).permit(
+      params.fetch(:case_contact, {}).permit(
         :duration_minutes,
         :occurred_at,
         :contact_made,
@@ -12,8 +12,8 @@ class CaseContactParameters < SimpleDelegator
         :notes,
         :status,
         :volunteer_address,
+        contact_type_ids: [],
         draft_case_ids: [],
-        case_contact_contact_type_attributes: [:contact_type_id],
         additional_expenses_attributes: %i[id other_expense_amount other_expenses_describe],
         contact_topic_answers_attributes: %i[id value selected]
       )

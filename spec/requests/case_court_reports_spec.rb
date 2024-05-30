@@ -152,7 +152,7 @@ RSpec.describe "/case_court_reports", type: :request do
 
     context "when a custom template is set" do
       before do
-        stub_twillio
+        stub_twilio
         volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
       end
 
@@ -243,12 +243,4 @@ RSpec.describe "/case_court_reports", type: :request do
       end
     end
   end
-end
-
-def stub_twillio
-  twillio_client = instance_double(Twilio::REST::Client)
-  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
-  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
-  allow(twillio_client).to receive(:messages).and_return(messages)
-  allow(messages).to receive(:list).and_return([])
 end
