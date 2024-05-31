@@ -127,7 +127,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
 1. _If you are running on an M1 mac, run the following command before you start the installation process:_
-   1. _Set the architecture: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
+   1. _Set the architecture_: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
    1. _Remove all gems before you proceed_: `gem uninstall -aIx`
 
 ## Running the App / Verifying Installation
