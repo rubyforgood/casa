@@ -36,7 +36,11 @@
         <% end %>
 
         <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-          <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+          <% if step == @case_contact.form_steps.last %>
+            <i class="lni lni-checkmark-circle mr-5"></i> Submit
+          <% else %>
+            <i class="lni lni-checkmark-circle mr-5"></i> Save and continue
+          <% end %>
         <% end %>
       </div>
     <% end %>
