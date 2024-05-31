@@ -5,6 +5,14 @@ require "sablon"
 class CourtDate < ApplicationRecord
   belongs_to :casa_case
   validates :date, presence: true
+  validates :date, comparison: {
+    less_than_or_equal_to: -> { 1.year.from_now },
+    message: "is not valid. Court date must be within one year from today."
+  }
+  validates :date, comparison: {
+    greater_than_or_equal_to: "1989-01-01".to_date,
+    message: "is not valid. Court date cannot be prior to 1/1/1989."
+  }
 
   has_many :case_court_orders
   belongs_to :hearing_type, optional: true

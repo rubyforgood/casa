@@ -17,15 +17,41 @@ RSpec.describe CourtDate, type: :model do
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
 
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
+
+  describe "date validation" do
+    it "is not valid before 1989" do
+      court_date = CourtDate.new(date: "1984-01-01".to_date)
+      expect(court_date.valid?).to be false
+      expect(court_date.errors[:date]).to eq(["is not valid. Court date cannot be prior to 1/1/1989."])
+    end
+
+    fit "is not valid more than 1 year in the future" do
+      court_date = CourtDate.new(date: 367.days.from_now)
+      expect(court_date.valid?).to be false
+      expect(court_date.errors[:date]).to eq(["is not valid. Court date must be within one year from today."])
+    end
+
+    it "is valid within one year in the future" do
+      court_date = CourtDate.new(date: 6.months.from_now)
+      court_date.valid?
+      expect(court_date.errors[:date]).to eq([])
+    end
+
+    it "is valid in the past after 1989" do
+      court_date = CourtDate.new(date: "1997-08-29".to_date)
+      court_date.valid?
+      expect(court_date.errors[:date]).to eq([])
+    end
+  end
+
   it "is invalid without a casa_case" do
     court_date = build(:court_date, casa_case: nil)
     expect do
       court_date.casa_case = casa_case
     end.to change { court_date.valid? }.from(false).to(true)
-  end
-
-  before do
-    travel_to Date.new(2021, 1, 1)
   end
 
   describe ".ordered_ascending" do
