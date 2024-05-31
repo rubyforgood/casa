@@ -305,18 +305,14 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       pending "is disabled by default"
 
       context "when none is selected" do
-        it "is enabled" do # TODO: Flaky. Fix this test
+        it "is enabled" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           find("[data-select-all-target='button']").click
           select "None", from: "supervisor_volunteer_supervisor_id"
 
-          button = find("[data-disable-form-target='submitButton']")
-
-          expect(button.disabled?).to be false
-          expect(button[:class].include?("deactive-btn")).to be false
-          expect(button[:class].include?("dark-btn")).to be true
-          expect(button[:class].include?("btn-hover")).to be true
+          expect(page).to have_button("Confirm", disabled: false)
+          expect(page).to have_button("Confirm", class: %w[!deactive-btn dark-btn btn-hover])
         end
       end
 
