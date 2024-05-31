@@ -26,6 +26,10 @@
       <%= form.label :active, "Active?", class: 'form-check-label' %>
       <span data-reveal-target="item" class="text-danger <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
     </div>
+    <span class="input-style-1">
+      <%= form.label :expires_at, "Expires at (optional)" %>
+      <%= form.datetime_field :expires_at, required: false %>
+    </span>
     <div class="input-style-1">
       <%= form.label :content %>
       <%= form.rich_text_area :content %>
