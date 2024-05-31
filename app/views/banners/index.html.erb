@@ -25,6 +25,7 @@
             <tr>
               <th>Name</th>
               <th>Active?</th>
+              <th>Expires At</th>
               <th>Last Updated By</th>
               <th>Updated At</th>
               <th>Actions</th>
@@ -39,6 +40,13 @@
                 <td class="min-width">
                   <% if banner.active? %>
                     Yes
+                  <% else %>
+                    No
+                  <% end %>
+                </td>
+                <td class="min-width">
+                  <% if banner.expires_at %>
+                    <%= distance_of_time_in_words(Time.now, banner.expires_at) %>
                   <% else %>
                     No
                   <% end %>
