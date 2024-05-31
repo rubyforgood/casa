@@ -136,7 +136,9 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
 
       click_on "New Case Contact"
       complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
-      complete_notes_page
+      complete_notes_page(click_continue: false)
+
+      click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
     end
