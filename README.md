@@ -126,6 +126,9 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
+1. _If you are running on an M1 mac, run the following command before you start the installation process:_
+   1. _Set the architecture: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
+   1. _Remove all gems before you proceed_: `gem uninstall -aIx`
 
 ## Running the App / Verifying Installation
 1. `cd casa/`
@@ -173,8 +176,8 @@ If additional work arises from your pull request that is outside the scope of th
 
 **Stimulus**
 
-[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use 
-[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to 
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use
+[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to
 `/casa_cases` and see **Stimulus is working!** in your browser console.
 
 **Post-deployment tasks**
