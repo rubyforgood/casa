@@ -245,7 +245,7 @@ RSpec.describe "/volunteers", type: :request do
 
         volunteer.reload
         expect(volunteer.display_name).to eq "New Name"
-        expect(volunteer.phone_number).to eq "+15463457898"
+        expect(volunteer.phone_number).to eq "15463457898"
       end
 
       it "sends the volunteer a confirmation email upon email change" do
