@@ -138,8 +138,6 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
       complete_notes_page
 
-      click_on "Submit"
-
       expect(page).to have_text "Case contact successfully created"
     end
   end
