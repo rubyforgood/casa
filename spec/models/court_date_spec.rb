@@ -28,7 +28,7 @@ RSpec.describe CourtDate, type: :model do
       expect(court_date.errors[:date]).to eq(["is not valid. Court date cannot be prior to 1/1/1989."])
     end
 
-    fit "is not valid more than 1 year in the future" do
+    it "is not valid more than 1 year in the future" do
       court_date = CourtDate.new(date: 367.days.from_now)
       expect(court_date.valid?).to be false
       expect(court_date.errors[:date]).to eq(["is not valid. Court date must be within one year from today."])
