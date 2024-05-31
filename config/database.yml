@@ -1,15 +1,15 @@
 default: &default
   adapter: postgresql
   encoding: unicode
-  username: <%= ENV.fetch("POSTGRES_USER") { } %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
-  password: <%= ENV.fetch("POSTGRES_PASSWORD") { 'password' } %>
 
 development:
   <<: *default
   database: casa_development
   host: <%= ENV.fetch("DATABASE_HOST") { } %>
+  username: <%= ENV.fetch("POSTGRES_USER") { } %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD") { 'password' } %>
 
 test:
   <<: *default
