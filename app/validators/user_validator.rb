@@ -43,6 +43,5 @@ class UserValidator < ActiveModel::Validator
 
     record.errors.add(:base, " Date of birth must be in the past.") unless date_of_birth.past?
     record.errors.add(:base, " Date of birth must be on or after 1/1/1920.") unless date_of_birth >= "1920-01-01".to_date
-
   end
 end

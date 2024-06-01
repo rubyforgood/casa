@@ -33,6 +33,5 @@ module CasaCase::Validations
 
     # Validation to check timestamp and submission status of a case
     validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]
-
   end
 end
