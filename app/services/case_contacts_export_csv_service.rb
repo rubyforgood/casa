@@ -53,8 +53,9 @@ class CaseContactsExportCsvService
   def court_topics
     @base_scope
       .has_court_topics
-      .select("contact_topics_contact_topic_answers.question")
+      .select("contact_topics_contact_topic_answers.id", "contact_topics_contact_topic_answers.question")
       .distinct
+      .order("contact_topics_contact_topic_answers.id")
       .map(&:question)
   end
 end

@@ -384,28 +384,32 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   context "with court topics" do
-    let(:used_topic)   { create(:contact_topic, question: "Used topic") }
-    let(:unused_topic) { create(:contact_topic, question: "Unused topic") }
+    let(:report) { described_class.new }
+    let(:csv)    { CSV.parse(report.to_csv, headers: true) }
+
+    let!(:used_topic_1) { create(:contact_topic, question: "Used topic 1") }
+    let!(:used_topic_2) { create(:contact_topic, question: "Used topic 2") }
+    let!(:unused_topic) { create(:contact_topic, question: "Unused topic") }
 
     let(:contacts) { create_list(:case_contact, 3) }
 
+    # Create the answers in opposite order than the topics
     before do
-      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic, value: "Yes!")
-      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic, value: "Nope")
+      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_2, value: "Ans Contact 1 Topic 2")
+      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_1, value: "Ans Contact 1 Topic 1")
+      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic_1, value: "Ans Contact 2 Topic 1")
     end
-
-    let(:report) { described_class.new }
-    let(:csv)    { CSV.parse(report.to_csv, headers: true) }
 
     it "appends headers for any topics referenced by case_contacts in the report" do
       headers = csv.headers
       expect(headers).not_to include(unused_topic.question)
-      expect(headers).to include(used_topic.question)
-      expect(headers.select { |header| header == used_topic.question }.size).to be 1
+      expect(headers).to include(used_topic_1.question, used_topic_2.question)
+      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1
     end
 
     it "includes topic answers in csv rows" do
-      expect(csv["Used topic"]).to match_array ["Yes!", "Nope", nil]
+      expect(csv["Used topic 1"]).to eq ["Ans Contact 1 Topic 1", "Ans Contact 2 Topic 1", nil]
+      expect(csv["Used topic 2"]).to eq ["Ans Contact 1 Topic 2", nil, nil]
     end
   end
 end
