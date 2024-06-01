@@ -11,8 +11,7 @@ class CaseContactsExportCsvService
 
   def perform
     CSV.generate(headers: true) do |csv|
-      filtered_columns.delete(:court_topics)
-      csv << filtered_columns.map(&:to_s).map(&:titleize) + court_topics
+      csv << filtered_columns.excluding(:court_topics).map(&:to_s).map(&:titleize) + court_topics
       if case_contacts.present?
         case_contacts.decorate.each do |case_contact|
           csv << fixed_column_values(case_contact) + court_topic_answers(case_contact)
@@ -47,10 +46,14 @@ class CaseContactsExportCsvService
   end
 
   def court_topic_answers(case_contact)
+    return [] unless filtered_columns.include?(:court_topics)
+
     case_contact.contact_topic_answers.map(&:value)
   end
 
   def court_topics
+    return [] unless filtered_columns.include?(:court_topics)
+
     @base_scope
       .has_court_topics
       .select("contact_topics_contact_topic_answers.id", "contact_topics_contact_topic_answers.question")

@@ -384,7 +384,7 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   context "with court topics" do
-    let(:report) { described_class.new }
+    let(:report) { described_class.new(filtered_csv_cols: {court_topics: "true"}) }
     let(:csv)    { CSV.parse(report.to_csv, headers: true) }
 
     let!(:used_topic_1) { create(:contact_topic, question: "Used topic 1") }
@@ -410,6 +410,20 @@ RSpec.describe CaseContactReport, type: :model do
     it "includes topic answers in csv rows" do
       expect(csv["Used topic 1"]).to eq ["Ans Contact 1 Topic 1", "Ans Contact 2 Topic 1", nil]
       expect(csv["Used topic 2"]).to eq ["Ans Contact 1 Topic 2", nil, nil]
+    end
+
+    context "when court topics are not requested" do
+      let(:report) do
+        described_class.new(filtered_csv_cols: {
+          internal_contact_number: "true",
+          court_topics: "false"
+        })
+      end
+
+      it "omits topics in headers and rows" do
+        expect(csv.headers).not_to include(used_topic_1.question, used_topic_2.question)
+        expect(csv.first.fields).not_to include("Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2")
+      end
     end
   end
 end
