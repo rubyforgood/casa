@@ -30,6 +30,18 @@ RSpec.describe CaseContactReport, type: :model do
       expect(parsed_csv.headers.length).to eq(case_contact_data.length)
       expect(case_contact_data[1]).to eq("60")
     end
+
+    example "with court topics" do
+      contact = create(:case_contact)
+      topic = create(:contact_topic, question: "How are you?")
+      create(:contact_topic_answer, case_contact: contact, contact_topic: topic)
+
+      csv = described_class.new.to_csv
+      parsed_csv = CSV.parse(csv, headers: true)
+
+      expect(parsed_csv.headers).not_to include("Court Topics")
+      expect(parsed_csv.headers).to include("How are you?")
+    end
   end
 
   describe "CSV body serialization" do
