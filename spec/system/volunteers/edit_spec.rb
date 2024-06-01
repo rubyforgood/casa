@@ -560,7 +560,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
         click_on "Impersonate"
 
-        within(".sidebar-nav-wrapper") do
+        within(".header") do
           expect(page).to have_text(
             "You (#{admin.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."
@@ -579,7 +579,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
         click_on "Impersonate"
 
-        within(".sidebar-nav-wrapper") do
+        within(".header") do
           expect(page).to have_text(
             "You (#{supervisor.display_name}) are signed in as John Doe. " \
               "Click here to stop impersonating."
