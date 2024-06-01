@@ -5,11 +5,10 @@ RSpec.describe CaseContactReport, type: :model do
     it "matches the length of row data" do
       create(:case_contact)
       csv = described_class.new.to_csv
-      parsed_csv = CSV.parse(csv)
+      parsed_csv = CSV.parse(csv, headers: true)
 
-      expect(parsed_csv.length).to eq(2)
-      expect(parsed_csv[0].length).to eq(parsed_csv[1].length)
-      expect(parsed_csv[0]).to eq([
+      expect(parsed_csv.length).to eq(1) # one header, one row
+      expect(parsed_csv.headers).to eq([
         "Internal Contact Number",
         "Duration Minutes",
         "Contact Types",
@@ -26,7 +25,9 @@ RSpec.describe CaseContactReport, type: :model do
         "Case Contact Notes",
         "Court Topics"
       ])
-      case_contact_data = parsed_csv[1]
+
+      case_contact_data = parsed_csv.first
+      expect(parsed_csv.headers.length).to eq(case_contact_data.length)
       expect(case_contact_data[1]).to eq("60")
     end
   end
