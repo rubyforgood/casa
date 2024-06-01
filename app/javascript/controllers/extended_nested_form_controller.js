@@ -17,6 +17,7 @@ export default class extends NestedForm {
   addStandardCourtOrder (e) {
     const dropdownValue = $(this.selectedStandardTarget).val()
     
+    // TODO: actually undo this, have "Custom court order" be a value in the drop down, which will add a blank court order
     if (dropdownValue !== "") {
       super.add(e)
       const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
