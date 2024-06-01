@@ -80,7 +80,12 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  # Uncomment if you wish to use codespaces
+  # config.action_controller.forgery_protection_origin_check = false
+
   config.hosts << ENV["DEV_HOSTS"]
+  config.hosts << ".app.github.dev"
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = false
