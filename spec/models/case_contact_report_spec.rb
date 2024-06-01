@@ -22,8 +22,7 @@ RSpec.describe CaseContactReport, type: :model do
         "Creator Email",
         "Creator Name",
         "Supervisor Name",
-        "Case Contact Notes",
-        "Court Topics"
+        "Case Contact Notes"
       ])
 
       case_contact_data = parsed_csv.first
@@ -97,7 +96,7 @@ RSpec.describe CaseContactReport, type: :model do
         contacts = report.case_contacts
 
         expect(report.to_csv).to eq(
-          "Internal Contact Number,Duration Minutes,Contact Types,Contact Made,Contact Medium,Occurred At,Added To System At,Miles Driven,Wants Driving Reimbursement,Casa Case Number,Creator Email,Creator Name,Supervisor Name,Case Contact Notes,Court Topics\n"
+          "Internal Contact Number,Duration Minutes,Contact Types,Contact Made,Contact Medium,Occurred At,Added To System At,Miles Driven,Wants Driving Reimbursement,Casa Case Number,Creator Email,Creator Name,Supervisor Name,Case Contact Notes\n"
         )
         expect(contacts.length).to eq(0)
       end
