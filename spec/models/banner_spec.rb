@@ -22,4 +22,24 @@ RSpec.describe Banner, type: :model do
       expect(banner).to be_valid
     end
   end
+
+  describe "#expired?" do
+    it "is false when expires_at is nil" do
+      banner = create(:banner, expires_at: nil)
+
+      expect(banner).not_to be_expired
+    end
+
+    it "is false when expires_at is set but is after today" do
+      banner = create(:banner, expires_at: 7.days.from_now)
+
+      expect(banner).not_to be_expired
+    end
+
+    it "is true when expires_at is set but is before today" do
+      banner = create(:banner, expires_at: 7.days.ago)
+
+      expect(banner).to be_expired
+    end
+  end
 end

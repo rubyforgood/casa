@@ -39,7 +39,7 @@ class ApplicationController < ActionController::Base
     @active_banner = current_organization.banners.active.first
 
     @active_banner = nil if session[:dismissed_banner] == @active_banner&.id
-    @active_banner = nil if @active_banner&.expires_at && Time.now.in_time_zone(cookies[:browser_time_zone]) > @active_banner&.expires_at
+    @active_banner = nil if @active_banner&.expired?
   end
 
   protected

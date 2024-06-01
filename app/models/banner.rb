@@ -8,6 +8,10 @@ class Banner < ApplicationRecord
   validates_presence_of :name
   validate :only_one_banner_is_active_per_organization
 
+  def expired?
+    expires_at && Time.current > expires_at
+  end
+
   private
 
   def only_one_banner_is_active_per_organization
