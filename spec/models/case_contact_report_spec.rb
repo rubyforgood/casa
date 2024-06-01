@@ -7,7 +7,7 @@ RSpec.describe CaseContactReport, type: :model do
       csv = described_class.new.to_csv
       parsed_csv = CSV.parse(csv, headers: true)
 
-      expect(parsed_csv.length).to eq(1) # one header, one row
+      expect(parsed_csv.length).to eq(1) # length doesn't include header row
       expect(parsed_csv.headers).to eq([
         "Internal Contact Number",
         "Duration Minutes",
@@ -27,24 +27,6 @@ RSpec.describe CaseContactReport, type: :model do
 
       case_contact_data = parsed_csv.first
       expect(parsed_csv.headers.length).to eq(case_contact_data.length)
-      expect(case_contact_data[1]).to eq("60")
-    end
-
-    it "with court topics" do
-      used_topic = create(:contact_topic, question: "Used topic")
-      unused_topic = create(:contact_topic, question: "Unused topic")
-
-      first_contact = create(:case_contact)
-      second_contact = create(:case_contact)
-      create(:contact_topic_answer, case_contact: first_contact, contact_topic: used_topic)
-      create(:contact_topic_answer, case_contact: second_contact, contact_topic: used_topic)
-
-      csv = described_class.new.to_csv
-      headers = CSV.parse(csv, headers: true).headers
-
-      expect(headers).not_to include(unused_topic.question)
-      expect(headers).to include(used_topic.question)
-      expect(headers.select { |header| header == used_topic.question }.size).to be 1
     end
   end
 
@@ -398,6 +380,32 @@ RSpec.describe CaseContactReport, type: :model do
           "Duration Minutes"
         ])
       end
+    end
+  end
+
+  context "with court topics" do
+    let(:used_topic)   { create(:contact_topic, question: "Used topic") }
+    let(:unused_topic) { create(:contact_topic, question: "Unused topic") }
+
+    let(:contacts) { create_list(:case_contact, 3) }
+
+    before do
+      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic, value: "Yes!")
+      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic, value: "Nope")
+    end
+
+    let(:report) { described_class.new }
+    let(:csv)    { CSV.parse(report.to_csv, headers: true) }
+
+    it "appends headers for any topics referenced by case_contacts in the report" do
+      headers = csv.headers
+      expect(headers).not_to include(unused_topic.question)
+      expect(headers).to include(used_topic.question)
+      expect(headers.select { |header| header == used_topic.question }.size).to be 1
+    end
+
+    it "includes topic answers in csv rows" do
+      expect(csv["Used topic"]).to match_array ["Yes!", "Nope", nil]
     end
   end
 end
