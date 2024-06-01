@@ -530,13 +530,32 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Submitted")
     end
 
-    it "can add a standard court order" do
+    it "can add a standard court order", js: true do
       visit edit_casa_case_path(casa_case)
       select("Family therapy", from: "Standard Court Order Type (optional)")
-      click_button("Add a standard court order")
-
-      textarea = all('textarea.court-order-text-entry').last
+      click_button("Add a court order")
+      
+      textarea = all('textarea.court-order-text-entry')[1]
       expect(textarea.value).to eq('Family therapy')
+    end
+    
+    it "can add a custom court order", js: true do
+      visit edit_casa_case_path(casa_case)
+      select("Custom court order", from: "Standard Court Order Type (optional)")
+      click_button("Add a court order")
+
+      textarea = all('textarea.court-order-text-entry')[1]
+      expect(textarea.value).to eq('')
+    end
+
+    context "nothing is selected from custom court order dropdown" do
+      it "does not add a standard court order field", js: true do
+        visit edit_casa_case_path(casa_case)
+        click_button("Add a standard court order")
+
+        textarea = all('textarea.court-order-text-entry')
+        expect(textarea.count).to eq(1)
+      end
     end
     
     it "can add a custom court order" do
