@@ -40,6 +40,12 @@ RSpec.describe LearningHour, type: :model do
     expect(learning_hour).to_not be_valid
   end
 
+  it "Date cannot be before 01-01-1989" do
+    learning_hour = build_stubbed(:learning_hour, occurred_at: "1984-01-01".to_date)
+    expect(learning_hour).to_not be_valid
+    expect(learning_hour.errors[:occurred_at]).to eq(["is not valid: Occurred on Date cannot be prior to 1/1/1989."])
+  end
+
   it "does not require learning_hour_topic if casa_org learning_hour_topic disabled" do
     learning_hour = build_stubbed(:learning_hour, learning_hour_topic: nil)
     expect(learning_hour).to be_valid

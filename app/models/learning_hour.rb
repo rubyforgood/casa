@@ -8,6 +8,10 @@ class LearningHour < ApplicationRecord
   validates :name, presence: {message: "/ Title cannot be blank"}
   validates :occurred_at, presence: true
   validate :occurred_at_not_in_future
+  validates :occurred_at, comparison: {
+    greater_than_or_equal_to: "1989-01-01".to_date,
+    message: "is not valid: Occurred on Date cannot be prior to 1/1/1989.", allow_nil: true
+  }
   validates :learning_hour_topic, presence: true, if: :user_org_learning_topic_enable?
 
   scope :supervisor_volunteers_learning_hours, ->(supervisor_id) {
