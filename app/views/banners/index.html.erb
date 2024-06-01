@@ -45,11 +45,7 @@
                   <% end %>
                 </td>
                 <td class="min-width">
-                  <% if banner.expires_at %>
-                    <%= distance_of_time_in_words(Time.now, banner.expires_at) %>
-                  <% else %>
-                    No
-                  <% end %>
+                  <%= banner_expiration_time_in_words(banner) %>
                 </td>
                 <td class="min-width">
                   <%= banner.user.display_name %>
