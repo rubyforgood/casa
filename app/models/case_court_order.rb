@@ -1,7 +1,6 @@
 class CaseCourtOrder < ApplicationRecord
   IMPLEMENTATION_STATUSES = {unimplemented: 1, partially_implemented: 2, implemented: 3}
   STANDARD_COURT_ORDERS = [
-    "Create custom court order",
     "Individual therapy for the Respondent",
     "Family therapy",
     "Birth certificate for the Respondent’s",
@@ -34,7 +33,7 @@ class CaseCourtOrder < ApplicationRecord
 
   enum implementation_status: IMPLEMENTATION_STATUSES
 
-  def self.standard_court_order_options
+  def self.court_order_options
     STANDARD_COURT_ORDERS.map { |o| [o, o] }
   end
 

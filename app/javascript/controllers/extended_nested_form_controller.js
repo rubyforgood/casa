@@ -18,7 +18,7 @@ export default class extends NestedForm {
     super.add(e)
     const selectedValue = $(this.selectedStandardCourtOrderTarget).val()
 
-    if (selectedValue !== 'Create custom court order') {
+    if (selectedValue !== '') {
       const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
       $textarea.val(selectedValue)
     }

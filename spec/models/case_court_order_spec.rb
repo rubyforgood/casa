@@ -7,10 +7,11 @@ RSpec.describe CaseCourtOrder, type: :model do
 
   it { is_expected.to validate_presence_of(:text) }
 
-  describe ".standard_court_order_options" do
+  describe ".court_order_options" do
     it "returns standard court order options" do
-      pending("returns standard court order options")
-      # TODO
+      expect(described_class.court_order_options.count).to eq(23)
+      expect(described_class.court_order_options).to be_an(Array)
+      expect(described_class.court_order_options).to all be_an(Array)
     end
   end
 end
