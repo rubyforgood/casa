@@ -48,6 +48,7 @@ class CaseContactReport
     :creator_name,
     :supervisor_name,
     :case_contact_notes,
+    :court_topics,
   ]
 
 end
