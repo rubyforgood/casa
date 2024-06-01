@@ -42,4 +42,18 @@ RSpec.describe Banner, type: :model do
       expect(banner).to be_expired
     end
   end
+
+  describe "#expires_at_in_time_zone" do
+    it "can shift time by timezone for equivalent times" do
+      banner = create(:banner, expires_at: "2024-06-13 12:00:00 UTC")
+
+      expires_at_in_pacific_time = banner.expires_at_in_time_zone("America/Los_Angeles")
+      expect(expires_at_in_pacific_time.to_s).to eq("2024-06-13 05:00:00 -0700")
+
+      expires_at_in_eastern_time = banner.expires_at_in_time_zone("America/New_York")
+      expect(expires_at_in_eastern_time.to_s).to eq("2024-06-13 08:00:00 -0400")
+
+      expect(expires_at_in_pacific_time).to eq(expires_at_in_eastern_time)
+    end
+  end
 end

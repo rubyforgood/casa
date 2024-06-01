@@ -12,6 +12,10 @@ class Banner < ApplicationRecord
     expires_at && Time.current > expires_at
   end
 
+  def expires_at_in_time_zone(timezone)
+    expires_at&.in_time_zone(timezone)
+  end
+
   private
 
   def only_one_banner_is_active_per_organization
