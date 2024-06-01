@@ -1,5 +1,30 @@
 class CaseCourtOrder < ApplicationRecord
   IMPLEMENTATION_STATUSES = {unimplemented: 1, partially_implemented: 2, implemented: 3}
+  STANDARD_ORDERS = [
+    "Individual therapy for the Respondent",
+    "Family therapy",
+    "Birth certificate for the Respondent\’s",
+    "Educational or Vocational referrals",
+    "Independent living skills classes or workshops",
+    "Learners\’ permit for the Respondent, drivers\’ education and driving hours when needed",
+    "Educational monitoring for the Respondent",
+    "Tutor for the Respondent",
+    "Individual therapy for the [parent]",
+    "Substance abuse assessment for the [parent]",
+    "Housing support for the [parent]",
+    "Visitation assistance for the Respondent to see [family]",
+    "No contact with (mother, father, other guardian)",
+    "Supervised visits",
+    "Supervised visits at DSS",
+    "Virtual Visits",
+    "Therapy (child, mother, father, other guardian)",
+    "Psychiatric Evaluation and follow all recommendations (child, mother, father, other guardian)",
+    "Substance Abuse Evaluation and follow all recommendations (child, mother, father, other guardian)",
+    "Substance Abuse Treatment (child, mother, father, other guardian)",
+    "Urinalysis (child, mother, father, other guardian)",
+    "Parenting Classes (mother, father, other guardian)",
+    "Domestic Violence Education/Group"
+  ].freeze
 
   belongs_to :casa_case
   belongs_to :court_date, optional: true
@@ -17,6 +42,10 @@ class CaseCourtOrder < ApplicationRecord
     else
       "❌".freeze
     end
+  end
+
+  def self.standard_order_options
+    STANDARD_ORDERS.map{|o| [o,o]}
   end
 end
 

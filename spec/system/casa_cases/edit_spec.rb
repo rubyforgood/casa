@@ -55,6 +55,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).not_to have_field("Court Report Due Date")
       expect(page).to have_text("Youth's Date in Care")
       expect(page).to have_text("Court Order Text One")
+      expect(page).to have_text("Standard Court Orders")
+      expect(page).to have_button("Add a standard court order")
+      expect(page).to have_button("Add a custom court order")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(casa_case.contact_types).to eq [contact_type]
@@ -409,7 +412,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         find('button[data-action="click->extended-nested-form#remove"]').click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
-of it unless it was included in a previous court report.")
+                                  of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
         expect(page).to_not have_text(text)
@@ -525,6 +528,20 @@ of it unless it was included in a previous court report.")
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
+    end
+
+    it "can add a standard court order" do
+      expect(page).to have_text("Standard Court Orders")
+      expect(page).to have_select("Standard Court Orders")
+      expect(page).to have_button("Add standard court order")
+    end
+    
+    it "can add a custom court order" do
+      expect(page).to have_button("Add custom court order")
+    end
+
+    context "adds standard court order" do
+      # 
     end
 
     context "Copy all court orders from a case" do

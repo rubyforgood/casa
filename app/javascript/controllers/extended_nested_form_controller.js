@@ -3,6 +3,8 @@ import Swal from 'sweetalert2'
 
 export default class extends NestedForm {
   //
+  static targets = ["selectedStandard"]
+
   remove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
     if (wrapper.dataset.newRecord !== 'true' && wrapper.dataset.type === 'COURT_ORDER') {
@@ -10,6 +12,13 @@ export default class extends NestedForm {
     } else {
       super.remove(e)
     }
+  }
+
+  addStandardCourtOrder (e) {
+    super.add(e)
+    const $dropdownValue = $(this.selectedStandardTarget).val()
+    const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
+    $textarea.val($dropdownValue)
   }
 
   removeCourtOrderWithConfirmation (e, wrapper) {

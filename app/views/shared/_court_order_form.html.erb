@@ -1,8 +1,7 @@
 <div class="court-order-entry d-flex align-items-center select-style-1 nested-form-wrapper"
      data-new-record="<%= f.object.new_record? %>" data-type="COURT_ORDER">
-
   <div class="input-style-1">
-    <%= f.text_area :text, cols: 50 %>
+    <%= f.text_area :text, cols: 50, class: "court-order-text-entry" %>
   </div>
   <div class="select-position">
     <%= f.select :implementation_status,

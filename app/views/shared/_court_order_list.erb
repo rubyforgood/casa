@@ -28,9 +28,23 @@
   <% end %>
 
   <div data-extended-nested-form-target="target"></div>
+  <div class="select-style-1">
+    <div class="select-position">
+      <%= select_tag :selectedStandard,
+          options_for_select(CaseCourtOrder.standard_order_options),
+          {include_blank: '', data: {extended_nested_form_target: "selectedStandard"}}
+        %>
+    </div>
+  </div>
+
 </div>
+
 <div class="add-container">
+  <button id="add-standard-court-order-button" type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#addStandardCourtOrder">
+    <i class="lni lni-plus mr-10"></i> Add a standard court order
+  </button>
+
   <button id="add-court-order-button" type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#add">
-    <i class="lni lni-plus mr-10"></i> Add a court order
+    <i class="lni lni-plus mr-10"></i> Add a custom court order
   </button>
 </div>
