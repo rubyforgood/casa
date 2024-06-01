@@ -6,8 +6,7 @@ class CaseContactsExportCsvService
   def initialize(case_contacts_scope, filtered_columns = nil)
     @filtered_columns = filtered_columns || CaseContactReport::COLUMNS
     @base_scope = case_contacts_scope
-
-    @case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case)
+    @case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case, :contact_topic_answers)
   end
 
   def perform
