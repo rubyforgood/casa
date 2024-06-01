@@ -31,15 +31,17 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     example "with court topics" do
+      used_topic = create(:contact_topic, question: "Used topic")
+      unused_topic = create(:contact_topic, question: "Unused topic")
+
       contact = create(:case_contact)
-      topic = create(:contact_topic, question: "How are you?")
-      create(:contact_topic_answer, case_contact: contact, contact_topic: topic)
+      create(:contact_topic_answer, case_contact: contact, contact_topic: used_topic)
 
       csv = described_class.new.to_csv
       parsed_csv = CSV.parse(csv, headers: true)
 
-      expect(parsed_csv.headers).not_to include("Court Topics")
-      expect(parsed_csv.headers).to include("How are you?")
+      expect(parsed_csv.headers).to include(used_topic.question)
+      expect(parsed_csv.headers).not_to include(unused_topic.question)
     end
   end
 
