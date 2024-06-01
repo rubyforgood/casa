@@ -16,9 +16,9 @@ export default class extends NestedForm {
 
   addStandardCourtOrder (e) {
     super.add(e)
-    const $dropdownValue = $(this.selectedStandardTarget).val()
+    const dropdownValue = $(this.selectedStandardTarget).val()
     const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
-    $textarea.val($dropdownValue)
+    $textarea.val(dropdownValue)
   }
 
   removeCourtOrderWithConfirmation (e, wrapper) {

@@ -1,6 +1,6 @@
 class CaseCourtOrder < ApplicationRecord
   IMPLEMENTATION_STATUSES = {unimplemented: 1, partially_implemented: 2, implemented: 3}
-  STANDARD_ORDERS = [
+  STANDARD_COURT_ORDERS = [
     "Individual therapy for the Respondent",
     "Family therapy",
     "Birth certificate for the Respondent\’s",
@@ -33,6 +33,10 @@ class CaseCourtOrder < ApplicationRecord
 
   enum implementation_status: IMPLEMENTATION_STATUSES
 
+  def self.standard_order_options
+    STANDARD_COURT_ORDERS.map{|o| [o,o]}
+  end
+  
   def implementation_status_symbol
     case implementation_status
     when "implemented"
@@ -44,9 +48,7 @@ class CaseCourtOrder < ApplicationRecord
     end
   end
 
-  def self.standard_order_options
-    STANDARD_ORDERS.map{|o| [o,o]}
-  end
+
 end
 
 # == Schema Information

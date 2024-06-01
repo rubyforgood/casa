@@ -28,11 +28,13 @@
   <% end %>
 
   <div data-extended-nested-form-target="target"></div>
+
   <div class="select-style-1">
+    <%= label_tag :selectedStandard, "Standard Court Order Type (optional)" %>
     <div class="select-position">
       <%= select_tag :selectedStandard,
           options_for_select(CaseCourtOrder.standard_order_options),
-          {include_blank: '', data: {extended_nested_form_target: "selectedStandard"}}
+          {include_blank: '--Custom Court Order--', data: {extended_nested_form_target: "selectedStandard"}}
         %>
     </div>
   </div>
