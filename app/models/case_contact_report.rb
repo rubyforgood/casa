@@ -30,6 +30,8 @@ class CaseContactReport
   def filtered_columns(args)
     if args[:filtered_csv_cols].present?
       args[:filtered_csv_cols].select { |_key, value| value == "true" }.keys.map(&:to_sym)
+    else
+      COLUMNS
     end
   end
 
@@ -48,7 +50,6 @@ class CaseContactReport
     :creator_name,
     :supervisor_name,
     :case_contact_notes,
-    :court_topics,
+    :court_topics
   ]
-
 end

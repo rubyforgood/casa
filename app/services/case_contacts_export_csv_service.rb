@@ -3,15 +3,15 @@ require "csv"
 class CaseContactsExportCsvService
   attr_reader :case_contacts, :filtered_columns
 
-  def initialize(case_contacts_scope, filtered_columns = nil)
-    @filtered_columns = filtered_columns || CaseContactReport::COLUMNS
+  def initialize(case_contacts_scope, filtered_columns)
+    @filtered_columns = filtered_columns
     @base_scope = case_contacts_scope
     @case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case, :contact_topic_answers)
   end
 
   def perform
     CSV.generate(headers: true) do |csv|
-      csv << filtered_columns.excluding(:court_topics).map(&:to_s).map(&:titleize) + court_topics
+      csv << fixed_column_headers + court_topics
       if case_contacts.present?
         case_contacts.decorate.each do |case_contact|
           csv << fixed_column_values(case_contact) + court_topic_answers(case_contact)
@@ -39,6 +39,10 @@ class CaseContactsExportCsvService
       supervisor_name: case_contact.creator&.supervisor&.display_name,
       case_contact_notes: case_contact.notes
     }
+  end
+
+  def fixed_column_headers
+    filtered_columns.excluding(:court_topics).map(&:to_s).map(&:titleize)
   end
 
   def fixed_column_values(case_contact)
