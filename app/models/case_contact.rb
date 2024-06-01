@@ -12,7 +12,8 @@ class CaseContact < ApplicationRecord
   validate :occurred_at_not_in_future
   validates :occurred_at, comparison: {
     greater_than_or_equal_to: "1989-01-01".to_date,
-    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.", allow_nil: true
+    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    allow_nil: true
   }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?

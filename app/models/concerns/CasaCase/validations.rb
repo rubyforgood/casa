@@ -16,11 +16,13 @@ module CasaCase::Validations
 
     validates :date_in_care, comparison: {
       less_than_or_equal_to: -> { Time.now.end_of_day },
-      message: "is not valid: Youth's Date in Care cannot be a future date.", allow_nil: true
+      message: "is not valid: Youth's Date in Care cannot be a future date.",
+      allow_nil: true
     }
     validates :date_in_care, comparison: {
       greater_than_or_equal_to: "1989-01-01".to_date,
-      message: "is not valid: Youth's Date in Care cannot be prior to 1/1/1989.", allow_nil: true
+      message: "is not valid: Youth's Date in Care cannot be prior to 1/1/1989.",
+      allow_nil: true
     }
 
     validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
