@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 
 export default class extends NestedForm {
   //
-  static targets = ["selectedStandard"]
+  static targets = ["selectedStandardCourtOrder"]
 
   remove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
@@ -14,14 +14,13 @@ export default class extends NestedForm {
     }
   }
 
-  addStandardCourtOrder (e) {
-    const dropdownValue = $(this.selectedStandardTarget).val()
-    
-    // TODO: actually undo this, have "Custom court order" be a value in the drop down, which will add a blank court order
-    if (dropdownValue !== "") {
-      super.add(e)
+  addCourtOrder (e) {
+    super.add(e)
+    const selectedValue = $(this.selectedStandardCourtOrderTarget).val()
+
+    if (selectedValue != "Create custom court order") {
       const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
-      $textarea.val(dropdownValue)
+      $textarea.val(selectedValue)
     }
   }
 

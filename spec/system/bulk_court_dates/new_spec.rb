@@ -28,7 +28,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     select judge.name, from: "Judge"
     select hearing_type.name, from: "Hearing type"
 
-    click_on "Add a custom court order"
+    click_on "Add a court order"
     text_area = first(:css, "textarea").native
     text_area.send_keys(court_order_text)
     page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
