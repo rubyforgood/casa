@@ -32,7 +32,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
-    it "adds a standard court order", js: true do 
+    it "adds a standard court order", js: true do
       select("Family therapy", from: "Court Order Type")
       click_button("Add a court order")
 
@@ -42,7 +42,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
     it "adds a custom court order", js: true do
       click_button("Add a court order")
-      
+
       textarea = all("textarea.court-order-text-entry")[1]
       expect(textarea.value).to eq("")
     end
