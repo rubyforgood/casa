@@ -65,12 +65,7 @@ class BannersController < ApplicationController
   end
 
   def banner_params
-    params.require(:banner).permit(:active, :content, :name, :expires_at).merge(user: current_user)
-      .tap { |banner_params| set_expires_at_in_user_time_zone(banner_params) }
-  end
-
-  def set_expires_at_in_user_time_zone(banner_params)
-    banner_params[:expires_at] = banner_params[:expires_at].in_time_zone(cookies[:browser_time_zone])
+    BannerParameters.new(params, current_user, cookies[:browser_time_zone])
   end
 
   def deactivate_alternate_active_banner
