@@ -138,8 +138,8 @@ class CaseContact < ApplicationRecord
     where(casa_case_id: case_ids) if case_ids.present?
   }
 
-  scope :with_court_topics, ->() {
-    left_joins(contact_topic_answers: [:contact_topic])
+  scope :has_court_topics, -> {
+    joins(contact_topic_answers: [:contact_topic])
   }
 
   scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }

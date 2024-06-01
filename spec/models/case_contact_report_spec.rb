@@ -30,18 +30,21 @@ RSpec.describe CaseContactReport, type: :model do
       expect(case_contact_data[1]).to eq("60")
     end
 
-    example "with court topics" do
+    it "with court topics" do
       used_topic = create(:contact_topic, question: "Used topic")
       unused_topic = create(:contact_topic, question: "Unused topic")
 
-      contact = create(:case_contact)
-      create(:contact_topic_answer, case_contact: contact, contact_topic: used_topic)
+      first_contact = create(:case_contact)
+      second_contact = create(:case_contact)
+      create(:contact_topic_answer, case_contact: first_contact, contact_topic: used_topic)
+      create(:contact_topic_answer, case_contact: second_contact, contact_topic: used_topic)
 
       csv = described_class.new.to_csv
-      parsed_csv = CSV.parse(csv, headers: true)
+      headers = CSV.parse(csv, headers: true).headers
 
-      expect(parsed_csv.headers).to include(used_topic.question)
-      expect(parsed_csv.headers).not_to include(unused_topic.question)
+      expect(headers).not_to include(unused_topic.question)
+      expect(headers).to include(used_topic.question)
+      expect(headers.select { |header| header == used_topic.question }.size).to be 1
     end
   end
 

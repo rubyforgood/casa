@@ -43,7 +43,11 @@ class CaseContactsExportCsvService
     }
   end
 
-  def court_topics()
-    @base_scope.pluck("contact_topics_contact_topic_answers.question")
+  def court_topics
+    @base_scope
+      .has_court_topics
+      .select("contact_topics_contact_topic_answers.question")
+      .distinct
+      .map(&:question)
   end
 end
