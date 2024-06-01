@@ -15,7 +15,7 @@ RSpec.describe EmancipationChecklistReminderTask, type: :model do
     end
 
     it "#send_reminders creates the reminders" do
-      expect { task.send_reminders }.to change { Notification.count }.by(2)
+      expect { task.send_reminders }.to change { EmancipationChecklistReminderNotification.count }.by(2)
     end
 
     it "#send_reminders also sends the notifications" do

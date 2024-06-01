@@ -2,11 +2,11 @@ require "rails_helper"
 
 RSpec.describe NotificationsHelper do
   context "notifications with respect to deploy time" do
-    let(:notification_created_after_deploy_a) { create(:followup_notifier) }
-    let(:notification_created_after_deploy_b) { create(:followup_notifier, created_at: 1.day.ago) }
-    let(:notification_created_at_deploy) { create(:followup_notifier, created_at: 2.days.ago) }
-    let(:notification_created_before_deploy_a) { create(:followup_notifier, created_at: 2.days.ago - 1.hour) }
-    let(:notification_created_before_deploy_b) { create(:followup_notifier, created_at: 3.days.ago) }
+    let(:notification_created_after_deploy_a) { create(:notification) }
+    let(:notification_created_after_deploy_b) { create(:notification, created_at: 1.day.ago) }
+    let(:notification_created_at_deploy) { create(:notification, created_at: 2.days.ago) }
+    let(:notification_created_before_deploy_a) { create(:notification, created_at: 2.days.ago - 1.hour) }
+    let(:notification_created_before_deploy_b) { create(:notification, created_at: 3.days.ago) }
 
     before do
       travel_to Time.new(2022, 1, 1, 0, 0, 0)
@@ -22,7 +22,7 @@ RSpec.describe NotificationsHelper do
     end
 
     describe "#notifications_after_and_including_deploy" do
-      let(:notifications_after_and_including_deploy) { helper.notifications_after_and_including_deploy(Noticed::Event.all) }
+      let(:notifications_after_and_including_deploy) { helper.notifications_after_and_including_deploy(Noticed::Notification.all) }
 
       it "returns all notifications from the given list after and including deploy time" do
         expect(notifications_after_and_including_deploy).to include(notification_created_after_deploy_a)
@@ -37,7 +37,7 @@ RSpec.describe NotificationsHelper do
     end
 
     describe "#notifications_before_deploy" do
-      let(:notifications_before_deploy) { helper.notifications_before_deploy(Noticed::Event.all) }
+      let(:notifications_before_deploy) { helper.notifications_before_deploy(Noticed::Notification.all) }
 
       it "returns all notifications from the given list before deploy time" do
         expect(notifications_before_deploy).to include(notification_created_before_deploy_a)
