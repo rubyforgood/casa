@@ -185,14 +185,14 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:casa_case) { volunteer.casa_cases.first }
       let(:search_term) { casa_case.case_number[-3..] }
 
-      xit "selects the correct case", js: true do # TODO make this work
-        page.find("span.selection").click
-        page.find(".select2-search__field").click
+      it "selects the correct case", js: true do
+        find(modal_selector).click
 
+        find("#case_select_body .selection").click
         send_keys(search_term)
         send_keys :enter
 
-        expect(find(".select2-selection__rendered").text).to match(/^#{casa_case.case_number}/)
+        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number)
       end
     end
   end
