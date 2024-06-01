@@ -1,4 +1,4 @@
-class Notification < Noticed::Event
+module BaseNotification
   # Require title, url and message methods to be implemented on children
   def title
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}"

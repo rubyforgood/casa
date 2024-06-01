@@ -137,7 +137,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   end
 
   context "EmancipationChecklistReminder" do
-    let(:notification_event) { create(:emancipation_checklist_reminder_notification, params: { casa_case: casa_case }) }
+    let(:notification_event) { create(:emancipation_checklist_reminder_notification, params: {casa_case: casa_case}) }
 
     before do
       volunteer.notifications << create(:notification, :emancipation_checklist_reminder, event: notification_event)
@@ -154,7 +154,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   end
 
   context "YouthBirthdayNotification" do
-    let(:notification_event) { create(:youth_birthday_notification, params: { casa_case: casa_case }) }
+    let(:notification_event) { create(:youth_birthday_notification, params: {casa_case: casa_case}) }
 
     before do
       volunteer.notifications << create(:notification, :youth_birthday, event: notification_event)
@@ -173,7 +173,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   context "ReimbursementCompleteNotification" do
     it "should display a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
-      notification_event = create(:reimbursement_complete_notification, params: { case_contact: case_contact })
+      notification_event = create(:reimbursement_complete_notification, params: {case_contact: case_contact})
       volunteer.notifications << create(:notification, :reimbursement_complete, event: notification_event)
       sign_in volunteer
       visit notifications_path

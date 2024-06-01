@@ -3,14 +3,15 @@
 # FollowupResolvedNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupResolvedNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupResolvedNotification < Notification
+class FollowupResolvedNotification < Noticed::Event
+  include BaseNotification
+
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
   # Add required params
-  #
-  required_param :followup, :created_by
+  required_params :followup, :created_by
 
   # Define helper methods to make rendering easier.
   #
@@ -23,6 +24,6 @@ class FollowupResolvedNotification < Notification
   end
 
   def url
-    edit_case_contact_path(params[:followup][:case_contact_id], notification_id: self.id)
+    edit_case_contact_path(params[:followup][:case_contact_id], notification_id: id)
   end
 end

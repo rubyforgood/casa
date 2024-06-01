@@ -3,13 +3,14 @@
 # YouthBirthdayNotification.with(post: @post).deliver_later(current_user)
 # YouthBirthdayNotification.with(post: @post).deliver(current_user)
 
-class YouthBirthdayNotification < Notification
+class YouthBirthdayNotification < Noticed::Event
+  include BaseNotification
+
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
   # Add required params
-  #
   required_param :casa_case
 
   # Define helper methods to make rendering easier.

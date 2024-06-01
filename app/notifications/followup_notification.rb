@@ -3,14 +3,16 @@
 # FollowupNotification.with(followup: @followup).deliver_later(current_user)
 # FollowupNotification.with(followup: @followup).deliver(current_user)
 
-class FollowupNotification < Notification
+class FollowupNotification < Noticed::Event
+  include BaseNotification
+
   # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
   # Add required params
-  required_param :followup, :created_by
+  required_params :followup, :created_by
 
   # Define helper methods to make rendering easier.
   def title
@@ -23,7 +25,7 @@ class FollowupNotification < Notification
 
   def url
     if params[:followup][:id].present?
-      edit_case_contact_path(params[:followup][:id], notification_id: self.id)
+      edit_case_contact_path(params[:followup][:id], notification_id: id)
     else
       root_path
     end

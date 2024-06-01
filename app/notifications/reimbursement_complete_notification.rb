@@ -1,4 +1,6 @@
-class ReimbursementCompleteNotification < Notification
+class ReimbursementCompleteNotification < Noticed::Event
+  include BaseNotification
+
   required_param :case_contact
 
   def title
