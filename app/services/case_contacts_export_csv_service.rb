@@ -16,7 +16,7 @@ class CaseContactsExportCsvService
       csv << filtered_columns.map(&:to_s).map(&:titleize) + court_topics
       if case_contacts.present?
         case_contacts.decorate.each do |case_contact|
-          csv << CaseContactsExportCsvService.fixed_columns(case_contact).slice(*filtered_columns).values
+          csv << fixed_column_values(case_contact) + court_topic_answers(case_contact)
         end
       end
     end
@@ -41,6 +41,14 @@ class CaseContactsExportCsvService
       supervisor_name: case_contact.creator&.supervisor&.display_name,
       case_contact_notes: case_contact.notes
     }
+  end
+
+  def fixed_column_values(case_contact)
+    CaseContactsExportCsvService.fixed_columns(case_contact).slice(*filtered_columns).values
+  end
+
+  def court_topic_answers(case_contact)
+    case_contact.contact_topic_answers.map(&:value)
   end
 
   def court_topics
