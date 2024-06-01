@@ -3,10 +3,11 @@ require "csv"
 class CaseContactsExportCsvService
   attr_reader :case_contacts, :filtered_columns
 
-  def initialize(case_contacts, filtered_columns = nil)
+  def initialize(case_contacts_scope, filtered_columns = nil)
     @filtered_columns = filtered_columns || CaseContactReport::COLUMNS
+    @base_scope = case_contacts_scope
 
-    @case_contacts = case_contacts.preload({creator: :supervisor}, :contact_types, :casa_case)
+    @case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case)
   end
 
   def perform
@@ -43,6 +44,6 @@ class CaseContactsExportCsvService
   end
 
   def court_topics()
-    ContactTopic.pluck(:question)
+    @base_scope.pluck("contact_topics_contact_topic_answers.question")
   end
 end
