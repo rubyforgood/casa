@@ -32,6 +32,21 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
+    it "adds a standard court order", js: true do 
+      select("Family therapy", from: "Court Order Type")
+      click_button("Add a court order")
+
+      textarea = all("textarea.court-order-text-entry")[1]
+      expect(textarea.value).to eq("Family therapy")
+    end
+
+    it "adds a custom court order", js: true do
+      click_button("Add a court order")
+      
+      textarea = all("textarea.court-order-text-entry")[1]
+      expect(textarea.value).to eq("")
+    end
+
     it "edits past court date", js: true do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
