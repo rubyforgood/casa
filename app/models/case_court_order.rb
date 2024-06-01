@@ -4,10 +4,10 @@ class CaseCourtOrder < ApplicationRecord
     "Create custom court order",
     "Individual therapy for the Respondent",
     "Family therapy",
-    "Birth certificate for the Respondent\’s",
+    "Birth certificate for the Respondent’s",
     "Educational or Vocational referrals",
     "Independent living skills classes or workshops",
-    "Learners\’ permit for the Respondent, drivers\’ education and driving hours when needed",
+    "Learners’ permit for the Respondent, drivers’ education and driving hours when needed",
     "Educational monitoring for the Respondent",
     "Tutor for the Respondent",
     "Individual therapy for the [parent]",
@@ -35,9 +35,9 @@ class CaseCourtOrder < ApplicationRecord
   enum implementation_status: IMPLEMENTATION_STATUSES
 
   def self.standard_court_order_options
-    STANDARD_COURT_ORDERS.map{ |o| [o,o] }
+    STANDARD_COURT_ORDERS.map { |o| [o, o] }
   end
-  
+
   def implementation_status_symbol
     case implementation_status
     when "implemented"
