@@ -20,10 +20,10 @@ class CaseContactsExportCsvService
     end
   end
 
-  def self.fixed_columns(case_contact)
+  def fixed_column_values(case_contact)
     # Note: these header labels are for stakeholders and do not match the
     # Rails DB names in all cases, e.g. added_to_system_at header is case_contact.created_at
-    {
+    mappings = {
       internal_contact_number: case_contact.id,
       duration_minutes: case_contact.report_duration_minutes,
       contact_types: case_contact.report_contact_types,
@@ -39,14 +39,12 @@ class CaseContactsExportCsvService
       supervisor_name: case_contact.creator&.supervisor&.display_name,
       case_contact_notes: case_contact.notes
     }
+
+    mappings.slice(*filtered_columns).values
   end
 
   def fixed_column_headers
     filtered_columns.excluding(:court_topics).map(&:to_s).map(&:titleize)
-  end
-
-  def fixed_column_values(case_contact)
-    CaseContactsExportCsvService.fixed_columns(case_contact).slice(*filtered_columns).values
   end
 
   def court_topic_answers(case_contact)
