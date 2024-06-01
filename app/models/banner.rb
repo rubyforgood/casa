@@ -12,6 +12,8 @@ class Banner < ApplicationRecord
     expires_at && Time.current > expires_at
   end
 
+  # `expires_at` is stored in the database as UTC, but timezone information will be stripped before displaying on frontend
+  # so this method converts the time to the user's timezone before displaying it
   def expires_at_in_time_zone(timezone)
     expires_at&.in_time_zone(timezone)
   end
