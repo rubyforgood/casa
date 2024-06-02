@@ -36,14 +36,14 @@ RSpec.describe "court_dates/edit", type: :system do
       select("Family therapy", from: "Court Order Type")
       click_button("Add a court order")
 
-      textarea = all("textarea.court-order-text-entry")[1]
+      textarea = all("textarea.court-order-text-entry").last
       expect(textarea.value).to eq("Family therapy")
     end
 
     it "adds a custom court order", js: true do
       click_button("Add a court order")
 
-      textarea = all("textarea.court-order-text-entry")[1]
+      textarea = all("textarea.court-order-text-entry").last
       expect(textarea.value).to eq("")
     end
 

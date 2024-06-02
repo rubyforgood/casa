@@ -531,7 +531,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       select("Family therapy", from: "Court Order Type")
       click_button("Add a court order")
 
-      textarea = all("textarea.court-order-text-entry")[1]
+      textarea = all("textarea.court-order-text-entry").last
       expect(textarea.value).to eq("Family therapy")
     end
 
@@ -539,7 +539,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       click_button("Add a court order")
 
-      textarea = all("textarea.court-order-text-entry")[1]
+      textarea = all("textarea.court-order-text-entry").last
       expect(textarea.value).to eq("")
     end
 
