@@ -38,7 +38,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "creates many notifications" do
-      expect { rake_task }.to change { Notification.count }.by(volunteer_count)
+      expect { rake_task }.to change { Noticed::Notification.count }.by(volunteer_count)
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "does not create a notification" do
-      expect { rake_task }.to change { Notification.count }.by(0)
+      expect { rake_task }.to change { Noticed::Notification.count }.by(0)
     end
   end
 

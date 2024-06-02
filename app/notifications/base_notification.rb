@@ -30,8 +30,6 @@ module BaseNotification
   end
 
   def muted_display
-    return "" unless record.read?
-
     "bg-light text-muted"
   end
 

@@ -88,7 +88,7 @@ RSpec.describe "layout/header", type: :view do
 
     it "displays unread notification count if the user has unread notifications" do
       sign_in user
-      build_stubbed(:notification)
+      create(:notification)
       allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
 
       render partial: "layouts/header"
