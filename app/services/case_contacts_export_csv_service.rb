@@ -1,17 +1,19 @@
 require "csv"
 
 class CaseContactsExportCsvService
-  attr_reader :case_contacts, :filtered_columns
+  attr_reader :case_contacts_scope, :filtered_columns
 
   def initialize(case_contacts_scope, filtered_columns)
     @filtered_columns = filtered_columns
-    @base_scope = case_contacts_scope
-    @case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case, :contact_topic_answers)
+    @case_contacts_scope = case_contacts_scope
   end
 
   def perform
-    CSV.generate(headers: true) do |csv|
-      csv << fixed_column_headers + court_topics
+    case_contacts = case_contacts_scope.preload({creator: :supervisor}, :contact_types, :casa_case, :contact_topic_answers)
+
+    CSV.generate do |csv|
+      csv << fixed_column_headers + court_topics.values
+
       if case_contacts.present?
         case_contacts.decorate.each do |case_contact|
           csv << fixed_column_values(case_contact) + court_topic_answers(case_contact)
@@ -48,19 +50,28 @@ class CaseContactsExportCsvService
   end
 
   def court_topic_answers(case_contact)
-    return [] unless filtered_columns.include?(:court_topics)
+    return [] if court_topics_filtered?
 
-    case_contact.contact_topic_answers.map(&:value)
+    # index_by so we don't loop through answers multiple times
+    answers_by_topic_id = case_contact.contact_topic_answers.index_by(&:contact_topic_id)
+
+    # we have to map values for all topics so we 'skip' unanswered ones (with a blank cell)
+    court_topics.keys.map { |topic_id| answers_by_topic_id[topic_id]&.value }
   end
 
   def court_topics
-    return [] unless filtered_columns.include?(:court_topics)
+    return {} if court_topics_filtered?
 
-    @base_scope
-      .has_court_topics
-      .select("contact_topics_contact_topic_answers.id", "contact_topics_contact_topic_answers.question")
+    @court_topics ||= ContactTopic
+      .with_answers_in(case_contacts_scope)
+      .order(:id)
+      .select(:id, :question)
       .distinct
-      .order("contact_topics_contact_topic_answers.id")
-      .map(&:question)
+      .to_h { |topic| [topic.id, topic.question] }
+  end
+
+  def court_topics_filtered?
+    return @court_topics_filtered if defined? @court_topics_filtered
+    @court_topics_filtered = filtered_columns.exclude?(:court_topics)
   end
 end

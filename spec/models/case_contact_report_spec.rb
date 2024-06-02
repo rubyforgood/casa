@@ -384,6 +384,7 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   context "with court topics" do
+    # rubocop:disable Lint/ExtraSpacing
     let(:report) { described_class.new(filtered_csv_cols: {court_topics: "true"}) }
     let(:csv)    { CSV.parse(report.to_csv, headers: true) }
 
@@ -397,19 +398,20 @@ RSpec.describe CaseContactReport, type: :model do
     before do
       create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_2, value: "Ans Contact 1 Topic 2")
       create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_1, value: "Ans Contact 1 Topic 1")
-      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic_1, value: "Ans Contact 2 Topic 1")
+      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic_2, value: "Ans Contact 2 Topic 2")
     end
 
     it "appends headers for any topics referenced by case_contacts in the report" do
       headers = csv.headers
       expect(headers).not_to include(unused_topic.question)
       expect(headers).to include(used_topic_1.question, used_topic_2.question)
-      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1
+      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1 # rubocop:disable Performance/Count
     end
 
     it "includes topic answers in csv rows" do
-      expect(csv["Used topic 1"]).to eq ["Ans Contact 1 Topic 1", "Ans Contact 2 Topic 1", nil]
-      expect(csv["Used topic 2"]).to eq ["Ans Contact 1 Topic 2", nil, nil]
+      expect(csv[0].fields).to eq ["Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2"]
+      expect(csv[1].fields).to eq [nil,                     "Ans Contact 2 Topic 2"]
+      expect(csv[2].fields).to eq [nil,                     nil]
     end
 
     context "when court topics are not requested" do
@@ -425,5 +427,6 @@ RSpec.describe CaseContactReport, type: :model do
         expect(csv.first.fields).not_to include("Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2")
       end
     end
+    # rubocop:enable Lint/ExtraSpacing
   end
 end
