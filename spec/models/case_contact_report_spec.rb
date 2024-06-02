@@ -384,7 +384,7 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   context "with court topics" do
-    # rubocop:disable Lint/ExtraSpacing
+    # rubocop:disable Layout/ExtraSpacing
     let(:report) { described_class.new(filtered_csv_cols: {court_topics: "true"}) }
     let(:csv)    { CSV.parse(report.to_csv, headers: true) }
 
@@ -427,6 +427,6 @@ RSpec.describe CaseContactReport, type: :model do
         expect(csv.first.fields).not_to include("Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2")
       end
     end
-    # rubocop:enable Lint/ExtraSpacing
+    # rubocop:enable Layout/ExtraSpacing
   end
 end
