@@ -37,7 +37,7 @@ module BaseNotification
 
   def created_by_name
     if params.key?(:created_by)
-      params[:created_by][:display_name]
+      params[:created_by][:display_name] || User.where(id: params[:created_by][:id])&.first&.display_name
     else # keep backward compatibility with older notifications
       params[:created_by_name]
     end
