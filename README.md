@@ -37,11 +37,17 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
-
-Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
+Find issues to work on [here](https://github.com/rubyforgood/casa/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee) on the issue board. Issues on the [project's](https://github.com/rubyforgood/casa/projects/1) TODO column are another way to browse issues. Check to see that no one is assigned to the issue. Then comment on it to claim the issue. Commenting on an issue doesn't automatically get the issue assigned so double check the comments on an issue to see that no one is requesting assignment.  
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
+
+### Communication and Collaboration
+
+We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) in the #casa channel so you can get fast help for any questions you may have.
+
+Check out [our google calendar](bit.ly/casacal) to see when office hours and stakeholder meetings are.  
+
+You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
 ### About this project
 
@@ -211,16 +217,6 @@ There is a `doc` directory at the top level that includes:
 
 Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
 [<img src="https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png" width="400" height="400" />](https://ter.li/h8k29r)
-
-# Communication and Collaboration
-
-Most conversation happens in the #casa channel of the Ruby For Good slack. Get access [here](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA).
-
-You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
-
-We have a weekly team office hours / hangout on Tuesday 5-7pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
-
-We have a weekly stakeholder call with CASA stakeholders on Friday at 11:00am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
 
 Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 
