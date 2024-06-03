@@ -66,11 +66,8 @@ class CaseAssignmentsController < ApplicationController
 
     flash_message = "Old Case Contacts created by #{volunteer.display_name} #{@case_assignment.hide_old_contacts? ? "are now visible" : "were successfully hidden"}."
 
-    if !@case_assignment.active && @case_assignment.update(hide_old_contacts: !@case_assignment.hide_old_contacts?)
-      redirect_to after_action_path(casa_case), notice: flash_message
-    else
-      render :edit
-    end
+    @case_assignment.toggle!(:hide_old_contacts)
+    redirect_to after_action_path(casa_case), notice: flash_message
   end
 
   def reimbursement
