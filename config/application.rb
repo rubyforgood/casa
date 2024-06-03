@@ -33,7 +33,3 @@ module Casa
     config.serve_static_assets = true
   end
 end
-
-Rails.application.reloader.to_prepare do
-  ActiveStorage::Blob
-end
