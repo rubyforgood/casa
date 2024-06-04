@@ -18,17 +18,18 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 **Table of Contents**
 
   - [Welcome contributors!](#welcome-contributors)
+    - [Communication and Collaboration](#communication-and-collaboration)
     - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
   - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
-    - [General Setup Instructions](#general-setup-instructions)
+    - [Getting Started (Codespaces - EXPERIMENTAL) 🛠️](#getting-started-codespaces---experimental-)
+    - [Local Setup Instructions](#local-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
 - [Acknowledgements](#acknowledgements)
-- [Communication and Collaboration](#communication-and-collaboration)
 - [Feedback](#feedback)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -82,7 +83,17 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 ## How to Contribute
   See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
-### General Setup Instructions
+
+###  Getting Started (Codespaces - EXPERIMENTAL) 🛠️
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/rubyforgood/casa/tree/main?quickstart=1)
+
+1. Follow the link above or follow instructions to [create a new Codespace.](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository); You can use the web editor, or even better open the Codespace in VSCode
+2. Wait for the container to start. This will take a few (10-15) minutes since Ruby needs to be installed, the database needs to be created, and the `bin/setup` script needs to run
+3. Run `bin/dev` and visit the URL that pops in VSCode up to see the CASA page
+4. Login as a sample user with these default credentials (which also work for [QA](https://casa-qa.herokuapp.com/)):
+
+### Local Setup Instructions
 **Downloading the Project**
 (*on a Mac or Linux machine*)
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.
