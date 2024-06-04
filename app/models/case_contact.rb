@@ -281,8 +281,12 @@ class CaseContact < ApplicationRecord
 
   def form_steps
     steps = FORM_STEPS.dup
-    steps.delete(:expenses) unless creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
+    steps.delete(:expenses) unless casa_org_any_expenses_enabled?
     steps.freeze
+  end
+
+  def casa_org_any_expenses_enabled?
+    creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
   end
 
   private_class_method def self.sorted_by_params
