@@ -1,5 +1,5 @@
 <label>Court Orders - Please check that you didn't enter any youth names</label>
-<template data-extended-nested-form-target="template">
+<template data-court-order-form-target="template">
   <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
     <%= render "shared/court_order_form", f: ff %>
   <% end %>
@@ -27,14 +27,14 @@
     <%= render "shared/court_order_form", f: ff %>
   <% end %>
 
-  <div data-extended-nested-form-target="target"></div>
+  <div data-court-order-form-target="target"></div>
 
   <div class="select-style-1">
-    <%= label_tag :selectedStandardCourtOrder, "Court Order Type" %>
+    <%= label_tag :selectedCourtOrder, "Court Order Type" %>
     <div class="select-position">
-      <%= select_tag :selectedStandardCourtOrder,
+      <%= select_tag :selectedCourtOrder,
           options_for_select(CaseCourtOrder.court_order_options),
-          { include_blank: "Create custom court order", data: {extended_nested_form_target: "selectedStandardCourtOrder"} }
+          { include_blank: "Create custom court order", data: {court_order_form_target: "selectedCourtOrder"} }
         %>
     </div>
   </div>
@@ -42,7 +42,7 @@
 </div>
 
 <div class="add-container">
-  <button id="add-standard-court-order-button" type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="extended-nested-form#addCourtOrder">
+  <button id="add-standard-court-order-button" type="button" class="main-btn primary-btn btn-sm btn-hover" data-action="court-order-form#add">
     <i class="lni lni-plus mr-10"></i> Add a court order
   </button>
 </div>

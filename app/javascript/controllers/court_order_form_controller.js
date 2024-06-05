@@ -3,7 +3,7 @@ import Swal from 'sweetalert2'
 
 export default class extends NestedForm {
   //
-  static targets = ['selectedStandardCourtOrder']
+  static targets = ['selectedCourtOrder']
 
   remove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
@@ -14,9 +14,9 @@ export default class extends NestedForm {
     }
   }
 
-  addCourtOrder (e) {
+  add (e) {
     super.add(e)
-    const selectedValue = $(this.selectedStandardCourtOrderTarget).val()
+    const selectedValue = $(this.selectedCourtOrderTarget).val()
 
     if (selectedValue !== '') {
       const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
