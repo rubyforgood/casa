@@ -31,8 +31,4 @@ class CaseAssignmentPolicy < ApplicationPolicy
   def show_or_hide_contacts?
     record.inactive? && admin_or_supervisor? && same_org?
   end
-
-  def same_org?
-    user.casa_org_id == record.casa_case.casa_org_id
-  end
 end
