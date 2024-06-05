@@ -43,7 +43,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       find(".ts-control").click
       find("span", text: contact_type.name).click
 
-      page.find('button[data-action="court-order-form#addCourtOrder"]').click
+      page.find('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do
@@ -214,7 +214,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
 
-      scroll_to('button[data-action="court-order-form#addCourtOrder"]').click
+      scroll_to('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
@@ -520,7 +520,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).to have_css('button[data-action="court-order-form#addCourtOrder"]')
+      expect(page).to have_css('button[data-action="court-order-form#add"]')
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
