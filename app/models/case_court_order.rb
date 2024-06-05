@@ -1,29 +1,29 @@
 class CaseCourtOrder < ApplicationRecord
   IMPLEMENTATION_STATUSES = {unimplemented: 1, partially_implemented: 2, implemented: 3}
   STANDARD_COURT_ORDERS = [
-    "Individual therapy for the Respondent",
-    "Family therapy",
     "Birth certificate for the Respondent’s",
-    "Educational or Vocational referrals",
-    "Independent living skills classes or workshops",
-    "Learners’ permit for the Respondent, drivers’ education and driving hours when needed",
+    "Domestic Violence Education/Group",
     "Educational monitoring for the Respondent",
-    "Tutor for the Respondent",
-    "Individual therapy for the [parent]",
-    "Substance abuse assessment for the [parent]",
+    "Educational or Vocational referrals",
+    "Family therapy",
     "Housing support for the [parent]",
-    "Visitation assistance for the Respondent to see [family]",
+    "Independent living skills classes or workshops",
+    "Individual therapy for the [parent]",
+    "Individual therapy for the Respondent",
+    "Learners’ permit for the Respondent, drivers’ education and driving hours when needed",
     "No contact with (mother, father, other guardian)",
-    "Supervised visits",
-    "Supervised visits at DSS",
-    "Virtual Visits",
-    "Therapy (child, mother, father, other guardian)",
+    "Parenting Classes (mother, father, other guardian)",
     "Psychiatric Evaluation and follow all recommendations (child, mother, father, other guardian)",
+    "Substance abuse assessment for the [parent]",
     "Substance Abuse Evaluation and follow all recommendations (child, mother, father, other guardian)",
     "Substance Abuse Treatment (child, mother, father, other guardian)",
+    "Supervised visits",
+    "Supervised visits at DSS",
+    "Therapy (child, mother, father, other guardian)",
+    "Tutor for the Respondent",
     "Urinalysis (child, mother, father, other guardian)",
-    "Parenting Classes (mother, father, other guardian)",
-    "Domestic Violence Education/Group"
+    "Virtual Visits",
+    "Visitation assistance for the Respondent to see [family]"
   ].freeze
 
   belongs_to :casa_case
