@@ -17,18 +17,18 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin_or_supervisor? && same_org?
+    admin_or_supervisor_same_org?
   end
 
   def unassign?
-    record.active? && admin_or_supervisor? && same_org?
+    record.active? && admin_or_supervisor_same_org?
   end
 
   def reimbursement?
-    admin_or_supervisor? && same_org?
+    admin_or_supervisor_same_org?
   end
 
   def show_or_hide_contacts?
-    record.inactive? && admin_or_supervisor? && same_org?
+    record.inactive? && admin_or_supervisor_same_org?
   end
 end
