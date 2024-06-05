@@ -98,7 +98,7 @@ RSpec.describe CaseAssignmentPolicy do
       end
     end
 
-    context "when the case_assignment is inactive" do
+    context "when the case_assignment is active" do
       describe "it does not allow any user to show/hide contacts" do
         it { is_expected.not_to permit(casa_admin, case_assignment) }
         it { is_expected.not_to permit(supervisor, case_assignment) }
