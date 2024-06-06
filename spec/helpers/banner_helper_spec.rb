@@ -43,7 +43,7 @@ RSpec.describe BannerHelper do
       let(:expires_at) { nil }
 
       it "returns No" do
-        expect(helper.banner_expiration_time_in_words(banner)).to eq("No")
+        expect(helper.banner_expiration_time_in_words(banner)).to eq("No Expiration")
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe BannerHelper do
       let(:expires_at) { 7.days.ago }
 
       it "returns yes" do
-        expect(helper.banner_expiration_time_in_words(banner)).to eq("Yes")
+        expect(helper.banner_expiration_time_in_words(banner)).to eq("Expired")
       end
     end
   end
