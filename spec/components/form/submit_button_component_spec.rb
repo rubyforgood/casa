@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe Form::SubmitButtonComponent, type: :component do
   before(:each) do
-    render_inline(described_class.new(last_step: last_step, current_step: current_step))
+    render_inline(described_class.new(last_step:, current_step:))
   end
 
   context "when last step is equal to current step" do
