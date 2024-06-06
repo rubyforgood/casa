@@ -16,14 +16,14 @@
           <div class="form-check radio-style mb-20">
             <%= form.radio_button :want_driving_reimbursement, true,
               required: false,
-              class: 'form-check-input' %>
+              class: ["form-check-input", "case-contacts-form-checkbox"] %>
             <%= form.label "Yes", class: "form-check-label",
               for: "case_contact_want_driving_reimbursement_true" %>
           </div>
           <div class="form-check radio-style mb-20">
             <%= form.radio_button :want_driving_reimbursement, false,
               required: false,
-              class: 'form-check-input' %>
+              class: ["form-check-input", "case-contacts-form-checkbox"] %>
             <%= form.label "No", class: "form-check-label",
               for: "case_contact_want_driving_reimbursement_false" %>
           </div>
@@ -144,7 +144,7 @@
       </div>
     <% end %>
 
-    <div class="actions mb-10 d-flex justify-content-end gap-2">
+    <div class="actions mb-10 case-contacts-form-buttons">
       <%= link_to previous_wizard_path(case_contact_id: @case_contact.id), class: "btn-sm main-btn primary-btn-outline btn-hover" do %>
         Back
       <% end %>

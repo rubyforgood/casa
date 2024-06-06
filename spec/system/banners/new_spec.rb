@@ -31,6 +31,34 @@ RSpec.describe "Banners", type: :system, js: true do
     expect(page).to have_text("Please fill out this survey.")
   end
 
+  it "lets you create banner with expiration time and edit it" do
+    sign_in admin
+
+    visit banners_path
+    click_on "New Banner"
+    fill_in "Name", with: "Expiring Announcement"
+    check "Active?"
+    fill_in "banner_expires_at", with: 7.days.from_now.strftime("%m%d%Y\t%I%M%P")
+    fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
+    click_on "Submit"
+
+    visit banners_path
+    expect(page).to have_text("Expiring Announcement")
+
+    visit banners_path
+    within "#banners" do
+      click_on "Edit", match: :first
+    end
+    fill_in "banner_expires_at", with: 7.days.ago.strftime("%m%d%Y\t%I%M%P")
+    click_on "Submit"
+
+    visit banners_path
+    expect(page).to have_text("Expiring Announcement")
+
+    visit root_path
+    expect(page).not_to have_text("Please fill out this survey.")
+  end
+
   describe "when an organization has an active banner" do
     let(:admin) { create(:casa_admin) }
     let(:organization) { create(:casa_org) }

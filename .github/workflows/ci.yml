@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
@@ -43,6 +43,7 @@ jobs:
       parallel_processes_count: 3 # the number of parallel processes to run tests in worker, must match the size of the
       # inner arrays in the matrix.groups
   combine_and_report:
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/combine_and_report.yml
     needs: [rspec_parallel]
     secrets: inherit

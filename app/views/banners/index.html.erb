@@ -25,6 +25,7 @@
             <tr>
               <th>Name</th>
               <th>Active?</th>
+              <th>Expires At</th>
               <th>Last Updated By</th>
               <th>Updated At</th>
               <th>Actions</th>
@@ -42,6 +43,9 @@
                   <% else %>
                     No
                   <% end %>
+                </td>
+                <td class="min-width">
+                  <%= banner_expiration_time_in_words(banner) %>
                 </td>
                 <td class="min-width">
                   <%= banner.user.display_name %>

@@ -29,7 +29,7 @@ RSpec.describe User, type: :model do
     end
 
     it "requires 12 digit phone numbers" do
-      user = build(:user, phone_number: "+1416321809")
+      user = build(:user, phone_number: "+1416321")
       expect(user.valid?).to be false
     end
 

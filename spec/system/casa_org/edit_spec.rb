@@ -76,11 +76,3 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(message).to eq "Please fill out this field."
   end
 end
-
-def stub_twilio
-  twillio_client = instance_double(Twilio::REST::Client)
-  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
-  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
-  allow(twillio_client).to receive(:messages).and_return(messages)
-  allow(messages).to receive(:list).and_return([])
-end

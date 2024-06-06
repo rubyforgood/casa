@@ -35,4 +35,32 @@ RSpec.describe BannerHelper do
       expect(helper.conditionally_add_hidden_class(true)).to eq(nil)
     end
   end
+
+  describe "#banner_expiration_time_in_words" do
+    let(:banner) { create(:banner, expires_at: expires_at) }
+
+    context "when expires_at isn't set" do
+      let(:expires_at) { nil }
+
+      it "returns No" do
+        expect(helper.banner_expiration_time_in_words(banner)).to eq("No")
+      end
+    end
+
+    context "when expires_at is in the future" do
+      let(:expires_at) { 7.days.from_now }
+
+      it "returns a word description of how far in the future" do
+        expect(helper.banner_expiration_time_in_words(banner)).to eq("in 7 days")
+      end
+    end
+
+    context "when expires_at is in the past" do
+      let(:expires_at) { 7.days.ago }
+
+      it "returns yes" do
+        expect(helper.banner_expiration_time_in_words(banner)).to eq("Yes")
+      end
+    end
+  end
 end

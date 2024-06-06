@@ -204,7 +204,7 @@ RSpec.describe "supervisors/edit", type: :system do
       end
 
       it "shows error message for invalid phone number" do
-        fill_in "supervisor_phone_number", with: "+1415555676"
+        fill_in "supervisor_phone_number", with: "+24155556760"
         click_on "Submit"
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end

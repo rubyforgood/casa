@@ -5,7 +5,7 @@ RSpec.describe "CasaOrg", type: :request do
   let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
 
   before {
-    stub_twillio
+    stub_twilio
     sign_in create(:casa_admin, casa_org: casa_org)
   }
 
@@ -136,12 +136,4 @@ RSpec.describe "CasaOrg", type: :request do
       end
     end
   end
-end
-
-def stub_twillio
-  twillio_client = instance_double(Twilio::REST::Client)
-  messages = instance_double(Twilio::REST::Api::V2010::AccountContext::MessageList)
-  allow(Twilio::REST::Client).to receive(:new).with("Aladdin", "open sesame", "articuno34").and_return(twillio_client)
-  allow(twillio_client).to receive(:messages).and_return(messages)
-  allow(messages).to receive(:list).and_return([])
 end

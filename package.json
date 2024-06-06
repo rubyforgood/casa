@@ -12,7 +12,7 @@
     "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
   },
   "dependencies": {
-    "@babel/core": "^7.24.5",
+    "@babel/core": "^7.24.6",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@hotwired/stimulus": "^3.2.2",
     "@popperjs/core": "^2.11.8",
@@ -29,7 +29,7 @@
     "chart.js": "^4.4.3",
     "chartjs-adapter-luxon": "^1.3.1",
     "datatables.net-dt": "^1.13.10",
-    "esbuild": "^0.21.3",
+    "esbuild": "^0.21.4",
     "faker": "^5.5.3",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
@@ -37,7 +37,7 @@
     "lodash": "^4.17.21",
     "luxon": "^3.4.0",
     "popper.js": "^1.16.1",
-    "sass": "^1.77.1",
+    "sass": "^1.77.4",
     "select2": "^4.0.13",
     "select2-bootstrap-5-theme": "^1.3.0",
     "stimulus-rails-nested-form": "^4.1.0",

@@ -8,6 +8,16 @@ class Banner < ApplicationRecord
   validates_presence_of :name
   validate :only_one_banner_is_active_per_organization
 
+  def expired?
+    expires_at && Time.current > expires_at
+  end
+
+  # `expires_at` is stored in the database as UTC, but timezone information will be stripped before displaying on frontend
+  # so this method converts the time to the user's timezone before displaying it
+  def expires_at_in_time_zone(timezone)
+    expires_at&.in_time_zone(timezone)
+  end
+
   private
 
   def only_one_banner_is_active_per_organization
@@ -25,6 +35,7 @@ end
 #
 #  id          :bigint           not null, primary key
 #  active      :boolean          default(FALSE)
+#  expires_at  :datetime
 #  name        :string
 #  created_at  :datetime         not null
 #  updated_at  :datetime         not null

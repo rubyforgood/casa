@@ -9,24 +9,27 @@ jobs:
       STORAGE_CONTAINER: ${{ secrets.STORAGE_CONTAINER }}
     steps:
       - name: Checkout Project
+        if: ${{ !cancelled() }}
         uses: actions/checkout@v4
       - name: Download artifacts
+        if: ${{ !cancelled() }}
         uses: actions/download-artifact@v4
         with:
           path: artifacts
 
       - name: Decompress chunk test reports
+        if: ${{ !cancelled() }}
         run: |
           find artifacts -name "test_reports*.zip" -exec unzip -d test_reports {} \;
           find test_reports -name "**/test_reports*.zip" -exec unzip -d test_reports {} \;
 
       - name: Merge parallel runtime log parts
-        if: env.AZURE_STORAGE_KEY != ''
+        if: ${{ !cancelled() && env.AZURE_STORAGE_KEY != '' }}
         run: |
           cat artifacts/**/parallel_runtime_rspec*.log > parallel_runtime.log
 
       - name: Upload log file to Azure Blob Storage
-        if: env.AZURE_STORAGE_KEY != ''
+        if: ${{ !cancelled() && env.AZURE_STORAGE_KEY != '' }}
         run: |
           az storage blob upload \
           -c $STORAGE_CONTAINER \
@@ -41,8 +44,6 @@ jobs:
           paths: |
             test_reports/**/rspec*.xml
       - name: Set job status
-        #         In this step we set the status of the job. Normally in case of failures, the next steps fail, so we have to
-        #         use `if: always()` to make sure the next steps run.
         if: ${{ steps.test_summary.outputs.failed > 0 }}
         uses: actions/github-script@v7
         with:
