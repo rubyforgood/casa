@@ -1,7 +1,7 @@
 <div class="container-fluid mb-1">
   <div class="card-style-1 mb-15 pt-0 pb-3 full-card">
     <div class="card-content">
-      <div class="col-8">
+      <div>
         <div class="mt-0">
           <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
           <div class="">
@@ -21,19 +21,25 @@
               <br>
               <%= contact.decorate.subheading %>
             </h6>
-            <div class="card-text js-read-more-text-wrapper mb-2">
-              <% if contact.notes && contact.notes.length > CaseContactDecorator::NOTES_CHARACTER_LIMIT %>
-                <div class="js-truncated-text" style="display: block;">
-                  <%= simple_format(contact.decorate.limited_notes) %>
-                  <span><a role="button" href="#" class="js-read-more">Read more</a></span>
-                </div>
-                <div class="js-full-text" style="display: none;">
-                  <%= simple_format(contact.decorate.full_notes) %>
-                  <span><a role="button" href="#" class="js-read-less">Hide</a></span>
-                </div>
-              <% else %>
-                <%= simple_format(contact.decorate.full_notes) %>
-              <% end %>
+            <div class="card-text mb-2">
+              <ul>
+                <% contact.contact_topic_answers.reject { _1.value.blank? }.each do |answer| %>
+                  <li>
+                    <%= render(TruncatedTextComponent.new) do %>
+                      <span class="text-bold d-inline"><%= answer.contact_topic.question %>:</span>
+                      <%= answer.value %>
+                    <% end %>
+                  </li>
+                <% end %>
+                <% if contact.notes %>
+                  <li>
+                    <%= render(TruncatedTextComponent.new) do %>
+                      <span class="text-bold d-inline">Additional Notes: </span>
+                      <%= contact.notes %>
+                    <% end %>
+                  </li>
+                <% end %>
+              </ul>
             </div>
           </div>
         </div>
