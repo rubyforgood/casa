@@ -19,7 +19,7 @@ RSpec.describe Form::SubmitButtonComponent, type: :component do
     let(:last_step) { :notes }
     let(:current_step) { :expenses }
     it "renders Save and continue button" do
-      expect(page).to have_content("Save and continue")
+      expect(page).to have_content("Save and Continue")
     end
   end
 end
