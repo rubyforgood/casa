@@ -27,8 +27,8 @@
       <span data-reveal-target="item" class="text-danger <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
     </div>
     <span class="input-style-1">
-      <%= form.label :expires_at, "Expires at (optional)" %>
-      <%= form.datetime_field :expires_at, value: banner.expires_at_in_time_zone(cookies[:browser_time]), required: false %>
+      <%= form.label :expires_at, "Expires at (optional)"%>
+      <%= form.datetime_field :expires_at, value: banner.expires_at_in_time_zone(cookies[:browser_time]), required: false, include_seconds: false %>
     </span>
     <div class="input-style-1">
       <%= form.label :content %>
