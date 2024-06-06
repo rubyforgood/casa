@@ -35,9 +35,8 @@
           Back
         <% end %>
 
-        <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-          <%= render(Form::SubmitButtonComponent.new(last_step: @case_contact.form_steps.last, current_step: :notes)) %>
-        <% end %>
+        <%= render(Form::SubmitButtonComponent.new(last_step: @case_contact.form_steps.last, current_step: :notes)) %>
+
       </div>
     <% end %>
   </div>
