@@ -56,9 +56,11 @@ RSpec.describe BannerHelper do
     end
 
     context "when expires_at is in the past" do
-      let(:expires_at) { 7.days.ago }
+      let(:expires_at) { 1.day.from_now }
 
       it "returns yes" do
+        banner
+        travel 2.days
         expect(helper.banner_expiration_time_in_words(banner)).to eq("Expired")
       end
     end

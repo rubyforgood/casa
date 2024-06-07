@@ -62,9 +62,10 @@ RSpec.describe "Banners", type: :request do
     end
 
     context "when expires_at is before today" do
-      let(:expires_at) { 7.days.ago }
+      let(:expires_at) { 2.days.from_now }
 
       it "does not display the banner" do
+        travel 3.days
         sign_in volunteer
         get casa_cases_path
         expect(response.body).not_to include "Please fill out this survey"

@@ -49,14 +49,14 @@ RSpec.describe "Banners", type: :system, js: true do
     within "#banners" do
       click_on "Edit", match: :first
     end
-    fill_in "banner_expires_at", with: 7.days.ago.strftime("%m%d%Y\t%I%M%P")
+    fill_in "banner_expires_at", with: 2.days.from_now.strftime("%m%d%Y\t%I%M%P")
     click_on "Submit"
 
     visit banners_path
     expect(page).to have_text("Expiring Announcement")
 
     visit root_path
-    expect(page).not_to have_text("Please fill out this survey.")
+    expect(page).to have_text("Please fill out this survey.")
   end
 
   describe "when an organization has an active banner" do
