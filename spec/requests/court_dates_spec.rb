@@ -263,7 +263,12 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "renders a successful response (i.e. to display the 'new' template)" do
           post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
           expect(response).to be_successful
-          expect(assigns[:court_date].errors.full_messages).to eq ["Date can't be blank"]
+          expected_errors = [
+            "Date can't be blank",
+            "Date is not valid. Court date must be within one year from today.",
+            "Date is not valid. Court date cannot be prior to 1/1/1989."
+          ].freeze
+          expect(assigns[:court_date].errors.full_messages).to eq expected_errors
         end
       end
     end
@@ -304,7 +309,12 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         patch casa_case_court_date_path(casa_case, court_date), params: {court_date: invalid_attributes}
 
         expect(response).to be_successful
-        expect(assigns[:court_date].errors.full_messages).to eq ["Date can't be blank"]
+        expected_errors = [
+          "Date can't be blank",
+          "Date is not valid. Court date must be within one year from today.",
+          "Date is not valid. Court date cannot be prior to 1/1/1989."
+        ].freeze
+        expect(assigns[:court_date].errors.full_messages).to eq expected_errors
       end
     end
 

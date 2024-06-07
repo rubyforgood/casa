@@ -25,6 +25,7 @@ helpers/template_helper.rb
 jobs/application_job.rb
 mailers/application_mailer.rb
 models/application_record.rb
+models/concerns/CasaCase/validations.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
 models/fund_request.rb

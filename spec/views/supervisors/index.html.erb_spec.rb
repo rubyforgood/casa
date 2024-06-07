@@ -23,11 +23,11 @@ RSpec.describe "supervisors/index", type: :view do
       casa_case1 = create(:casa_case,
         case_number: "123",
         active: true,
-        birth_month_year_youth: Date.new(1900))
+        birth_month_year_youth: "1999-01-01".to_date)
       casa_case2 = create(:casa_case,
         case_number: "456",
         active: false,
-        birth_month_year_youth: Date.new(2100))
+        birth_month_year_youth: "2024-01-01".to_date)
       assign :casa_cases, [casa_case1, casa_case2]
       assign :supervisors, []
       assign :available_volunteers, []
