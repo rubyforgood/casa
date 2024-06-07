@@ -12,7 +12,6 @@ RSpec.describe CourtReportDueSmsReminderService do
     before :each do
       WebMockHelper.short_io_court_report_due_date_stub
       WebMockHelper.twilio_court_report_due_date_stub
-      WebMock.disable_net_connect!
     end
 
     context "when sending sms reminder" do

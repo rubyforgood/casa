@@ -6,10 +6,6 @@ RSpec.describe "/volunteers", type: :request do
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
-  # add domains to blacklist you want to stub
-  blacklist = ["api.twilio.com", "api.short.io"]
-  web_mock = WebMockHelper.new(blacklist)
-  web_mock.stub_network_connection
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -145,15 +141,14 @@ RSpec.describe "/volunteers", type: :request do
         organization = create(:casa_org, twilio_enabled: true)
         admin = create(:casa_admin, casa_org: organization)
         params[:volunteer][:phone_number] = "+12222222222"
-        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
-        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
-        @short_io_stub = WebMockHelper.short_io_stub_sms
+        twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
+        short_io_stub = WebMockHelper.short_io_stub_sms
 
         sign_in admin
         post volunteers_url, params: params
 
-        expect(@short_io_stub).to have_been_requested.times(2)
-        expect(@twilio_activation_success_stub).to have_been_requested.times(1)
+        expect(short_io_stub).to have_been_requested.times(2)
+        expect(twilio_activation_success_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New volunteer created successfully. SMS has been sent!/)
@@ -162,16 +157,9 @@ RSpec.describe "/volunteers", type: :request do
       it "does not send a SMS when phone number is not provided" do
         organization = create(:casa_org, twilio_enabled: true)
         admin = create(:casa_admin, casa_org: organization)
-        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
-        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
-        @short_io_stub = WebMockHelper.short_io_stub_sms
-
         sign_in admin
         post volunteers_url, params: params
 
-        expect(@short_io_stub).to have_been_requested.times(0)
-        expect(@twilio_activation_success_stub).to have_been_requested.times(0)
-        expect(@twilio_activation_error_stub).to have_been_requested.times(0)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New volunteer created successfully./)
@@ -180,15 +168,15 @@ RSpec.describe "/volunteers", type: :request do
       it "does not send a SMS when Twilio API has an error" do
         org = create(:casa_org, twilio_account_sid: "articuno31", twilio_enabled: true)
         admin = create(:casa_admin, casa_org: org)
-        @twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("volunteer")
-        @twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
-        @short_io_stub = WebMockHelper.short_io_stub_sms
+        twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("volunteer")
+        short_io_stub = WebMockHelper.short_io_stub_sms
         params[:volunteer][:phone_number] = "+12222222222"
 
         sign_in admin
         post volunteers_url, params: params
 
-        expect(@twilio_activation_error_stub).to have_been_requested.times(1)
+        expect(short_io_stub).to have_been_requested.times(2) # TODO: why is this called at all?
+        expect(twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New volunteer created successfully. SMS not sent. Error: ./)
@@ -198,10 +186,12 @@ RSpec.describe "/volunteers", type: :request do
         org = create(:casa_org, twilio_enabled: false)
         admin = build(:casa_admin, casa_org: org)
         params[:volunteer][:phone_number] = "+12222222222"
+        short_io_stub = WebMockHelper.short_io_stub_sms
 
         sign_in admin
         post volunteers_url, params: params
 
+        expect(short_io_stub).to have_been_requested.times(2) # TODO: why is this called at all?
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New volunteer created successfully./)

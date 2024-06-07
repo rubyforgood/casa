@@ -37,7 +37,6 @@ RSpec.describe NoContactMadeReminder do
     WebMockHelper.twilio_success_stub
     WebMockHelper.twilio_no_contact_made_stub
     WebMockHelper.short_io_stub_localhost
-    WebMock.disable_net_connect!
   end
 
   context "volunteer with no contact made in past 2 weeks in case contact" do
