@@ -6,6 +6,7 @@ class Banner < ApplicationRecord
   scope :active, -> { where(active: true) }
 
   validates_presence_of :name
+  validates_presence_of :content
   validate :only_one_banner_is_active_per_organization
   validates_comparison_of :expires_at, greater_than: Time.current, message: "must take place in the future (after %{value} )", allow_blank: true
 

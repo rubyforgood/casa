@@ -30,6 +30,11 @@ RSpec.describe Banner, type: :model do
       banner = build(:banner, casa_org: casa_org, user: supervisor, expires_at: 1.day.from_now)
       expect(banner).to be_valid
     end
+
+    it "does not allow content to be empty" do
+      banner = build(:banner, casa_org: casa_org, user: supervisor, content: nil)
+      expect(banner).to_not be_valid 
+    end
   end
 
   describe "#expired?" do
