@@ -59,6 +59,21 @@ RSpec.describe "Banners", type: :system, js: true do
     expect(page).to have_text("Please fill out this survey.")
   end
 
+  it "does not allow creation of banner with an expiration time set in the past" do
+    sign_in admin
+
+    visit banners_path
+    click_on "New Banner"
+    fill_in "Name", with: "Annoucement"
+    fill_in "banner_expires_at", with: 1.hour.ago.strftime("%m%d%Y\t%I%M%P")
+    fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
+    click_on "Submit"
+    
+    message = page.find("#banner_expires_at").native.attribute("validationMessage")
+    expect(message).to start_with("Value must be")
+    # Can't get an exact match for the date/time since cookie "browser_time_zone" isn't set in the test Chrome session
+  end
+
   describe "when an organization has an active banner" do
     let(:admin) { create(:casa_admin) }
     let(:organization) { create(:casa_org) }
