@@ -1,7 +1,8 @@
 class NotificationsController < ApplicationController
   def index
     @deploy_time = Health.instance.latest_deploy_time
-    @notifications = Noticed::Notification.where(recipient: current_user).newest_first.includes(:event)
+    @notifications = current_user.notifications.newest_first
+    byebug
     @patch_notes = PatchNote.notes_available_for_user(current_user)
   end
 end

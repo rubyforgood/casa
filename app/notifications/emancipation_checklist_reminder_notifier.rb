@@ -1,11 +1,9 @@
 # To deliver this notification:
 #
-# EmancipationChecklistNotification.with(post: @post).deliver_later(current_user)
-# EmancipationChecklistNotification.with(post: @post).deliver(current_user)
+# EmancipationChecklistReminderNotifier.with(post: @post).deliver_later(current_user)
+# EmancipationChecklistReminderNotifier.with(post: @post).deliver(current_user)
 
-class EmancipationChecklistReminderNotification < Noticed::Event
-  include BaseNotification
-
+class EmancipationChecklistReminderNotifier < BaseNotifier
   # deliver_by :email, mailer: "UserMailer"
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
@@ -27,6 +25,6 @@ class EmancipationChecklistReminderNotification < Noticed::Event
   end
 
   def url
-    casa_case_emancipation_path(params[:casa_case][:id])
+    casa_case_emancipation_path(params[:casa_case].id)
   end
 end

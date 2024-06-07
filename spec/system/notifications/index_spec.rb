@@ -8,7 +8,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
 
   before { casa_case.assigned_volunteers << volunteer }
 
-  context "FollowupResolvedNotification" do
+  context "FollowupResolvedNotifier" do
     let(:notification_message) { "#{volunteer.display_name} resolved a follow up. Click to see more." }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
@@ -48,7 +48,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "FollowupNotification", js: true do
+  context "FollowupNotifier", js: true do
     let(:note) { "Lorem ipsum dolor sit amet." }
 
     let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
@@ -137,7 +137,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   end
 
   context "EmancipationChecklistReminder" do
-    let(:notification_event) { create(:emancipation_checklist_reminder_notification, params: {casa_case: casa_case}) }
+    let(:notification_event) { create(:emancipation_checklist_reminder_notifier, params: {casa_case: casa_case}) }
 
     before do
       volunteer.notifications << create(:notification, :emancipation_checklist_reminder, event: notification_event)
@@ -153,8 +153,8 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "YouthBirthdayNotification" do
-    let(:notification_event) { create(:youth_birthday_notification, params: {casa_case: casa_case}) }
+  context "YouthBirthdayNotifier" do
+    let(:notification_event) { create(:youth_birthday_notifier, params: {casa_case: casa_case}) }
 
     before do
       volunteer.notifications << create(:notification, :youth_birthday, event: notification_event)
@@ -170,10 +170,10 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "ReimbursementCompleteNotification" do
+  context "ReimbursementCompleteNotifier" do
     it "should display a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
-      notification_event = create(:reimbursement_complete_notification, params: {case_contact: case_contact})
+      notification_event = create(:reimbursement_complete_notifier, params: {case_contact: case_contact})
       volunteer.notifications << create(:notification, :reimbursement_complete, event: notification_event)
       sign_in volunteer
       visit notifications_path
