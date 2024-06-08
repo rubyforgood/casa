@@ -88,7 +88,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     before { travel_to(this_month_15th + 2.days) }
 
     it "skips the rake task" do
-      expect { rake_task }.to change { Notification.count }.by(0)
+      expect { rake_task }.to change { Noticed::Notification.count }.by(0)
     end
   end
 end
