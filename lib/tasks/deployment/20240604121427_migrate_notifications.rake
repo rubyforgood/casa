@@ -4,7 +4,7 @@ class Notification < ActiveRecord::Base
 end
 
 namespace :after_party do
-  desc 'Deployment task: Migrates existing notifications to new tables for noticed gem v2.x'
+  desc "Deployment task: Migrates existing notifications to new tables for noticed gem v2.x"
   task migrate_notifications: :environment do
     puts "Running deploy task 'migrate_notifications'"
 
@@ -18,14 +18,14 @@ namespace :after_party do
       attributes[:params] = {} if attributes[:params].try(:has_key?, "noticed_error") # Skip invalid records
 
       attributes[:notifications_attributes] = [{
-                                                 type: "#{attributes[:type]}::Notification",
-                                                 recipient_type: notification.recipient_type,
-                                                 recipient_id: notification.recipient_id,
-                                                 read_at: notification.read_at,
-                                                 seen_at: notification.read_at,
-                                                 created_at: notification.created_at,
-                                                 updated_at: notification.updated_at
-                                               }]
+        type: "#{attributes[:type]}::Notification",
+        recipient_type: notification.recipient_type,
+        recipient_id: notification.recipient_id,
+        read_at: notification.read_at,
+        seen_at: notification.read_at,
+        created_at: notification.created_at,
+        updated_at: notification.updated_at
+      }]
       Noticed::Event.create!(attributes)
     end
 

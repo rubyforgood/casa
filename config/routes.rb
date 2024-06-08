@@ -113,7 +113,7 @@ Rails.application.routes.draw do
   resources :judges, only: %i[new create edit update]
   resources :notifications, only: [:index] do
     member do
-      post 'mark_as_read'
+      post "mark_as_read"
     end
   end
   resources :other_duties, only: %i[new create edit index update]

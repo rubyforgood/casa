@@ -4,6 +4,7 @@ channels/application_cable/connection.rb
 controllers/bulk_court_dates_controller.rb
 controllers/case_groups_controller.rb
 controllers/concerns/court_date_params.rb
+controllers/concerns/notification_extensions.rb
 controllers/followup_reports_controller.rb
 controllers/learning_hour_topics_controller.rb
 controllers/learning_hour_types_controller.rb
@@ -29,12 +30,11 @@ models/concerns/CasaCase/validations.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
 models/fund_request.rb
-models/notification.rb
-notifications/base_notification.rb
+notifications/base_notifier.rb
 notifications/delivery_methods/sms.rb
-notifications/followup_notification.rb
-notifications/followup_resolved_notification.rb
-notifications/youth_birthday_notification.rb
+notifications/followup_notifier.rb
+notifications/followup_resolved_notifier.rb
+notifications/youth_birthday_notifier.rb
 policies/fund_request_policy.rb
 policies/learning_hour_topic_policy.rb
 policies/learning_hour_type_policy.rb
