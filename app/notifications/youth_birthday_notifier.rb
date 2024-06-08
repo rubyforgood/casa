@@ -1,10 +1,12 @@
 # To deliver this notification:
 #
-# YouthBirthdayNotifier.with(post: @post).deliver_later(current_user)
 # YouthBirthdayNotifier.with(post: @post).deliver(current_user)
-
+#
 class YouthBirthdayNotifier < BaseNotifier
-  # deliver_by :email, mailer: "UserMailer"
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
@@ -12,7 +14,6 @@ class YouthBirthdayNotifier < BaseNotifier
   required_param :casa_case
 
   # Define helper methods to make rendering easier.
-
   def message
     "Your youth, case number: #{params[:casa_case].case_number} has a birthday next month."
   end

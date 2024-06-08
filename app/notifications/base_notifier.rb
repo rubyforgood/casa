@@ -29,15 +29,11 @@ class BaseNotifier < Noticed::Event
     created_by_name
   end
 
-  def muted_display(notification)
-    "bg-light text-muted" if notification.read?
-  end
-
   private
 
   def created_by_name
     if params.key?(:created_by)
-      params[:created_by][:display_name] || User.where(id: params[:created_by][:id])&.first&.display_name
+      params[:created_by].display_name
     else # keep backward compatibility with older notifications
       params[:created_by_name]
     end

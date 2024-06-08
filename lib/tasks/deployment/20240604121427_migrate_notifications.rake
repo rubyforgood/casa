@@ -17,9 +17,6 @@ namespace :after_party do
       attributes[:params] = Noticed::Coder.load(notification.params)
       attributes[:params] = {} if attributes[:params].try(:has_key?, "noticed_error") # Skip invalid records
 
-      # Extract related record to `belongs_to :record` association
-      # This allows ActiveRecord associations instead of querying the JSON data
-
       attributes[:notifications_attributes] = [{
                                                  type: "#{attributes[:type]}::Notification",
                                                  recipient_type: notification.recipient_type,

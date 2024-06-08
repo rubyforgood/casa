@@ -1,6 +1,7 @@
 <a
-  href="<%= notification.event.url %>"
-  class="<%= notification.event.muted_display(notification) %> list-group-item list-group-item-action flex-column align-items-start">
+  href="<%= mark_as_read_notification_path(notification) %>"
+  class="<%= notification.muted_display %> list-group-item list-group-item-action flex-column align-items-start"
+  data-method="post">
   <div class="d-flex flex-row">
     <div class="d-flex-shrink-0">
       <% unless notification.read? %>

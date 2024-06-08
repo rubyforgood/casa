@@ -1,10 +1,12 @@
 # To deliver this notification:
 #
-# FollowupResolvedNotifier.with(followup: @followup).deliver_later(current_user)
 # FollowupResolvedNotifier.with(followup: @followup).deliver(current_user)
-
+#
 class FollowupResolvedNotifier < BaseNotifier
-  # deliver_by :email, mailer: "UserMailer"
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 

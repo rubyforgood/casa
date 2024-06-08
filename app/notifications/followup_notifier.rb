@@ -1,10 +1,12 @@
 # To deliver this notification:
 #
-# FollowupNotifier.with(followup: @followup).deliver_later(current_user)
 # FollowupNotifier.with(followup: @followup).deliver(current_user)
-
+#
 class FollowupNotifier < BaseNotifier
-  # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"

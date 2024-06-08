@@ -11,7 +11,7 @@ Rails.application.configure do
   config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
 
   # While tests run files are not watched, reloading is not necessary.
-  config.enable_reloading = true
+  config.enable_reloading = false
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.action_view.cache_template_loading = true
 

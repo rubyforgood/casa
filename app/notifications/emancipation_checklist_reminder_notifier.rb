@@ -1,10 +1,12 @@
 # To deliver this notification:
 #
-# EmancipationChecklistReminderNotifier.with(post: @post).deliver_later(current_user)
 # EmancipationChecklistReminderNotifier.with(post: @post).deliver(current_user)
-
+#
 class EmancipationChecklistReminderNotifier < BaseNotifier
-  # deliver_by :email, mailer: "UserMailer"
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
