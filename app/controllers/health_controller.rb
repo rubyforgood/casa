@@ -23,6 +23,10 @@ class HealthController < ApplicationController
   def monthly_line_graph_data
     first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
 
+    if first_day_of_last_12_months.size > 12
+      first_day_of_last_12_months = first_day_of_last_12_months[1..12]
+    end
+
     monthly_counts_of_case_contacts_created = CaseContact.group_by_month(:created_at, last: 12).count
     monthly_counts_of_case_contacts_with_notes_created = CaseContact.left_outer_joins(:contact_topic_answers).where("case_contacts.notes != '' OR contact_topic_answers.value != ''").select(:id).distinct.group_by_month(:created_at, last: 12).count
     monthly_counts_of_users_who_have_created_case_contacts = CaseContact.select(:creator_id).distinct.group_by_month(:created_at, last: 12).count
@@ -41,6 +45,10 @@ class HealthController < ApplicationController
 
   def monthly_unique_users_graph_data
     first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month.strftime("%b %Y") }
+
+    if first_day_of_last_12_months.size > 12
+      first_day_of_last_12_months = first_day_of_last_12_months[1..12]
+    end
 
     monthly_counts_of_volunteers = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Volunteer"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
     monthly_counts_of_supervisors = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Supervisor"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)

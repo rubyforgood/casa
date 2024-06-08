@@ -18,16 +18,18 @@ body.volunteers {
     }
   }
 }
-
-
 table#volunteers.dataTable.hover tbody tr.selected > * {
   background-color: rgba(54, 92, 245, 0.1);
   box-shadow: none; 
   color: inherit;
 }
-
 table#volunteers.dataTable.hover > tbody > tr.selected:hover > * {
   background-color: rgba(54, 92, 245, 0.15);
   box-shadow: none !important; 
   color: inherit;
 }
+
+.form-check-input {
+  border: 1px solid #757575;
+}
+

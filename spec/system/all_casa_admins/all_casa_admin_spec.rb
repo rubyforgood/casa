@@ -40,7 +40,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
 
     # footer
     expect(page).to have_link("Ruby For Good", href: "https://rubyforgood.org/")
-    expect(page).to have_link("Report a site issue", href: "https://docs.google.com/forms/d/e/1FAIpQLSfM6dA5KkCuzIcdikete7C3wusoQ8p-EAyGyb38DFBlxzZjrg/viewform")
+    expect(page).to have_link("Report a site issue", href: "https://form.typeform.com/to/iXY4BubB")
     expect(page).to have_link("SMS Terms & Conditions", href: "/sms-terms-conditions.html")
 
     # create new org

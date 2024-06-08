@@ -10,7 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
+<<<<<<< main
 ActiveRecord::Schema[7.1].define(version: 2024_05_09_104734) do
+=======
+ActiveRecord::Schema[7.1].define(version: 2024_05_31_172823) do
+>>>>>>> main
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -95,6 +99,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_09_104734) do
     t.boolean "active", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "expires_at"
     t.index ["casa_org_id"], name: "index_banners_on_casa_org_id"
     t.index ["user_id"], name: "index_banners_on_user_id"
   end

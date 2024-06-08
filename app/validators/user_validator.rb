@@ -6,7 +6,8 @@ class UserValidator < ActiveModel::Validator
     validate_presence(:display_name, record)
     at_least_one_communication_preference_selected(record)
     valid_phone_number_if_receive_sms_notifications(record)
-    valid_date_of_birth(record.date_of_birth, record)
+    validate_date_of_birth_in_past(record.date_of_birth, record)
+    validate_date_of_birth_not_before_1920(record.date_of_birth, record)
   end
 
   private
@@ -38,9 +39,15 @@ class UserValidator < ActiveModel::Validator
     end
   end
 
-  def valid_date_of_birth(date_of_birth, record)
+  def validate_date_of_birth_in_past(date_of_birth, record)
     return unless date_of_birth.present?
 
     record.errors.add(:base, " Date of birth must be in the past.") unless date_of_birth.past?
+  end
+
+  def validate_date_of_birth_not_before_1920(date_of_birth, record)
+    return unless date_of_birth.present?
+
+    record.errors.add(:base, " Date of birth must be on or after 1/1/1920.") unless date_of_birth >= "1920-01-01".to_date
   end
 end

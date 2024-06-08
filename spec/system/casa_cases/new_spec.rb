@@ -9,7 +9,6 @@ RSpec.describe "casa_cases/new", type: :system do
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
         contact_type = create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
-        court_date = 21.days.from_now
 
         sign_in admin
         visit root_path
@@ -18,6 +17,7 @@ RSpec.describe "casa_cases/new", type: :system do
         click_on "New Case"
 
         travel_to Time.zone.local(2020, 12, 1) do
+          court_date = 21.days.from_now
           fourteen_years = (Date.today.year - 14).to_s
           fill_in "Case number", with: case_number
 

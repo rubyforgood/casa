@@ -157,12 +157,12 @@
   </div>
 </div>
 
-<div class="tables-wrapper" data-controller="select-all" data-select-all-hidden-class="d-none" data-select-all-button-label-value="Manage Volunteer">
+<div class="tables-wrapper" data-controller="select-all" data-select-all-hidden-class="invisible" data-select-all-button-label-value="Manage Volunteer">
   <div class="row">
     <div class="col-lg-12">
       <div class="card-style mb-30">
         <div class="mb-3">
-          <button type="button" class="main-btn dark-btn btn-sm mb-2 mb-md-0 d-none" data-bs-toggle="modal" data-bs-target="#bulk-assigment-modal" data-select-all-target="button">
+          <button type="button" class="main-btn dark-btn btn-sm mb-2 mb-md-0 invisible" data-bs-toggle="modal" data-bs-target="#bulk-assigment-modal" data-select-all-target="button">
             <i class="lni lni-users mr-10"></i>
             <span class="d-inline" data-select-all-target="buttonLabel"></span>
           </button>
@@ -176,7 +176,7 @@
               <thead>
               <tr>
                 <th>
-                  <input type="checkbox" class="form-check-input" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
+                  <input id="checkbox-toggle-all" type="checkbox" class="form-check-input" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
                 </th>
                 <th>Name</th>
                 <th>Email</th>

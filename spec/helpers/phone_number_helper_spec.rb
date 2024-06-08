@@ -4,27 +4,51 @@ RSpec.describe PhoneNumberHelper do
   describe "phone number helper" do
     include PhoneNumberHelper
 
-    context "valid phone number" do
+    context "validates phone number" do
       it "with empty string" do
         valid, error = valid_phone_number("")
         expect(valid).to be(true)
         expect(error).to be_nil
       end
 
-      it "with correct country code and 12 digits" do
+      it "with 10 digit phone number prepended with US country code" do
         valid, error = valid_phone_number("+12223334444")
         expect(valid).to be(true)
         expect(error).to be_nil
       end
 
-      it "with 10 digits" do
-        valid, error = valid_phone_number("2223334444")
+      it "with 10 digit phone number prepended with US country code without the plus sign" do
+        valid, error = valid_phone_number("12223334444")
+        expect(valid).to be(true)
+        expect(error).to be_nil
+      end
+
+      it "with 10 phone number with spaces" do
+        valid, error = valid_phone_number("222 333 4444")
+        expect(valid).to be(true)
+        expect(error).to be_nil
+      end
+
+      it "with 10 phone number with parentheses" do
+        valid, error = valid_phone_number("(222)3334444")
+        expect(valid).to be(true)
+        expect(error).to be_nil
+      end
+
+      it "with 10 phone number with dashes" do
+        valid, error = valid_phone_number("222-333-4444")
+        expect(valid).to be(true)
+        expect(error).to be_nil
+      end
+
+      it "with 10 phone number with dots" do
+        valid, error = valid_phone_number("222.333.4444")
         expect(valid).to be(true)
         expect(error).to be_nil
       end
     end
 
-    context "invalid phone number" do
+    context "invalidates phone number" do
       it "with incorrect country code" do
         valid, error = valid_phone_number("+22223334444")
         expect(valid).to be(false)

@@ -18,17 +18,18 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 **Table of Contents**
 
   - [Welcome contributors!](#welcome-contributors)
+    - [Communication and Collaboration](#communication-and-collaboration)
     - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
   - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
-    - [General Setup Instructions](#general-setup-instructions)
+    - [Getting Started (Codespaces - EXPERIMENTAL) 🛠️](#getting-started-codespaces---experimental-)
+    - [Local Setup Instructions](#local-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
 - [Acknowledgements](#acknowledgements)
-- [Communication and Collaboration](#communication-and-collaboration)
 - [Feedback](#feedback)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
@@ -37,11 +38,17 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
-
-Issues on the issue board https://github.com/rubyforgood/casa/projects/1 in the TODO column are fair game. An issue can be claimed by commenting on it.
+Find issues to work on [here](https://github.com/rubyforgood/casa/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee) on the issue board. Issues on the [project's](https://github.com/rubyforgood/casa/projects/1) TODO column are another way to browse issues. Check to see that no one is assigned to the issue. Then comment on it to claim the issue. Commenting on an issue doesn't automatically get the issue assigned so double check the comments on an issue to see that no one is requesting assignment.  
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
+
+### Communication and Collaboration
+
+We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) in the #casa channel so you can get fast help for any questions you may have.
+
+Check out [our google calendar](bit.ly/casacal) to see when office hours and stakeholder meetings are.  
+
+You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
 ### About this project
 
@@ -76,7 +83,17 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 ## How to Contribute
   See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
-### General Setup Instructions
+
+###  Getting Started (Codespaces - EXPERIMENTAL) 🛠️
+
+[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/rubyforgood/casa/tree/main?quickstart=1)
+
+1. Follow the link above or follow instructions to [create a new Codespace.](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository); You can use the web editor, or even better open the Codespace in VSCode
+2. Wait for the container to start. This will take a few (10-15) minutes since Ruby needs to be installed, the database needs to be created, and the `bin/setup` script needs to run
+3. Run `bin/dev` and visit the URL that pops in VSCode up to see the CASA page
+4. Login as a sample user with these default credentials (which also work for [QA](https://casa-qa.herokuapp.com/)):
+
+### Local Setup Instructions
 **Downloading the Project**
 (*on a Mac or Linux machine*)
 1. `git clone https://github.com/rubyforgood/casa.git` clone the repo to your local machine.
@@ -126,6 +143,9 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
 1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
 1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
+1. _If you are running on an M1 mac, run the following command before you start the installation process:_
+   1. _Set the architecture_: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
+   1. _Remove all gems before you proceed_: `gem uninstall -aIx`
 
 ## Running the App / Verifying Installation
 1. `cd casa/`
@@ -173,8 +193,8 @@ If additional work arises from your pull request that is outside the scope of th
 
 **Stimulus**
 
-[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use 
-[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to 
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use
+[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to
 `/casa_cases` and see **Stimulus is working!** in your browser console.
 
 **Post-deployment tasks**
@@ -208,16 +228,6 @@ There is a `doc` directory at the top level that includes:
 
 Thank you to [Scout](https://ter.li/h8k29r) for letting us use their dashboard for free!
 [<img src="https://user-images.githubusercontent.com/578159/165240278-c2c0ac30-c86f-4b67-9da6-e6a5e4ab4c37.png" width="400" height="400" />](https://ter.li/h8k29r)
-
-# Communication and Collaboration
-
-Most conversation happens in the #casa channel of the Ruby For Good slack. Get access [here](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA).
-
-You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
-
-We have a weekly team office hours / hangout on Tuesday 5-7pm Pacific time where we do pair/mob programming and talk about issues. Please stop by! (Zoom link in slack)
-
-We have a weekly stakeholder call with CASA stakeholders on Friday at 11:00am Pacific time where we show off progress and discuss launch plans. Feel free to join! (Zoom link in slack)
 
 Join info for all public meetings is posted in the rubyforgood slack in the #casa channel
 

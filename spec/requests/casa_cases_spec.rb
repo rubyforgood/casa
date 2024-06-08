@@ -207,7 +207,14 @@ RSpec.describe "/casa_cases", type: :request do
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank", "Casa case contact types : At least one contact type must be selected"].to_json)
+            expected_response_body = [
+              "Birth month year youth can't be blank",
+              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be a future date.",
+              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be prior to 1/1/1989.",
+              "Case number can't be blank",
+              "Casa case contact types : At least one contact type must be selected"
+            ].to_json
+            expect(response.body).to eq(expected_response_body)
           end
         end
 
