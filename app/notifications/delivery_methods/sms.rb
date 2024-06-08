@@ -1,4 +1,4 @@
-class DeliveryMethods::Sms < Noticed::DeliveryMethods::Base
+class DeliveryMethods::Sms < Noticed::DeliveryMethod
   include SmsBodyHelper
   def deliver
     if sender.casa_admin? || sender.supervisor?
