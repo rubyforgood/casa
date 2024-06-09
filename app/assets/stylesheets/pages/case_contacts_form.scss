@@ -1,5 +1,11 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
+body.case_contacts-form {
+  .highlight {
+    display: inline-block;
+  }
+}
+
 .case-contacts-form {
   &-buttons {
     display: flex;
