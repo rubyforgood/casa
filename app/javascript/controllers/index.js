@@ -12,7 +12,7 @@ import DisableFormController from './disable_form_controller'
 
 import DismissController from './dismiss_controller'
 
-import ExtendedNestedFormController from './extended_nested_form_controller'
+import CourtOrderFormController from './court_order_form_controller'
 
 import HelloController from './hello_controller'
 
@@ -31,7 +31,7 @@ application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
 application.register('disable-form', DisableFormController)
 application.register('dismiss', DismissController)
-application.register('extended-nested-form', ExtendedNestedFormController)
+application.register('court-order-form', CourtOrderFormController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
 application.register('multiple-select', MultipleSelectController)

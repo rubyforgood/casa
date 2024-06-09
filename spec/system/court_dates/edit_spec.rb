@@ -32,6 +32,21 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
+    it "adds a standard court order", js: true do
+      select("Family therapy", from: "Court Order Type")
+      click_button("Add a court order")
+
+      textarea = all("textarea.court-order-text-entry").last
+      expect(textarea.value).to eq("Family therapy")
+    end
+
+    it "adds a custom court order", js: true do
+      click_button("Add a court order")
+
+      textarea = all("textarea.court-order-text-entry").last
+      expect(textarea.value).to eq("")
+    end
+
     it "edits past court date", js: true do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
@@ -45,7 +60,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")
       expect(page).to have_text("Add a court order")
 
-      page.find('button[data-action="extended-nested-form#add"]').click
+      page.find('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do

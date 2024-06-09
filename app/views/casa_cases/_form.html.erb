@@ -1,7 +1,7 @@
 <div class="card card-container">
   <div class="card-body">
     <%= form_with(model: casa_case, local: true,
-      data: { controller: "extended-nested-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
+      data: { controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
       <%= render "/shared/error_messages", resource: casa_case %>
       <% if casa_case.active %>
         <div class="top-page-actions pull-right z-1">
