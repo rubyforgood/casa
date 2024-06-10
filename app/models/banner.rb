@@ -11,7 +11,8 @@ class Banner < ApplicationRecord
   validates_comparison_of :expires_at, greater_than: Time.current, message: "must take place in the future (after %{value} )", allow_blank: true
 
   def expired?
-    expires_at && Time.current > expires_at
+    expired = expires_at && Time.current > expires_at
+    update(active: false) if active && expired
   end
 
   # `expires_at` is stored in the database as UTC, but timezone information will be stripped before displaying on frontend

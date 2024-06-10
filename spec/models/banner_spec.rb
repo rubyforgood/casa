@@ -55,6 +55,14 @@ RSpec.describe Banner, type: :model do
       travel 2.hours
       expect(banner).to be_expired
     end
+
+    it "sets active to false when banner is expired" do
+      banner = create(:banner, expires_at: 1.hour.from_now)
+      expect(banner.active).to be true
+      travel 2.hours
+      banner.expired?
+      expect(banner.active).to be false
+    end
   end
 
   describe "#expires_at_in_time_zone" do
