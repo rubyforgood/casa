@@ -272,10 +272,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "13mmj925n7phf0qxvxwnpjh225p4lnya3j4sxljz5lnj6ck53g2j";
+      sha256 = "1fz2mc5wb2fgxc6bxjqj019aiyvqqdmlp3xfrfs23c7qid733ak1";
       type = "gem";
     };
-    version = "0.30.0";
+    version = "1.0.2";
   };
   brakeman = {
     dependencies = ["racc"];
@@ -418,10 +418,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1qh1b14jwbbj242klkyz5fc7npd4j0mvndz62gajhvl1l3wd7zc2";
+      sha256 = "1kmhr3pz2nmhnq0nqlicqfwfmkzkcl835g7sw1gjjhjvhz8g2sf3";
       type = "gem";
     };
-    version = "1.2.3";
+    version = "1.3.1";
   };
   connection_pool = {
     groups = ["default" "development" "test"];
@@ -694,10 +694,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0isxcqv4xkw7hrdf89mga6zsi4alban16xyw84bkqvbsr859nax4";
+      sha256 = "1gc6li2fcvl9g752sz7nradi46jw7q2kjmmx017b0wfc8v7ayvp3";
       type = "gem";
     };
-    version = "3.3.1";
+    version = "3.4.1";
   };
   faraday = {
     dependencies = ["faraday-em_http" "faraday-em_synchrony" "faraday-excon" "faraday-httpclient" "faraday-multipart" "faraday-net_http" "faraday-net_http_persistent" "faraday-patron" "faraday-rack" "faraday-retry" "ruby2_keywords"];
@@ -1250,10 +1250,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1y0pzapcasfjayk4nydy04hnx11xmsv8jl8myizxhbpkdmrl10dc";
+      sha256 = "18yclv06n0cy8jqmi11sd1dl8nasc5n5r1mhan2v51j7jd3z58v3";
       type = "gem";
     };
-    version = "0.4.11";
+    version = "0.4.12";
   };
   net-pop = {
     dependencies = ["net-protocol"];
