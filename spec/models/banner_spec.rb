@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe Banner, type: :model do
   describe "#valid?" do
     let(:casa_org) { create(:casa_org) }
-    let(:supervisor) {create(:supervisor, casa_org: casa_org) }
+    let(:supervisor) { create(:supervisor, casa_org: casa_org) }
 
     it "does not allow multiple active banners for same organization" do
       create(:banner, casa_org: casa_org, user: supervisor)
@@ -33,7 +33,7 @@ RSpec.describe Banner, type: :model do
 
     it "does not allow content to be empty" do
       banner = build(:banner, casa_org: casa_org, user: supervisor, content: nil)
-      expect(banner).to_not be_valid 
+      expect(banner).to_not be_valid
     end
   end
 

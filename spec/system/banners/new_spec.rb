@@ -68,7 +68,7 @@ RSpec.describe "Banners", type: :system, js: true do
     fill_in "banner_expires_at", with: 1.hour.ago.strftime("%m%d%Y\t%I%M%P")
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
-    
+
     message = page.find("#banner_expires_at").native.attribute("validationMessage")
     expect(message).to start_with("Value must be")
     # Can't get an exact match for the date/time since cookie "browser_time_zone" isn't set in the test Chrome session
