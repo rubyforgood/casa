@@ -274,7 +274,9 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
         visit new_case_contact_path
 
         complete_details_page(case_numbers: [volunteer.casa_cases.first.case_number], contact_types: %w[School], contact_made: true, medium: "In Person")
-        complete_notes_page
+        complete_notes_page(click_continue: false)
+
+        click_on "Submit"
 
         expect(page).not_to have_field("b. Want Driving Reimbursement")
       end

@@ -46,6 +46,13 @@ RSpec.describe User, type: :model do
     it "requires date of birth to be in the past" do
       user = build(:user, date_of_birth: 10.days.from_now)
       expect(user.valid?).to be false
+      expect(user.errors[:base]).to eq([" Date of birth must be in the past."])
+    end
+
+    it "requires date of birth to be no earlier than 1/1/1920" do
+      user = build(:user, date_of_birth: "1919-12-31".to_date)
+      expect(user.valid?).to be false
+      expect(user.errors[:base]).to eq([" Date of birth must be on or after 1/1/1920."])
     end
 
     it "has an empty old_emails array when initialized" do

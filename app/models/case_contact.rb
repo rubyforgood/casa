@@ -10,6 +10,11 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
   validate :occurred_at_not_in_future
+  validates :occurred_at, comparison: {
+    greater_than_or_equal_to: "1989-01-01".to_date,
+    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    allow_nil: true
+  }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
   validate :volunteer_address_is_valid, if: :active_or_expenses?
@@ -277,6 +282,16 @@ class CaseContact < ApplicationRecord
     casa_case_ids.each_with_object({}) do |casa_case_id, hash|
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
+  end
+
+  def form_steps
+    steps = FORM_STEPS.dup
+    steps.delete(:expenses) unless casa_org_any_expenses_enabled?
+    steps.freeze
+  end
+
+  def casa_org_any_expenses_enabled?
+    creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
   end
 
   private_class_method def self.sorted_by_params

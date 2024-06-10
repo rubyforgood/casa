@@ -43,7 +43,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       find(".ts-control").click
       find("span", text: contact_type.name).click
 
-      page.find('button[data-action="extended-nested-form#add"]').click
+      page.find('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       within ".top-page-actions" do
@@ -214,7 +214,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
 
-      scroll_to('button[data-action="extended-nested-form#add"]').click
+      scroll_to('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
@@ -407,9 +407,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         expect(page).to have_text(text)
 
-        find('button[data-action="click->extended-nested-form#remove"]').click
-        expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records \
-of it unless it was included in a previous court report.")
+        find('button[data-action="click->court-order-form#remove"]').click
+        expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
         expect(page).to_not have_text(text)
@@ -521,10 +520,27 @@ of it unless it was included in a previous court report.")
       expect(page).not_to have_text("Youth's Date in Care")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(page).to have_css('button[data-action="extended-nested-form#add"]')
+      expect(page).to have_css('button[data-action="court-order-form#add"]')
 
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Submitted")
+    end
+
+    it "adds a standard court order", js: true do
+      visit edit_casa_case_path(casa_case)
+      select("Family therapy", from: "Court Order Type")
+      click_button("Add a court order")
+
+      textarea = all("textarea.court-order-text-entry").last
+      expect(textarea.value).to eq("Family therapy")
+    end
+
+    it "adds a custom court order", js: true do
+      visit edit_casa_case_path(casa_case)
+      click_button("Add a court order")
+
+      textarea = all("textarea.court-order-text-entry").last
+      expect(textarea.value).to eq("")
     end
 
     context "Copy all court orders from a case" do
