@@ -73,7 +73,7 @@ RSpec.describe "Banners", type: :system, js: true do
       click_on "Submit"
 
       message = page.find("#banner_expires_at").native.attribute("validationMessage")
-      expect(message).to eq("Value must be #{current_time.in_time_zone("America/Chicago").strftime("%m/%d/%Y, %H:%M or later.")}")
+      expect(message).to eq("Value must be #{current_time.in_time_zone("America/Chicago").strftime("%m/%d/%Y, %I:%M %p or later.")}")
     end
   end
 
