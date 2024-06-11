@@ -4,7 +4,6 @@ channels/application_cable/connection.rb
 controllers/bulk_court_dates_controller.rb
 controllers/case_groups_controller.rb
 controllers/concerns/court_date_params.rb
-controllers/concerns/notification_extensions.rb
 controllers/followup_reports_controller.rb
 controllers/learning_hour_topics_controller.rb
 controllers/learning_hour_types_controller.rb
