@@ -149,9 +149,7 @@
         Back
       <% end %>
 
-      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-        <i class="lni lni-checkmark-circle mr-5"></i> Submit
-      <% end %>
+      <%= render(Form::SubmitButtonComponent.new(last_step: @case_contact.form_steps.last, current_step: :expenses)) %>
     </div>
   <% end %>
 </div>
