@@ -1,4 +1,4 @@
-class BaseNotification < Noticed::Base
+class BaseNotifier < Noticed::Event
   # Require title, url and message methods to be implemented on children
   def title
     raise NotImplementedError, "#{self.class} has not implemented method '#{__method__}"
@@ -29,17 +29,11 @@ class BaseNotification < Noticed::Base
     created_by_name
   end
 
-  def muted_display
-    return "" unless record.read?
-
-    "bg-light text-muted"
-  end
-
   private
 
   def created_by_name
     if params.key?(:created_by)
-      params[:created_by][:display_name]
+      params[:created_by].display_name
     else # keep backward compatibility with older notifications
       params[:created_by_name]
     end

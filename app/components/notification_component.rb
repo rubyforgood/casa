@@ -6,4 +6,8 @@ class NotificationComponent < ViewComponent::Base
   def initialize(notification:)
     @notification = notification
   end
+
+  def muted_display
+    "bg-light text-muted" if notification.read?
+  end
 end

@@ -4,11 +4,11 @@ RSpec.describe ReimbursementsController, type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_org) { admin.casa_org }
   let(:case_contact) { create(:case_contact) }
-  let(:notification_double) { double("ReimbursementCompleteNotification") }
+  let(:notification_double) { double("ReimbursementCompleteNotifier") }
 
   before do
     sign_in(admin)
-    allow(ReimbursementCompleteNotification).to receive(:with).and_return(notification_double)
+    allow(ReimbursementCompleteNotifier).to receive(:with).and_return(notification_double)
     allow(notification_double).to receive(:deliver)
   end
 
@@ -40,7 +40,7 @@ RSpec.describe ReimbursementsController, type: :request do
   describe "PATCH /mark_as_complete" do
     it "changes reimbursement status to complete" do
       patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
-      expect(ReimbursementCompleteNotification).to(have_received(:with).once.with(case_contact: case_contact))
+      expect(ReimbursementCompleteNotifier).to(have_received(:with).once.with(case_contact: case_contact))
       expect(response).to redirect_to(reimbursements_path)
       expect(response).to have_http_status(:redirect)
       expect(case_contact.reload.reimbursement_complete).to be_truthy
