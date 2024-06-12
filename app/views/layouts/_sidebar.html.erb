@@ -53,14 +53,6 @@
               { title: "Edit Organization", icon: "cogs", path: edit_casa_org_path(current_organization), render_check: policy(:application).modify_organization? }
             ]) %>
           <% end %>
-          <li>
-            <% if current_user != true_user %>
-              <%= link_to stop_impersonating_volunteers_path, method: :post, class: "mr-10 ml-10" do %>
-                You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
-                Click here to stop impersonating.
-              <% end %>
-            <% end %>
-          </li>
         </ul>
       </nav>
     </nav>
