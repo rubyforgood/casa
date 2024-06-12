@@ -18,6 +18,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 **Table of Contents**
 
   - [Welcome contributors!](#welcome-contributors)
+    - [Communication and Collaboration](#communication-and-collaboration)
     - [About this project](#about-this-project)
 - [Developing! ✨🛠✨](#developing-)
   - [How to Contribute](#how-to-contribute)
@@ -28,7 +29,6 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
 - [Other Documentation](#other-documentation)
 - [Acknowledgements](#acknowledgements)
-- [Communication and Collaboration](#communication-and-collaboration)
 - [Feedback](#feedback)
 
 <!-- END doctoc generated TOC please keep comment here to allow auto update -->
