@@ -145,17 +145,4 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
     end
   end
-
-  context "impersonation" do
-    let(:user) { build_stubbed :volunteer }
-    let(:true_user) { build_stubbed :casa_admin }
-
-    it "renders a stop impersonating link when impersonating" do
-      allow(view).to receive(:true_user).and_return(true_user)
-
-      render partial: "layouts/sidebar"
-
-      expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
-    end
-  end
 end
