@@ -117,5 +117,13 @@ RSpec.describe "layout/header", type: :view do
 
       expect(rendered).to match "<strong>Role: Volunteer</strong>"
     end
+
+    it "renders a stop impersonating link when impersonating" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/header"
+
+      expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
+    end
   end
 end
