@@ -2,7 +2,7 @@
   <% id = "generate-docx-report-modal" %>
   <%= render(Modal::OpenButtonComponent.new(
     target: id,
-    klass: "d-inline main-btn btn-hover btn-sm success-btn pull-right mb-2")) do %>
+    klass: "d-inline main-btn btn-hover btn-sm success-btn pull-right")) do %>
     Generate Report
   <% end %>
   <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
