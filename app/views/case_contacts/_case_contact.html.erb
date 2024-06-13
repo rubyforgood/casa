@@ -24,20 +24,10 @@
             <div class="card-text mb-2">
               <ul>
                 <% contact.contact_topic_answers.reject { _1.value.blank? }.each do |answer| %>
-                  <li>
-                    <%= render(TruncatedTextComponent.new) do %>
-                      <span class="text-bold d-inline"><%= answer.contact_topic.question %>:</span>
-                      <%= answer.value %>
-                    <% end %>
-                  </li>
+                  <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
                 <% end %>
                 <% if contact.notes %>
-                  <li>
-                    <%= render(TruncatedTextComponent.new) do %>
-                      <span class="text-bold d-inline">Additional Notes: </span>
-                      <%= contact.notes %>
-                    <% end %>
-                  </li>
+                  <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional Notes") %></li>
                 <% end %>
               </ul>
             </div>

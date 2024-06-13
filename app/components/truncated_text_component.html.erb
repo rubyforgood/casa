@@ -1,5 +1,10 @@
 <div class="truncation-container" data-controller="truncated-text">
-  <span class="line-clamp-1" data-truncated-text-target="text"><%= text_content %></span>
+  <div class="line-clamp-1" data-truncated-text-target="text">
+    <% if label %>
+      <span class="text-bold d-inline"><%= label %>:</span>
+    <% end %>
+    <%= text %>
+  </div>
   <a
     role="button"
     href="#"

@@ -1,18 +1,9 @@
 # frozen_string_literal: true
 
 class TruncatedTextComponent < ViewComponent::Base
-  def initialize(text = nil, render_check: true)
+  attr_reader :text, :label
+  def initialize(text = nil, label: nil)
     @text = text
-    @render_check = render_check
-  end
-
-  def text_content
-    return content if content.present?
-
-    simple_format(@text)
-  end
-
-  def render?
-    @render_check && (@text.present? || content.present?)
+    @label = label
   end
 end
