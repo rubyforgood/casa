@@ -1,7 +1,4 @@
 class NotificationsController < ApplicationController
-  skip_before_action :authenticate_user!
-  skip_after_action :verify_authorized
-
   def index
     @deploy_time = Health.instance.latest_deploy_time
     @notifications = current_user.notifications.includes([:event]).newest_first
