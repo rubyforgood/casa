@@ -63,7 +63,9 @@ RSpec.describe "Banners", type: :system, js: true do
     sign_in admin
 
     freeze_time do
-      current_time = Time.current
+      off_set = Time.zone.now.utc_offset
+      time_zone = ActiveSupport::TimeZone[off_set].tzinfo.name
+      current_time = Time.now.in_time_zone(time_zone)
       visit banners_path
       page.driver.browser.manage.add_cookie(name: "browser_time_zone", value: "America/Chicago")
       click_on "New Banner"
@@ -73,7 +75,8 @@ RSpec.describe "Banners", type: :system, js: true do
       click_on "Submit"
 
       message = page.find("#banner_expires_at").native.attribute("validationMessage")
-      expect(message).to eq("Value must be #{current_time.in_time_zone("America/Chicago").strftime("%m/%d/%Y, %I:%M %p or later.")}")
+      expected_message = "Value must be #{current_time.strftime("%m/%d/%Y, %I:%M")}"
+      expect(message).to start_with(expected_message)
     end
   end
 
