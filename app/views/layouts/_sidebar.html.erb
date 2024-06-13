@@ -23,7 +23,7 @@
         <ul>
           <%= render(Sidebar::LinkComponent.new(title: "Supervisors", icon: "network", path: supervisors_path, render_check: policy(Supervisor).index?)) %>
           <%= render(Sidebar::LinkComponent.new(title: "Volunteers", icon: "heart-filled", path: volunteers_path, render_check: policy(Volunteer).index?)) %>
-          <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: current_user.casa_admin? || (current_user.supervisor? && policy(OtherDuty).index?))) %>
+          <%= render(Sidebar::LinkComponent.new(title: "Other Duties", icon: "agenda", path: other_duties_path, render_check: (current_user.casa_admin? || current_user.supervisor?) && policy(OtherDuty).index?)) %>
           <!-- Renders Cases for Volunteers -->
           <%= render(Sidebar::GroupComponent.new(title: cases_index_title, icon: "folder", render_check: current_user.volunteer?)) do |group| %>
             <% group.with_link(title: "All", path: casa_cases_path, nav_item: false) %>
