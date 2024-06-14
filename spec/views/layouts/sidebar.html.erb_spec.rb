@@ -51,6 +51,30 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
       expect(rendered).to_not have_link("System Settings", href: "/settings")
+      expect(rendered).to have_link("Other Duties", href: "/other_duties")
+    end
+
+    context "when casa_org other_duties_enabled is true" do
+      before do
+        user.casa_org.other_duties_enabled = true
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "renders Other Duties" do
+        expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      end
+    end
+
+    context "when casa_org other_duties_enabled is false" do
+      before do
+        user.casa_org.other_duties_enabled = false
+
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "does not renders Other Duties" do
+        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+      end
     end
   end
 
@@ -78,6 +102,30 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to_not have_link("System Settings", href: "/settings")
+      expect(rendered).to have_link("Other Duties", href: "/other_duties")
+    end
+
+    context "when casa_org other_duties_enabled is true" do
+      before do
+        user.casa_org.other_duties_enabled = true
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "renders Other Duties" do
+        expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      end
+    end
+
+    context "when casa_org other_duties_enabled is false" do
+      before do
+        user.casa_org.other_duties_enabled = false
+
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "does not renders Other Duties" do
+        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+      end
     end
 
     context "when the volunteer does not have a transitioning case" do
@@ -143,6 +191,30 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+      expect(rendered).to have_link("Other Duties", href: "/other_duties")
+    end
+
+    context "when casa_org other_duties_enabled is true" do
+      before do
+        user.casa_org.other_duties_enabled = true
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "renders Other Duties" do
+        expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      end
+    end
+
+    context "when casa_org other_duties_enabled is false" do
+      before do
+        user.casa_org.other_duties_enabled = false
+
+        sign_in user
+        render partial: "layouts/sidebar"
+      end
+      it "does not renders Other Duties" do
+        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+      end
     end
   end
 
