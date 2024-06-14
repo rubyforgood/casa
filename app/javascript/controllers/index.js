@@ -27,6 +27,8 @@ import SelectAllController from './select_all_controller'
 import SidebarController from './sidebar_controller'
 
 import SidebarGroupController from './sidebar_group_controller'
+
+import TruncatedTextController from './truncated_text_controller'
 application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
 application.register('disable-form', DisableFormController)
@@ -39,3 +41,4 @@ application.register('navbar', NavbarController)
 application.register('select-all', SelectAllController)
 application.register('sidebar', SidebarController)
 application.register('sidebar-group', SidebarGroupController)
+application.register('truncated-text', TruncatedTextController)
