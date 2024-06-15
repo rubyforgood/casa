@@ -28,6 +28,10 @@
     <%= " - Contact Made: #{recent_contact&.contact_made}" %>
     <br>
     <%= " - Medium Type: #{recent_contact&.medium_type}" %>
+    <% recent_contact.contact_topic_answers.reject { _1.value.blank? }.each do |answer| %>
+      <br>
+      - <b><%= "#{answer.contact_topic.question}" %></b><%= ": #{answer.value}" %>
+    <% end %>
     <br>
     <%= " - Notes: #{recent_contact&.notes}" %>
   <% else %>
