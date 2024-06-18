@@ -62,7 +62,7 @@ RSpec.describe "Banners", type: :request do
     context "when expires_at is before today" do
       let!(:active_banner) do
         banner = create(:banner, casa_org: casa_org, expires_at: nil)
-        banner.update_columns(expires_at: 1.day.ago )
+        banner.update_columns(expires_at: 1.day.ago)
       end
 
       it "does not display the banner" do
