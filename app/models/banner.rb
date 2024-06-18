@@ -13,6 +13,7 @@ class Banner < ApplicationRecord
   def expired?
     expired = expires_at && Time.current > expires_at
     update(active: false) if active && expired
+    expired
   end
 
   # `expires_at` is stored in the database as UTC, but timezone information will be stripped before displaying on frontend

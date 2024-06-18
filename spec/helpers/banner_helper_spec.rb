@@ -42,7 +42,7 @@ RSpec.describe BannerHelper do
     context "when expires_at isn't set" do
       let(:expires_at) { nil }
 
-      it "returns No" do
+      it "returns No Expiration" do
         expect(helper.banner_expiration_time_in_words(banner)).to eq("No Expiration")
       end
     end
@@ -56,12 +56,14 @@ RSpec.describe BannerHelper do
     end
 
     context "when expires_at is in the past" do
-      let(:expires_at) { 1.day.from_now }
-
-      it "returns yes" do
+      let(:expired_banner) do
+        banner = create(:banner, expires_at: nil)
+        banner.update_columns(expires_at: 2.days.ago)
         banner
-        travel 2.days
-        expect(helper.banner_expiration_time_in_words(banner)).to eq("Expired")
+      end
+
+      it "returns Expired" do
+        expect(helper.banner_expiration_time_in_words(expired_banner)).to eq("Expired")
       end
     end
   end

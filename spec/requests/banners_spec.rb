@@ -49,10 +49,8 @@ RSpec.describe "Banners", type: :request do
   end
 
   context "when a banner has expires_at" do
-    let!(:active_banner) { create(:banner, casa_org: casa_org, expires_at: expires_at) }
-
     context "when expires_at is after today" do
-      let(:expires_at) { 7.days.from_now }
+      let!(:active_banner) { create(:banner, casa_org: casa_org, expires_at: 7.days.from_now) }
 
       it "displays the banner" do
         sign_in volunteer
@@ -62,10 +60,12 @@ RSpec.describe "Banners", type: :request do
     end
 
     context "when expires_at is before today" do
-      let(:expires_at) { 2.days.from_now }
+      let!(:active_banner) do
+        banner = create(:banner, casa_org: casa_org, expires_at: nil)
+        banner.update_columns(expires_at: 1.day.ago )
+      end
 
       it "does not display the banner" do
-        travel 3.days
         sign_in volunteer
         get casa_cases_path
         expect(response.body).not_to include "Please fill out this survey"
