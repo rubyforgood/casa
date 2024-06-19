@@ -8,7 +8,7 @@ class Banner < ApplicationRecord
   validates_presence_of :name
   validates_presence_of :content
   validate :only_one_banner_is_active_per_organization
-  validates_comparison_of :expires_at, greater_than: Time.current, message: "must take place in the future (after #{Time.current})", allow_blank: true
+  validate :expires_at_must_be_in_future
 
   def expired?
     expired = expires_at && Time.current > expires_at
@@ -29,6 +29,14 @@ class Banner < ApplicationRecord
     more_than_one_banner_active = is_other_banner_active && active?
     if more_than_one_banner_active
       errors.add(:base, "Only one banner can be active at a time. Mark the other banners as not active before marking this banner as active.")
+    end
+  end
+
+  # Validation using line below doesn't work with `travel_to` in specs. Must use detailed method
+  # validates_comparison_of :expires_at, greater_than: Time.current, message: "must take place in the future (after #{Time.current})", allow_blank: true
+  def expires_at_must_be_in_future
+    if expires_at.present? && expires_at < Time.current
+      errors.add(:expires_at, "must take place in the future (after #{Time.current})")
     end
   end
 end
