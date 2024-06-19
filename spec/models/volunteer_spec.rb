@@ -33,7 +33,6 @@ RSpec.describe Volunteer, type: :model do
     before do
       stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
       WebMockHelper.short_io_court_report_due_date_stub
-      WebMock.disable_net_connect!
     end
 
     it "sends one mailer" do

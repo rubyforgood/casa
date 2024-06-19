@@ -1,4 +1,5 @@
 require "rails_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CasaOrg, type: :model do
   it { is_expected.to validate_presence_of(:name) }
@@ -29,8 +30,16 @@ RSpec.describe CasaOrg, type: :model do
 
   describe "validate validate_twilio_credentials" do
     let(:casa_org) { create(:casa_org, twilio_enabled: true) }
+    let(:twilio_rest_error) do
+      error_response = double("error_response", status_code: 401, body: {})
+      Twilio::REST::RestError.new("Error message", error_response)
+    end
 
     it "validates twillio credentials on update", :aggregate_failures do
+      twillio_client = instance_double(Twilio::REST::Client)
+      allow(Twilio::REST::Client).to receive(:new).and_return(twillio_client)
+      allow(twillio_client).to receive_message_chain(:messages, :list).and_raise(twilio_rest_error)
+
       %i[twilio_account_sid twilio_api_key_sid twilio_api_key_secret].each do |field|
         update_successful = casa_org.update(field => "")
         aggregate_failures do

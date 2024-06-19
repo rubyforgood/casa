@@ -3,11 +3,7 @@ require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe ApplicationController, type: :controller do
   let(:volunteer) { create(:volunteer) }
-  # add domains to blacklist you want to stub
-  blacklist = ["api.short.io"]
-  web_mock = WebMockHelper.new(blacklist)
-  web_mock.stub_network_connection
-  # stub application controller methods
+
   controller do
     def index
       render plain: "hello there..."
