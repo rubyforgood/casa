@@ -29,10 +29,10 @@
     <span class="input-style-1">
       <%= form.label :expires_at, "Expires at (optional)" %>
       <%= form.datetime_field :expires_at,
-                              value: banner.expires_at_in_time_zone(cookies[:browser_time_zone]),
+                              value: banner.expires_at_in_time_zone(browser_time_zone),
                               required: false,
                               include_seconds: false,
-                              min: Time.current.in_time_zone(cookies[:browser_time_zone]) %>
+                              min: Time.current.in_time_zone(browser_time_zone) %>
     </span>
     <div class="input-style-1">
       <%= form.label :content %>
