@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_31_172823) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_19_005250) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -597,6 +597,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_172823) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "standard_court_orders", force: :cascade do |t|
+    t.string "value"
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_standard_court_orders_on_casa_org_id"
+  end
+
   create_table "supervisor_volunteers", force: :cascade do |t|
     t.bigint "supervisor_id", null: false
     t.bigint "volunteer_id", null: false
@@ -729,6 +737,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_31_172823) do
   add_foreign_key "preference_sets", "users"
   add_foreign_key "sent_emails", "casa_orgs"
   add_foreign_key "sent_emails", "users"
+  add_foreign_key "standard_court_orders", "casa_orgs"
   add_foreign_key "supervisor_volunteers", "users", column: "supervisor_id"
   add_foreign_key "supervisor_volunteers", "users", column: "volunteer_id"
   add_foreign_key "user_reminder_times", "users"
