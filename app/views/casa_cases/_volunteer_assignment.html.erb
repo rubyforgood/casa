@@ -56,16 +56,16 @@
                         method: :patch,
                         class: "btn btn-outline-success" %>
             <% end %>
-            <% if (policy(assignment).hide_contacts?) %>
-              <%= button_to("Hide Old Contacts",
-                        show_hide_contacts_case_assignment_path(assignment),
-                        method: :patch,
-                        class: "btn btn-outline-secondary text-wrap") %>
-            <% else %>
+            <% if assignment.hide_old_contacts? %>
               <%= button_to("Show Old Contacts",
                         show_hide_contacts_case_assignment_path(assignment),
                         method: :patch,
                         class: "btn btn-outline-warning text-wrap") %>
+            <% else %>
+              <%= button_to("Hide Old Contacts",
+                        show_hide_contacts_case_assignment_path(assignment),
+                        method: :patch,
+                        class: "btn btn-outline-secondary text-wrap") %>
             <% end %>
           <% end %>
         </td>

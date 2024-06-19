@@ -5,7 +5,7 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
   let(:case_contact) { create(:case_contact) }
 
   describe "POST /create" do
-    let(:notification_double) { double("FollowupNotification") }
+    let(:notification_double) { double("FollowupNotifier") }
     let(:params) { {note: "Hello, world!"} }
 
     subject(:request) do
@@ -16,7 +16,7 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
 
     before do
       sign_in volunteer
-      allow(FollowupNotification).to receive(:with).and_return(notification_double)
+      allow(FollowupNotifier).to receive(:with).and_return(notification_double)
       allow(notification_double).to receive(:deliver)
     end
 
@@ -27,10 +27,10 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
       expect(followup.note).to eq "Hello, world!"
     end
 
-    it "sends a Followup Notification to case contact creator" do
+    it "sends a Followup Notifier to case contact creator" do
       request
       followup = Followup.last
-      expect(FollowupNotification).to(
+      expect(FollowupNotifier).to(
         have_received(:with).once.with(followup: followup, created_by: volunteer)
       )
       expect(notification_double).to have_received(:deliver).once.with(case_contact.creator)
@@ -44,11 +44,11 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
   end
 
   describe "PATCH /resolve" do
-    let(:notification_double) { double("FollowupResolvedNotification") }
+    let(:notification_double) { double("FollowupResolvedNotifier") }
 
     before do
       sign_in volunteer
-      allow(FollowupResolvedNotification).to receive(:with).and_return(notification_double)
+      allow(FollowupResolvedNotifier).to receive(:with).and_return(notification_double)
       allow(notification_double).to receive(:deliver)
     end
 
@@ -66,18 +66,18 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
         expect { request }.to change { followup.reload.resolved? }.from(false).to(true)
       end
 
-      it "does not send Followup Notification" do
+      it "does not send Followup Notifier" do
         followup
-        expect(FollowupResolvedNotification).not_to receive(:with)
+        expect(FollowupResolvedNotifier).not_to receive(:with)
         expect { request }.to change { followup.reload.resolved? }.from(false).to(true)
       end
 
       context "when who resolves the followup is not the followup's creator" do
         let(:followup) { create(:followup, case_contact: case_contact) }
 
-        it "sends a Followup Notification to the creator" do
+        it "sends a Followup Notifier to the creator" do
           request
-          expect(FollowupResolvedNotification).to(
+          expect(FollowupResolvedNotifier).to(
             have_received(:with).once.with(followup: followup, created_by: volunteer)
           )
           expect(notification_double).to have_received(:deliver).once.with(followup.creator)

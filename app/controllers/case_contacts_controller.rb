@@ -61,8 +61,8 @@ class CaseContactsController < ApplicationController
 
   def edit
     authorize @case_contact
-    current_user.notifications.unread.where(id: params[:notification_id]).mark_as_read!
-    redirect_to case_contact_form_path(@case_contact.form_steps.first, case_contact_id: @case_contact.id)
+    current_user.notifications.unread.where(id: params[:notification_id]).mark_as_read
+    redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
   end
 
   def destroy

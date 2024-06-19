@@ -8,6 +8,11 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   let(:inactive_volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
   let(:supervisor_mailer) { SupervisorMailer.new }
 
+  let(:contact_topic_1) { create(:contact_topic, question: "Contact Topic 1") }
+  let(:contact_topic_2) { create(:contact_topic, question: "Contact Topic 2") }
+  let(:contact_topic_answer_1) { create(:contact_topic_answer, contact_topic: contact_topic_1, value: "Contact Topic 1 Answer") }
+  let(:contact_topic_answer_2) { create(:contact_topic_answer, contact_topic: contact_topic_2, value: "") }
+
   context "when there are successful and unsuccessful contacts" do
     before(:each) do
       supervisor.volunteers << volunteer
@@ -15,7 +20,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       supervisor.volunteers_ever_assigned << inactive_volunteer
       volunteer.casa_cases << casa_case
       create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: Time.current - 6.days
-      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days
+      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days, contact_topic_answers: [contact_topic_answer_1, contact_topic_answer_2]
       assign :supervisor, supervisor
       assign :inactive_volunteers, []
       sign_in supervisor
@@ -35,6 +40,9 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("- Contact Made: #{@case_contact.contact_made}") }
     it { expect(rendered).to have_text("- Medium Type: #{@case_contact.medium_type}") }
     it { expect(rendered).to have_text("- Notes: #{@case_contact.notes}") }
+    it { expect(rendered).to have_text("Contact Topic 1") }
+    it { expect(rendered).to have_text("Contact Topic 1 Answer") }
+    it { expect(rendered).to_not have_text("Contact Topic 2") }
   end
 
   context "when there are no volunteers" do

@@ -9,7 +9,6 @@ RSpec.describe ShortUrlService do
   describe "short.io API" do
     before :each do
       WebMockHelper.short_io_stub
-      WebMock.disable_net_connect!
     end
 
     it "returns a successful response with correct http request" do

@@ -57,12 +57,12 @@ class CaseImporter < FileImporter
 
     volunteer_assignment_list.each do |volunteer|
       # Expecting an array of length 0 or 1
-      assignment = casa_case.case_assignments.where(volunteer: volunteer)
+      assignments = casa_case.case_assignments.where(volunteer: volunteer)
 
-      if assignment.empty?
+      if assignments.empty?
         casa_case.volunteers << volunteer
-      elsif !assignment[0].active
-        assignment[0].update(active: true)
+      elsif assignments[0].inactive?
+        assignments[0].update(active: true)
       end
     end
   end

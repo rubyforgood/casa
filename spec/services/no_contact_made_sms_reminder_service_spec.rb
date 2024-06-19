@@ -12,7 +12,6 @@ RSpec.describe NoContactMadeSmsReminderService do
     before :each do
       WebMockHelper.short_io_stub_localhost
       WebMockHelper.twilio_no_contact_made_stub
-      WebMock.disable_net_connect!
     end
 
     context "when sending sms reminder" do

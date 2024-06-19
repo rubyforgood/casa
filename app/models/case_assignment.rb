@@ -14,6 +14,8 @@ class CaseAssignment < ApplicationRecord
     where("updated_at > ?", 1.week.ago).where(active: false).where(volunteer_id: volunteer_id)
   end
 
+  def inactive? = !active?
+
   private
 
   def assignee_must_be_volunteer

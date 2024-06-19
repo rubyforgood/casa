@@ -67,11 +67,12 @@ RSpec.describe CaseAssignmentPolicy do
     context "when an admin" do
       context "in the same organization" do
         it "allows user to show or hide contacts" do
-          is_expected.to permit(casa_admin, case_assignment)
+          is_expected.to permit(casa_admin, case_assignment_inactive)
         end
       end
       context "in a different organization" do
         it "does not allow user to show or hide contacts" do
+          other_case_assignment.update(active: false)
           is_expected.not_to permit(casa_admin, other_case_assignment)
         end
       end
@@ -80,11 +81,12 @@ RSpec.describe CaseAssignmentPolicy do
     context "when a supervisor" do
       context "in the same organization" do
         it "allows user to show or hide contacts" do
-          is_expected.to permit(supervisor, case_assignment)
+          is_expected.to permit(supervisor, case_assignment_inactive)
         end
       end
       context "in a different organization" do
         it "does not allow user to show or hide contacts" do
+          other_case_assignment.update(active: false)
           is_expected.not_to permit(supervisor, other_case_assignment)
         end
       end
@@ -92,7 +94,15 @@ RSpec.describe CaseAssignmentPolicy do
 
     context "when a volunteer" do
       it "does not allow user to show or hide contacts" do
-        is_expected.not_to permit(volunteer, case_assignment)
+        is_expected.not_to permit(volunteer, case_assignment_inactive)
+      end
+    end
+
+    context "when the case_assignment is active" do
+      describe "it does not allow any user to show/hide contacts" do
+        it { is_expected.not_to permit(casa_admin, case_assignment) }
+        it { is_expected.not_to permit(supervisor, case_assignment) }
+        it { is_expected.not_to permit(volunteer, case_assignment) }
       end
     end
   end

@@ -307,16 +307,18 @@ RSpec.describe "/case_assignments", type: :request do
       end
     end
 
+    # Note: we don't expect this endpoint to be exposed in the UI if the case is inactive
     context "when the case_assignment is active" do
       let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: true) }
 
-      xit "does not toggle contacts visibility" do
-        # TODO: fix controller as it is trying to render a template that does not exist
+      it "does not toggle contacts visibility" do
         expect { request }.not_to change { assignment.reload.hide_old_contacts? }
       end
 
-      xit "renders the edit page?" do
-        # TODO: fix controller as it is trying to render a template that does not exist
+      it "redirects to root with an authorization failure message" do
+        request
+        expect(response).to redirect_to root_path
+        expect(response.request.flash[:notice]).to match "not authorized"
       end
     end
   end

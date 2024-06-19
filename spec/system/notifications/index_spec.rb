@@ -8,7 +8,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
 
   before { casa_case.assigned_volunteers << volunteer }
 
-  context "FollowupResolvedNotification" do
+  context "FollowupResolvedNotifier" do
     let(:notification_message) { "#{volunteer.display_name} resolved a follow up. Click to see more." }
     let!(:followup) { create(:followup, creator: admin, case_contact: case_contact) }
 
@@ -48,7 +48,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "FollowupNotification", js: true do
+  context "FollowupNotifier", js: true do
     let(:note) { "Lorem ipsum dolor sit amet." }
 
     let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
@@ -137,8 +137,11 @@ RSpec.describe "notifications/index", type: :system, js: true do
   end
 
   context "EmancipationChecklistReminder" do
+    let(:notifier) { create(:emancipation_checklist_reminder_notifier, params: {casa_case: casa_case}) }
+    let(:notification) { create(:notification, :emancipation_checklist_reminder, event: notifier) }
+
     before do
-      volunteer.notifications << create(:notification, :emancipation_checklist_reminder, params: {casa_case: casa_case})
+      volunteer.notifications << notification
       sign_in volunteer
       visit notifications_path
     end
@@ -147,13 +150,16 @@ RSpec.describe "notifications/index", type: :system, js: true do
       notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Emancipation Checklist Reminder")
-      expect(page).to have_link(notification_message, href: casa_case_emancipation_path(casa_case.id))
+      expect(page).to have_link(notification_message, href: mark_as_read_notification_path(notification))
     end
   end
 
-  context "YouthBirthdayNotification" do
+  context "YouthBirthdayNotifier" do
+    let(:notifier) { create(:youth_birthday_notifier, params: {casa_case: casa_case}) }
+    let(:notification) { create(:notification, :youth_birthday, event: notifier) }
+
     before do
-      volunteer.notifications << create(:notification, :youth_birthday, params: {casa_case: casa_case})
+      volunteer.notifications << notification
       sign_in volunteer
       visit notifications_path
     end
@@ -162,14 +168,17 @@ RSpec.describe "notifications/index", type: :system, js: true do
       notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Youth Birthday Notification")
-      expect(page).to have_link(notification_message, href: casa_case_path(casa_case.id))
+      expect(page).to have_link(notification_message, href: mark_as_read_notification_path(notification))
     end
   end
 
-  context "ReimbursementCompleteNotification" do
+  context "ReimbursementCompleteNotifier" do
     it "should display a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
-      volunteer.notifications << create(:notification, :reimbursement_complete, params: {case_contact: case_contact})
+      notifier = create(:reimbursement_complete_notifier, params: {case_contact: case_contact})
+      notification = create(:notification, :reimbursement_complete, event: notifier)
+
+      volunteer.notifications << notification
       sign_in volunteer
       visit notifications_path
       notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
@@ -178,7 +187,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Reimbursement Approved")
       expect(page).to have_content(notification_message)
-      expect(page).to have_link(href: case_contacts_path(casa_case_id: casa_case.id))
+      expect(page).to have_link(href: mark_as_read_notification_path(notification))
     end
   end
 

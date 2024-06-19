@@ -88,7 +88,7 @@ RSpec.describe "layout/header", type: :view do
 
     it "displays unread notification count if the user has unread notifications" do
       sign_in user
-      build_stubbed(:notification)
+      build(:notification)
       allow(user).to receive_message_chain(:notifications, :unread).and_return([:notification])
 
       render partial: "layouts/header"
@@ -116,6 +116,14 @@ RSpec.describe "layout/header", type: :view do
       render partial: "layouts/header"
 
       expect(rendered).to match "<strong>Role: Volunteer</strong>"
+    end
+
+    it "renders a stop impersonating link when impersonating" do
+      allow(view).to receive(:true_user).and_return(true_user)
+
+      render partial: "layouts/header"
+
+      expect(rendered).to have_link(href: "/volunteers/stop_impersonating")
     end
   end
 end

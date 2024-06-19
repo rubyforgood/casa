@@ -1,23 +1,20 @@
 # To deliver this notification:
 #
-# FollowupNotification.with(followup: @followup).deliver_later(current_user)
-# FollowupNotification.with(followup: @followup).deliver(current_user)
-
-class FollowupNotification < BaseNotification
-  # Add your delivery methods
-  #
-  deliver_by :database
-  # deliver_by :email, mailer: "UserMailer", if: :email_notifications?
+# FollowupNotifier.with(followup: @followup).deliver(current_user)
+#
+class FollowupNotifier < BaseNotifier
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
   # deliver_by :sms, class: "DeliveryMethods::Sms", if: :sms_notifications?
   # deliver_by :slack
   # deliver_by :custom, class: "MyDeliveryMethod"
 
   # Add required params
-  #
-  param :followup, :created_by
+  required_params :followup, :created_by
 
   # Define helper methods to make rendering easier.
-  #
   def title
     "New followup"
   end
@@ -27,7 +24,7 @@ class FollowupNotification < BaseNotification
   end
 
   def url
-    edit_case_contact_path(params[:followup][:case_contact_id], notification_id: record.id)
+    edit_case_contact_path(params[:followup].id, notification_id: id)
   end
 
   private
@@ -41,7 +38,7 @@ class FollowupNotification < BaseNotification
   end
 
   def build_message
-    note = params[:followup][:note]
+    note = params[:followup].note
     join_char = note.present? ? "\n" : " "
     result = ["#{created_by} has flagged a Case Contact that needs follow up."]
     result << "Note: #{note}" if note.present?
