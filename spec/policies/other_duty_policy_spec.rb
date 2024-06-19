@@ -44,15 +44,15 @@ RSpec.describe OtherDutyPolicy do
         supervisor.casa_org.other_duties_enabled = true
         volunteer.casa_org.other_duties_enabled = true
       end
-      it "not allows casa_admins" do
+      it "allows casa_admins" do
         is_expected.to permit(casa_admin)
       end
 
-      it "not allows supervisors" do
+      it "allows supervisors" do
         is_expected.to permit(supervisor)
       end
 
-      it "not allows volunteer" do
+      it "allows volunteer" do
         is_expected.to permit(volunteer)
       end
     end
