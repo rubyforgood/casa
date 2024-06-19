@@ -17,26 +17,18 @@ class CaseAssignmentPolicy < ApplicationPolicy
   end
 
   def destroy?
-    admin_or_supervisor? && same_org?
+    admin_or_supervisor_same_org?
   end
 
   def unassign?
-    record.active? && admin_or_supervisor? && same_org?
+    record.active? && admin_or_supervisor_same_org?
   end
 
   def reimbursement?
-    admin_or_supervisor? && same_org?
-  end
-
-  def hide_contacts?
-    !record.active? && !record.hide_old_contacts? && admin_or_supervisor?
+    admin_or_supervisor_same_org?
   end
 
   def show_or_hide_contacts?
-    admin_or_supervisor? && same_org?
-  end
-
-  def same_org?
-    user.casa_org_id == record.casa_case.casa_org_id
+    record.inactive? && admin_or_supervisor_same_org?
   end
 end

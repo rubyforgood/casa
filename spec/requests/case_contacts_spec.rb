@@ -94,7 +94,7 @@ RSpec.describe "/case_contacts", type: :request do
         response
       end
 
-      before { FollowupResolvedNotification.with(followup: followup, created_by: admin).deliver(followup.creator) }
+      before { FollowupResolvedNotifier.with(followup: followup, created_by: admin).deliver(followup.creator) }
 
       it "is marked as read" do
         request

@@ -1,7 +1,16 @@
-class ReimbursementCompleteNotification < BaseNotification
-  deliver_by :database
+# To deliver this notification:
+#
+# ReimbursementCompleteNotifier.with(case_contact: @case_contact).deliver(current_user)
+#
+class ReimbursementCompleteNotifier < BaseNotifier
+  # deliver_by :email do |config|
+  #   config.mailer = "UserMailer"
+  #   ...
+  # end
+  # deliver_by :slack
+  # deliver_by :custom, class: "MyDeliveryMethod"
 
-  param :case_contact
+  required_param :case_contact
 
   def title
     "Reimbursement Approved"

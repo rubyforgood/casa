@@ -158,6 +158,7 @@ end
 #  footer_links                :string           default([]), is an Array
 #  learning_topic_active       :boolean          default(FALSE)
 #  name                        :string           not null
+#  other_duties_enabled        :boolean          default(TRUE)
 #  show_driving_reimbursement  :boolean          default(TRUE)
 #  show_fund_request           :boolean          default(FALSE)
 #  slug                        :string

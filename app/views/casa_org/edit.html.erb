@@ -51,6 +51,10 @@
       <%= form.label :learning_topic_active, "Enable Learning Topic", class: 'form-check-label mb-2' %>
     </div>
     <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :other_duties_enabled, class: 'form-check-input' %>
+      <%= form.label :other_duties_enabled, "Enable Other Duties", class: 'form-check-label mb-2' %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
       <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>
       <%= form.label :twilio_enabled, "Enable Twilio", class: 'form-check-label mb-2' %>
     </div>

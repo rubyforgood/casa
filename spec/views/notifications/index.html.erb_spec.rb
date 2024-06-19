@@ -45,7 +45,7 @@ RSpec.describe "notifications/index", type: :view do
 
       before do
         Health.instance.update_attribute(:latest_deploy_time, Date.today)
-        assign(:notifications, Notification.all)
+        assign(:notifications, Noticed::Notification.all)
         patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
         patch_note_2.update_attribute(:patch_note_group, patch_note_group_no_volunteers)
       end

@@ -162,3 +162,11 @@ body.casa_cases-show {
     }
   }
 }
+
+.card-text {
+  ul {
+    display: flex;
+    flex-direction: column;
+    gap: .2rem;
+  }
+}

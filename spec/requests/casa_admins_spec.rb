@@ -456,6 +456,7 @@ RSpec.describe "/casa_admins", type: :request do
       it "does not send SMS when Twilio has an error" do
         org = create(:casa_org, twilio_account_sid: "articuno31", twilio_enabled: true)
         admin = build(:casa_admin, casa_org: org)
+        short_io_stub = WebMockHelper.short_io_stub_sms
         twilio_activation_error_stub = WebMockHelper.twilio_activation_error_stub("admin")
         params = attributes_for(:casa_admin)
         params[:phone_number] = "+12222222222"
@@ -463,6 +464,7 @@ RSpec.describe "/casa_admins", type: :request do
         sign_in admin
         post casa_admins_path, params: {casa_admin: params}
 
+        expect(short_io_stub).to have_been_requested.times(2) # TODO: why is this called at all?
         expect(twilio_activation_error_stub).to have_been_requested.times(1)
         expect(response).to have_http_status(:redirect)
         follow_redirect!
@@ -474,10 +476,12 @@ RSpec.describe "/casa_admins", type: :request do
         admin = build(:casa_admin, casa_org: org)
         params = attributes_for(:casa_admin)
         params[:phone_number] = "+12222222222"
+        short_io_stub = WebMockHelper.short_io_stub_sms
 
         sign_in admin
         post casa_admins_path, params: {casa_admin: params}
 
+        expect(short_io_stub).to have_been_requested.times(2) # TODO: why is this called at all?
         expect(response).to have_http_status(:redirect)
         follow_redirect!
         expect(flash[:notice]).to match(/New admin created successfully./)

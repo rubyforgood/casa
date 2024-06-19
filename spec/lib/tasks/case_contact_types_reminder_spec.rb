@@ -35,7 +35,6 @@ RSpec.describe CaseContactTypesReminder do
     WebMockHelper.twilio_success_stub
     WebMockHelper.twilio_success_stub_messages_60_days
     WebMockHelper.short_io_stub_localhost
-    WebMock.disable_net_connect!
   end
 
   context "volunteer with uncontacted contact types, sms notifications on, and no reminder in last quarter" do
