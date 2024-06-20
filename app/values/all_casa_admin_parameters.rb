@@ -3,7 +3,7 @@ class AllCasaAdminParameters < SimpleDelegator
     params =
       params.require(:all_casa_admin).permit(:email, :password)
 
-    super(params)
+    super
   end
 
   def with_password(password)
