@@ -5160,10 +5160,10 @@ stream-combiner@~0.0.4:
   dependencies:
     duplexer "~0.1.1"
 
-strftime@^0.10.2:
-  version "0.10.2"
-  resolved "https://registry.yarnpkg.com/strftime/-/strftime-0.10.2.tgz#9cc5a63a6170455730ddf617e8b506ab06dde985"
-  integrity sha512-Y6IZaTVM80chcMe7j65Gl/0nmlNdtt+KWPle5YeCAjmsBfw+id2qdaJ5MDrxUq+OmHKab+jHe7mUjU/aNMSZZg==
+strftime@^0.10.3:
+  version "0.10.3"
+  resolved "https://registry.yarnpkg.com/strftime/-/strftime-0.10.3.tgz#d801427a07f794c1e16a622371efe660fa72123f"
+  integrity sha512-DZrDUeIF73eKJ4/GgGuv8UHWcUQPYDYfDeQFj3jrx+JZl6GQE656MbHIpvbo4mEG9a5DgS8GRCc5DxJXD2udDQ==
 
 string-length@^4.0.1:
   version "4.0.2"
