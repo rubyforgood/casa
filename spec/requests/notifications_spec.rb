@@ -114,4 +114,49 @@ RSpec.describe "/notifications", type: :request do
       end
     end
   end
+
+  describe "POST #mark_as_read" do
+    let(:user) { create(:volunteer) }
+    let(:notification) { create(:notification, :followup_with_note, recipient: user, read_at: nil) }
+
+    before { sign_in user }
+
+    context "when user is authorized" do
+      it "marks the notification as read" do
+        post mark_as_read_notification_path(notification)
+
+        expect(notification.reload.read_at).not_to be_nil
+      end
+
+      it "redirects to the notification event URL" do
+        post mark_as_read_notification_path(notification)
+
+        expect(response).to redirect_to(notification.event.url)
+      end
+    end
+
+    context "when user is not authorized" do
+      let(:other_user) { create(:volunteer) }
+
+      before { sign_in other_user }
+
+      it "does not mark the notification as read" do
+        post mark_as_read_notification_path(notification)
+
+        expect(notification.reload.read_at).to be_nil
+      end
+
+      it "redirects to root" do
+        post mark_as_read_notification_path(notification)
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+
+    it "does not mark the notification as read if it is already read" do
+      notification = create(:notification, :followup_read, recipient: user)
+
+      expect { post mark_as_read_notification_path(notification) }.not_to(change { notification.reload.read_at })
+    end
+  end
 end
