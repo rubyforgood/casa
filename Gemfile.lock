@@ -235,6 +235,18 @@ GEM
       faraday (~> 1.0)
     ffi (1.16.3)
     filterrific (5.2.5)
+    flipper (1.3.0)
+      concurrent-ruby (< 2)
+    flipper-active_record (1.3.0)
+      activerecord (>= 4.2, < 8)
+      flipper (~> 1.3.0)
+    flipper-ui (1.3.0)
+      erubi (>= 1.0.0, < 2.0.0)
+      flipper (~> 1.3.0)
+      rack (>= 1.4, < 4)
+      rack-protection (>= 1.5.3, < 5.0.0)
+      rack-session (>= 1.0.2, < 3.0.0)
+      sanitize (< 7)
     friendly_id (5.5.1)
       activerecord (>= 4.0.0)
     globalid (1.2.1)
@@ -356,6 +368,9 @@ GEM
       rack (>= 1.0, < 4)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-session (1.0.2)
       rack (< 3)
     rack-test (2.1.0)
@@ -465,6 +480,9 @@ GEM
       nokogiri (>= 1.8.5)
       rubyzip (>= 1.1.1)
     safe_shell (1.1.0)
+    sanitize (6.1.1)
+      crass (~> 1.0.2)
+      nokogiri (>= 1.12.0)
     scout_apm (5.3.8)
       parser
     selenium-webdriver (4.21.1)
@@ -583,6 +601,9 @@ DEPENDENCIES
   factory_bot_rails
   faker
   filterrific
+  flipper
+  flipper-active_record
+  flipper-ui
   friendly_id (~> 5.5.1)
   groupdate
   httparty
