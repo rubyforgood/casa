@@ -37,7 +37,6 @@
 @use "pages/case_contacts_form";
 @use "pages/court_dates";
 @use "pages/emancipation";
-@use "pages/feature_flags";
 @use "pages/login";
 @use "pages/password";
 @use "pages/patch_notes";
@@ -45,5 +44,5 @@
 @use "pages/supervisors";
 @use "pages/volunteers";
 
-@use 'trix/dist/trix.css';
+@use "trix/dist/trix.css";
 @use "actiontext";
