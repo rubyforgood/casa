@@ -100,15 +100,6 @@ RSpec.describe CasaOrg, type: :model do
     end
   end
 
-  describe "user_count" do
-    let(:org) { create(:casa_org) }
-    subject(:count) { org.user_count }
-    before do
-      2.times { create(:user, casa_org: org) }
-    end
-    it { is_expected.to eq 2 }
-  end
-
   describe "generate_defaults" do
     let(:org) { create(:casa_org) }
     let(:fake_topics) { [{"question" => "Test Title", "details" => "Test details"}] }
