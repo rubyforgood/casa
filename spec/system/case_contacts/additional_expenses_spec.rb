@@ -7,7 +7,7 @@ RSpec.describe "additional_expenses", type: :system do
   let(:casa_case) { create(:casa_case, casa_org: organization) }
 
   before do
-    FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+    allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
     create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
   end
 
