@@ -126,7 +126,7 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
 
   context "when the org has neither reimbursable expenses nor travel" do
     before do
-      FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(false)
       allow_any_instance_of(CasaOrg).to receive(:show_driving_reimbursement).and_return(false)
       sign_in volunteer
     end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_10_071054) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_22_020203) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -332,12 +332,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_10_071054) do
     t.index ["emancipation_category_id"], name: "index_emancipation_options_on_emancipation_category_id"
   end
 
-  create_table "feature_flags", force: :cascade do |t|
-    t.string "name", null: false
-    t.boolean "enabled", default: false, null: false
+  create_table "flipper_features", force: :cascade do |t|
+    t.string "key", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["name"], name: "index_feature_flags_on_name", unique: true
+    t.index ["key"], name: "index_flipper_features_on_key", unique: true
+  end
+
+  create_table "flipper_gates", force: :cascade do |t|
+    t.string "feature_key", null: false
+    t.string "key", null: false
+    t.text "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "followups", force: :cascade do |t|

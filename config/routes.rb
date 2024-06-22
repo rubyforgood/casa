@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
+def set_up_flipper
+  flipper_app = Flipper::UI.app(Flipper.instance, rack_protection: {except: :http_origin}) do |builder|
+    builder.use Rack::Auth::Basic do |username, password|
+      username == ENV["FLIPPER_USERNAME"] && password == ENV["FLIPPER_PASSWORD"]
+    end
+  end
+  mount flipper_app, at: "/flipper"
+end
+
 Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
+
+  set_up_flipper
+
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
 
@@ -189,8 +201,6 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
-
-    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
