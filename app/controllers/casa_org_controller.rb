@@ -7,6 +7,7 @@ class CasaOrgController < ApplicationController
   before_action :set_learning_hour_topics, only: %i[edit update]
   before_action :set_sent_emails, only: %i[edit update]
   before_action :set_contact_topics, only: %i[edit update]
+  before_action :set_custom_links, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
   before_action :set_active_storage_url_options, only: %i[edit update]
@@ -90,7 +91,7 @@ class CasaOrgController < ApplicationController
     @contact_topics = @casa_org.contact_topics.where(soft_delete: false)
   end
 
-  def set_custom_url
+  def set_custom_links
     @custom_links = @casa_org.custom_links.where(soft_delete: false)
   end
 
