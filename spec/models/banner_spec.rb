@@ -67,8 +67,8 @@ RSpec.describe Banner, type: :model do
 
   describe "#expires_at_in_time_zone" do
     it "can shift time by timezone for equivalent times" do
-      banner = create(:banner, expires_at: nil)
-      banner.update_columns(expires_at: "2024-06-13 12:00:00 UTC")
+      travel_to Time.new(2024, 6, 1, 11, 0, 0, "UTC")
+      banner = create(:banner, expires_at: "2024-06-13 12:00:00 UTC")
 
       expires_at_in_pacific_time = banner.expires_at_in_time_zone("America/Los_Angeles")
       expect(expires_at_in_pacific_time.to_s).to eq("2024-06-13 05:00:00 -0700")

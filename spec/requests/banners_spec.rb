@@ -86,15 +86,15 @@ RSpec.describe "Banners", type: :request do
     end
 
     context "when client timezone is ahead of UTC" do
+      before { travel_to Time.new(2024, 6, 1, 11, 0, 0, "+03:00") } # 08:00 UTC
+
       context "when submitted time is behind client but ahead of UTC" do
         let(:expires_at) { Time.new(2024, 6, 1, 9, 0, 0, "UTC") } # 12:00 +03:00
 
         it "succeeds" do
-          travel_to Time.new(2024, 6, 1, 11, 0, 0, "+03:00") do # 08:00 UTC
-            sign_in admin
-            post banners_path, params: {banner: banner_params}
-            expect(response).to redirect_to banners_path
-          end
+          sign_in admin
+          post banners_path, params: {banner: banner_params}
+          expect(response).to redirect_to banners_path
         end
       end
 
@@ -102,35 +102,31 @@ RSpec.describe "Banners", type: :request do
         let(:expires_at) { Time.new(2024, 6, 1, 7, 0, 0, "UTC") } # 10:00 +03:00
 
         it "fails" do
-          travel_to Time.new(2024, 6, 1, 11, 0, 0, "+03:00") do # 08:00 UTC
-            sign_in admin
-            post banners_path, params: {banner: banner_params}
-            expect(response).to render_template "banners/new"
-            expect(response.body).to include "Expires at must take place in the future (after 2024-06-01 08:00:00 UTC)"
-          end
+          sign_in admin
+          post banners_path, params: {banner: banner_params}
+          expect(response).to render_template "banners/new"
+          expect(response.body).to include "Expires at must take place in the future (after 2024-06-01 08:00:00 UTC)"
         end
       end
     end
 
     context "when client timezone is behind UTC" do
+      before { travel_to Time.new(2024, 6, 1, 11, 0, 0, "-04:00") } # 15:00 UTC
+
       context "when submitted time is ahead of client and ahead of UTC" do
         let(:expires_at) { Time.new(2024, 6, 1, 16, 0, 0, "UTC") } # 12:00 -04:00
 
         it "succeeds" do
-          travel_to Time.new(2024, 6, 1, 11, 0, 0, "-04:00") do # 15:00 UTC
-            sign_in admin
-            post banners_path, params: {banner: banner_params}
-            expect(response).to redirect_to banners_path
-          end
+          sign_in admin
+          post banners_path, params: {banner: banner_params}
+          expect(response).to redirect_to banners_path
         end
       end
-    end
 
-    context "when submitted time is ahead of client but behind UTC" do
-      let(:expires_at) { Time.new(2024, 6, 1, 14, 0, 0, "UTC") } # 10:00 -04:00
+      context "when submitted time is ahead of client but behind UTC" do
+        let(:expires_at) { Time.new(2024, 6, 1, 14, 0, 0, "UTC") } # 10:00 -04:00
 
-      it "fails" do
-        travel_to Time.new(2024, 6, 1, 11, 0, 0, "-04:00") do # 15:00 UTC
+        it "fails" do
           sign_in admin
           post banners_path, params: {banner: banner_params}
           expect(response).to render_template "banners/new"
