@@ -1,16 +1,6 @@
 class CustomLinksController < ApplicationController
   before_action :set_custom_link, only: %i[edit update soft_delete]
 
-   # GET /custom_links
-   def index
-    byebug
-    @custom_links = CustomLink.all
-  end
-
-  # GET /custom_links/1
-  def show
-  end
-
   # GET /custom_links/new
   def new
     authorize CustomLink
@@ -46,27 +36,26 @@ class CustomLinksController < ApplicationController
     end
   end
 
-    # DELETE /contact_topics/1/soft_delete
-    def soft_delete
-      authorize @custom_link
+  # DELETE /contact_topics/1/soft_delete
+  def soft_delete
+    authorize @custom_link
 
-      if @custom_link.update(soft_delete: true)
-        redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully removed."
-      else
-        render :show, status: :unprocessable_entity
-      end
+    if @custom_link.update(soft_delete: true)
+      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully removed.'
+    else
+      render :show, status: :unprocessable_entity
     end
+  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_custom_link
-      @custom_link = CustomLink.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def custom_link_params
-      params.require(:custom_link).permit(:text, :url, :active, :casa_org_id)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_custom_link
+    @custom_link = CustomLink.find(params[:id])
+  end
 
-
+  # Only allow a list of trusted parameters through.
+  def custom_link_params
+    params.require(:custom_link).permit(:text, :url, :active, :casa_org_id)
+  end
 end
