@@ -1,0 +1,39 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>
+          <%= title %>
+        </h1>
+      </div>
+    </div>
+  </div>
+</div><!-- ==== end title ==== -->
+
+<!-- ========== card start ========== -->
+<div class="card-style mb-30">
+  <%= form_with(model: custom_link, local: true) do |form| %>
+    <%= form.hidden_field :casa_org_id %>
+    <div class="alert-box danger-alert">
+      <%= render "/shared/error_messages", resource: custom_link %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :text, "Display Text" %>
+      <%= form.text_field :text, class: "form-control", required: true %>
+    </div>
+    <div class="input-style-1">
+      <%= form.label :url, "URL" %>
+      <%= form.text_field :url, rows: 5, class: "form-control", required: true %>
+    </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :active, class: 'form-check-input' %>
+      <%= form.label :active, "Active?", class: 'form-check-label' %>
+    </div>
+    <div class="actions mb-10">
+      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+      <% end %>
+    </div>
+  <% end %>
+</div>
+<!-- card end -->
