@@ -298,7 +298,7 @@ GEM
     mutex_m (0.2.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.4.12)
+    net-imap (0.4.13)
       date
       net-protocol
     net-pop (0.1.2)
@@ -322,12 +322,12 @@ GEM
     oj (3.16.3)
       bigdecimal (>= 3.0)
     orm_adapter (0.5.0)
-    parallel (1.24.0)
+    parallel (1.25.1)
     parallel_tests (4.7.1)
       parallel
     paranoia (2.6.3)
       activerecord (>= 5.1, < 7.2)
-    parser (3.3.1.0)
+    parser (3.3.3.0)
       ast (~> 2.4.1)
       racc
     pdf-forms (1.5.0)
@@ -408,8 +408,8 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    rexml (3.2.8)
-      strscan (>= 3.0.9)
+    rexml (3.3.0)
+      strscan
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
     rspec-expectations (3.13.0)
@@ -440,7 +440,7 @@ GEM
     rswag-ui (2.13.0)
       actionpack (>= 3.1, < 7.2)
       railties (>= 3.1, < 7.2)
-    rubocop (1.63.5)
+    rubocop (1.64.1)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -453,7 +453,7 @@ GEM
       unicode-display_width (>= 2.4.0, < 3.0)
     rubocop-ast (1.31.3)
       parser (>= 3.3.1.0)
-    rubocop-performance (1.21.0)
+    rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
     ruby-progressbar (1.13.0)
@@ -491,10 +491,10 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    standard (1.36.0)
+    standard (1.37.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
-      rubocop (~> 1.63.0)
+      rubocop (~> 1.64.0)
       standard-custom (~> 1.0.0)
       standard-performance (~> 1.4)
     standard-custom (1.0.2)
@@ -625,7 +625,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  standard (~> 1.36.0)
+  standard (~> 1.37.0)
   stimulus-rails
   strong_migrations
   traceroute
