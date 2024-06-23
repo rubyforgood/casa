@@ -90,6 +90,10 @@ class CasaOrgController < ApplicationController
     @contact_topics = @casa_org.contact_topics.where(soft_delete: false)
   end
 
+  def set_custom_url
+    @custom_links = @casa_org.custom_links.where(soft_delete: false)
+  end
+
   def set_active_storage_url_options
     ActiveStorage::Current.url_options = {host: request.base_url}
   end
