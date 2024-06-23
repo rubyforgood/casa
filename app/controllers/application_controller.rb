@@ -10,6 +10,7 @@ class ApplicationController < ActionController::Base
   before_action :set_timeout_duration
   before_action :set_current_organization
   before_action :set_active_banner
+  before_action :set_custom_links
   after_action :verify_authorized, except: :index, unless: :devise_controller?
   # after_action :verify_policy_scoped, only: :index
 
@@ -42,27 +43,29 @@ class ApplicationController < ActionController::Base
     @active_banner = nil if @active_banner&.expired?
   end
 
+  def set_custom_links
+    @custom_links = current_organization.custom_links.active
+  end
+
   protected
 
   def handle_short_url(url_list)
     hash_of_short_urls = {}
-    url_list.each_with_index { |val, index|
+    url_list.each_with_index do |val, index|
       # call short io service to shorten url
       # create an entry in hash if api is success
       short_io_service = ShortUrlService.new
       response = short_io_service.create_short_url(val)
       short_url = short_io_service.short_url
       hash_of_short_urls[index] = (response.code == 201 || response.code == 200) ? short_url : nil
-    }
+    end
     hash_of_short_urls
   end
 
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
-      return "blank"
-    end
+    return "blank" if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
 
     body = body_msg
     to = resource.phone_number
@@ -78,8 +81,8 @@ class ApplicationController < ActionController::Base
     begin
       twilio_res = @twilio.send_sms(req_params)
       twilio_res.error_code.nil? ? "sent" : "error"
-    rescue Twilio::REST::RestError => error
-      @error = error
+    rescue Twilio::REST::RestError => e
+      @error = e
       "error"
     rescue # unverfied error isnt picked up by Twilio::Rest::RestError
       # https://www.twilio.com/docs/errors/21608
@@ -100,9 +103,9 @@ class ApplicationController < ActionController::Base
   end
 
   def store_referring_location
-    if request.referer && !request.referer.end_with?("users/sign_in")
-      session[:return_to] = request.referer
-    end
+    return unless request.referer && !request.referer.end_with?("users/sign_in")
+
+    session[:return_to] = request.referer
   end
 
   def redirect_back_to_referer(fallback_location:)
@@ -141,17 +144,13 @@ class ApplicationController < ActionController::Base
   end
 
   def log_and_reraise(error)
-    unless KNOWN_ERRORS.include?(error.class)
-      Bugsnag.notify(error)
-    end
+    Bugsnag.notify(error) unless KNOWN_ERRORS.include?(error.class)
     raise
   end
 
   def check_unconfirmed_email_notice(user)
     notice = "#{user.role} was successfully updated."
-    if user.saved_changes.include?("unconfirmed_email")
-      notice += " Confirmation Email Sent."
-    end
+    notice += " Confirmation Email Sent." if user.saved_changes.include?("unconfirmed_email")
     notice
   end
 end
