@@ -1,0 +1,19 @@
+<div class="truncation-container" data-controller="truncated-text">
+  <div class="line-clamp-1" data-truncated-text-target="text">
+    <% if label %>
+      <span class="text-bold d-inline"><%= label %>:</span>
+    <% end %>
+    <%= text %>
+  </div>
+  <a
+    role="button"
+    href="#"
+    data-truncated-text-target="hideButton"
+    data-action="truncated-text#toggle:prevent"
+    class="d-none">[hide]</a>
+  <a
+    role="button"
+    href="#"
+    data-truncated-text-target="moreButton"
+    data-action="truncated-text#toggle:prevent">[read more]</a>
+</div>

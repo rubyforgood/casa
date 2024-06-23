@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Continuous Integration (experimental)
 
 on:
   push:
@@ -12,19 +12,38 @@ on:
       - main
 
 jobs:
-  rspec:
+  preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+
+      - name: Set up JS
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/gallium
+          cache: "yarn"
+
+  rspec_parallel:
+    needs: [preparation]
     strategy:
       fail-fast: false
       matrix:
-        groups: ["[0, 1, 2, 3]", "[4, 5, 6, 7]", "[8, 9, 10, 11]"]
-    uses: ./.github/workflows/rspec.yml
+        groups: ["[0, 1, 2]", "[3, 4, 5]", "[6, 7, 8]", "[9, 10, 11]"]
+    uses: ./.github/workflows/rspec_parallel.yml
     secrets: inherit
     with:
       groups: ${{ matrix.groups }}
       group_count: 12 # the total number of test groups, must match the groups listed in the matrix.groups
-      parallel_processes_count: 4 # the number of parallel processes to run tests in worker, must match the size of the
+      parallel_processes_count: 3 # the number of parallel processes to run tests in worker, must match the size of the
       # inner arrays in the matrix.groups
   combine_and_report:
+    if: ${{ !cancelled() }}
     uses: ./.github/workflows/combine_and_report.yml
-    needs: [rspec]
+    needs: [rspec_parallel]
     secrets: inherit

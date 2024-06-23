@@ -3,7 +3,7 @@
 source "https://rubygems.org"
 
 ruby "3.2.2"
-gem "rails", "7.1.3.2"
+gem "rails", "7.1.3.3"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
@@ -65,7 +65,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.35.1"
+  gem "standard", "~> 1.37.0"
   gem "parallel_tests"
   gem "rspec_junit_formatter"
 end

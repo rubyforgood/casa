@@ -33,7 +33,6 @@ RSpec.describe Volunteer, type: :model do
     before do
       stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
       WebMockHelper.short_io_court_report_due_date_stub
-      WebMock.disable_net_connect!
     end
 
     it "sends one mailer" do
@@ -327,7 +326,7 @@ RSpec.describe Volunteer, type: :model do
     context "there are volunteers whose birthdays are not next month" do
       let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(1990, 9, 1)) }
       let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1998, 10, 15)) }
-      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1919, 12, 1)) }
+      let!(:volunteer3) { create(:volunteer, date_of_birth: Date.new(1920, 12, 1)) }
 
       it { is_expected.to be_empty }
     end

@@ -41,120 +41,6 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       expect(CaseContact.first.contact_types).to match_array([school, therapist])
       expect(CaseContact.first.duration_minutes).to eq 105
     end
-
-    it "should display full text in table if notes are less than 100 characters", js: true do
-      organization = build(:casa_org)
-      admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-      contact_type_group = build(:contact_type_group, casa_org: organization)
-      create(:contact_type, name: "School", contact_type_group: contact_type_group)
-      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-      sign_in admin
-
-      visit casa_case_path(casa_case.id)
-      click_on "New Case Contact"
-
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/05/2020", hours: 1, minutes: 45)
-      short_notes = "Hello world!"
-      complete_notes_page(notes: short_notes)
-      fill_in_expenses_page
-
-      expect {
-        click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
-
-      expect(page).to have_text(short_notes)
-      expect(page).not_to have_text("Read more")
-    end
-
-    it "should allow expanding or hiding if notes are more than 100 characters", js: true do
-      organization = build(:casa_org)
-      admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-      contact_type_group = build(:contact_type_group, casa_org: organization)
-      create(:contact_type, name: "School", contact_type_group: contact_type_group)
-      create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-
-      sign_in admin
-
-      visit casa_case_path(casa_case.id)
-      click_on "New Case Contact"
-
-      complete_details_page(case_numbers: [], contact_types: %w[School Therapist], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
-      long_notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit." \
-        "Nullam id placerat eros. Fusce egestas sem facilisis interdum maximus." \
-        "Donec ullamcorper ligula et consectetur placerat. Duis vel purus molestie," \
-        "euismod diam pretium, mattis nibh. Fusce eget leo ex. Donec vitae lacus eu" \
-        "magna tincidunt placerat. Mauris nibh nibh, venenatis sit amet libero in,"
-      complete_notes_page(notes: long_notes)
-      fill_in_expenses_page
-
-      expect {
-        click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
-
-      expected_text = long_notes.truncate(100)
-      expect(page).to have_text("Read more")
-      expect(page).to have_text(expected_text)
-
-      click_link "Read more"
-
-      expect(page).to have_text(long_notes)
-    end
-
-    context "with HTML in notes" do
-      it "renders HTML correctly on the index page", js: true do
-        organization = build(:casa_org)
-        admin = create(:casa_admin, casa_org: organization)
-        casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-        contact_type_group = build(:contact_type_group, casa_org: organization)
-        create(:contact_type, name: "School", contact_type_group: contact_type_group)
-        create(:contact_type, name: "Therapist", contact_type_group: contact_type_group)
-
-        sign_in admin
-
-        visit casa_case_path(casa_case.id)
-        click_on "New Case Contact"
-
-        complete_details_page(case_numbers: [], contact_types: %w[School], contact_made: true, medium: "Video", hours: 1)
-        note_content = "<h1>Hello world</h1>"
-        complete_notes_page(notes: note_content)
-        fill_in_expenses_page
-
-        expect {
-          click_on "Submit"
-        }.to change(CaseContact.where(status: "active"), :count).by(1)
-
-        expect(page).to have_css("#case_contacts_list h1", text: "Hello world")
-      end
-    end
-  end
-
-  context "mutliple contact type groups" do
-    it "shows the contact type groups, and their contact type alphabetically", js: true do
-      organization = build(:casa_org)
-      admin = create(:casa_admin, casa_org: organization)
-      casa_case = create(:casa_case, :with_case_assignments, casa_org: organization)
-      group_1 = build(:contact_type_group, name: "Placement", casa_org: organization)
-      group_2 = build(:contact_type_group, name: "Education", casa_org: organization)
-      create(:contact_type, name: "School", contact_type_group: group_1)
-      create(:contact_type, name: "Sports", contact_type_group: group_1)
-      create(:contact_type, name: "Caregiver Family", contact_type_group: group_2)
-      create(:contact_type, name: "Foster Parent", contact_type_group: group_2)
-
-      sign_in admin
-
-      visit(new_case_contact_path(casa_case.id))
-
-      expect(index_of("Education")).to be < index_of("Placement")
-      expect(index_of("School")).to be < index_of("Sports")
-      expect(index_of("Caregiver Family")).to be < index_of("Foster Parent")
-      expect(index_of("School")).to be > index_of("Caregiver Family")
-    end
-
-    def index_of(text)
-      page.text.index(text)
-    end
   end
 
   context "volunteer user" do
@@ -264,9 +150,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find("#case_contact_contact_type_ids-ts-control").click
+        expect(page).to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 
@@ -281,9 +168,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        expect(page).not_to have_field("Attorney")
-        expect(page).to have_field("School")
-        expect(page).to have_field("Therapist")
+        find(".ts-control").click
+        expect(page).not_to have_text("Attorney")
+        expect(page).to have_text("School")
+        expect(page).to have_text("Therapist")
       end
     end
 
@@ -299,7 +187,9 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
         visit new_case_contact_path
 
         complete_details_page(case_numbers: [volunteer.casa_cases.first.case_number], contact_types: %w[School], contact_made: true, medium: "In Person")
-        complete_notes_page
+        complete_notes_page(click_continue: false)
+
+        click_on "Submit"
 
         expect(page).not_to have_field("b. Want Driving Reimbursement")
       end

@@ -25,7 +25,8 @@ class CaseCourtReportContext
       latest_hearing_date: latest_hearing_date,
       org_address: org_address(@path_to_template),
       volunteer: volunteer_info,
-      hearing_type_name: @court_date&.hearing_type&.name || "None"
+      hearing_type_name: @court_date&.hearing_type&.name || "None",
+      case_topics: court_topics.values
     }
   end
 
@@ -86,6 +87,51 @@ class CaseCourtReportContext
   def org_address(path_to_template)
     is_default_template = path_to_template.end_with?("default_report_template.docx")
     @volunteer.casa_org.address if @volunteer && is_default_template
+  end
+
+  # Sample output
+  #
+  # expected_topics = {
+  # "Question 1" => {topic: "Question 1", details: "Details 1", answers: [
+  #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
+  #   {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"}
+  # ]},
+  # "Question 2" => {topic: "Question 2", details: "Details 2", answers: [
+  #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
+  #   {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
+  # ]},
+  # "Question 3" => {topic: "Question 3", details: "Details 3", answers: [
+  #   {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
+  #   {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
+  # ]}
+  # }
+  def court_topics
+    topics = ContactTopic
+      .joins(contact_topic_answers: {case_contact: [:casa_case, :contact_types]}).distinct
+      .where("casa_cases.id": @casa_case.id)
+      .where("case_contacts.occurred_at": @date_range)
+      .order(:occurred_at, :value)
+      .select(:details, :question, :occurred_at, :value, :contact_made,
+        "STRING_AGG(contact_types.name, ', ' ORDER BY contact_types.name) AS medium_types")
+      .group(:details, :question, :occurred_at, :value, :contact_made)
+
+    topics.each_with_object({}) do |topic, hash|
+      hash[topic.question] ||= {
+        answers: [],
+        topic: topic.question,
+        details: topic.details
+      }
+
+      formatted_date = CourtReportFormatContactDate.new(topic).format_long
+      answer_value = topic.value.blank? ? "No Answer Provided" : topic.value
+      answer = {
+        date: formatted_date,
+        medium: topic.medium_types,
+        value: answer_value
+      }
+
+      hash[topic.question][:answers].push(answer)
+    end
   end
 
   private

@@ -9,11 +9,75 @@ RSpec.describe CasaCase, type: :model do
   it { is_expected.to have_many(:emancipation_categories).through(:casa_case_emancipation_categories) }
   it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
   it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
-  it { is_expected.to validate_presence_of(:case_number) }
-  it { is_expected.to validate_presence_of(:birth_month_year_youth) }
-  it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
   it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
   it { is_expected.to have_many(:volunteers).through(:case_assignments) }
+
+  describe "validations" do
+    describe "case_number" do
+      it { is_expected.to validate_presence_of(:case_number) }
+      it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
+    end
+
+    describe "date_in_care" do
+      it "is valid when blank" do
+        casa_case = CasaCase.new(date_in_care: nil)
+        casa_case.valid?
+        expect(casa_case.errors[:date_in_care]).to eq([])
+      end
+
+      it "is not valid before 1989" do
+        casa_case = CasaCase.new(date_in_care: "1984-01-01".to_date)
+        expect(casa_case.valid?).to be false
+        expect(casa_case.errors[:date_in_care]).to eq(["is not valid: Youth's Date in Care cannot be prior to 1/1/1989."])
+      end
+
+      it "is not valid with a future date" do
+        casa_case = CasaCase.new(date_in_care: 1.day.from_now)
+        expect(casa_case.valid?).to be false
+        expect(casa_case.errors[:date_in_care]).to eq(["is not valid: Youth's Date in Care cannot be a future date."])
+      end
+
+      it "is valid today" do
+        casa_case = CasaCase.new(date_in_care: Time.now)
+        casa_case.valid?
+        expect(casa_case.errors[:date_in_care]).to eq([])
+      end
+
+      it "is valid in the past after 1989" do
+        casa_case = CasaCase.new(date_in_care: "1997-08-29".to_date)
+        casa_case.valid?
+        expect(casa_case.errors[:date_in_care]).to eq([])
+      end
+    end
+
+    describe "birth_month_year_youth" do
+      it { is_expected.to validate_presence_of(:birth_month_year_youth) }
+
+      it "is not valid before 1989" do
+        casa_case = CasaCase.new(birth_month_year_youth: "1984-01-01".to_date)
+        expect(casa_case.valid?).to be false
+        expect(casa_case.errors[:birth_month_year_youth]).to eq(["is not valid: Youth's Birth Month & Year cannot be prior to 1/1/1989."])
+      end
+
+      it "is not valid with a future date" do
+        casa_case = CasaCase.new(birth_month_year_youth: 1.day.from_now)
+        expect(casa_case.valid?).to be false
+        expect(casa_case.errors[:birth_month_year_youth]).to eq(["is not valid: Youth's Birth Month & Year cannot be a future date."])
+      end
+
+      it "is valid today" do
+        casa_case = CasaCase.new(birth_month_year_youth: Time.now)
+        casa_case.valid?
+        expect(casa_case.errors[:birth_month_year_youth]).to eq([])
+      end
+
+      it "is valid in the past after 1989" do
+        casa_case = CasaCase.new(birth_month_year_youth: "1997-08-29".to_date)
+        casa_case.valid?
+        expect(casa_case.errors[:birth_month_year_youth]).to eq([])
+      end
+    end
+  end
 
   describe "scopes" do
     describe ".due_date_passed" do
@@ -38,7 +102,7 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.birthday_next_month }
 
       context "when a youth has a birthday next month" do
-        let(:casa_case) { create(:casa_case, birth_month_year_youth: DateTime.now.next_month) }
+        let(:casa_case) { create(:casa_case, birth_month_year_youth: 10.years.ago + 1.month) }
 
         it { is_expected.to include(casa_case) }
       end
@@ -362,7 +426,7 @@ RSpec.describe CasaCase, type: :model do
       expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types).to match_array([type1])
 
-      casa_case.update_cleaning_contact_types({casa_case_contact_types_attributes: [{contact_type_id: type2.id}]})
+      casa_case.update_cleaning_contact_types({contact_type_ids: [type2.id]})
 
       expect(casa_case.casa_case_contact_types.count).to be 1
       expect(casa_case.contact_types.reload).to match_array([type2])

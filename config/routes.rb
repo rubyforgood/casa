@@ -111,7 +111,11 @@ Rails.application.routes.draw do
   end
   resources :emancipation_checklists, only: %i[index]
   resources :judges, only: %i[new create edit update]
-  resources :notifications, only: :index
+  resources :notifications, only: [:index] do
+    member do
+      post "mark_as_read"
+    end
+  end
   resources :other_duties, only: %i[new create edit index update]
   resources :missing_data_reports, only: %i[index]
   resources :learning_hours_reports, only: %i[index]

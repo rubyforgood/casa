@@ -1,33 +1,35 @@
 <div class="row">
   <%= render "thank_you_modal" %>
-  <div class="col-sm-12 form-header my-4">
-    <h1 class="pull-left"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
-    <%- if policy(:case_contact).new? & @casa_case.active? %>
-      <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: "main-btn primary-btn btn-sm btn-hover pull-left casa-case-button" do %>
-        <i class="lni lni-plus mr-10"></i>
-        New Case Contact
+  <div class="col-sm-12 form-header d-flex flex-wrap justify-content-between">
+    <h1 class="pull-left my-4"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
+    <div class="d-inline-flex flex-wrap my-4 gap-3">
+      <%- if policy(:case_contact).new? & @casa_case.active? %>
+        <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: "main-btn primary-btn btn-sm btn-hover pull-left" do %>
+          <i class="lni lni-plus mr-10"></i>
+          New Case Contact
+        <% end %>
+      <%- end %>
+      <% if @casa_case.active? %>
+        <%= link_to edit_casa_case_path(@casa_case), class: "main-btn primary-btn btn-sm btn-hover pull-left" do %>
+          <i class="lni lni-pencil mr-10"></i>
+          Edit Case Details
+        <% end %>
       <% end %>
-    <%- end %>
-    <% if @casa_case.active? %>
-      <%= link_to edit_casa_case_path(@casa_case), class: "main-btn primary-btn btn-sm btn-hover pull-left casa-case-button pull-left casa-case-button" do %>
-        <i class="lni lni-pencil mr-10"></i>
-        Edit Case Details
+      <% if @casa_case.in_transition_age? %>
+        <%= link_to(casa_case_emancipation_path(@casa_case),
+                class: "main-btn primary-btn btn-sm") do %>
+          Emancipation
+          <%= render BadgeComponent.new(text: @casa_case.decorate.emancipation_checklist_count,
+                                        type: :light,
+                                        margin: false) %>
+        <% end %>
       <% end %>
-    <% end %>
-    <% if @casa_case.in_transition_age? %>
-      <%= link_to(casa_case_emancipation_path(@casa_case),
-              class: "main-btn primary-btn btn-sm pull-left casa-case-button") do %>
-        Emancipation
-        <%= render BadgeComponent.new(text: @casa_case.decorate.emancipation_checklist_count,
-                                      type: :light,
-                                      margin: false) %>
+      <% if @casa_case.casa_org.show_fund_request %>
+        <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case),
+  class: "main-btn primary-btn btn-sm") %>
       <% end %>
-    <% end %>
-    <%= render "casa_cases/generate_report_modal" %>
-    <% if @casa_case.casa_org.show_fund_request %>
-      <%= link_to("New Fund Request", new_casa_case_fund_request_path(@casa_case),
-class: "btn btn-primary pull-left casa-case-button") %>
-    <% end %>
+      <%= render "casa_cases/generate_report_modal" %>
+    </div>
   </div>
 </div>
 <div class="card card-container">

@@ -11,7 +11,7 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
-  validate :validate_twilio_credentials, if: -> { twilio_enabled || twilio_account_sid.present? || twilio_api_key_sid.present? || twilio_api_key_secret.present? }, on: :update
+  validate :validate_twilio_credentials, if: :twilio_enabled, on: :update
 
   has_many :users, dependent: :destroy
   has_many :casa_cases, dependent: :destroy
@@ -95,6 +95,12 @@ class CasaOrg < ApplicationRecord
     contact_type_groups.joins(:contact_types).where(contact_types: {active: true}).alphabetically.uniq
   end
 
+  # Returns contact types that are active and tied to the CasaOrg as a an array of hashes that can be used by the multiple select component
+  # @return [ActiveRecord::Relation<ContactType>]
+  def contact_types
+    ContactType.joins(:contact_type_group).where(active: true, contact_type_group: {casa_org: self}).order(:name)
+  end
+
   # Given a specific date, returns the active mileage rate.
   # If more than one mileage rate is active for a given date, assumes the rate for the most recent date takes precedence.
   # For instance, given two mileage rates that are active, one set on January 1, 1970 and one set on January 3, 1970:
@@ -129,7 +135,7 @@ class CasaOrg < ApplicationRecord
     client = Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
     begin
       client.messages.list(limit: 1)
-    rescue Twilio::REST::RestError
+    rescue Twilio::REST::RestError, URI::InvalidURIError
       errors.add(:base, "Your Twilio credentials are incorrect, kindly check and try again.")
     end
   end
@@ -152,6 +158,7 @@ end
 #  footer_links                :string           default([]), is an Array
 #  learning_topic_active       :boolean          default(FALSE)
 #  name                        :string           not null
+#  other_duties_enabled        :boolean          default(TRUE)
 #  show_driving_reimbursement  :boolean          default(TRUE)
 #  show_fund_request           :boolean          default(FALSE)
 #  slug                        :string

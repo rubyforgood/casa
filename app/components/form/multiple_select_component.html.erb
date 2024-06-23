@@ -1,0 +1,23 @@
+<div class="select-style-1 mr-8"
+     data-controller="multiple-select"
+     data-multiple-select-options-value="<%= @options %>"
+     data-multiple-select-selected-items-value="<%= @selected_items %>"
+     data-multiple-select-with-options-value="true">
+
+  <template data-multiple-select-target="option">
+    <div class="d-flex align-items-baseline">
+      <span class='mr-5'>DATA_LABEL</span>
+      <% if @render_option_subtext %>
+        <small class="fst-italic fw-lighter"><em>DATA_SUB_TEXT</em></small>
+      <% end %>
+    </div>
+  </template>
+
+  <template data-multiple-select-target="item">
+    <div class="badge rounded-pill bg-primary active px-3">DATA_LABEL</div>
+  </template>
+
+  <%= @form.select @name, {}, { multiple: true } , {
+    data: { "multiple-select-target": "select",  } , class: "form-control-lg form-select form-select-lg input-group-lg"
+  } %>
+</div>

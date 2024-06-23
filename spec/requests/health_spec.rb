@@ -47,7 +47,7 @@ RSpec.describe "Health", type: :request do
   end
 
   describe "GET #monthly_line_graph_data" do
-    it "returns case contacts creation times in the last year" do
+    def setup
       # Create case contacts for testing
       create(:case_contact, notes: "Test Notes", created_at: 11.months.ago)
       create(:case_contact, notes: "", created_at: 11.months.ago)
@@ -57,8 +57,37 @@ RSpec.describe "Health", type: :request do
       # Create associated contact_topic_answers
       create(:contact_topic_answer, case_contact: CaseContact.first)
       create(:contact_topic_answer, case_contact: CaseContact.last)
+    end
+
+    after do
+      travel_back
+    end
+
+    it "returns case contacts creation times in the last year" do
+      travel_to Time.zone.local(2024, 5, 2)
+      setup
 
       get monthly_line_graph_data_health_index_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("application/json")
+
+      chart_data = JSON.parse(response.body)
+      expect(chart_data).to be_an(Array)
+      expect(chart_data.length).to eq(12)
+
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 2])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 1])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
+      expect(chart_data[3]).to eq([8.months.ago.strftime("%b %Y"), 0, 0, 0])
+    end
+
+    it "returns case contacts creation times in the last year (on the first of the month)" do
+      travel_to Time.zone.local(2024, 5, 1)
+      setup
+
+      get monthly_line_graph_data_health_index_path
+
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
 
@@ -74,17 +103,32 @@ RSpec.describe "Health", type: :request do
   end
 
   describe "GET #monthly_unique_users_graph_data" do
+    def setup
+      volunteer1 = create(:user, type: "Volunteer")
+      volunteer2 = create(:user, type: "Volunteer")
+      supervisor = create(:user, type: "Supervisor")
+      casa_admin = create(:user, type: "CasaAdmin")
+
+      create(:login_activity, user: volunteer1, created_at: 11.months.ago, success: true)
+      create(:login_activity, user: volunteer2, created_at: 11.months.ago, success: true)
+      create(:login_activity, user: supervisor, created_at: 11.months.ago, success: true)
+      create(:login_activity, user: casa_admin, created_at: 11.months.ago, success: true)
+      create(:login_activity, user: volunteer1, created_at: 10.months.ago, success: true)
+      create(:login_activity, user: volunteer2, created_at: 9.months.ago, success: true)
+      create(:login_activity, user: supervisor, created_at: 9.months.ago, success: true)
+      create(:login_activity, user: casa_admin, created_at: 9.months.ago, success: true)
+    end
+
+    after do
+      travel_back
+    end
+
     it "returns monthly unique users data for volunteers, supervisors, and admins in the last year" do
-      create(:user, type: "Volunteer", current_sign_in_at: 11.months.ago)
-      create(:user, type: "Volunteer", current_sign_in_at: 11.months.ago)
-      create(:user, type: "Supervisor", current_sign_in_at: 11.months.ago)
-      create(:user, type: "CasaAdmin", current_sign_in_at: 11.months.ago)
-      create(:user, type: "Volunteer", current_sign_in_at: 10.months.ago)
-      create(:user, type: "Volunteer", current_sign_in_at: 9.months.ago)
-      create(:user, type: "Supervisor", current_sign_in_at: 9.months.ago)
-      create(:user, type: "CasaAdmin", current_sign_in_at: 9.months.ago)
+      travel_to Time.zone.local(2024, 5, 2)
+      setup
 
       get monthly_unique_users_graph_data_health_index_path
+
       expect(response).to have_http_status(:ok)
       expect(response.content_type).to include("application/json")
 
@@ -95,7 +139,24 @@ RSpec.describe "Health", type: :request do
       expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1])
       expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0])
       expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
-      expect(chart_data[3]).to eq([8.months.ago.strftime("%b %Y"), 0, 0, 0])
+    end
+
+    it "returns monthly unique users data for volunteers, supervisors, and admins in the last year (on the first of the month)" do
+      travel_to Time.zone.local(2024, 5, 1)
+      setup
+
+      get monthly_unique_users_graph_data_health_index_path
+
+      expect(response).to have_http_status(:ok)
+      expect(response.content_type).to include("application/json")
+
+      chart_data = JSON.parse(response.body)
+      expect(chart_data).to be_an(Array)
+      expect(chart_data.length).to eq(12)
+
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
     end
   end
 end

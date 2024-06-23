@@ -4,13 +4,7 @@ require "support/stubbed_requests/webmock_helper"
 RSpec.describe TwilioService do
   describe "twilio API" do
     context "SMS messaging" do
-      before :all do
-        WebMockHelper.twilio_success_stub
-        WebMockHelper.short_io_stub
-        WebMock.disable_net_connect!
-        @short_url = ShortUrlService.new
-      end
-
+      let(:short_url) { ShortUrlService.new }
       let!(:casa_org) do
         create(
           :casa_org,
@@ -22,18 +16,23 @@ RSpec.describe TwilioService do
         )
       end
 
+      before do
+        WebMockHelper.short_io_stub_sms
+        WebMockHelper.twilio_success_stub
+      end
+
       it "can send a SMS with a short url successfully" do
-        @twilio = TwilioService.new(casa_org)
-        @short_url.create_short_url("https://www.google.com")
+        twilio = TwilioService.new(casa_org)
+        short_url.create_short_url("https://www.google.com")
         params = {
           From: "+15555555555",
           Body: "Execute Order 66 - ",
           To: "+12222222222",
-          URL: @short_url.short_url
+          URL: short_url.short_url
         }
 
         # response is a Twilio API obj
-        response = @twilio.send_sms(params)
+        response = twilio.send_sms(params)
         expect(response.error_code).to match nil
         expect(response.status).to match "sent"
         expect(response.body).to match "Execute Order 66 - https://42ni.short.gy/jzTwdF"
@@ -52,17 +51,22 @@ RSpec.describe TwilioService do
         )
       end
 
-      it "retruns nil" do
-        @short_url = ShortUrlService.new
-        @twilio = TwilioService.new(casa_org_twilio_disabled)
-        @short_url.create_short_url("https://www.google.com")
+      before do
+        WebMockHelper.short_io_stub_sms
+        WebMockHelper.twilio_success_stub
+      end
+
+      it "returns nil" do
+        short_url = ShortUrlService.new
+        twilio = TwilioService.new(casa_org_twilio_disabled)
+        short_url.create_short_url("https://www.google.com")
         params = {
           From: "+15555555555",
           Body: "Execute Order 66 - ",
           To: "+12222222222",
-          URL: @short_url.short_url
+          URL: short_url.short_url
         }
-        response = @twilio.send_sms(params)
+        response = twilio.send_sms(params)
         expect(response).to eq nil
       end
     end

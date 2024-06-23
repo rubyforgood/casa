@@ -1,4 +1,5 @@
 require "rails_helper"
+require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CasaOrg, type: :model do
   it { is_expected.to validate_presence_of(:name) }
@@ -28,13 +29,46 @@ RSpec.describe CasaOrg, type: :model do
   end
 
   describe "validate validate_twilio_credentials" do
-    let(:casa_org) { create(:casa_org) }
+    let(:casa_org) { create(:casa_org, twilio_enabled: true) }
+    let(:twilio_rest_error) do
+      error_response = double("error_response", status_code: 401, body: {})
+      Twilio::REST::RestError.new("Error message", error_response)
+    end
 
     it "validates twillio credentials on update", :aggregate_failures do
-      %i[twilio_account_sid twilio_api_key_sid].each do |field|
+      twillio_client = instance_double(Twilio::REST::Client)
+      allow(Twilio::REST::Client).to receive(:new).and_return(twillio_client)
+      allow(twillio_client).to receive_message_chain(:messages, :list).and_raise(twilio_rest_error)
+
+      %i[twilio_account_sid twilio_api_key_sid twilio_api_key_secret].each do |field|
         update_successful = casa_org.update(field => "")
-        expect(update_successful).to be false
+        aggregate_failures do
+          expect(update_successful).to be false
+          expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
+        end
+      end
+    end
+
+    it "returns error if credentials form invalid URI" do
+      twillio_client = instance_double(Twilio::REST::Client)
+      allow(Twilio::REST::Client).to receive(:new).and_return(twillio_client)
+      allow(twillio_client).to receive_message_chain(:messages, :list).and_raise(URI::InvalidURIError)
+
+      casa_org.update(twilio_account_sid: "some bad value")
+
+      aggregate_failures do
+        expect(casa_org).to_not be_valid
         expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
+      end
+    end
+
+    context "org with disabled twilio" do
+      let(:casa_org) { create(:casa_org, twilio_enabled: false) }
+
+      it "validates twillio credentials on update", :aggregate_failures do
+        %i[twilio_account_sid twilio_api_key_sid twilio_api_key_secret].each do |field|
+          expect(casa_org.update(field => "")).to be true
+        end
       end
     end
   end
@@ -64,27 +98,6 @@ RSpec.describe CasaOrg, type: :model do
     it "has a slug based on the name" do
       expect(org.slug).to eq "prince-george-casa"
     end
-  end
-
-  describe "user_count" do
-    let(:org) { create(:casa_org) }
-    subject(:count) { org.user_count }
-    before do
-      2.times { create(:user, casa_org: org) }
-    end
-    it { is_expected.to eq 2 }
-  end
-
-  describe "case_contacts_count" do
-    let(:org) { create(:casa_org) }
-    subject(:count) { org.case_contacts_count }
-    before do
-      5.times do
-        casa_case = create(:casa_case, casa_org: org)
-        3.times { create(:case_contact, casa_case: casa_case) }
-      end
-    end
-    it { is_expected.to eq 15 }
   end
 
   describe "generate_defaults" do

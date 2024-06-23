@@ -1,0 +1,33 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/postgres
+{
+  "dockerComposeFile": "docker-compose.yml",
+  "forwardPorts": [3000, 5432],
+  "workspaceFolder": "/workspaces/casa",
+  "service": "app",
+  "customizations": {
+    "vscode": {
+      "extensions": ["Shopify.ruby-extensions-pack"],
+      "settings": {
+        "rubyLsp.rubyVersionManager": {
+          "identifier": "rvm"
+        }
+      }
+    }
+  },
+  "containerEnv": {
+    "DATABASE_HOST": "postgres",
+    "POSTGRES_USER": "postgres",
+    "POSTGRES_PASSWORD": "postgres"
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "latest"
+    }
+  },
+
+  "postCreateCommand": ".devcontainer/post-create.sh"
+}

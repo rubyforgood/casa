@@ -51,6 +51,7 @@ class CasaOrgController < ApplicationController
       :court_report_template,
       :show_driving_reimbursement,
       :additional_expenses_enabled,
+      :other_duties_enabled,
       :twilio_account_sid,
       :twilio_phone_number,
       :twilio_api_key_sid,

@@ -34,7 +34,7 @@ class ReimbursementsController < ApplicationController
     @grouped_case_contacts.update_all(reimbursement_params.to_h)
     notification_recipients = [@case_contact.creator]
     notification_recipients << @case_contact.supervisor if @case_contact.supervisor
-    ReimbursementCompleteNotification.with(case_contact: @case_contact).deliver(notification_recipients)
+    ReimbursementCompleteNotifier.with(case_contact: @case_contact).deliver(notification_recipients)
     redirect_to reimbursements_path unless params[:ajax]
   end
 
@@ -69,7 +69,7 @@ class ReimbursementsController < ApplicationController
   def fetch_reimbursements
     case_contacts = CaseContact.joins(:casa_case).includes(
       :creator,
-      :case_contact_contact_type,
+      :case_contact_contact_types,
       contact_types: [:contact_type_group]
     ).preload(:casa_case)
     policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)

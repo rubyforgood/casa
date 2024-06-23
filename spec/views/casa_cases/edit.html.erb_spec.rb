@@ -2,6 +2,8 @@ require "rails_helper"
 
 RSpec.describe "casa_cases/edit", type: :view do
   let(:organization) { create(:casa_org) }
+  let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+  let(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
 
   before do
     enable_pundit(view, user)
@@ -40,6 +42,7 @@ RSpec.describe "casa_cases/edit", type: :view do
 
     it "includes an editable case number" do
       assign :casa_case, casa_case
+      assign :contact_types, organization.contact_types
 
       render template: "casa_cases/edit"
 
@@ -49,6 +52,7 @@ RSpec.describe "casa_cases/edit", type: :view do
 
     it "includes volunteer assignment" do
       assign :casa_case, casa_case
+      assign :contact_types, organization.contact_types
 
       render template: "casa_cases/edit"
 
@@ -64,6 +68,7 @@ RSpec.describe "casa_cases/edit", type: :view do
     it "does not have an option to select a volunteer that is already assigned to the casa case" do
       casa_case = create(:casa_case, casa_org: organization)
       assign :casa_case, casa_case
+      assign :contact_types, organization.contact_types
       assigned_volunteer = build_stubbed(:volunteer)
       build_stubbed(:case_assignment, volunteer: assigned_volunteer, casa_case: casa_case)
       unassigned_volunteer = create(:volunteer)

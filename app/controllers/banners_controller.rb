@@ -65,7 +65,7 @@ class BannersController < ApplicationController
   end
 
   def banner_params
-    params.require(:banner).permit(:active, :content, :name).merge(user: current_user)
+    BannerParameters.new(params, current_user, cookies[:browser_time_zone])
   end
 
   def deactivate_alternate_active_banner

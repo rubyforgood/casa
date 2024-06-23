@@ -10,6 +10,11 @@ class CaseContact < ApplicationRecord
   validates :occurred_at, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
   validate :occurred_at_not_in_future
+  validates :occurred_at, comparison: {
+    greater_than_or_equal_to: "1989-01-01".to_date,
+    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    allow_nil: true
+  }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
   validate :volunteer_address_is_valid, if: :active_or_expenses?
@@ -26,8 +31,8 @@ class CaseContact < ApplicationRecord
   validates :casa_case_id, presence: true, if: :active?
   validate :draft_case_ids_not_empty, if: :active_or_details?
 
-  has_many :case_contact_contact_type
-  has_many :contact_types, through: :case_contact_contact_type, source: :contact_type
+  has_many :case_contact_contact_types
+  has_many :contact_types, through: :case_contact_contact_types
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
@@ -48,7 +53,6 @@ class CaseContact < ApplicationRecord
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
   validates_associated :additional_expenses
 
-  accepts_nested_attributes_for :case_contact_contact_type
   accepts_nested_attributes_for :casa_case
   accepts_nested_attributes_for :contact_topic_answers, update_only: true
 
@@ -164,7 +168,7 @@ class CaseContact < ApplicationRecord
 
   def update_cleaning_contact_types(args)
     transaction do
-      case_contact_contact_type.destroy_all
+      contact_types.clear
       update(args)
     end
   end
@@ -278,6 +282,16 @@ class CaseContact < ApplicationRecord
     casa_case_ids.each_with_object({}) do |casa_case_id, hash|
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
+  end
+
+  def form_steps
+    steps = FORM_STEPS.dup
+    steps.delete(:expenses) unless casa_org_any_expenses_enabled?
+    steps.freeze
+  end
+
+  def casa_org_any_expenses_enabled?
+    creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
   end
 
   private_class_method def self.sorted_by_params

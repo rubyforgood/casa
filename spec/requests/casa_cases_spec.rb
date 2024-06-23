@@ -13,7 +13,7 @@ RSpec.describe "/casa_cases", type: :request do
       "date_in_care(2i)": date_in_care.month,
       "date_in_care(1i)": date_in_care.year,
       casa_org_id: organization.id,
-      casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+      contact_type_ids: [type1.id]
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
@@ -180,7 +180,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "1234",
           birth_month_year_youth: pre_transition_aged_youth_age,
           casa_org_id: other_org.id,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
 
         expect { post casa_cases_url, params: {casa_case: attributes} }.to(
@@ -207,7 +207,14 @@ RSpec.describe "/casa_cases", type: :request do
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
             expect(response).to have_http_status(:unprocessable_entity)
-            expect(response.body).to eq(["Case number can't be blank", "Birth month year youth can't be blank", "Casa case contact types : At least one contact type must be selected"].to_json)
+            expected_response_body = [
+              "Birth month year youth can't be blank",
+              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be a future date.",
+              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be prior to 1/1/1989.",
+              "Case number can't be blank",
+              "Casa case contact types : At least one contact type must be selected"
+            ].to_json
+            expect(response.body).to eq(expected_response_body)
           end
         end
 
@@ -251,7 +258,7 @@ RSpec.describe "/casa_cases", type: :request do
         {
           case_number: "12345",
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
       end
 
@@ -677,7 +684,7 @@ RSpec.describe "/casa_cases", type: :request do
           case_number: "12345",
           court_report_status: :completed,
           case_court_orders_attributes: orders_attributes,
-          casa_case_contact_types_attributes: [{contact_type_id: type1.id}]
+          contact_type_ids: [type1.id]
         }
       end
 

@@ -5,10 +5,10 @@ RSpec.describe FollowupService do
     let(:case_contact) { create(:case_contact) }
     let(:creator) { create(:volunteer) }
     let(:note) { "This is a test note." }
-    let(:notification_double) { double("FollowupNotification") }
+    let(:notification_double) { double("FollowupNotifier") }
 
     before do
-      allow(FollowupNotification).to receive(:with).and_return(notification_double)
+      allow(FollowupNotifier).to receive(:with).and_return(notification_double)
       allow(notification_double).to receive(:deliver)
     end
 
@@ -22,7 +22,7 @@ RSpec.describe FollowupService do
       expect(followup.creator).to eq(creator)
       expect(followup.followupable).to eq(case_contact)
 
-      expect(FollowupNotification).to have_received(:with).with(
+      expect(FollowupNotifier).to have_received(:with).with(
         followup: followup,
         created_by: creator
       )
@@ -37,7 +37,7 @@ RSpec.describe FollowupService do
 
       it "does not send a notification" do
         expect(FollowupService.create_followup(case_contact, creator, note)).to be_a_new(Followup)
-        expect(FollowupNotification).not_to have_received(:with)
+        expect(FollowupNotifier).not_to have_received(:with)
       end
     end
   end

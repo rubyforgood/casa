@@ -26,7 +26,7 @@
                   <td>
                     <% if @volunteer.active? && assignment.casa_case.active? && assignment.active? %>
                       Volunteer is <%= render BadgeComponent.new(text: "Active", type: :success) %>
-                    <% elsif @volunteer.active? && assignment.casa_case.active? && !assignment.active? %>
+                    <% elsif @volunteer.active? && assignment.casa_case.active? && assignment.inactive? %>
                       Volunteer is <%= render BadgeComponent.new(text: "Unassigned", type: :danger) %>
                     <% elsif @volunteer.active? %>
                       Case was deactivated
