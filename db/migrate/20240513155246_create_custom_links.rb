@@ -8,6 +8,7 @@ class CreateCustomLinks < ActiveRecord::Migration[7.1]
       t.text :url
       t.references :casa_org, null: false, foreign_key: true
       t.boolean :soft_delete, null: false, default: false
+      t.boolean :active, null: false, default: true
       t.timestamps
     end
   end
