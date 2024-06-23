@@ -1,0 +1,64 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card-style mb-30">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h3>Custom Link</h3>
+        </div>
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper">
+            <span class="ml-5">
+              <%= link_to new_custom_link_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+                <i class="lni lni-plus mr-10"></i>
+                New Custom Link
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrapper table-responsive">
+        <table class="table striped-table" id="contact-topics">
+          <thead>
+            <tr>
+              <th>Display Text</th>
+              <th>URL</th>
+              <th>Active?</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @custom_links.each do |custom_link| %>
+              <% id = "custom_link-#{custom_link.id}" %>
+              <tr>
+                <td scope="row" class="min-width">
+                  <%= custom_link.text %>
+                </td>
+                <td scope="row" class="min-width pre-line"><%= custom_link.url %></td>
+                <td scope="row" class="min-width">
+                  <%= custom_link.active ? "Yes" : "No" %>
+                </td>
+                <td>
+                  <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true)) do %>
+                    <li><%= link_to "Edit", edit_custom_link_path(custom_link), class: "dropdown-item" %></li>
+                    <li><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: id, klass: "dropdown-item")) %></li>
+                  <% end %>
+                </td>
+              </tr>
+              <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
+                <% component.with_header(text: "Delete Custom Link?", id: id) %>
+                <% component.with_body(text: [
+                  "This custom link will be deleted and will no longer be visible in profile dropdown."]) %>
+                <% component.with_footer do %>
+                  <%= link_to soft_delete_custom_link_path(custom_link), method: :delete,
+                    class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
+                    <i class="lni lni-trash-can mr-10"></i>
+                    Delete Custom Link
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
