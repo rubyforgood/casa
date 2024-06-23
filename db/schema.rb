@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_13_155246) do
+ActiveRecord::Schema[7.1].define(version: 2024_06_10_071054) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -304,6 +304,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_13_155246) do
     t.string "text"
     t.text "url"
     t.bigint "casa_org_id", null: false
+    t.boolean "soft_delete", default: false, null: false
+    t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_org_id"], name: "index_custom_links_on_casa_org_id"

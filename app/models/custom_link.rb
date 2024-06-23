@@ -1,5 +1,6 @@
 class CustomLink < ApplicationRecord
   belongs_to :casa_org
+  validates :soft_delete, inclusion: [true, false]
   scope :active, -> { where(active: true, soft_delete: false) }
 end
 
@@ -8,6 +9,7 @@ end
 # Table name: custom_links
 #
 #  id          :bigint           not null, primary key
+#  active      :boolean          default(TRUE), not null
 #  soft_delete :boolean          default(FALSE), not null
 #  text        :string
 #  url         :text
