@@ -65,7 +65,7 @@ class BannersController < ApplicationController
   end
 
   def banner_params
-    BannerParameters.new(params, current_user, cookies[:browser_time_zone])
+    BannerParameters.new(params, current_user, browser_time_zone)
   end
 
   def deactivate_alternate_active_banner

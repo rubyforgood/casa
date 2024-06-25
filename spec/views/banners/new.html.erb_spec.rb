@@ -9,6 +9,9 @@ RSpec.describe "banners/new", type: :view do
 
       allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(current_organization)
+      without_partial_double_verification do
+        allow(view).to receive(:browser_time_zone).and_return("America/New_York")
+      end
       allow(current_organization).to receive(:has_alternate_active_banner?).and_return(true)
 
       assign :banners, [current_organization_banner]
@@ -30,6 +33,9 @@ RSpec.describe "banners/new", type: :view do
 
         allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
+        without_partial_double_verification do
+          allow(view).to receive(:browser_time_zone).and_return("America/New_York")
+        end
         allow(current_organization).to receive(:has_alternate_active_banner?).and_return(true)
 
         assign :banners, [current_organization_banner]
@@ -51,6 +57,9 @@ RSpec.describe "banners/new", type: :view do
 
         allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
+        without_partial_double_verification do
+          allow(view).to receive(:browser_time_zone).and_return("America/New_York")
+        end
         allow(current_organization).to receive(:has_alternate_active_banner?).and_return(false)
 
         assign :banners, []
