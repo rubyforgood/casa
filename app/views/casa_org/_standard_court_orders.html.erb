@@ -1,0 +1,61 @@
+<div class="row">
+  <div class="col-lg-12">
+    <div class="card-style mb-30">
+      <div class="row align-items-center">
+        <div class="col-md-6">
+          <h3>Standard Court Orders</h3>
+        </div>
+        <div class="col-md-6">
+          <div class="breadcrumb-wrapper">
+            <span class="ml-5">
+              <%= link_to new_standard_court_order_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
+                <i class="lni lni-plus mr-10"></i>
+                New Standard Court Order
+              <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="table-wrapper table-responsive">
+        <table class="table striped-table" id="standard-court-orders">
+          <thead>
+            <tr>
+              <th>Value</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% @standard_court_orders.each do |standard_court_order| %>
+              <% id = "standard_court_order-#{standard_court_order.id}" %>
+              <tr>
+                <td scope="row" class="min-width">
+                  <%= standard_court_order.value %>
+                </td>
+                <td>
+                  <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true)) do %>
+                    <li><%= link_to "Edit", edit_standard_court_order_path(standard_court_order), class: "dropdown-item" %></li>
+                    <li><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: id, klass: "dropdown-item")) %></li>
+                  <% end %>
+                </td>
+              </tr>
+              <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
+                <% component.with_header(text: "Delete Standard Court Order?", id: id) %>
+                <!---->TODO: update confirmation text
+                <% component.with_body(text: [
+                  "This standard court order will be deleted and will no longer be presented while filling out case details.",
+                  "This will not affect case contacts that have already been created."]) %>
+                <% component.with_footer do %>
+                  <%= link_to standard_court_order_path(standard_court_order), method: :delete,
+                    class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
+                    <i class="lni lni-trash-can mr-10"></i>
+                    Delete Standard Court Order
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

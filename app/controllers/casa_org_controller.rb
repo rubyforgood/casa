@@ -7,6 +7,7 @@ class CasaOrgController < ApplicationController
   before_action :set_learning_hour_topics, only: %i[edit update]
   before_action :set_sent_emails, only: %i[edit update]
   before_action :set_contact_topics, only: %i[edit update]
+  before_action :set_standard_court_orders, only: %i[edit update]
   before_action :require_organization!
   after_action :verify_authorized
   before_action :set_active_storage_url_options, only: %i[edit update]
@@ -88,6 +89,10 @@ class CasaOrgController < ApplicationController
 
   def set_contact_topics
     @contact_topics = @casa_org.contact_topics.where(soft_delete: false)
+  end
+
+  def set_standard_court_orders
+    @standard_court_orders = @casa_org.standard_court_orders
   end
 
   def set_active_storage_url_options

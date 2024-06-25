@@ -12,6 +12,7 @@ RSpec.describe CasaOrg, type: :model do
   it { is_expected.to have_one_attached(:logo) }
   it { is_expected.to have_one_attached(:court_report_template) }
   it { is_expected.to have_many(:contact_topics) }
+  it { is_expected.to have_many(:standard_court_orders).dependent(:destroy) }
 
   it "has unique name" do
     org = create(:casa_org)
