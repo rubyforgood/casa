@@ -19,7 +19,7 @@ class CasaCasesController < ApplicationController
       format.html {}
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
-        csv = CaseContactsExportCsvService.new(case_contacts).perform
+        csv = CaseContactsExportCsvService.new(case_contacts, CaseContactReport::COLUMNS).perform
         send_data csv, filename: case_contact_csv_name(case_contacts)
       end
       format.xlsx do
