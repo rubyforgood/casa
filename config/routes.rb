@@ -138,6 +138,8 @@ Rails.application.routes.draw do
     delete "soft_delete", on: :member
   end
 
+  resources :standard_court_orders, except: %i[index show]
+
   resources :followup_reports, only: :index
   resources :placement_reports, only: :index
   resources :banners, except: %i[show] do
