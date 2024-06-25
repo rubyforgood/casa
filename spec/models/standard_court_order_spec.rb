@@ -1,11 +1,11 @@
-require 'rails_helper'
+require "rails_helper"
 
 RSpec.describe StandardCourtOrder, type: :model do
-  describe 'associations' do
+  describe "associations" do
     it { is_expected.to belong_to(:casa_org) }
   end
 
-  describe 'validations' do
+  describe "validations" do
     subject { FactoryBot.build(:standard_court_order) }
 
     it { is_expected.to validate_presence_of(:value) }
