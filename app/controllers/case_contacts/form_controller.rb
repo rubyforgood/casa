@@ -60,7 +60,7 @@ class CaseContacts::FormController < ApplicationController
       @contact_types = current_organization.contact_types
     end
     @contact_types.order(name: :asc)
-
+    @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
   end
 

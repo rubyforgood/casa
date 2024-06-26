@@ -129,11 +129,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
         create_contact_types(volunteer_casa_case_one.casa_org)
 
         visit new_case_contact_path
-
         complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School], contact_made: true, medium: nil, occurred_on: "04/04/2020", hours: 1, minutes: 45)
         expect(page).to have_text("Medium type can't be blank")
 
-        complete_details_page(case_numbers: [volunteer_casa_case_one.case_number], contact_types: %w[School], contact_made: true, medium: "In Person", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+        choose_medium("In Person")
         complete_notes_page
         fill_in_expenses_page(want_reimbursement: true)
         click_on "Submit"
@@ -168,7 +167,10 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
         visit new_case_contact_path
 
-        find(".ts-control").click
+        within find("#contact-type-id-selector") do
+          find(".ts-control").click
+        end
+
         expect(page).not_to have_text("Attorney")
         expect(page).to have_text("School")
         expect(page).to have_text("Therapist")
@@ -228,8 +230,8 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
           it "selects no cases" do
             visit new_case_contact_path
 
-            expect(page).not_to have_checked_field(first_case.case_number)
-            expect(page).not_to have_checked_field(second_case.case_number)
+            expect(page).not_to have_text(first_case.case_number)
+            expect(page).not_to have_text(second_case.case_number)
           end
 
           it "warns user about using the back button on step 1" do
@@ -243,8 +245,8 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
             it "select the cases defined in the params" do
               visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
 
-              expect(page).to have_checked_field(first_case.case_number)
-              expect(page).not_to have_checked_field(second_case.case_number)
+              expect(page).to have_text(first_case.case_number)
+              expect(page).not_to have_text(second_case.case_number)
             end
 
             it "does not warn user when clicking the back button" do
@@ -264,7 +266,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
         it "selects the only case" do
           visit new_case_contact_path
 
-          expect(page).to have_checked_field(first_case.case_number)
+          expect(page).to have_text(first_case.case_number)
         end
 
         it "does not warn user when clicking the back button" do

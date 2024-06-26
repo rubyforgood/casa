@@ -1,0 +1,10 @@
+<p>Select the relevant cases below by searching or selecting from the dropdown menu.</p>
+<div id="draft-case-id-selector">
+  <%= render(Form::MultipleSelectComponent.new(
+    form: form,
+    name: :draft_case_ids,
+    options: options.decorate.map { |casa_case| casa_case.hash_for_multi_select },
+    selected_items: selected_items,
+    render_option_subtext: current_user.supervisor?
+  )) %>
+</div>
