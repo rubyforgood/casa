@@ -163,7 +163,8 @@ class DbPopulator
       miles_driven: rng.rand(5..40),
       want_driving_reimbursement: random_true_false,
       contact_made: random_true_false,
-      notes: note_generator
+      notes: note_generator,
+      draft_case_ids: [casa_case&.id]
     )
   end
 
