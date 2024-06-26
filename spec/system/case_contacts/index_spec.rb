@@ -14,7 +14,9 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         [
           create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1),
           create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today),
+          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today,
+            contact_types: [create(:contact_type, name: "DRAFT Case Contact")])
         ]
       end
 
@@ -32,6 +34,22 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         sign_in volunteer
         visit case_contacts_path
         expect(page).to have_no_link("Bob Loblaw")
+      end
+
+      it "allows the volunteer to delete a draft they created" do
+        case_contacts
+        sign_in volunteer
+        visit case_contacts_path
+
+        card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        expect(card).to_not be_nil
+
+        within_element(card) do
+          expect(card).to have_text("Draft")
+          click_link "Delete"
+        end
+
+        expect(page).to_not have_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
       end
 
       it "displays the contact type groups" do

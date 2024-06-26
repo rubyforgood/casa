@@ -276,7 +276,7 @@ GEM
     json (2.7.2)
     json-schema (4.1.1)
       addressable (>= 2.8)
-    jwt (2.8.1)
+    jwt (2.8.2)
       base64
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
@@ -284,6 +284,7 @@ GEM
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
     lint_roller (1.1.0)
+    logger (1.6.0)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -306,11 +307,11 @@ GEM
     minitest (5.23.1)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
-    multipart-post (2.4.0)
+    multipart-post (2.4.1)
     mutex_m (0.2.0)
     net-http-persistent (4.0.1)
       connection_pool (~> 2.2)
-    net-imap (0.4.13)
+    net-imap (0.4.14)
       date
       net-protocol
     net-pop (0.1.2)
@@ -320,14 +321,14 @@ GEM
     net-smtp (0.5.0)
       net-protocol
     nio4r (2.7.3)
-    nokogiri (1.16.5)
+    nokogiri (1.16.6)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
-    nokogiri (1.16.5-arm64-darwin)
+    nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-darwin)
+    nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.5-x86_64-linux)
+    nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     noticed (2.3.2)
       rails (>= 6.1.0)
@@ -485,8 +486,9 @@ GEM
       nokogiri (>= 1.12.0)
     scout_apm (5.3.8)
       parser
-    selenium-webdriver (4.21.1)
+    selenium-webdriver (4.22.0)
       base64 (~> 0.2)
+      logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
@@ -509,7 +511,7 @@ GEM
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       sprockets (>= 3.0.0)
-    standard (1.37.0)
+    standard (1.39.0)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.0)
       rubocop (~> 1.64.0)
@@ -531,7 +533,7 @@ GEM
     timeout (0.4.1)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (7.0.2)
+    twilio-ruby (7.2.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
@@ -646,7 +648,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  standard (~> 1.37.0)
+  standard (~> 1.39.0)
   stimulus-rails
   strong_migrations
   traceroute

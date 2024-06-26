@@ -66,7 +66,7 @@ class CaseContactsController < ApplicationController
   end
 
   def destroy
-    authorize CaseContact
+    authorize @case_contact
 
     @case_contact.destroy
     flash[:notice] = "Contact is successfully deleted."

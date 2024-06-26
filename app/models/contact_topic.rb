@@ -11,6 +11,16 @@ class ContactTopic < ApplicationRecord
 
   scope :active, -> { where(active: true, soft_delete: false) }
 
+  scope :with_answers_in, ->(case_contacts_scope) do
+    # unscope order in case it collides with distinct
+    case_contact_ids = case_contacts_scope.unscope(:order).select(:id).distinct
+
+    # AR will use the query above as a subquery within this one's where clause, ie:
+    ContactTopic                                    # select …
+      .joins(contact_topic_answers: :case_contact)  # from contact_topics inner join contact_topics …
+      .where(case_contact: {id: case_contact_ids})  # where case_contact.id in (select distinct case_contacts.id from …
+  end
+
   class << self
     def generate_for_org!(casa_org)
       default_contact_topics.each do |topic|

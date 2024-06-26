@@ -16,7 +16,7 @@
               Select columns:
             </h6>
             <%= form.fields_for :filtered_csv_cols do |ff| %>
-              <% CaseContactsExportCsvService.DATA_COLUMNS.keys.each_with_index do |column, index| %>
+              <% CaseContactReport::COLUMNS.each_with_index do |column, index| %>
                 <div class="form-check checkbox-style m-2">
                   <%= ff.check_box column, { class: "form-check-input", checked: true }, true, false %>
                   <%= ff.label column, column.to_s.titleize, class: "form-check-label" %>
