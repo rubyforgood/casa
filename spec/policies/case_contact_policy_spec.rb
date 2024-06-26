@@ -90,13 +90,37 @@ RSpec.describe CaseContactPolicy do
     end
   end
 
-  permissions :create?, :destroy? do
+  permissions :destroy? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin, case_contact)
     end
 
-    it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer, case_contact)
+    context "when volunteer is assigned" do
+      context "case_contact is a draft" do
+        let(:case_contact) { build_stubbed(:case_contact, :started_status, creator: volunteer) }
+
+        it { is_expected.to permit(volunteer, case_contact) }
+      end
+
+      context "case_contact is not a draft" do
+        let(:case_contact) { build_stubbed(:case_contact, status: "active", creator: volunteer) }
+
+        it { is_expected.not_to permit(volunteer, case_contact) }
+      end
+    end
+
+    context "when volunteer is not assigned" do
+      context "case_contact is a draft" do
+        let(:case_contact) { build_stubbed(:case_contact, :started_status, creator: build_stubbed(:volunteer)) }
+
+        it { is_expected.not_to permit(volunteer, case_contact) }
+      end
+
+      context "case_contact is not a draft" do
+        let(:case_contact) { build_stubbed(:case_contact, status: "active", creator: build_stubbed(:volunteer)) }
+
+        it { is_expected.not_to permit(volunteer, case_contact) }
+      end
     end
   end
 end
