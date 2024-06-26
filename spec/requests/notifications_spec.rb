@@ -131,7 +131,9 @@ RSpec.describe "/notifications", type: :request do
       it "redirects to the notification event URL" do
         post mark_as_read_notification_path(notification)
 
-        expect(response).to redirect_to(notification.event.url)
+        case_contact_url = edit_case_contact_path(CaseContact.last)
+
+        expect(response).to redirect_to(case_contact_url)
       end
     end
 

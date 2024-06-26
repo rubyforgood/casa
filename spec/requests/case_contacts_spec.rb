@@ -84,23 +84,6 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     it { is_expected.to have_http_status(:redirect) }
-
-    describe "unread notification" do
-      let(:followup) { create(:followup, case_contact: case_contact, creator: admin) }
-
-      subject(:request) do
-        get edit_case_contact_url(case_contact, notification_id: admin.notifications.first.id)
-
-        response
-      end
-
-      before { FollowupResolvedNotifier.with(followup: followup, created_by: admin).deliver(followup.creator) }
-
-      it "is marked as read" do
-        request
-        expect(admin.notifications.unread).to eq([])
-      end
-    end
   end
 
   describe "DELETE /destroy" do
