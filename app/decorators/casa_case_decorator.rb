@@ -118,6 +118,6 @@ class CasaCaseDecorator < Draper::Decorator
   def hash_for_multi_select
     volunteers = object.volunteers.map(&:display_name).join(", ")
 
-    {value: object.id, text: object.case_number, group: object.casa_org_id, subtext: volunteers}
+    {value: object.id, text: object.case_number, group: object&.casa_org_id, subtext: volunteers}
   end
 end
