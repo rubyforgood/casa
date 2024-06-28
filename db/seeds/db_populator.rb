@@ -58,6 +58,21 @@ class DbPopulator
 
   private # -------------------------------------------------------------------------------------------------------
 
+  # Create other duties (only if Volunteer)
+  def create_other_duties(casa_org)
+    Volunteer.where(casa_org: casa_org).find_each do |v|
+      rand(1..5).times do 
+        OtherDuty.create!(
+          creator_id: v.id, 
+          creator_type: "Volunteer", 
+          occurred_at: Faker::Date.between(2.days.ago, Date.today), 
+          duration_minutes: rand(5..180), 
+          notes: Faker::Lorem.words(3..7)
+        )
+      end
+    end
+  end
+
   # Create 2 judges for each casa_org.
   def create_judges(casa_org)
     2.times { Judge.create(name: Faker::Name.name, casa_org: casa_org) }
