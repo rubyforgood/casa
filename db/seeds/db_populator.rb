@@ -59,8 +59,8 @@ class DbPopulator
   private # -------------------------------------------------------------------------------------------------------
 
   # Create other duties (only if Volunteer)
-  def create_other_duties(casa_org)
-    Volunteer.where(casa_org: casa_org).find_each do |v|
+  def create_other_duties
+    Volunteer.where.find_each do |v|
       rand(1..5).times do 
         OtherDuty.create!(
           creator_id: v.id, 
