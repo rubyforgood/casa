@@ -240,7 +240,7 @@ class CaseContact < ApplicationRecord
   end
 
   def requested_followup
-    followups.requested.first
+    followups.find(&:requested?)
   end
 
   def should_send_reimbursement_email?

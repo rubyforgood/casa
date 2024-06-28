@@ -115,7 +115,12 @@ class CaseContactsController < ApplicationController
   end
 
   def all_case_contacts
-    policy_scope(current_organization.case_contacts).includes(:creator, contact_types: :contact_type_group)
+    policy_scope(current_organization.case_contacts).includes(
+      :creator,
+      :followups,
+      :contact_types,
+      contact_topic_answers: [:contact_topic]
+    )
   end
 
   def additional_expense_params

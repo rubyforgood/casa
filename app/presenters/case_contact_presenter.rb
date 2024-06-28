@@ -28,6 +28,6 @@ class CaseContactPresenter < BasePresenter
     CasaOrg.includes(:casa_cases)
       .references(:casa_cases)
       .find_by(id: current_user.casa_org_id)
-      .casa_cases.includes(:case_contacts)
+      .casa_cases
   end
 end
