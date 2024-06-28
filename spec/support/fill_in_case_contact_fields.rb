@@ -7,15 +7,30 @@ module FillInCaseContactFields
   # @param hours [Integer]
   # @param minutes [Integer]
   def complete_details_page(contact_made:, medium: nil, occurred_on: nil, hours: nil, minutes: nil, case_numbers: [], contact_types: [], contact_topics: [])
-    case_numbers.each do |case_number|
-      check case_number
+    within find("#draft-case-id-selector") do
+      find(".ts-control").click
     end
 
-    find(".ts-control").click
+    case_numbers.each do |case_number|
+      checkbox_for_case_number = find("span", text: case_number).sibling("input")
+      checkbox_for_case_number.click unless checkbox_for_case_number.checked?
+    end
+
+    within find("#draft-case-id-selector") do
+      find(".ts-control").click
+    end
+
+    within find("#contact-type-id-selector") do
+      find(".ts-control").click
+    end
+
     contact_types.each do |contact_type|
       find("span", text: contact_type).click
     end
-    find(".ts-control").click
+
+    within find("#contact-type-id-selector") do
+      find(".ts-control").click
+    end
 
     within "#enter-contact-details" do
       choose contact_made ? "Yes" : "No"
@@ -30,6 +45,12 @@ module FillInCaseContactFields
     end
 
     click_on "Save and Continue"
+  end
+
+  def choose_medium(medium, click_continue: true)
+    choose medium if medium
+
+    click_on "Save and Continue" if click_continue
   end
 
   # @param notes [String]

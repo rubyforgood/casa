@@ -6,20 +6,9 @@
 
     <div class="card-style-1 pl-25 mb-10">
       <h4 class="mb-20"><label for="case_contact_casa_case">1. Select the relevant <%= "case".pluralize(@casa_cases.count) %> for this contact <span class="red-letter">*</span></label></h4>
-      <div class="casa-case-scroll">
+      <div class="d-flex flex-column gap-4">
         <%= form.hidden_field :draft_case_ids, multiple: true, value: nil %>
-        <% @casa_cases.each do |casa_case| %>
-          <div class="form-check checkbox-style mb-10 ml-5">
-            <%= check_box_tag "case_contact[draft_case_ids][]",
-              casa_case.id,
-              @case_contact.draft_case_ids.include?(casa_case.id),
-              id: "case_contact_draft_case_id_#{casa_case.id}",
-              class: ["form-check-input", "casa-case-id", "case-contacts-form-checkbox"] %>
-            <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
-              <%= casa_case.case_number %>
-            </label>
-          </div>
-        <% end %>
+        <%= render "relevant_cases", form: form, options: @casa_cases, selected_items: @selected_cases, casa_cases: @casa_cases %>
       </div>
     </div>
     <div class="card-style-1 pl-25 pr-25 mb-10">

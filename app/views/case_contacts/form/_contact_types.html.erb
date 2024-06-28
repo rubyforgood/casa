@@ -1,8 +1,10 @@
 <p>Choose from the available options below by searching or selecting from the dropdown menu.</p>
-<%= render(Form::MultipleSelectComponent.new(
-  form: form,
-  name: :contact_type_ids,
-  options: options.decorate.map { |ct| ct.hash_for_multi_select_with_cases(casa_cases&.pluck(:id)) },
-  selected_items: selected_items,
-  render_option_subtext: true
-)) %>
+<div id="contact-type-id-selector">
+  <%= render(Form::MultipleSelectComponent.new(
+    form: form,
+    name: :contact_type_ids,
+    options: options.decorate.map { |ct| ct.hash_for_multi_select_with_cases(casa_cases&.pluck(:id)) },
+    selected_items: selected_items,
+    render_option_subtext: true
+  )) %>
+</div>
