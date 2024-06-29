@@ -21,9 +21,9 @@ jobs:
   rspec_parallel:
     name: RSpec Groups ${{ inputs.groups }}
     runs-on: ubuntu-latest
-    timeout-minutes: 4
     env:
       RAILS_ENV: test
+      TEST_MAX_DURATION: 30
       BUNDLE_WITHOUT: "development"
       CI_TOTAL_JOBS: ${{ inputs.group_count }}
       CI_JOB_INDEX: ${{ inputs.groups }}

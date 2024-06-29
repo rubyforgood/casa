@@ -31,14 +31,14 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
   end
 
-  context "there are many volunteers with birthdays next month" do
-    volunteer_count = 10
+  context "there are multiple volunteers with birthdays next month" do
+    let(:supervisor) { create(:supervisor) }
     let!(:volunteer) do
-      create_list(:volunteer, volunteer_count, :with_assigned_supervisor, date_of_birth: next_month)
+      create_list(:volunteer, 4, :with_assigned_supervisor, date_of_birth: next_month, supervisor: supervisor)
     end
 
-    it "creates many notifications" do
-      expect { rake_task }.to change { Noticed::Notification.count }.by(volunteer_count)
+    it "creates multiple notifications" do
+      expect { rake_task }.to change { Noticed::Notification.count }.by(4)
     end
   end
 
