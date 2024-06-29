@@ -54,7 +54,7 @@
           <% end %>
         </div>
       </div>
-      <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", klass: "pull-left mx-2 my-1")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", klass: "pull-left mx-2 my-1 status-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "status_option_active", "true", true,
                             class: "form-check-input",
