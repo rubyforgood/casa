@@ -2,25 +2,20 @@
   <div class="row casa-case-filters">
     <div class="col-sm-12 flex align-items-center">
       <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
-        </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton1">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_active", "Active", true,
-                              class: "form-check-input",
-                              data: { value: "Active" } %>
-            <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_inactive", "Inactive", false,
-                              class: "form-check-input",
-                              data: { value: "Inactive" } %>
-            <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Status", klass: "pull-left mx-2 my-1 status-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_active", "Active", true,
+                            class: "form-check-input",
+                            data: { value: "Active" } %>
+          <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_inactive", "Inactive", false,
+                            class: "form-check-input",
+                            data: { value: "Inactive" } %>
+          <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
+        </div>
+      <% end %>
       <div class="dropdown pull-left mx-2 my-1">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Volunteer
