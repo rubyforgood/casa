@@ -1,5 +1,5 @@
 class CustomLinksController < ApplicationController
-  before_action :set_custom_link, only: %i[edit update soft_delete]
+  before_action :set_custom_link, only: %i[edit update destroy]
 
   # GET /custom_links/new
   def new
@@ -20,7 +20,7 @@ class CustomLinksController < ApplicationController
     @custom_link = CustomLink.new(custom_link_params)
 
     if @custom_link.save
-      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully created."
+      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully created.'
     else
       render :new
     end
@@ -30,18 +30,18 @@ class CustomLinksController < ApplicationController
   def update
     authorize @custom_link
     if @custom_link.update(custom_link_params)
-      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully updated."
+      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully updated.'
     else
       render :edit
     end
   end
 
-  # DELETE /contact_topics/1/soft_delete
-  def soft_delete
+  # DELETE /custom_links/1/delete
+  def destroy
     authorize @custom_link
 
-    if @custom_link.update(soft_delete: true)
-      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully removed."
+    if @custom_link.destroy
+      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully removed.'
     else
       render :show, status: :unprocessable_entity
     end

@@ -48,7 +48,7 @@
                 <% component.with_body(text: [
                   "This custom link will be deleted and will no longer be visible in profile dropdown."]) %>
                 <% component.with_footer do %>
-                  <%= link_to soft_delete_custom_link_path(custom_link), method: :delete,
+                  <%= link_to custom_link_path(custom_link), method: :delete,
                     class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
                     <i class="lni lni-trash-can mr-10"></i>
                     Delete Custom Link

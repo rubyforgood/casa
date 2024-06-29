@@ -126,8 +126,7 @@ Rails.application.routes.draw do
     delete "soft_delete", on: :member
   end
 
-  resources :custom_links, except: %i[index show delete] do
-    delete "soft_delete", on: :member
+  resources :custom_links, except: %i[index show] do
   end
 
   resources :followup_reports, only: :index
