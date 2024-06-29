@@ -54,25 +54,20 @@
           <% end %>
         </div>
       </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
-        </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_active", "true", true,
-                              class: "form-check-input",
-                              data: { value: "true" } %>
-            <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_inactive", "false", false,
-                              class: "form-check-input",
-                              data: { value: "false" } %>
-            <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", klass: "pull-left mx-2 my-1")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_active", "true", true,
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_inactive", "false", false,
+                            class: "form-check-input",
+                            data: { value: "false" } %>
+          <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
+        </div>
+      <% end %>
 
       <div class="dropdown pull-left mx-2 my-1">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
