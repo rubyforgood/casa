@@ -43,9 +43,9 @@
           </div>
         </div>
         <div class="select-style-1 mb-0">
-          <div class="select-position pr-5">
-            <%= f.label :sorted_by %>
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "select-style-1 mb-0 bg-white"}) %>
+          <%= f.label :sorted_by %>
+          <div class="select-position">
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: ""}) %>
           </div>
         </div>
         <div>
@@ -99,27 +99,30 @@
             </div>
           </div>
         </div>
-        <div class="row align-items-end select-style-1 mb-10">
+        <div class="row align-items-end  mb-10">
           <div class="col-12">
             <h3>Other filters</h3>
           </div>
-          <div class="col-md-6 select-position pr-5">
+          <div class="col-md-6 select-style-1 pr-5">
             <%= f.label :contact_medium %>
-            <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
-                                        {include_blank: "Display all"},
-                                        {class: "select-style-1"}) %>
+            <div class="select-position">
+              <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
+                                          {include_blank: "Display all"}) %>
+            </div>
           </div>
-          <div class="col-md-3 select-position pr-5">
+          <div class="col-md-3 select-style-1 pr-5">
             <%= f.label :want_driving_reimbursement %>
-            <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
-                                                    {include_blank: "Display all"},
-                                                    {class: "select-style-1"}) %>
+            <div class="select-position">
+              <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
+                                                      {include_blank: "Display all"}) %>
+            </div>
           </div>
-          <div class="col-md-3 select-position pr-5">
+          <div class="col-md-3 select-style-1 pr-5">
             <%= f.label :contact_made %>
-            <%= f.select(:contact_made, @presenter.boolean_select_options,
-                                      {include_blank: "Display all"},
-                                      {class: "select-style-1"}) %>
+            <div class="select-position">
+              <%= f.select(:contact_made, @presenter.boolean_select_options,
+                                        {include_blank: "Display all"}) %>
+            </div>
           </div>
         </div>
       </div>
