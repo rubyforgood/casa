@@ -78,25 +78,20 @@
           <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Has Extra Languages
-        </button>
-        <div class="dropdown-menu extra-language-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "extra_language_option_yes", "true", true,
-                              class: "form-check-input",
-                              data: { value: "true" } %>
-            <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "extra_language_option_no", "false", true,
-                              class: "form-check-input",
-                              data: { value: "false" } %>
-            <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Has Extra Languages", klass: "pull-left mx-2 my-1 extra-language-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "extra_language_option_yes", "true", true,
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "extra_language_option_no", "false", true,
+                            class: "form-check-input",
+                            data: { value: "false" } %>
+          <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
