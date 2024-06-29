@@ -15,35 +15,50 @@
   </div>
 </div>
 
-<%= form_for_filterrific @filterrific, url: case_contacts_path do |f| %>
+<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"} do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
-  <div class="card-style my-4">
-    <div class="card-content d-flex justify-content-between align-items-end">
-      <div class="h4 btn-lg">Filter by</div>
-      <button href="#"
-              class="btn btn-lg btn-link"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#filter-card-body"
-              aria-expanded="<%= params[:filterrific].present? %>>"
-              aria-controls="filter-card-body">
-        <div class="h4">Show / Hide</div>
-      </button>
-    </div>
 
-  <% collapse_class = params[:filterrific] ? "" : "collapse" %>
-    <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
-      <div class="row">
-        <div class="col-12">
-          <h3 class="mt-10"><label>Draft status</label></h3>
-        </div>
-        <div class="col-md-4">
-          <div class="form-check checkbox-style">
-            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
-            <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
+
+  <div class="card-style">
+    <div class="card-content">
+      <div class="d-flex justify-content-between align-items-center">
+        <div class="h4 btn-lg">Filter by</div>
+        <button href="#"
+                class="btn btn-lg btn-link"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#filter-card-body"
+                aria-expanded="<%= params[:filterrific].present? %>>"
+                aria-controls="filter-card-body">
+          <div class="h4">Expand / Hide</div>
+        </button>
+      </div>
+      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
+        <div class="">
+          <div class="">
+            <div class="form-check checkbox-style">
+              <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
+              <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
+            </div>
           </div>
         </div>
+        <div class="select-style-1 mb-0">
+          <div class="select-position pr-5">
+            <%= f.label :sorted_by %>
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "select-style-1 mb-0 bg-white"}) %>
+          </div>
+        </div>
+        <div>
+          <%= button_tag( :class=> "btn-sm main-btn dark-btn") do %>
+            <i class="lni lni-funnel mr-10"></i> Filter
+          <% end %>
+          <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove") %>
+        </div>
       </div>
+    </div>
+
+    <% collapse_class = params[:filterrific] ? "" : "collapse" %>
+    <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
         <div class="row">
           <div class="col-12">
             <h3 class="mt-10"><label>Date of contact</label></h3>
@@ -106,18 +121,6 @@
                                       {include_blank: "Display all"},
                                       {class: "select-style-1"}) %>
           </div>
-        </div>
-        <div class="row select-style-1">
-          <div class="col-md-6 select-position pr-5">
-            <%= f.label :sorted_by %>
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "select-style-1"}) %>
-          </div>
-        </div>
-        <div>
-          <%= button_tag( :class=> "btn-sm main-btn dark-btn") do %>
-            <i class="lni lni-funnel mr-10"></i> Filter
-          <% end %>
-          <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove") %>
         </div>
       </div>
     </div>
