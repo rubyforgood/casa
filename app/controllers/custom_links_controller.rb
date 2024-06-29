@@ -20,7 +20,7 @@ class CustomLinksController < ApplicationController
     @custom_link = CustomLink.new(custom_link_params)
 
     if @custom_link.save
-      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully created.'
+      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully created."
     else
       render :new
     end
@@ -30,7 +30,7 @@ class CustomLinksController < ApplicationController
   def update
     authorize @custom_link
     if @custom_link.update(custom_link_params)
-      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully updated.'
+      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully updated."
     else
       render :edit
     end
@@ -41,7 +41,7 @@ class CustomLinksController < ApplicationController
     authorize @custom_link
 
     if @custom_link.destroy
-      redirect_to edit_casa_org_path(current_organization), notice: 'Custom link was successfully removed.'
+      redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully removed."
     else
       render :show, status: :unprocessable_entity
     end
