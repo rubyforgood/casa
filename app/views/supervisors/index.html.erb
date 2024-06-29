@@ -9,10 +9,7 @@
     <div class="col-md-6">
       <div class="breadcrumb-wrapper mb-30">
         <span class="ml-5">
-        <div class="dropdown pull-left mx-2 supervisor-filters">
-          <button class="btn-sm main-btn dark-btn dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          <i class="lni lni-funnel mr-10"></i>Filter Status</button>
-          <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+          <%= render(DropdownMenuComponent.new(menu_title: "Filter Status", klass: "pull-left mx-2 supervisor-filters", button_klass: "btn-sm main-btn dark-btn", icon_name: "funnel")) do %>
             <div class="dropdown-item form-check checkbox-style">
               <%= check_box_tag "status_option_active", "true", true,
                             class: "active form-check-input",
@@ -25,8 +22,7 @@
                             data: { value: "false" } %>
               <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
             </div>
-          </div>
-        </div>
+          <% end %>
         </span>
         <span class="ml-5">
           <% if policy(Supervisor).create? %>
