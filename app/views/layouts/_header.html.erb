@@ -75,7 +75,7 @@
               <% @custom_links.each do |custom_link| %>
                 <li>
                   <%= link_to custom_link.url, target: "_blank" do %>
-                    <%= custom_link.text %>
+                   <i class="lni lni-link"></i> <%= custom_link.text %>
                   <% end %>
                 </li>
             <% end %>
