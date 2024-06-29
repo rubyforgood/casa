@@ -44,6 +44,8 @@ class ApplicationController < ActionController::Base
   end
 
   def set_custom_links
+    return unless current_organization
+
     @custom_links = current_organization.custom_links.active
   end
 
@@ -57,7 +59,7 @@ class ApplicationController < ActionController::Base
       short_io_service = ShortUrlService.new
       response = short_io_service.create_short_url(val)
       short_url = short_io_service.short_url
-      hash_of_short_urls[index] = (response.code == 201 || response.code == 200) ? short_url : nil
+      hash_of_short_urls[index] = response.code == 201 || response.code == 200 ? short_url : nil
     end
     hash_of_short_urls
   end
@@ -65,7 +67,7 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    return "blank" if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
+    return 'blank' if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
 
     body = body_msg
     to = resource.phone_number
@@ -80,30 +82,30 @@ class ApplicationController < ActionController::Base
 
     begin
       twilio_res = @twilio.send_sms(req_params)
-      twilio_res.error_code.nil? ? "sent" : "error"
+      twilio_res.error_code.nil? ? 'sent' : 'error'
     rescue Twilio::REST::RestError => e
       @error = e
-      "error"
-    rescue # unverfied error isnt picked up by Twilio::Rest::RestError
+      'error'
+    rescue StandardError # unverfied error isnt picked up by Twilio::Rest::RestError
       # https://www.twilio.com/docs/errors/21608
-      @error = "Phone number is unverifiied"
-      "error"
+      @error = 'Phone number is unverifiied'
+      'error'
     end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)
     case sms_status
-    when "blank"
+    when 'blank'
       "New #{resource_name} created successfully."
-    when "error"
+    when 'error'
       "New #{resource_name} created successfully. SMS not sent. Error: #{@error}."
-    when "sent"
+    when 'sent'
       "New #{resource_name} created successfully. SMS has been sent!"
     end
   end
 
   def store_referring_location
-    return unless request.referer && !request.referer.end_with?("users/sign_in")
+    return unless request.referer && !request.referer.end_with?('users/sign_in')
 
     session[:return_to] = request.referer
   end
@@ -139,7 +141,7 @@ class ApplicationController < ActionController::Base
 
   def not_authorized
     session[:user_return_to] = nil
-    flash[:notice] = "Sorry, you are not authorized to perform this action."
+    flash[:notice] = 'Sorry, you are not authorized to perform this action.'
     redirect_to(root_url)
   end
 
@@ -150,7 +152,7 @@ class ApplicationController < ActionController::Base
 
   def check_unconfirmed_email_notice(user)
     notice = "#{user.role} was successfully updated."
-    notice += " Confirmation Email Sent." if user.saved_changes.include?("unconfirmed_email")
+    notice += ' Confirmation Email Sent.' if user.saved_changes.include?('unconfirmed_email')
     notice
   end
 end
