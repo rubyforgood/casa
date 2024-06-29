@@ -29,31 +29,26 @@
   <div class="row volunteer-filters">
     <div class="col-sm-12 flex align-items-center">
       <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Supervisor
-        </button>
-        <div class="dropdown-menu supervisor-options">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "supervisor-option-none", "", true,
-                              class: "form-check-input",
-                              data: { value: "" },
-                              id: "unassigned-vol-filter" %>
-            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
-          </div>
-          <% current_organization.supervisors.where(active: true).each do |supervisor| %>
-            <div class="dropdown-item form-check checkbox-style">
-              <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
-              <% tag_name = "supervisor-option-#{option_for_name}" -%>
-              <%= check_box_tag tag_name, supervisor.id,
-                                policy(User).edit_name?(supervisor), # checked?
-                                class: "form-check-input",
-                                data: { value: supervisor.id } %>
-              <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
-            </div>
-          <% end %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Supervisor", klass: "pull-left mx-2 my-1 supervisor-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "supervisor-option-none", "", true,
+                            class: "form-check-input",
+                            data: { value: "" },
+                            id: "unassigned-vol-filter" %>
+          <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
         </div>
-      </div>
+        <% current_organization.supervisors.where(active: true).each do |supervisor| %>
+          <div class="dropdown-item form-check checkbox-style">
+            <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
+            <% tag_name = "supervisor-option-#{option_for_name}" -%>
+            <%= check_box_tag tag_name, supervisor.id,
+                              policy(User).edit_name?(supervisor), # checked?
+                              class: "form-check-input",
+                              data: { value: supervisor.id } %>
+            <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
+          </div>
+        <% end %>
+      <% end %>
       <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", klass: "pull-left mx-2 my-1 status-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "status_option_active", "true", true,
