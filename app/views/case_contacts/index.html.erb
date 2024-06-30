@@ -18,7 +18,6 @@
 <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"} do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
 
-
   <div class="card-style">
     <div class="card-content">
       <div class="d-flex justify-content-between align-items-center">
@@ -34,18 +33,16 @@
         </button>
       </div>
       <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-        <div class="">
-          <div class="">
-            <div class="form-check checkbox-style">
-              <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
-              <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
+        <div class="d-flex flex-column gap-3">
+          <div class="select-style-1 mb-0">
+            <%= f.label :sorted_by %>
+            <div class="select-position">
+              <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: ""}) %>
             </div>
           </div>
-        </div>
-        <div class="select-style-1 mb-0">
-          <%= f.label :sorted_by %>
-          <div class="select-position">
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: ""}) %>
+          <div class="form-check checkbox-style">
+            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
+            <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
           </div>
         </div>
         <div>
