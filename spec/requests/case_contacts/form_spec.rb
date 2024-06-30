@@ -8,9 +8,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   let(:creator) { admin }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
-  before { sign_in admin }
+  # Note to self: moved sign_in under each describe
 
   describe "GET /show" do
+    before { sign_in admin }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
     let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
     let!(:contact_types_b) do
@@ -56,9 +57,9 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         let(:organization) { create(:casa_org) }
         let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
 
-        it "does not show contact topic card" do
+        it "it shows the admin the contact topics link" do
           page = request.parsed_body.to_html
-          expect(page).to_not include("Court report topics")
+          expect(page).to include("Manage Case Contact Topics</a> to set your organization Court report topics.")
         end
       end
       context "when the org has topics assigned" do
@@ -85,6 +86,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   end
 
   describe "PATCH /update" do
+    before { sign_in admin }
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
     let(:advance_form) { true }
@@ -417,4 +419,66 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
     end
   end
+    #TODO
+    describe "GET /show (volunteer view)" do
+      before { sign_in volunteer }
+      let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+      let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
+      let!(:contact_types_b) do
+        [
+          create(:contact_type, name: "Teacher", contact_type_group: contact_type_group_b),
+          create(:contact_type, name: "Counselor", contact_type_group: contact_type_group_b)
+        ]
+      end
+  
+      let!(:contact_type_group_a) { create(:contact_type_group, casa_org: organization, name: "A") }
+      let!(:contact_types_a) do
+        [
+          create(:contact_type, name: "Sibling", contact_type_group: contact_type_group_a),
+          create(:contact_type, name: "Parent", contact_type_group: contact_type_group_a)
+        ]
+      end
+      
+      context "when user is signed in" do
+        it "checks if the volunteer is signed in" do
+          get case_contact_form_path(:details, case_contact_id: case_contact.id)
+          expect(response).to have_http_status(:ok)
+        end
+      end
+  
+      context "details step" do
+        subject(:request) do
+          get case_contact_form_path(:details, case_contact_id: case_contact.id)
+  
+          response
+        end
+  
+        it "shows all contact types once" do
+          page = request.parsed_body.to_html
+          expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+          expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
+        end
+  
+        xcontext "when the case has specific contact types assigned" do
+          let!(:casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
+  
+          it "shows only contact types assigned to selected casa case" do
+            page = request.parsed_body.to_html
+            expect(page).to include(*casa_case.contact_types.pluck(:name))
+            expect(page).not_to include(*contact_types_a.pluck(:name))
+            expect(page).not_to include(*contact_types_b.pluck(:name))
+          end
+        end
+  
+        xcontext "when an org has no topics" do
+          let(:organization) { create(:casa_org) }
+          let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+  
+          it "it guides volunteer to contact admin" do
+            page = request.parsed_body.to_html
+            expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
+          end
+        end
+      end
+    end
 end
