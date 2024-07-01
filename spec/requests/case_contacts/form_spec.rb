@@ -4,14 +4,15 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   let(:organization) { build(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  let!(:volunteer) { create(:volunteer, casa_org: organization, supervisor: supervisor) }
+  let!(:volunteer) { create(:volunteer, casa_org: organization, supervisor:) }
   let(:creator) { admin }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
-  before { sign_in admin }
+  # Note to self: moved sign_in under each describe
 
   describe "GET /show" do
-    let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+    before { sign_in admin }
+    let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
     let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
     let!(:contact_types_b) do
       [
@@ -54,24 +55,24 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
       context "when an org has no topics" do
         let(:organization) { create(:casa_org) }
-        let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
 
-        it "does not show contact topic card" do
+        it "it shows the admin the contact topics link" do
           page = request.parsed_body.to_html
-          expect(page).to_not include("Court report topics")
+          expect(page).to include("Manage Case Contact Topics</a> to set your organization Court report topics.")
         end
       end
       context "when the org has topics assigned" do
-        let(:contact_topics) {
+        let(:contact_topics) do
           [
             build(:contact_topic, active: true, soft_delete: false),
             build(:contact_topic, active: false, soft_delete: false),
             build(:contact_topic, active: true, soft_delete: true),
             build(:contact_topic, active: false, soft_delete: true)
           ]
-        }
+        end
         let(:organization) { create(:casa_org, contact_topics:) }
-        let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
+        let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case:) }
 
         it "shows contact topics" do
           page = request.parsed_body.to_html
@@ -85,19 +86,22 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   end
 
   describe "PATCH /update" do
+    before { sign_in admin }
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
     let(:advance_form) { true }
     let(:params) { {case_contact: attributes} }
 
     subject(:request) do
-      patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params
+      patch("/case_contacts/#{case_contact.id}/form/#{step}", params:)
 
       response
     end
 
     context "submitting details step" do
-      let!(:case_contact) { create(:case_contact, :started_status, creator: creator, contact_topic_answers: topic_answers) }
+      let!(:case_contact) do
+        create(:case_contact, :started_status, creator:, contact_topic_answers: topic_answers)
+      end
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:step) { :details }
       let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
@@ -124,7 +128,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             duration_minutes: 50,
             contact_made: true,
             medium_type: CaseContact::CONTACT_MEDIUMS.second,
-            contact_type_ids: contact_type_ids,
+            contact_type_ids:,
             contact_topic_answers_attributes: topic_answers_attributes
           }
         end
@@ -167,7 +171,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           end
 
           context "when updating contact types" do
-            let(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first.id) }
+            let(:old_contact_type) do
+              create(:case_contact_contact_type, case_contact:,
+                contact_type: contact_type_group_b.contact_types.first.id)
+            end
 
             it "removes unselected ones" do
               expect(case_contact.contact_types.count).to eq 1
@@ -204,7 +211,9 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting notes step: contact topics" do
-      let!(:case_contact) { create(:case_contact, :details_status, creator: creator, contact_topic_answers: topic_answers) }
+      let!(:case_contact) do
+        create(:case_contact, :details_status, creator:, contact_topic_answers: topic_answers)
+      end
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers_attributes) do
         {
@@ -250,7 +259,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting notes step" do
-      let!(:case_contact) { create(:case_contact, :details_status, creator: creator) }
+      let!(:case_contact) { create(:case_contact, :details_status, creator:) }
       let(:step) { :notes }
 
       context "with valid attributes" do
@@ -278,7 +287,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
         context "when autosaving" do
           subject(:request) do
-            patch "/case_contacts/#{case_contact.id}/form/#{step}", params: params, as: :json
+            patch "/case_contacts/#{case_contact.id}/form/#{step}", params:, as: :json
 
             response
           end
@@ -301,7 +310,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting expenses step" do
-      let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator: creator, contact_topic_answers: topic_answers) }
+      let!(:case_contact) do
+        create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator:,
+          contact_topic_answers: topic_answers)
+      end
       let(:case_contact_topics) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers_attributes) do
@@ -359,7 +371,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
 
         context "with only one volunteer for the first case" do
-          let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
+          let!(:case_assignment) { create(:case_assignment, casa_case:, volunteer:) }
 
           it "updates the volunteer's address" do
             request
@@ -376,9 +388,12 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           end
 
           it "sends reimbursement email" do
-            expect {
+            expect do
               request
-            }.to change { have_enqueued_job(ActionMailer::MailDeliveryJob).with("SupervisorMailer", "reimbursement_request_email", volunteer, supervisor) }
+            end.to(change do
+                     have_enqueued_job(ActionMailer::MailDeliveryJob).with("SupervisorMailer", "reimbursement_request_email", volunteer,
+                       supervisor)
+                   end)
           end
         end
 
@@ -386,15 +401,15 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
         context "with multiple cases selected" do
           let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
-          let!(:case_contact) {
+          let!(:case_contact) do
             create(:case_contact, :notes_status, draft_case_ids: [casa_case.id, other_casa_case.id],
               creator: admin, contact_topic_answers: topic_answers)
-          }
+          end
 
           it "creates a copy of the draft for each case" do
-            expect {
+            expect do
               request
-            }.to change(CaseContact, :count).by(1)
+            end.to change(CaseContact, :count).by(1)
             expect(CaseContact.last.casa_case_id).to eq other_casa_case.id
             expect(CaseContact.last.draft_case_ids).to eq [other_casa_case.id]
             expect(CaseContact.last.status).to eq "active"
@@ -413,6 +428,43 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             expect(case_contact.draft_case_ids.count).to eq 1
             expect(case_contact.draft_case_ids).to eq [casa_case.id]
           end
+        end
+      end
+    end
+  end
+  # TODO
+  describe "GET /show for volunteer & supervisor" do
+    context "when volunteer is signed in" do
+      before { sign_in volunteer }
+
+      context "details step - when an org has no topics" do
+        subject(:request) do
+          get case_contact_form_path(:details, case_contact_id: case_contact.id)
+          response
+        end
+        let(:organization) { create(:casa_org) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: volunteer) }
+
+        it "guides volunteer to contact admin" do
+          page = request.parsed_body.to_html
+          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
+        end
+      end
+    end
+    context "when supervisor is signed in" do
+      before { sign_in supervisor }
+
+      context "details step - when an org has no topics" do
+        subject(:request) do
+          get case_contact_form_path(:details, case_contact_id: case_contact.id)
+          response
+        end
+        let(:organization) { create(:casa_org) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: supervisor) }
+
+        it "guides supervisor to contact admin" do
+          page = request.parsed_body.to_html
+          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
         end
       end
     end
