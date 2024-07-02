@@ -18,14 +18,14 @@
 <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"} do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
 
-  <div class="card-style">
+  <div class="card-style" data-controller="collapse">
     <div class="card-content">
       <div class="d-flex justify-content-between align-items-center">
         <div class="h4 btn-lg">Filter by</div>
         <button href="#"
                 class="btn btn-lg btn-link"
                 type="button"
-                data-bs-toggle="collapse"
+                data-action="collapse#toggle"
                 data-bs-target="#filter-card-body"
                 aria-expanded="<%= params[:filterrific].present? %>>"
                 aria-controls="filter-card-body">
@@ -54,8 +54,7 @@
       </div>
     </div>
 
-    <% collapse_class = params[:filterrific] ? "collapse show" : "collapse" %>
-    <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
+    <div class="card-content mb-10 ml-20 collapse" id="filter-card-body" data-collapse-target="collapsible">
         <div class="row">
           <div class="col-12">
             <h3 class="mt-10"><label>Date of contact</label></h3>
