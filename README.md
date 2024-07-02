@@ -150,6 +150,7 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 ## Running the App / Verifying Installation
 1. `cd casa/`
 1. Run `bin/setup`
+1. Alter `POSTGRES_USER` and `POSTGRES_PASSWORD` in the newly generated `.env` file.
 1. Run `bin/dev` and visit http://localhost:3000/ to see the app running.
 
 **Logging in with seed users**
