@@ -6,7 +6,7 @@ export default class extends Controller {
   static targets = ['collapsible']
 
   initialize () {
-    const isCollapsed = sessionStorage.getItem('filtersCollapsed') === 'true'
+    const isCollapsed = window.sessionStorage.getItem('filtersCollapsed') === 'true'
 
     if (isCollapsed) {
       this.collapsibleTarget.classList.add('collapse')
@@ -24,6 +24,6 @@ export default class extends Controller {
 
     this.collapsible.toggle()
 
-    sessionStorage.setItem('filtersCollapsed', isCollapsed ? 'false' : 'true')
+    window.sessionStorage.setItem('filtersCollapsed', isCollapsed ? 'false' : 'true')
   }
 }
