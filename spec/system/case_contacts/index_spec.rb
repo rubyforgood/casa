@@ -72,7 +72,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
             sign_in volunteer
             visit case_contacts_path
-            click_button "Show / Hide"
+            click_button "Expand / Hide"
 
             fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
             fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
@@ -167,7 +167,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         expect(page).to_not have_text("Case 1 Notes")
 
         # filtering to only show case 2
-        click_button "Show / Hide"
+        click_button "Expand / Hide"
         fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
         fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
         click_button "Filter"

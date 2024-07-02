@@ -8,11 +8,13 @@ import AlertController from './alert_controller'
 
 import AutosaveController from './autosave_controller'
 
+import CollapseController from './collapse_controller'
+
+import CourtOrderFormController from './court_order_form_controller'
+
 import DisableFormController from './disable_form_controller'
 
 import DismissController from './dismiss_controller'
-
-import CourtOrderFormController from './court_order_form_controller'
 
 import HelloController from './hello_controller'
 
@@ -31,9 +33,10 @@ import SidebarGroupController from './sidebar_group_controller'
 import TruncatedTextController from './truncated_text_controller'
 application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
+application.register('collapse', CollapseController)
+application.register('court-order-form', CourtOrderFormController)
 application.register('disable-form', DisableFormController)
 application.register('dismiss', DismissController)
-application.register('court-order-form', CourtOrderFormController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
 application.register('multiple-select', MultipleSelectController)
