@@ -6,12 +6,12 @@ export default class extends Controller {
   static targets = ['collapsible']
 
   initialize () {
-    const isCollapsed = window.sessionStorage.getItem('filtersCollapsed') === 'true'
+    const isExpanded = window.sessionStorage.getItem('filtersCollapsed') === 'false'
 
-    if (isCollapsed) {
-      this.collapsibleTarget.classList.add('collapse')
-    } else {
+    if (isExpanded) {
       this.collapsibleTarget.classList.add('collapse', 'show')
+    } else {
+      this.collapsibleTarget.classList.add('collapse')
     }
   }
 
