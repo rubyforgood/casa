@@ -79,17 +79,16 @@ Rails.application.routes.draw do
       patch :deactivate
       patch :activate
       patch :resend_invitation
-      post :send_reactivation_alert
       patch :change_to_supervisor
     end
   end
 
   get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
-  resources :case_contacts, except: %i[create update] do
+  resources :case_contacts, except: %i[create update show] do
     member do
       post :restore
     end
-    resources :form, controller: "case_contacts/form"
+    resources :form, controller: "case_contacts/form", only: :index
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
@@ -134,7 +133,7 @@ Rails.application.routes.draw do
   resources :learning_hour_types, only: %i[new create edit update]
   resources :learning_hour_topics, only: %i[new create edit update]
 
-  resources :contact_topics, except: %i[index show delete] do
+  resources :contact_topics, except: %i[index show destroy] do
     delete "soft_delete", on: :member
   end
 
@@ -221,9 +220,7 @@ Rails.application.routes.draw do
       delete :remove_language
     end
   end
-  resources :languages, only: %i[new create edit update] do
-    delete :remove_from_volunteer
-  end
+  resources :languages, only: %i[new create edit update] 
 
   direct :help_admins_supervisors do
     "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
