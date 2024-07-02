@@ -26,6 +26,7 @@ class CasaOrg < ApplicationRecord
   has_many :learning_hour_topics, dependent: :destroy
   has_many :case_groups, dependent: :destroy
   has_many :contact_topics
+  has_many :custom_links
   has_one_attached :logo
   has_one_attached :court_report_template
 
