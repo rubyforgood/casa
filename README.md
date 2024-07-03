@@ -146,11 +146,14 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. _If you are running on an M1 mac, run the following command before you start the installation process:_
    1. _Set the architecture_: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
    1. _Remove all gems before you proceed_: `gem uninstall -aIx`
+1. If `bin/setup` fails with a credentials error:
+   1. Open the `.env` file.
+   1. update the values of `POSTGRES_USER` and `POSTGRES_PASSWORD`to match your PostgreSQL credentials.
+   1. Run `bin/setup`
 
 ## Running the App / Verifying Installation
 1. `cd casa/`
 1. Run `bin/setup`
-1. Alter `POSTGRES_USER` and `POSTGRES_PASSWORD` in the newly generated `.env` file.
 1. Run `bin/dev` and visit http://localhost:3000/ to see the app running.
 
 **Logging in with seed users**
