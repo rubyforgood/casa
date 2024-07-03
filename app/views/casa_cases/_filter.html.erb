@@ -58,25 +58,18 @@
           <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <div class="dropdown pull-left mx-2 my-1">
-        <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Casa Case Prefix
-          </button>
+      <%= render(DropdownMenuComponent.new(menu_title: "Casa Case Prefix", klass: "pull-left mx-2 my-1 case-number-prefix-options")) do %>
+        <% ["CINA", "None", "TPR"].each do |option| %>
+          <div class="dropdown-item form-check checkbox-style">
+            <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
+            <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
+            <%= check_box_tag tag_name, option, true,
+                              class: "form-check-input",
+                              data: { value: option } %>
+            <%= label_tag tag_name, option, class: "form-check-label" %>
+          </div>
         <% end %>
-        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton5">
-          <% ["CINA", "None", "TPR"].each do |option| %>
-            <div class="dropdown-item form-check checkbox-style">
-              <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
-              <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
-              <%= check_box_tag tag_name, option, true,
-                                class: "form-check-input",
-                                data: { value: option } %>
-              <%= label_tag tag_name, option, class: "form-check-label" %>
-            </div>
-          <% end %>
-        </div>
-      </div>
+      <% end %>
     </div>
   </div>
 </div>
