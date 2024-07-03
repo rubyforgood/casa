@@ -44,25 +44,20 @@
           <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Transition Aged Youth
-        </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
-                              class: "form-check-input",
-                              data: { value: "Yes 🦋" } %>
-            <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No 🐛" } %>
-            <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
+                            class: "form-check-input",
+                            data: { value: "Yes 🦋" } %>
+          <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "transition_youth_option_no", "No", true,
+                            class: "form-check-input",
+                            data: { value: "No 🐛" } %>
+          <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
+        </div>
+      <% end %>
       <div class="dropdown pull-left mx-2 my-1">
         <% unless current_user.volunteer? %>
           <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
