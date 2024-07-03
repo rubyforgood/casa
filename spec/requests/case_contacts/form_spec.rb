@@ -87,7 +87,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
       context "details step - when an org has no topics" do
         let(:organization) { create(:casa_org) }
-        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: volunteer) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case, creator: volunteer) }
 
         it "guides volunteer to contact admin" do
           page = request.parsed_body.to_html
