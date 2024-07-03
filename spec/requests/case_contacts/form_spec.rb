@@ -97,7 +97,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting details step" do
-      let!(:case_contact) {create(:case_contact, :started_status, creator:, contact_topic_answers: topic_answers) }
+      let!(:case_contact) { create(:case_contact, :started_status, creator:, contact_topic_answers: topic_answers) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:step) { :details }
       let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
@@ -378,7 +378,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           it "sends reimbursement email" do
             expect {
               request
-            }.to change { have_enqueued_job(ActionMailer::MailDeliveryJob).with("SupervisorMailer", "reimbursement_request_email", volunteer, supervisor)}
+            }.to change { have_enqueued_job(ActionMailer::MailDeliveryJob).with("SupervisorMailer", "reimbursement_request_email", volunteer, supervisor) }
           end
         end
 
@@ -389,7 +389,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           let!(:case_contact) {
             create(:case_contact, :notes_status, draft_case_ids: [casa_case.id, other_casa_case.id],
               creator: admin, contact_topic_answers: topic_answers)
-        }
+          }
 
           it "creates a copy of the draft for each case" do
             expect {
