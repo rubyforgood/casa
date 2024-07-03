@@ -9,7 +9,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
   describe "GET /show" do
-    before { sign_in admin }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
     let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
     let!(:contact_types_b) do
@@ -26,58 +25,86 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         create(:contact_type, name: "Parent", contact_type_group: contact_type_group_a)
       ]
     end
+    subject(:request) do
+      get case_contact_form_path(:details, case_contact_id: case_contact.id)
 
-    context "details step" do
-      subject(:request) do
-        get case_contact_form_path(:details, case_contact_id: case_contact.id)
+      response
+    end
 
-        response
-      end
+    describe "admin view" do
+      before { sign_in admin }
 
-      it "shows all contact types once" do
-        page = request.parsed_body.to_html
-        expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
-        expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
-      end
-
-      context "when the case has specific contact types assigned" do
-        let!(:casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
-
-        it "shows only contact types assigned to selected casa case" do
+      context "details step" do
+        it "shows all contact types once" do
           page = request.parsed_body.to_html
-          expect(page).to include(*casa_case.contact_types.pluck(:name))
-          expect(page).not_to include(*contact_types_a.pluck(:name))
-          expect(page).not_to include(*contact_types_b.pluck(:name))
+          expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
+          expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
+        end
+
+        context "when the case has specific contact types assigned" do
+          let!(:casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
+
+          it "shows only contact types assigned to selected casa case" do
+            page = request.parsed_body.to_html
+            expect(page).to include(*casa_case.contact_types.pluck(:name))
+            expect(page).not_to include(*contact_types_a.pluck(:name))
+            expect(page).not_to include(*contact_types_b.pluck(:name))
+          end
+        end
+        context "when an org has no topics" do
+          let(:organization) { create(:casa_org) }
+          let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+
+          it "it shows the admin the contact topics link" do
+            page = request.parsed_body.to_html
+            expect(page).to include("Manage Case Contact Topics</a> to set your organization Court report topics.")
+          end
+        end
+        context "when the org has topics assigned" do
+          let(:contact_topics) {
+            [
+              build(:contact_topic, active: true, soft_delete: false),
+              build(:contact_topic, active: false, soft_delete: false),
+              build(:contact_topic, active: true, soft_delete: true),
+              build(:contact_topic, active: false, soft_delete: true)
+            ]
+          }
+          let(:organization) { create(:casa_org, contact_topics:) }
+          let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
+
+          it "shows contact topics" do
+            page = request.parsed_body.to_html
+            expect(page).to include(contact_topics[0].question)
+            expect(page).to_not include(contact_topics[1].question)
+            expect(page).to_not include(contact_topics[2].question)
+            expect(page).to_not include(contact_topics[3].question)
+          end
         end
       end
+    end
+    describe "volunteer view" do
+      before { sign_in volunteer }
 
-      context "when an org has no topics" do
+      context "details step - when an org has no topics" do
         let(:organization) { create(:casa_org) }
-        let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: volunteer) }
 
-        it "it shows the admin the contact topics link" do
+        it "guides volunteer to contact admin" do
           page = request.parsed_body.to_html
-          expect(page).to include("Manage Case Contact Topics</a> to set your organization Court report topics.")
+          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
         end
       end
-      context "when the org has topics assigned" do
-        let(:contact_topics) {
-          [
-            build(:contact_topic, active: true, soft_delete: false),
-            build(:contact_topic, active: false, soft_delete: false),
-            build(:contact_topic, active: true, soft_delete: true),
-            build(:contact_topic, active: false, soft_delete: true)
-          ]
-        }
-        let(:organization) { create(:casa_org, contact_topics:) }
-        let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
+    end
+    describe "supervisor view" do
+      before { sign_in supervisor }
 
-        it "shows contact topics" do
+      context "details step - when an org has no topics" do
+        let(:organization) { create(:casa_org) }
+        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: supervisor) }
+
+        it "guides supervisor to contact admin" do
           page = request.parsed_body.to_html
-          expect(page).to include(contact_topics[0].question)
-          expect(page).to_not include(contact_topics[1].question)
-          expect(page).to_not include(contact_topics[2].question)
-          expect(page).to_not include(contact_topics[3].question)
+          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
         end
       end
     end
@@ -97,7 +124,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting details step" do
-      let!(:case_contact) { create(:case_contact, :started_status, creator:, contact_topic_answers: topic_answers) }
+      let!(:case_contact) { create(:case_contact, :started_status, creator: creator, contact_topic_answers: topic_answers) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:step) { :details }
       let!(:contact_type_group_b) { create(:contact_type_group, casa_org: organization, name: "B") }
@@ -167,7 +194,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           end
 
           context "when updating contact types" do
-            let(:old_contact_type) { create(:case_contact_contact_type, case_contact:, contact_type: contact_type_group_b.contact_types.first.id) }
+            let(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first.id) }
 
             it "removes unselected ones" do
               expect(case_contact.contact_types.count).to eq 1
@@ -204,7 +231,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting notes step: contact topics" do
-      let!(:case_contact) { create(:case_contact, :details_status, creator:, contact_topic_answers: topic_answers) }
+      let!(:case_contact) { create(:case_contact, :details_status, creator: creator, contact_topic_answers: topic_answers) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers_attributes) do
         {
@@ -301,7 +328,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
 
     context "submitting expenses step" do
-      let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator:, contact_topic_answers: topic_answers) }
+      let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator: creator, contact_topic_answers: topic_answers) }
       let(:case_contact_topics) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers_attributes) do
@@ -359,7 +386,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         end
 
         context "with only one volunteer for the first case" do
-          let!(:case_assignment) { create(:case_assignment, casa_case:, volunteer: volunteer) }
+          let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
           it "updates the volunteer's address" do
             request
@@ -413,42 +440,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             expect(case_contact.draft_case_ids.count).to eq 1
             expect(case_contact.draft_case_ids).to eq [casa_case.id]
           end
-        end
-      end
-    end
-  end
-  describe "GET /show for volunteer & supervisor" do
-    context "when volunteer is signed in" do
-      before { sign_in volunteer }
-
-      context "details step - when an org has no topics" do
-        subject(:request) do
-          get case_contact_form_path(:details, case_contact_id: case_contact.id)
-          response
-        end
-        let(:organization) { create(:casa_org) }
-        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: volunteer) }
-
-        it "guides volunteer to contact admin" do
-          page = request.parsed_body.to_html
-          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
-        end
-      end
-    end
-    context "when supervisor is signed in" do
-      before { sign_in supervisor }
-
-      context "details step - when an org has no topics" do
-        subject(:request) do
-          get case_contact_form_path(:details, case_contact_id: case_contact.id)
-          response
-        end
-        let(:organization) { create(:casa_org) }
-        let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: supervisor) }
-
-        it "guides supervisor to contact admin" do
-          page = request.parsed_body.to_html
-          expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
         end
       end
     end
