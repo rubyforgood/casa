@@ -8,8 +8,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   let(:creator) { admin }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
 
-  # Note to self: moved sign_in under each describe
-
   describe "GET /show" do
     before { sign_in admin }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
@@ -432,7 +430,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
     end
   end
-  # TODO
   describe "GET /show for volunteer & supervisor" do
     context "when volunteer is signed in" do
       before { sign_in volunteer }
