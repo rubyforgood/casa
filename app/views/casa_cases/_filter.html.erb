@@ -30,25 +30,20 @@
           <%= label_tag "assigned_to_volunteer_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to more than 1 Volunteer
-        </button>
-        <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
-                              class: "form-check-input",
-                              data: { value: "Yes" } %>
-            <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No" } %>
-            <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to more than 1 Volunteer", klass: "pull-left mx-2 my-1 more-than-one-volunteer-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
+                            class: "form-check-input",
+                            data: { value: "Yes" } %>
+          <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
+                            class: "form-check-input",
+                            data: { value: "No" } %>
+          <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
+        </div>
+      <% end %>
       <div class="dropdown pull-left mx-2 my-1">
         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Assigned to Transition Aged Youth
