@@ -3,11 +3,15 @@ require "rails_helper"
 RSpec.describe "casa_cases/new", type: :system do
   context "when signed in as a Casa Org Admin" do
     context "when all fields are filled" do
+      let(:casa_org) { build(:casa_org) }
+      let(:admin) { create(:casa_admin, casa_org: casa_org) }
+      let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
+      let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+      let(:volunteer_display_name) { "Test User" }
+      let!(:supervisor) { create(:supervisor, casa_org: casa_org)}
+      let!(:volunteer) { create(:volunteer, display_name: volunteer_display_name, supervisor: supervisor, casa_org: casa_org) }
+
       it "is successful", js: true do
-        casa_org = build(:casa_org)
-        admin = create(:casa_admin, casa_org: casa_org)
-        contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        contact_type = create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
 
         sign_in admin
@@ -30,6 +34,8 @@ RSpec.describe "casa_cases/new", type: :system do
 
           find(".ts-control").click
           find("span", text: contact_type.name).click
+
+          select "Test User", from: "casa_case[assigned_volunteer_id]"
 
           within ".top-page-actions" do
             click_on "Create CASA Case"

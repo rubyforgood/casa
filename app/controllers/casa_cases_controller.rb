@@ -45,10 +45,14 @@ class CasaCasesController < ApplicationController
         casa_org: current_organization
       )
     )
+
     authorize @casa_case
 
     @casa_case.validate_contact_type = true
+
     if @casa_case.save
+      assign_volunteer_to_case if assigned_volunteer_id
+
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
         format.json { render json: @casa_case, status: :created }
@@ -138,6 +142,16 @@ class CasaCasesController < ApplicationController
 
   private
 
+  def assign_volunteer_to_case
+    return unless volunteer
+
+    volunteer.case_assignments.new(casa_case_id: @casa_case.id, volunteer_id: assigned_volunteer_id).save!
+  end
+
+  def volunteer
+    User.find(assigned_volunteer_id) if assigned_volunteer_id.present?
+  end
+
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:id])
@@ -159,6 +173,12 @@ class CasaCasesController < ApplicationController
       contact_type_ids: [],
       court_dates_attributes: [:date]
     )
+  end
+
+  def assigned_volunteer_id
+    params.require(:casa_case).permit(
+      :assigned_volunteer_id
+    )[:assigned_volunteer_id]
   end
 
   def casa_case_create_params

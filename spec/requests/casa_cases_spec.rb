@@ -4,6 +4,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:date_in_care) { Date.today }
   let(:organization) { build(:casa_org) }
   let(:group) { build(:contact_type_group) }
+  let(:volunteer) { create(:volunteer) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
   let(:valid_attributes) do
     {
@@ -12,6 +13,7 @@ RSpec.describe "/casa_cases", type: :request do
       "date_in_care(3i)": date_in_care.day,
       "date_in_care(2i)": date_in_care.month,
       "date_in_care(1i)": date_in_care.year,
+      assigned_volunteer_id: volunteer.id,
       casa_org_id: organization.id,
       contact_type_ids: [type1.id]
     }
@@ -171,6 +173,37 @@ RSpec.describe "/casa_cases", type: :request do
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response).to have_http_status(:created)
           expect(response.body).to match(valid_attributes[:case_number].to_json)
+        end
+
+        context "with valid assigned_volunteer_id" do
+          it "creates a case assignment" do
+            expect { post casa_cases_url, params: {casa_case: valid_attributes} }.to change(
+              CaseAssignment,
+              :count
+            ).by(1)
+          end
+        end
+
+        context "without an assigned_volunteer_id" do
+          let(:valid_attributes) do
+            {
+              case_number: "1234",
+              birth_month_year_youth: pre_transition_aged_youth_age,
+              "date_in_care(3i)": date_in_care.day,
+              "date_in_care(2i)": date_in_care.month,
+              "date_in_care(1i)": date_in_care.year,
+              assigned_volunteer_id: nil,
+              casa_org_id: organization.id,
+              contact_type_ids: [type1.id]
+            }
+          end
+
+          it "does not create a case assignment" do
+            expect { post casa_cases_url, params: {casa_case: valid_attributes} }.not_to change(
+               CaseAssignment,
+               :count
+             )
+          end
         end
       end
 
