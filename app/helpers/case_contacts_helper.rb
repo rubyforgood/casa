@@ -48,12 +48,11 @@ module CaseContactsHelper
     end
   end
 
-  def expand_filters?
-    return false if params[:filterrific].nil?
-
-    params[:filterrific].reject do |key, value|
-      key === "no_drafts" || key === "sorted_by" || value == ""
-    end.present?
+  def expand_filters?(surfaced_keys = %i[no_drafts sorted_by])
+    params.fetch(:filterrific, {})
+      .except(*surfaced_keys)
+      .reject { |_, value| value == "" }
+      .present?
   end
 
   private
