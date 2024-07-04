@@ -30,17 +30,19 @@
       </div>
     <% end %>
     <br>
-    <h3 class="title">Assign a New Volunteer</h3>
+    <h3 class="title">Assign a Volunteer to Case</h3>
     <fieldset class="border-0" <%= 'disabled' unless available_volunteers.any? %>>
       <%= form_for assignable_obj.new, url: assign_action do |form| %>
-        <div class='form-group'>
+        <div class='form-group select-style-1'>
           <label for="<%= select_id %>" class="mt-2">Select a Volunteer</label>
-          <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select-style-2 mt-1'>
-            <option value="">Please Select Volunteer</option>
-            <% available_volunteers.each do |volunteer| %>
-              <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
-            <% end %>
-          </select>
+          <div class="select-position">
+            <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select-style-2 mt-1'>
+              <option value="">Please Select Volunteer</option>
+              <% available_volunteers.each do |volunteer| %>
+                <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+              <% end %>
+            </select>
+          </div>
         </div>
         <% if @supervisor %>
           <%= form.hidden_field :supervisor_id, :value => @supervisor.id %>
