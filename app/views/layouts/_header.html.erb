@@ -40,13 +40,8 @@
 
           </div>
 
-          <div class="profile-box ml-15">
-            <button
-              class="dropdown-toggle bg-transparent border-0"
-              type="button"
-              id="profile"
-              data-bs-toggle="dropdown"
-              aria-expanded="false">
+          <%= render(DropdownMenuComponent.new(menu_title: current_user.display_name, hide_label: true, klass: "profile-box ml-15", button_klass: "bg-transparent border-0")) do |component| %>
+            <% component.with_icon do %>
               <div class="profile-info">
                 <div class="info">
                   <h6><%= current_user.display_name %>
@@ -57,56 +52,52 @@
                   </div>
                 </div>
               </div>
-              <i class="lni lni-chevron-down"></i>
-            </button>
-            <ul
-              class="dropdown-menu dropdown-menu-end"
-              aria-labelledby="profile">
-              <li>
-                <span>
-                  <strong>Role: <%= current_role %></strong>
-                </span>
-              </li>
-              <li>
-                <span>
-                  <strong> <%= current_user.email %></strong>
-                </span>
-              </li>
-              <li>
-                <%= link_to edit_users_path do %>
-                  <i class="lni lni-pencil"></i>
-                  Edit Profile
-                <% end %>
-              </li>
-              <li>
-                <%= link_to notifications_path do %>
-                  <i class="lni lni-envelope"></i>
-                  Messages
-                <% end %>
-              </li>
-              <% if policy(:application).modify_organization? %>
-                <li>
-                  <%= link_to edit_casa_org_path(current_organization) do %>
-                    <i class="lni lni-cogs mr-10"></i>
-                    Edit Organization
-                  <% end %>
-                </li>
+              <i class="lni lni-chevron-down text-dark"></i>
+            <% end %>
+            <li>
+              <span>
+                <strong>Role: <%= current_role %></strong>
+              </span>
+            </li>
+            <li>
+              <span>
+                <strong> <%= current_user.email %></strong>
+              </span>
+            </li>
+            <li>
+              <%= link_to edit_users_path do %>
+                <i class="lni lni-pencil"></i>
+                Edit Profile
               <% end %>
+            </li>
+            <li>
+              <%= link_to notifications_path do %>
+                <i class="lni lni-envelope"></i>
+                Messages
+              <% end %>
+            </li>
+            <% if policy(:application).modify_organization? %>
               <li>
-                <% help_url = current_user.volunteer? ? help_volunteers_url : help_admins_supervisors_url %>
-                <%= link_to help_url, target: :_blank do %>
-                  <i class="lni lni-question-circle"></i>
-                  Help
+                <%= link_to edit_casa_org_path(current_organization) do %>
+                  <i class="lni lni-cogs mr-10"></i>
+                  Edit Organization
                 <% end %>
               </li>
-              <li>
-                <%= link_to destroy_user_session_path do %>
-                  <i class="lni lni-exit"></i>
-                  Sign Out
-                <% end %>
-              </li>
-            </ul>
-          </div>
+            <% end %>
+            <li>
+              <% help_url = current_user.volunteer? ? help_volunteers_url : help_admins_supervisors_url %>
+              <%= link_to help_url, target: :_blank do %>
+                <i class="lni lni-question-circle"></i>
+                Help
+              <% end %>
+            </li>
+            <li>
+              <%= link_to destroy_user_session_path do %>
+                <i class="lni lni-exit"></i>
+                Sign Out
+              <% end %>
+            </li>
+          <% end %>
         </div>
       </div>
     </div>
