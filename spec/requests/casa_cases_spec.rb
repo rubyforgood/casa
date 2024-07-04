@@ -200,9 +200,9 @@ RSpec.describe "/casa_cases", type: :request do
 
           it "does not create a case assignment" do
             expect { post casa_cases_url, params: {casa_case: valid_attributes} }.not_to change(
-               CaseAssignment,
-               :count
-             )
+              CaseAssignment,
+              :count
+            )
           end
         end
       end

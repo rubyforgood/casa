@@ -8,7 +8,7 @@ RSpec.describe "casa_cases/new", type: :system do
       let(:contact_type_group) { create(:contact_type_group, casa_org: casa_org) }
       let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
       let(:volunteer_display_name) { "Test User" }
-      let!(:supervisor) { create(:supervisor, casa_org: casa_org)}
+      let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
       let!(:volunteer) { create(:volunteer, display_name: volunteer_display_name, supervisor: supervisor, casa_org: casa_org) }
 
       it "is successful", js: true do
