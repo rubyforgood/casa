@@ -27,7 +27,7 @@
                 type="button"
                 data-bs-toggle="collapse"
                 data-bs-target="#filter-card-body"
-                aria-expanded="<%= params[:filterrific].present? %>>"
+                aria-expanded="<%= expand_filters? %>>"
                 aria-controls="filter-card-body">
           <div class="h4">Expand / Hide</div>
         </button>
@@ -54,7 +54,7 @@
       </div>
     </div>
 
-    <% collapse_class = params[:filterrific] ? "collapse show" : "collapse" %>
+    <% collapse_class = expand_filters? ? "collapse show" : "collapse" %>
     <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
       <div class="row">
         <div class="col-12">

@@ -48,6 +48,14 @@ module CaseContactsHelper
     end
   end
 
+  def expand_filters?
+    return false if params[:filterrific].nil?
+
+    params[:filterrific].reject do |key, value|
+      key === "no_drafts" || key === "sorted_by" || value == ""
+    end.present?
+  end
+
   private
 
   def send_home
