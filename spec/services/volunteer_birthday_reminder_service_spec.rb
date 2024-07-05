@@ -1,9 +1,9 @@
 require "rails_helper"
-require "rake"
-Rake.application.rake_require "tasks/volunteer_birthday_reminder"
 
-RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
-  let(:rake_task) { Rake::Task["volunteer_birthday_reminder"].invoke }
+RSpec.describe VolunteerBirthdayReminderService do
+  include ActiveJob::TestHelper
+
+  let(:send_reminders) { described_class.new.send_reminders }
   let(:now) { Date.new(2022, 10, 15) }
   let(:this_month) { now.month }
   let(:this_month_15th) { Date.new(now.year, now.month, 15) }
@@ -11,14 +11,12 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
   let(:not_next_month) { Date.new(1998, this_month - 1, 1) }
 
   before do
-    Rake::Task.clear
-    Casa::Application.load_tasks
-
     travel_to now
   end
 
   after do
     travel_back
+    clear_enqueued_jobs
   end
 
   context "there is a volunteer with a birthday next month" do
@@ -27,18 +25,18 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "creates a notification" do
-      expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(1)
+      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(1)
     end
   end
 
-  context "there are many volunteers with birthdays next month" do
-    volunteer_count = 10
+  context "there are multiple volunteers with birthdays next month" do
+    let(:supervisor) { create(:supervisor) }
     let!(:volunteer) do
-      create_list(:volunteer, volunteer_count, :with_assigned_supervisor, date_of_birth: next_month)
+      create_list(:volunteer, 4, :with_assigned_supervisor, date_of_birth: next_month, supervisor: supervisor)
     end
 
-    it "creates many notifications" do
-      expect { rake_task }.to change { Noticed::Notification.count }.by(volunteer_count)
+    it "creates multiple notifications" do
+      expect { send_reminders }.to change { Noticed::Notification.count }.by(4)
     end
   end
 
@@ -48,7 +46,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "does not create a notification" do
-      expect { rake_task }.to change { Noticed::Notification.count }.by(0)
+      expect { send_reminders }.to change { Noticed::Notification.count }.by(0)
     end
   end
 
@@ -58,7 +56,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "does not create a notification" do
-      expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(0)
+      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(0)
     end
   end
 
@@ -68,7 +66,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "does not create a notification" do
-      expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(0)
+      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(0)
     end
   end
 
@@ -80,7 +78,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     end
 
     it "runs the rake task" do
-      expect { rake_task }.to change { volunteer.supervisor.notifications.count }.by(1)
+      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(1)
     end
   end
 
@@ -88,7 +86,7 @@ RSpec.describe "lib/tasks/volunteer_birthday_reminder.rake", ci_only: true do
     before { travel_to(this_month_15th + 2.days) }
 
     it "skips the rake task" do
-      expect { rake_task }.to change { Noticed::Notification.count }.by(0)
+      expect { send_reminders }.to change { Noticed::Notification.count }.by(0)
     end
   end
 end
