@@ -77,28 +77,23 @@
       </div>
     </div>
 
+<div class="card-style-1 pl-25 pr-25 mb-10">
+  <h4 class="mb-20 details__topics-label">Court Report Topics <span class="content-1">(optional)</span></h4>
+  <div>
     <% if @case_contact.contact_topic_answers.any? %>
-      <div class="card-style-1 pl-25 pr-25 mb-10">
-        <h4 class="mb-20 details__topics-label">Court report <%= "topic".pluralize(@case_contact.contact_topic_answers.count) %> <span class="content-1">(optional)</span></h4>
-        <div>
-          <%= form.fields_for(:contact_topic_answers) do |f| %>
-            <div class="form-check checkbox-style mb-10 ml-5">
-              <%= f.check_box :selected, class: ["form-check-input", "casa-case-id"] %>
-              <%= f.label :selected, f.object.contact_topic.question, class: "form-check-label" %>
-            </div>
-          <% end %>
+      <%= form.fields_for(:contact_topic_answers) do |f| %>
+        <div class="form-check checkbox-style mb-10 ml-5">
+          <%= f.check_box :selected, class: ["form-check-input", "casa-case-id"] %>
+          <%= f.label :selected, f.object.contact_topic.question, class: "form-check-label" %>
         </div>
-      </div>
-    <% elsif @case_contact.contact_topic_answers.none? %>
-      <div class="card-style-1 pl-25 pr-25 mb-10">
-        <h4 class="mb-20 details__topics-label">Court Report Topics</h4>
-        <% if current_user.volunteer? || current_user.supervisor? %>
-          <div class="mb-10 ml-5">Your organization has not set any Court Report Topics yet. Contact your admin to learn more.</div>
-        <% elsif current_user.casa_admin? %>
-          <div>Visit <%= link_to "Manage Case Contact Topics", edit_casa_org_path(current_user.casa_org_id) %> to set your organization Court report topics.</div>
-        <% end %>
-      </div>
+      <% end %>
+    <% elsif current_user.casa_admin? %>
+      Visit <%= link_to "Manage Case Contact Topics", edit_casa_org_path(current_user.casa_org_id) %> to set your organization Court report topics.
+    <% else %>
+      Your organization has not set any Court Report Topics yet. Contact your admin to learn more.
     <% end %>
+  </div>
+</div>
 
     <div class="actions mb-10 case-contacts-form-buttons">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
