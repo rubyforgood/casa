@@ -1,14 +1,12 @@
 require "rails_helper"
-require "rake"
-Rake.application.rake_require "tasks/deployment/20240416171009_backfill_followup_followupable_id_and_type_from_case_contact_id"
 
-RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case_contact_id", type: :task do
-  let(:task_name) { "after_party:backfill_followup_followupable_id_and_type_from_case_contact_id" }
-  let(:rake_task) { Rake::Task[task_name].invoke }
+RSpec.describe BackfillFollowupableService do
+  include ActiveJob::TestHelper
 
-  before(:each) do
-    Rake::Task.clear
-    Casa::Application.load_tasks
+  let(:run_backfill) { described_class.new.fill_followup_id_and_type }
+
+  after do
+    clear_enqueued_jobs
   end
 
   describe "backfilling followup polymorphic columns" do
@@ -16,7 +14,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
     let!(:followup) { create(:followup, :without_dual_writing, case_contact: case_contact) }
 
     it "updates followupable_id and followupable_type correctly" do
-      expect { rake_task }.to change { followup.reload.followupable_id }.from(nil).to(case_contact.id)
+      expect { run_backfill }.to change { followup.reload.followupable_id }.from(nil).to(case_contact.id)
         .and change { followup.reload.followupable_type }.from(nil).to("CaseContact")
     end
 
@@ -29,7 +27,7 @@ RSpec.describe "after_party:backfill_followup_followupable_id_and_type_from_case
         expect(Bugsnag).to receive(:notify).with(instance_of(StandardError))
         expect(Rails.logger).to receive(:error).with(/Failed to update Followup/)
         expect {
-          rake_task
+          run_backfill
         }.to_not change { followup.reload.followupable_id }
       end
     end
