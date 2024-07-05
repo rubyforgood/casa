@@ -328,8 +328,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.6-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.6-x86_64-linux)
-      racc (~> 1.4)
     noticed (2.4.0)
       rails (>= 6.1.0)
     oj (3.16.3)
@@ -428,13 +426,13 @@ GEM
       strscan
     rspec-core (3.13.0)
       rspec-support (~> 3.13.0)
-    rspec-expectations (3.13.0)
+    rspec-expectations (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
     rspec-mocks (3.13.1)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.13.0)
-    rspec-rails (6.1.2)
+    rspec-rails (6.1.3)
       actionpack (>= 6.1)
       activesupport (>= 6.1)
       railties (>= 6.1)
@@ -572,7 +570,7 @@ PLATFORMS
   ruby
   x86_64-darwin-19
   x86_64-darwin-21
-  x86_64-linux
+  x86_64-darwin-23
 
 DEPENDENCIES
   after_party
