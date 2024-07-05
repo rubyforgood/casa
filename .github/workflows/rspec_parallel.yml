@@ -21,9 +21,9 @@ jobs:
   rspec_parallel:
     name: RSpec Groups ${{ inputs.groups }}
     runs-on: ubuntu-latest
-    timeout-minutes: 4
     env:
       RAILS_ENV: test
+      TEST_MAX_DURATION: 45
       BUNDLE_WITHOUT: "development"
       CI_TOTAL_JOBS: ${{ inputs.group_count }}
       CI_JOB_INDEX: ${{ inputs.groups }}
@@ -110,12 +110,10 @@ jobs:
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec parallel_rspec \
           -n "${CI_TOTAL_JOBS}" \
           --only-group "${CI_JOB_INDEX}" \
-          --runtime-log old_parallel_runtime.log \
-          --verbose ./spec
+          --runtime-log old_parallel_runtime.log ./spec
 
           # echo 'Tests completed. Uploading to Code Climate'
           # ./cc-test-reporter after-build --exit-code $?
-          # cat tmp/spec_summary.log
 
       - name: Compress reports
         if: ${{ !cancelled() }}

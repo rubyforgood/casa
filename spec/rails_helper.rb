@@ -69,6 +69,15 @@ RSpec.configure do |config|
 
   config.disable_monkey_patching!
 
+  config.around :each do |example|
+    # If timeout is not set it will run without a timeout
+    Timeout.timeout(ENV["TEST_MAX_DURATION"].to_i) do
+      example.run
+    end
+  rescue Timeout::Error
+    raise StandardError.new "\"#{example.full_description}\" in #{example.location} timed out."
+  end
+
   config.around :each, :disable_bullet do |example|
     Bullet.raise = false
     example.run
