@@ -1,4 +1,4 @@
-class EmancipationChecklistReminderTask
+class EmancipationChecklistReminderService
   attr_reader :cases
 
   def initialize
@@ -11,10 +11,12 @@ class EmancipationChecklistReminderTask
   end
 
   def send_reminders
-    cases.each do |assignment|
-      ::EmancipationChecklistReminderNotifier
-        .with(casa_case: assignment.casa_case)
-        .deliver(assignment.volunteer)
+    if Time.now.utc.to_date.day == 1
+      cases.each do |assignment|
+        ::EmancipationChecklistReminderNotifier
+          .with(casa_case: assignment.casa_case)
+          .deliver(assignment.volunteer)
+      end
     end
   end
 end
