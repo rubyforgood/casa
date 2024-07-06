@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 20
     env:
       RAILS_ENV: test
+      TEST_MAX_DURATION: 60
 
     services:
       db:
