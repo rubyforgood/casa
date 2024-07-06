@@ -12,10 +12,11 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     context "without filter" do
       let(:case_contacts) do
         [
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today),
-          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today,
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.days.ago),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.now,
+            contact_types: [create(:contact_type, name: "Most Recent Case Contact")]),
+          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,
             contact_types: [create(:contact_type, name: "DRAFT Case Contact")])
         ]
       end
@@ -56,9 +57,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         case_contacts
         sign_in volunteer
         visit case_contacts_path
-        within(".card-title", match: :first) do
-          expect(page).to have_text(case_contacts[2].contact_groups_with_types.keys.first)
-        end
+        expect(page).to have_text("Most Recent Case Contact")
+        expect(page).to have_text("DRAFT Case Contact")
       end
     end
 
