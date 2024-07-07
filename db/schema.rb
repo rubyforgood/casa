@@ -612,6 +612,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_16_194609) do
     t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["casa_org_id", "value"], name: "index_standard_court_orders_on_casa_org_id_and_value", unique: true
     t.index ["casa_org_id"], name: "index_standard_court_orders_on_casa_org_id"
   end
 

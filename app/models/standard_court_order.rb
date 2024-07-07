@@ -16,7 +16,8 @@ end
 #
 # Indexes
 #
-#  index_standard_court_orders_on_casa_org_id  (casa_org_id)
+#  index_standard_court_orders_on_casa_org_id            (casa_org_id)
+#  index_standard_court_orders_on_casa_org_id_and_value  (casa_org_id,value) UNIQUE
 #
 # Foreign Keys
 #
