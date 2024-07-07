@@ -48,6 +48,13 @@ module CaseContactsHelper
     end
   end
 
+  def expand_filters?(surfaced_keys = %i[no_drafts sorted_by])
+    params.fetch(:filterrific, {})
+      .except(*surfaced_keys)
+      .reject { |_, value| value == "" }
+      .present?
+  end
+
   private
 
   def send_home

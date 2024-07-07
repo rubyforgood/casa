@@ -72,7 +72,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
             sign_in volunteer
             visit case_contacts_path
-            click_button "Show / Hide"
+            click_button "Expand / Hide"
 
             fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
             fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
@@ -104,6 +104,57 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
           expect(page).not_to have_content other_casa_case.case_number
           expect(page).to have_content casa_case.case_number
+        end
+      end
+
+      describe "by hide drafts" do
+        it "does not show draft contacts" do
+          create(:case_contact, creator: volunteer, casa_case: casa_case)
+          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case)
+
+          sign_in volunteer
+          visit case_contacts_path
+
+          check "Hide drafts"
+
+          click_button "Filter"
+
+          expect(page).not_to have_content "Draft"
+        end
+      end
+
+      describe "collapsing filter menu" do
+        before do
+          sign_in volunteer
+          visit case_contacts_path
+        end
+
+        it "displays sticky filters before clicking expand" do
+          expect(page).to have_field "Hide drafts", type: :checkbox
+        end
+
+        it "does not expand menu when filtering only by sticky filter" do
+          check "Hide drafts"
+
+          click_button "Filter"
+
+          expect(page).to have_field "Hide drafts", type: :checkbox
+          expect(page).not_to have_content "Other filters"
+        end
+
+        it "displays other filters when expanded" do
+          click_button "Expand / Hide"
+
+          expect(page).to have_content "Other filters"
+        end
+
+        it "does not hide menu when filtering by placement filter" do
+          click_button "Expand / Hide"
+          select "In Person", from: "Contact medium"
+
+          click_button "Filter"
+
+          expect(page).to have_content "Other filters"
         end
       end
     end
@@ -167,7 +218,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         expect(page).to_not have_text("Case 1 Notes")
 
         # filtering to only show case 2
-        click_button "Show / Hide"
+        click_button "Expand / Hide"
         fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
         fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
         click_button "Filter"
