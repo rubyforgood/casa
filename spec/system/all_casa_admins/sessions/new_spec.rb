@@ -19,6 +19,11 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       expect(page).to have_text "Signed out successfully"
       expect(page).to have_text "All CASA Log In"
     end
+
+    it "allows access to flipper" do
+      visit "/flipper"
+      expect(page).to have_text "Flipper"
+    end
   end
 
   context "when unauthenticated" do
@@ -49,6 +54,10 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       end
 
       expect(page).to have_text "Invalid Email or password"
+    end
+
+    it "denies access to flipper" do
+      expect { visit "/flipper" }.to raise_error(ActionController::RoutingError)
     end
   end
 end

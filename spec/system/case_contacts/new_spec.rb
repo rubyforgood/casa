@@ -49,10 +49,11 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
     before(:each) do
       sign_in volunteer
+      allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
     end
 
     it "is successful without a. Miles Driven or driving reimbursement", js: true do
-      FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+      allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(false)
       organization = build(:casa_org)
       build(:contact_type_group, name: "Empty", casa_org: organization)
       grp_with_hidden = build(:contact_type_group, name: "OnlyHiddenTypes", casa_org: organization)

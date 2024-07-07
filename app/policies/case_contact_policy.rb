@@ -12,7 +12,7 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   def additional_expenses_allowed?
-    FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) &&
+    Flipper.enabled?(:show_additional_expenses) &&
       current_organization.additional_expenses_enabled
   end
 
