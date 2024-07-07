@@ -6,5 +6,7 @@ class CreateStandardCourtOrders < ActiveRecord::Migration[7.1]
 
       t.timestamps
     end
+
+    add_index :standard_court_orders, [:casa_org_id, :value], unique: true
   end
 end
