@@ -19,6 +19,7 @@ class DbPopulator
     @casa_org_counter = 0
     @case_number_sequence = 1000
     @case_fourteen_years_old = case_fourteen_years_old
+    @other_duties_counter = 0 ## adds other duties counter
   end
 
   def create_all_casa_admin(email)
