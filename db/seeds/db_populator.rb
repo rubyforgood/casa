@@ -106,6 +106,25 @@ class DbPopulator
     Volunteer.all.each { |v| v.supervisor = supervisors.sample(random: rng) }
   end
 
+  # Create other duties (Volunteer only)
+  # Increment other_duties_counter by 1 each time other duty is created
+  # Print out statement that indicates number of other duties created
+
+  def create_other_duties
+    Volunteer.map do |v|
+      2.times {
+        OtherDuty.create!(
+          creator_id: v.id, 
+          creator_type: "Volunteer", 
+          occurred_at: Faker::Date.between(from: 2.days.ago, to: Date.today), 
+          duration_minutes: rand(5..180), 
+          notes: Faker::Lorem.sentence 
+        )}
+        @other_duties_counter =+ 1
+      end
+    puts "Created #{@other_duties_counter} Other Duties."
+  end
+
   def generate_case_number
     # CINA-YY-XXXX
     years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
