@@ -112,7 +112,7 @@ GEM
     blueprinter (1.0.2)
     brakeman (6.1.2)
       racc
-    bugsnag (6.27.0)
+    bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     bullet (7.1.6)
