@@ -112,7 +112,7 @@ GEM
     blueprinter (1.0.2)
     brakeman (6.1.2)
       racc
-    bugsnag (6.27.0)
+    bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     bullet (7.1.6)
@@ -327,6 +327,8 @@ GEM
     nokogiri (1.16.6-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.16.6-x86_64-darwin)
+      racc (~> 1.4)
+    nokogiri (1.16.6-x86_64-linux)
       racc (~> 1.4)
     noticed (2.4.0)
       rails (>= 6.1.0)
@@ -568,9 +570,9 @@ GEM
 PLATFORMS
   arm64-darwin-21
   ruby
-  x86_64-darwin-19
   x86_64-darwin-21
   x86_64-darwin-23
+  x86_64-linux
 
 DEPENDENCIES
   after_party
