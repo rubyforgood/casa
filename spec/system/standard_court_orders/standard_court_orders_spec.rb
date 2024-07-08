@@ -4,6 +4,7 @@ RSpec.describe "Standard Court Orders", type: :system, js: true do
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org) }
 
   it "allows an admin to create a standard court order" do
     sign_in admin
@@ -37,7 +38,14 @@ RSpec.describe "Standard Court Orders", type: :system, js: true do
     expect(page).to_not have_css("tr", text: "Substance Abuse Treatment (child, mother, father, other guardian)")
   end
 
-  it "allows a volunteer to select a standard court order" do
-    # 
-  end
+  # it "allows a volunteer to select a standard court order" do
+  #   sign_in volunteer
+  #
+  #   create(:standard_court_order, value: "Substance Abuse Treatment (child, mother, father, other guardian)")
+  #
+  #   visit edit_casa_case_path(casa_case)
+  #   select("Substance Abuse Treatment (child, mother, father, other guardian)", from: "Court Order Type")
+  #   click_button("Add a court order")
+  #
+  # end
 end
