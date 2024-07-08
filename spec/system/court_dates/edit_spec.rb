@@ -19,6 +19,8 @@ RSpec.describe "court_dates/edit", type: :system do
 
   context "as an admin" do
     before do
+      create(:standard_court_order, value: "Some Totally New Value", casa_org: volunteer.casa_org)
+
       sign_in admin
       visit casa_case_path(casa_case)
       click_on court_date.date.strftime("%B %-d, %Y")
@@ -33,11 +35,12 @@ RSpec.describe "court_dates/edit", type: :system do
     end
 
     it "adds a standard court order", js: true do
-      select("Family therapy", from: "Court Order Type")
+
+      select("Some Totally New Value", from: "Court Order Type")
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last
-      expect(textarea.value).to eq("Family therapy")
+      expect(textarea.value).to eq("Some Totally New Value")
     end
 
     it "adds a custom court order", js: true do
