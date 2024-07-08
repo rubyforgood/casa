@@ -533,7 +533,7 @@ GEM
     timeout (0.4.1)
     traceroute (0.8.1)
       rails (>= 3.0.0)
-    twilio-ruby (7.2.1)
+    twilio-ruby (7.2.3)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
