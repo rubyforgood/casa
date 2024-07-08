@@ -33,7 +33,7 @@ RSpec.describe "casa_cases/new", type: :view do
       render template: "casa_cases/new"
 
       expect(rendered).to have_content("Assign a Volunteer")
-      expect(rendered).to have_css("#casa_case_assigned_volunteer_id")
+      expect(rendered).to have_css("#casa_case_case_assignments_attributes_0_volunteer_id")
     end
   end
 end

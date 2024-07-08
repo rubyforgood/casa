@@ -109,14 +109,18 @@
         <label for="casa_case_contact_type_ids">Contact Types</label>
         <%= render "case_contacts/form/contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: [@casa_case] %>
       <% end %>
-      <div class="select-style-1">
-        <%= form.label :assigned_volunteer_id, "Assign a Volunteer" %>
-        <div class="select-position">
-          <%= form.select :assigned_volunteer_id,
-                          @casa_case.unassigned_volunteers.map { |v| [v.display_name, v.id] },
-                          prompt: "Please select a volunteer" %>
+      <% unless casa_case.persisted? %>
+        <div class="select-style-1">
+          <%= form.fields_for :case_assignments, casa_case.case_assignments.new do |caf| %>
+            <%= caf.label :volunteer_id, "Assign a Volunteer" %>
+            <div class="select-position">
+              <%= caf.select :volunteer_id,
+                             @casa_case.unassigned_volunteers.map { |v| [v.display_name, v.id] },
+                             prompt: "Please select a volunteer" %>
+            </div>
+          <% end %>
         </div>
-      </div>
+      <% end %>
       <br>
       <div class="actions-cc">
         <% if casa_case.active %>

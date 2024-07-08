@@ -34,8 +34,9 @@ RSpec.describe "casa_cases/new", type: :system do
 
           find(".ts-control").click
           find("span", text: contact_type.name).click
+          find(".ts-control").click
 
-          select "Test User", from: "casa_case[assigned_volunteer_id]"
+          select "Test User", from: "casa_case[case_assignments_attributes][0][volunteer_id]"
 
           within ".top-page-actions" do
             click_on "Create CASA Case"

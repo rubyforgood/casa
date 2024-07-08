@@ -51,8 +51,6 @@ class CasaCasesController < ApplicationController
     @casa_case.validate_contact_type = true
 
     if @casa_case.save
-      assign_volunteer_to_case if assigned_volunteer_id
-
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
         format.json { render json: @casa_case, status: :created }
@@ -142,16 +140,6 @@ class CasaCasesController < ApplicationController
 
   private
 
-  def assign_volunteer_to_case
-    return unless volunteer
-
-    volunteer.case_assignments.new(casa_case_id: @casa_case.id, volunteer_id: assigned_volunteer_id).save!
-  end
-
-  def volunteer
-    User.find(assigned_volunteer_id) if assigned_volunteer_id.present?
-  end
-
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:id])
@@ -171,23 +159,15 @@ class CasaCasesController < ApplicationController
       :court_report_due_date,
       :empty_court_date,
       contact_type_ids: [],
-      court_dates_attributes: [:date]
+      court_dates_attributes: [:date],
+      case_assignments_attributes: [:volunteer_id]
     )
   end
 
-  def assigned_volunteer_id
-    params.require(:casa_case).permit(
-      :assigned_volunteer_id
-    )[:assigned_volunteer_id]
-  end
-
   def casa_case_create_params
-    create_params = if court_date_unknown?
-      casa_case_params.except(:court_dates_attributes)
-    else
-      casa_case_params
-    end
-
+    create_params = casa_case_params
+    create_params = create_params.except(:court_dates_attributes) if court_date_unknown?
+    create_params = create_params.except(:case_assignments_attributes) unless assigned_volunteer?
     create_params.except(:empty_court_date)
   end
 
@@ -210,5 +190,9 @@ class CasaCasesController < ApplicationController
 
   def court_date_unknown?
     casa_case_params[:empty_court_date] == "1"
+  end
+
+  def assigned_volunteer?
+    casa_case_params[:case_assignments_attributes] && casa_case_params[:case_assignments_attributes]["0"][:volunteer_id].present?
   end
 end

@@ -15,7 +15,8 @@ RSpec.describe "/casa_cases", type: :request do
       "date_in_care(1i)": date_in_care.year,
       assigned_volunteer_id: volunteer.id,
       casa_org_id: organization.id,
-      contact_type_ids: [type1.id]
+      contact_type_ids: [type1.id],
+      case_assignments_attributes: {"0": {volunteer_id: volunteer.id.to_s}}
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
