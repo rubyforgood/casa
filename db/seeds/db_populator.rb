@@ -54,7 +54,7 @@ class DbPopulator
     create_learning_hour_types(casa_org)
     create_learning_hour_topics(casa_org)
     create_learning_hours(casa_org)
-    create_other_duties 
+    create_other_duties
     casa_org
   end
 
@@ -111,17 +111,18 @@ class DbPopulator
   # Print out statement that indicates number of other duties created
 
   def create_other_duties
-    Volunteer.map do |v|
+    Volunteer.find_each do |v|
       2.times {
         OtherDuty.create!(
-          creator_id: v.id, 
-          creator_type: "Volunteer", 
-          occurred_at: Faker::Date.between(from: 2.days.ago, to: Date.today), 
-          duration_minutes: rand(5..180), 
-          notes: Faker::Lorem.sentence 
-        )}
-        @other_duties_counter =+ 1
-      end
+          creator_id: v.id,
+          creator_type: "Volunteer",
+          occurred_at: Faker::Date.between(from: 2.days.ago, to: Date.today),
+          duration_minutes: rand(5..180),
+          notes: Faker::Lorem.sentence
+        )
+        @other_duties_counter = + 1
+      }
+    end
     puts "Created #{@other_duties_counter} Other Duties."
   end
 
