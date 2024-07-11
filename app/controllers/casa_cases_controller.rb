@@ -167,7 +167,6 @@ class CasaCasesController < ApplicationController
   def casa_case_create_params
     create_params = casa_case_params
     create_params = create_params.except(:court_dates_attributes) if court_date_unknown?
-    create_params = create_params.except(:case_assignments_attributes) unless assigned_volunteer?
     create_params.except(:empty_court_date)
   end
 
@@ -190,9 +189,5 @@ class CasaCasesController < ApplicationController
 
   def court_date_unknown?
     casa_case_params[:empty_court_date] == "1"
-  end
-
-  def assigned_volunteer?
-    casa_case_params[:case_assignments_attributes] && casa_case_params[:case_assignments_attributes]["0"][:volunteer_id].present?
   end
 end
