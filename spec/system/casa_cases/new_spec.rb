@@ -47,6 +47,7 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
           expect(page).to have_content("Transition Aged Youth: Yes")
+          expect(page).to have_content(volunteer_display_name)
         end
       end
     end
