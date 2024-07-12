@@ -50,7 +50,7 @@ class CaseContact < ApplicationRecord
     status == "expenses" || active?
   end
 
-  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
+  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
   validates_associated :additional_expenses
 
   accepts_nested_attributes_for :casa_case

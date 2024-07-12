@@ -1,7 +1,7 @@
 <%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact expenses", step: @page, total_steps: @total_pages)) %>
 
 <div>
-  <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
+  <%= form_with(model: @case_contact, data: { controller: "additional-expenses-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"}, url: wizard_path(nil, case_contact_id: @case_contact.id), local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <div class="card-style-1 pl-25 mb-10 pr-50">
@@ -59,87 +59,29 @@
         <div class="other-expenses">
           <ol>
             <% @case_contact.decorate.additional_expenses_count %>
-            <% if @case_contact.additional_expenses.any? %>
-              <%= form.fields_for :additional_expenses do |ff| %>
-                <li>
-                  <div class="expense-container row">
-                    <div class="input-style-1 col-sm-3">
-                      <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
-                      <div class="input-group">
-                        <span class="dollar-sign">
-                          <%= ff.number_field :other_expense_amount,
-                            placeholder: "0",
-                            class: "form-control other-expense-amount",
-                            min: "0", max: 1000, step: 0.01 %>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="input-style-1 col">
-                      <h5><%= form.label :other_expenses_describe, "b. Expense details" %></h5>
-                      <%= ff.text_field :other_expenses_describe,
-                        placeholder: "Enter additional details",
-                        class: "form-control other-expenses-describe" %>
-                    </div>
-                  </div>
-                </li>
-              <% end %>
-            <% end %>
-            <% if @case_contact.decorate.additional_expenses_count < 10 %>
-              <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-                <li>
-                  <div class="expense-container row">
-                    <div class="input-style-1 col-sm-3">
-                      <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
-                      <div class="input-group">
-                        <span class="dollar-sign">
-                          <%= ff.number_field :other_expense_amount,
-                            placeholder: "0",
-                            class: "form-control other-expense-amount",
-                            min: "0", max: 1000, step: 0.01 %>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="input-style-1 col">
-                      <h5><%= form.label :other_expenses_describe, "b. Expense details" %></h5>
-                      <%= ff.text_field :other_expenses_describe,
-                        placeholder: "Enter additional details",
-                        class: "form-control other-expenses-describe" %>
-                    </div>
-                  </div>
-                </li>
-              <% end %>
-              <% (9 - @case_contact.decorate.additional_expenses_count).times do |i| %>
-                <%= form.fields_for :additional_expenses, AdditionalExpense.new do |ff| %>
-                  <div class="expense-container row d-none" id="<%= if @case_contact.decorate.additional_expenses_count === 0
-                                                                    then "expense" + (i + 2).to_s
-                                                                    else "expense" + ((@case_contact.decorate.additional_expenses_count) + (i + 2)).to_s
-                                                                    end %>">
-                    <div class="input-style-1 col-sm-3">
-                      <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
-                      <div class="input-group">
-                        <span class="dollar-sign">
-                          <%= ff.number_field :other_expense_amount,
-                            placeholder: "0",
-                            class: "form-control other-expense-amount",
-                            min: "0", max: 1000, step: 0.01 %>
-                        </span>
-                      </div>
-                    </div>
-                    <div class="input-style-1 col">
-                      <h5><%= form.label :other_expenses_describe, "b. Expense details" %></h5>
-                      <%= ff.text_field :other_expenses_describe,
-                        placeholder: "Enter additional details",
-                        class: "form-control other-expenses-describe" %>
-                    </div>
-                  </div>
+            <% if form.object.additional_expenses.any? %>
+              <% form.object.additional_expenses.each do |expense| %>
+                <%= form.fields_for :additional_expenses, expense do |f| %>
+                  <%= render "shared/additional_expense_form", form: f, new_record: false %>
+                  <% end %>
                 <% end %>
+            <% else %>
+              <%= form.fields_for :additional_expenses, AdditionalExpense.new do |f| %>
+                <%= render "shared/additional_expense_form", form: f, new_record: true %>
               <% end %>
             <% end %>
+            <template data-additional-expenses-form-target="template">
+              <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |f| %>
+                <%= render "shared/additional_expense_form", form: f %>
+              <% end %>
+            </template>
+            <div id="expense<%= form.index %>" data-additional-expenses-form-target="target"></div>
           </ol>
 
-          <% if @case_contact.decorate.additional_expenses_count < 10 %>
-            <button type="button" class="btn-sm main-btn primary-btn-outline btn-hover" id="add-another-expense">+ Add Another Expense</button>
-          <% end %>
+          <button type="button" class="btn-sm main-btn primary-btn-outline btn-hover" data-action="additional-expenses-form#add" id="add-another-expense">
+            <i class="lni lni-plus mr-10"></i> Add Another Expense
+          </button>
+
         </div>
       </div>
     <% end %>
