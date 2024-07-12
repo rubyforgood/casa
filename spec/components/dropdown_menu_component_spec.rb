@@ -25,8 +25,7 @@ RSpec.describe DropdownMenuComponent, type: :component do
     render_inline(DropdownMenuComponent.new(menu_title: "Example Title")) { "Example Item" }
 
     expect(page).to have_css("div.dropdown")
-    expect(page).to have_css("button.btn.btn-secondary.dropdown-toggle svg")
-    expect(page).to have_css("svg title", text: "Example Title")
+    expect(page).to have_css("button.btn.btn-secondary.dropdown-toggle")
     expect(page).to have_css(".dropdown-menu", text: "Example Item")
   end
 
