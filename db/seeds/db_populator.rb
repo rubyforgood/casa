@@ -19,7 +19,6 @@ class DbPopulator
     @casa_org_counter = 0
     @case_number_sequence = 1000
     @case_fourteen_years_old = case_fourteen_years_old
-    @other_duties_counter = 0 ## adds other duties counter
   end
 
   def create_all_casa_admin(email)
@@ -120,10 +119,8 @@ class DbPopulator
           duration_minutes: rand(5..180),
           notes: Faker::Lorem.sentence
         )
-        @other_duties_counter = + 1
       }
     end
-    puts "Created #{@other_duties_counter} Other Duties."
   end
 
   def generate_case_number

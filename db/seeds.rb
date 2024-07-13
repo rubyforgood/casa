@@ -68,6 +68,7 @@ class SeederMain
       LearningHourType,
       LearningHourTopic,
       MileageRate,
+      OtherDuty,
       Supervisor,
       SupervisorVolunteer,
       User,
