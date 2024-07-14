@@ -46,4 +46,20 @@ RSpec.describe ContactTypeDecorator do
       end
     end
   end
+
+  describe "last_contact_timestamp" do
+    context "with empty array" do
+      it { expect(contact_type.decorate.last_contact_timestamp([])).to eq Time.at(0) }
+    end
+
+    context "with cases" do
+      let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+      let(:casa_case_ids) { [casa_case.id] }
+
+      context "with no case contacts" do
+        it { expect(contact_type.decorate.last_contact_timestamp([])).to eq Time.at(0) }
+      end
+    end
+  end
+
 end
