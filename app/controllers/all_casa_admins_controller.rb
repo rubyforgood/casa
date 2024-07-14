@@ -30,7 +30,7 @@ class AllCasaAdminsController < ApplicationController
       end
     rescue ActiveRecord::RecordInvalid
       respond_to do |format|
-        format.html { render :new }
+        format.html { render :new, status: :unprocessable_entity }
 
         format.json do
           render json: @all_casa_admin.errors.full_messages, status: :unprocessable_entity
@@ -53,7 +53,7 @@ class AllCasaAdminsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors.full_messages, status: :unprocessable_entity }
       end
     end
@@ -78,7 +78,7 @@ class AllCasaAdminsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @user.errors.full_messages, status: :unprocessable_entity }
       end
     end

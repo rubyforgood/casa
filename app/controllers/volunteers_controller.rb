@@ -41,7 +41,7 @@ class VolunteersController < ApplicationController
       sms_status = deliver_sms_to @volunteer, body_msg
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -58,7 +58,7 @@ class VolunteersController < ApplicationController
       @volunteer.filter_old_emails!(@volunteer.email)
       redirect_to edit_volunteer_path(@volunteer), notice: notice
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -73,7 +73,7 @@ class VolunteersController < ApplicationController
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated. They have been sent an email."
       end
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -82,7 +82,7 @@ class VolunteersController < ApplicationController
     if @volunteer.deactivate
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

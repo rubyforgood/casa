@@ -12,7 +12,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
       service.create!
       redirect_to all_casa_admins_casa_org_path(@casa_org), notice: "New admin created successfully"
     rescue ActiveRecord::RecordInvalid
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -28,7 +28,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
       @casa_admin.filter_old_emails!(@casa_admin.email)
       redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: notice
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -39,7 +39,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
       redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was activated. They have been sent an email."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
@@ -50,7 +50,7 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
       redirect_to edit_all_casa_admins_casa_org_casa_admin_path, notice: "Admin was deactivated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
