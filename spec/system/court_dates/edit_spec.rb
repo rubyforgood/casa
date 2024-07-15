@@ -35,7 +35,6 @@ RSpec.describe "court_dates/edit", type: :system do
     end
 
     it "adds a standard court order", js: true do
-
       select("Some Totally New Value", from: "Court Order Type")
       click_button("Add a court order")
 

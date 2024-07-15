@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: Create default standard court orders for every CASA org'
+  desc "Deployment task: Create default standard court orders for every CASA org"
   task create_default_standard_court_orders: :environment do
     puts "Running deploy task 'create_default_standard_court_orders'"
 
