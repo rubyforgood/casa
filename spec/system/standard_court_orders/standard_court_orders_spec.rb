@@ -25,7 +25,7 @@ RSpec.describe "Standard Court Orders", type: :system, js: true do
     create(:standard_court_order, value: "Substance Abuse Treatment (child, mother, father, other guardian)")
 
     visit edit_casa_org_path(casa_org)
-  
+
     within("#standard-court-orders") do
       click_button "Actions Menu"
       click_link "Delete"
@@ -37,15 +37,4 @@ RSpec.describe "Standard Court Orders", type: :system, js: true do
     expect(page).to have_css("div.alert", text: "Standard court order was successfully deleted.")
     expect(page).to_not have_css("tr", text: "Substance Abuse Treatment (child, mother, father, other guardian)")
   end
-
-  # it "allows a volunteer to select a standard court order" do
-  #   sign_in volunteer
-  #
-  #   create(:standard_court_order, value: "Substance Abuse Treatment (child, mother, father, other guardian)")
-  #
-  #   visit edit_casa_case_path(casa_case)
-  #   select("Substance Abuse Treatment (child, mother, father, other guardian)", from: "Court Order Type")
-  #   click_button("Add a court order")
-  #
-  # end
 end

@@ -5,8 +5,8 @@ RSpec.describe Deployment::CreateDefaultStandardCourtOrdersService do
     let!(:casa_org_1) { create(:casa_org) }
     let!(:casa_org_2) { create(:casa_org) }
 
-    it 'creates StandardCourtOrders from DEFAULT_STANDARD_COURT_ORDERS for each org' do
-      stub_const("Deployment::CreateDefaultStandardCourtOrdersService::DEFAULT_STANDARD_COURT_ORDERS", 
+    it "creates StandardCourtOrders from DEFAULT_STANDARD_COURT_ORDERS for each org" do
+      stub_const("Deployment::CreateDefaultStandardCourtOrdersService::DEFAULT_STANDARD_COURT_ORDERS",
         ["Default 1", "Default 2"])
 
       described_class.new.create_defaults
