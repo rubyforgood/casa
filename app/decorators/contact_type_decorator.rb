@@ -17,7 +17,7 @@ class ContactTypeDecorator < Draper::Decorator
   end
 
   def last_contact_timestamp(casa_case_ids)
-    last_contact = CaseContact.joins(:contact_types).where(casa_case_id: casa_case_ids, contact_types: { id: object.id }).order(occurred_at: :desc).first
+    last_contact = CaseContact.joins(:contact_types).where(casa_case_id: casa_case_ids, contact_types: {id: object.id}).order(occurred_at: :desc).first
     last_contact&.occurred_at || Time.at(0)
   end
 end

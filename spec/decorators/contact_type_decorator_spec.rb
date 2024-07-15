@@ -61,5 +61,4 @@ RSpec.describe ContactTypeDecorator do
       end
     end
   end
-
 end
