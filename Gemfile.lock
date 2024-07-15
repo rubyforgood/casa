@@ -332,7 +332,7 @@ GEM
       racc (~> 1.4)
     noticed (2.4.0)
       rails (>= 6.1.0)
-    oj (3.16.3)
+    oj (3.16.4)
       bigdecimal (>= 3.0)
     orm_adapter (0.5.0)
     parallel (1.25.1)
