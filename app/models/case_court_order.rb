@@ -8,11 +8,6 @@ class CaseCourtOrder < ApplicationRecord
 
   enum implementation_status: IMPLEMENTATION_STATUSES
 
-  # TODO: assess what we're doing with this method
-  def self.court_order_options
-    STANDARD_COURT_ORDERS.map { |o| [o, o] }
-  end
-
   def implementation_status_symbol
     case implementation_status
     when "implemented"
