@@ -12,11 +12,11 @@
       <% if @progress %>
         <div class="col-12 col-md-6 align-items-center d-flex gap-2 mt-2 mt-md-0">
         <% if @navigable %>
-          <%= link_to @nav_back do %>
-            <i class="lni lni-chevron-left"></i>
+          <%= link_to @nav_back, title: "Back step", aria: { label: "Back step" } do %>
+            <i class="lni lni-chevron-left", alt: "Chevron icon left"></i>
           <% end %>
-          <%= link_to @nav_next do %>
-            <i class="lni lni-chevron-right"></i>
+          <%= link_to @nav_next, title: "Next step", aria: { label: "Next step" } do %>
+            <i class="lni lni-chevron-right", alt: "Chevron icon right"></i>
           <% end %>
         <% end %>
         <p class="col-auto">
