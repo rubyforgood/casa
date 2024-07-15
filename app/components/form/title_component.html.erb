@@ -15,21 +15,19 @@
           <%= link_to @nav_back do %>
             <i class="lni lni-chevron-left"></i>
           <% end %>
-        <% end %>
-          <p class="col-auto">
-            <%= @steps_in_text %>
-          </p>
-          <div class="col">
-            <div class="progress">
-              <div class="progress-bar primary-bg" role="progressbar" style="width: <%= @progress %>%" aria-valuenow="<%= @progress %>" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-          </div>
-        </div>
-        <% if @navigable %>
           <%= link_to @nav_next do %>
             <i class="lni lni-chevron-right"></i>
           <% end %>
         <% end %>
+        <p class="col-auto">
+          <%= @steps_in_text %>
+        </p>
+        <div class="col">
+          <div class="progress">
+            <div class="progress-bar primary-bg" role="progressbar" style="width: <%= @progress %>%" aria-valuenow="<%= @progress %>" aria-valuemin="0" aria-valuemax="100"></div>
+          </div>
+        </div>
+        </div>
       <% end %>
     </div>
 
