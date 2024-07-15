@@ -1,4 +1,4 @@
-<%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact details", step: @page, total_steps: @total_pages)) %>
+<%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact details", step: @page, total_steps: @total_pages, navigable: true, nav_back: leave_case_contacts_form_path, nav_next: next_wizard_path)) %>
 
 <div>
   <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), local: true, id: "casa-contact-form", class: "component-validated-form") do |form| %>

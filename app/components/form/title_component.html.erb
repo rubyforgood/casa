@@ -11,6 +11,9 @@
       <h2 class="col-12 col-md-6 case-contacts-form-subtitle"><%= @subtitle %></h2>
       <% if @progress %>
         <div class="col-12 col-md-6 align-items-center d-flex gap-2 mt-2 mt-md-0">
+        <% if @navigable %>
+          <%= link_to 'BACK', @nav_back %>
+        <% end %>
           <p class="col-auto">
             <%= @steps_in_text %>
           </p>
@@ -20,6 +23,9 @@
             </div>
           </div>
         </div>
+        <% if @navigable %>
+          <%= link_to 'NEXT', @nav_next %>
+        <% end %>
       <% end %>
     </div>
 
