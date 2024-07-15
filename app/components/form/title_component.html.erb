@@ -12,7 +12,9 @@
       <% if @progress %>
         <div class="col-12 col-md-6 align-items-center d-flex gap-2 mt-2 mt-md-0">
         <% if @navigable %>
-          <%= link_to 'BACK', @nav_back %>
+          <%= link_to @nav_back do %>
+            <i class="lni lni-chevron-left"></i>
+          <% end %>
         <% end %>
           <p class="col-auto">
             <%= @steps_in_text %>
@@ -24,7 +26,9 @@
           </div>
         </div>
         <% if @navigable %>
-          <%= link_to 'NEXT', @nav_next %>
+          <%= link_to @nav_next do %>
+            <i class="lni lni-chevron-right"></i>
+          <% end %>
         <% end %>
       <% end %>
     </div>
