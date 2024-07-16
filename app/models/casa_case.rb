@@ -48,6 +48,7 @@ class CasaCase < ApplicationRecord
   accepts_nested_attributes_for :casa_case_contact_types
   accepts_nested_attributes_for :court_dates
   accepts_nested_attributes_for :volunteers
+  accepts_nested_attributes_for :case_assignments, reject_if: proc { |attributes| attributes["volunteer_id"].blank? }
 
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
