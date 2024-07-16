@@ -547,6 +547,19 @@ RSpec.describe CaseContact, type: :model do
         end
       end
     end
+
+    describe ".drafts_for_removal" do
+      let!(:active_case_contact) { create(:case_contact, status: "active") }
+      let!(:new_draft_case_contact) { create(:case_contact, status: "started", created_at: Time.now, draft_case_ids: nil) }
+      let!(:draft_case_contact_without_draft_case_id) { create(:case_contact, status: "started", created_at: Time.now - 2.days, draft_case_ids: nil) }
+      let!(:draft_case_contact_with_draft_case_id) { create(:case_contact, status: "started", created_at: Time.now - 2.days, draft_case_ids: [1]) }
+      let!(:eight_day_draft_case_contact) { create(:case_contact, status: "details", created_at: Time.now - 8.days) }
+      let!(:eight_day_active_case_contact) { create(:case_contact, status: "active", created_at: Time.now - 8.days) }
+
+      it "returns drafts not attached to cases and drafts older than a week" do
+        expect(described_class.drafts_for_removal).to match_array [draft_case_contact_without_draft_case_id, eight_day_draft_case_contact]
+      end
+    end
   end
 
   describe "#contact_groups_with_types" do
