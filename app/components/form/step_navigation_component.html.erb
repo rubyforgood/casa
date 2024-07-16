@@ -1,0 +1,23 @@
+<div>
+    <%# Back navigation %>
+    <%= button_tag type: @submit_back ? "submit" : "button", class: "btn btn-link", title: "Back step", aria: { label: "Back step" } do %>
+        <% if @submit_back %>
+            <i class="lni lni-chevron-left", alt: "Chevron icon left"></i>
+        <% else %>
+            <%= link_to @nav_back, title: "Back step", aria: { label: "Back step" } do %>
+                <i class="lni lni-chevron-left", alt: "Chevron icon left"></i>
+            <% end %>
+        <% end %>
+    <% end %>
+    
+    <%# Next navigation %>
+    <%= button_tag type: @submit_next ? "submit" : "button", class: "btn btn-link", title: "Next step", aria: { label: "Next step" } do %>
+        <% if @submit_next %>
+            <i class="lni lni-chevron-right", alt: "Chevron icon right"></i>
+        <% else %>
+            <%= link_to @nav_next, title: "Next step", aria: { label: "Next step" } do %>
+                <i class="lni lni-chevron-right", alt: "Chevron icon right"></i>
+            <% end %>
+        <% end %>
+    <% end %>
+</div>
