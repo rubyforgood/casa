@@ -20,6 +20,8 @@ class CaseContacts::FormController < ApplicationController
 
   def update
     authorize @case_contact
+    @page = wizard_steps.index(step) + 1
+    @total_pages = steps.count
     params[:case_contact][:status] = step.to_s if !@case_contact.active?
     remove_unwanted_contact_types
     remove_nil_draft_ids
