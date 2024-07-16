@@ -148,7 +148,7 @@ class CaseContact < ApplicationRecord
   scope :drafts_for_removal, -> {
     where.not(status: "active")
       .where("case_contacts.created_at < ?", 1.week.ago)
-      .or(where(draft_case_ids: nil).where("case_contacts.created_at < ?", 1.day.ago))
+      .or(where(draft_case_ids: []).where("case_contacts.created_at < ?", 1.day.ago))
   }
 
   filterrific(
