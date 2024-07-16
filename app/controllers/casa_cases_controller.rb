@@ -45,9 +45,11 @@ class CasaCasesController < ApplicationController
         casa_org: current_organization
       )
     )
+
     authorize @casa_case
 
     @casa_case.validate_contact_type = true
+
     if @casa_case.save
       respond_to do |format|
         format.html { redirect_to @casa_case, notice: "CASA case was successfully created." }
@@ -157,17 +159,14 @@ class CasaCasesController < ApplicationController
       :court_report_due_date,
       :empty_court_date,
       contact_type_ids: [],
-      court_dates_attributes: [:date]
+      court_dates_attributes: [:date],
+      case_assignments_attributes: [:volunteer_id]
     )
   end
 
   def casa_case_create_params
-    create_params = if court_date_unknown?
-      casa_case_params.except(:court_dates_attributes)
-    else
-      casa_case_params
-    end
-
+    create_params = casa_case_params
+    create_params = create_params.except(:court_dates_attributes) if court_date_unknown?
     create_params.except(:empty_court_date)
   end
 

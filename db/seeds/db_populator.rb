@@ -53,6 +53,7 @@ class DbPopulator
     create_learning_hour_types(casa_org)
     create_learning_hour_topics(casa_org)
     create_learning_hours(casa_org)
+    create_other_duties
     casa_org
   end
 
@@ -102,6 +103,24 @@ class DbPopulator
     create_users_of_type.call(Volunteer, options.volunteer_count)
     supervisors = Supervisor.all.to_a
     Volunteer.all.each { |v| v.supervisor = supervisors.sample(random: rng) }
+  end
+
+  # Create other duties (Volunteer only)
+  # Increment other_duties_counter by 1 each time other duty is created
+  # Print out statement that indicates number of other duties created
+
+  def create_other_duties
+    Volunteer.find_each do |v|
+      2.times {
+        OtherDuty.create!(
+          creator_id: v.id,
+          creator_type: "Volunteer",
+          occurred_at: Faker::Date.between(from: 2.days.ago, to: Date.today),
+          duration_minutes: rand(5..180),
+          notes: Faker::Lorem.sentence
+        )
+      }
+    end
   end
 
   def generate_case_number

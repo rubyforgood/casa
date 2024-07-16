@@ -22,7 +22,7 @@ RSpec.describe "casa_cases/new", type: :view do
   end
 
   context "when trying to assign a volunteer to a case" do
-    it "should not be able to assign volunteers" do
+    it "should be able to assign volunteers" do
       enable_pundit(view, user)
       allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(user.casa_org)
@@ -32,8 +32,8 @@ RSpec.describe "casa_cases/new", type: :view do
 
       render template: "casa_cases/new"
 
-      expect(rendered).not_to have_content("Manage Volunteers")
-      expect(rendered).not_to have_css("#volunteer-assignment")
+      expect(rendered).to have_content("Assign a Volunteer")
+      expect(rendered).to have_css("#casa_case_case_assignments_attributes_0_volunteer_id")
     end
   end
 end
