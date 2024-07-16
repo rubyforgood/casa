@@ -21,37 +21,36 @@ export default class extends Controller {
     })
   }
 
-  // For group list with anchor links where method above does not work because 
-  // active does not get triggered in sidebar_helper.rb
+  // For group list with anchor links where toggleShow() does not work because
+  // active class does not get triggered in sidebar_helper.rb
   toggleShowAnchorList () {
     this.titleTarget.classList.remove('collapsed')
     this.listTarget.classList.add('show')
   }
 
   obsFunc () {
-    console.log('obsFunc is run!')
-    let anchorLinks = [];
-    this.linkTargets.forEach((link) => {
-      if (link.children[0].href.includes('/casa_org/1/edit#')) {
-        anchorLinks.push(link);
-      }
-    });
-
     const observer = new IntersectionObserver(entries => {
       entries.forEach(entry => {
         if (entry.intersectionRatio > 0) {
-          let headerID = entry.target.id
-          this.linkTargets.forEach((link) => {
-            if (link.children[0].href.includes(headerID)) {
-              link.classList.add('active');
-            } else {
-              link.classList.remove('active');
-            }
-          })
+          let headerID = entry.target.id;
+
+          this.linkTargets.forEach(link => link.classList.remove('active'));
+
+          const activeLink = this.linkTargetsMap[headerID];
+          if(activeLink) {
+            activeLink.classList.add('active');
+          }
         }
       });
     });
-  
+
+    this.linkTargetsMap = {};
+    this.linkTargets.forEach(link => {
+      const href = link.children[0].href;
+      const headerID = href.substring(href.indexOf('#') + 1);
+      this.linkTargetsMap[headerID] = link;
+    });
+
     document.querySelectorAll('h1[id], h2[id]').forEach((header) => {
       observer.observe(header);
     });
