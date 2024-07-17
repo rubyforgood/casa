@@ -3,7 +3,7 @@
     <%= button_tag type: @submit_back ? :submit : :button,
         name: :nav_step,
         value: @nav_back,
-        class: "btn btn-link", 
+        class: "btn btn-link #{@nav_back.nil? ? 'disabled' : 'enabled'}", 
         title: "Back step", 
         aria: { label: "Back step" }, 
         disabled: !@nav_back do %>
@@ -16,7 +16,7 @@
     <%= button_tag type: @submit_next ? :submit : :button, 
         name: :nav_step,
         value: @nav_forward,
-        class: "btn btn-link", 
+        class: "btn btn-link #{@nav_next.nil? ? 'disabled' : 'enabled'}",
         title: "Next step", 
         aria: { label: "Next step" }, 
         disabled: !@nav_next do %>
