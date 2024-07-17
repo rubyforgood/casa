@@ -291,8 +291,7 @@ class CaseContact < ApplicationRecord
   end
 
   def casa_org_any_expenses_enabled?
-    # creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
-    return true
+    creator.casa_org.additional_expenses_enabled || creator.casa_org.show_driving_reimbursement
   end
 
   private_class_method def self.sorted_by_params
