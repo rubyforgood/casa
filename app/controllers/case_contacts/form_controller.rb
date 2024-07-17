@@ -22,6 +22,7 @@ class CaseContacts::FormController < ApplicationController
     authorize @case_contact
     @page = wizard_steps.index(step) + 1
     @total_pages = steps.count
+    @nav_step = params[:nav_step]
     params[:case_contact][:status] = step.to_s if !@case_contact.active?
     remove_unwanted_contact_types
     remove_nil_draft_ids
@@ -29,6 +30,7 @@ class CaseContacts::FormController < ApplicationController
     if CaseContactUpdateService.new(@case_contact).update_attrs(case_contact_params)
       respond_to do |format|
         format.html {
+          render @nav_step.split('/').last.to_sym if @nav_step.present?
           if step == steps.last
             finish_editing
           else
@@ -155,3 +157,4 @@ class CaseContacts::FormController < ApplicationController
     self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end
+

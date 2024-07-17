@@ -6,7 +6,5 @@ class Form::StepNavigationComponent < ViewComponent::Base
     @nav_next = nav_next
     @submit_back = submit_back
     @submit_next = submit_next
-    @back_disabled = !@nav_back
-    @next_disabled = !@nav_next
   end
 end

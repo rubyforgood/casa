@@ -1,8 +1,8 @@
 <div data-controller="autosave" data-autosave-good-alert-class="text-muted" data-autosave-bad-alert-class="text-danger">
-  <%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact notes", step: @page, total_steps: @total_pages, notes: @case_contact.decorate.form_page_notes[:notes], autosave: true)) %>
 
   <div>
     <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), id: "casa-contact-form", class: "component-validated-form", data: { "turbo-action": "advance", "autosave-target": "form" }) do |form| %>
+      <%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact notes", step: @page, total_steps: @total_pages, notes: @case_contact.decorate.form_page_notes[:notes], autosave: true, navigable: Form::StepNavigationComponent.new(nav_back: previous_wizard_path, nav_next: @case_contact.casa_org_any_expenses_enabled? ? next_wizard_path : nil, submit_back: true, submit_next: true))) %>
       <%= render "contact_topic_notes", form: %>
       <div class="card-style-1 pl-25 pr-25 mb-10">
         <div class="d-flex justify-content-between mb-3"
