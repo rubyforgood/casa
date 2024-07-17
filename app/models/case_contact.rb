@@ -320,6 +320,7 @@ end
 #  draft_case_ids             :integer          default([]), is an Array
 #  duration_minutes           :integer
 #  medium_type                :string
+#  metadata                   :jsonb
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
 #  occurred_at                :datetime

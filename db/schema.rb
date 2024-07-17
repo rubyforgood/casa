@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_06_22_020203) do
+ActiveRecord::Schema[7.1].define(version: 2024_07_16_194609) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -203,6 +203,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_06_22_020203) do
     t.string "status", default: "started"
     t.integer "draft_case_ids", default: [], array: true
     t.string "volunteer_address"
+    t.jsonb "metadata", default: {}
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.index ["deleted_at"], name: "index_case_contacts_on_deleted_at"
