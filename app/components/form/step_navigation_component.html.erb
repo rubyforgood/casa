@@ -1,6 +1,6 @@
 <div>
     <%# Back navigation %>
-    <%= button_tag type: @submit_back ? :submit : :button,
+    <%= button_tag type: :submit,
         name: :nav_step,
         value: @nav_back,
         class: "btn btn-link #{@nav_back.nil? ? 'disabled' : 'enabled'}", 
@@ -13,7 +13,7 @@
     <% end %>
     
     <%# Next navigation %>
-    <%= button_tag type: @submit_next ? :submit : :button, 
+    <%= button_tag type: :submit, 
         name: :nav_step,
         value: @nav_forward,
         class: "btn btn-link #{@nav_next.nil? ? 'disabled' : 'enabled'}",
