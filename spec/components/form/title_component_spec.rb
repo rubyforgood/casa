@@ -9,6 +9,7 @@ RSpec.describe Form::TitleComponent, type: :component do
   let(:total_steps) { nil }
   let(:notes) { nil }
   let(:autosave) { nil }
+  let(:navigable) { nil }
 
   before(:each) do
     render_inline(described_class.new(title: title, subtitle: subtitle, step: step, total_steps: total_steps, notes: notes, autosave: autosave))
