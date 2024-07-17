@@ -3,25 +3,24 @@
     <%= button_tag type: :submit,
         name: :nav_step,
         value: @nav_back,
-        class: "btn btn-link #{@nav_back.nil? ? 'disabled' : 'enabled'}", 
-        title: "Back step", 
-        aria: { label: "Back step" }, 
+        class: "btn btn-link #{@nav_back.nil? ? 'disabled' : 'enabled'}",
+        title: "Back step",
+        aria: { label: "Back step" },
         disabled: !@nav_back do %>
         <%= link_to @nav_back, title: "Back step", aria: { label: "Back step" } do %>
-            <i class="lni lni-chevron-left", alt: "Chevron icon left"></i>
+            <i class="lni lni-chevron-left" alt="Chevron icon left"></i>
         <% end %>
     <% end %>
-    
     <%# Next navigation %>
-    <%= button_tag type: :submit, 
+    <%= button_tag type: :submit,
         name: :nav_step,
         value: @nav_forward,
         class: "btn btn-link #{@nav_next.nil? ? 'disabled' : 'enabled'}",
-        title: "Next step", 
-        aria: { label: "Next step" }, 
+        title: "Next step",
+        aria: { label: "Next step" },
         disabled: !@nav_next do %>
         <%= link_to @nav_next, title: "Next step", aria: { label: "Next step" } do %>
-            <i class="lni lni-chevron-right", alt: "Chevron icon right"></i>
+            <i class="lni lni-chevron-right" alt="Chevron icon right"></i>
         <% end %>
     <% end %>
 </div>
