@@ -9,36 +9,21 @@ class CaseContacts::FormController < ApplicationController
 
   # wizard_path
   def show
-    authorize @case_contact
+    manage_form_step
     get_cases_and_contact_types
-    @page = wizard_steps.index(step) + 1
-    @total_pages = steps.count
-
     render_wizard
     wizard_path
   end
 
   def update
-    authorize @case_contact
-    @page = wizard_steps.index(step) + 1
-    @total_pages = steps.count
-    @nav_step = params[:nav_step]
-
+    manage_form_step(step_navigation: true)
     params[:case_contact][:status] = step.to_s if !@case_contact.active?
     remove_unwanted_contact_types
     remove_nil_draft_ids
-
     if CaseContactUpdateService.new(@case_contact).update_attrs(case_contact_params)
       respond_to do |format|
         format.html {
-          if @nav_step.present?
-            jump_to(@nav_step.split("/").last.to_sym)
-            render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-          elsif step == steps.last
-            finish_editing
-          else
-            render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-          end
+          manage_navigation
         }
         format.json { head :ok }
       end
@@ -59,6 +44,13 @@ class CaseContacts::FormController < ApplicationController
     @case_contact = CaseContact.find(params[:case_contact_id])
   end
 
+  def manage_form_step(step_navigation: false)
+    authorize @case_contact
+    @page = wizard_steps.index(step) + 1
+    @total_pages = steps.count
+    @nav_step = params[:nav_step] if step_navigation
+  end
+
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases)
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
@@ -70,6 +62,17 @@ class CaseContacts::FormController < ApplicationController
     @contact_types.order(name: :asc)
     @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
+  end
+
+  def manage_navigation
+    if @nav_step.present?
+      jump_to(@nav_step.split("/").last.to_sym)
+      render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
+    elsif step == steps.last
+      finish_editing
+    else
+      render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
+    end
   end
 
   def finish_editing
