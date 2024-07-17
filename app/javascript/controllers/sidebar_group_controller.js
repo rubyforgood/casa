@@ -1,7 +1,6 @@
 /* global IntersectionObserver */
 
 import { Controller } from '@hotwired/stimulus'
-import { has } from 'lodash'
 
 export default class extends Controller {
   static targets = ['title', 'list', 'link']
@@ -32,25 +31,25 @@ export default class extends Controller {
   }
 
   // Highlights menu items as user scrolls on page. Implemented for casa_org/1/edit#organization-details.
-  menuHighlight() {
+  menuHighlight () {
     /**
      * Constructs a map where the keys are header IDs extracted from the href attributes of the links,
      * and the values are the corresponding link elements.
-     * 
+     *
      * @returns {Object} A hash map with header IDs as keys and link elements as values.
      */
     const linkTargetsMap = () => {
-      let hash = {};
+      const hash = {}
       this.linkTargets.forEach(link => {
-        const href = link.children[0].href;
-        const headerID = href.substring(href.indexOf('#') + 1);
-        hash[headerID] = link;
+        const href = link.children[0].href
+        const headerID = href.substring(href.indexOf('#') + 1)
+        hash[headerID] = link
       })
-      return hash;
-    };
+      return hash
+    }
 
     // Call linkTargetsMap() and assign it to linkHash
-    const linkHash = linkTargetsMap();
+    const linkHash = linkTargetsMap()
 
     // add class active to link if it on page
     const observer = new IntersectionObserver(entries => {
@@ -75,7 +74,7 @@ export default class extends Controller {
 
   /**
    * Checks to see if user is in /casa_org/1/edit path.
-   * 
+   *
    * @returns {Boolean}
    */
   isEditOrganization () {
