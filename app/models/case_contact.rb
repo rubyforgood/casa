@@ -145,12 +145,6 @@ class CaseContact < ApplicationRecord
 
   scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
 
-  scope :drafts_for_removal, -> {
-    where.not(status: "active")
-      .where("case_contacts.created_at < ?", 1.week.ago)
-      .or(where(draft_case_ids: []).where("case_contacts.created_at < ?", 1.day.ago))
-  }
-
   filterrific(
     default_filter_params: {sorted_by: "occurred_at_desc"},
     available_filters: [
