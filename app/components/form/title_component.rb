@@ -7,7 +7,7 @@ class Form::TitleComponent < ViewComponent::Base
     @notes = notes
     @autosave = autosave
     @navigable = navigable
-    
+
     if step && total_steps
       @steps_in_text = "Step #{step} of #{total_steps}"
       @progress = (step.to_d / total_steps.to_d) * 100
