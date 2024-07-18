@@ -49,18 +49,25 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.find(params[:case_contact_id])
+    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
+                               .find(params[:case_contact_id])
   end
 
   def get_cases_and_contact_types
-    @casa_cases = policy_scope(current_organization.casa_cases)
+    @casa_cases = policy_scope(current_organization.casa_cases.includes(:volunteers))
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @contact_types = ContactType.joins(:casa_case_contact_types).where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
-    unless @contact_types.present?
+    @contact_types = ContactType.includes(:contact_type_group)
+                                .joins(:casa_case_contact_types)
+                                .where(casa_case_contact_types: { casa_case_id: @casa_cases.pluck(:id) })
+                                .order(name: :asc)
+
+    if @contact_types.empty?
       @contact_types = current_organization.contact_types
+                                           .includes(:contact_type_group)
+                                           .order(name: :asc)
     end
-    @contact_types.order(name: :asc)
+
     @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
   end
