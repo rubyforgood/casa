@@ -49,8 +49,7 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
-                               .find(params[:case_contact_id])
+    @case_contact = CaseContact.includes(contact_topic_answers: :contact_topic).find(params[:case_contact_id])
   end
 
   def get_cases_and_contact_types
@@ -58,15 +57,11 @@ class CaseContacts::FormController < ApplicationController
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
     @contact_types = ContactType.includes(:contact_type_group)
-                                .joins(:casa_case_contact_types)
-                                .where(casa_case_contact_types: { casa_case_id: @casa_cases.pluck(:id) })
-                                .order(name: :asc)
+      .joins(:casa_case_contact_types)
+      .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    if @contact_types.empty?
-      @contact_types = current_organization.contact_types
-                                           .includes(:contact_type_group)
-                                           .order(name: :asc)
-    end
+    @contact_types = current_organization.contact_types.includes(:contact_type_group) if @contact_types.empty?
+    @contact_types.order(name: :asc)
 
     @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
@@ -137,15 +132,11 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    if params.dig(:case_contact, :contact_type_ids)
-      @case_contact.contact_types.clear
-    end
+    @case_contact.contact_types.clear if params.dig(:case_contact, :contact_type_ids)
   end
 
   def remove_nil_draft_ids
-    if params.dig(:case_contact, :draft_case_ids)
-      params[:case_contact][:draft_case_ids] -= [""]
-    end
+    params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
   end
 
   def set_progress
