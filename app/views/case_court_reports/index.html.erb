@@ -47,6 +47,9 @@
   }
 
   const setTimeZone = () => {
+    if(!$('#case-selection').val()){ 
+      alert('Select an active case and specify the date range.');
+    }
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     document.getElementById("user-time-zone").value = timeZone
   }

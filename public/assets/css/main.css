@@ -56,7 +56,7 @@ a {
 
 span {
     display: block; }
-}
+
 audio,
 canvas,
 iframe,
@@ -1079,6 +1079,12 @@ h6,
 .input-style-1 {
   position: relative;
   margin-bottom: 30px; }
+  .input-style-1 select{
+    width: 465px; 
+    height: 40px; 
+    border-radius: 5px;
+    border: 1px solid #4a6cf7;
+  }
   .input-style-1 label {
     font-size: 14px;
     font-weight: 500;
