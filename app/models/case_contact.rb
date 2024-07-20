@@ -37,6 +37,8 @@ class CaseContact < ApplicationRecord
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
 
+  after_save_commit ::CaseContactMetadataCallback.new
+
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order and have an html template in case_contacts/form.
   FORM_STEPS = %i[details notes expenses].freeze
