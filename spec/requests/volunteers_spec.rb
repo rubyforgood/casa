@@ -218,7 +218,7 @@ RSpec.describe "/volunteers", type: :request do
           post volunteers_url, params: params
         }.to change(Volunteer, :count).by(0)
           .and change(ActionMailer::Base.deliveries, :count).by(0)
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -262,7 +262,7 @@ RSpec.describe "/volunteers", type: :request do
         patch volunteer_path(volunteer), params: {
           volunteer: {email: other_volunteer.email, display_name: "New Name", phone_number: "+15463457898"}
         }
-        expect(response).to have_http_status(:success) # Re-renders form
+        expect(response).to have_http_status(:unprocessable_entity)
 
         volunteer.reload
         expect(volunteer.display_name).to_not eq "New Name"
