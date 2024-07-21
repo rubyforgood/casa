@@ -3,8 +3,7 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :set_progress
   before_action :require_organization!
-  before_action :set_case_contact, only: [:show, :update]
-  prepend_before_action :set_steps, only: [:show, :update]
+  prepend_before_action :set_case_contact, only: [:show, :update]
   after_action :verify_authorized
 
   # wizard_path
@@ -49,11 +48,12 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.includes(contact_topic_answers: :contact_topic).find(params[:case_contact_id])
+    @case_contact = CaseContact.find(params[:case_contact_id])
+    self.steps = @case_contact.form_steps
   end
 
   def get_cases_and_contact_types
-    @casa_cases = policy_scope(current_organization.casa_cases.includes(:volunteers))
+    @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
     @contact_types = ContactType.includes(:contact_type_group)
@@ -145,9 +145,5 @@ class CaseContacts::FormController < ApplicationController
     else
       0
     end
-  end
-
-  def set_steps
-    self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end
