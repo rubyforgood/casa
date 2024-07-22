@@ -36,7 +36,7 @@
         </select>
       </div>
       <!-- Occurred at filter -->
-      <%= render(DropdownMenuComponent.new(menu_title: "Occurred at", klass: "pull-left mr-2")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Occurred at", container_klass: "pull-left mr-2")) do %>
         <div data-filter="occurred_at">
           <%= render partial: "occurred_at_filter_input", locals: {
             label: "Starting from",

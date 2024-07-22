@@ -40,7 +40,7 @@
 
           </div>
 
-          <%= render(DropdownMenuComponent.new(menu_title: current_user.display_name, hide_label: true, klass: "profile-box ml-15", button_klass: "bg-transparent border-0")) do |component| %>
+          <%= render(DropdownMenuComponent.new(menu_title: current_user.display_name, hide_label: true, container_klass: "profile-box ml-15", button_klass: "bg-transparent border-0")) do |component| %>
             <% component.with_icon do %>
               <div class="profile-info">
                 <div class="info">

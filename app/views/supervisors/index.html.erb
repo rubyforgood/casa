@@ -9,7 +9,7 @@
     <div class="col-md-6">
       <div class="breadcrumb-wrapper mb-30">
         <span class="ml-5">
-          <%= render(DropdownMenuComponent.new(menu_title: "Filter Status", klass: "pull-left mx-2 supervisor-filters status-options", button_klass: "btn-sm main-btn dark-btn", icon_name: "funnel")) do %>
+          <%= render(DropdownMenuComponent.new(menu_title: "Filter Status", container_klass: "pull-left mx-2 supervisor-filters status-options", button_klass: "btn-sm main-btn dark-btn", icon_name: "funnel")) do %>
             <div class="dropdown-item form-check checkbox-style">
               <%= check_box_tag "status_option_active", "true", true,
                             class: "active form-check-input",

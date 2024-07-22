@@ -3,12 +3,12 @@
 class DropdownMenuComponent < ViewComponent::Base
   renders_one :icon
 
-  def initialize(menu_title:, icon_name: nil, hide_label: false, render_check: true, klass: nil, button_klass: nil)
+  def initialize(menu_title:, icon_name: nil, hide_label: false, render_check: true, container_klass: nil, button_klass: nil)
     @menu_title = menu_title
     @render_check = render_check
     @hide_label = hide_label
     @icon_name = icon_name
-    @class = klass
+    @container_class = container_klass
     @button_class = button_klass
   end
 

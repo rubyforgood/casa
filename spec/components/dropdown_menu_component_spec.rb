@@ -36,7 +36,7 @@ RSpec.describe DropdownMenuComponent, type: :component do
   end
 
   it "renders the dropdown menu with additional classes" do
-    render_inline(DropdownMenuComponent.new(menu_title: "Example", klass: "example-class")) { "Example Content" }
+    render_inline(DropdownMenuComponent.new(menu_title: "Example", container_klass: "example-class")) { "Example Content" }
 
     expect(page).to have_css("div.dropdown.example-class")
   end

@@ -29,7 +29,7 @@
   <div class="row volunteer-filters">
     <div class="col-sm-12 flex align-items-center">
       <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <%= render(DropdownMenuComponent.new(menu_title: "Supervisor", klass: "pull-left mx-2 my-1 supervisor-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Supervisor", container_klass: "pull-left mx-2 my-1 supervisor-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "supervisor-option-none", "", true,
                             class: "form-check-input",
@@ -49,7 +49,7 @@
           </div>
         <% end %>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Status", klass: "pull-left mx-2 my-1 status-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Status", container_klass: "pull-left mx-2 my-1 status-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "status_option_active", "true", true,
                             class: "form-check-input",
@@ -64,7 +64,7 @@
         </div>
       <% end %>
 
-      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", container_klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "transition_youth_option_yes", "true", true,
                             class: "form-check-input",
@@ -78,7 +78,7 @@
           <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Has Extra Languages", klass: "pull-left mx-2 my-1 extra-language-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Has Extra Languages", container_klass: "pull-left mx-2 my-1 extra-language-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "extra_language_option_yes", "true", true,
                             class: "form-check-input",

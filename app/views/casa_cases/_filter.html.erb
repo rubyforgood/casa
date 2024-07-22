@@ -2,7 +2,7 @@
   <div class="row casa-case-filters">
     <div class="col-sm-12 flex align-items-center">
       <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <%= render(DropdownMenuComponent.new(menu_title: "Status", klass: "pull-left mx-2 my-1 status-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Status", container_klass: "pull-left mx-2 my-1 status-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "status_option_active", "Active", true,
                             class: "form-check-input",
@@ -16,7 +16,7 @@
           <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
         </div>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Volunteer", klass: "pull-left mx-2 my-1 assigned-to-volunteer-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Volunteer", container_klass: "pull-left mx-2 my-1 assigned-to-volunteer-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true,
                             class: "form-check-input",
@@ -30,7 +30,7 @@
           <%= label_tag "assigned_to_volunteer_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to more than 1 Volunteer", klass: "pull-left mx-2 my-1 more-than-one-volunteer-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to more than 1 Volunteer", container_klass: "pull-left mx-2 my-1 more-than-one-volunteer-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
                             class: "form-check-input",
@@ -44,7 +44,7 @@
           <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", container_klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
         <div class="dropdown-item form-check checkbox-style">
           <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
                             class: "form-check-input",
@@ -58,7 +58,7 @@
           <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
       <% end %>
-      <%= render(DropdownMenuComponent.new(menu_title: "Casa Case Prefix", klass: "pull-left mx-2 my-1 case-number-prefix-options")) do %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Casa Case Prefix", container_klass: "pull-left mx-2 my-1 case-number-prefix-options")) do %>
         <% ["CINA", "None", "TPR"].each do |option| %>
           <div class="dropdown-item form-check checkbox-style">
             <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
