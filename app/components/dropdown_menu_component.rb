@@ -27,6 +27,6 @@ class DropdownMenuComponent < ViewComponent::Base
   end
 
   def button_label
-    content_tag(:span, @menu_title, class: @hide_label ? "sr-only" : "mr-5")
+    content_tag(:span, @menu_title, class: ["mr-5", {"sr-only" => @hide_label}])
   end
 end
