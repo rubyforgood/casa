@@ -233,7 +233,7 @@ class CaseContact < ApplicationRecord
 
   def contact_groups_with_types
     hash = Hash.new { |h, k| h[k] = [] }
-    contact_types.each do |contact_type|
+    contact_types.includes(:contact_type_group).each do |contact_type|
       hash[contact_type.contact_type_group.name] << contact_type.name
     end
     hash
