@@ -7,7 +7,6 @@ export default class extends Controller {
 
   connect () {
     if (this.isEditOrganization()) {
-      console.log('hi')
       this.toggleShowAnchorList()
       this.menuHighlight()
     }
