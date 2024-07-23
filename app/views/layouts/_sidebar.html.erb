@@ -51,7 +51,7 @@
               { title: "Mileage Rates", icon: "car", path: mileage_rates_path, render_check: policy(:application).see_mileage_rate? }
             ]) %>
           <% end %>
-          <%= render(Sidebar::GroupComponent.new(title: "Edit Organization", icon: "list", render_check: !current_user.volunteer?)) do |group| %>
+          <%= render(Sidebar::AnchorMenuComponent.new(title: "Edit Organization", icon: "list", render_check: !current_user.volunteer?)) do |group| %>
             <% group.with_links([
               { title: "Organization Details", icon: "briefcase", path: edit_casa_org_path(current_organization, anchor: 'organization-details'), render_check: policy(:application).modify_organization? },
               { title: "Contact Types", icon: "user", path: edit_casa_org_path(current_organization, anchor: 'contact-types'), render_check: policy(:application).modify_organization? },
