@@ -2,7 +2,7 @@
     <li>
       <div class="expense-container row" data-index="<%= form.index %>">
         <div class="input-style-1 col-sm-3">
-          <h5><%= form.label :additional_expense, "a. Expense amount" %></h5>
+          <h5><%= form.label :additional_expense, "Expense amount" %></h5>
           <div class="input-group">
             <span class="dollar-sign">
               <%= form.number_field :other_expense_amount,
@@ -14,7 +14,7 @@
           </div>
         </div>
         <div class="input-style-1 col">
-          <h5><%= form.label :other_expenses_describe, "b. Expense details" %></h5>
+          <h5><%= form.label :other_expenses_describe, "Expense details" %></h5>
           <%= form.text_field :other_expenses_describe,
             placeholder: "Enter additional details",
             class: "form-control other-expenses-describe" %>
