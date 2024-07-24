@@ -59,6 +59,15 @@ FactoryBot.define do
 
     trait :expenses_status do
       draft_case_ids { [1] }
+      status { "expenses" }
+    end
+
+    after(:create) do |case_contact, evaluator|
+      if evaluator.metadata
+        case_contact.update_columns(metadata: evaluator.metadata)
+      elsif case_contact.status
+        case_contact.update_columns(metadata: {"status" => {case_contact.status => case_contact.created_at}})
+      end
     end
 
     trait :with_org_topics do

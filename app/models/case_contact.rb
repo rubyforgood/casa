@@ -29,13 +29,15 @@ class CaseContact < ApplicationRecord
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
   validates :casa_case_id, presence: true, if: :active?
-  validate :draft_case_ids_not_empty, if: :active_or_details?
+  validate :draft_case_ids_not_empty, unless: :started?
 
   has_many :case_contact_contact_types
   has_many :contact_types, through: :case_contact_contact_types
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
+
+  after_save_commit ::CaseContactMetadataCallback.new
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order and have an html template in case_contacts/form.
