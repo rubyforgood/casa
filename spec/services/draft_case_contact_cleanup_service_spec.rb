@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe DraftCaseContactCleanupService do
   describe ".call" do
-    let!(:past_expiration) { Time.now - 8.days }
-    let!(:past_exp_without_case) { Time.now - 2.days }
+    let!(:past_expiration) { 8.days.ago }
+    let!(:past_exp_without_case) { 2.days.ago }
     let!(:active_case_contact) { create(:case_contact, status: "active") }
     let!(:new_draft_case_contact) { create(:case_contact, status: "started", created_at: Time.now, draft_case_ids: []) }
     let!(:draft_case_contact_without_draft_case_id) { create(:case_contact, status: "started", created_at: past_exp_without_case, draft_case_ids: []) }
