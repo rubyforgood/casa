@@ -297,7 +297,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         sign_in admin
       end
 
-      pending "is disabled by default"
+      it "is disabled by default" do
+        visit volunteers_path
+        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
+        find("[data-select-all-target='button']").click
+
+        expect(page).to have_button("Confirm", disabled: true, class: %w[deactive-btn main-btn])
+      end
 
       context "when none is selected" do
         it "is enabled" do
