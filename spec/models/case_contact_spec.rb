@@ -134,10 +134,10 @@ RSpec.describe CaseContact, type: :model do
       expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
 
-    it "validates casa case present" do
-      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, casa_case: nil)
+    it "requires a case to be selected" do
+      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, draft_case_ids: [])
       expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("Casa case can't be blank")
+      expect(obj.errors.full_messages).to include("You must select at least one casa case.")
     end
   end
 
@@ -551,13 +551,13 @@ RSpec.describe CaseContact, type: :model do
 
   describe "#contact_groups_with_types" do
     it "returns the groups with their associated case types" do
-      group1 = build_stubbed(:contact_type_group, name: "Family")
-      group2 = build_stubbed(:contact_type_group, name: "Health")
-      contact_type1 = build_stubbed(:contact_type, contact_type_group: group1, name: "Parent")
-      contact_type2 = build_stubbed(:contact_type, contact_type_group: group2, name: "Medical Professional")
-      contact_type3 = build_stubbed(:contact_type, contact_type_group: group2, name: "Other Therapist")
+      group1 = build(:contact_type_group, name: "Family")
+      group2 = build(:contact_type_group, name: "Health")
+      contact_type1 = build(:contact_type, contact_type_group: group1, name: "Parent")
+      contact_type2 = build(:contact_type, contact_type_group: group2, name: "Medical Professional")
+      contact_type3 = build(:contact_type, contact_type_group: group2, name: "Other Therapist")
       case_contact_types = [contact_type1, contact_type2, contact_type3]
-      case_contact = build_stubbed(:case_contact)
+      case_contact = create(:case_contact)
       case_contact.contact_types = case_contact_types
 
       groups_with_types = case_contact.contact_groups_with_types
