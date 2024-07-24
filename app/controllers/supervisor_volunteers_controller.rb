@@ -17,8 +17,8 @@ class SupervisorVolunteersController < ApplicationController
   def unassign
     authorize :supervisor_volunteer
     volunteer = Volunteer.find(params[:id])
-    supervisor = volunteer.supervisor_volunteer.supervisor
     if unassign_volunteers_supervisor(volunteer)
+      supervisor = volunteer.supervisor_volunteer.supervisor
       flash[:notice] = "#{volunteer.display_name} was unassigned from #{supervisor.display_name}."
     else
       flash[:alert] = "Something went wrong. Please try again."
