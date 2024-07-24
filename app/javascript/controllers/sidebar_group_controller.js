@@ -23,49 +23,45 @@ export default class extends Controller {
     this.listTarget.classList.add('show')
   }
 
-    initializeMenuHighlight () {
-      const linkTargetsMap = () => {
-        const hash = {}
-        this.linkTargets.forEach(link => {
-          const href = link.firstElementChild.href
-          if (href.includes("#")) {
-            const headerId = href.substring(href.indexOf('#') + 1)
-            hash[headerId] = link
-          }
-        })
-        return hash
+  anchorLinkMap () {
+    const hash = {}
+    this.linkTargets.forEach(link => {
+      const href = link.firstElementChild.href
+      if (href.includes('#')) {
+        const headerId = href.substring(href.indexOf('#') + 1)
+        hash[headerId] = link
       }
-  
-      const linkHash = linkTargetsMap()
-  
-      const observer = new IntersectionObserver(entries => {
-        entries.forEach(entry => {
-          if (entry.intersectionRatio > 0) {
-            this.linkTargets.forEach(link => link.classList.remove('active'))
-  
-            const headerId = entry.target.id
-            const activeLink = linkHash[headerId]
-            if (activeLink) {
-              activeLink.classList.add('active')
-            }
-          }
-        })
-      })
-  
-      document.querySelectorAll('h1[id], h2[id]').forEach((header) => {
-        observer.observe(header)
-      })
-    }
+    })
+    return hash
+  }
 
-    isAnchorGroupPage () {
-      if (this.linkTarget.firstElementChild) {
-        const href = this.linkTarget.firstElementChild.href
-        if (href.includes('#')) {
-          const hrefAnchorString =  href.substring(href.indexOf('#') + 1)
-          if (document.getElementById(hrefAnchorString)) {
-            return true
+  initializeMenuHighlight () {
+    const linkHash = this.anchorLinkMap()
+
+    const observer = new window.IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.intersectionRatio > 0) {
+          this.linkTargets.forEach(link => link.classList.remove('active'))
+
+          const headerId = entry.target.id
+          const activeLink = linkHash[headerId]
+          if (activeLink) {
+            activeLink.classList.add('active')
           }
         }
-      }
+      })
+    })
+
+    document.querySelectorAll('h1[id], h2[id]').forEach((header) => {
+      observer.observe(header)
+    })
+  }
+
+  isAnchorGroupPage () {
+    const href = this.linkTarget.firstElementChild.href
+    const hrefAnchorString = href.substring(href.indexOf('#') + 1)
+    if (document.getElementById(hrefAnchorString)) {
+      return true
     }
+  }
 }
