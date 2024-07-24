@@ -13,7 +13,7 @@ class ChecklistItemsController < ApplicationController
       set_checklist_updated_date(@hearing_type)
       redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -25,7 +25,7 @@ class ChecklistItemsController < ApplicationController
       set_checklist_updated_date(@hearing_type)
       redirect_to edit_hearing_type_path(@hearing_type), notice: "Checklist item was successfully updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

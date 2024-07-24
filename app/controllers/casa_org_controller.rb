@@ -28,7 +28,7 @@ class CasaOrgController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit }
+        format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @casa_org.errors.full_messages, status: :unprocessable_entity }
       end
     end

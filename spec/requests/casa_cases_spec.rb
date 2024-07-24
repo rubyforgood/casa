@@ -231,9 +231,9 @@ RSpec.describe "/casa_cases", type: :request do
             ).by(0)
           end
 
-          it "renders a successful response (i.e. to display the 'new' template)" do
+          it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_attributes}
-            expect(response).to be_successful
+            expect(response).to have_http_status(:unprocessable_entity)
           end
 
           it "also respond to json", :aggregate_failures do
@@ -271,9 +271,9 @@ RSpec.describe "/casa_cases", type: :request do
             )
           end
 
-          it "renders a successful response (i.e. to display the 'new' template)" do
+          it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_params}
-            expect(response).to be_successful
+            expect(response).to have_http_status(:unprocessable_entity)
           end
         end
       end
@@ -329,9 +329,9 @@ RSpec.describe "/casa_cases", type: :request do
       end
 
       context "with invalid parameters" do
-        it "renders a successful response displaying the edit template" do
+        it "renders an unprocessable entity response displaying the edit template" do
           patch casa_case_url(casa_case), params: {casa_case: invalid_attributes}
-          expect(response).to be_successful
+          expect(response).to have_http_status(:unprocessable_entity)
         end
 
         it "also responds as json", :aggregate_failures do
