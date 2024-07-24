@@ -1,7 +1,7 @@
 require "rails_helper"
 require "action_view"
 
-RSpec.describe "additional_expenses", type: :system do
+RSpec.describe "additional_expenses", type: :system, flipper: true do
   let(:organization) { build(:casa_org, additional_expenses_enabled: true) }
   let(:volunteer) { create(:volunteer, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
@@ -11,11 +11,13 @@ RSpec.describe "additional_expenses", type: :system do
     create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
   end
 
-  it "can be set per organization", js: true do
+  it "additional expenses and notices can be set per organization", js: true do
     other_organization = build(:casa_org)
     other_volunteer = create(:volunteer, casa_org: other_organization)
     other_casa_case = create(:casa_case, casa_org: other_organization)
     create(:case_assignment, casa_case: other_casa_case, volunteer: other_volunteer)
+
+    allow(Flipper).to receive(:enabled?).with(:reimbursement_warning, organization).and_return(true)
 
     sign_in volunteer
     visit casa_case_path(casa_case.id)
@@ -25,6 +27,7 @@ RSpec.describe "additional_expenses", type: :system do
     complete_notes_page
 
     expect(page).to have_text("Other Expenses")
+    expect(page).to have_text("Volunteers are eligible to be reimbursed for case-related travel")
 
     sign_in other_volunteer
     visit casa_case_path(other_casa_case.id)
@@ -34,6 +37,7 @@ RSpec.describe "additional_expenses", type: :system do
     complete_notes_page
 
     expect(page).not_to have_text("Other Expenses")
+    expect(page).not_to have_text("Volunteers are eligible to be reimbursed for case-related travel")
   end
 
   context "when setting additional expenses" do
