@@ -543,7 +543,7 @@ RSpec.describe CaseContact, type: :model do
 
       context "when parameter is not nil" do
         it "returns contacts with the given casa case ids" do
-          expect(described_class.with_casa_case(casa_case.id)).to eq(case_contacts)
+          expect(described_class.with_casa_case(casa_case.id)).to match_array(case_contacts)
         end
       end
     end
