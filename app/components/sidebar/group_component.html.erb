@@ -1,4 +1,4 @@
-<li class="nav-item nav-item-has-children group-item" data-sidebar-target="groupList" data-controller="<%= @controller %>">
+<li class="nav-item nav-item-has-children group-item" data-sidebar-target="groupList" data-controller="sidebar-group">
   <a
     href="#0"
     class="<%= @class %>"
@@ -7,13 +7,13 @@
     aria-controls="ddmenu_<%= @identifier %>"
     aria-expanded="true"
     aria-label="Toggle navigation"
-    data-<%= @controller %>-target="title">
+    data-sidebar-group-target="title">
               <span class="icon">
                 <i class="lni mr-10 lni-<%= @icon %>"></i>
               </span>
     <span data-sidebar-target="linkTitle"><%= @title %></span>
   </a>
-  <ul id="ddmenu_<%= @identifier %>" class="collapse dropdown-nav" data-<%= @controller %>-target="list">
+  <ul id="ddmenu_<%= @identifier %>" class="collapse dropdown-nav" data-sidebar-group-target="list">
     <% links.each do |link| %>
       <%= link %>
     <% end %>
