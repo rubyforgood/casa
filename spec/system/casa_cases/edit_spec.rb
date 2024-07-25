@@ -527,12 +527,16 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     it "adds a standard court order", js: true do
+      create(:standard_court_order,
+        value: "Some Totally New Value",
+        casa_org: volunteer.casa_org)
+
       visit edit_casa_case_path(casa_case)
-      select("Family therapy", from: "Court Order Type")
+      select("Some Totally New Value", from: "Court Order Type")
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last
-      expect(textarea.value).to eq("Family therapy")
+      expect(textarea.value).to eq("Some Totally New Value")
     end
 
     it "adds a custom court order", js: true do
