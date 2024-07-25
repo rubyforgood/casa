@@ -48,8 +48,16 @@
               { title: "Reimbursement Queue", icon: "money-location", path: reimbursements_path, render_check: policy(:reimbursement).index? },
               { title: "Export Data", icon: "folder", path: reports_path, render_check: policy(:application).see_reports_page? },
               { title: "System Imports", icon: "archive", path: imports_path, render_check: policy(:application).see_reports_page? },
-              { title: "Mileage Rates", icon: "car", path: mileage_rates_path, render_check: policy(:application).see_mileage_rate? },
-              { title: "Edit Organization", icon: "cogs", path: edit_casa_org_path(current_organization), render_check: policy(:application).modify_organization? }
+              { title: "Mileage Rates", icon: "car", path: mileage_rates_path, render_check: policy(:application).see_mileage_rate? }
+            ]) %>
+          <% end %>
+          <%= render(Sidebar::GroupComponent.new(title: "Edit Organization", icon: "list", render_check: !current_user.volunteer?)) do |group| %>
+            <% group.with_links([
+              { title: "Organization Details", icon: "briefcase", path: edit_casa_org_path(current_organization, anchor: 'organization-details'), render_check: policy(:application).modify_organization? },
+              { title: "Contact Types", icon: "user", path: edit_casa_org_path(current_organization, anchor: 'contact-types'), render_check: policy(:application).modify_organization? },
+              { title: "Court Details", icon: "library", path: edit_casa_org_path(current_organization, anchor: 'court-details'), render_check: policy(:application).modify_organization? },
+              { title: "Learning Hours", icon: "timer", path: edit_casa_org_path(current_organization, anchor: 'learning-hours'), render_check: policy(:application).modify_organization? },
+              { title: "Case Contact Topics", icon: "comments", path: edit_casa_org_path(current_organization, anchor: 'case-contact-topics'), render_check: policy(:application).modify_organization? }
             ]) %>
           <% end %>
         </ul>
