@@ -39,7 +39,7 @@ RSpec.describe "All-Casa Admin" do
       it "renders new page" do
         expect { subject }.not_to change(CasaAdmin, :count)
 
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template "casa_admins/new"
       end
     end
@@ -92,7 +92,7 @@ RSpec.describe "All-Casa Admin" do
 
       it "renders new page" do
         subject
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template "casa_admins/edit"
       end
     end
@@ -130,7 +130,7 @@ RSpec.describe "All-Casa Admin" do
 
       it "renders edit page" do
         subject
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template "casa_admins/edit"
       end
     end
@@ -168,7 +168,7 @@ RSpec.describe "All-Casa Admin" do
 
       it "renders edit page" do
         subject
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template "casa_admins/edit"
       end
     end

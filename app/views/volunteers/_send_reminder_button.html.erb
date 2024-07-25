@@ -1,14 +1,16 @@
-<%= button_tag(
-  type: "submit",
-  class: "main-btn primary-btn btn-hover btn-sm",
-  id: "reminder_button",
-  data_toggle: "tooltip",
-  title: "Remind volunteer to input case contacts".to_s
-) do %>
-  <i class="lni lni-alarm mr-10"></i> Send Reminder
-<% end %>
+<div class="d-inline-flex align-items-center">
+  <%= button_tag(
+    type: "submit",
+    class: "main-btn primary-btn btn-hover btn-sm mr-3",
+    id: "reminder_button",
+    data_toggle: "tooltip",
+    title: "Remind volunteer to input case contacts".to_s
+  ) do %>
+    <i class="lni lni-alarm mr-10"></i> Send Reminder
+  <% end %>
 
-<div class="d-inline form-check">
-  <%= check_box_tag 'with_cc', 1, class: 'form-check-input' %>
-  <%= label_tag 'with_cc', 'Send CC to Supervisor and Admin', class: 'unbold form-check-label' %>
+  <div class="form-check">
+    <%= check_box_tag 'with_cc', 1, false, class: 'form-check-input' %>
+    <%= label_tag 'with_cc', 'Send CC to Supervisor and Admin', class: 'unbold form-check-label ml-2' %>
+  </div>
 </div>

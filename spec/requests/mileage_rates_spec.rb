@@ -80,7 +80,7 @@ RSpec.describe "/mileage_rates", type: :request do
         expect {
           post mileage_rates_path, params: params
         }.to_not change { MileageRate.count }
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 
@@ -104,7 +104,7 @@ RSpec.describe "/mileage_rates", type: :request do
         expect {
           post mileage_rates_path, params: params
         }.to_not change { MileageRate.count }
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
   end
@@ -140,7 +140,7 @@ RSpec.describe "/mileage_rates", type: :request do
       it "does not update a mileage rate" do
         patch mileage_rate_path(mileage_rate), params: params
 
-        expect(response).to have_http_status(:success)
+        expect(response).to have_http_status(:unprocessable_entity)
 
         mileage_rate.reload
         expect(mileage_rate.amount).to eq(10.11)

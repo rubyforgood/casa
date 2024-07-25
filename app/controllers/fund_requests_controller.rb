@@ -15,7 +15,7 @@ class FundRequestsController < ApplicationController
       FundRequestMailer.send_request(nil, @fund_request).deliver
       redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
