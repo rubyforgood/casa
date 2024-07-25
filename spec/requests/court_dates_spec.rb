@@ -260,9 +260,9 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           end.to change(CourtDate, :count).by(0)
         end
 
-        it "renders a successful response (i.e. to display the 'new' template)" do
+        it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
           post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
-          expect(response).to be_successful
+          expect(response).to have_http_status(:unprocessable_entity)
           expected_errors = [
             "Date can't be blank",
             "Date is not valid. Court date must be within one year from today.",
@@ -305,10 +305,10 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     end
 
     context "with invalid parameters" do
-      it "renders a successful response displaying the edit template" do
+      it "renders an unprocessable entity response displaying the edit template" do
         patch casa_case_court_date_path(casa_case, court_date), params: {court_date: invalid_attributes}
 
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expected_errors = [
           "Date can't be blank",
           "Date is not valid. Court date must be within one year from today.",

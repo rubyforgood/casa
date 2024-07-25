@@ -147,7 +147,7 @@ RSpec.describe FundRequestsController, type: :request do
           end
         end
 
-        context "with in valid params" do
+        context "with invalid params" do
           it "does not create fund request or call mailer" do
             volunteer = create(:volunteer, :with_casa_cases)
             casa_case = volunteer.casa_cases.first
@@ -170,7 +170,7 @@ RSpec.describe FundRequestsController, type: :request do
               }
             }.to_not change(FundRequest, :count)
 
-            expect(response).to be_successful
+            expect(response).to have_http_status(:unprocessable_entity)
           end
         end
       end
