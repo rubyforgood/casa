@@ -2,9 +2,9 @@ require "rails_helper"
 
 RSpec.describe "notifications/index", type: :view do
   let(:notification_1_hour_ago) { create(:notification, :followup_with_note) }
-  let(:notification_1_day_ago) { create(:notification, :followup_with_note) }
-  let(:notification_2_days_ago) { create(:notification, :followup_with_note) }
-  let(:notification_3_days_ago) { create(:notification, :followup_with_note) }
+  let(:notification_1_day_ago) { create(:notification, :emancipation_checklist_reminder) }
+  let(:notification_2_days_ago) { create(:notification, :youth_birthday) }
+  let(:notification_3_days_ago) { create(:notification, :reimbursement_complete) }
 
   let(:patch_note_group_all_users) { create(:patch_note_group, :all_users) }
   let(:patch_note_group_no_volunteers) { create(:patch_note_group, :only_supervisors_and_admins) }
@@ -42,9 +42,9 @@ RSpec.describe "notifications/index", type: :view do
         notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
-        expect(notifications_html[0].text).to include(notification_1_hour_ago.event.message)
-        expect(notifications_html[1].text).to include(notification_1_day_ago.event.message)
-        expect(notifications_html[2].text).to include(notification_2_days_ago.event.message)
+        expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
+        expect(notifications_html[1].text).to match(/Your case CINA-\d+ is a transition aged youth/)
+        expect(notifications_html[2].text).to match(/Your youth, case number: CINA-\d+ has a birthday next month/)
         expect(patch_note_index).to eq(3)
       end
 
@@ -55,7 +55,7 @@ RSpec.describe "notifications/index", type: :view do
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
         expect(patch_note_index).to eq(3)
-        expect(notifications_html[patch_note_index + 1].text).to include(notification_3_days_ago.event.message)
+        expect(notifications_html[patch_note_index + 1].text).to match(/Volunteer User \d+'s request for reimbursement for 0mi on .* has been processed and is en route./)
       end
     end
 
@@ -68,8 +68,8 @@ RSpec.describe "notifications/index", type: :view do
       it "shows all the patch notes available" do
         render template: "notifications/index"
 
-        expect(rendered).to have_text(patch_note_1.note)
-        expect(rendered).to have_text(patch_note_2.note)
+        expect(rendered).to have_text("Patch Note 1")
+        expect(rendered).to have_text("Patch Note B")
       end
 
       it "shows the patch notes under the correct type" do
@@ -81,10 +81,10 @@ RSpec.describe "notifications/index", type: :view do
         patch_note_type_b_header = queryable_html.xpath("//*[text()[contains(.,'#{patch_note_type_b.name}')]]").first
 
         patch_note_a_data = patch_note_type_a_header.parent.css("ul").first
-        expect(patch_note_a_data.text).to include(patch_note_1.note)
+        expect(patch_note_a_data.text).to include("Patch Note 1")
 
         patch_note_b_data = patch_note_type_b_header.parent.css("ul").first
-        expect(patch_note_b_data.text).to include(patch_note_2.note)
+        expect(patch_note_b_data.text).to include("Patch Note B")
       end
     end
   end
