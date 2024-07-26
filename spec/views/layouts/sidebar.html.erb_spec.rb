@@ -52,6 +52,11 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
       expect(rendered).to_not have_link("System Settings", href: "/settings")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      expect(rendered).to_not have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
+      expect(rendered).to_not have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
+      expect(rendered).to_not have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
+      expect(rendered).to_not have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
+      expect(rendered).to_not have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
 
     context "when casa_org other_duties_enabled is true" do
@@ -103,6 +108,11 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to_not have_link("Admins", href: "/casa_admins")
       expect(rendered).to_not have_link("System Settings", href: "/settings")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      expect(rendered).to_not have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
+      expect(rendered).to_not have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
+      expect(rendered).to_not have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
+      expect(rendered).to_not have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
+      expect(rendered).to_not have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
 
     context "when casa_org other_duties_enabled is true" do
@@ -187,11 +197,15 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("System Imports", href: "/imports")
-      expect(rendered).to have_link("Edit Organization", href: "/casa_org/#{user.casa_org.id}/edit")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
       expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
+      expect(rendered).to have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
+      expect(rendered).to have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
+      expect(rendered).to have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
+      expect(rendered).to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
+      expect(rendered).to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
 
     context "when casa_org other_duties_enabled is true" do

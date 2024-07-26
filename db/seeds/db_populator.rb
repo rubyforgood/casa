@@ -150,9 +150,9 @@ class DbPopulator
     @random_past_court_date_counts.sample(random: rng)
   end
 
-  def random_future_court_date_count
-    @random_future_court_date_counts ||= [0, 1]
-    @random_future_court_date_counts.sample(random: rng)
+  def random_zero_one_count
+    @random_zero_one_count ||= [0, 1]
+    @random_zero_one_count.sample(random: rng)
   end
 
   def random_court_order_count
@@ -171,8 +171,33 @@ class DbPopulator
     }.join("\n\n")
   end
 
-  def create_case_contact(casa_case)
-    CaseContact.create!(
+  def create_case_contacts(casa_case)
+    draft_statuses = %w[started details notes expenses]
+
+    case_contact_statuses = Array.new(random_zero_one_count, draft_statuses.sample(random: rng)) +
+      Array.new(random_case_contact_count, "active")
+
+    case_contact_statuses.shuffle(random: rng).each do |status|
+      create_case_contact(casa_case, status:)
+    end
+  end
+
+  def create_case_contact(casa_case, status: "active")
+    params = base_case_contact_params(casa_case, status)
+
+    status_modifications = {
+      "started" => {want_driving_reimbursement: false, draft_case_ids: [], medium_type: nil, occurred_at: nil, duration_minutes: nil, notes: nil, miles_driven: 0},
+      "details" => {want_driving_reimbursement: false, notes: nil, miles_driven: 0},
+      "notes" => {want_driving_reimbursement: false, miles_driven: 0},
+      "expenses" => {want_driving_reimbursement: true}
+    }
+
+    params.merge!(status_modifications[status]) unless status == "active"
+    CaseContact.create!(params)
+  end
+
+  def base_case_contact_params(casa_case, status)
+    {
       casa_case: casa_case,
       creator: casa_case.volunteers.sample(random: rng),
       duration_minutes: likely_contact_durations.sample(random: rng),
@@ -183,8 +208,9 @@ class DbPopulator
       want_driving_reimbursement: random_true_false,
       contact_made: random_true_false,
       notes: note_generator,
+      status: status,
       draft_case_ids: [casa_case&.id]
-    )
+    }
   end
 
   def order_choices
@@ -249,7 +275,7 @@ class DbPopulator
         )
       end
 
-      random_future_court_date_count.times do |index|
+      random_zero_one_count.times do |index|
         CourtDate.create!(
           casa_case_id: new_casa_case.id,
           date: Date.today + 5.weeks
@@ -263,9 +289,7 @@ class DbPopulator
         )
       end
 
-      random_case_contact_count.times do
-        create_case_contact(new_casa_case)
-      end
+      create_case_contacts(new_casa_case)
 
       # guarantee at least one case contact before and after most recent past court date
       if most_recent_past_court_date(new_casa_case.id)
