@@ -10,7 +10,7 @@ FactoryBot.define do
       casa_case { nil }
     end
 
-    before(:create) do |notification, eval|
+    after(:build) do |notification, eval|
       notification.params[:created_by] = eval.created_by if eval.created_by.present?
       notification.params[:casa_case] = eval.casa_case if eval.casa_case.present?
     end
@@ -20,11 +20,11 @@ FactoryBot.define do
     end
 
     trait :followup_without_note do
-      association :event, factory: [:followup_notifier, :without_note]
+      event { association(:followup_notifier, :without_note) }
     end
 
     trait :followup_read do
-      association :event, factory: [:followup_notifier, :read]
+      event { association(:followup_notifier, :read) }
       read_at { DateTime.current }
       seen_at { DateTime.current }
     end

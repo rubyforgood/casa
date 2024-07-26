@@ -3,7 +3,8 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :set_progress
   before_action :require_organization!
-  prepend_before_action :set_case_contact, only: [:show, :update]
+  before_action :set_case_contact, only: [:show, :update]
+  prepend_before_action :set_steps, only: [:show, :update]
   after_action :verify_authorized
 
   # wizard_path
@@ -48,8 +49,8 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.find(params[:case_contact_id])
-    self.steps = @case_contact.form_steps
+    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
+      .find(params[:case_contact_id])
   end
 
   def get_cases_and_contact_types
@@ -117,7 +118,7 @@ class CaseContacts::FormController < ApplicationController
           other_expenses_describe: ae.other_expenses_describe
         )
       end
-      case_contact.contact_topic_answers.each do |cta|
+      case_contact.contact_topic_answers.includes(:contact_topic).each do |cta|
         new_case_contact.contact_topic_answers << cta.dup
       end
 
@@ -145,5 +146,9 @@ class CaseContacts::FormController < ApplicationController
     else
       0
     end
+  end
+
+  def set_steps
+    self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end
