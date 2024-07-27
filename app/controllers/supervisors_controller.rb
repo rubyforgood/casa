@@ -12,7 +12,10 @@ class SupervisorsController < ApplicationController
 
   def index
     authorize Supervisor
-    @supervisors = policy_scope(current_organization.supervisors)
+    @supervisors = policy_scope(current_organization.supervisors).includes(
+      :volunteers,
+      volunteers: [:supervisor, :case_assignments, :case_contacts]
+    )
     @casa_cases = current_organization.casa_cases.missing_court_dates
   end
 
@@ -95,7 +98,10 @@ class SupervisorsController < ApplicationController
 
   def datatable
     authorize Supervisor
-    supervisors = policy_scope current_organization.supervisors
+    supervisors = policy_scope(current_organization.supervisors).includes(
+      :volunteers,
+      volunteers: [:supervisor, :case_assignments, :case_contacts]
+    )
     datatable = SupervisorDatatable.new supervisors, params
 
     render json: datatable
