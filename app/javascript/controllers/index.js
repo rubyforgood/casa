@@ -29,6 +29,9 @@ import SidebarController from './sidebar_controller'
 import SidebarGroupController from './sidebar_group_controller'
 
 import TruncatedTextController from './truncated_text_controller'
+
+import NestedForm from 'stimulus-rails-nested-form'
+
 application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
 application.register('disable-form', DisableFormController)
@@ -42,3 +45,4 @@ application.register('select-all', SelectAllController)
 application.register('sidebar', SidebarController)
 application.register('sidebar-group', SidebarGroupController)
 application.register('truncated-text', TruncatedTextController)
+application.register('nested-form', NestedForm)
