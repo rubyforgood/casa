@@ -72,7 +72,7 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.39.0"
+  gem "standard", "~> 1.39.2"
 end
 
 group :development do
