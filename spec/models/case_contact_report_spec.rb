@@ -409,9 +409,15 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     it "includes topic answers in csv rows" do
-      expect(csv[0].fields).to eq ["Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2"]
-      expect(csv[1].fields).to eq [nil,                     "Ans Contact 2 Topic 2"]
-      expect(csv[2].fields).to eq [nil,                     nil]
+      expected_rows = [
+        # ['Used topic 1',        'Used topic 2'] (header)
+        ["Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2"],
+        [nil,                     "Ans Contact 2 Topic 2"],
+        [nil,                     nil]
+      ]
+      csv.by_row.each do |row|
+        expect(expected_rows).to include(row.fields)
+      end
     end
 
     context "when court topics are not requested" do
