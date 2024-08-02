@@ -40,16 +40,7 @@ class CaseContactsController < ApplicationController
     # - If there is only one case, select that case
     # - If there are no hints, let them select their case
     casa_cases = policy_scope(current_organization.casa_cases)
-    draft_case_ids =
-      if params[:draft_case_ids].present?
-        params[:draft_case_ids]
-      elsif params.dig(:case_contact, :casa_case_id).present?
-        casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
-      elsif casa_cases.count == 1
-        [casa_cases.first.id]
-      else
-        []
-      end
+    draft_case_ids = set_draft_case_ids(params, casa_cases)
 
     @case_contact = CaseContact.create_with_answers(current_organization,
       creator: current_user, draft_case_ids: draft_case_ids)
@@ -138,6 +129,18 @@ class CaseContactsController < ApplicationController
       @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
     else
       redirect_to authenticated_user_root_path
+    end
+  end
+
+  def set_draft_case_ids(params, casa_cases)
+    if params[:draft_case_ids].present?
+      params[:draft_case_ids]
+    elsif params.dig(:case_contact, :casa_case_id).present?
+      casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
+    elsif casa_cases.count == 1
+      [casa_cases.first.id]
+    else
+      []
     end
   end
 end
