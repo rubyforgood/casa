@@ -24,11 +24,9 @@ class CaseContactParameters < SimpleDelegator
     if params.dig(:case_contact, :miles_driven)
       new_params[:miles_driven] = convert_miles_driven(params)
     end
-
-    create_another_param = params.dig(:case_contact, :metadata, :create_another)
-    if create_another_param.present?
-      # "0" or "1" (from checkbox) will not be cast to boolean because metadata is jsonb
-      new_params[:metadata][:create_another] = ActiveRecord::Type::Boolean.new.cast create_another_param
+    if params.dig(:case_contact, :metadata, :create_another)
+      new_params[:metadata][:create_another] =
+        ActiveRecord::Type::Boolean.new.cast params[:case_contact][:metadata][:create_another]
     end
 
     super(new_params)
