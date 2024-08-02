@@ -134,5 +134,24 @@ you are trying to set the address for both of them. This is not currently possib
 
       expect(CaseContact.last.notes).to eq "Hello world"
     end
+
+    context "when 'Create Another' option is checked" do
+      it "redirects to new contact with the same draft_case_ids", js: true do
+        case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer)
+        sign_in volunteer
+        visit edit_case_contact_path(case_contact)
+
+        complete_details_page(contact_made: true, medium: "Letter")
+        complete_notes_page
+        fill_in_expenses_page
+
+        check "Create Another"
+        expect { click_on "Submit" }.to change { CaseContact.count }.by(1)
+
+        expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
+        expect(page).to have_text "Step 1 of 3"
+        expect(page).to have_text casa_case.case_number
+      end
+    end
   end
 end

@@ -35,12 +35,15 @@ class CaseContactsController < ApplicationController
     store_referring_location
     authorize CaseContact
 
-    # - If there are cases defined in the params, select those cases (often coming from the case page)
+    # - If there are cases defined in the params, select those cases
+    #   - as in coming from the case page, or previous case contact 'create another' option
     # - If there is only one case, select that case
     # - If there are no hints, let them select their case
     casa_cases = policy_scope(current_organization.casa_cases)
     draft_case_ids =
-      if params.dig(:case_contact, :casa_case_id).present?
+      if params[:draft_case_ids].present?
+        params[:draft_case_ids]
+      elsif params.dig(:case_contact, :casa_case_id).present?
         casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
       elsif casa_cases.count == 1
         [casa_cases.first.id]

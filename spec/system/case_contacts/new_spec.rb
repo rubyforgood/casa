@@ -216,6 +216,63 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
       end
     end
 
+    context "when 'Create Another' is checked" do
+      let(:casa_org) { volunteer.casa_org }
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:case_number) { casa_case.case_number }
+
+      before { create_contact_types casa_org }
+
+      it "redirects to the new CaseContact form with the same case selected" do
+        visit new_case_contact_path(case_contact: {casa_case_id: casa_case.id})
+        expect(page).to have_text case_number
+        complete_details_page(
+          case_numbers: [case_number], contact_types: %w[School Therapist], contact_made: true,
+          medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
+        )
+        complete_notes_page(notes: "Hello world")
+
+        check "Create Another"
+        submitted_case_contact = CaseContact.last
+        expect { click_on "Submit" }.to change { CaseContact.count }.by(1)
+        next_case_contact = CaseContact.last
+
+        expect(page).to have_text "Step 1 of 3"
+        # store that the submitted contact used 'create another' in metadata
+        expect(submitted_case_contact.reload.metadata["create_another"]).to be true
+        # new contact uses draft_case_ids from the original & form selects them
+        expect(next_case_contact.draft_case_ids).to eq [casa_case.id]
+        expect(page).to have_text case_number
+        # default values for other attributes (not from the last contact)
+        expect(next_case_contact.status).to eq "started"
+        expect(next_case_contact.miles_driven).to be_zero
+        %i[casa_case_id duration_minutes occurred_at contact_made medium_type
+          want_driving_reimbursement notes].each do |attribute|
+          expect(next_case_contact.send(attribute)).to be_blank
+        end
+      end
+
+      context "multiple cases selected" do
+        let(:casa_case_two) { volunteer.casa_cases.second }
+        let(:case_number_two) { casa_case_two.case_number }
+
+        it "redirects to the new CaseContact form with the same cases selected" do
+          visit new_case_contact_path
+          complete_details_page(
+            case_numbers: [case_number, case_number_two], contact_made: true, medium: "In Person"
+          )
+          complete_notes_page
+          check "Create Another"
+          click_on "Submit"
+          expect(page).to have_text "Step 1 of 3"
+          next_case_contact = CaseContact.last
+          expect(next_case_contact.draft_case_ids).to eq [casa_case.id, casa_case_two.id]
+          expect(page).to have_text case_number
+          expect(page).to have_text case_number_two
+        end
+      end
+    end
+
     describe "differences in single vs. multiple cases" do
       let(:volunteer) { create(:volunteer, :with_casa_cases) }
       let(:first_case) { volunteer.casa_cases.first }
