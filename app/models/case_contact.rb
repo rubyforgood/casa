@@ -18,6 +18,7 @@ class CaseContact < ApplicationRecord
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
   validate :volunteer_address_is_valid, if: :active_or_expenses?
+  validates :contact_type_ids, presence: true, if: :active_or_details?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {

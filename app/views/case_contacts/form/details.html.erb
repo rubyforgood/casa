@@ -19,9 +19,9 @@
     </div>
 
     <div id="enter-contact-details" class="card-style-1 pl-25 mb-10">
-      <h4 class="mb-3"><label>3. Record contact details</label><span class="red-letter"> *</span></h4>
+      <h4 class="mb-3"><label>3. Record contact details</label></h4>
       <div class="">
-        <h5 classs="mb-3"><label>a. Was contact made?</label></h5>
+        <h5 classs="mb-3"><label>a. Was contact made?</label><span class="red-letter"> *</span></h5>
         <div class="form-check radio-style mb-20">
           <%= form.radio_button :contact_made, true,
             checked: @case_contact.contact_made,
@@ -41,7 +41,7 @@
       </div>
 
       <div class="field contact-medium form-group">
-        <h5 classs="mb-3"><label>b. How was contact made?</label></h5>
+        <h5 classs="mb-3"><label>b. How was contact made?</label><span class="red-letter"> *</span></h5>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
           <div class="form-check radio-style mb-20">
             <%= b.radio_button(class: ["form-check-input", "case-contacts-form-checkbox"]) %>
