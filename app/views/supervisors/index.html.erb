@@ -66,7 +66,7 @@
             <!-- end table row-->
             </thead>
             <tbody>
-            <% @supervisors.includes(:volunteers, volunteers: [:supervisor, :case_assignments, :case_contacts]).each do |supervisor| %>
+            <% @supervisors.each do |supervisor| %>
               <tr>
                 <td id="name-<%= supervisor.id %>" class="min-width">
                   <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
