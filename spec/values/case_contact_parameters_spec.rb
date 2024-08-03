@@ -15,7 +15,8 @@ RSpec.describe CaseContactParameters do
         want_driving_reimbursement: "want_driving_reimbursement",
         notes: "notes",
         contact_type_ids: [],
-        contact_topic_answers_attributes:
+        contact_topic_answers_attributes:,
+        metadata: {"create_another" => "1", "bad_key" => "bad_value"}
       )
     )
   }
@@ -25,16 +26,21 @@ RSpec.describe CaseContactParameters do
   end
 
   it "returns data" do
-    expect(subject["duration_minutes"]).to eq(62)
-    expect(subject["occurred_at"]).to eq("occurred_at")
-    expect(subject["contact_made"]).to eq("contact_made")
-    expect(subject["medium_type"]).to eq("medium_type")
-    expect(subject["miles_driven"]).to eq(123)
-    expect(subject["want_driving_reimbursement"]).to eq("want_driving_reimbursement")
-    expect(subject["notes"]).to eq("notes")
-    expect(subject["contact_type_ids"]).to eq([])
+    aggregate_failures do
+      expect(subject["duration_minutes"]).to eq(62)
+      expect(subject["occurred_at"]).to eq("occurred_at")
+      expect(subject["contact_made"]).to eq("contact_made")
+      expect(subject["medium_type"]).to eq("medium_type")
+      expect(subject["miles_driven"]).to eq(123)
+      expect(subject["want_driving_reimbursement"]).to eq("want_driving_reimbursement")
+      expect(subject["notes"]).to eq("notes")
+      expect(subject["contact_type_ids"]).to eq([])
 
-    expected_attrs = contact_topic_answers_attributes["0"].except("question")
-    expect(subject["contact_topic_answers_attributes"]["0"].to_h).to eq(expected_attrs)
+      expected_attrs = contact_topic_answers_attributes["0"].except("question")
+      expect(subject["contact_topic_answers_attributes"]["0"].to_h).to eq(expected_attrs)
+
+      expect(subject["metadata"]["create_another"]).to eq(true)
+      expect(subject["metadata"]["bad_key"]).to_not be_present
+    end
   end
 end
