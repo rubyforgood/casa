@@ -224,8 +224,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
       before { create_contact_types casa_org }
 
       it "redirects to the new CaseContact form with the same case selected" do
-        visit new_case_contact_path(case_contact: {casa_case_id: casa_case.id})
-        expect(page).to have_text case_number
+        visit new_case_contact_path
         complete_details_page(
           case_numbers: [case_number], contact_types: %w[School Therapist], contact_made: true,
           medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45

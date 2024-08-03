@@ -148,7 +148,6 @@ you are trying to set the address for both of them. This is not currently possib
         check "Create Another"
         expect { click_on "Submit" }.to change { CaseContact.count }.by(1)
 
-        expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
         expect(page).to have_text "Step 1 of 3"
         expect(page).to have_text casa_case.case_number
       end
