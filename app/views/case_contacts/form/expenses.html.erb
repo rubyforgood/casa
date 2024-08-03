@@ -97,7 +97,7 @@
     <% end %>
 
     <div class="actions mb-10 case-contacts-form-buttons">
-      <div class="case-contacts-form-options checkbox-style flex-grow-1">
+      <div class="case-contacts-form-options checkbox-style pt-1">
         <%= form.fields_for :metadata do |metadata_form| %>
           <%= metadata_form.check_box :create_another, class: 'form-check-input ' %>
           <%= metadata_form.label :create_another,  "Create Another", class: 'form-check-label ' %>
