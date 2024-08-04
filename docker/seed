@@ -4,13 +4,13 @@ set +e
 
 # If the local web server is running, it must be stopped to allow the database to be reseeded.
 echo 'Stopping existing containers...'
-docker-compose stop
+docker compose stop
 echo 'Done stopping existing containers.'
 
 # NOTE: "rails db:reset" creates the development and test databases AND seeds the database.
 # This app will not work until you run this command.
 echo 'Resetting rails db...'
-docker-compose run --rm web rails db:reset
+docker compose run --rm web rails db:reset
 echo 'Done resetting rails db.'
 
 echo ''
