@@ -419,10 +419,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
           before { params[:case_contact][:metadata] = {create_another: "1"} }
 
-          it "redirects to contact form with the same draft_case_id, ignore_referrer" do
+          it "redirects to contact form with the same draft_case_id, ignore_referer" do
             expect(request).to have_http_status :redirect
             expect(request).to redirect_to(
-              new_case_contact_path(draft_case_ids:, ignore_referrer: true)
+              new_case_contact_path(draft_case_ids:, ignore_referer: true)
             )
           end
         end
@@ -465,11 +465,11 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           context "when create_another option is truthy" do
             before { params[:case_contact][:metadata] = {create_another: "1"} }
 
-            it "redirects to new contact with the same draft_case_ids, ignore_referrer" do
+            it "redirects to new contact with the same draft_case_ids, ignore_referer" do
               draft_case_ids = case_contact.draft_case_ids
               expect(request).to have_http_status :redirect
               expect(request).to redirect_to(
-                new_case_contact_path(draft_case_ids:, ignore_referrer: true)
+                new_case_contact_path(draft_case_ids:, ignore_referer: true)
               )
             end
           end

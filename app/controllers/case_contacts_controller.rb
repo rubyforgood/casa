@@ -32,7 +32,7 @@ class CaseContactsController < ApplicationController
   end
 
   def new
-    store_referring_location unless params[:ignore_referrer]
+    store_referring_location
     authorize CaseContact
 
     # - If there are cases defined in the params, select those cases
