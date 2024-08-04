@@ -266,7 +266,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
         complete_notes_page
 
         click_on "Submit"
-        # CaseContactsController#new should see original referrer, casa_case_path(casa_case)
+        # update should redirect to the original referrer, casa_case_path(casa_case)
         expect(page).to have_text "CASA Case Details"
         expect(page).to have_text "Case number: #{case_number}"
       end
