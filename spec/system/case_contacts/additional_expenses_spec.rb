@@ -59,6 +59,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
+
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
       expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
       find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "5.34")
@@ -74,8 +75,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "5.34")
       expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Lunch")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
+
       expect(page).to have_text("Add Another Expense")
     end
 
@@ -90,19 +90,22 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       complete_notes_page
 
       expect(page).to have_text("Add Another Expense")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "7.21")
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Toll")
+
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 1)
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 1)
+
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").first.fill_in(with: "7.21")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").first.fill_in(with: "Toll")
 
       find_by_id("add-another-expense").click
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
 
-      find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.22")
-      find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "Another Toll")
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 2)
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 2)
+
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").last.fill_in(with: "7.22")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "Another Toll")
+
       expect(page).to have_text("Add Another Expense")
-
       expect {
         click_on "Submit"
       }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(2)
@@ -111,17 +114,21 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       complete_details_page(contact_made: true)
       complete_notes_page
 
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "7.21")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Toll")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.22")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "Another Toll")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount")
+      amount_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']")
+      describe_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']")
+
+      expect(amount_fields[0].value).to eq("7.21")
+      expect(describe_fields[0].value).to eq("Toll")
+      expect(amount_fields[1].value).to eq("7.22")
+      expect(describe_fields[1].value).to eq("Another Toll")
       expect(page).to have_text("Add Another Expense")
 
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "Breakfast")
-      find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.23")
-      find_by_id("case_contact_additional_expenses_attributes_2_other_expense_amount").fill_in(with: "8.23")
-      find_by_id("case_contact_additional_expenses_attributes_2_other_expenses_describe").fill_in(with: "Yet another toll")
+      find_by_id("add-another-expense").click
+
+      describe_fields[0].fill_in(with: "Breakfast")
+      amount_fields[1].fill_in(with: "7.23")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").last.fill_in(with: "8.23")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "Yet another toll")
 
       expect {
         click_on "Submit"
@@ -131,17 +138,21 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       complete_details_page(contact_made: true)
       complete_notes_page
 
-      expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "8.23")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "Yet another toll")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "Breakfast")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "7.23")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_3_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
+      amount_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']")
+      describe_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']")
+
+      expect(amount_fields[2].value).to eq("8.23")
+      expect(describe_fields[2].value).to eq("Yet another toll")
+      expect(describe_fields[0].value).to eq("Breakfast")
+      expect(amount_fields[1].value).to eq("7.23")
+
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 3)
+
       find_by_id("add-another-expense").click
-      expect(page).to have_field("case_contact_additional_expenses_attributes_4_other_expense_amount")
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 4)
     end
 
-    it "additional expenses for maximum entries", js: true do
+    it "additional expenses for more than ten entries", js: true do
       sign_in volunteer
 
       visit casa_case_path(casa_case.id)
@@ -153,56 +164,83 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect(page).to have_text("Add Another Expense")
 
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expenses_describe")
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "0.11")
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "1 meal")
-      expect(page).to have_text("Add Another Expense")
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 1)
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 1)
 
-      (1..9).each { |i|
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").first.fill_in(with: "0.11")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").first.fill_in(with: "1 meal")
+
+      11.times do |i|
         find_by_id("add-another-expense").click
-        expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expense_amount")
-        expect(page).to have_field("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe")
-        expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i + 1}_other_expense_amount")
-        expect(page).to have_no_field("case_contact_additional_expenses_attributes_#{i + 1}_other_expenses_describe")
-        find_by_id("case_contact_additional_expenses_attributes_#{i}_other_expense_amount").fill_in(with: "#{i}.11")
-        find_by_id("case_contact_additional_expenses_attributes_#{i}_other_expenses_describe").fill_in(with: "#{i + 1} meal")
-      }
+        expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: i + 2)
+        expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: i + 2)
+
+        all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").last.fill_in(with: "#{i + 1}.11")
+        all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "#{i + 2} meal")
+      end
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(10)
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(12)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
       complete_notes_page
 
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount", with: "0.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expenses_describe", with: "1 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expense_amount", with: "1.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_1_other_expenses_describe", with: "2 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expense_amount", with: "2.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_2_other_expenses_describe", with: "3 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_3_other_expense_amount", with: "3.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_3_other_expenses_describe", with: "4 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_4_other_expense_amount", with: "4.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_4_other_expenses_describe", with: "5 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_5_other_expense_amount", with: "5.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_5_other_expenses_describe", with: "6 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_6_other_expense_amount", with: "6.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_6_other_expenses_describe", with: "7 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_7_other_expense_amount", with: "7.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_7_other_expenses_describe", with: "8 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_8_other_expense_amount", with: "8.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_8_other_expenses_describe", with: "9 meal")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expense_amount", with: "9.11")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_9_other_expenses_describe", with: "10 meal")
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 12)
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 12)
 
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_10_other_expenses_describe")
-      expect(casa_case.case_contacts.last.additional_expenses.count).to eq(10)
-      expect(page).to have_no_text("Add Another Expense")
+      amount_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']")
+      describe_fields = all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']")
+
+      12.times do |i|
+        expect(amount_fields[i].value).to eq("#{i}.11")
+        expect(describe_fields[i].value).to eq("#{i + 1} meal")
+      end
+
+      expect(page).to have_no_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 13)
+      expect(page).to have_no_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 13)
+
+      expect(casa_case.case_contacts.last.additional_expenses.count).to eq(12)
+      expect(page).to have_text("Add Another Expense")
+    end
+
+    it "additional expenses can be deleted", js: true do
+      sign_in volunteer
+      visit casa_case_path(casa_case.id)
+      click_on "New Case Contact"
+
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
+      complete_notes_page
+
+      find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "0.11")
+      find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "1 meal")
+
+      expect(page).to have_selector("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 1)
+
+      find_by_id("add-another-expense").click
+
+      expect(page).to have_selector("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 2)
+
+      all("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expense_amount]']").last.fill_in(with: "1.11")
+      all("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "2 meal")
+
+      expect {
+        click_on "Submit"
+      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(2)
+
+      visit edit_case_contact_path(casa_case.reload.case_contacts.last)
+      complete_details_page(contact_made: true)
+      complete_notes_page
+
+      all("button.remove-expense-button").last.click
+
+      expect(page).to have_selector("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 1)
+      expect(page).to have_selector("input[name*='case_contact[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 1)
+
+      expect {
+        click_on "Submit"
+      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(-1)
     end
 
     it "verifies that an additional expense without a description will cause an error", js: true do
@@ -214,11 +252,11 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Video", occurred_on: "04/04/2020", hours: 1, minutes: 45)
       complete_notes_page
-
       expect(page).to have_text("Add Another Expense")
-      expect(page).to have_field("case_contact_additional_expenses_attributes_0_other_expense_amount")
-      expect(page).to have_no_field("case_contact_additional_expenses_attributes_1_other_expense_amount")
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expense_amount").fill_in(with: "5.34")
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']", count: 1)
+      expect(page).to have_selector("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']", count: 1)
+
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").first.fill_in(with: "5.34")
 
       expect {
         click_on "Submit"
@@ -226,7 +264,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect(page).to have_text("error")
 
-      find_by_id("case_contact_additional_expenses_attributes_0_other_expenses_describe").fill_in(with: "1 meal")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").first.fill_in(with: "1 meal")
 
       expect {
         click_on "Submit"
@@ -237,15 +275,16 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       complete_details_page(contact_made: true)
       complete_notes_page
 
-      # Confirming validation and correct errors to user for update method
-      find_by_id("case_contact_additional_expenses_attributes_1_other_expense_amount").fill_in(with: "7.45")
+      find_by_id("add-another-expense").click
+
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expense_amount]']").last.fill_in(with: "7.45")
 
       expect {
         click_on "Submit"
       }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(0)
       expect(page).to have_text("error")
 
-      find_by_id("case_contact_additional_expenses_attributes_1_other_expenses_describe").fill_in(with: "2nd meal")
+      all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "2nd meal")
 
       expect {
         click_on "Submit"
