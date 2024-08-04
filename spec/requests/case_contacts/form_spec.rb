@@ -422,7 +422,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           it "redirects to contact form with the same draft_case_id, ignore_referrer" do
             expect(request).to have_http_status :redirect
             expect(request).to redirect_to(
-              new_case_contact_path draft_case_ids:, ignore_referrer: true
+              new_case_contact_path(draft_case_ids:, ignore_referrer: true)
             )
           end
         end
@@ -469,7 +469,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
               draft_case_ids = case_contact.draft_case_ids
               expect(request).to have_http_status :redirect
               expect(request).to redirect_to(
-                new_case_contact_path draft_case_ids:, ignore_referrer: true
+                new_case_contact_path(draft_case_ids:, ignore_referrer: true)
               )
             end
           end
