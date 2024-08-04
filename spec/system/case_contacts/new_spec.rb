@@ -251,6 +251,26 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
         end
       end
 
+      it "does not reset referring location" do
+        visit casa_case_path casa_case
+        # referrer will be set by CaseContactsController#new to casa_case_path(casa_case)
+        click_on "New Case Contact"
+        complete_details_page contact_made: true, medium: "In Person"
+        complete_notes_page
+
+        # goes through CaseContactsController#new, but should not set a referring location
+        check "Create Another"
+        click_on "Submit"
+
+        complete_details_page contact_made: true, medium: "In Person"
+        complete_notes_page
+
+        click_on "Submit"
+        # CaseContactsController#new should see original referrer, casa_case_path(casa_case)
+        expect(page).to have_text "CASA Case Details"
+        expect(page).to have_text "Case number: #{case_number}"
+      end
+
       context "multiple cases selected" do
         let(:casa_case_two) { volunteer.casa_cases.second }
         let(:case_number_two) { casa_case_two.case_number }
@@ -265,7 +285,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
           click_on "Submit"
           expect(page).to have_text "Step 1 of 3"
           next_case_contact = CaseContact.last
-          expect(next_case_contact.draft_case_ids).to eq [casa_case.id, casa_case_two.id]
+          expect(next_case_contact.draft_case_ids).to match_array [casa_case.id, casa_case_two.id]
           expect(page).to have_text case_number
           expect(page).to have_text case_number_two
         end

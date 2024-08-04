@@ -83,7 +83,7 @@ class CaseContacts::FormController < ApplicationController
     update_volunteer_address(@case_contact)
     flash[:notice] = message
     if @case_contact.metadata["create_another"]
-      redirect_to new_case_contact_path(params: {draft_case_ids:})
+      redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referrer: true})
     else
       redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
     end
