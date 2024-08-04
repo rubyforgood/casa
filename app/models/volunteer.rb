@@ -105,7 +105,7 @@ class Volunteer < User
   end
 
   def supervised_by?(supervisor)
-    supervisor_volunteer == supervisor
+    supervisor_volunteer&.supervisor_id == supervisor.id
   end
 
   # false if volunteer has any case with no contact in the past 30 days
