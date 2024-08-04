@@ -32,13 +32,13 @@ jobs:
           mkdir -p tmp/downloads
           chmod 777 tmp tmp/downloads
       - name: docker UP
-        run: docker-compose up -d
+        run: docker compose up -d
       - name: db:reset
-        run: docker-compose exec -T web rails db:reset
+        run: docker compose exec -T web rails db:reset
       - name: compile assets
-        run: docker-compose exec -T web bundle exec rails assets:precompile
+        run: docker compose exec -T web bundle exec rails assets:precompile
       - name: Test
-        run: docker-compose exec -T web bundle exec rspec spec --fail-fast
+        run: docker compose exec -T web bundle exec rspec spec --fail-fast
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
