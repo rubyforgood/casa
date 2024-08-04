@@ -54,7 +54,7 @@
 <% end %>
 <% content_for :table_body do %>
   <tbody>
-    <% (@all_volunteers_ever_assigned || @supervisor.volunteers).includes([:supervisor]).each do |volunteer| %>
+    <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
       <tr>
         <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
         <td><%= volunteer.email %></td>
