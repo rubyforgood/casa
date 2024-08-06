@@ -238,14 +238,8 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
     end
 
     context "when 'Create Another' is checked" do
-      let(:casa_org) { volunteer.casa_org }
-      let(:casa_case) { volunteer.casa_cases.first }
-      let(:case_number) { casa_case.case_number }
-
-      before { create_contact_types casa_org }
-
       it "redirects to the new CaseContact form with the same case selected" do
-        visit new_case_contact_path
+        subject
         complete_details_page(
           case_numbers: [case_number], contact_types: %w[School Therapist], contact_made: true,
           medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
@@ -293,11 +287,12 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
       end
 
       context "multiple cases selected" do
+        let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
         let(:casa_case_two) { volunteer.casa_cases.second }
         let(:case_number_two) { casa_case_two.case_number }
 
         it "redirects to the new CaseContact form with the same cases selected" do
-          visit new_case_contact_path
+          subject
           complete_details_page(
             case_numbers: [case_number, case_number_two], contact_made: true, medium: "In Person"
           )
