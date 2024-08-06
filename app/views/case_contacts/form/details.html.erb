@@ -53,10 +53,14 @@
       <div class="pr-50">
         <h5 class="mb-3"><%= form.label :occurred_at, "c. Date of contact" %></h5>
         <div class="input-style-1">
-          <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
-          <%= render "layouts/components/ranged_date_picker",
-            form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
-            max_date: "today", component_name: "occurred on" %>
+          <% min_date = "1989-01-01".to_date %>
+          <% current_date = Date.current %>
+          <% initial_value = @case_contact.occurred_at&.to_date || current_date %>
+          <%= form.date_field :occurred_at,
+            value: initial_value.to_fs(:iso8601),
+            max: current_date.to_fs(:iso8601),
+            min: min_date.to_fs(:iso8601),
+            class: "form-control card-style-1" %>
         </div>
       </div>
 
