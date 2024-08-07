@@ -4,13 +4,13 @@ class BulkCourtDatesController < ApplicationController
   before_action :require_organization!
 
   def new
-    authorize :application, :admin_or_supervisor?
+    authorize :bulk_court_date, :new?
 
     @court_date = CourtDate.new
   end
 
   def create
-    authorize :application, :admin_or_supervisor?
+    authorize :bulk_court_date, :create?
 
     case_group_id = params[:court_date][:case_group_id]
     if case_group_id.empty?
