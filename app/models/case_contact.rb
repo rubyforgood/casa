@@ -45,8 +45,10 @@ class CaseContact < ApplicationRecord
   after_save_commit ::CaseContactMetadataCallback.new
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
-  # These steps must be listed in order and have an html template in case_contacts/form.
+  # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
   FORM_STEPS = %i[details notes expenses].freeze
+  # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
+  # integer column would make db queries faster
   enum :status,
     started: "started",
     active: "active",
@@ -55,15 +57,15 @@ class CaseContact < ApplicationRecord
     expenses: "expenses"
 
   def active_or_details?
-    status == "details" || active?
+    details? || active?
   end
 
   def active_or_expenses?
-    status == "expenses" || active?
+    expenses? || active?
   end
 
   def active_or_notes?
-    status == "notes" || active?
+    notes? || active?
   end
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true

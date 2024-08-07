@@ -5,7 +5,7 @@ FactoryBot.define do
 
     contact_types { [create(:contact_type)] }
     duration_minutes { 60 }
-    occurred_at { Time.zone.now }
+    occurred_at { Time.zone.today }
     contact_made { false }
     medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
