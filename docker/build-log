@@ -1,9 +1,9 @@
 #!/bin/bash
 set +e
 
-docker-compose down -v --remove-orphans
+docker compose down -v --remove-orphans
 wait
 
 echo 'Building docker containers...'
-docker-compose build # Set up the Docker containers
+docker compose build # Set up the Docker containers
 echo 'Done building docker containers.'

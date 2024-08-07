@@ -2,5 +2,5 @@
 set -e
 
 echo '-------------------------------------'
-echo 'docker-compose exec web rails console'
-docker-compose exec web rails console
+echo 'docker compose exec web rails console'
+docker compose exec web rails console
