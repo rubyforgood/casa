@@ -61,8 +61,8 @@ wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
 # List all available LTS versions
 nvm ls-remote | grep -i 'Latest LTS'
 
-# Install an LTS version
-nvm install lts/fermium
+# Install version from .nvmrc file:
+nvm install
 # Update npm
 npm i -g npm@latest
 ```

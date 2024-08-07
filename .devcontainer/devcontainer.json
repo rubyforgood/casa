@@ -25,7 +25,7 @@
       "version": "latest"
     },
     "ghcr.io/devcontainers/features/node:1": {
-      "version": "latest"
+      "version": "20.16.0"
     }
   },
 

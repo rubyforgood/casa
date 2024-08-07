@@ -107,7 +107,8 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 **node.js**
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
-1. Install a current LTS version of Node. lts/fermium works.
+    - If you use asdf, the node version from `.tool-versions` will be used, but may be out of sync with the codename version (lts/iron) in `.nvmrc`. To use the version from `.nvmrc`, see one of these options: [legacy file codename support](https://github.com/asdf-vm/asdf-nodejs?tab=readme-ov-file#partial-and-codename-versions) or [installing via custom script](https://github.com/asdf-vm/asdf-nodejs/issues/382#issuecomment-2258647554).
+1. Install a current LTS version of Node. Running `nvm install` from this directory will read the `.nvmrc` file to install the correct version.
 1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **PostgreSQL ("postgres")**
