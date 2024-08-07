@@ -10,18 +10,16 @@ class CaseContact < ApplicationRecord
   validates :duration_minutes, presence: true, if: :active_or_details?
   validates :occurred_at, presence: true, if: :active_or_details?
   MINIMUM_DATE = "1989-01-01".to_date
-  validates :occurred_at,
-    comparison: {
-      greater_than_or_equal_to: MINIMUM_DATE,
-      message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
-      allow_nil: true
-    }
-  validates :occurred_at,
-    comparison: {
-      less_than: Date.tomorrow,
-      message: "cannot be in the future",
-      allow_nil: true
-    }
+  validates :occurred_at, comparison: {
+    greater_than_or_equal_to: MINIMUM_DATE,
+    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    allow_nil: true
+  }
+  validates :occurred_at, comparison: {
+    less_than: Date.tomorrow,
+    message: "cannot be in the future",
+    allow_nil: true
+  }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
   validate :volunteer_address_is_valid, if: :active_or_expenses?
