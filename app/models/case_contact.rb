@@ -162,7 +162,7 @@ class CaseContact < ApplicationRecord
     where(casa_case_id: case_ids) if case_ids.present?
   }
 
-  scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
+  scope :no_drafts, ->(checked) { (checked == 1) ? active : all }
 
   scope :with_metadata_pair, ->(key, value) { where("metadata -> ? @> ?::jsonb", key.to_s, value.to_s) }
   scope :used_create_another, -> { with_metadata_pair(:create_another, true) }
