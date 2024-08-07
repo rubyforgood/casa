@@ -53,7 +53,7 @@
       <div class="pr-50">
         <h5 class="mb-3"><%= form.label :occurred_at, "c. Date of contact" %></h5>
         <div class="input-style-1">
-          <% min_date = "1989-01-01".to_date %>
+          <% min_date = CaseContact::MINIMUM_DATE %>
           <% current_date = Date.current %>
           <% initial_value = @case_contact.occurred_at&.to_date || current_date %>
           <%= form.date_field :occurred_at,

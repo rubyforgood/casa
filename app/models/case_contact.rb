@@ -9,9 +9,10 @@ class CaseContact < ApplicationRecord
   validates :medium_type, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
   validates :occurred_at, presence: true, if: :active_or_details?
+  MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at,
     comparison: {
-      greater_than_or_equal_to: "1989-01-01".to_date,
+      greater_than_or_equal_to: MINIMUM_DATE,
       message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
       allow_nil: true
     }
