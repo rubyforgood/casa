@@ -1,4 +1,13 @@
 class SupervisorPolicy < UserPolicy
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      scope.includes(
+        :volunteers,
+        volunteers: [:supervisor, :case_assignments, :case_contacts]
+      )
+    end
+  end
+
   def index?
     admin_or_supervisor?
   end
