@@ -47,7 +47,12 @@ class CaseContact < ApplicationRecord
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order and have an html template in case_contacts/form.
   FORM_STEPS = %i[details notes expenses].freeze
-  enum status: (%w[started active] + FORM_STEPS.map(&:to_s)).zip((%w[started active] + FORM_STEPS.map(&:to_s))).to_h
+  enum :status,
+    started: "started",
+    active: "active",
+    details: "details",
+    notes: "notes",
+    expenses: "expenses"
 
   def active_or_details?
     status == "details" || active?
