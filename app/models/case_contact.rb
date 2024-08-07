@@ -48,14 +48,14 @@ class CaseContact < ApplicationRecord
   # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
   FORM_STEPS = %i[details notes expenses].freeze
   # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
-  # integer column would make db queries faster
+  # string values for wizard form steps, integer column would make db queries faster
   enum :status, {
     started: "started",
     active: "active",
     details: "details",
     notes: "notes",
     expenses: "expenses"
-  }, validate: true
+  }, validate: true, default: :started
 
   def active_or_details?
     details? || active?
