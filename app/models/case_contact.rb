@@ -12,12 +12,12 @@ class CaseContact < ApplicationRecord
   MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
     greater_than_or_equal_to: MINIMUM_DATE,
-    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE, format: :slash)}.",
     allow_nil: true
   }
   validates :occurred_at, comparison: {
     less_than: Date.tomorrow,
-    message: "cannot be in the future",
+    message: :cant_be_future,
     allow_nil: true
   }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
