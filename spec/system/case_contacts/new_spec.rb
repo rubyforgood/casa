@@ -36,7 +36,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
       expect(CaseContact.first.casa_case_id).to eq casa_case.id
       expect(CaseContact.first.contact_types).to match_array([school, therapist])
       expect(CaseContact.first.duration_minutes).to eq 105
@@ -104,7 +104,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
 
       expect(CaseContact.first.notes).to eq ""
     end
@@ -120,7 +120,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
 
       expect(CaseContact.first.notes).to eq "This is the note"
     end

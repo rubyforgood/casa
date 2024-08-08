@@ -67,7 +67,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.active, :count).by(1).and change(AdditionalExpense, :count).by(1)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
@@ -108,7 +108,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
       expect(page).to have_text("Add Another Expense")
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(2)
+      }.to change(CaseContact.active, :count).by(1).and change(AdditionalExpense, :count).by(2)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
@@ -132,7 +132,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.active, :count).by(0).and change(AdditionalExpense, :count).by(1)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
@@ -181,7 +181,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(12)
+      }.to change(CaseContact.active, :count).by(1).and change(AdditionalExpense, :count).by(12)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
@@ -227,7 +227,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(2)
+      }.to change(CaseContact.active, :count).by(1).and change(AdditionalExpense, :count).by(2)
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
       complete_details_page(contact_made: true)
@@ -240,7 +240,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(-1)
+      }.to change(CaseContact.active, :count).by(0).and change(AdditionalExpense, :count).by(-1)
     end
 
     it "verifies that an additional expense without a description will cause an error", js: true do
@@ -260,7 +260,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(0)
+      }.to change(CaseContact.active, :count).by(0).and change(AdditionalExpense, :count).by(0)
 
       expect(page).to have_text("error")
 
@@ -268,7 +268,7 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.active, :count).by(1).and change(AdditionalExpense, :count).by(1)
       expect(page).not_to have_text("error")
 
       visit edit_case_contact_path(casa_case.reload.case_contacts.last)
@@ -281,14 +281,14 @@ RSpec.describe "additional_expenses", type: :system, flipper: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(0)
+      }.to change(CaseContact.active, :count).by(0).and change(AdditionalExpense, :count).by(0)
       expect(page).to have_text("error")
 
       all("input[name*='[additional_expenses_attributes]'][name$='[other_expenses_describe]']").last.fill_in(with: "2nd meal")
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(0).and change(AdditionalExpense, :count).by(1)
+      }.to change(CaseContact.active, :count).by(0).and change(AdditionalExpense, :count).by(1)
       expect(page).not_to have_text("error")
     end
   end
