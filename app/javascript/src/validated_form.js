@@ -150,62 +150,6 @@ class ValidatableFormSectionComponent {
   }
 }
 
-class RangedDatePicker extends ValidatableFormSectionComponent {
-  constructor (componentElementsAsJQuery, notifier) {
-    super(componentElementsAsJQuery, notifier)
-
-    const maxDateValue = this.componentElementsAsJQuery.attr('data-max-date')
-    const minDateValue = this.componentElementsAsJQuery.attr('data-min-date')
-    this.name = this.componentElementsAsJQuery.attr('component-name')
-
-    const max = maxDateValue === 'today' ? new Date() : new Date(maxDateValue)
-    const min = minDateValue === 'today' ? new Date() : new Date(minDateValue)
-
-    this.max = max
-    this.min = min
-
-    if (min instanceof Date && max instanceof Date && max < min) {
-      throw new RangeError('The minimum date for the component was set to be later than the maximum date')
-    }
-  }
-
-  errorHighlightUI (errorState) {
-    if (errorState) {
-      this.componentElementsAsJQuery.css('border', '2px solid red')
-    } else {
-      this.componentElementsAsJQuery.css('border', '')
-    }
-  }
-
-  getErrorState () {
-    const setDate = new Date(this.componentElementsAsJQuery.val())
-    const { max, min } = this
-
-    if (setDate > max && !isNaN(max)) {
-      return `Date for ${this.name} is past maximum allowed date of ${max.toDateString()}`
-    } else if (setDate < min && !isNaN(min)) {
-      return `Date for ${this.name} is before minimum allowed date of ${min.toDateString()}`
-    }
-  }
-
-  showUserError (errorMsg) {
-    TypeChecker.checkNonEmptyString(errorMsg, 'errorMsg')
-
-    if (this.errorNotification) {
-      this.errorNotification.setText(errorMsg)
-    } else if (this.notifier) {
-      this.errorNotification = this.notifier.notify(errorMsg, 'error', false)
-    }
-  }
-
-  removeUserError () {
-    if (this.errorNotification) {
-      this.errorNotification.dismiss()
-      delete this.errorNotification
-    }
-  }
-}
-
 class NonDrivingContactMediumWarning extends ValidatableFormSectionComponent {
   constructor (allInputs, notifier) {
     super(allInputs, notifier)
@@ -306,12 +250,6 @@ $(() => { // JQuery's callback for the DOM loading
   const notificationsElement = $('#notifications')
   const pageNotifier = notificationsElement.length ? new Notifier(notificationsElement) : null
 
-  validatedFormCollection.find('.component-date-picker-range').each(function () {
-    safeInstantiateComponent('ranged date picker', () => {
-      validatableFormSectionComponents.push(new RangedDatePicker($(this), pageNotifier))
-    })
-  })
-
   if ($('#case_contact_miles_driven').length) {
     safeInstantiateComponent('non driving contact medium warning', () => {
       const contactMediumWithMilesDrivenWarning = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier)
@@ -353,4 +291,4 @@ $(() => { // JQuery's callback for the DOM loading
   })
 })
 
-module.exports = { NonDrivingContactMediumWarning, RangedDatePicker }
+module.exports = { NonDrivingContactMediumWarning }

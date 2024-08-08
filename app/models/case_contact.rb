@@ -7,12 +7,17 @@ class CaseContact < ApplicationRecord
   validate :contact_made_chosen
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
-  validates :occurred_at, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
-  validate :occurred_at_not_in_future
+  validates :occurred_at, presence: true, if: :active_or_details?
+  MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
-    greater_than_or_equal_to: "1989-01-01".to_date,
-    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    greater_than_or_equal_to: MINIMUM_DATE,
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
+    allow_nil: true
+  }
+  validates :occurred_at, comparison: {
+    less_than: Date.tomorrow,
+    message: :cant_be_future,
     allow_nil: true
   }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
@@ -173,12 +178,6 @@ class CaseContact < ApplicationRecord
       contact_types.clear
       update(args)
     end
-  end
-
-  def occurred_at_not_in_future
-    return unless occurred_at && occurred_at >= Date.tomorrow
-
-    errors.add(:occurred_at, :invalid, message: "cannot be in the future")
   end
 
   # Displays occurred_at in the format January 1, 1970

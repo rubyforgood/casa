@@ -28,8 +28,15 @@
 #
 # To learn more, please read the Rails Internationalization guide
 # available at https://guides.rubyonrails.org/i18n.html.
-
+---
 en:
+  activerecord:
+    attributes:
+      case_contact:
+        occurred_at: Date
+    errors:
+      messages:
+        cant_be_future: can't be in the future
   time:
     formats:
       day_and_date: "%A, %b %d, %Y"
@@ -43,4 +50,8 @@ en:
       time_on_date: "%-I:%-M %p on %m-%e-%Y"
   date:
     formats:
+      default: "%m/%d/%Y"
       full: "%B %-d, %Y"
+      long: "%B %d, %Y"
+      short: "%b %d"
+      year_first: "%Y-%m-%d"

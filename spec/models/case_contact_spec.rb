@@ -37,13 +37,15 @@ RSpec.describe CaseContact, type: :model do
     it "verifies occurred at is not in the future" do
       case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
       expect(case_contact).to_not be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
+      expect(case_contact.errors.full_messages).to include("Date can't be in the future")
     end
 
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).to_not be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["is not valid: Date of Contact cannot be prior to 1/1/1989."])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
+      expect(case_contact.errors.full_messages).to include("Date can't be prior to 01/01/1989.")
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
@@ -117,7 +119,8 @@ RSpec.describe CaseContact, type: :model do
     it "requires occurred at" do
       case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors.full_messages).to include("Occurred at can't be blank")
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
+      expect(case_contact.errors.full_messages).to include("Date can't be blank")
     end
 
     it "requires duration minutes" do
