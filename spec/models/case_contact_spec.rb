@@ -44,8 +44,8 @@ RSpec.describe CaseContact, type: :model do
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).to_not be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 1/1/1989."])
-      expect(case_contact.errors.full_messages).to include("Date can't be prior to 1/1/1989.")
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
+      expect(case_contact.errors.full_messages).to include("Date can't be prior to 01/01/1989.")
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is  positive" do

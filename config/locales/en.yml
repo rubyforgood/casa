@@ -50,9 +50,8 @@ en:
       time_on_date: "%-I:%-M %p on %m-%e-%Y"
   date:
     formats:
-      default: "%m-%d-%Y"
+      default: "%m/%d/%Y"
       full: "%B %-d, %Y"
       long: "%B %d, %Y"
       short: "%b %d"
-      slash: "%-m/%-d/%Y"
       year_first: "%Y-%m-%d"

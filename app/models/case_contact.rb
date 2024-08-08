@@ -12,7 +12,7 @@ class CaseContact < ApplicationRecord
   MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
     greater_than_or_equal_to: MINIMUM_DATE,
-    message: "can't be prior to #{I18n.l(MINIMUM_DATE, format: :slash)}.",
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
     allow_nil: true
   }
   validates :occurred_at, comparison: {
