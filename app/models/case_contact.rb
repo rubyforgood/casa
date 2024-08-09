@@ -147,6 +147,9 @@ class CaseContact < ApplicationRecord
 
   scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
 
+  scope :with_metadata_pair, ->(key, value) { where("metadata -> ? @> ?::jsonb", key.to_s, value.to_s) }
+  scope :used_create_another, -> { with_metadata_pair(:create_another, true) }
+
   filterrific(
     default_filter_params: {sorted_by: "occurred_at_desc"},
     available_filters: [

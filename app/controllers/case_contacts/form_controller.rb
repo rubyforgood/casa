@@ -71,17 +71,22 @@ class CaseContacts::FormController < ApplicationController
   def finish_editing
     message = ""
     send_reimbursement_email(@case_contact)
+    draft_case_ids = @case_contact.draft_case_ids
     if @case_contact.active?
       message = @case_contact.decorate.form_updated_message
     else
-      message = "Case #{"contact".pluralize(@case_contact.draft_case_ids.count)} successfully created."
+      message = "Case #{"contact".pluralize(draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
-      first_casa_case_id = @case_contact.draft_case_ids.slice(0)
+      first_casa_case_id = draft_case_ids.first
       @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end
     update_volunteer_address(@case_contact)
     flash[:notice] = message
-    redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
+    if @case_contact.metadata["create_another"]
+      redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referer: true})
+    else
+      redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
+    end
   end
 
   def send_reimbursement_email(case_contact)

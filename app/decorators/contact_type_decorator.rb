@@ -13,6 +13,6 @@ class ContactTypeDecorator < Draper::Decorator
   def last_time_used_with_cases(casa_case_ids)
     last_contact = CaseContact.joins(:contact_types).where(casa_case_id: casa_case_ids, contact_types: {id: object.id}).order(occurred_at: :desc).first
 
-    last_contact.nil? ? "never" : "#{time_ago_in_words(last_contact.occurred_at)} ago"
+    last_contact&.occurred_at.blank? ? "never" : "#{time_ago_in_words(last_contact.occurred_at)} ago"
   end
 end

@@ -131,13 +131,13 @@ RSpec.describe "case_contacts/create", type: :system, js: true do
       sign_in volunteer
     end
 
-    it "should create a case contact" do
+    it "should skip expenses step and create a case contact" do
       visit case_contacts_path
 
       click_on "New Case Contact"
       complete_details_page(case_numbers: [casa_case.case_number], medium: "In Person", contact_made: true, hours: 1, minutes: 45)
       complete_notes_page(click_continue: false)
-
+      expect(page).to have_text("Step 2 of 2")
       click_on "Submit"
 
       expect(page).to have_text "Case contact successfully created"
