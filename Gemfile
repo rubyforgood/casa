@@ -49,6 +49,7 @@ gem "scout_apm"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails"
 gem "strong_migrations"
+gem "turbo-rails", "~> 2.0"
 gem "twilio-ruby" # twilio helper functions
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "view_component" # View components for reusability
@@ -100,3 +101,4 @@ group :test do
 end
 
 # gem "pdf-reader", "~> 2.9"
+# gem "redis", "~> 4.0" # Redis is by default included with turbo-rails install but excluded per https://github.com/rubyforgood/casa/issues/5906
