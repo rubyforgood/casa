@@ -15,7 +15,7 @@
   </div>
 </div>
 
-<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"} do |f| %>
+<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"}, data: {turbo: true, turbo_frame: :case_contacts } do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
 
   <div class="card-style">
@@ -49,7 +49,7 @@
           <%= button_tag( :class=> "btn-sm main-btn dark-btn") do %>
             <i class="lni lni-funnel mr-10"></i> Filter
           <% end %>
-          <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove") %>
+          <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove", data: {turbo: true, turbo_frame: :case_contacts}) %>
         </div>
       </div>
     </div>
@@ -125,33 +125,35 @@
     </div>
   </div>
 <% end %>
-<% @presenter.case_contacts.each do |casa_case_id, data| %>
-  <div class="card-style-1 mb-5">
-    <div class="card-content">
-      <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
-      <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
-    </div>
-  </div>
-<% end %>
-<% if @presenter.case_contacts.empty? %>
-  <% if params.key?(:casa_case_id) %>
+<%= turbo_frame_tag :case_contacts do %>
+  <% @presenter.case_contacts.each do |casa_case_id, data| %>
     <div class="card-style-1 mb-5">
       <div class="card-content">
-        <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
-        <%= params[:filterrific] ?
-            "No case contacts have been found." :
-            "You have no case contacts for this case. \
-      Please click New Case Contact button above to create a case contact for your youth!" %>
+        <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
+        <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
       </div>
     </div>
-  <% else %>
-    <div class="card-style-1">
-      <div class="card-content">
-        <%= params[:filterrific] ?
-            "No case contacts have been found." :
-            "You have no case contacts for this case. \
-      Please click New Case Contact button above to create a case contact for your youth!" %>
+  <% end %>
+  <% if @presenter.case_contacts.empty? %>
+    <% if params.key?(:casa_case_id) %>
+      <div class="card-style-1 mb-5">
+        <div class="card-content">
+          <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
+          <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
+        Please click New Case Contact button above to create a case contact for your youth!" %>
+        </div>
       </div>
-    </div>
+    <% else %>
+      <div class="card-style-1">
+        <div class="card-content">
+          <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
+        Please click New Case Contact button above to create a case contact for your youth!" %>
+        </div>
+      </div>
+    <% end %>
   <% end %>
 <% end %>
