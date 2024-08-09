@@ -2,13 +2,15 @@
   <div class="alert-box danger-alert">
     <div id="error_explanation" class="alert">
       <h6>
-        <%= pluralize(resource.errors.count, "error") %> prohibited this
+        <%= pluralize(resource.errors.messages.count, "error") %> prohibited this
         <%= @custom_error_header || resource.model_name.human %> from being saved:
       </h6>
 
       <ul>
-        <% resource.errors.full_messages.each do |message| %>
-          <li><%= message %></li>
+        <% resource.errors.messages.each do |attr, error| %>
+          <li> 
+            <%= "#{attr.to_s.humanize} : #{error.first}" %> 
+          </li>
         <% end %>
       </ul>
     </div>
