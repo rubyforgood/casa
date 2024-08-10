@@ -100,7 +100,7 @@
       <div class="checkbox-style pt-1">
         <%= form.fields_for :metadata do |metadata_form| %>
           <%= metadata_form.check_box :create_another, class: "form-check-input" %>
-          <%= metadata_form.label :create_another, class: "form-check-label" do %>
+          <%= metadata_form.label :create_another, class: "form-check-label d-inline align-bottom" do %>
             Create Another
             <i class="lni lni-question-circle" data-toggle="tooltip" data-placement="top"
               title="Start a new contact for the same case(s) after submitting.">
