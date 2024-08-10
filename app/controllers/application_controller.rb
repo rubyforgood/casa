@@ -100,8 +100,8 @@ class ApplicationController < ActionController::Base
   end
 
   def store_referring_location
-    if request.referer && !request.referer.end_with?("users/sign_in")
-      session[:return_to] = request.referer unless params[:ignore_referer]
+    if request.referer && !request.referer.end_with?("users/sign_in") && params[:ignore_referer].blank?
+      session[:return_to] = request.referer
     end
   end
 
