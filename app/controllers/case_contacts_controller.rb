@@ -36,7 +36,7 @@ class CaseContactsController < ApplicationController
     authorize CaseContact
 
     casa_cases = policy_scope(current_organization.casa_cases)
-    draft_case_ids = set_draft_case_ids(params, casa_cases)
+    draft_case_ids = build_draft_case_ids(params, casa_cases)
 
     @case_contact = CaseContact.create_with_answers(current_organization,
       creator: current_user, draft_case_ids: draft_case_ids)
@@ -128,7 +128,7 @@ class CaseContactsController < ApplicationController
     end
   end
 
-  def set_draft_case_ids(params, casa_cases)
+  def build_draft_case_ids(params, casa_cases)
     # Use case(s) from params if present
     if params[:draft_case_ids].present?
       params[:draft_case_ids]
