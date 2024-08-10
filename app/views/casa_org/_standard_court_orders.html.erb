@@ -25,7 +25,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @standard_court_orders.each do |standard_court_order| %>
+            <% @standard_court_orders&.each do |standard_court_order| %>
               <% id = "standard_court_order-#{standard_court_order.id}" %>
               <tr>
                 <td scope="row" class="min-width">

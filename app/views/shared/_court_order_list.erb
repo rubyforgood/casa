@@ -33,7 +33,7 @@
     <%= label_tag :selectedCourtOrder, "Court Order Type" %>
     <div class="select-position">
       <%= select_tag :selectedCourtOrder,
-          options_for_select(casa_case.casa_org.standard_court_orders.map(&:value)),
+          options_for_select(current_organization.standard_court_orders.map(&:value)),
           { include_blank: "Create custom court order", data: {court_order_form_target: "selectedCourtOrder"} }
         %>
     </div>
