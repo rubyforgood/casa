@@ -1,8 +1,15 @@
 FactoryBot.define do
-  # note: uses enum status column, see:
+  # NOTE: FactoryBot automatically creates traits for a model's enum attributes
   # https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#enum-traits
+  # For example, CaseContact status enum includes `active: "active"` state, so following already defined:
+  # trait :active do
+  #   status { "active" }
+  # end
+  # ALSO, we can use any trait within other traits:
+  # https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#traits-within-traits
+  # So, rather than `status { "active" }` - use enum trait like so:
   factory :case_contact do
-    active
+    active # use the `:active` enum trait
     association :creator, factory: :user
     casa_case
 
@@ -34,7 +41,7 @@ FactoryBot.define do
     end
 
     trait :started_status do
-      started
+      started # enum trait
 
       casa_case { nil }
       draft_case_ids { [] }
@@ -46,7 +53,7 @@ FactoryBot.define do
     end
 
     trait :details_status do
-      details
+      details # enum trait
 
       casa_case { nil }
       draft_case_ids { [1] }
@@ -55,7 +62,7 @@ FactoryBot.define do
     end
 
     trait :notes_status do
-      notes
+      notes # enum trait
 
       casa_case { nil }
       draft_case_ids { [1] }
@@ -63,7 +70,7 @@ FactoryBot.define do
     end
 
     trait :expenses_status do
-      expenses
+      expenses # enum trait
 
       draft_case_ids { [1] }
     end
