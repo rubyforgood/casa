@@ -14,7 +14,7 @@ RSpec.describe Deployment::BackfillCaseContactStartedMetadataService do
     let(:case_contact) { create(:case_contact) }
 
     context "when a case contact has status started metadata" do
-      let!(:case_contact) { create(:case_contact, created_at: past, status: "started") }
+      let!(:case_contact) { create(:case_contact, :started, created_at: past) }
 
       it "does not change metadata" do
         described_class.new.backfill_metadata
