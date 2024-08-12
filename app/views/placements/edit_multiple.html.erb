@@ -1,0 +1,36 @@
+<h1>Edit Placements for <%= @casa_case.case_number %></h1>
+
+<%= form_tag update_multiple_casa_case_placements_path(@casa_case), method: :patch do %>
+  <table>
+    <thead>
+    <tr>
+      <th>Placement Type</th>
+      <th>Start Date</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tbody>
+    <% @placements.each do |placement| %>
+      <tr>
+        <td>
+          <div class="input-style-1">
+            <%= text_field_tag "placements[#{placement.id}][placement_type_name]", placement.placement_type.name %>
+          </div>
+        </td>
+        <td>
+          <div class="select-style-1">
+            <%= date_field_tag "placements[#{placement.id}][placement_started_at]", placement.placement_started_at %>
+          </div>
+        </td>
+        <td>
+          <%= link_to "Delete", edit_casa_case_path(@casa_case), class: 'text-danger' %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+
+  <%= submit_tag "Update All Placements", class: 'btn btn-primary' %>
+<% end %>
+
+<%= link_to "Cancel", casa_case_placements_path(@casa_case), class: 'btn btn-secondary' %>

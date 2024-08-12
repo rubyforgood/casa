@@ -1,13 +1,27 @@
-<% placements = casa_case.placements %>
-<label>Placements:</label>
-<% if placements.empty? %>
-  No Placements
+<% placements = casa_case.placements.includes(:placement_type) %>
+<% current_placement = placements.order(placement_started_at: :desc).first %>
+
+<% if current_placement %>
+  <table class="table" style="max-width: 800px;">
+    <thead>
+    <tr>
+      <th>Placement</th>
+      <th>Start Date</th>
+      <th>Actions</th>
+    </tr>
+    </thead>
+    <tr>
+      <td><%= current_placement.placement_type.name %></td>
+      <td><%= current_placement.placement_started_at.strftime('%B %d, %Y') %> - Present</td>
+      <td>
+        <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true, klass: "placement-dropdown")) do %>
+          <li><%= link_to "Show All", casa_case_placements_path(casa_case), class: "dropdown-item" %></li>
+<!--          <li><%#= link_to "Edit", edit_casa_case_placements_path(casa_case, current_placement), class: "dropdown-item" %></li>-->
+<!--          <li><%#= render(Modal::OpenLinkComponent.new(text: "Delete", target: current_placement.id, klass: "dropdown-item")) %></li>-->
+        <% end %>
+      </td>
+    </tr>
+  </table>
 <% else %>
-  <ul>
-    <% placements.each do |pcd| %>
-      <p>
-        <%= link_to(pcd.decorate.placement_info, casa_case_placement_path(casa_case, pcd)) %>
-      </p>
-    <% end %>
-  </ul>
+  <p>No placements found.</p>
 <% end %>

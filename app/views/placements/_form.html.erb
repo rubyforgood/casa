@@ -1,0 +1,26 @@
+<div class="card-style mb-30">
+  <%= form_with(model: placement, url: [casa_case, placement], local: true,
+                data: { controller: "placement-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
+    <div class="row align-items-center">
+      <div class="col-md-6">
+        <h6><strong>Case Number:</strong> <%= link_to casa_case.case_number, casa_case %></h6>
+      </div>
+      <div class="col-md-6">
+        <div class="breadcrumb-wrapper">
+          <span class="top-page-actions ml-5">
+            <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
+              <% if placement.persisted? %>
+                <i class="lni lni-pencil-alt"></i> Update
+              <% else %>
+                <i class="lni lni-plus"></i> Create
+              <% end %>
+            <% end %>
+          </span>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center">
+      <%= render 'placements/fields', placement: placement, form: form, casa_case: casa_case %>
+    </div>
+  <% end %>
+</div>

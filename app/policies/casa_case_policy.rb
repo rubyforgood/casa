@@ -106,6 +106,8 @@ class CasaCasePolicy < ApplicationPolicy
   alias_method :new?, :is_admin_same_org?
   alias_method :create?, :is_admin_same_org?
   alias_method :destroy?, :is_admin_same_org?
+  alias_method :update_multiple?, :edit?
+  alias_method :edit_multiple?, :edit?
 
   private
 
