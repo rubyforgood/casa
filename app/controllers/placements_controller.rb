@@ -32,28 +32,6 @@ class PlacementsController < ApplicationController
     end
   end
 
-  def edit_multiple
-    authorize @casa_case
-    @placements = @casa_case.placements.includes(:placement_type)
-  end
-
-  def update_multiple
-    @casa_case = CasaCase.find(params[:casa_case_id])
-
-    Placement.transaction do
-      params[:placements].each do |id, placement_params|
-        placement = @casa_case.placements.find(id)
-        placement.update!(placement_params)
-      end
-    end
-
-    redirect_to casa_case_placements_path(@casa_case), notice: 'Placements were successfully updated.'
-  rescue ActiveRecord::RecordInvalid
-    @placements = @casa_case.placements
-    flash.now[:alert] = 'There was an error updating the placements.'
-    render :edit_multiple
-  end
-
   # def create
   #   @placement = Placement.new(placement_params.merge(casa_case: @casa_case))
   #   authorize @placement
@@ -74,14 +52,14 @@ class PlacementsController < ApplicationController
   #   end
   # end
 
-  # def destroy
-  #   authorize @placement
-  #   if @placement.destroy
-  #     redirect_to casa_case_path(@casa_case), notice: "Placement was successfully deleted."
-  #   else
-  #     render :edit, status: :unprocessable_entity
-  #   end
-  # end
+  def destroy
+    authorize @placement
+    if @placement.destroy
+      redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully deleted."
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
 
   private
 

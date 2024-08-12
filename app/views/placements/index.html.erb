@@ -29,7 +29,12 @@
             <%= "- Present" if idx.zero? %>
           </td>
           <td><%= link_to "Edit", edit_casa_case_placement_path(@casa_case, placement), class: 'text-danger' %></td>
-          <td><%= link_to "Delete", edit_casa_case_path(@casa_case), class: 'text-danger' %></td>
+          <td>
+            <%= link_to [@casa_case, @placement], method: :delete, data: { confirm: 'Are you sure?' },class: "btn-sm main-btn danger-btn-outline btn-hover ms-auto" do %>
+              <i class="lni lni-trash-can mr-10"></i>
+              Delete
+            <% end %>
+          </td>
         </tr>
       <% end %>
       </tbody>
