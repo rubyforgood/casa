@@ -3,8 +3,16 @@
     <div class="col-md-6">
       <div class="title mb-30">
         <h1>Placements for
-          <%= @casa_case.case_number %>
+          <%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %>
         </h1>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <%= link_to new_casa_case_placement_path, class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
+          <i class="lni lni-plus"></i>
+          New Placement
+        <% end %>
       </div>
     </div>
   </div>
@@ -15,7 +23,7 @@
       <thead>
       <tr>
         <th>Placement Type</th>
-        <th>Start Date</th>
+        <th>Date</th>
         <th></th>
         <th></th>
       </tr>
@@ -26,16 +34,29 @@
           <td><%= placement.placement_type.name %></td>
           <td>
             <%= placement.placement_started_at.strftime('%B %d, %Y') %>
-            <%= "- Present" if idx.zero? %>
-          </td>
-          <td><%= link_to "Edit", edit_casa_case_placement_path(@casa_case, placement), class: 'text-danger' %></td>
-          <td>
-            <%= link_to [@casa_case, @placement], method: :delete, data: { confirm: 'Are you sure?' },class: "btn-sm main-btn danger-btn-outline btn-hover ms-auto" do %>
-              <i class="lni lni-trash-can mr-10"></i>
-              Delete
+            -
+            <% if idx.zero? %>
+              Present
+            <% elsif @placements[idx - 1].placement_started_at %>
+              <%= (@placements[idx - 1].placement_started_at - 1.day).strftime('%B %d, %Y') %>
             <% end %>
           </td>
+          <td><%= link_to edit_casa_case_placement_path(@casa_case, placement), class: "btn-sm main-btn primary-btn-outline btn-hover ms-auto" do %>
+              <i class="lni lni-pencil-alt"></i>
+              Edit
+            <% end %>
+          </td>
+          <td><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: placement.id, klass: "btn-sm main-btn danger-btn-outline btn-hover ms-auto")) %></td>
         </tr>
+        <%= render(Modal::GroupComponent.new(id: placement.id)) do |component| %>
+          <% component.with_header(text: "Delete Placement?", id: placement.id) %>
+          <% component.with_footer do %>
+            <%= link_to casa_case_placement_path(@casa_case, placement), method: :delete, class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
+              <i class="lni lni-trash-can mr-10"></i>
+              Delete Placement
+            <% end %>
+          <% end %>
+        <% end %>
       <% end %>
       </tbody>
     </table>
