@@ -90,9 +90,10 @@ Rails.application.routes.draw do
       post :restore
     end
     resources :form, controller: "case_contacts/form"
-    resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
-      patch :resolve, on: :member
-    end
+  end
+
+  resources :followups, only: %i[create], controller: "followups" do
+    patch :resolve, on: :member
   end
 
   resources :reports, only: %i[index]

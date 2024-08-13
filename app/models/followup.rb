@@ -22,6 +22,15 @@ class Followup < ApplicationRecord
   def existing_requested_followup?
     Followup.where(status: :requested, case_contact: case_contact).count == 0
   end
+
+  # Must add to this if we add more followupable options
+  def casa_case
+    if followupable.is_a?(CaseContact)
+      followupable.casa_case
+    elsif followupable.is_a?(CasaCase)
+      followupable
+    end
+  end
 end
 
 # == Schema Information
