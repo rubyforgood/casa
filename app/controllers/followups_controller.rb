@@ -1,5 +1,7 @@
-class CaseContacts::FollowupsController < ApplicationController
+class FollowupsController < ApplicationController
   after_action :verify_authorized
+
+  ALLOWED_FOLLOWUPABLE_TYPES = ['CaseContact', 'CasaCase'].freeze
 
   def create
     authorize Followup
@@ -18,7 +20,7 @@ class CaseContacts::FollowupsController < ApplicationController
     authorize @casa_case
 
     @followup.resolved!
-    create_notification
+    send_followup_resolved_notification
 
     redirect_to casa_case_path(@casa_case)
   end
@@ -26,23 +28,28 @@ class CaseContacts::FollowupsController < ApplicationController
   private
 
   def simple_followup_params
-    params.permit(:note)
+    params.permit(:note, :followupable_id, :followupable_type)
   end
 
   def find_followupable
-    params.each do |name, value|
-      if name =~ /(.+)_id$/
-        return $1.classify.constantize.find(value)
-      end
+    followupable_type = params[:followupable_type]
+    followupable_id = params[:followupable_id]
+
+    # Validate the followupable_type against the whitelist
+    if followupable_type.in?(ALLOWED_FOLLOWUPABLE_TYPES)
+      followupable_class = followupable_type.constantize
+      return followupable_class.find_by(id: followupable_id)
+    else
+      Rails.logger.warn("Attempt to access an unauthorized followupable type: #{followupable_type}")
+      nil
     end
-    nil
   end
 
-  def create_notification
+  # TODO: move this to FollowupService
+  def send_followup_resolved_notification
     return if current_user == @followup.creator
     FollowupResolvedNotifier
       .with(followup: @followup, created_by: current_user)
       .deliver(@followup.creator)
   end
-
 end

@@ -12,14 +12,15 @@ function convertDateToSystemTimeZone(date) {
   return new Date(typeof date === "string" ? new Date(date) : date);
 }
 
-async function displayFollowupAlert() {
+async function displayFollowupAlert(followupableType, followupableId) {
   const { value: text, isConfirmed } = await fireSwalFollowupAlert();
-
   if (!isConfirmed) return;
 
-  const params = text ? { note: text } : {};
-  // const caseContactId = this.id.replace("followup-button-", "");
-  console.log("Sending POST request to /followups with params:", params); // Debugging log
+  const params = {
+    note: text,
+    followupable_type: followupableType,
+    followupable_id: followupableId,
+  };
   $.post(`/followups`, params, () => window.location.reload());
 }
 
@@ -55,7 +56,9 @@ $(() => {
 
   $('[data-toggle="tooltip"]').tooltip();
   $(".followup-button").on("click", function (event) {
-    displayFollowupAlert;
+    const followupableType = $(this).data("followupable-type");
+    const followupableId = $(this).data("followupable-id");
+    displayFollowupAlert(followupableType, followupableId);
   });
 });
 

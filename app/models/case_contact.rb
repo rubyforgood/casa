@@ -24,7 +24,7 @@ class CaseContact < ApplicationRecord
     where(is_active: true)
   }, primary_key: :creator_id, foreign_key: :volunteer_id
   has_one :supervisor, through: :creator
-  has_many :followups
+  has_many :followups, as: :followupable
 
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true

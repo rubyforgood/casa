@@ -1,6 +1,5 @@
 class Followup < ApplicationRecord
   belongs_to :followupable, polymorphic: true, optional: true # TODO polymorph: remove optional after data is safely migrated
-  belongs_to :case_contact
   belongs_to :creator, class_name: "User"
   enum status: {requested: 0, resolved: 1}
 
@@ -20,7 +19,7 @@ class Followup < ApplicationRecord
   private
 
   def existing_requested_followup?
-    Followup.where(status: :requested, case_contact: case_contact).count == 0
+    Followup.where(status: :requested, followupable_id: self.followupable_id).count == 0
   end
 
   # Must add to this if we add more followupable options

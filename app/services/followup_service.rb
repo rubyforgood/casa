@@ -9,7 +9,7 @@ class FollowupService
 
     if followup.save
       maintain_backward_compatibility(followupable, followup)
-      send_notification(followup, creator)
+      send_followup_notification(followup, creator)
     end
 
     followup
@@ -25,9 +25,15 @@ class FollowupService
     end
   end
 
-  def self.send_notification(followup, creator)
+  def self.send_followup_notification(followup, creator)
+    recipient = case followup.followupable
+                when CaseContact
+                  followup.followupable.creator
+                else
+                  Rails.logger.warn("Unsupported followupable type: #{followup.followupable_type}")
+                end
     FollowupNotifier
       .with(followup: followup, created_by: creator)
-      .deliver(followup.case_contact.creator)
+      .deliver(recipient)
   end
 end
