@@ -43,7 +43,7 @@ class CourtDate < ApplicationRecord
   end
 
   def display_name
-    "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date)}"
+    "#{casa_case.case_number} - Court Date - #{I18n.l(date.to_date, format: :year_first)}"
   end
 
   private
