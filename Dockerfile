@@ -3,23 +3,14 @@ FROM ruby:3.2.2-alpine AS builder
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
   curl-dev \
-  nodejs \
   postgresql-dev \
-  tzdata \
-  vim \
-  yarn && rm -rf /var/cache/apk/*
+  tzdata
 
 ARG RAILS_ROOT=/usr/src/app/
 WORKDIR $RAILS_ROOT
 
-COPY package*.json yarn.lock $RAILS_ROOT
-RUN yarn install --check-files
-
 COPY Gemfile* $RAILS_ROOT
 RUN bundle install
-
-COPY . .
-RUN yarn build && yarn build:css
 
 ### BUILD STEP DONE ###
 
@@ -38,7 +29,10 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
 
 WORKDIR $RAILS_ROOT
 
-COPY --from=builder $RAILS_ROOT $RAILS_ROOT
+COPY . .
+RUN yarn install
+RUN yarn build && yarn build:css
+
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 
 EXPOSE 3000
