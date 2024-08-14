@@ -550,6 +550,20 @@ RSpec.describe CaseContact, type: :model do
         end
       end
     end
+
+    describe ".used_create_another" do
+      let!(:scope_case_contact) { create(:case_contact, metadata: {"create_another" => true}) }
+      let!(:false_case_contact) { create(:case_contact, metadata: {"create_another" => false}) }
+      let!(:empty_meta_case_contact) { create(:case_contact) }
+
+      subject { described_class.used_create_another }
+
+      it "returns only the case contacts with the metadata key 'create_another' set to true" do
+        expect(subject).to include(scope_case_contact)
+        expect(subject).not_to include(false_case_contact)
+        expect(subject).not_to include(empty_meta_case_contact)
+      end
+    end
   end
 
   describe "#contact_groups_with_types" do
