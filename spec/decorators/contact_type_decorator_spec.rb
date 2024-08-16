@@ -20,8 +20,12 @@ RSpec.describe ContactTypeDecorator do
   end
 
   describe "last_time_used_with_cases" do
+    let(:casa_case_ids) { [] }
+
+    subject { contact_type.decorate.last_time_used_with_cases casa_case_ids }
+
     context "with empty array" do
-      it { expect(contact_type.decorate.last_time_used_with_cases([])).to eq "never" }
+      it { is_expected.to eq "never" }
     end
 
     context "with cases" do
@@ -38,10 +42,19 @@ RSpec.describe ContactTypeDecorator do
 
         it "is the most recent case contact" do
           case_contact1.contact_types << contact_type
-          expect(contact_type.decorate.last_time_used_with_cases(casa_case_ids)).to eq "4 days ago"
+          expect(subject).to eq "4 days ago"
 
           case_contact2.contact_types << contact_type
           expect(contact_type.decorate.last_time_used_with_cases(casa_case_ids)).to eq "3 days ago"
+        end
+
+        context "when case_contact occurred_at is nil" do
+          let(:case_contact1) { build :case_contact, casa_case: casa_case, occurred_at: nil }
+
+          it "returns 'never'" do
+            case_contact1.contact_types << contact_type
+            expect(subject).to eq "never"
+          end
         end
       end
     end

@@ -2,11 +2,6 @@
 /* global $ */
 
 import Swal from 'sweetalert2'
-
-function enGBDateString (date) {
-  return date.toLocaleDateString('en-GB').split('/').reverse().join('-')
-}
-
 function convertDateToSystemTimeZone (date) {
   return new Date((typeof date === 'string' ? new Date(date) : date))
 }
@@ -48,13 +43,6 @@ async function fireSwalFollowupAlert () {
 }
 
 $(() => { // JQuery's callback for the DOM loading
-  const caseOccurredAt = $('#case_contact_occurred_at')
-  const timeZoneConvertedDate = enGBDateString(new Date())
-
-  if (enGBDateString(convertDateToSystemTimeZone(caseOccurredAt.val())) === timeZoneConvertedDate) {
-    caseOccurredAt.val(timeZoneConvertedDate)
-  }
-
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
 })

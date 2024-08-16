@@ -409,7 +409,23 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           end
         end
 
-        it { is_expected.to have_http_status(:redirect) }
+        it "redirects to referrer (fallback) page" do
+          expect(request).to have_http_status :redirect
+          expect(request).to redirect_to case_contacts_path(success: true)
+        end
+
+        context "when create_another option is truthy" do
+          let(:draft_case_ids) { case_contact.draft_case_ids }
+
+          before { params[:case_contact][:metadata] = {create_another: "1"} }
+
+          it "redirects to contact form with the same draft_case_id, ignore_referer" do
+            expect(request).to have_http_status :redirect
+            expect(request).to redirect_to(
+              new_case_contact_path(draft_case_ids:, ignore_referer: true)
+            )
+          end
+        end
 
         context "with multiple cases selected" do
           let!(:other_casa_case) { create(:casa_case, casa_org: organization) }
@@ -439,6 +455,23 @@ RSpec.describe "CaseContacts::Forms", type: :request do
             case_contact.reload
             expect(case_contact.draft_case_ids.count).to eq 1
             expect(case_contact.draft_case_ids).to eq [casa_case.id]
+          end
+
+          it "redirects to referrer (fallback) page" do
+            expect(request).to have_http_status :redirect
+            expect(request).to redirect_to case_contacts_path(success: true)
+          end
+
+          context "when create_another option is truthy" do
+            before { params[:case_contact][:metadata] = {create_another: "1"} }
+
+            it "redirects to new contact with the same draft_case_ids, ignore_referer" do
+              draft_case_ids = case_contact.draft_case_ids
+              expect(request).to have_http_status :redirect
+              expect(request).to redirect_to(
+                new_case_contact_path(draft_case_ids:, ignore_referer: true)
+              )
+            end
           end
         end
       end
