@@ -10,7 +10,7 @@ class PlacementType < ApplicationRecord
     "APPLA"
   ].freeze
 
-  validates :name, presence: true, inclusion: { in: VALID_NAMES }
+  validates :name, presence: true, inclusion: {in: VALID_NAMES}
   scope :for_organization, ->(org) { where(casa_org: org).order(:name) }
 
   def self.valid_names

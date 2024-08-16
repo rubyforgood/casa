@@ -40,7 +40,7 @@ class PlacementsController < ApplicationController
       redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully created."
     else
       Rails.logger.error("Placement creation failed: #{@placement.errors.full_messages}")
-      flash.now[:alert] = "Failed to create placement: #{@placement.errors.full_messages.join(', ')}"
+      flash.now[:alert] = "Failed to create placement: #{@placement.errors.full_messages.join(", ")}"
       render :new, status: :unprocessable_entity
     end
   rescue Pundit::NotAuthorizedError => e

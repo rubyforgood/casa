@@ -5,9 +5,9 @@ RSpec.describe "placements/edit", type: :view do
 
   let(:organization) { create(:casa_org) }
   let(:user) { build_stubbed(:casa_admin, casa_org: organization) }
-  let(:casa_case) { create(:casa_case, casa_org: organization, case_number: '123') }
-  let(:placement_type) { create(:placement_type, name: 'Reunification') }
-  let(:placement) { create(:placement, placement_started_at: '2024-08-15 12:39:00 UTC', placement_type:, casa_case:) }
+  let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "123") }
+  let(:placement_type) { create(:placement_type, name: "Reunification") }
+  let(:placement) { create(:placement, placement_started_at: "2024-08-15 12:39:00 UTC", placement_type:, casa_case:) }
 
   before do
     assign :casa_case, casa_case
