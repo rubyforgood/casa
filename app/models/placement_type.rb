@@ -1,21 +1,8 @@
 class PlacementType < ApplicationRecord
   belongs_to :casa_org
 
-  VALID_NAMES = [
-    "Reunification",
-    "Custody/Guardianship by a relative",
-    "Custody/Guardianship by a non-relative",
-    "Adoption by relative",
-    "Adoption by a non-relative",
-    "APPLA"
-  ].freeze
-
-  validates :name, presence: true, inclusion: {in: VALID_NAMES}
+  validates :name, presence: true
   scope :for_organization, ->(org) { where(casa_org: org).order(:name) }
-
-  def self.valid_names
-    VALID_NAMES
-  end
 end
 
 # == Schema Information

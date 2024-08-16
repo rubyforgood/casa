@@ -16,7 +16,7 @@
       <td>
         <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true, klass: "placement-dropdown")) do %>
           <li><%= link_to "Show All", casa_case_placements_path(casa_case), class: "dropdown-item" %></li>
-          <li><%= link_to "Edit", new_casa_case_placement_path(casa_case), class: "dropdown-item" %></li>
+          <li><%= link_to "Edit", edit_casa_case_placement_path(casa_case, current_placement), class: "dropdown-item" %></li>
           <li><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: current_placement.id, klass: "dropdown-item")) %></li>
         <% end %>
       </td>

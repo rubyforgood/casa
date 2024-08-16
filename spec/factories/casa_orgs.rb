@@ -12,5 +12,15 @@ FactoryBot.define do
     trait :with_logo do
       logo { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "org_logo.jpeg")) }
     end
+
+    trait :with_placement_types do
+      transient { placement_types { ["Reunification", "Adoption", "Foster Care", "Kinship"] } }
+
+      after(:create) do |org, evaluator|
+        evaluator.placement_types.each do |name|
+          org.placement_types.create!(name: name)
+        end
+      end
+    end
   end
 end

@@ -1,6 +1,6 @@
 class PlacementsController < ApplicationController
   before_action :set_casa_case
-  before_action :set_placement, only: %i[edit update destroy]
+  before_action :set_placement, only: %i[edit show generate update destroy]
   before_action :require_organization!
 
   rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
@@ -19,19 +19,6 @@ class PlacementsController < ApplicationController
     authorize @casa_case
   end
 
-  def update
-    authorize @placement
-
-    if @placement.update(placement_params)
-      redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully updated."
-    else
-      render :edit, status: :unprocessable_entity
-    end
-  rescue Pundit::NotAuthorizedError => e
-    Rails.logger.error("Authorization failed: #{e.message}")
-    redirect_to casa_case_placements_path, alert: "You are not authorized to create a placement for this case."
-  end
-
   def create
     @placement = Placement.new(placement_params)
     authorize @placement
@@ -42,6 +29,19 @@ class PlacementsController < ApplicationController
       Rails.logger.error("Placement creation failed: #{@placement.errors.full_messages}")
       flash.now[:alert] = "Failed to create placement: #{@placement.errors.full_messages.join(", ")}"
       render :new, status: :unprocessable_entity
+    end
+  rescue Pundit::NotAuthorizedError => e
+    Rails.logger.error("Authorization failed: #{e.message}")
+    redirect_to casa_case_placements_path, alert: "You are not authorized to create a placement for this case."
+  end
+
+  def update
+    authorize @placement
+
+    if @placement.update(placement_params)
+      redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully updated."
+    else
+      render :edit, status: :unprocessable_entity
     end
   rescue Pundit::NotAuthorizedError => e
     Rails.logger.error("Authorization failed: #{e.message}")
