@@ -6,7 +6,7 @@ class PlacementDecorator < Draper::Decorator
   end
 
   def placement_info
-    [formatted_date, placement_type&.name&.to_s].compact.join(" - ")
+    ["Started At:  #{formatted_date}", "Placement Type: #{placement_type&.name}"].compact.join(" - ")
   end
 
   def placement_started_at

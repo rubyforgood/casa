@@ -1,0 +1,32 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+    <div class="col-md-6">
+      <div class="title mb-30">
+        <h1>Placement</h1>
+        <time datetime="<%= @placement.placement_started_at %>" class="d-inline-block h4"><%= @placement.decorate.formatted_date %></time>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="breadcrumb-wrapper mb-30">
+        <%= link_to edit_casa_case_placement_path(@casa_case, @placement), class: "btn-sm main-btn primary-btn btn-hover" do %>
+          <i class="lni lni-pencil-alt mr-10"></i>
+          Edit
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-lg-12">
+  <div class="card-style mb-30">
+    <dl>
+      <dt>
+        <h6>Case Number:</h6>
+      </dt>
+      <dd class="mb-3"><%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %></dd>
+      <dt>
+        <h6>Placement Type:</h6>
+      </dt>
+      <dd class="mb-3"><%= @placement.placement_type.name %></dd>
+    </dl>
+  </div>
+</div>

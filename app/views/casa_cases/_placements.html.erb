@@ -1,5 +1,4 @@
-<% placements = casa_case.placements.includes(:placement_type) %>
-<% current_placement = placements.order(placement_started_at: :desc).first %>
+<% current_placement = casa_case.placements.order(placement_started_at: :desc).first %>
 
 <% if current_placement %>
   <table class="table" style="max-width: 800px;">

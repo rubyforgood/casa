@@ -10,6 +10,10 @@ class PlacementsController < ApplicationController
     @placements = @casa_case.placements.includes(:placement_type).order(placement_started_at: :desc)
   end
 
+  def show
+    authorize @casa_case
+  end
+
   def new
     authorize @casa_case
     @placement = Placement.new
