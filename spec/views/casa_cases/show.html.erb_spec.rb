@@ -61,7 +61,7 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match("111")
-      expect(rendered).to match("May 6, 2023")
+      expect(rendered).to match("May 06, 2023 - Present")
     end
   end
 
