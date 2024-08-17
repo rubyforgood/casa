@@ -15,9 +15,9 @@ class FollowupsController < ApplicationController
 
   def resolve
     @followup = Followup.find(params[:id])
-    @casa_case = @followup.casa_case
-    authorize @followup
-    authorize @casa_case
+    @casa_case = @followup.associated_casa_case
+
+    authorize @followup, :resolve?
 
     @followup.resolved!
     send_followup_resolved_notification

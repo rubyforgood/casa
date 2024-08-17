@@ -16,19 +16,22 @@ class Followup < ApplicationRecord
     errors.add(:base, "Only 1 Followup can be in requested status.")
   end
 
+  # Must add to this if we add more followupable options
+  def associated_casa_case
+    case followupable
+    when CasaCase
+      followupable
+    when CaseContact
+      followupable.casa_case
+    else
+      nil
+    end
+  end
+
   private
 
   def existing_requested_followup?
     Followup.where(status: :requested, followupable_id: self.followupable_id).count == 0
-  end
-
-  # Must add to this if we add more followupable options
-  def casa_case
-    if followupable.is_a?(CaseContact)
-      followupable.casa_case
-    elsif followupable.is_a?(CasaCase)
-      followupable
-    end
   end
 end
 

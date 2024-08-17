@@ -38,6 +38,7 @@ class CasaCase < ApplicationRecord
   has_many :case_group_memberships
   has_many :case_groups, through: :case_group_memberships
   has_many_attached :court_reports
+  has_many :followups, as: :followupable
 
   belongs_to :hearing_type, optional: true
   belongs_to :judge, optional: true
