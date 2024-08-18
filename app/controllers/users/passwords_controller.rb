@@ -4,13 +4,18 @@ class Users::PasswordsController < Devise::PasswordsController
   include SmsBodyHelper
 
   def create
-    @email, @phone_number = [params[resource_name][:email], params[resource_name][:phone_number]]
+    @email = params[resource_name][:email]
+    @phone_number = params[resource_name][:phone_number]
     @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
 
-    valid_params?(@email, @phone_number) ? send_password : render_error
-    return if @errors
+    unless valid_params?(@email, @phone_number)
+      render_error
+      return if @errors
+    end
 
-    redirect_to after_sending_reset_password_instructions_path_for(resource_name), notice: "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
+    send_password
+    redirect_to after_sending_reset_password_instructions_path_for(resource_name),
+                notice: 'If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.'
   end
 
   private
@@ -21,6 +26,8 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def send_password
+    return if @resource.nil?
+
     send_password_reset_mail if email?
     send_password_reset_sms if phone_number?
   end
@@ -46,7 +53,6 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def valid_params?(email, phone_number)
     return empty_fields_error if params_not_present(email, phone_number)
-    return no_user_found_error unless user_exists
 
     valid_phone_number, error_message = valid_phone_number(phone_number)
     return invalid_phone_number_error(error_message) unless valid_phone_number
@@ -64,7 +70,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def empty_fields_error
     @resource ||= resource
-    @resource.errors.add(:base, "Please enter at least one field.")
+    @resource.errors.add(:base, 'Please enter at least one field.')
 
     false
   end
@@ -84,7 +90,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def no_user_found_error
-    resource.errors.add(:base, "User does not exist.")
+    resource.errors.add(:base, 'User does not exist.')
 
     false
   end
