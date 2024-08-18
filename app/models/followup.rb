@@ -1,12 +1,18 @@
 class Followup < ApplicationRecord
   belongs_to :followupable, polymorphic: true, optional: true # TODO polymorph: remove optional after data is safely migrated
   belongs_to :creator, class_name: "User"
+
+  before_save :maintain_backward_compatibility
+
   enum status: {requested: 0, resolved: 1}
 
   validate :uniqueness_of_requested
 
   def self.in_organization(casa_org)
-    Followup.joins(case_contact: :casa_case).where(casa_cases: {casa_org_id: casa_org.id})
+    # if other followupable_types are added this will need exapansion
+    joins("LEFT JOIN case_contacts ON case_contacts.id = followups.followupable_id AND followups.followupable_type = 'CaseContact'")
+      .joins("LEFT JOIN casa_cases ON casa_cases.id = case_contacts.casa_case_id")
+      .where(casa_cases: { casa_org_id: casa_org.id })
   end
 
   def uniqueness_of_requested
@@ -19,8 +25,6 @@ class Followup < ApplicationRecord
   # Must add to this if we add more followupable options
   def associated_casa_case
     case followupable
-    when CasaCase
-      followupable
     when CaseContact
       followupable.casa_case
     else
@@ -32,6 +36,14 @@ class Followup < ApplicationRecord
 
   def existing_requested_followup?
     Followup.where(status: :requested, followupable_id: self.followupable_id).count == 0
+  end
+
+  def maintain_backward_compatibility
+    if followupable.is_a?(CaseContact)
+      self.case_contact_id = followupable.id
+    else
+      self.case_contact_id = nil
+    end
   end
 end
 

@@ -10,12 +10,21 @@ RSpec.describe BackfillFollowupableService do
   end
 
   describe "backfilling followup polymorphic columns" do
-    let(:case_contact) { create(:case_contact) }
-    let!(:followup) { create(:followup, :without_dual_writing, case_contact: case_contact) }
+    let(:creator) { create(:user, display_name: "Craig") }
+    let!(:followup) { create(:followup, creator: creator, note: "hello, this is the thing, ") }
+
+    before do
+      # immitate an instance from before polymorphic column change
+      followup.update(followupable_id: nil, followupable_type: nil)
+    end
 
     it "updates followupable_id and followupable_type correctly" do
-      expect { run_backfill }.to change { followup.reload.followupable_id }.from(nil).to(case_contact.id)
-        .and change { followup.reload.followupable_type }.from(nil).to("CaseContact")
+      run_backfill
+      followup.reload
+      case_contact_id = followup.followupable_id
+
+      expect(followup.followupable_id).to eq(case_contact_id)
+      expect(followup.followupable_type).to eq("CaseContact")
     end
 
     context "when an error occurs during update" do

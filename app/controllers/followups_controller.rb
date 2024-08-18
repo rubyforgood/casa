@@ -1,12 +1,11 @@
 class FollowupsController < ApplicationController
   after_action :verify_authorized
 
-  ALLOWED_FOLLOWUPABLE_TYPES = ['CaseContact', 'CasaCase'].freeze
+  ALLOWED_FOLLOWUPABLE_TYPES = ['CaseContact'].freeze # TODO: move to enum
 
   def create
     authorize Followup
     followupable = find_followupable
-    # case_contact = CaseContact.find(params[:case_contact_id])
     note = simple_followup_params[:note]
     FollowupService.create_followup(followupable, current_user, note)
 
