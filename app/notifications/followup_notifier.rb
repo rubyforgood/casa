@@ -24,7 +24,7 @@ class FollowupNotifier < BaseNotifier
   end
 
   def url
-    edit_case_contact_path(params[:followup].case_contact_id)
+    polymorphic_path([:edit, followup.followupable])
   end
 
   private
@@ -38,9 +38,11 @@ class FollowupNotifier < BaseNotifier
   end
 
   def build_message
-    note = params[:followup].note
+    followup = params[:followup]
+    humanized_followupable_type = followup.followupable_type.underscore.humanize.titleize
+    note = followup.note
     join_char = note.present? ? "\n" : " "
-    result = ["#{created_by} has flagged a Case Contact that needs follow up."]
+    result = ["#{created_by} has flagged a #{humanized_followupable_type} that needs follow up."]
     result << "Note: #{note}" if note.present?
     result << "Click to see more."
     result.join(join_char)

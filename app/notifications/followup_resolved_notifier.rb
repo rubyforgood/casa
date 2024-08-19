@@ -24,6 +24,6 @@ class FollowupResolvedNotifier < BaseNotifier
   end
 
   def url
-    edit_case_contact_path(params[:followup].case_contact_id, notification_id: id)
+    polymorphic_path([:edit, followup.followupable, notification_id: id])
   end
 end
