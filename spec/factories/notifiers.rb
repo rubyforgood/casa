@@ -14,7 +14,7 @@ FactoryBot.define do
     trait :without_note do
       params do
         {
-          followup: create(:followup, :without_note, case_contact_id: create(:case_contact).id)
+          followup: create(:followup, :without_note, followupable: create(:case_contact))
         }
       end
     end
@@ -22,7 +22,7 @@ FactoryBot.define do
     trait :read do
       params do
         {
-          followup: create(:followup, :without_note, case_contact_id: create(:case_contact).id)
+          followup: create(:followup, :without_note, followupable: create(:case_contact))
         }
       end
     end

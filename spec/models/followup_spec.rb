@@ -23,11 +23,12 @@ RSpec.describe Followup, type: :model do
   end
 
   it "only allows 1 followup in requested status" do
-    case_contact = build_stubbed(:case_contact)
+    case_contact = create(:case_contact)  # Persist the case_contact in the database
     create(:followup, followupable: case_contact)
     invalid_followup = build(:followup, status: :requested, followupable: case_contact)
 
     expect(invalid_followup).to be_invalid
+    expect(invalid_followup.errors[:base]).to include("Only 1 Followup can be in requested status.")
   end
 
   it "allows followup to be flipped to resolved" do
