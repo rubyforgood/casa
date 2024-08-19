@@ -1,35 +1,15 @@
 <% current_placement = casa_case.placements.order(placement_started_at: :desc).first %>
 
-<% if current_placement %>
-  <table class="table" style="max-width: 800px;">
-    <thead>
-    <tr>
-      <th>Placement</th>
-      <th>Date</th>
-      <th>Actions</th>
-    </tr>
-    </thead>
-    <tr>
-      <td><%= current_placement.placement_type.name %></td>
-      <td><%= current_placement.placement_started_at.strftime('%B %d, %Y') %> - Present</td>
-      <td>
-        <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true, klass: "placement-dropdown")) do %>
-          <li><%= link_to "Show All", casa_case_placements_path(casa_case), class: "dropdown-item" %></li>
-          <li><%= link_to "Edit", edit_casa_case_placement_path(casa_case, current_placement), class: "dropdown-item" %></li>
-          <li><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: current_placement.id, klass: "dropdown-item")) %></li>
-        <% end %>
-      </td>
-    </tr>
-    <%= render(Modal::GroupComponent.new(id: current_placement.id)) do |component| %>
-      <% component.with_header(text: "Delete Current Placement?", id: current_placement.id) %>
-      <% component.with_footer do %>
-        <%= link_to casa_case_placement_path(@casa_case, current_placement), method: :delete, class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
-          <i class="lni lni-trash-can mr-10"></i>
-          Delete Placement
-        <% end %>
-      <% end %>
-    <% end %>
-  </table>
-<% else %>
-  <p>No Placements</p>
-<% end %>
+<h6>
+  <strong>Current Placement:</strong>
+
+  <% if current_placement %>
+    <%= current_placement.placement_type.name %>
+    <p>Placed since: <%= current_placement.decorate.formatted_date %></p>
+  <% else %>
+    Unknown
+  <% end %>
+
+  <p><%= link_to "See All Placements", casa_case_placements_path(casa_case), class: 'text-primary hover-underline' %></p>
+</h6>
+

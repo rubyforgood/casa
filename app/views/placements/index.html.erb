@@ -2,7 +2,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h1>Placements for
+        <h1>Placement History for
           <%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %>
         </h1>
       </div>
@@ -33,7 +33,7 @@
         <tr>
           <td><%= placement.placement_type.name %></td>
           <td>
-            <%= placement.placement_started_at.strftime('%B %d, %Y') %>
+            <%= placement.decorate.formatted_date %>
             -
             <% if idx.zero? %>
               Present
@@ -46,14 +46,19 @@
               Edit
             <% end %>
           </td>
-          <td><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: placement.id, klass: "btn-sm main-btn danger-btn-outline btn-hover ms-auto")) %></td>
+          <td>
+            <%= render(Modal::OpenLinkComponent.new(target: placement.id, klass: "btn-sm main-btn danger-btn-outline btn-hover ms-auto")) do %>
+              <i class="lni lni-trash-can"></i>
+              Delete
+            <% end %>
+          </td>
         </tr>
         <%= render(Modal::GroupComponent.new(id: placement.id)) do |component| %>
           <% component.with_header(text: "Delete Placement?", id: placement.id) %>
           <% component.with_footer do %>
             <%= link_to casa_case_placement_path(@casa_case, placement), method: :delete, class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
-              <i class="lni lni-trash-can mr-10"></i>
-              Delete Placement
+              <i class="lni lni-trash-can"></i>
+              Delete
             <% end %>
           <% end %>
         <% end %>

@@ -3,13 +3,13 @@ class PlacementPolicy < ApplicationPolicy
     casa_case_policy.edit?
   end
 
-  alias_method :index?, :allowed_to_edit_casa_case?
-  alias_method :show?, :allowed_to_edit_casa_case?
-  alias_method :edit?, :allowed_to_edit_casa_case?
-  alias_method :update?, :allowed_to_edit_casa_case?
-  alias_method :new?, :allowed_to_edit_casa_case?
-  alias_method :create?, :allowed_to_edit_casa_case?
-  alias_method :destroy?, :admin_or_supervisor?
+  alias index? allowed_to_edit_casa_case?
+  alias show? allowed_to_edit_casa_case?
+  alias edit? allowed_to_edit_casa_case?
+  alias update? allowed_to_edit_casa_case?
+  alias new? allowed_to_edit_casa_case?
+  alias create? allowed_to_edit_casa_case?
+  alias destroy? admin_or_supervisor?
 
   private
 
