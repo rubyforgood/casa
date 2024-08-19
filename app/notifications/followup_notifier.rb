@@ -24,7 +24,7 @@ class FollowupNotifier < BaseNotifier
   end
 
   def url
-    polymorphic_path([:edit, params[:followup].followupable])
+    edit_polymorphic_path(params[:followup].followupable)
   end
 
   private
