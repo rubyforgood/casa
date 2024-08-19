@@ -109,7 +109,7 @@ GEM
       smart_properties
     bigdecimal (3.1.8)
     bindex (0.8.1)
-    blueprinter (1.0.2)
+    blueprinter (1.1.0)
     brakeman (6.1.2)
       racc
     bugsnag (6.27.1)
