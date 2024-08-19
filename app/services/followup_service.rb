@@ -14,7 +14,19 @@ class FollowupService
     followup
   end
 
+  def self.resolve_followup(followup, user)
+    followup.resolved!
+    send_followup_resolved_notification(followup, user)
+  end
+
   private_class_method
+
+  def self.send_followup_resolved_notification(followup, user)
+    return if user == followup.creator
+    FollowupResolvedNotifier
+      .with(followup: followup, created_by: user)
+      .deliver(followup.creator)
+  end
 
   def self.send_followup_notification(followup, creator)
     recipient = case followup.followupable

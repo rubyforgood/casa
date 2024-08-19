@@ -41,4 +41,44 @@ RSpec.describe FollowupService do
       end
     end
   end
+
+  describe ".resolve_followup" do
+
+    let(:creator) { create(:volunteer) }
+    let(:notification_double) { double("FollowupResolvedNotifier") }
+
+    before do
+      allow(FollowupResolvedNotifier).to receive(:with).and_return(notification_double)
+      allow(notification_double).to receive(:deliver)
+    end
+
+    context "when followup is resolved successfully" do
+      let(:followup) { create(:followup) }
+
+      it "sets the followup as resolved" do
+        FollowupService.resolve_followup(followup, creator)
+        expect(followup.reload).to be_resolved
+      end
+
+      it "sends a notification" do
+        FollowupService.resolve_followup(followup, creator)
+
+        expect(FollowupResolvedNotifier).to have_received(:with).with(
+          followup: followup,
+          created_by: creator
+        )
+
+        expect(notification_double).to have_received(:deliver)
+      end
+    end
+
+    context "when the current user is the creator of the followup" do
+      let!(:followup) { create(:followup, creator: creator) }
+
+      it "does not send a notification" do
+        FollowupService.resolve_followup(followup, creator)
+        expect(FollowupResolvedNotifier).not_to have_received(:with)
+      end
+    end
+  end
 end

@@ -18,8 +18,7 @@ class FollowupsController < ApplicationController
 
     authorize @followup, :resolve?
 
-    @followup.resolved!
-    send_followup_resolved_notification
+    FollowupService.resolve_followup(@followup, current_user)
 
     redirect_to casa_case_path(@casa_case)
   end
@@ -42,13 +41,5 @@ class FollowupsController < ApplicationController
       Rails.logger.warn("Attempt to access an unauthorized followupable type: #{followupable_type}")
       nil
     end
-  end
-
-  # TODO: move this to FollowupService
-  def send_followup_resolved_notification
-    return if current_user == @followup.creator
-    FollowupResolvedNotifier
-      .with(followup: @followup, created_by: current_user)
-      .deliver(@followup.creator)
   end
 end
