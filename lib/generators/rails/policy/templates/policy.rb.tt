@@ -1,0 +1,52 @@
+<%- module_namespacing do -%>
+class <%= class_name %>Policy < ApplicationPolicy
+<%- if options[:headless] -%>
+  # Headless policy (used when no corresponding ActiveRecord/Model):
+  # - use `authorize(:<%= singular_name %>, :action?)` in controller actions
+  # - see https://github.com/varvet/pundit#headless-policies
+  def initialize(user, _record)
+    @user = user
+  end
+<%- else -%>
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      case user
+      when CasaAdmin, Supervisor
+        scope.where(casa_org: @user.casa_org)
+      when Volunteer
+        # REMOVE IF NOT APPLICABLE (just an example, doesn't work for all cases)
+        # scope.assigned_to_user(@user)
+        scope.none
+      else
+        scope.none
+      end
+    end
+  end
+<%- end -%>
+<%- user_example = "is_admin? || is_supervisor?" -%>
+<%- record_example = "admin_or_supervisor_same_org?" -%>
+<%- if actions.empty? -%>
+
+  # No actions specified, Example usage:
+  # def index?
+  #   <%= user_example %>
+  # end
+  #
+  # def show?
+  #   <%= record_example %>
+  # end
+<%- end -%>
+<%- actions.each do |action| -%>
+
+  <%- if action == "index" -%>
+  def index?
+    <%= user_example %>
+  end
+  <%- else -%>
+  def <%= action %>?
+    <%= options[:headless] ? user_example :  record_example %>
+  end
+  <%- end -%>
+<%- end -%>
+end
+<% end -%>

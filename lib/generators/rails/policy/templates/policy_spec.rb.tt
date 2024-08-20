@@ -1,0 +1,136 @@
+require "<%= File.exist?("spec/rails_helper.rb") ? "rails_helper" : "spec_helper" %>"
+
+<%- headless_actions = options[:headless] ? actions : actions.select { |action| action.to_s.match?(/index/) } -%>
+<%- headless_methods = headless_actions.map { |action| ":#{action}?" }.join(", ") -%>
+<%- record_actions = actions - headless_actions -%>
+<%- record_methods = record_actions.map { |action| ":#{action}?" }.join(", ") -%>
+RSpec.describe <%= class_name %>Policy, type: :policy do
+  let(:casa_org) { create :casa_org }
+  let(:volunteer) { create :volunteer, casa_org: }
+  let(:supervisor) { create :supervisor, casa_org: }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:all_casa_admin) { create :all_casa_admin }
+<%- unless options[:headless] -%>
+
+  # may need to modify factory/create other records to assign org
+  let(:<%= singular_name %>) { create :<%= singular_name %>, casa_org: }
+  # modify to assign to volunteer user or remove
+  let(:volunteer_<%= singular_name %>) { create :<%= singular_name %>, casa_org:, volunteer: }
+<%- end -%>
+
+  subject { described_class }
+
+<%- unless record_actions.empty? -%>
+  # split actions into different `permissions` block for different behavior
+  permissions <%= record_methods %> do
+    it "does not permit a nil user" do
+      expect(described_class).not_to permit(nil, <%= singular_name %>)
+    end
+
+    it "does not permit a volunteer" do
+      expect(described_class).not_to permit(volunteer, <%= singular_name %>)
+    end
+
+    it "permits a volunteer assigned to the <%= human_name.downcase %>" do
+      expect(described_class).to permit(volunteer, volunteer_<%= singular_name %>)
+    end
+
+    it "permits a supervisor" do
+      expect(described_class).to permit(supervisor, <%= singular_name %>)
+    end
+
+    it "does not permit a supervisor for a different casa org" do
+      other_org_supervisor = create :supervisor, casa_org: create(:casa_org)
+      expect(described_class).not_to permit(other_org_supervisor, <%= singular_name %>)
+    end
+
+    it "permits a casa admin" do
+      expect(described_class).to permit(casa_admin, <%= singular_name %>)
+    end
+
+    it "does not permit a casa admin for a different casa org" do
+      other_org_casa_admin = create :casa_admin, casa_org: create(:casa_org)
+      expect(described_class).not_to permit(other_org_casa_admin, <%= singular_name %>)
+    end
+
+    it "does not permit an all casa admin" do
+      expect(described_class).not_to permit(all_casa_admin, <%= singular_name %>)
+    end
+  end
+<%- end -%>
+<%- unless headless_actions.empty? -%>
+
+  # split actions into different `permissions` block for different behavior
+  permissions <%= headless_methods %> do
+    it "does not permit a nil user" do
+      expect(described_class).not_to permit(nil, :<%= singular_name %>)
+    end
+
+    it "does not permit a volunteer" do
+      expect(described_class).not_to permit(volunteer, :<%= singular_name %>)
+    end
+
+    it "permits a supervisor" do
+      expect(described_class).to permit(supervisor, :<%= singular_name %>)
+    end
+
+    it "permits a casa admin" do
+      expect(described_class).to permit(casa_admin, :<%= singular_name %>)
+    end
+
+    it "does not permit an all casa admin" do
+      expect(described_class).not_to permit(all_casa_admin, :<%= singular_name %>)
+    end
+  end
+<%- end -%>
+<%- unless options[:headless] -%>
+
+  describe ".scope" do
+    subject { described_class::Scope.new user, <%= class_name %>.all }
+
+    describe "#resolve" do
+      let!(:casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: }
+      let!(:other_casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: create(:casa_org) }
+
+      subject { super().resolve }
+
+      context "when user is a visitor" do
+        let(:user) { nil }
+
+        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+      end
+
+      context "when user is a volunteer" do
+        let(:user) { volunteer }
+        let!(:user_<%= singular_name %>) { volunteer_<%= singular_name %> }
+
+        it { is_expected.to include(user_<%= singular_name %>) }
+        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+      end
+
+      context "when user is a supervisor" do
+        let(:user) { supervisor }
+
+        it { is_expected.to include(casa_org_<%= singular_name %>) }
+        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+      end
+
+      context "when user is a casa_admin" do
+        let(:user) { casa_admin }
+
+        it { is_expected.to include(casa_org_<%= singular_name %>) }
+        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+      end
+
+      context "when user is an all_casa_admin" do
+        let(:user) { all_casa_admin }
+
+        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+      end
+    end
+  end
+<%- end -%>
+end

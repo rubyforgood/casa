@@ -1,0 +1,9 @@
+Description:
+    Generates a pundit policy and corresponding spec.
+
+Example:
+    bin/rails generate policy CasaThing
+
+    This will create:
+        - app/policies/casa_thing_policy.rb
+        - spec/policies/casa_thing_policy_spec.rb
