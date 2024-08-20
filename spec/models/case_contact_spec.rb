@@ -579,7 +579,7 @@ RSpec.describe CaseContact, type: :model do
     context "a followup exists in requested status" do
       it "returns nil" do
         case_contact = build_stubbed(:case_contact)
-        followup = create(:followup, case_contact: case_contact)
+        followup = create(:followup, followupable: case_contact)
 
         expect(case_contact.requested_followup).to eq(followup)
       end
