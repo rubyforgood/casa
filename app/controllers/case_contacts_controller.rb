@@ -28,7 +28,8 @@ class CaseContactsController < ApplicationController
   def drafts
     authorize CaseContact
 
-    @case_contacts = case_contact_drafts
+    case_contacts = CaseContact.case_hash_from_cases(case_contact_drafts)
+    @presenter = CaseContactPresenter.new(case_contacts)
   end
 
   def new

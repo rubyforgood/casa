@@ -1,0 +1,8 @@
+<% @presenter.case_contacts.each do |casa_case_id, data| %>
+  <div class="card-style-1 mb-5">
+    <div class="card-content">
+      <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
+      <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
+    </div>
+  </div>
+<% end %>
