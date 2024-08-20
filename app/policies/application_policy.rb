@@ -48,7 +48,7 @@ class ApplicationPolicy
   end
 
   def is_admin?
-    user.casa_admin?
+    user&.casa_admin?
   end
 
   def same_org?
@@ -56,6 +56,8 @@ class ApplicationPolicy
     when CasaOrg
       user.casa_org == record
     when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup, ContactTopic
+      user.casa_org == record.casa_org
+    when CaseGroup
       user.casa_org == record.casa_org
     when CourtDate, CaseContact, CaseAssignment
       user.casa_org == record&.casa_case&.casa_org
@@ -76,16 +78,16 @@ class ApplicationPolicy
 
   def is_admin_same_org?
     # eventually everything should use this
-    user.casa_admin? && same_org?
+    user&.casa_admin? && same_org?
   end
 
   def is_supervisor?
-    user.supervisor?
+    user&.supervisor?
   end
 
   def is_supervisor_same_org?
     # eventually everything should use this
-    user.supervisor? && same_org?
+    is_supervisor? && same_org?
   end
 
   def is_volunteer? # deprecated in favor of is_volunteer_same_org?

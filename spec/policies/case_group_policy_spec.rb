@@ -2,19 +2,16 @@ require "rails_helper"
 
 RSpec.describe CaseGroupPolicy, type: :policy do
   let(:casa_org) { create :casa_org }
-  let(:volunteer) { create :volunteer, casa_org: }
+  let(:volunteer) { create :volunteer, :with_casa_cases, casa_org: }
   let(:supervisor) { create :supervisor, casa_org: }
   let(:casa_admin) { create :casa_admin, casa_org: }
   let(:all_casa_admin) { create :all_casa_admin }
 
-  # may need to modify factory/create other records to assign org
   let(:case_group) { create :case_group, casa_org: }
-  # modify to assign to volunteer user or remove
-  let(:volunteer_case_group) { create :case_group, casa_org:, volunteer: }
+  let(:volunteer_case_group) { create :case_group, casa_org:, casa_cases: volunteer.casa_cases }
 
   subject { described_class }
 
-  # split actions into different `permissions` block for different behavior
   permissions :new?, :show?, :create?, :edit?, :update?, :destroy? do
     it "does not permit a nil user" do
       expect(described_class).not_to permit(nil, case_group)
@@ -24,8 +21,8 @@ RSpec.describe CaseGroupPolicy, type: :policy do
       expect(described_class).not_to permit(volunteer, case_group)
     end
 
-    it "permits a volunteer assigned to the case group" do
-      expect(described_class).to permit(volunteer, volunteer_case_group)
+    it "does not permit a volunteer assigned to the case group" do
+      expect(described_class).not_to permit(volunteer, volunteer_case_group)
     end
 
     it "permits a supervisor" do
@@ -51,7 +48,6 @@ RSpec.describe CaseGroupPolicy, type: :policy do
     end
   end
 
-  # split actions into different `permissions` block for different behavior
   permissions :index? do
     it "does not permit a nil user" do
       expect(described_class).not_to permit(nil, :case_group)
@@ -94,7 +90,7 @@ RSpec.describe CaseGroupPolicy, type: :policy do
         let(:user) { volunteer }
         let!(:user_case_group) { volunteer_case_group }
 
-        it { is_expected.to include(user_case_group) }
+        it { is_expected.not_to include(user_case_group) }
         it { is_expected.not_to include(casa_org_case_group) }
         it { is_expected.not_to include(other_casa_org_case_group) }
       end
