@@ -3,11 +3,11 @@ class PlacementPolicy < ApplicationPolicy
     casa_case_policy.edit?
   end
 
-  alias index? allowed_to_edit_casa_case?
-  alias show? allowed_to_edit_casa_case?
+  alias index? admin_or_supervisor_or_volunteer_same_org?
+  alias show? admin_or_supervisor_or_volunteer_same_org?
   alias edit? allowed_to_edit_casa_case?
   alias update? allowed_to_edit_casa_case?
-  alias new? allowed_to_edit_casa_case?
+  alias new? admin_or_supervisor_or_volunteer_same_org?
   alias create? allowed_to_edit_casa_case?
   alias destroy? admin_or_supervisor?
 

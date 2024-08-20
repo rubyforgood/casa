@@ -4,21 +4,21 @@ class PlacementsController < ApplicationController
   before_action :require_organization!
 
   def index
-    authorize @casa_case
+    authorize Placement
     @placements = @casa_case.placements.includes(:placement_type).order(placement_started_at: :desc)
   end
 
   def show
-    authorize @casa_case
+    authorize Placement
   end
 
   def new
-    authorize @casa_case
+    authorize Placement
     @placement = Placement.new
   end
 
   def edit
-    authorize @casa_case
+    authorize @placement
   end
 
   def create
@@ -44,6 +44,7 @@ class PlacementsController < ApplicationController
 
   def destroy
     authorize @placement
+
     if @placement.destroy
       redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully deleted."
     else
@@ -52,10 +53,6 @@ class PlacementsController < ApplicationController
   end
 
   private
-
-  def authorize_placement
-    authorize @placement, policy_class: PlacementPolicy
-  end
 
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:casa_case_id])
