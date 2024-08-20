@@ -18,7 +18,7 @@ Rails.application.configure do
   # recommended that you enable it in continuous integration systems to ensure eager
   # loading is working properly before deploying your code.
   config.eager_load = ENV["CI"].present?
-  # cach classes on CI, but enable reloading for local work (bin/rspec)
+  # cache classes on CI, but enable reloading for local work (bin/rspec)
   config.enable_reloading = ENV["CI"].blank?
 
   # Configure public file server for tests with Cache-Control for performance.
