@@ -66,6 +66,6 @@ class PlacementsController < ApplicationController
     params.require(:placement).permit(
       :placement_started_at,
       :placement_type_id
-    ).merge({ creator_id: current_user.id, casa_case_id: @casa_case.id })
+    ).merge({creator_id: current_user.id, casa_case_id: @casa_case.id})
   end
 end

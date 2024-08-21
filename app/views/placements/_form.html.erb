@@ -1,4 +1,7 @@
 <div class="card-style mb-30">
+  <div class="alert-box danger-alert">
+    <%= render "/shared/error_messages", resource: placement %>
+  </div>
   <%= form_with(model: placement, url: [casa_case, placement], local: true,
                 data: { controller: "placement-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
     <div class="row align-items-center">
