@@ -76,7 +76,7 @@ RSpec.describe CaseContactPolicy do
     end
   end
 
-  permissions :update? do
+  permissions :update?, :drafts? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin, case_contact)
     end

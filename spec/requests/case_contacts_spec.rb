@@ -86,6 +86,22 @@ RSpec.describe "/case_contacts", type: :request do
     it { is_expected.to have_http_status(:redirect) }
   end
 
+  describe "GET /drafts" do
+    subject(:request) do
+      get case_contacts_drafts_path
+
+      response
+    end
+
+    it { is_expected.to have_http_status(:success) }
+
+    context "when user is volunteer" do
+      before { sign_in volunteer }
+
+      it { is_expected.to have_http_status(:redirect) }
+    end
+  end
+
   describe "DELETE /destroy" do
     let(:case_contact) { create(:case_contact) }
 
