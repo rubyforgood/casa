@@ -28,8 +28,7 @@ class CaseContactsController < ApplicationController
   def drafts
     authorize CaseContact
 
-    case_contacts = CaseContact.case_hash_from_cases(case_contact_drafts)
-    @presenter = CaseContactPresenter.new(case_contacts)
+    @case_contacts = current_organization.case_contacts.not_active
   end
 
   def new
@@ -115,10 +114,6 @@ class CaseContactsController < ApplicationController
 
   def additional_expense_params
     @additional_expense_params ||= AdditionalExpenseParamsService.new(params).calculate
-  end
-
-  def case_contact_drafts
-    CaseContact.where(creator: current_user).not_active
   end
 
   def set_case_contact
