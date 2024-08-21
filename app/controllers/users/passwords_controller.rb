@@ -15,7 +15,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
     send_password
     redirect_to after_sending_reset_password_instructions_path_for(resource_name),
-                notice: 'If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.'
+      notice: "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 
   private
@@ -70,7 +70,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def empty_fields_error
     @resource ||= resource
-    @resource.errors.add(:base, 'Please enter at least one field.')
+    @resource.errors.add(:base, "Please enter at least one field.")
 
     false
   end
@@ -90,7 +90,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def no_user_found_error
-    resource.errors.add(:base, 'User does not exist.')
+    resource.errors.add(:base, "User does not exist.")
 
     false
   end
