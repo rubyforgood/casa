@@ -13,8 +13,7 @@ RSpec.describe "users/passwords/new", type: :system do
       fill_in "Phone number", with: user.phone_number
 
       click_on "Send me reset password instructions"
-      expect(page).to have_content "1 error prohibited this User from being saved:"
-      expect(page).to have_text("User does not exist.")
+      expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
     end
 
     it "displays phone number error messages for incorrect formatting" do
@@ -35,7 +34,7 @@ RSpec.describe "users/passwords/new", type: :system do
       fill_in "Email", with: user.email
 
       click_on "Send me reset password instructions"
-      expect(page).to have_content "You will receive an email or SMS with instructions on how to reset your password in a few minutes."
+      expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
     end
   end
 
