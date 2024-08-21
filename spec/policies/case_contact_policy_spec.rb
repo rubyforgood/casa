@@ -103,7 +103,7 @@ RSpec.describe CaseContactPolicy do
       end
 
       context "case_contact is not a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, status: "active", creator: volunteer) }
+        let(:case_contact) { build_stubbed(:case_contact, :active, creator: volunteer) }
 
         it { is_expected.not_to permit(volunteer, case_contact) }
       end
@@ -117,7 +117,7 @@ RSpec.describe CaseContactPolicy do
       end
 
       context "case_contact is not a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, status: "active", creator: build_stubbed(:volunteer)) }
+        let(:case_contact) { build_stubbed(:case_contact, :active, creator: build_stubbed(:volunteer)) }
 
         it { is_expected.not_to permit(volunteer, case_contact) }
       end

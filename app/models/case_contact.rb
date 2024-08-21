@@ -45,16 +45,28 @@ class CaseContact < ApplicationRecord
   after_save_commit ::CaseContactMetadataCallback.new
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
-  # These steps must be listed in order and have an html template in case_contacts/form.
+  # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
   FORM_STEPS = %i[details notes expenses].freeze
-  enum status: (%w[started active] + FORM_STEPS.map(&:to_s)).zip((%w[started active] + FORM_STEPS.map(&:to_s))).to_h
+  # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
+  # string values for wizard form steps, integer column would make db queries faster
+  enum :status, {
+    started: "started",
+    active: "active",
+    details: "details",
+    notes: "notes",
+    expenses: "expenses"
+  }, validate: true, default: :started
 
   def active_or_details?
-    status == "details" || active?
+    details? || active?
   end
 
   def active_or_expenses?
-    status == "expenses" || active?
+    expenses? || active?
+  end
+
+  def active_or_notes?
+    notes? || active?
   end
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
@@ -150,7 +162,7 @@ class CaseContact < ApplicationRecord
     where(casa_case_id: case_ids) if case_ids.present?
   }
 
-  scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
+  scope :no_drafts, ->(checked) { (checked == 1) ? active : all }
 
   scope :with_metadata_pair, ->(key, value) { where("metadata -> ? @> ?::jsonb", key.to_s, value.to_s) }
   scope :used_create_another, -> { with_metadata_pair(:create_another, true) }

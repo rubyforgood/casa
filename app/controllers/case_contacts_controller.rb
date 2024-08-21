@@ -117,7 +117,7 @@ class CaseContactsController < ApplicationController
   end
 
   def case_contact_drafts
-    CaseContact.where(creator: current_user).where.not(status: "active")
+    CaseContact.where(creator: current_user).not_active
   end
 
   def set_case_contact
