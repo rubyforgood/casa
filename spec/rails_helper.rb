@@ -65,7 +65,13 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
 
+  # Filter backtraces to gems that are not under our control.
+  # Can override using `--backtrace` option to rspec to see full backtraces.
   config.filter_rails_from_backtrace!
+  config.filter_gems_from_backtrace(*%w[
+    bootsnap capybara factory_bot puma rack railties shoulda-matchers
+    sprockets-rails pundit
+  ])
 
   config.disable_monkey_patching!
 
