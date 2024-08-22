@@ -264,9 +264,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
           post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
           expect(response).to have_http_status(:unprocessable_entity)
           expected_errors = [
-            "Date can't be blank",
-            "Date is not valid. Court date must be within one year from today.",
-            "Date is not valid. Court date cannot be prior to 1/1/1989."
+            "Date can't be blank"
           ].freeze
           expect(assigns[:court_date].errors.full_messages).to eq expected_errors
         end
@@ -310,9 +308,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
         expected_errors = [
-          "Date can't be blank",
-          "Date is not valid. Court date must be within one year from today.",
-          "Date is not valid. Court date cannot be prior to 1/1/1989."
+          "Date can't be blank"
         ].freeze
         expect(assigns[:court_date].errors.full_messages).to eq expected_errors
       end
