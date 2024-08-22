@@ -57,8 +57,6 @@ class ApplicationPolicy
       user.casa_org == record
     when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup, ContactTopic
       user.casa_org == record.casa_org
-    when CaseGroup
-      user.casa_org == record.casa_org
     when CourtDate, CaseContact, CaseAssignment
       user.casa_org == record&.casa_case&.casa_org
     when LearningHour

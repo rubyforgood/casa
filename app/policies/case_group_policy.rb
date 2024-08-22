@@ -39,4 +39,8 @@ class CaseGroupPolicy < ApplicationPolicy
   def destroy?
     admin_or_supervisor_same_org?
   end
+
+  def same_org?
+    user&.casa_org.present? && user&.casa_org == record&.casa_org
+  end
 end
