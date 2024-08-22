@@ -56,7 +56,13 @@ RSpec.describe "/contact_topics", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:attributes) { {casa_org_id: 0} }
+      let(:attributes) do
+        {
+          casa_org_id: casa_org.id,
+          question: "",
+          details: ""
+        }
+      end
 
       it "does not create a new ContactTopic" do
         expect do
