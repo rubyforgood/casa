@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "placements/destroy", type: :system do
+RSpec.describe "placements", type: :system do
   let(:now) { Date.new(2025, 1, 2) }
   let(:casa_org) { create(:casa_org, :with_placement_types) }
   let(:admin) { create(:casa_admin, casa_org:) }
@@ -19,24 +19,15 @@ RSpec.describe "placements/destroy", type: :system do
   before do
     travel_to now
     sign_in admin
-    visit casa_case_placements_path(casa_case, placement)
-    click_on "Delete"
+    visit casa_case_placements_path(casa_case, placements)
   end
 
-  it "does not delete on modal close" do
-    expect(page).to have_text("Delete Placement?")
-    click_on "Close"
-
+  it "displays all placements for org" do
     expect(page).to have_text("Reunification")
     expect(page).to have_text("August 15, 2024 - Present")
-  end
-
-  it "deletes placement" do
-    expect(page).to have_text("Delete Placement?")
-    click_on "Confirm"
-
-    expect(page).to have_text("Placement was successfully deleted.")
-    expect(page).not_to have_text("Reunification")
-    expect(page).not_to have_text("August 15, 2024 - Present")
+    expect(page).to have_text("Kinship")
+    expect(page).to have_text("June 2, 2023 - August 14, 2024")
+    expect(page).to have_text("Adoption")
+    expect(page).to have_text("December 25, 2021 - June 01, 2023")
   end
 end

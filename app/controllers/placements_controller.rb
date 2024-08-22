@@ -4,16 +4,16 @@ class PlacementsController < ApplicationController
   before_action :require_organization!
 
   def index
-    authorize Placement
+    authorize @casa_case
     @placements = @casa_case.placements.includes(:placement_type).order(placement_started_at: :desc)
   end
 
   def show
-    authorize Placement
+    authorize @casa_case
   end
 
   def new
-    authorize Placement
+    authorize @casa_case
     @placement = Placement.new
   end
 

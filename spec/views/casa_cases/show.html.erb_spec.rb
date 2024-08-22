@@ -61,7 +61,10 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match("111")
-      expect(rendered).to match("May 06, 2023 - Present")
+      expect(rendered).to match("Current Placement:")
+      expect(rendered).to match("Placement Type 1")
+      expect(rendered).to match("Placed since: May 6, 2023")
+      expect(rendered).to match("See All Placements")
     end
   end
 
@@ -73,7 +76,9 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match(casa_case.case_number)
-      expect(rendered).to have_content("No Placements")
+      expect(rendered).to have_content("Current Placement:")
+      expect(rendered).to have_content("Unknown")
+      expect(rendered).to have_content("See All Placements")
     end
   end
 end
