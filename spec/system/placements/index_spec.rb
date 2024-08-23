@@ -26,8 +26,8 @@ RSpec.describe "placements", type: :system do
     expect(page).to have_text("Reunification")
     expect(page).to have_text("August 15, 2024 - Present")
     expect(page).to have_text("Kinship")
-    expect(page).to have_text("June 2, 2023 - August 14, 2024")
+    expect(page).to have_text("June 2, 2023 - August 15, 2024")
     expect(page).to have_text("Adoption")
-    expect(page).to have_text("December 25, 2021 - June 01, 2023")
+    expect(page).to have_text("December 25, 2021 - June 2, 2023")
   end
 end
