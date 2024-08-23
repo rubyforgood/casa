@@ -6,14 +6,34 @@ RSpec.describe PlacementPolicy do
   let(:casa_org) { create(:casa_org) }
   let(:diff_org) { create(:casa_org) }
 
-  let(:placement) { create(:placement, casa_case:) }
   let(:casa_case) { create(:casa_case, casa_org:) }
+  let(:placement) { create(:placement, casa_case:) }
 
-  let(:casa_admin) { create(:casa_admin, casa_org:) }
-  let(:volunteer) { create(:volunteer, casa_org:) }
-  let(:supervisor) { create(:supervisor, casa_org:) }
+  let(:casa_admin) { build(:casa_admin, casa_org:) }
+  let(:supervisor) { build(:supervisor, casa_org:) }
+  let(:volunteer) { build(:volunteer, casa_org:) }
+  let(:casa_admin_diff_org) { build(:casa_admin, casa_org: diff_org) }
+  let(:supervisor_diff_org) { build(:supervisor, casa_org: diff_org) }
+  let(:volunteer_diff_org) { build(:volunteer, casa_org: diff_org) }
 
-  permissions :index?, :new?, :create?, :edit?, :update?, :show? do
+  permissions :index? do
+    it "allows casa_admins" do
+      is_expected.to permit(casa_admin, Placement)
+      is_expected.to permit(casa_admin_diff_org, Placement)
+    end
+
+    it "allows supervisor" do
+      is_expected.to permit(supervisor, Placement)
+      is_expected.to permit(supervisor_diff_org, Placement)
+    end
+
+    it "allows volunteer" do
+      is_expected.to permit(volunteer, Placement)
+      is_expected.to permit(volunteer_diff_org, Placement)
+    end
+  end
+
+  permissions :create?, :edit?, :update?, :show?, :new? do
     it { is_expected.to permit(casa_admin, placement) }
 
     context "when a supervisor belongs to the same org as the case" do
@@ -27,7 +47,7 @@ RSpec.describe PlacementPolicy do
     end
 
     context "when volunteer is assigned" do
-      before { volunteer.casa_cases << casa_case }
+      before { create(:case_assignment, volunteer:, casa_case:, active: true) }
 
       it { is_expected.to permit(volunteer, placement) }
     end
