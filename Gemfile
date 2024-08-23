@@ -101,4 +101,4 @@ group :test do
 end
 
 # gem "pdf-reader", "~> 2.9"
-# gem "redis", "~> 4.0" # Redis is by default included with turbo-rails install but excluded per https://github.com/rubyforgood/casa/issues/5906
+# gem "redis", "~> 4.0" # Redis is required for Turbo Streams but is not available in production yet until the need arises.
