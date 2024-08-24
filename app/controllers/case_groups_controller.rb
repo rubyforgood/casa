@@ -52,6 +52,6 @@ class CaseGroupsController < ApplicationController
   end
 
   def set_case_group
-    @case_group = CaseGroup.find(params[:id])
+    @case_group = policy_scope(CaseGroup).find(params[:id])
   end
 end
