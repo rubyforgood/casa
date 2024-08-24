@@ -3,12 +3,12 @@ require "rails_helper"
 RSpec.describe "supervisors/index", type: :system do
   shared_examples_for "functioning sort buttons" do
     it "sorts table columns" do
-      expect(page).to have_selector("tr:nth-child(1)", text: expected_first_ordered_value)
+      expect(page).to have_css("tr:nth-child(1)", text: expected_first_ordered_value)
 
       find("th", text: column_to_sort).click
 
-      expect(page).to have_selector("th.sorting_asc", text: column_to_sort)
-      expect(page).to have_selector("tr:nth-child(1)", text: expected_last_ordered_value)
+      expect(page).to have_css("th.sorting_asc", text: column_to_sort)
+      expect(page).to have_css("tr:nth-child(1)", text: expected_last_ordered_value)
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe "supervisors/index", type: :system do
       context "with active and deactivated supervisors" do
         it "shows deactivated supervisor on show button click", js: true do
           expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
-          expect(page).not_to have_text("Deactivated supervisor")
+          expect(page).to have_no_text("Deactivated supervisor")
 
           find(".supervisor-filters").click_on("Filter Status")
           check("status_option_inactive")
@@ -97,7 +97,7 @@ RSpec.describe "supervisors/index", type: :system do
           uncheck("status_option_inactive")
 
           expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
-          expect(page).not_to have_text("Deactivated supervisor")
+          expect(page).to have_no_text("Deactivated supervisor")
         end
       end
 
@@ -115,7 +115,7 @@ RSpec.describe "supervisors/index", type: :system do
           expect(page).to have_text("Assigned to Case(s)")
           expect(page).to have_text(unassigned_volunteer_name)
 
-          expect(page).not_to have_text("There are no unassigned volunteers")
+          expect(page).to have_no_text("There are no unassigned volunteers")
         end
 
         it "links to edit page of volunteer" do
@@ -133,8 +133,8 @@ RSpec.describe "supervisors/index", type: :system do
         it "will not show a list of volunteers not assigned to supervisors", js: true do
           expect(page).to have_text("There are no active volunteers without supervisors to display here")
 
-          expect(page).not_to have_text("Active volunteers not assigned to supervisors")
-          expect(page).not_to have_text("Assigned to Case(s)")
+          expect(page).to have_no_text("Active volunteers not assigned to supervisors")
+          expect(page).to have_no_text("Assigned to Case(s)")
         end
       end
     end
@@ -167,7 +167,7 @@ RSpec.describe "supervisors/index", type: :system do
 
             within("table#supervisors") do
               expect(page).to have_text("Active Supervisor")
-              expect(page).not_to have_text("Inactive Supervisor")
+              expect(page).to have_no_text("Inactive Supervisor")
             end
           end
         end
@@ -182,7 +182,7 @@ RSpec.describe "supervisors/index", type: :system do
             end
 
             within("table#supervisors") do
-              expect(page).not_to have_content("Active Supervisor")
+              expect(page).to have_no_content("Active Supervisor")
               expect(page).to have_content("Inactive Supervisor")
             end
           end
