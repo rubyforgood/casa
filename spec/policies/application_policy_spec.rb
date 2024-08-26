@@ -7,6 +7,7 @@ RSpec.describe ApplicationPolicy do
   let(:casa_admin) { build_stubbed(:casa_admin, casa_org: casa_org) }
   let(:supervisor) { build_stubbed(:supervisor, casa_org: casa_org) }
   let(:volunteer) { build_stubbed(:volunteer, casa_org: casa_org) }
+  let(:all_casa_admin) { build_stubbed(:all_casa_admin) }
 
   permissions :see_reports_page? do
     it "allows casa_admins" do
@@ -84,6 +85,47 @@ RSpec.describe ApplicationPolicy do
 
       it "does not allow casa_admins" do
         is_expected.not_to permit(casa_admin)
+      end
+    end
+  end
+
+  describe "#same_org?" do
+    let(:record) { double }
+
+    context "record with same casa_org" do
+      before { allow(record).to receive(:casa_org).and_return(casa_org) }
+
+      permissions :same_org? do
+        it { is_expected.to permit(volunteer, record) }
+        it { is_expected.to permit(supervisor, record) }
+        it { is_expected.to permit(casa_admin, record) }
+      end
+    end
+
+    context "record with different casa_org" do
+      before { allow(record).to receive(:casa_org).and_return(build_stubbed(:casa_org)) }
+
+      permissions :same_org? do
+        it { is_expected.to_not permit(volunteer, record) }
+        it { is_expected.to_not permit(supervisor, record) }
+        it { is_expected.to_not permit(casa_admin, record) }
+      end
+    end
+
+    context "all_casa_admin user" do
+      it "raises a no method error for all_casa_admin.casa_org" do
+        expect { subject.new(all_casa_admin, record).same_org? }.to raise_error(NoMethodError)
+      end
+    end
+
+    context "called with a class instead of a record" do
+      let(:klass) { CasaCase }
+
+      [:volunteer, :casa_admin, :supervisor, :all_casa_admin].each do |user_type|
+        it "raises a no method error for #{user_type}" do
+          user = send(user_type)
+          expect { subject.new(user, klass).same_org? }.to raise_error(NoMethodError)
+        end
       end
     end
   end
