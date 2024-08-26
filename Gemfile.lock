@@ -333,8 +333,6 @@ GEM
       racc (~> 1.4)
     nokogiri (1.16.7-x86_64-darwin)
       racc (~> 1.4)
-    nokogiri (1.16.7-x86_64-linux)
-      racc (~> 1.4)
     noticed (2.4.1)
       rails (>= 6.1.0)
     oj (3.16.5)
@@ -541,6 +539,10 @@ GEM
     timeout (0.4.1)
     traceroute (0.8.1)
       rails (>= 3.0.0)
+    turbo-rails (2.0.6)
+      actionpack (>= 6.0.0)
+      activejob (>= 6.0.0)
+      railties (>= 6.0.0)
     twilio-ruby (7.2.3)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
@@ -577,6 +579,7 @@ GEM
 
 PLATFORMS
   arm64-darwin-21
+  arm64-darwin-22
   ruby
   x86_64-darwin-21
   x86_64-darwin-23
@@ -660,6 +663,7 @@ DEPENDENCIES
   stimulus-rails
   strong_migrations
   traceroute
+  turbo-rails (~> 2.0)
   twilio-ruby
   tzinfo-data
   view_component
@@ -671,4 +675,4 @@ RUBY VERSION
    ruby 3.2.2p53
 
 BUNDLED WITH
-   2.5.16
+   2.5.17
