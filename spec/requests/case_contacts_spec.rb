@@ -84,22 +84,21 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     it { is_expected.to have_http_status(:redirect) }
+  end
 
-    describe "unread notification" do
-      let(:followup) { create(:followup, case_contact: case_contact, creator: admin) }
+  describe "GET /drafts" do
+    subject(:request) do
+      get case_contacts_drafts_path
 
-      subject(:request) do
-        get edit_case_contact_url(case_contact, notification_id: admin.notifications.first.id)
+      response
+    end
 
-        response
-      end
+    it { is_expected.to have_http_status(:success) }
 
-      before { FollowupResolvedNotifier.with(followup: followup, created_by: admin).deliver(followup.creator) }
+    context "when user is volunteer" do
+      before { sign_in volunteer }
 
-      it "is marked as read" do
-        request
-        expect(admin.notifications.unread).to eq([])
-      end
+      it { is_expected.to have_http_status(:redirect) }
     end
   end
 

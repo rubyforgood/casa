@@ -20,9 +20,10 @@ class CaseContacts::FormController < ApplicationController
 
   def update
     authorize @case_contact
-    params[:case_contact][:status] = step.to_s if !@case_contact.active?
+    params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
     remove_unwanted_contact_types
     remove_nil_draft_ids
+
     if @case_contact.update(case_contact_params)
       respond_to do |format|
         format.html {
@@ -48,36 +49,44 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.find(params[:case_contact_id])
+    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
+      .find(params[:case_contact_id])
   end
 
   def get_cases_and_contact_types
-    @casa_cases = policy_scope(current_organization.casa_cases)
+    @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @contact_types = ContactType.joins(:casa_case_contact_types).where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
-    unless @contact_types.present?
-      @contact_types = current_organization.contact_types
-    end
+    @contact_types = ContactType.includes(:contact_type_group)
+      .joins(:casa_case_contact_types)
+      .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
+
+    @contact_types = current_organization.contact_types.includes(:contact_type_group) if @contact_types.empty?
     @contact_types.order(name: :asc)
 
+    @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
   end
 
   def finish_editing
     message = ""
     send_reimbursement_email(@case_contact)
+    draft_case_ids = @case_contact.draft_case_ids
     if @case_contact.active?
       message = @case_contact.decorate.form_updated_message
     else
-      message = "Case #{"contact".pluralize(@case_contact.draft_case_ids.count)} successfully created."
+      message = "Case #{"contact".pluralize(draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
-      first_casa_case_id = @case_contact.draft_case_ids.slice(0)
+      first_casa_case_id = draft_case_ids.first
       @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end
     update_volunteer_address(@case_contact)
     flash[:notice] = message
-    redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
+    if @case_contact.metadata["create_another"]
+      redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referer: true})
+    else
+      redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
+    end
   end
 
   def send_reimbursement_email(case_contact)
@@ -129,15 +138,11 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    if params.dig(:case_contact, :contact_type_ids)
-      @case_contact.contact_types.clear
-    end
+    @case_contact.contact_types.clear if params.dig(:case_contact, :contact_type_ids)
   end
 
   def remove_nil_draft_ids
-    if params.dig(:case_contact, :draft_case_ids)
-      params[:case_contact][:draft_case_ids] -= [""]
-    end
+    params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
   end
 
   def set_progress

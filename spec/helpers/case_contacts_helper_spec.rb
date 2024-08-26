@@ -110,4 +110,27 @@ RSpec.describe CaseContactsHelper do
       expect(helper.show_volunteer_reimbursement(@casa_cases)).to eq(false)
     end
   end
+
+  describe "#expand_filters?" do
+    it "returns false if filterrific param does not exist" do
+      allow(helper).to receive(:params)
+        .and_return({})
+
+      expect(helper.expand_filters?).to eq(false)
+    end
+
+    it "returns false if filterrific contains only surfaced params" do
+      allow(helper).to receive(:params)
+        .and_return({filterrific: {surfaced_param: "true"}})
+
+      expect(helper.expand_filters?([:surfaced_param])).to eq(false)
+    end
+
+    it "returns true if filterrific contains any other key" do
+      allow(helper).to receive(:params)
+        .and_return({filterrific: {surfaced_param: "true", other_key: "value"}})
+
+      expect(helper.expand_filters?([:surfaced_param])).to eq(true)
+    end
+  end
 end

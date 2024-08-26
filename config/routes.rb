@@ -1,8 +1,20 @@
 # frozen_string_literal: true
 
+# def set_up_flipper
+#   flipper_app = Flipper::UI.app(Flipper.instance, rack_protection: {except: :http_origin}) do |builder|
+#     builder.use Rack::Auth::Basic do |username, password|
+#       username == ENV["FLIPPER_USERNAME"] && password == ENV["FLIPPER_PASSWORD"]
+#     end
+#   end
+#   mount flipper_app, at: "/flipper"
+# end
+
 Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
+
+  # set_up_flipper
+
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
 
@@ -73,7 +85,8 @@ Rails.application.routes.draw do
   end
 
   get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
-  resources :case_contacts, except: %i[create update] do
+  get "case_contacts/drafts", to: "case_contacts#drafts"
+  resources :case_contacts, except: %i[create update show] do
     member do
       post :restore
     end
@@ -192,8 +205,6 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
-
-    resources :feature_flags, only: %i[index update]
   end
 
   resources :all_casa_admins, only: [:new, :create] do
@@ -235,5 +246,9 @@ Rails.application.routes.draw do
         # get 'sign_out', to: 'sessions#destroy'
       end
     end
+  end
+
+  constraints CanAccessFlipperUI do
+    mount Flipper::UI.app(Flipper) => "/flipper"
   end
 end

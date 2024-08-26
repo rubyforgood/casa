@@ -91,7 +91,7 @@ RSpec.describe "/all_casa_admins", type: :request do
             email: ""
           }
         }
-        expect(response).to be_successful
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(response).to render_template "all_casa_admins/new"
       end
 
@@ -132,7 +132,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       it "does not update the all_casa_admin" do
         other_admin = create(:all_casa_admin)
         patch all_casa_admins_path, params: {all_casa_admin: {email: other_admin.email}}
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:unprocessable_entity)
 
         expect(admin.email).to_not eq "newemail@example.com"
       end
@@ -201,7 +201,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       it "does not update the all_casa_admin password" do
         subject
 
-        expect(response).to have_http_status(:ok)
+        expect(response).to have_http_status(:unprocessable_entity)
         expect(admin.reload.valid_password?("newpassword")).to be false
       end
 

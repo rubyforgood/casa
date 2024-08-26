@@ -24,7 +24,7 @@ class FollowupNotifier < BaseNotifier
   end
 
   def url
-    edit_case_contact_path(params[:followup].id, notification_id: id)
+    edit_case_contact_path(params[:followup].case_contact_id)
   end
 
   private

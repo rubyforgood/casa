@@ -68,11 +68,13 @@ class SeederMain
       LearningHourType,
       LearningHourTopic,
       MileageRate,
+      OtherDuty,
       Supervisor,
       SupervisorVolunteer,
       User,
       LearningHour,
-      Volunteer
+      Volunteer,
+      PlacementType
     ]
   end
 
@@ -121,3 +123,4 @@ begin
 rescue => e
   puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
 end
+load(Rails.root.join("db", "seeds", "placement_data.rb"))

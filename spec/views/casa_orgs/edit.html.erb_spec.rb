@@ -145,7 +145,7 @@ RSpec.describe "casa_org/edit", type: :view do
   describe "additional expense feature flag" do
     context "enabled" do
       it "has option to enable additional expenses" do
-        FeatureFlagService.enable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
         organization = build_stubbed(:casa_org)
         allow(view).to receive(:current_organization).and_return(organization)
 
@@ -157,7 +157,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
     context "disabled" do
       it "has option to enable additional expenses" do
-        FeatureFlagService.disable!(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG)
+        allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(false)
         organization = build_stubbed(:casa_org)
         allow(view).to receive(:current_organization).and_return(organization)
 

@@ -16,19 +16,19 @@ class UsersController < ApplicationController
       flash[:success] = "Profile was successfully updated."
       redirect_to edit_users_path
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
   def add_language
     if @language.nil?
       @user.errors.add(:language_id, "can not be blank. Please select a language before adding.")
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     if current_user.languages.include?(@language)
       @user.errors.add(:language_id, "#{@language.name} is already in your languages list.")
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     current_user.languages << @language
@@ -54,11 +54,11 @@ class UsersController < ApplicationController
   def update_password
     unless valid_user_password
       @user.errors.add(:base, "Current password is incorrect")
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     unless update_user_password
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     bypass_sign_in(@user) if @user == true_user
@@ -72,11 +72,11 @@ class UsersController < ApplicationController
   def update_email
     unless valid_user_password
       @user.errors.add(:base, "Current password is incorrect")
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     unless update_user_email
-      return render "edit"
+      return render "edit", status: :unprocessable_entity
     end
 
     bypass_sign_in(@user) if @user == true_user

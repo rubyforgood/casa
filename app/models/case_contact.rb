@@ -7,12 +7,17 @@ class CaseContact < ApplicationRecord
   validate :contact_made_chosen
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
-  validates :occurred_at, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
-  validate :occurred_at_not_in_future
+  validates :occurred_at, presence: true, if: :active_or_details?
+  MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
-    greater_than_or_equal_to: "1989-01-01".to_date,
-    message: "is not valid: Date of Contact cannot be prior to 1/1/1989.",
+    greater_than_or_equal_to: MINIMUM_DATE,
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
+    allow_nil: true
+  }
+  validates :occurred_at, comparison: {
+    less_than: Date.tomorrow,
+    message: :cant_be_future,
     allow_nil: true
   }
   validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
@@ -29,7 +34,7 @@ class CaseContact < ApplicationRecord
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
   validates :casa_case_id, presence: true, if: :active?
-  validate :draft_case_ids_not_empty, if: :active_or_details?
+  validate :draft_case_ids_not_empty, unless: :started?
 
   has_many :case_contact_contact_types
   has_many :contact_types, through: :case_contact_contact_types
@@ -37,20 +42,34 @@ class CaseContact < ApplicationRecord
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
 
+  after_save_commit ::CaseContactMetadataCallback.new
+
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
-  # These steps must be listed in order and have an html template in case_contacts/form.
+  # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
   FORM_STEPS = %i[details notes expenses].freeze
-  enum status: (%w[started active] + FORM_STEPS.map(&:to_s)).zip((%w[started active] + FORM_STEPS.map(&:to_s))).to_h
+  # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
+  # string values for wizard form steps, integer column would make db queries faster
+  enum :status, {
+    started: "started",
+    active: "active",
+    details: "details",
+    notes: "notes",
+    expenses: "expenses"
+  }, validate: true, default: :started
 
   def active_or_details?
-    status == "details" || active?
+    details? || active?
   end
 
   def active_or_expenses?
-    status == "expenses" || active?
+    expenses? || active?
   end
 
-  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank
+  def active_or_notes?
+    notes? || active?
+  end
+
+  accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
   validates_associated :additional_expenses
 
   accepts_nested_attributes_for :casa_case
@@ -143,7 +162,10 @@ class CaseContact < ApplicationRecord
     where(casa_case_id: case_ids) if case_ids.present?
   }
 
-  scope :no_drafts, ->(checked) { (checked == 1) ? where(status: "active") : all }
+  scope :no_drafts, ->(checked) { (checked == 1) ? active : all }
+
+  scope :with_metadata_pair, ->(key, value) { where("metadata -> ? @> ?::jsonb", key.to_s, value.to_s) }
+  scope :used_create_another, -> { with_metadata_pair(:create_another, true) }
 
   filterrific(
     default_filter_params: {sorted_by: "occurred_at_desc"},
@@ -171,12 +193,6 @@ class CaseContact < ApplicationRecord
       contact_types.clear
       update(args)
     end
-  end
-
-  def occurred_at_not_in_future
-    return unless occurred_at && occurred_at >= Date.tomorrow
-
-    errors.add(:occurred_at, :invalid, message: "cannot be in the future")
   end
 
   # Displays occurred_at in the format January 1, 1970
@@ -233,14 +249,14 @@ class CaseContact < ApplicationRecord
 
   def contact_groups_with_types
     hash = Hash.new { |h, k| h[k] = [] }
-    contact_types.each do |contact_type|
+    contact_types.includes(:contact_type_group).each do |contact_type|
       hash[contact_type.contact_type_group.name] << contact_type.name
     end
     hash
   end
 
   def requested_followup
-    followups.requested.first
+    followups.find(&:requested?)
   end
 
   def should_send_reimbursement_email?
@@ -320,6 +336,7 @@ end
 #  draft_case_ids             :integer          default([]), is an Array
 #  duration_minutes           :integer
 #  medium_type                :string
+#  metadata                   :jsonb
 #  miles_driven               :integer          default(0), not null
 #  notes                      :string
 #  occurred_at                :datetime

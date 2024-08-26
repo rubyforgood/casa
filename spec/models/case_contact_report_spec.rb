@@ -5,11 +5,10 @@ RSpec.describe CaseContactReport, type: :model do
     it "matches the length of row data" do
       create(:case_contact)
       csv = described_class.new.to_csv
-      parsed_csv = CSV.parse(csv)
+      parsed_csv = CSV.parse(csv, headers: true)
 
-      expect(parsed_csv.length).to eq(2)
-      expect(parsed_csv[0].length).to eq(parsed_csv[1].length)
-      expect(parsed_csv[0]).to eq([
+      expect(parsed_csv.length).to eq(1) # length doesn't include header row
+      expect(parsed_csv.headers).to eq([
         "Internal Contact Number",
         "Duration Minutes",
         "Contact Types",
@@ -25,8 +24,9 @@ RSpec.describe CaseContactReport, type: :model do
         "Supervisor Name",
         "Case Contact Notes"
       ])
-      case_contact_data = parsed_csv[1]
-      expect(case_contact_data[1]).to eq("60")
+
+      case_contact_data = parsed_csv.first
+      expect(parsed_csv.headers.length).to eq(case_contact_data.length)
     end
   end
 
@@ -381,5 +381,58 @@ RSpec.describe CaseContactReport, type: :model do
         ])
       end
     end
+  end
+
+  context "with court topics" do
+    # rubocop:disable Layout/ExtraSpacing
+    let(:report) { described_class.new(filtered_csv_cols: {court_topics: "true"}) }
+    let(:csv)    { CSV.parse(report.to_csv, headers: true) }
+
+    let!(:used_topic_1) { create(:contact_topic, question: "Used topic 1") }
+    let!(:used_topic_2) { create(:contact_topic, question: "Used topic 2") }
+    let!(:unused_topic) { create(:contact_topic, question: "Unused topic") }
+
+    let(:contacts) { create_list(:case_contact, 3) }
+
+    # Create the answers in opposite order than the topics
+    before do
+      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_2, value: "Ans Contact 1 Topic 2")
+      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_1, value: "Ans Contact 1 Topic 1")
+      create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic_2, value: "Ans Contact 2 Topic 2")
+    end
+
+    it "appends headers for any topics referenced by case_contacts in the report" do
+      headers = csv.headers
+      expect(headers).not_to include(unused_topic.question)
+      expect(headers).to include(used_topic_1.question, used_topic_2.question)
+      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1 # rubocop:disable Performance/Count
+    end
+
+    it "includes topic answers in csv rows" do
+      expected_rows = [
+        # ['Used topic 1',        'Used topic 2'] (header)
+        ["Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2"],
+        [nil,                     "Ans Contact 2 Topic 2"],
+        [nil,                     nil]
+      ]
+      csv.by_row.each do |row|
+        expect(expected_rows).to include(row.fields)
+      end
+    end
+
+    context "when court topics are not requested" do
+      let(:report) do
+        described_class.new(filtered_csv_cols: {
+          internal_contact_number: "true",
+          court_topics: "false"
+        })
+      end
+
+      it "omits topics in headers and rows" do
+        expect(csv.headers).not_to include(used_topic_1.question, used_topic_2.question)
+        expect(csv.first.fields).not_to include("Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2")
+      end
+    end
+    # rubocop:enable Layout/ExtraSpacing
   end
 end

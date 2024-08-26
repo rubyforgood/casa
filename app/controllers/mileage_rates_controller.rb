@@ -18,7 +18,7 @@ class MileageRatesController < ApplicationController
     if @mileage_rate.save
       redirect_to mileage_rates_path
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -32,7 +32,7 @@ class MileageRatesController < ApplicationController
     if @mileage_rate.update(mileage_rate_params)
       redirect_to mileage_rates_path
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 

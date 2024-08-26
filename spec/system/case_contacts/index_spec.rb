@@ -12,9 +12,12 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     context "without filter" do
       let(:case_contacts) do
         [
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.days.ago),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.now,
+            contact_types: [create(:contact_type, name: "Most Recent Case Contact")]),
+          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,
+            contact_types: [create(:contact_type, name: "DRAFT Case Contact")])
         ]
       end
 
@@ -34,13 +37,28 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         expect(page).to have_no_link("Bob Loblaw")
       end
 
+      it "allows the volunteer to delete a draft they created" do
+        case_contacts
+        sign_in volunteer
+        visit case_contacts_path
+
+        card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        expect(card).to_not be_nil
+
+        within_element(card) do
+          expect(card).to have_text("Draft")
+          click_link "Delete"
+        end
+
+        expect(page).to_not have_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
+      end
+
       it "displays the contact type groups" do
         case_contacts
         sign_in volunteer
         visit case_contacts_path
-        within(".card-title", match: :first) do
-          expect(page).to have_text(case_contacts[2].contact_groups_with_types.keys.first)
-        end
+        expect(page).to have_text("Most Recent Case Contact")
+        expect(page).to have_text("DRAFT Case Contact")
       end
     end
 
@@ -54,7 +72,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
             sign_in volunteer
             visit case_contacts_path
-            click_button "Show / Hide"
+            click_button "Expand / Hide"
 
             fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
             fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
@@ -86,6 +104,57 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
           expect(page).not_to have_content other_casa_case.case_number
           expect(page).to have_content casa_case.case_number
+        end
+      end
+
+      describe "by hide drafts" do
+        it "does not show draft contacts" do
+          create(:case_contact, creator: volunteer, casa_case: casa_case)
+          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case)
+
+          sign_in volunteer
+          visit case_contacts_path
+
+          check "Hide drafts"
+
+          click_button "Filter"
+
+          expect(page).not_to have_content "Draft"
+        end
+      end
+
+      describe "collapsing filter menu" do
+        before do
+          sign_in volunteer
+          visit case_contacts_path
+        end
+
+        it "displays sticky filters before clicking expand" do
+          expect(page).to have_field "Hide drafts", type: :checkbox
+        end
+
+        it "does not expand menu when filtering only by sticky filter" do
+          check "Hide drafts"
+
+          click_button "Filter"
+
+          expect(page).to have_field "Hide drafts", type: :checkbox
+          expect(page).not_to have_content "Other filters"
+        end
+
+        it "displays other filters when expanded" do
+          click_button "Expand / Hide"
+
+          expect(page).to have_content "Other filters"
+        end
+
+        it "does not hide menu when filtering by placement filter" do
+          click_button "Expand / Hide"
+          select "In Person", from: "Contact medium"
+
+          click_button "Filter"
+
+          expect(page).to have_content "Other filters"
         end
       end
     end
@@ -149,7 +218,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         expect(page).to_not have_text("Case 1 Notes")
 
         # filtering to only show case 2
-        click_button "Show / Hide"
+        click_button "Expand / Hide"
         fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
         fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
         click_button "Filter"

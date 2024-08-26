@@ -5,9 +5,9 @@ set +e
 # All containers must be already running
 
 echo 'Running migrations...'
-docker-compose exec web rails db:migrate
+docker compose exec web rails db:migrate
 echo 'Done running migrations.'
 
 echo 'Running rspec...'
-docker-compose exec web rspec spec
+docker compose exec web rspec spec
 echo 'Done running rspec.'

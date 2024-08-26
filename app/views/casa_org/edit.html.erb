@@ -2,7 +2,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h1>Editing CASA Organization</h1>
+        <h1 id="organization-details">Editing CASA Organization</h1>
       </div>
     </div>
   </div>
@@ -80,7 +80,7 @@
         </div>
       </div>
     <%# Twilio Form End %>
-    <% if FeatureFlagService.is_enabled?(FeatureFlagService::SHOW_ADDITIONAL_EXPENSES_FLAG) %>
+    <% if Flipper.enabled?(:show_additional_expenses) %>
         <div class="form-check checkbox-style mb-20">
           <%= form.check_box :additional_expenses_enabled, class: 'form-check-input' %>
           <%= form.label :additional_expenses_enabled, "Volunteers can add Other Expenses", class: 'form-check-label mb-2' %>
@@ -104,7 +104,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>
+        <h2 id="contact-types">
           Manage Contact Types
         </h2>
       </div>
@@ -120,7 +120,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>
+        <h2 id="court-details">
           Manage Court Details
         </h2>
       </div>
@@ -136,7 +136,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>
+        <h2 id="learning-hours">
           Manage Learning Hours
         </h2>
       </div>
@@ -153,7 +153,7 @@
   <div class="row align-items-center">
     <div class="col-md-6">
       <div class="title mb-30">
-        <h2>
+        <h2 id="case-contact-topics">
           Manage Case Contact Topics
         </h2>
       </div>

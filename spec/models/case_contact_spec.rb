@@ -37,13 +37,15 @@ RSpec.describe CaseContact, type: :model do
     it "verifies occurred at is not in the future" do
       case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
       expect(case_contact).to_not be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["cannot be in the future"])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
+      expect(case_contact.errors.full_messages).to include("Date can't be in the future")
     end
 
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).to_not be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["is not valid: Date of Contact cannot be prior to 1/1/1989."])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
+      expect(case_contact.errors.full_messages).to include("Date can't be prior to 01/01/1989.")
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
@@ -117,7 +119,8 @@ RSpec.describe CaseContact, type: :model do
     it "requires occurred at" do
       case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors.full_messages).to include("Occurred at can't be blank")
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
+      expect(case_contact.errors.full_messages).to include("Date can't be blank")
     end
 
     it "requires duration minutes" do
@@ -134,10 +137,10 @@ RSpec.describe CaseContact, type: :model do
       expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
 
-    it "validates casa case present" do
-      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, casa_case: nil)
+    it "requires a case to be selected" do
+      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, draft_case_ids: [])
       expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("Casa case can't be blank")
+      expect(obj.errors.full_messages).to include("You must select at least one casa case.")
     end
   end
 
@@ -543,21 +546,35 @@ RSpec.describe CaseContact, type: :model do
 
       context "when parameter is not nil" do
         it "returns contacts with the given casa case ids" do
-          expect(described_class.with_casa_case(casa_case.id)).to eq(case_contacts)
+          expect(described_class.with_casa_case(casa_case.id)).to match_array(case_contacts)
         end
+      end
+    end
+
+    describe ".used_create_another" do
+      let!(:scope_case_contact) { create(:case_contact, metadata: {"create_another" => true}) }
+      let!(:false_case_contact) { create(:case_contact, metadata: {"create_another" => false}) }
+      let!(:empty_meta_case_contact) { create(:case_contact) }
+
+      subject { described_class.used_create_another }
+
+      it "returns only the case contacts with the metadata key 'create_another' set to true" do
+        expect(subject).to include(scope_case_contact)
+        expect(subject).not_to include(false_case_contact)
+        expect(subject).not_to include(empty_meta_case_contact)
       end
     end
   end
 
   describe "#contact_groups_with_types" do
     it "returns the groups with their associated case types" do
-      group1 = build_stubbed(:contact_type_group, name: "Family")
-      group2 = build_stubbed(:contact_type_group, name: "Health")
-      contact_type1 = build_stubbed(:contact_type, contact_type_group: group1, name: "Parent")
-      contact_type2 = build_stubbed(:contact_type, contact_type_group: group2, name: "Medical Professional")
-      contact_type3 = build_stubbed(:contact_type, contact_type_group: group2, name: "Other Therapist")
+      group1 = build(:contact_type_group, name: "Family")
+      group2 = build(:contact_type_group, name: "Health")
+      contact_type1 = build(:contact_type, contact_type_group: group1, name: "Parent")
+      contact_type2 = build(:contact_type, contact_type_group: group2, name: "Medical Professional")
+      contact_type3 = build(:contact_type, contact_type_group: group2, name: "Other Therapist")
       case_contact_types = [contact_type1, contact_type2, contact_type3]
-      case_contact = build_stubbed(:case_contact)
+      case_contact = create(:case_contact)
       case_contact.contact_types = case_contact_types
 
       groups_with_types = case_contact.contact_groups_with_types

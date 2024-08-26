@@ -65,9 +65,24 @@ RSpec.configure do |config|
 
   config.example_status_persistence_file_path = "#{::Rails.root}/tmp/persistent_examples.txt"
 
+  # Filter backtraces to gems that are not under our control.
+  # Can override using `--backtrace` option to rspec to see full backtraces.
   config.filter_rails_from_backtrace!
+  config.filter_gems_from_backtrace(*%w[
+    bootsnap capybara factory_bot puma rack railties shoulda-matchers
+    sprockets-rails pundit
+  ])
 
   config.disable_monkey_patching!
+
+  config.around :each do |example|
+    # If timeout is not set it will run without a timeout
+    Timeout.timeout(ENV["TEST_MAX_DURATION"].to_i) do
+      example.run
+    end
+  rescue Timeout::Error
+    raise StandardError.new "\"#{example.full_description}\" in #{example.location} timed out."
+  end
 
   config.around :each, :disable_bullet do |example|
     Bullet.raise = false

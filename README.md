@@ -46,7 +46,7 @@ Pull requests which are not for an issue but which improve the codebase are also
 
 We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-21pyz2ab8-H6JgQfGGI0Ab6MfNOZRIQA) in the #casa channel so you can get fast help for any questions you may have.
 
-Check out [our google calendar](bit.ly/casacal) to see when office hours and stakeholder meetings are.  
+Check out [our google calendar](https://bit.ly/casacal) to see when office hours and stakeholder meetings are.  
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
@@ -107,7 +107,8 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 **node.js**
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
-1. Install a current LTS version of Node. lts/fermium works.
+    - If you use asdf, the node version from `.tool-versions` will be used, but may be out of sync with the codename version (lts/iron) in `.nvmrc`. To use the version from `.nvmrc`, see one of these options: [legacy file codename support](https://github.com/asdf-vm/asdf-nodejs?tab=readme-ov-file#partial-and-codename-versions) or [installing via custom script](https://github.com/asdf-vm/asdf-nodejs/issues/382#issuecomment-2258647554).
+1. Install a current LTS version of Node. Running `nvm install` from this directory will read the `.nvmrc` file to install the correct version.
 1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **PostgreSQL ("postgres")**
@@ -146,6 +147,10 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
 1. _If you are running on an M1 mac, run the following command before you start the installation process:_
    1. _Set the architecture_: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
    1. _Remove all gems before you proceed_: `gem uninstall -aIx`
+1. If `bin/setup` fails with a credentials error:
+   1. Open the `.env` file.
+   1. Update the values of `POSTGRES_USER` and `POSTGRES_PASSWORD`to match your PostgreSQL credentials.
+   1. Run `bin/setup`
 
 ## Running the App / Verifying Installation
 1. `cd casa/`

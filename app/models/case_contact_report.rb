@@ -30,6 +30,26 @@ class CaseContactReport
   def filtered_columns(args)
     if args[:filtered_csv_cols].present?
       args[:filtered_csv_cols].select { |_key, value| value == "true" }.keys.map(&:to_sym)
+    else
+      COLUMNS
     end
   end
+
+  COLUMNS = [
+    :internal_contact_number,
+    :duration_minutes,
+    :contact_types,
+    :contact_made,
+    :contact_medium,
+    :occurred_at,
+    :added_to_system_at,
+    :miles_driven,
+    :wants_driving_reimbursement,
+    :casa_case_number,
+    :creator_email,
+    :creator_name,
+    :supervisor_name,
+    :case_contact_notes,
+    :court_topics
+  ]
 end

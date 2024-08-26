@@ -1,16 +1,25 @@
 FactoryBot.define do
+  # NOTE: FactoryBot automatically creates traits for a model's enum attributes
+  # https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#enum-traits
+  # For example, CaseContact status enum includes `active: "active"` state, so following already defined:
+  # trait :active do
+  #   status { "active" }
+  # end
+  # ALSO, we can use any trait within other traits:
+  # https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#traits-within-traits
+  # So, rather than `status { "active" }` - use enum trait like so:
   factory :case_contact do
+    active # use the `:active` enum trait
     association :creator, factory: :user
     casa_case
 
     contact_types { [create(:contact_type)] }
     duration_minutes { 60 }
-    occurred_at { Time.zone.now }
+    occurred_at { Time.zone.today }
     contact_made { false }
     medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
     deleted_at { nil }
-    status { "active" }
     draft_case_ids { [casa_case&.id] }
 
     trait :multi_line_note do
@@ -32,6 +41,8 @@ FactoryBot.define do
     end
 
     trait :started_status do
+      started # enum trait
+
       casa_case { nil }
       draft_case_ids { [] }
       medium_type { nil }
@@ -39,26 +50,37 @@ FactoryBot.define do
       duration_minutes { nil }
       notes { nil }
       miles_driven { 0 }
-      status { "started" }
     end
 
     trait :details_status do
+      details # enum trait
+
       casa_case { nil }
       draft_case_ids { [1] }
       notes { nil }
       miles_driven { 0 }
-      status { "details" }
     end
 
     trait :notes_status do
+      notes # enum trait
+
       casa_case { nil }
       draft_case_ids { [1] }
       miles_driven { 0 }
-      status { "notes" }
     end
 
     trait :expenses_status do
+      expenses # enum trait
+
       draft_case_ids { [1] }
+    end
+
+    after(:create) do |case_contact, evaluator|
+      if evaluator.metadata
+        case_contact.update_columns(metadata: evaluator.metadata)
+      elsif case_contact.status
+        case_contact.update_columns(metadata: {"status" => {case_contact.status => case_contact.created_at}})
+      end
     end
 
     trait :with_org_topics do

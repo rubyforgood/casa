@@ -7,9 +7,7 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-
   config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
-
   # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = false
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
@@ -20,6 +18,8 @@ Rails.application.configure do
   # recommended that you enable it in continuous integration systems to ensure eager
   # loading is working properly before deploying your code.
   config.eager_load = ENV["CI"].present?
+  # cache classes on CI, but enable reloading for local work (bin/rspec)
+  config.enable_reloading = ENV["CI"].blank?
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
@@ -78,4 +78,7 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = false
+
+  # https://github.com/rails/rails/issues/48468
+  config.active_job.queue_adapter = :test
 end

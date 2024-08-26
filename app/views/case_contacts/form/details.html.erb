@@ -6,20 +6,9 @@
 
     <div class="card-style-1 pl-25 mb-10">
       <h4 class="mb-20"><label for="case_contact_casa_case">1. Select the relevant <%= "case".pluralize(@casa_cases.count) %> for this contact <span class="red-letter">*</span></label></h4>
-      <div class="casa-case-scroll">
+      <div class="d-flex flex-column gap-4">
         <%= form.hidden_field :draft_case_ids, multiple: true, value: nil %>
-        <% @casa_cases.each do |casa_case| %>
-          <div class="form-check checkbox-style mb-10 ml-5">
-            <%= check_box_tag "case_contact[draft_case_ids][]",
-              casa_case.id,
-              @case_contact.draft_case_ids.include?(casa_case.id),
-              id: "case_contact_draft_case_id_#{casa_case.id}",
-              class: ["form-check-input", "casa-case-id", "case-contacts-form-checkbox"] %>
-            <label class="form-check-label" for="case_contact_draft_case_id_<%= casa_case.id %>">
-              <%= casa_case.case_number %>
-            </label>
-          </div>
-        <% end %>
+        <%= render "relevant_cases", form: form, options: @casa_cases, selected_items: @selected_cases, casa_cases: @casa_cases %>
       </div>
     </div>
     <div class="card-style-1 pl-25 pr-25 mb-10">
@@ -64,10 +53,14 @@
       <div class="pr-50">
         <h5 class="mb-3"><%= form.label :occurred_at, "c. Date of contact" %></h5>
         <div class="input-style-1">
-          <% occurred_at = @case_contact.occurred_at || Time.zone.now %>
-          <%= render "layouts/components/ranged_date_picker",
-            form: form, model_field: :occurred_at, initial_value: occurred_at.to_date,
-            max_date: "today", component_name: "occurred on" %>
+          <% min_date = CaseContact::MINIMUM_DATE %>
+          <% current_date = Date.current %>
+          <% initial_value = @case_contact.occurred_at&.to_date || current_date %>
+          <%= form.date_field :occurred_at,
+            value: initial_value.to_fs(:iso8601),
+            max: current_date.to_fs(:iso8601),
+            min: min_date.to_fs(:iso8601),
+            class: "form-control card-style-1" %>
         </div>
       </div>
 
@@ -77,19 +70,24 @@
       </div>
     </div>
 
+<div class="card-style-1 pl-25 pr-25 mb-10">
+  <h4 class="mb-20 details__topics-label">Court Report Topics <span class="content-1">(optional)</span></h4>
+  <div>
     <% if @case_contact.contact_topic_answers.any? %>
-    <div class="card-style-1 pl-25 mb-10">
-      <h4 class="mb-20 details__topics-label">Court report <%= "topic".pluralize(@case_contact.contact_topic_answers.count) %> <span class="content-1">(optional)</span></label></h4>
-      <div class="">
-        <%= form.fields_for(:contact_topic_answers) do |f| %>
-          <div class="form-check checkbox-style mb-10 ml-5">
-            <%= f.check_box :selected, class: ["form-check-input", "casa-case-id"] %>
-            <%= f.label :selected, f.object.contact_topic.question, class: "form-check-label" %>
-          </div>
-        <% end %>
-      </div>
-    </div>
+      <%= form.fields_for(:contact_topic_answers) do |f| %>
+        <div class="form-check checkbox-style mb-10 ml-5">
+          <%= f.check_box :selected, class: ["form-check-input", "casa-case-id"] %>
+          <%= f.label :selected, f.object.contact_topic.question, class: "form-check-label" %>
+        </div>
+      <% end %>
+    <% elsif current_user.casa_admin? %>
+      Visit <%= link_to "Manage Case Contact Topics", edit_casa_org_path(current_user.casa_org_id) %> to set your organization Court report topics.
+    <% else %>
+      Your organization has not set any Court Report Topics yet. Contact your admin to learn more.
     <% end %>
+  </div>
+</div>
+
     <div class="actions mb-10 case-contacts-form-buttons">
       <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
         Back

@@ -114,4 +114,10 @@ class CasaCaseDecorator < Draper::Decorator
   def show_contact_type?(contact_type_id)
     object.casa_case_contact_types.map(&:contact_type_id).include?(contact_type_id)
   end
+
+  def hash_for_multi_select
+    volunteers = object.volunteers.map(&:display_name).join(", ")
+
+    {value: object.id, text: object.case_number, group: object&.casa_org_id, subtext: volunteers}
+  end
 end

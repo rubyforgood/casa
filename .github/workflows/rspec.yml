@@ -20,6 +20,7 @@ jobs:
     timeout-minutes: 20
     env:
       RAILS_ENV: test
+      TEST_MAX_DURATION: 60
 
     services:
       db:
@@ -45,7 +46,7 @@ jobs:
       - name: Set up JS
         uses: actions/setup-node@v4
         with:
-          node-version: lts/gallium
+          node-version-file: '.nvmrc'
           cache: "yarn"
       - run: yarn
 

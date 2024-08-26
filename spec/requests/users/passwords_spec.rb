@@ -52,7 +52,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
       it "shows the correct flash message" do
         request
         expect(flash[:notice]).to(
-          eq("You will receive an email or SMS with instructions on how to reset your password in a few minutes.")
+          eq("If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.")
         )
       end
 
@@ -101,7 +101,9 @@ RSpec.describe "Users::PasswordsController", type: :request do
 
       it "sets errors correctly" do
         request
-        expect(request.parsed_body.to_html).to include("User does not exist.")
+        expect(flash[:notice]).to(
+          eq("If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.")
+        )
       end
     end
 
@@ -116,7 +118,7 @@ RSpec.describe "Users::PasswordsController", type: :request do
         expect_any_instance_of(User).to receive(:send_reset_password_instructions).once
         request
         expect(flash[:notice]).to(
-          eq("You will receive an email or SMS with instructions on how to reset your password in a few minutes.")
+          eq("If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.")
         )
       end
     end

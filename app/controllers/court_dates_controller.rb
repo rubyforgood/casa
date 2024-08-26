@@ -38,7 +38,7 @@ class CourtDatesController < ApplicationController
     if @court_date.save && @casa_case.save
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully created."
     else
-      render :new
+      render :new, status: :unprocessable_entity
     end
   end
 
@@ -47,7 +47,7 @@ class CourtDatesController < ApplicationController
     if @court_date.update(court_date_params(@casa_case))
       redirect_to casa_case_court_date_path(@casa_case, @court_date), notice: "Court date was successfully updated."
     else
-      render :edit
+      render :edit, status: :unprocessable_entity
     end
   end
 
