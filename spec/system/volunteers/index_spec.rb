@@ -36,13 +36,12 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
         visit volunteers_path
 
-        expect(page).to have_selector("#casa-logo[src*='default-logo']")
-        expect(page).to have_selector("#casa-logo[alt='CASA Logo']")
+        expect(page).to have_css("#casa-logo[src*='default-logo']")
+        expect(page).to have_css("#casa-logo[alt='CASA Logo']")
       end
     end
 
     it "displays last attempted contact by default", js: true do
-      travel_to Date.new(2021, 1, 1)
       create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
 
       sign_in admin
@@ -68,7 +67,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       uncheck "Contact Made In Past 60 Days"
       uncheck "Last Attempted Contact"
       within(".modal-dialog") do
-        click_button "Close"
+        click_on "Close"
       end
 
       expect(page).to have_text("Name")
@@ -87,7 +86,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       sign_in admin
 
       visit volunteers_path
-      expect(page).to have_selector(".volunteer-filters")
+      expect(page).to have_css(".volunteer-filters")
 
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
@@ -104,15 +103,15 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       inactive_volunteers.each do |inactive_volunteer|
         expect(page).to have_text inactive_volunteer.display_name
       end
-      expect(page).to have_selector("table#volunteers tbody tr", count: inactive_volunteers.count)
+      expect(page).to have_css("table#volunteers tbody tr", count: inactive_volunteers.count)
 
       visit volunteers_path
       click_on "Supervisor"
-      find(:css, "#unassigned-vol-filter").set(false)
+      find_by_id("unassigned-vol-filter").set(false)
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
-      expect(page).to have_selector("table#volunteers tbody tr", count: assigned_volunteers.count)
+      expect(page).to have_css("table#volunteers tbody tr", count: assigned_volunteers.count)
     end
 
     it "can go to the volunteer edit page from the volunteer list", js: true do
@@ -136,7 +135,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       click_on "New Volunteer"
 
       expect(page).to have_text("New Volunteer")
-      expect(page).to have_selector("form#new_volunteer")
+      expect(page).to have_css("form#new_volunteer")
     end
 
     describe "supervisor column of volunteers table" do
@@ -146,9 +145,9 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
         visit volunteers_path
         click_on "Supervisor"
-        find(:css, "#unassigned-vol-filter").set(true)
+        find_by_id("unassigned-vol-filter").set(true)
 
-        expect(page).to have_selector("tbody .supervisor-column", text: "")
+        expect(page).to have_css("tbody .supervisor-column", text: "")
       end
 
       it "displays supervisor's name when volunteer has supervisor", js: true do
@@ -158,7 +157,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         sign_in admin
 
         visit volunteers_path
-        expect(page).to have_selector("tbody .supervisor-column", text: name)
+        expect(page).to have_css("tbody .supervisor-column", text: name)
       end
 
       it "is blank when volunteer's supervisor is inactive", js: true do
@@ -167,9 +166,9 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
         visit volunteers_path
         click_on "Supervisor"
-        find(:css, "#unassigned-vol-filter").set(true)
+        find_by_id("unassigned-vol-filter").set(true)
 
-        expect(page).to have_selector("tbody .supervisor-column", text: "")
+        expect(page).to have_css("tbody .supervisor-column", text: "")
       end
     end
 
@@ -190,7 +189,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
 
       it "does not display by default" do
         visit volunteers_path
-        expect(page).not_to have_text "Manage Volunteer"
+        expect(page).to have_no_text "Manage Volunteer"
       end
 
       context "when one or more volunteers selected" do
@@ -205,14 +204,14 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           visit volunteers_path
           volunteers.each_with_index do |volunteer, index|
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-            expect(page).to have_selector("[data-select-all-target='buttonLabel']", text: "#{index + 1})")
+            expect(page).to have_css("[data-select-all-target='buttonLabel']", text: "#{index + 1})")
           end
         end
 
         it "text matches pluralization of volunteers selected" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          expect(page).not_to have_text "Manage Volunteers"
+          expect(page).to have_no_text "Manage Volunteers"
 
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
           expect(page).to have_text "Manage Volunteers"
@@ -224,7 +223,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           expect(page).to have_text "Manage Volunteer"
 
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          expect(page).not_to have_text "Manage Volunteer"
+          expect(page).to have_no_text "Manage Volunteer"
         end
       end
     end
@@ -245,7 +244,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       it "selects all volunteers" do
         visit volunteers_path
         find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # Wait for data table to be loaded
-        find("#checkbox-toggle-all").click
+        find_by_id("checkbox-toggle-all").click
 
         volunteers.each do |volunteer|
           expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{volunteer.id}", checked: true)
@@ -259,7 +258,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           end
 
-          find("#checkbox-toggle-all").click
+          find_by_id("checkbox-toggle-all").click
           expect(page).to have_field("checkbox-toggle-all", checked: false)
 
           volunteers.each do |volunteer|
@@ -274,13 +273,13 @@ RSpec.describe "view all volunteers", type: :system, js: true do
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
 
           expect(page).to have_field("checkbox-toggle-all", checked: false)
-          expect(find("#checkbox-toggle-all")[:indeterminate]).to eq("true")
+          expect(find_by_id("checkbox-toggle-all")[:indeterminate]).to eq("true")
         end
 
         it "selects all volunteers" do
           visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          find("#checkbox-toggle-all").click
+          find_by_id("checkbox-toggle-all").click
 
           volunteers.each do |volunteer|
             expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{volunteer.id}", checked: true)
@@ -357,8 +356,8 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       sign_in supervisor
 
       visit volunteers_path
-      expect(page).to have_selector(".volunteer-filters")
-      expect(page).to have_selector("table#volunteers tbody tr", count: 1)
+      expect(page).to have_css(".volunteer-filters")
+      expect(page).to have_css("table#volunteers tbody tr", count: 1)
 
       click_on "Status"
       find(:css, 'input[data-value="true"]').set(false)
@@ -368,11 +367,10 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       inactive_volunteers.each do |inactive_volunteer|
         expect(page).to have_text inactive_volunteer.display_name
       end
-      expect(page).to have_selector("table#volunteers tbody tr", count: inactive_volunteers.count)
+      expect(page).to have_css("table#volunteers tbody tr", count: inactive_volunteers.count)
     end
 
     it "can show/hide columns on volunteers table", js: true do
-      travel_to Date.new(2021, 1, 1)
       sign_in supervisor
 
       visit volunteers_path
@@ -388,7 +386,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       uncheck "Contact Made In Past 60 Days"
       uncheck "Last Attempted Contact"
       within(".modal-dialog") do
-        click_button "Close"
+        click_on "Close"
       end
 
       expect(page).to have_text("Name")
@@ -415,7 +413,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         expect(page).to have_text("Contacts Made in Past 60 Day")
       end
 
-      click_button "Pick displayed columns"
+      click_on "Pick displayed columns"
 
       uncheck "Name"
       uncheck "Status"
@@ -423,7 +421,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       uncheck "Last Attempted Contact"
 
       within(".modal-dialog") do
-        click_button "Close"
+        click_on "Close"
       end
 
       within("#volunteers") do
@@ -436,12 +434,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         expect(page).to have_text("Case Number(s)")
       end
 
-      sign_out supervisor
-      visit volunteers_path
-
-      sign_in supervisor
-      visit volunteers_path
-
+      refresh
       # Expectations after page reload
       within("#volunteers") do
         expect(page).to have_no_text("Name")
@@ -466,7 +459,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         visit supervisors_path
         visit volunteers_path
 
-        expect(page).to have_selector("#volunteers_filter input", text: "")
+        expect(page).to have_css("#volunteers_filter input", text: "")
       end
     end
   end
