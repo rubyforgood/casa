@@ -25,6 +25,22 @@ RSpec.describe "casa_org/edit", type: :view do
     expect(rendered).to have_selector("input[required=required]", id: "casa_org_name")
   end
 
+  it "has standard court order content" do
+    organization = build_stubbed(:casa_org)
+    allow(view).to receive(:current_organization).and_return(organization)
+    standard_court_order = build_stubbed(:standard_court_order, value: "Standard court order value")
+    assign(:standard_court_orders, [standard_court_order])
+
+    render template: "casa_org/edit"
+
+    expect(rendered).to have_text("Standard Court Orders")
+    expect(rendered).to have_table("standard-court-orders",
+      with_rows:
+      [
+        ["Standard court order value", "Edit"]
+      ])
+  end
+
   it "has contact topic content" do
     organization = build_stubbed(:casa_org)
     allow(view).to receive(:current_organization).and_return(organization)
