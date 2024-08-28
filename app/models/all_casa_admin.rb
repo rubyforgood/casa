@@ -12,6 +12,10 @@ class AllCasaAdmin < ApplicationRecord
   def supervisor?
     false
   end
+
+  def volunteer?
+    false
+  end
 end
 
 # == Schema Information
