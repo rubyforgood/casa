@@ -5,8 +5,8 @@ class Rails::PolicyGenerator < Rails::Generators::NamedBase
   remove_class_option :skip_namespace
   remove_class_option :skip_collision_check
 
-  argument :actions, type: :array, banner: "action action",
-    default: %w[index new show create edit update destroy]
+  argument :actions, type: :array, banner: "action action", default: []
+
   class_option :headless, type: :boolean, default: false,
     desc: "Policy for non-model routes (dashboard, collection, etc)"
 
