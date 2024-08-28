@@ -11,7 +11,7 @@ FactoryBot.define do
       casa_cases = if evaluator.casa_cases.present?
         evaluator.casa_cases
       elsif case_group.case_group_memberships.empty?
-        build_list(:casa_case, evaluator.case_count)
+        build_list(:casa_case, evaluator.case_count, casa_org: case_group.casa_org)
       else
         []
       end
