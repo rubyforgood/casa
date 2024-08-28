@@ -70,51 +70,47 @@ RSpec.describe CaseGroupPolicy, type: :policy do
     end
   end
 
-  describe ".scope" do
-    subject { described_class::Scope.new user, CaseGroup.all }
+  describe "Scope#resolve" do
+    let!(:casa_org_case_group) { create :case_group, casa_org: }
+    let!(:other_casa_org_case_group) { create :case_group, casa_org: create(:casa_org) }
 
-    describe "#resolve" do
-      let!(:casa_org_case_group) { create :case_group, casa_org: }
-      let!(:other_casa_org_case_group) { create :case_group, casa_org: create(:casa_org) }
+    subject { described_class::Scope.new(user, CaseGroup.all).resolve }
 
-      subject { super().resolve }
+    context "when user is a visitor" do
+      let(:user) { nil }
 
-      context "when user is a visitor" do
-        let(:user) { nil }
+      it { is_expected.not_to include(casa_org_case_group) }
+      it { is_expected.not_to include(other_casa_org_case_group) }
+    end
 
-        it { is_expected.not_to include(casa_org_case_group) }
-        it { is_expected.not_to include(other_casa_org_case_group) }
-      end
+    context "when user is a volunteer" do
+      let(:user) { volunteer }
+      let!(:user_case_group) { volunteer_case_group }
 
-      context "when user is a volunteer" do
-        let(:user) { volunteer }
-        let!(:user_case_group) { volunteer_case_group }
+      it { is_expected.not_to include(user_case_group) }
+      it { is_expected.not_to include(casa_org_case_group) }
+      it { is_expected.not_to include(other_casa_org_case_group) }
+    end
 
-        it { is_expected.not_to include(user_case_group) }
-        it { is_expected.not_to include(casa_org_case_group) }
-        it { is_expected.not_to include(other_casa_org_case_group) }
-      end
+    context "when user is a supervisor" do
+      let(:user) { supervisor }
 
-      context "when user is a supervisor" do
-        let(:user) { supervisor }
+      it { is_expected.to include(casa_org_case_group) }
+      it { is_expected.not_to include(other_casa_org_case_group) }
+    end
 
-        it { is_expected.to include(casa_org_case_group) }
-        it { is_expected.not_to include(other_casa_org_case_group) }
-      end
+    context "when user is a casa_admin" do
+      let(:user) { casa_admin }
 
-      context "when user is a casa_admin" do
-        let(:user) { casa_admin }
+      it { is_expected.to include(casa_org_case_group) }
+      it { is_expected.not_to include(other_casa_org_case_group) }
+    end
 
-        it { is_expected.to include(casa_org_case_group) }
-        it { is_expected.not_to include(other_casa_org_case_group) }
-      end
+    context "when user is an all_casa_admin" do
+      let(:user) { all_casa_admin }
 
-      context "when user is an all_casa_admin" do
-        let(:user) { all_casa_admin }
-
-        it { is_expected.not_to include(casa_org_case_group) }
-        it { is_expected.not_to include(other_casa_org_case_group) }
-      end
+      it { is_expected.not_to include(casa_org_case_group) }
+      it { is_expected.not_to include(other_casa_org_case_group) }
     end
   end
 end

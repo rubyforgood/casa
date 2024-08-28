@@ -85,51 +85,47 @@ RSpec.describe <%= class_name %>Policy, type: :policy do
 <%- end -%>
 <%- unless options[:headless] -%>
 
-  describe ".scope" do
-    subject { described_class::Scope.new user, <%= class_name %>.all }
+  describe "Scope#resolve" do
+    let!(:casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: }
+    let!(:other_casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: create(:casa_org) }
 
-    describe "#resolve" do
-      let!(:casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: }
-      let!(:other_casa_org_<%= singular_name %>) { create :<%= singular_name %>, casa_org: create(:casa_org) }
+    subject { described_class::Scope.new(user, <%= class_name %>.all).resolve }
 
-      subject { super().resolve }
+    context "when user is a visitor" do
+      let(:user) { nil }
 
-      context "when user is a visitor" do
-        let(:user) { nil }
+      it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+      it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+    end
 
-        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
-        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
-      end
+    context "when user is a volunteer" do
+      let(:user) { volunteer }
+      let!(:user_<%= singular_name %>) { volunteer_<%= singular_name %> }
 
-      context "when user is a volunteer" do
-        let(:user) { volunteer }
-        let!(:user_<%= singular_name %>) { volunteer_<%= singular_name %> }
+      it { is_expected.to include(user_<%= singular_name %>) }
+      it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+      it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+    end
 
-        it { is_expected.to include(user_<%= singular_name %>) }
-        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
-        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
-      end
+    context "when user is a supervisor" do
+      let(:user) { supervisor }
 
-      context "when user is a supervisor" do
-        let(:user) { supervisor }
+      it { is_expected.to include(casa_org_<%= singular_name %>) }
+      it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+    end
 
-        it { is_expected.to include(casa_org_<%= singular_name %>) }
-        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
-      end
+    context "when user is a casa_admin" do
+      let(:user) { casa_admin }
 
-      context "when user is a casa_admin" do
-        let(:user) { casa_admin }
+      it { is_expected.to include(casa_org_<%= singular_name %>) }
+      it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
+    end
 
-        it { is_expected.to include(casa_org_<%= singular_name %>) }
-        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
-      end
+    context "when user is an all_casa_admin" do
+      let(:user) { all_casa_admin }
 
-      context "when user is an all_casa_admin" do
-        let(:user) { all_casa_admin }
-
-        it { is_expected.not_to include(casa_org_<%= singular_name %>) }
-        it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
-      end
+      it { is_expected.not_to include(casa_org_<%= singular_name %>) }
+      it { is_expected.not_to include(other_casa_org_<%= singular_name %>) }
     end
   end
 <%- end -%>
