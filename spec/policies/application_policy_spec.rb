@@ -118,6 +118,26 @@ RSpec.describe ApplicationPolicy do
       end
     end
 
+    context "user with no casa_org" do
+      let(:volunteer) { build_stubbed(:volunteer, casa_org: nil) }
+      let(:supervisor) { build_stubbed(:supervisor, casa_org: nil) }
+      let(:casa_admin) { build_stubbed(:casa_admin, casa_org: nil) }
+
+      permissions :same_org? do
+        it { is_expected.to_not permit(volunteer, record) }
+        it { is_expected.to_not permit(supervisor, record) }
+        it { is_expected.to_not permit(casa_admin, record) }
+      end
+    end
+
+    context "no user" do
+      let(:user) { nil }
+
+      permissions :same_org? do
+        it { is_expected.to_not permit(user, record) }
+      end
+    end
+
     context "called with a class instead of a record" do
       let(:klass) { CasaCase }
 
