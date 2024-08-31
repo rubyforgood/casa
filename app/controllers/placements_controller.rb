@@ -4,8 +4,7 @@ class PlacementsController < ApplicationController
   before_action :require_organization!
 
   def index
-    authorize Placement
-    @placements = @casa_case.placements.includes(:placement_type).order(placement_started_at: :desc)
+    @placements = policy_scope(@casa_case.placements).includes(:placement_type).order(placement_started_at: :desc)
   end
 
   def show

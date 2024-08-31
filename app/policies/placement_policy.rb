@@ -1,9 +1,21 @@
 class PlacementPolicy < ApplicationPolicy
+  class Scope < ApplicationPolicy::Scope
+    def resolve
+      case @user
+      when CasaAdmin, Supervisor
+        scope.joins(:casa_case).where(casa_cases: { casa_org_id: @user.casa_org_id })
+      when Volunteer
+        scope.none
+      else
+        scope.none
+      end
+    end
+  end
+
   def allowed_to_edit_casa_case?
     casa_case_policy.edit?
   end
 
-  alias_method :index?, :admin_or_supervisor_or_volunteer_same_org?
   alias_method :show?, :allowed_to_edit_casa_case?
   alias_method :edit?, :allowed_to_edit_casa_case?
   alias_method :update?, :allowed_to_edit_casa_case?

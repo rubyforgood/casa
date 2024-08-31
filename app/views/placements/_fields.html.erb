@@ -9,7 +9,7 @@
   <div class="select-position">
     <%= form.collection_select(
           :placement_type_id,
-          PlacementType.for_organization(current_organization),
+          PlacementType.for_organization(current_organization).order_alphabetically,
           :id, :name,
           {include_hidden: false, include_blank: "-Select Placement Type-"},
           {class: "form-control"}

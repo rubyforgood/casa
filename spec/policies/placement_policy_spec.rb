@@ -16,23 +16,6 @@ RSpec.describe PlacementPolicy do
   let(:supervisor_diff_org) { build(:supervisor, casa_org: diff_org) }
   let(:volunteer_diff_org) { build(:volunteer, casa_org: diff_org) }
 
-  permissions :index? do
-    it "allows casa_admins" do
-      is_expected.to permit(casa_admin, Placement)
-      is_expected.to permit(casa_admin_diff_org, Placement)
-    end
-
-    it "allows supervisor" do
-      is_expected.to permit(supervisor, Placement)
-      is_expected.to permit(supervisor_diff_org, Placement)
-    end
-
-    it "allows volunteer" do
-      is_expected.to permit(volunteer, Placement)
-      is_expected.to permit(volunteer_diff_org, Placement)
-    end
-  end
-
   permissions :create?, :edit?, :update?, :show?, :new? do
     it { is_expected.to permit(casa_admin, placement) }
 
