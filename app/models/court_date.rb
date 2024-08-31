@@ -4,6 +4,7 @@ require "sablon"
 
 class CourtDate < ApplicationRecord
   belongs_to :casa_case
+  has_one :casa_org, through: :casa_case
   validates :date, presence: true
   validates :date, comparison: {
     less_than_or_equal_to: -> { 1.year.from_now },

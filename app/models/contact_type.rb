@@ -1,5 +1,6 @@
 class ContactType < ApplicationRecord
   belongs_to :contact_type_group
+  has_one :casa_org, through: :contact_type_group
 
   has_many :casa_case_contact_types
   has_many :casa_cases, through: :casa_case_contact_types

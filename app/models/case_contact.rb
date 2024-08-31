@@ -33,6 +33,7 @@ class CaseContact < ApplicationRecord
 
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
+  has_one :casa_org, through: :casa_case
   validates :casa_case_id, presence: true, if: :active?
   validate :draft_case_ids_not_empty, unless: :started?
 

@@ -4,9 +4,8 @@ class ContactTopicsController < ApplicationController
 
   # GET /contact_topics/new
   def new
-    authorize ContactTopic
-    contact_topic = ContactTopic.new(casa_org_id: current_user.casa_org_id)
-    @contact_topic = contact_topic
+    @contact_topic = ContactTopic.new(casa_org_id: current_user.casa_org_id)
+    authorize @contact_topic
   end
 
   # GET /contact_topics/1/edit
@@ -16,8 +15,8 @@ class ContactTopicsController < ApplicationController
 
   # POST /contact_topics or /contact_topics.json
   def create
-    authorize ContactTopic
     @contact_topic = ContactTopic.new(contact_topic_params)
+    authorize @contact_topic
 
     if @contact_topic.save
       redirect_to edit_casa_org_path(current_organization), notice: "Contact topic was successfully created."

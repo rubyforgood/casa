@@ -1,6 +1,7 @@
 class Followup < ApplicationRecord
   belongs_to :followupable, polymorphic: true, optional: true # TODO polymorph: remove optional after data is safely migrated
   belongs_to :case_contact
+  has_one :casa_org, through: :case_contact
   belongs_to :creator, class_name: "User"
   enum status: {requested: 0, resolved: 1}
 
