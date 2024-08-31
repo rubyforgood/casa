@@ -1,7 +1,7 @@
 class PlacementPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      scope.joins(:casa_case).where(casa_cases: { casa_org_id: @user.casa_org_id })
+      scope.joins(:casa_case).where(casa_cases: {casa_org_id: @user.casa_org_id})
     end
   end
 
