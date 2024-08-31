@@ -48,7 +48,7 @@ class ApplicationPolicy
   end
 
   def is_admin?
-    user.casa_admin?
+    user&.casa_admin?
   end
 
   def same_org?
@@ -60,16 +60,16 @@ class ApplicationPolicy
 
   def is_admin_same_org?
     # eventually everything should use this
-    user.casa_admin? && same_org?
+    user&.casa_admin? && same_org?
   end
 
   def is_supervisor?
-    user.supervisor?
+    user&.supervisor?
   end
 
   def is_supervisor_same_org?
     # eventually everything should use this
-    user.supervisor? && same_org?
+    is_supervisor? && same_org?
   end
 
   def is_volunteer? # deprecated in favor of is_volunteer_same_org?
