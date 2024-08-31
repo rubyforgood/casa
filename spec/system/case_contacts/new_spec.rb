@@ -41,7 +41,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
       contact = CaseContact.last
       expect(contact.casa_case_id).to eq casa_case.id
       expect(contact.contact_types.map(&:name)).to include("School", "Therapist")
@@ -137,7 +137,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
 
       expect(CaseContact.first.notes).to eq ""
     end
@@ -154,7 +154,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
       expect {
         click_on "Submit"
-      }.to change(CaseContact.where(status: "active"), :count).by(1)
+      }.to change(CaseContact.active, :count).by(1)
 
       expect(CaseContact.first.notes).to eq "This is the note"
     end

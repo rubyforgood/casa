@@ -48,44 +48,28 @@ class ApplicationPolicy
   end
 
   def is_admin?
-    user.casa_admin?
+    user&.casa_admin?
   end
 
   def same_org?
-    case record
-    when CasaOrg
-      user.casa_org == record
-    when CasaAdmin, CasaCase, Volunteer, Supervisor, HearingType, ContactTypeGroup, ContactTopic, Placement
-      user.casa_org == record.casa_org
-    when CourtDate, CaseContact, CaseAssignment
-      user.casa_org == record&.casa_case&.casa_org
-    when LearningHour
-      user.casa_org == record&.user&.casa_org
-    when ChecklistItem
-      user.casa_org == record&.hearing_type&.casa_org
-    when ContactType
-      user.casa_org == record&.contact_type_group&.casa_org
-    when Followup
-      user.casa_org == record&.case_contact&.casa_case&.casa_org
-    when Class # Authorizing against collection, does not belong to org
-      true
-    else # Type not recognized, no auth since we can't verify the record
-      false
-    end
+    # NOTE: must have casa_org association on a Policy's associated Model
+    # that is: `has_one :casa_org, through: :some_association` (may need to define :some_association)
+    # do not use for collection actions (index), check user type & use policy_scope() on the collection
+    user&.casa_org.present? && user.casa_org == record&.casa_org
   end
 
   def is_admin_same_org?
     # eventually everything should use this
-    user.casa_admin? && same_org?
+    user&.casa_admin? && same_org?
   end
 
   def is_supervisor?
-    user.supervisor?
+    user&.supervisor?
   end
 
   def is_supervisor_same_org?
     # eventually everything should use this
-    user.supervisor? && same_org?
+    is_supervisor? && same_org?
   end
 
   def is_volunteer? # deprecated in favor of is_volunteer_same_org?

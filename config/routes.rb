@@ -85,6 +85,7 @@ Rails.application.routes.draw do
   end
 
   get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
+  get "case_contacts/drafts", to: "case_contacts#drafts"
   resources :case_contacts, except: %i[create update show] do
     member do
       post :restore

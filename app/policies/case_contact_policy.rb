@@ -19,7 +19,7 @@ class CaseContactPolicy < ApplicationPolicy
   alias_method :index?, :admin_or_supervisor_or_volunteer?
   alias_method :new?, :admin_or_supervisor_or_volunteer?
   alias_method :show?, :is_creator_or_casa_admin?
-  alias_method :drafts?, :admin_or_supervisor_or_volunteer?
+  alias_method :drafts?, :admin_or_supervisor?
   alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
   alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
   alias_method :restore?, :is_admin?

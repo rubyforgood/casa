@@ -23,7 +23,7 @@ RSpec.describe CaseContactMetadataCallback do
     end
 
     context "case contact is in started status" do
-      let(:case_contact) { create(:case_contact, status: "started", created_at: past) }
+      let(:case_contact) { create(:case_contact, :started, created_at: past) }
 
       context "updates to started status" do
         before { case_contact.update(status: "started") }
@@ -59,7 +59,7 @@ RSpec.describe CaseContactMetadataCallback do
     end
 
     context "case contact is in details status" do
-      let(:case_contact) { create(:case_contact, status: "details", created_at: past) }
+      let(:case_contact) { create(:case_contact, :details, created_at: past) }
 
       context "updates to details status" do
         before { case_contact.update(status: "details") }
@@ -89,7 +89,7 @@ RSpec.describe CaseContactMetadataCallback do
     end
 
     context "case contact is in notes status" do
-      let(:case_contact) { create(:case_contact, status: "notes", created_at: past) }
+      let(:case_contact) { create(:case_contact, :notes, created_at: past) }
 
       context "updates to notes status" do
         before { case_contact.update(status: "notes") }
@@ -111,7 +111,7 @@ RSpec.describe CaseContactMetadataCallback do
     end
 
     context "case contact is in expenses status" do
-      let!(:case_contact) { create(:case_contact, status: "expenses", created_at: past) }
+      let!(:case_contact) { create(:case_contact, :expenses, created_at: past) }
 
       context "updates to expenses status" do
         before { case_contact.update(status: "expenses") }
