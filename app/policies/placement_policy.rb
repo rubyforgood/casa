@@ -1,14 +1,7 @@
 class PlacementPolicy < ApplicationPolicy
   class Scope < ApplicationPolicy::Scope
     def resolve
-      case @user
-      when CasaAdmin, Supervisor
-        scope.joins(:casa_case).where(casa_cases: { casa_org_id: @user.casa_org_id })
-      when Volunteer
-        scope.none
-      else
-        scope.none
-      end
+      scope.joins(:casa_case).where(casa_cases: { casa_org_id: @user.casa_org_id })
     end
   end
 
