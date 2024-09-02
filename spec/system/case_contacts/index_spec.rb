@@ -180,6 +180,8 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     end
 
     it "can show only case contacts for one case" do
+      # would prefer to not use travel_to... did flake out at least once
+      # also doing a lot of re-visiting here...
       travel_to Date.new(2021, 1, 2) do
         create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: Time.zone.yesterday - 1)
 

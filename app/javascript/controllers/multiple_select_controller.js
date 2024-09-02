@@ -6,6 +6,7 @@ export default class extends Controller {
   static values = {
     options: Array,
     selectedItems: Array,
+    placeholderTerm: String,
     withOptions: Boolean
   }
 
@@ -18,7 +19,7 @@ export default class extends Controller {
   }
 
   createBasicMultiSelect () {
-    /* eslint-disable no-new */
+    /* eslint-disable-next-line no-new */
     new TomSelect(this.selectTarget, {
       plugins: {
         remove_button: {
@@ -32,7 +33,7 @@ export default class extends Controller {
     const optionTemplate = this.optionTarget.innerHTML
     const itemTemplate = this.itemTarget.innerHTML
 
-    /* eslint-disable no-new */
+    /* eslint-disable-next-line no-new */
     new TomSelect(this.selectTarget, {
       onItemAdd: function () {
         this.setTextboxValue('')
@@ -51,7 +52,7 @@ export default class extends Controller {
       },
       options: this.optionsValue,
       items: this.selectedItemsValue,
-      placeholder: 'Select or search for contacts',
+      placeholder: `Select or search ${this.placeholderTermValue}`,
       hidePlaceholder: true,
       searchField: ['text', 'group'],
       render: {

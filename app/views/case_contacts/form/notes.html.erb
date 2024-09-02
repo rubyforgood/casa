@@ -1,41 +1,42 @@
+<!-- TODO: delete file - keeping for autosave reference -->
+
 <div data-controller="autosave" data-autosave-good-alert-class="text-muted" data-autosave-bad-alert-class="text-danger">
-  <%= render(Form::TitleComponent.new(title: @case_contact.decorate.form_title, subtitle: "Contact notes", step: @page, total_steps: @total_pages, notes: @case_contact.decorate.form_page_notes[:notes], autosave: true)) %>
 
-  <div>
-    <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), id: "casa-contact-form", class: "component-validated-form", data: { "turbo-action": "advance", "autosave-target": "form" }) do |form| %>
-      <%= render "contact_topic_notes", form: %>
-      <div class="card-style-1 pl-25 pr-25 mb-10">
-        <div class="d-flex justify-content-between mb-3"
-             data-icon-toggle-target="margin"
-             data-action="click->icon-toggle#toggle"
-             data-bs-toggle="collapse"
-             data-controller="icon-toggle"
-             data-bs-target="#additional-notes"
-             data-icon-toggle-icons-value='["lni-chevron-up", "lni-chevron-down"]'>
-          <h4 class=""><%= form.label :notes, "#{@case_contact.contact_topic_answers.count + 1}. Additional notes (optional)" %></h4>
-          <button class="bg-transparent border-0"
-                  type="button"
-                  aria-expanded="false">
-            <i id="additional-notes-icon" class="lni lni-chevron-up" data-icon-toggle-target="icon"></i>
-          </button>
-        </div>
+  <%= form_with(model: @case_contact, url: wizard_path(nil, case_contact_id: @case_contact.id), id: "casa-contact-form", class: "component-validated-form", data: { "turbo-action": "advance", "autosave-target": "form" }) do |form| %>
+    <%= render "contact_topic_notes", form: %>
 
-        <div class="collapse show" id="additional-notes">
-          <p class="mb-3">
-            Include any additional comments or notes that may assist in future case tracking or reporting.
-          </p>
-          <div class="input-style-1">
-            <%= form.text_area :notes, :rows => 5, placeholder: "Additional notes", class: "form-control", data: { action: "input->autosave#save" } %>
-          </div>
-        </div>
+    <div class="card-style-1 pl-25 pr-25 mb-10">
+      <div class="d-flex justify-content-between mb-3"
+        data-icon-toggle-target="margin"
+        data-action="click->icon-toggle#toggle"
+        data-bs-toggle="collapse"
+        data-controller="icon-toggle"
+        data-bs-target="#additional-notes"
+        data-icon-toggle-icons-value='["lni-chevron-up", "lni-chevron-down"]'>
+        <h4 class=""><%= form.label :notes, "#{@case_contact.contact_topic_answers.count + 1}. Additional notes (optional)" %></h4>
+        <button class="bg-transparent border-0"
+          type="button"
+          aria-expanded="false">
+          <i id="additional-notes-icon" class="lni lni-chevron-up" data-icon-toggle-target="icon"></i>
+        </button>
       </div>
 
-      <div class="actions mb-10 case-contacts-form-buttons">
-        <%= link_to previous_wizard_path(case_contact_id: @case_contact.id), class: "btn-sm main-btn primary-btn-outline btn-hover" do %>
-          Back
-        <% end %>
-        <%= render(Form::SubmitButtonComponent.new(last_step: @case_contact.form_steps.last, current_step: :notes)) %>
+      <div class="collapse show" id="additional-notes">
+        <p class="mb-3">
+          Include any additional comments or notes that may assist in future case tracking or reporting.
+        </p>
+        <div class="input-style-1">
+          <%= form.text_area :notes, :rows => 5, placeholder: "Additional notes", class: "form-control", data: { action: "input->autosave#save" } %>
+        </div>
       </div>
-    <% end %>
-  </div>
+    </div>
+
+    <div class="actions mb-10 case-contacts-form-buttons">
+      <%= link_to previous_wizard_path(case_contact_id: @case_contact.id), class: "btn-sm main-btn primary-btn-outline btn-hover" do %>
+        Back
+      <% end %>
+
+      <%= render(Form::SubmitButtonComponent.new(last_step: @case_contact.form_steps.last, current_step: :notes)) %>
+    </div>
+  <% end %>
 </div>

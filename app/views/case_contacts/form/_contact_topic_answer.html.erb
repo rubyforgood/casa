@@ -1,0 +1,19 @@
+<div class="d-flex gap-1 nested-form-wrapper" data-new-record="<%= form.object.new_record? %>">
+  <% select_options = @contact_topics.map { |ct| [ct.question, ct.id] } %>
+  <div class="col-md-4">
+    <%= form.label :contact_topic_id, "Discussion Topic", class: "" %>
+    <%= form.select :contact_topic_id, select_options, {include_blank: "Additional Notes"}, class: "form-select" %>
+  </div>
+  <div class="flex-grow-1">
+    <%= form.label :value, "Discussion Notes" %>
+    <%= form.text_area :value, class: "form-control" %>
+  </div>
+  <div class="flex-shrink-1">
+    <button type="button"
+      data-action="nested-form#remove"
+      class="mt-4 btn-sm main-btn danger-btn-outline btn-hover">
+      Delete
+    </button>
+  </div>
+  <%= form.hidden_field :_destroy %>
+</div>

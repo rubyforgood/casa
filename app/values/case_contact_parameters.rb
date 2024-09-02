@@ -17,7 +17,7 @@ class CaseContactParameters < SimpleDelegator
         draft_case_ids: [],
         metadata: %i[create_another],
         additional_expenses_attributes: %i[id other_expense_amount other_expenses_describe _destroy],
-        contact_topic_answers_attributes: %i[id value selected]
+        contact_topic_answers_attributes: %i[id contact_topic_id value selected]
       )
 
     super(new_params)
@@ -35,6 +35,8 @@ class CaseContactParameters < SimpleDelegator
     if params.dig(:case_contact, :miles_driven)
       params[:case_contact][:miles_driven] = convert_miles_driven(params)
     end
+
+    params = normalize_topic_answers_and_notes(params)
 
     params
   end
@@ -56,6 +58,23 @@ class CaseContactParameters < SimpleDelegator
   def convert_miles_driven(params)
     miles_driven = params[:case_contact][:miles_driven]
     miles_driven.to_i
+  end
+
+  def normalize_topic_answers_and_notes(params)
+    # allows contact.notes to be submitted as a topic-less answer & maintain compatibility...
+    notes = ""
+    notes << params[:case_contact][:notes] if params[:case_contact][:notes]
+
+    answers_attributes = params[:case_contact][:contact_topic_answers_attributes]&.to_unsafe_h
+    no_topic_answers = answers_attributes&.filter { |_k, v| v[:contact_topic_id].blank? }
+    no_topic_answers&.each do |k, v|
+      notes << v["value"]
+      params[:case_contact][:contact_topic_answers_attributes].delete(k)
+    end
+
+    params[:case_contact][:notes] = notes
+
+    params
   end
 
   private

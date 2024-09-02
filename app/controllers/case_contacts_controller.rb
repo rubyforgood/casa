@@ -33,13 +33,17 @@ class CaseContactsController < ApplicationController
 
   def new
     store_referring_location
+    # authorize @case_contact
     authorize CaseContact
 
     casa_cases = policy_scope(current_organization.casa_cases)
     draft_case_ids = build_draft_case_ids(params, casa_cases)
 
-    @case_contact = CaseContact.create_with_answers(current_organization,
-      creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
+    # still need create_with_answers probably not?
+    # @case_contact = CaseContact.create_with_answers(current_organization,
+    #   creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
+
+    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
 
     if @case_contact.errors.any?
       flash[:alert] = @case_contact.errors.full_messages.join("\n")

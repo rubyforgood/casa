@@ -21,9 +21,9 @@ class CaseContact < ApplicationRecord
     message: :cant_be_future,
     allow_nil: true
   }
-  validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
-  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
-  validate :volunteer_address_is_valid, if: :active_or_expenses?
+  validate :reimbursement_only_when_miles_driven
+  validate :volunteer_address_when_reimbursement_wanted
+  validate :volunteer_address_is_valid
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -32,6 +32,7 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
+  # can remove draft ids? do we use case groups in here?
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
   has_one :casa_org, through: :casa_case
@@ -48,9 +49,13 @@ class CaseContact < ApplicationRecord
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
-  FORM_STEPS = %i[details notes expenses].freeze
+
+  # FORM_STEPS = %i[details notes expenses].freeze
+  FORM_STEPS = %i[details].freeze
   # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
   # string values for wizard form steps, integer column would make db queries faster
+
+  # can't remove because of previous data... any way to clean up? put all wizard methods in a commented section?
   enum :status, {
     started: "started",
     active: "active",

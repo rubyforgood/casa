@@ -118,7 +118,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def form_title
-    active? ? "Editing existing case contact" : "Record new case contact"
+    active? ? "Editing Existing Case Contact" : "Record New Case Contact"
   end
 
   def form_page_notes

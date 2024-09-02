@@ -1,7 +1,21 @@
+@use "../base/breakpoints.scss" as screen-sizes;
 
-fieldset {
-    border: 1px double #CCC;
+#form-contact-types-by-group {
+    display: grid;
+    grid-template-columns: 1fr;
 }
+
+@media only screen and (min-width: screen-sizes.$small) {
+    #form-contact-types-by-group {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media only screen and (min-width: screen-sizes.$medium) {
+    #form-contact-types-by-group {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+ }
 
 .slide-container {
     padding: 0rem 1rem;
@@ -90,7 +104,7 @@ legend {
         }
     }
  }
- 
+
 .other-expenses li {
     margin-bottom: .2rem;
 }
@@ -118,7 +132,7 @@ legend {
     display: flex;
     align-items: center;
   }
-  
+
 .dollar-sign .other-expense-amount {
     position: relative;
     padding-left: 32px;
@@ -135,7 +149,7 @@ legend {
     left: 28px;
     z-index: 100;
 }
-  
+
 .pr-7 {
     padding-right: 1.5rem !important;
     padding-left: 2.5rem !important;

@@ -10,9 +10,13 @@ class CaseContacts::FormController < ApplicationController
   # wizard_path
   def show
     authorize @case_contact
+    if @case_contact.started?
+      @case_contact.contact_made = true
+      # @case_contact.contact_topic_answers.build()
+      # @case_contact.additional_expenses.build()
+    end
+
     get_cases_and_contact_types
-    @page = wizard_steps.index(step) + 1
-    @total_pages = steps.count
 
     render_wizard
     wizard_path
@@ -55,15 +59,31 @@ class CaseContacts::FormController < ApplicationController
 
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
+    # why not just disable input instead of this? - check edit view when done
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @contact_types = ContactType.includes(:contact_type_group)
-      .joins(:casa_case_contact_types)
-      .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
+    # @contact_types = ContactType.includes(:contact_type_group)
+    #   .joins(:casa_case_contact_types)
+    #   .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    @contact_types = current_organization.contact_types.includes(:contact_type_group) if @contact_types.empty?
-    @contact_types.order(name: :asc)
+    # includes
+    # additional_expenses
+    # contact_topic_answers
 
+    # TODO: can we loop over contact type groups for form instead?
+    # is there an active scope for either of these?
+    # policy_scope?
+    @contact_types = ContactType
+      .joins(:contact_type_group)
+      .where(contact_type_group: { casa_org: current_organization })
+      .order('contact_type_group.name ASC', :name) # template builds grouped type checkboxes
+
+    @contact_topics = ContactTopic
+      .where(casa_org: current_organization)
+      .active
+      .order(:question)
+
+    @displayed_contact_type_group_ids = [] # initial value, built in template
     @selected_cases = @case_contact.draft_case_ids
     @selected_contact_type_ids = @case_contact.contact_type_ids
   end
