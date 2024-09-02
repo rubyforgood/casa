@@ -289,7 +289,7 @@ GEM
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
     lint_roller (1.1.0)
-    logger (1.6.0)
+    logger (1.6.1)
     lograge (0.14.0)
       actionpack (>= 4)
       activesupport (>= 4)
@@ -492,7 +492,7 @@ GEM
       nokogiri (>= 1.12.0)
     scout_apm (5.3.8)
       parser
-    selenium-webdriver (4.23.0)
+    selenium-webdriver (4.24.0)
       base64 (~> 0.2)
       logger (~> 1.4)
       rexml (~> 3.2, >= 3.2.5)
