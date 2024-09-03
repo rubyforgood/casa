@@ -14,10 +14,10 @@ FactoryBot.define do
     end
 
     trait :with_placement_types do
-      transient { placement_types { ["Reunification", "Adoption", "Foster Care", "Kinship"] } }
+      transient { placement_names { ["Reunification", "Adoption", "Foster Care", "Kinship"] } }
 
       after(:create) do |org, evaluator|
-        evaluator.placement_types.each do |name|
+        evaluator.placement_names.each do |name|
           org.placement_types.create!(name: name)
         end
       end

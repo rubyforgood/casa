@@ -1,14 +1,18 @@
 <% current_placement = casa_case.placements.order(placement_started_at: :desc).first %>
 
-<h6>
-  <strong>Current Placement:</strong>
-
-  <% if current_placement %>
+<% if current_placement %>
+  <h6>
+    <strong>Current Placement:</strong>
     <%= current_placement.placement_type.name %>
-    <p>Placed since: <%= current_placement.decorate.formatted_date %></p>
-  <% else %>
+  </h6>
+
+  <p>Placed since: <%= current_placement.decorate.formatted_date %></p>
+  <p><%= link_to "See All Placements", casa_case_placements_path(casa_case), class: 'text-primary hover-underline' %></p>
+<% elsif casa_case.casa_org.placement_types.present? %>
+  <h6>
+    <strong>Current Placement:</strong>
     Unknown
-  <% end %>
+  </h6>
 
   <p><%= link_to "See All Placements", casa_case_placements_path(casa_case), class: 'text-primary hover-underline' %></p>
-</h6>
+<% end %>
