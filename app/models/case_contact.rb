@@ -332,7 +332,7 @@ end
 # Table name: case_contacts
 #
 #  id                         :bigint           not null, primary key
-#  contact_made               :boolean          default(FALSE)
+#  contact_made               :boolean          default(TRUE)
 #  deleted_at                 :datetime
 #  draft_case_ids             :integer          default([]), is an Array
 #  duration_minutes           :integer
