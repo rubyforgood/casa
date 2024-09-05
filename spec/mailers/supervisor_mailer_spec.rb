@@ -134,6 +134,14 @@ RSpec.describe SupervisorMailer, type: :mailer do
           expect(mail.body.encoded).not_to match("volunteers have not signed in or created case contacts in the last 30 days")
         end
       end
+
+      context "volunteer from different org do not show" do
+        it "display no_recent_sign_in section" do
+          expect(mail.body.encoded).to match("volunteers have not signed in or created case contacts in the last 30 days")
+          expect(mail.body.encoded).to match(volunteer.display_name)
+          expect(mail.body.encoded).not_to match(volunteer_for_other_org.display_name)
+        end
+      end
     end
   end
 
