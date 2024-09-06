@@ -2,6 +2,7 @@ class Placement < ApplicationRecord
   belongs_to :casa_case
   belongs_to :placement_type
   belongs_to :creator, class_name: "User"
+  has_one :casa_org, through: :casa_case
 
   validates :placement_started_at, comparison: {
     greater_than_or_equal_to: "1989-01-01".to_date,

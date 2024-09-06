@@ -28,6 +28,7 @@ class CasaOrg < ApplicationRecord
   has_many :contact_topics
   has_one_attached :logo
   has_one_attached :court_report_template
+  has_many :placement_types, dependent: :destroy
 
   def casa_admins
     CasaAdmin.in_organization(self)

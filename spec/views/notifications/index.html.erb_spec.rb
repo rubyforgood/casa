@@ -1,6 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "notifications/index", type: :view do
+  let(:base_time) { Date.new(2025, 1, 2) }
   let(:notification_1_hour_ago) { create(:notification, :followup_with_note) }
   let(:notification_1_day_ago) { create(:notification, :emancipation_checklist_reminder) }
   let(:notification_2_days_ago) { create(:notification, :youth_birthday) }
@@ -20,7 +21,7 @@ RSpec.describe "notifications/index", type: :view do
   end
 
   context "when there is a deploy date" do
-    let(:deploy_time) { 2.days.ago }
+    let(:deploy_time) { base_time - 2.days }
 
     before do
       Health.instance.update_attribute(:latest_deploy_time, deploy_time)
@@ -28,10 +29,10 @@ RSpec.describe "notifications/index", type: :view do
 
     context "when there are notifications" do
       before do
-        notification_1_hour_ago.update_attribute(:created_at, 1.hour.ago)
-        notification_1_day_ago.update_attribute(:created_at, 1.day.ago)
-        notification_2_days_ago.update_attribute(:created_at, 2.days.ago)
-        notification_3_days_ago.update_attribute(:created_at, 3.days.ago)
+        notification_1_hour_ago.update_attribute(:created_at, base_time - 1.hour)
+        notification_1_day_ago.update_attribute(:created_at, base_time - 1.day)
+        notification_2_days_ago.update_attribute(:created_at, base_time - 2.days)
+        notification_3_days_ago.update_attribute(:created_at, base_time - 3.days)
 
         patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
       end
