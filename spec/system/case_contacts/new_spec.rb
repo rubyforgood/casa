@@ -260,7 +260,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
         # default values for other attributes (not from the last contact)
         expect(next_case_contact.status).to eq "started"
         expect(next_case_contact.miles_driven).to be_zero
-        %i[casa_case_id duration_minutes occurred_at medium_type
+        %i[casa_case_id duration_minutes occurred_at contact_made medium_type
           want_driving_reimbursement notes].each do |attribute|
           expect(next_case_contact.send(attribute)).to be_blank
         end
