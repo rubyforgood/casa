@@ -1,12 +1,17 @@
+<!--<div class="d-flex gap-1 topic-answers-nested-form" data-new-record="<%#= form.object.new_record? %>">-->
 <div class="d-flex gap-1 nested-form-wrapper" data-new-record="<%= form.object.new_record? %>">
-  <% select_options = @contact_topics.map { |ct| [ct.question, ct.id] } %>
   <div class="col-md-4">
-    <%= form.label :contact_topic_id, "Discussion Topic", class: "" %>
-    <%= form.select :contact_topic_id, select_options, {include_blank: "Additional Notes"}, class: "form-select" %>
+    <%= form.label :contact_topic_id, "Discussion Topic" %>
+    <%= form.select :contact_topic_id, select_options, {include_blank: false}, class: ["form-select", "contact-topic-id-select"] %>
   </div>
   <div class="flex-grow-1">
     <%= form.label :value, "Discussion Notes" %>
-    <%= form.text_area :value, class: "form-control" %>
+    <%= form.text_area(
+      :value,
+      data: { action: "input->autosave#save" },
+      rows: 5,
+      class: ["form-control", "contact-topic-answer-input"],
+    ) %>
   </div>
   <div class="flex-shrink-1">
     <button type="button"
@@ -15,5 +20,6 @@
       Delete
     </button>
   </div>
+
   <%= form.hidden_field :_destroy %>
 </div>

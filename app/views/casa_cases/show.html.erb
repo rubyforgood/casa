@@ -157,6 +157,8 @@
 </div>
 
 <%# clear local storage when successfully created case_contacts %>
+<%# ? is this doing things here... move to js controller? %>
+<%# ? check localStorage for casa-contact-form %>
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     if (/\/casa_cases\/.*\?.*success=true/.test(window.location.href)) {
@@ -189,7 +191,6 @@
     if (caseSelectEl)
       caseSelectEl.addEventListener('change', handleSelect)
   }
-
   const setTimeZone = () => {
     const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
     document.getElementById("user-time-zone").value = timeZone

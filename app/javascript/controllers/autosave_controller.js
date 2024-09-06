@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { debounce } from 'lodash'
 
 export default class extends Controller {
   static targets = ['form', 'alert']
@@ -11,10 +12,13 @@ export default class extends Controller {
 
   static classes = ['goodAlert', 'badAlert']
 
+  connect () {
+    this.save = debounce(this.save, this.delayValue).bind(this)
+  }
+
   save () {
     this.autosaveAlert()
-    clearTimeout(this.timeout)
-    this.timeout = setTimeout(() => this.submitForm(), this.delayValue)
+    this.submitForm()
   }
 
   submitForm () {

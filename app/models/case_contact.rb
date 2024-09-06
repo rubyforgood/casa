@@ -21,9 +21,9 @@ class CaseContact < ApplicationRecord
     message: :cant_be_future,
     allow_nil: true
   }
-  validate :reimbursement_only_when_miles_driven
-  validate :volunteer_address_when_reimbursement_wanted
-  validate :volunteer_address_is_valid
+  validate :reimbursement_only_when_miles_driven, unless: :started?
+  validate :volunteer_address_when_reimbursement_wanted, unless: :started?
+  validate :volunteer_address_is_valid, unless: :started?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -49,13 +49,10 @@ class CaseContact < ApplicationRecord
 
   # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
   # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
-
-  # FORM_STEPS = %i[details notes expenses].freeze
   FORM_STEPS = %i[details].freeze
   # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
   # string values for wizard form steps, integer column would make db queries faster
-
-  # can't remove because of previous data... any way to clean up? put all wizard methods in a commented section?
+  # migrate any legacy notes/expenses 'back' to details status (draft)
   enum :status, {
     started: "started",
     active: "active",

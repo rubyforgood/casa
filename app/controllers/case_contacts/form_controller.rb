@@ -1,7 +1,6 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
-  before_action :set_progress
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
   prepend_before_action :set_steps, only: [:show, :update]
@@ -9,14 +8,22 @@ class CaseContacts::FormController < ApplicationController
 
   # wizard_path
   def show
+    # ? error if not details step?
     authorize @case_contact
+
+    # ? Do I need to add selected in the params for other views...
+    get_cases_and_contact_types
+
     if @case_contact.started?
       @case_contact.contact_made = true
-      # @case_contact.contact_topic_answers.build()
-      # @case_contact.additional_expenses.build()
     end
 
-    get_cases_and_contact_types
+    # TODO: don't love this... build separate 'add note' for notes if exist?
+    # or build options for select here?
+    # if @case_contact.notes.present?
+    #   @case_contact.contact_topic_answers.build(contact_topic_id: "", value: "Additional Notes", value: @case_contact.notes)
+    #   @contact_topics = @contact_topics.to_a << ContactTopic.new(question: "Additional Notes")
+    # end
 
     render_wizard
     wizard_path
@@ -42,9 +49,14 @@ class CaseContacts::FormController < ApplicationController
     else
       respond_to do |format|
         format.html {
+          # ? redirect to show instead of this for consistency? lose info?
+          # ? shared setup method at least? # different behavior from show...
           get_cases_and_contact_types
           render step
         }
+        # ? why?
+        # autosave form action is /case_contacts/1074/form/details
+        # TODO: save only one answer per contact topic.
         format.json { head :internal_server_error }
       end
     end
@@ -75,8 +87,8 @@ class CaseContacts::FormController < ApplicationController
     # policy_scope?
     @contact_types = ContactType
       .joins(:contact_type_group)
-      .where(contact_type_group: { casa_org: current_organization })
-      .order('contact_type_group.name ASC', :name) # template builds grouped type checkboxes
+      .where(contact_type_group: {casa_org: current_organization})
+      .order("contact_type_group.name ASC", :name) # template builds grouped type checkboxes
 
     @contact_topics = ContactTopic
       .where(casa_org: current_organization)
@@ -98,6 +110,7 @@ class CaseContacts::FormController < ApplicationController
       message = "Case #{"contact".pluralize(draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
       first_casa_case_id = draft_case_ids.first
+      # why remove draft case ids? seems useful to keep around?
       @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end
     update_volunteer_address(@case_contact)
@@ -137,6 +150,7 @@ class CaseContacts::FormController < ApplicationController
       case_contact.case_contact_contact_types.each do |ccct|
         new_case_contact.case_contact_contact_types.new(contact_type_id: ccct.contact_type_id)
       end
+      # ? potential problem accounting for duplicated expenses?
       case_contact.additional_expenses.each do |ae|
         new_case_contact.additional_expenses.new(
           other_expense_amount: ae.other_expense_amount,
@@ -158,6 +172,8 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
+    # ? bc we want case_contact_types i think?
+    # puts "REMOVE_UNWANTED_CONTACT_TYPES #{params.dig(:case_contact, :contact_type_ids).present?}"
     @case_contact.contact_types.clear if params.dig(:case_contact, :contact_type_ids)
   end
 

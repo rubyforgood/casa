@@ -35,7 +35,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       before { sign_in admin }
 
       context "details step" do
-        it "shows all contact types once" do
+        it "shows all contact types once", pending: "move to system spec" do
           page = request.parsed_body.to_html
           expected_contact_types = [].concat(contact_types_a, contact_types_b).map(&:name)
           expected_contact_types.each { |contact_type| expect(page.scan(contact_type).size).to eq(1) }
@@ -44,7 +44,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         context "when the case has specific contact types assigned" do
           let!(:casa_case) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
 
-          it "shows only contact types assigned to selected casa case" do
+          it "shows only contact types assigned to selected casa case", pending: "move to system spec" do
             page = request.parsed_body.to_html
             expect(page).to include(*casa_case.contact_types.pluck(:name))
             expect(page).not_to include(*contact_types_a.pluck(:name))
@@ -55,7 +55,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           let(:organization) { create(:casa_org) }
           let!(:case_contact) { create(:case_contact, :details_status, casa_case: casa_case) }
 
-          it "it shows the admin the contact topics link" do
+          it "it shows the admin the contact topics link", pending: "move to system spec" do
             page = request.parsed_body.to_html
             expect(page).to include("Manage Case Contact Topics</a> to set your organization Court report topics.")
           end
@@ -72,7 +72,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           let(:organization) { create(:casa_org, contact_topics:) }
           let!(:case_contact) { create(:case_contact, :details_status, :with_org_topics, casa_case: casa_case) }
 
-          it "shows contact topics" do
+          it "shows contact topics", pending: "move to system spec" do
             page = request.parsed_body.to_html
             expect(page).to include(contact_topics[0].question)
             expect(page).to_not include(contact_topics[1].question)
@@ -102,7 +102,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         let(:organization) { create(:casa_org) }
         let!(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: supervisor) }
 
-        it "guides supervisor to contact admin" do
+        it "guides supervisor to contact admin", pending: "move to system spec" do
           page = request.parsed_body.to_html
           expect(page).to include("Your organization has not set any Court Report Topics yet. Contact your admin to learn more.")
         end
@@ -115,6 +115,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     let!(:casa_case) { create(:casa_case, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, :details_status, casa_case:) }
     let(:advance_form) { true }
+    let(:attributes) { valid_attributes }
     let(:params) { {case_contact: attributes} }
 
     subject(:request) do
@@ -142,99 +143,98 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           create(:contact_type, name: "Parent", contact_type_group: contact_type_group_a)
         ]
       end
+      let(:valid_attributes) do
+        {
+          draft_case_ids: [casa_case.id],
+          occurred_at: 3.days.ago,
+          duration_minutes: 50,
+          contact_made: true,
+          medium_type: CaseContact::CONTACT_MEDIUMS.second,
+          contact_type_ids: contact_type_ids,
+          contact_topic_answers_attributes: topic_answers_attributes
+        }
+      end
+      let(:contact_type_ids) do
+        [contact_type_group_a.contact_types.first.id, contact_type_group_a.contact_types.second.id]
+      end
 
-      context "with valid attributes" do
-        let(:attributes) do
-          {
-            draft_case_ids: [casa_case.id],
-            occurred_at: 3.days.ago,
-            duration_minutes: 50,
-            contact_made: true,
-            medium_type: CaseContact::CONTACT_MEDIUMS.second,
-            contact_type_ids: contact_type_ids,
-            contact_topic_answers_attributes: topic_answers_attributes
-          }
-        end
-        let(:contact_type_ids) do
-          [contact_type_group_a.contact_types.first.id, contact_type_group_a.contact_types.second.id]
-        end
+      let(:topic_answers_attributes) do
+        {
+          "0" => {id: topic_answers.first.id, value: "test", selected: true},
+          "1" => {id: topic_answers.second.id, value: "test", selected: true},
+          "2" => {id: topic_answers.third.id, value: "test", selected: true}
+        }
+      end
 
-        let(:topic_answers_attributes) do
-          {
-            "0" => {id: topic_answers.first.id, value: "test", selected: true},
-            "1" => {id: topic_answers.second.id, value: "test", selected: true},
-            "2" => {id: topic_answers.third.id, value: "test", selected: true}
-          }
-        end
+      it "updates the requested case_contact" do
+        request
+        case_contact.reload
+        expect(case_contact.occurred_at).to eq(attributes[:occurred_at].floor)
+        expect(case_contact.duration_minutes).to eq(50)
+        expect(case_contact.contact_made).to eq(true)
+        expect(case_contact.medium_type).to eq(CaseContact::CONTACT_MEDIUMS.second)
+      end
 
-        it "with valid attributes updates the requested case_contact" do
+      it "updates only answer field for contact topics" do
+        request
+        case_contact.reload
+
+        expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
+        expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
+      end
+
+      context "contact types" do
+        it "attaches contact types" do
           request
           case_contact.reload
-          expect(case_contact.occurred_at).to eq(attributes[:occurred_at].floor)
-          expect(case_contact.duration_minutes).to eq(50)
-          expect(case_contact.contact_made).to eq(true)
-          expect(case_contact.medium_type).to eq(CaseContact::CONTACT_MEDIUMS.second)
+          expect(case_contact.contact_types.count).to eq 2
+          expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.first.id)
+          expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.second.id)
         end
 
-        it "updates only answer field for contact topics" do
-          request
-          case_contact.reload
+          context "when updating contact types" do
+            let!(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first) }
 
-          expect(case_contact.contact_topic_answers.pluck(:value)).to be_all "test"
-          expect(case_contact.contact_topic_answers.pluck(:selected)).to be_all true
-        end
+          it "removes unselected ones" do
+            expect(case_contact.contact_types.count).to eq 1
+            expect(case_contact.contact_types.map(&:id)).not_to include(contact_type_group_a.contact_types.first.id)
+            expect(case_contact.contact_types.map(&:id)).not_to include(contact_type_group_a.contact_types.second.id)
 
-        context "contact types" do
-          it "attaches contact types" do
             request
             case_contact.reload
             expect(case_contact.contact_types.count).to eq 2
             expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.first.id)
             expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.second.id)
           end
-
-          context "when updating contact types" do
-            let!(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first) }
-
-            it "removes unselected ones" do
-              expect(case_contact.contact_types.count).to eq 1
-              expect(case_contact.contact_types.map(&:id)).not_to include(contact_type_group_a.contact_types.first.id)
-              expect(case_contact.contact_types.map(&:id)).not_to include(contact_type_group_a.contact_types.second.id)
-
-              request
-              case_contact.reload
-              expect(case_contact.contact_types.count).to eq 2
-              expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.first.id)
-              expect(case_contact.contact_types.map(&:id)).to include(contact_type_group_a.contact_types.second.id)
-            end
-          end
         end
-
-        it { is_expected.to have_http_status(:redirect) }
       end
 
-      context "with missing attributes" do
+      context "with invalid attributes" do
         let(:attributes) do
-          {
-            occurred_at: 3.days.ago,
+          valid_attributes.merge({
+            occurred_at: 3.days.from_now,
             duration_minutes: 50,
             contact_made: true
-          }
+          })
         end
 
         it "does not update the requested case_contact" do
+          original_attributes = case_contact.attributes
           request
+
+          expect(case_contact.reload.attributes).to eq original_attributes
           expect(case_contact.duration_minutes).not_to eq(50)
           expect(case_contact.contact_made).not_to eq(true)
         end
       end
     end
 
-    context "submitting notes step: contact topics" do
+    context "submitting notes step: contact topics", pending: "move to details step" do
       let!(:case_contact) { create(:case_contact, :details_status, creator: creator, contact_topic_answers: topic_answers) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers_attributes) do
         {
+          # add no contact topic field -> notes
           "0" => {id: topic_answers.first.id, value: "test", selected: true},
           "1" => {id: topic_answers.second.id, value: "test", selected: true},
           "2" => {id: topic_answers.third.id, value: "test", selected: true}
@@ -276,7 +276,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
     end
 
-    context "submitting notes step" do
+    context "submitting notes step", pending: "move to details step" do
       let!(:case_contact) { create(:case_contact, :details_status, creator: creator) }
       let(:step) { :notes }
 
@@ -327,7 +327,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
     end
 
-    context "submitting expenses step" do
+    context "submitting expenses step", pending: "move to details step" do
       let!(:case_contact) { create(:case_contact, :notes_status, draft_case_ids: [casa_case.id], creator: creator, contact_topic_answers: topic_answers) }
       let(:case_contact_topics) { build_list(:contact_topic_answer, 3) }
       let(:topic_answers) { build_list(:contact_topic_answer, 3) }

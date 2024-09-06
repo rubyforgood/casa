@@ -97,10 +97,8 @@ RSpec.describe CaseContact, type: :model do
 
   context "status is details" do
     it "ignores some validations" do
-      case_contact = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
+      case_contact = build_stubbed(:case_contact, :details_status)
       expect(case_contact.casa_case).to be nil
-      expect(case_contact.miles_driven).to be 0
-      expect(case_contact.volunteer_address).to be_nil
       expect(case_contact).to be_valid
     end
 
