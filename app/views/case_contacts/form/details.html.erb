@@ -24,7 +24,6 @@
         <h5 classs="mb-3"><label>a. Was contact made?</label></h5>
         <div class="form-check radio-style mb-20">
           <%= form.radio_button :contact_made, true,
-            checked: true,
             required: true,
             class: ["form-check-input", "case-contacts-form-checkbox"] %>
           <%= form.label "Yes", class: "form-check-label",
