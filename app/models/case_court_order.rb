@@ -1,5 +1,4 @@
 class CaseCourtOrder < ApplicationRecord
-  IMPLEMENTATION_STATUSES = {unimplemented: 1, partially_implemented: 2, implemented: 3}
   STANDARD_COURT_ORDERS = [
     "Birth certificate for the Respondent’s",
     "Domestic Violence Education/Group",
@@ -31,7 +30,7 @@ class CaseCourtOrder < ApplicationRecord
 
   validates :text, presence: true
 
-  enum implementation_status: IMPLEMENTATION_STATUSES
+  enum :implementation_status, {unimplemented: 1, partially_implemented: 2, implemented: 3}
 
   def self.court_order_options
     STANDARD_COURT_ORDERS.map { |o| [o, o] }

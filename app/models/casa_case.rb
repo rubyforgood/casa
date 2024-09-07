@@ -53,7 +53,7 @@ class CasaCase < ApplicationRecord
   has_many :case_court_orders, -> { order "id asc" }, dependent: :destroy
   accepts_nested_attributes_for :case_court_orders, reject_if: :all_blank, allow_destroy: true
 
-  enum court_report_status: {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, _prefix: :court_report
+  enum :court_report_status, {not_submitted: 0, submitted: 1, in_review: 2, completed: 3}, prefix: :court_report
 
   scope :ordered, -> { order(updated_at: :desc) }
   scope :actively_assigned_to, ->(volunteer) {
