@@ -38,7 +38,7 @@ RSpec.describe "/volunteers", type: :request do
     let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
 
     before do
-      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", as_json: data
+      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", to_json: data.to_json
     end
 
     it "is successful" do

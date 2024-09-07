@@ -17,13 +17,19 @@ RSpec.describe MockController, type: :controller do
   let(:volunteer) { create(:volunteer) }
 
   context "Authenticated user" do
-    before :each do
-      Rails.application.reload_routes!
-      Rails.application.routes.disable_clear_and_finalize = true
+    around do |example|
       Rails.application.routes.draw do
         get :action, to: "mock#action"
         get :no_session_action, to: "mock#no_session_action"
+
+        # required routes to make Accessible concern work
+        get :mock_admin, to: "admin#mock", as: :authenticated_all_casa_admin_root
+        get :mock_user, to: "user#mock", as: :authenticated_user_root
       end
+
+      example.run
+
+      Rails.application.reload_routes!
     end
 
     it "should redirect to authenticated casa admin root path" do

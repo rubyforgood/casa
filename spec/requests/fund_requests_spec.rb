@@ -84,6 +84,23 @@ RSpec.describe FundRequestsController, type: :request do
   end
 
   describe "POST /casa_cases/:casa_id/fund_request" do
+    let(:params) do
+      {
+        fund_request: {
+          submitter_email: "submitter@example.com",
+          youth_name: "CINA-123",
+          payment_amount: "$10.00",
+          deadline: "2022-12-31",
+          request_purpose: "something noble",
+          payee_name: "Minnie Mouse",
+          requested_by_and_relationship: "Favorite Volunteer",
+          other_funding_source_sought: "Some other agency",
+          impact: "Great",
+          extra_information: "foo bar"
+        }
+      }
+    end
+
     context "when volunteer" do
       context "when casa_case is within organization" do
         context "with valid params" do
@@ -95,55 +112,48 @@ RSpec.describe FundRequestsController, type: :request do
             sign_in volunteer
 
             expect {
-              post casa_case_fund_request_path(casa_case), params: {
-                submitter_email: "submitter@example.com",
-                youth_name: "CINA-123",
-                payment_amount: "$10.00",
-                deadline: "2022-12-31",
-                request_purpose: "something noble",
-                payee_name: "Minnie Mouse",
-                requested_by_and_relationship: "Favorite Volunteer",
-                other_funding_source_sought: "Some other agency",
-                impact: "Great",
-                extra_information: "foo bar"
-              }
+              post casa_case_fund_request_path(casa_case), params: params
             }.to change(FundRequest, :count).by(1)
               .and change(ActionMailer::Base.deliveries, :count).by(1)
 
             fr = FundRequest.last
-            expect(fr.submitter_email).to eq "submitter@example.com"
-            expect(fr.youth_name).to eq "CINA-123"
-            expect(fr.payment_amount).to eq "$10.00"
-            expect(fr.deadline).to eq "2022-12-31"
-            expect(fr.request_purpose).to eq "something noble"
-            expect(fr.payee_name).to eq "Minnie Mouse"
-            expect(fr.requested_by_and_relationship).to eq "Favorite Volunteer"
-            expect(fr.other_funding_source_sought).to eq "Some other agency"
-            expect(fr.impact).to eq "Great"
-            expect(fr.extra_information).to eq "foo bar"
-            expect(response).to redirect_to casa_case
+            aggregate_failures do
+              expect(fr.submitter_email).to eq "submitter@example.com"
+              expect(fr.youth_name).to eq "CINA-123"
+              expect(fr.payment_amount).to eq "$10.00"
+              expect(fr.deadline).to eq "2022-12-31"
+              expect(fr.request_purpose).to eq "something noble"
+              expect(fr.payee_name).to eq "Minnie Mouse"
+              expect(fr.requested_by_and_relationship).to eq "Favorite Volunteer"
+              expect(fr.other_funding_source_sought).to eq "Some other agency"
+              expect(fr.impact).to eq "Great"
+              expect(fr.extra_information).to eq "foo bar"
+              expect(response).to redirect_to casa_case
+            end
 
             mail = ActionMailer::Base.deliveries.last
-            expect(mail.subject).to eq("Fund request from submitter@example.com")
-            expect(mail.to).to match_array(["recipient@example.com", "submitter@example.com"])
-            expect(mail.body.encoded).to include("Youth name")
-            expect(mail.body.encoded).to include("CINA-123")
-            expect(mail.body.encoded).to include("Payment amount")
-            expect(mail.body.encoded).to include("$10.00")
-            expect(mail.body.encoded).to include("Deadline")
-            expect(mail.body.encoded).to include("2022-12-31")
-            expect(mail.body.encoded).to include("Request purpose")
-            expect(mail.body.encoded).to include("something noble")
-            expect(mail.body.encoded).to include("Payee name")
-            expect(mail.body.encoded).to include("Minnie Mouse")
-            expect(mail.body.encoded).to include("Requested by and relationship")
-            expect(mail.body.encoded).to include("Favorite Volunteer")
-            expect(mail.body.encoded).to include("Other funding source sought")
-            expect(mail.body.encoded).to include("Some other agency")
-            expect(mail.body.encoded).to include("Impact")
-            expect(mail.body.encoded).to include("Great")
-            expect(mail.body.encoded).to include("Extra information")
-            expect(mail.body.encoded).to include("foo bar")
+            aggregate_failures do
+              expect(mail.subject).to eq("Fund request from submitter@example.com")
+              expect(mail.to).to match_array(["recipient@example.com", "submitter@example.com"])
+              expect(mail.body.encoded).to include("Youth name")
+              expect(mail.body.encoded).to include("CINA-123")
+              expect(mail.body.encoded).to include("Payment amount")
+              expect(mail.body.encoded).to include("$10.00")
+              expect(mail.body.encoded).to include("Deadline")
+              expect(mail.body.encoded).to include("2022-12-31")
+              expect(mail.body.encoded).to include("Request purpose")
+              expect(mail.body.encoded).to include("something noble")
+              expect(mail.body.encoded).to include("Payee name")
+              expect(mail.body.encoded).to include("Minnie Mouse")
+              expect(mail.body.encoded).to include("Requested by and relationship")
+              expect(mail.body.encoded).to include("Favorite Volunteer")
+              expect(mail.body.encoded).to include("Other funding source sought")
+              expect(mail.body.encoded).to include("Some other agency")
+              expect(mail.body.encoded).to include("Impact")
+              expect(mail.body.encoded).to include("Great")
+              expect(mail.body.encoded).to include("Extra information")
+              expect(mail.body.encoded).to include("foo bar")
+            end
           end
         end
 
@@ -156,18 +166,7 @@ RSpec.describe FundRequestsController, type: :request do
             sign_in volunteer
             expect(FundRequestMailer).to_not receive(:send_request)
             expect {
-              post casa_case_fund_request_path(casa_case), params: {
-                submitter_email: "foo@example.com",
-                youth_name: "CINA-123",
-                payment_amount: "$10.00",
-                deadline: "2022-12-31",
-                request_purpose: "something noble",
-                payee_name: "Minnie Mouse",
-                requested_by_and_relationship: "Favorite Volunteer",
-                other_funding_source_sought: "Some other agency",
-                impact: "Great",
-                extra_information: "foo bar"
-              }
+              post casa_case_fund_request_path(casa_case), params: params
             }.to_not change(FundRequest, :count)
 
             expect(response).to have_http_status(:unprocessable_entity)
@@ -183,18 +182,7 @@ RSpec.describe FundRequestsController, type: :request do
           sign_in volunteer
           expect(FundRequestMailer).to_not receive(:send_request)
           expect {
-            post casa_case_fund_request_path(casa_case), params: {
-              submitter_email: "foo@example.com",
-              youth_name: "CINA-123",
-              payment_amount: "$10.00",
-              deadline: "2022-12-31",
-              request_purpose: "something noble",
-              payee_name: "Minnie Mouse",
-              requested_by_and_relationship: "Favorite Volunteer",
-              other_funding_source_sought: "Some other agency",
-              impact: "Great",
-              extra_information: "foo bar"
-            }
+            post casa_case_fund_request_path(casa_case), params: params
           }.to_not change(FundRequest, :count)
 
           expect(response).to redirect_to root_path
@@ -213,18 +201,7 @@ RSpec.describe FundRequestsController, type: :request do
         expect(FundRequestMailer).to receive(:send_request).with(nil, instance_of(FundRequest)).and_return(mailer_mock)
         expect(mailer_mock).to receive(:deliver)
         expect {
-          post casa_case_fund_request_path(casa_case), params: {
-            submitter_email: "foo@example.com",
-            youth_name: "CINA-123",
-            payment_amount: "$10.00",
-            deadline: "2022-12-31",
-            request_purpose: "something noble",
-            payee_name: "Minnie Mouse",
-            requested_by_and_relationship: "Favorite Volunteer",
-            other_funding_source_sought: "Some other agency",
-            impact: "Great",
-            extra_information: "foo bar"
-          }
+          post casa_case_fund_request_path(casa_case), params: params
         }.to change(FundRequest, :count).by(1)
 
         expect(response).to redirect_to casa_case
@@ -242,18 +219,7 @@ RSpec.describe FundRequestsController, type: :request do
         expect(FundRequestMailer).to receive(:send_request).with(nil, instance_of(FundRequest)).and_return(mailer_mock)
         expect(mailer_mock).to receive(:deliver)
         expect {
-          post casa_case_fund_request_path(casa_case), params: {
-            submitter_email: "foo@example.com",
-            youth_name: "CINA-123",
-            payment_amount: "$10.00",
-            deadline: "2022-12-31",
-            request_purpose: "something noble",
-            payee_name: "Minnie Mouse",
-            requested_by_and_relationship: "Favorite Volunteer",
-            other_funding_source_sought: "Some other agency",
-            impact: "Great",
-            extra_information: "foo bar"
-          }
+          post casa_case_fund_request_path(casa_case), params: params
         }.to change(FundRequest, :count).by(1)
 
         expect(response).to redirect_to casa_case
