@@ -43,10 +43,12 @@ RSpec.describe "notifications/index", type: :view do
         notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
-        expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
-        expect(notifications_html[1].text).to match(/Your case CINA-\d+ is a transition aged youth/)
-        expect(notifications_html[2].text).to match(/Your youth, case number: CINA-\d+ has a birthday next month/)
-        expect(patch_note_index).to eq(3)
+        aggregate_failures do
+          expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
+          expect(notifications_html[1].text).to match(/Your case CINA-\d+ is a transition aged youth/)
+          expect(notifications_html[2].text).to match(/Your youth, case number: CINA-\d+ has a birthday next month/)
+          expect(patch_note_index).to eq(3)
+        end
       end
 
       it "has all notifications created before the deploy date below the patch note" do
