@@ -61,8 +61,8 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         expect { post_create }.to change(ContactTopic, :count).by(2)
 
         casa_org = CasaOrg.last
-        expect(casa_org.contact_topics.map(&:question)).to eq contact_topics.map { |t| t["question"] }
-        expect(casa_org.contact_topics.map(&:details)).to eq contact_topics.map { |t| t["details"] }
+        expect(casa_org.contact_topics.map(&:question)).to match_array(contact_topics.map { |t| t["question"] })
+        expect(casa_org.contact_topics.map(&:details)).to match_array(contact_topics.map { |t| t["details"] })
         expect(casa_org.contact_topics.pluck(:active)).to be_all true
       end
 

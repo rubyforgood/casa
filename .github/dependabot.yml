@@ -17,6 +17,12 @@ updates:
     directory: "/"
     schedule:
       interval: "weekly"
+    ignore:
+      # Keep this locked to 1.77.6 until
+      # bootstrap 5.3.4 is out to silence
+      # sass deprecation warnings
+      - dependency-name: "sass"
+        versions: ["1.77.*", "1.78.*"]
 
   - package-ecosystem: "bundler"
     directory: "/"
