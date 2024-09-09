@@ -28,13 +28,12 @@
           <h5>
             <label for="case_contact_draft_case_ids">Relevant Case(s)<span class="red-letter">*</span></label>
           </h5>
-          <%= form.hidden_field :draft_case_ids, multiple: true, value: nil %>
           <div id="draft-case-id-selector">
             <%= render(Form::MultipleSelectComponent.new(
               form: form,
               name: :draft_case_ids,
               options: @casa_cases.decorate.map { |casa_case| casa_case.hash_for_multi_select },
-              selected_items: @selected_cases,
+              selected_items: @case_contact.draft_case_ids,
               render_option_subtext: current_user.supervisor?
             )) %>
           </div>
@@ -68,7 +67,6 @@
       <div id="form-contact-types-by-group" class="">
         <% @displayed_contact_type_group_ids = [] %>
         <%= form.collection_check_boxes(:contact_type_ids, @contact_types, :id, :name) do |b| %>
-          <% next unless b.object.active %>
           <% if @displayed_contact_type_group_ids.exclude?(b.object.contact_type_group&.id) %>
             <%#- Have not started this contact type group yet -%>
             <% unless @displayed_contact_type_group_ids.size == 0 %>
@@ -124,7 +122,10 @@
     <!--NOTES-->
     <%#- https://www.stimulus-components.com/docs/stimulus-rails-nested-form/ -%>
     <!--<div id="contact-form-notes" class="card-style-1 px-4 mb-10" data-controller="nested-form" data-nested_form_wrapper_selector_value=".topic-answers-nested-form">-->
-    <div id="contact-form-notes" class="card-style-1 px-4 mb-10" data-controller="nested-form" data-nested_form_wrapper_selector_value=".nested-form-wrapper">
+    <div id="contact-form-notes"
+      class="card-style-1 px-4 mb-10"
+      data-controller="nested-form"
+      data-nested_form_wrapper_selector_value=".nested-form-wrapper">
       <h2 class="mb-4">Notes</h2>
 
       <% if @contact_topics.empty? %>
@@ -212,8 +213,11 @@
 
         <% if show_additional_expenses %>
           <!-- ADDITIONAL EXPENSES -->
-          <%#- https://www.stimulus-components.com/docs/stimulus-rails-nested-form/ -%>
-          <div id="contact-form-expenses" class="other-expenses" data-controller="nested-form" data-nested_form_wrapper_selector_value=".nested-form-wrapper">
+          <%#- https://www.stimulus-components.com/docs/stimulus-rails-case-contact-nested-form/ -%>
+          <div id="contact-form-expenses"
+            class="other-expenses"
+            data-controller="nested-form"
+            data-nested_form_wrapper_selector_value=".nested-form-wrapper">
             <template data-nested-form-target="template">
               <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |expense_fields| %>
                 <%= render "shared/additional_expense_form", form: expense_fields %>
@@ -222,7 +226,7 @@
 
             <% if form.object.additional_expenses.any? %>
               <%= form.fields_for :additional_expenses do |expense_fields| %>
-                <%= render "shared/additional_expense_form", form: expense_fields, new_record: false %>
+                <%= render "shared/additional_expense_form", form: expense_fields %>
               <% end %>
             <% end %>
 

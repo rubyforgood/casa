@@ -44,6 +44,7 @@ class CaseContact < ApplicationRecord
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
+  has_many :contact_topics, through: :contact_topic_answers
 
   after_save_commit ::CaseContactMetadataCallback.new
 
@@ -77,7 +78,7 @@ class CaseContact < ApplicationRecord
   validates_associated :additional_expenses
 
   accepts_nested_attributes_for :casa_case
-  accepts_nested_attributes_for :contact_topic_answers, update_only: true
+  accepts_nested_attributes_for :contact_topic_answers, reject_if: :all_blank, allow_destroy: true
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?

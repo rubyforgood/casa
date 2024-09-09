@@ -19,22 +19,19 @@ module FillInCaseContactFields
     case_numbers: [], contact_types: [], contact_topics: []
   )
     within DETAILS_ID do
-      within find("#draft-case-id-selector") do
+      within "#draft-case-id-selector" do
+        if !case_numbers.empty?
+          all(:element, "a", title: "Remove this item").each(&:click)
+        end
+
         find(".ts-control").click
-      end
 
-      Array.wrap(case_numbers).each do |case_number|
-        checkbox_for_case_number = find("span", text: case_number).sibling("input")
-        checkbox_for_case_number.click unless checkbox_for_case_number.checked?
-      end
+        Array.wrap(case_numbers).each do |case_number|
+          checkbox_for_case_number = find("span", text: case_number).sibling("input")
+          checkbox_for_case_number.click unless checkbox_for_case_number.checked?
+        end
 
-      within find("#draft-case-id-selector") do
         find(".ts-control").click
-      end
-
-      Array.wrap(case_numbers).each do |case_number|
-        # check case_numbers have been selected
-        expect(page).to have_text case_number
       end
 
       fill_in "case_contact_occurred_at", with: occurred_on if occurred_on

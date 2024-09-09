@@ -3,27 +3,19 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
-  prepend_before_action :set_steps, only: [:show, :update]
   after_action :verify_authorized
+
+  steps :details
 
   # wizard_path
   def show
-    # ? error if not details step?
     authorize @case_contact
 
-    # ? Do I need to add selected in the params for other views...
     get_cases_and_contact_types
 
     if @case_contact.started?
       @case_contact.contact_made = true
     end
-
-    # TODO: don't love this... build separate 'add note' for notes if exist?
-    # or build options for select here?
-    # if @case_contact.notes.present?
-    #   @case_contact.contact_topic_answers.build(contact_topic_id: "", value: "Additional Notes", value: @case_contact.notes)
-    #   @contact_topics = @contact_topics.to_a << ContactTopic.new(question: "Additional Notes")
-    # end
 
     render_wizard
     wizard_path
@@ -49,14 +41,9 @@ class CaseContacts::FormController < ApplicationController
     else
       respond_to do |format|
         format.html {
-          # ? redirect to show instead of this for consistency? lose info?
-          # ? shared setup method at least? # different behavior from show...
           get_cases_and_contact_types
           render step
         }
-        # ? why?
-        # autosave form action is /case_contacts/1074/form/details
-        # TODO: save only one answer per contact topic.
         format.json { head :internal_server_error }
       end
     end
@@ -65,39 +52,38 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
+    # ? includes additional_expenses
+    # ? includes contact_topic_answers: :contact_topic
+    @case_contact = CaseContact
+      .includes(:creator)
       .find(params[:case_contact_id])
   end
 
   def get_cases_and_contact_types
     @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
-    # why not just disable input instead of this? - check edit view when done
+    # ? limiting to one case.. also disable input if this happens?
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    # @contact_types = ContactType.includes(:contact_type_group)
-    #   .joins(:casa_case_contact_types)
-    #   .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
+    @case_contact_types = ContactType.includes(:contact_type_group)
+      .joins(:casa_case_contact_types)
+      .active
+      .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    # includes
-    # additional_expenses
-    # contact_topic_answers
-
-    # TODO: can we loop over contact type groups for form instead?
-    # is there an active scope for either of these?
-    # policy_scope?
-    @contact_types = ContactType
-      .joins(:contact_type_group)
-      .where(contact_type_group: {casa_org: current_organization})
-      .order("contact_type_group.name ASC", :name) # template builds grouped type checkboxes
+    @contact_types = if @case_contact_types.present?
+      @case_contact_types
+    else
+      ContactType
+        .includes(:contact_type_group)
+        .joins(:contact_type_group)
+        .active
+        .where(contact_type_group: {casa_org: current_organization})
+        .order("contact_type_group.name ASC", :name) # template builds grouped type checkboxes
+    end
 
     @contact_topics = ContactTopic
-      .where(casa_org: current_organization)
       .active
+      .where(casa_org: current_organization)
       .order(:question)
-
-    @displayed_contact_type_group_ids = [] # initial value, built in template
-    @selected_cases = @case_contact.draft_case_ids
-    @selected_contact_type_ids = @case_contact.contact_type_ids
   end
 
   def finish_editing
@@ -109,8 +95,8 @@ class CaseContacts::FormController < ApplicationController
     else
       message = "Case #{"contact".pluralize(draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
+      # save all draft case ids in metadata?
       first_casa_case_id = draft_case_ids.first
-      # why remove draft case ids? seems useful to keep around?
       @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end
     update_volunteer_address(@case_contact)
@@ -150,7 +136,6 @@ class CaseContacts::FormController < ApplicationController
       case_contact.case_contact_contact_types.each do |ccct|
         new_case_contact.case_contact_contact_types.new(contact_type_id: ccct.contact_type_id)
       end
-      # ? potential problem accounting for duplicated expenses?
       case_contact.additional_expenses.each do |ae|
         new_case_contact.additional_expenses.new(
           other_expense_amount: ae.other_expense_amount,
@@ -172,24 +157,10 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    # ? bc we want case_contact_types i think?
-    # puts "REMOVE_UNWANTED_CONTACT_TYPES #{params.dig(:case_contact, :contact_type_ids).present?}"
     @case_contact.contact_types.clear if params.dig(:case_contact, :contact_type_ids)
   end
 
   def remove_nil_draft_ids
     params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
-  end
-
-  def set_progress
-    @progress = if wizard_steps.any? && wizard_steps.index(step).present?
-      ((wizard_steps.index(step) + 1).to_d / wizard_steps.count.to_d) * 100
-    else
-      0
-    end
-  end
-
-  def set_steps
-    self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end

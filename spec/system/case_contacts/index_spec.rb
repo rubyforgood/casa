@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", js: true, type: :system do
+RSpec.describe "case_contacts/index", :js, type: :system do
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:organization) { create(:casa_org) }
 
@@ -43,14 +43,14 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         visit case_contacts_path
 
         card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
-        expect(card).to_not be_nil
+        expect(card).not_to be_nil
 
         within_element(card) do
           expect(card).to have_text("Draft")
-          click_link "Delete"
+          click_on "Delete"
         end
 
-        expect(page).to_not have_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        expect(page).to have_no_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
       end
 
       it "displays the contact type groups" do
@@ -65,24 +65,32 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     describe "filtering case contacts" do
       describe "by date of contact" do
         it "only shows the contacts with the correct date" do
-          travel_to Date.new(2021, 1, 2) do
-            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday - 1)
-            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.yesterday)
-            create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.today)
+          yesterday = Time.zone.yesterday
+          day_before_yesterday = yesterday - 1.day
+          today = Time.zone.today
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: day_before_yesterday)
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: yesterday)
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: today)
 
-            sign_in volunteer
-            visit case_contacts_path
-            click_button "Expand / Hide"
+          sign_in volunteer
+          visit case_contacts_path
+          click_on "Expand / Hide"
 
-            fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
-            fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
+          yesterday_display = I18n.l(yesterday, format: :full, default: nil)
+          day_before_yesterday_display = I18n.l(day_before_yesterday, format: :full, default: nil)
+          today_display = I18n.l(today, format: :full, default: nil)
+          expect(page).to have_content day_before_yesterday_display
+          expect(page).to have_content yesterday_display
+          expect(page).to have_content today_display
 
-            click_button "Filter"
+          fill_in "filterrific_occurred_starting_at", with: yesterday
+          fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
-            expect(page).not_to have_content "December 31, 2020"
-            expect(page).to have_content "January 1, 2021"
-            expect(page).to have_content "January 2, 2021"
-          end
+          click_on "Filter"
+
+          expect(page).to have_no_content day_before_yesterday_display
+          expect(page).to have_content yesterday_display
+          expect(page).to have_content today_display
         end
       end
 
@@ -94,7 +102,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           sign_in volunteer
           visit case_contacts_path(casa_case_id: casa_case.id)
 
-          expect(page).not_to have_content "You have no case contacts for this case."
+          expect(page).to have_no_content "You have no case contacts for this case."
           expect(page).to have_content "Draft"
         end
 
@@ -102,7 +110,7 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
           sign_in volunteer
           visit case_contacts_path(casa_case_id: casa_case.id)
 
-          expect(page).not_to have_content other_casa_case.case_number
+          expect(page).to have_no_content other_casa_case.case_number
           expect(page).to have_content casa_case.case_number
         end
       end
@@ -117,9 +125,9 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
 
           check "Hide drafts"
 
-          click_button "Filter"
+          click_on "Filter"
 
-          expect(page).not_to have_content "Draft"
+          expect(page).to have_no_content "Draft"
         end
       end
 
@@ -136,23 +144,23 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
         it "does not expand menu when filtering only by sticky filter" do
           check "Hide drafts"
 
-          click_button "Filter"
+          click_on "Filter"
 
           expect(page).to have_field "Hide drafts", type: :checkbox
-          expect(page).not_to have_content "Other filters"
+          expect(page).to have_no_content "Other filters"
         end
 
         it "displays other filters when expanded" do
-          click_button "Expand / Hide"
+          click_on "Expand / Hide"
 
           expect(page).to have_content "Other filters"
         end
 
         it "does not hide menu when filtering by placement filter" do
-          click_button "Expand / Hide"
+          click_on "Expand / Hide"
           select "In Person", from: "Contact medium"
 
-          click_button "Filter"
+          click_on "Filter"
 
           expect(page).to have_content "Other filters"
         end
@@ -180,70 +188,70 @@ RSpec.describe "case_contacts/index", js: true, type: :system do
     end
 
     it "can show only case contacts for one case" do
-      # would prefer to not use travel_to... did flake out at least once
-      # also doing a lot of re-visiting here...
-      travel_to Date.new(2021, 1, 2) do
-        create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: Time.zone.yesterday - 1)
+      yesterday = Time.zone.yesterday
+      day_before_yesterday = yesterday - 1.day
+      today = Time.zone.today
+      create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: day_before_yesterday)
 
-        another_case_number = "CINA-2"
-        another_case = create(:casa_case, casa_org: organization, case_number: another_case_number)
-        create(:case_assignment, volunteer: volunteer, casa_case: another_case)
-        create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: Time.zone.today)
+      another_case_number = "CINA-2"
+      another_case = create(:casa_case, casa_org: organization, case_number: another_case_number)
+      create(:case_assignment, volunteer: volunteer, casa_case: another_case)
+      create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: today)
 
-        sign_in volunteer
+      sign_in volunteer
 
-        # showing all cases
-        visit root_path
-        click_on "Case Contacts"
-        within "#ddmenu_case-contacts" do
-          click_on "All"
-        end
-        expect(page).to have_text("Case 1 Notes")
-        expect(page).to have_text("Case 2 Notes")
-
-        # showing case 1
-        visit root_path
-        click_on "Case Contacts"
-        within "#ddmenu_case-contacts" do
-          click_on case_number
-        end
-        expect(page).to have_text("Case 1 Notes")
-        expect(page).to_not have_text("Case 2 Notes")
-
-        # showing case 2
-        visit root_path
-        click_on "Case Contacts"
-        within "#ddmenu_case-contacts" do
-          click_on another_case_number
-        end
-        expect(page).to have_text("Case 2 Notes")
-        expect(page).to_not have_text("Case 1 Notes")
-
-        # filtering to only show case 2
-        click_button "Expand / Hide"
-        fill_in "filterrific_occurred_starting_at", with: Time.zone.yesterday
-        fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
-        click_button "Filter"
-        expect(page).to have_text("Case 2 Notes")
-        expect(page).to_not have_text("Case 1 Notes")
-
-        # no contacts because we're only showing case 1 and that occurred before the filter dates
-        visit root_path
-        click_on "Case Contacts"
-        within "#ddmenu_case-contacts" do
-          click_on case_number
-        end
-        expect(page).to_not have_text("Case 1 Notes")
-        expect(page).to_not have_text("Case 2 Notes")
+      # showing all cases
+      visit root_path
+      click_on "Case Contacts"
+      within "#ddmenu_case-contacts" do
+        click_on "All"
       end
+      expect(page).to have_text("Case 1 Notes")
+      expect(page).to have_text("Case 2 Notes")
+
+      # showing case 1
+      visit root_path
+      click_on "Case Contacts"
+      within "#ddmenu_case-contacts" do
+        click_on case_number
+      end
+      expect(page).to have_text("Case 1 Notes")
+      expect(page).to have_no_text("Case 2 Notes")
+
+      # showing case 2
+      visit root_path
+      click_on "Case Contacts"
+      within "#ddmenu_case-contacts" do
+        click_on another_case_number
+      end
+      expect(page).to have_text("Case 2 Notes")
+      expect(page).to have_no_text("Case 1 Notes")
+
+      # filtering to only show case 2
+      click_on "Expand / Hide"
+      fill_in "filterrific_occurred_starting_at", with: yesterday
+      fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
+      click_on "Filter"
+      expect(page).to have_text("Case 2 Notes")
+      expect(page).to have_no_text("Case 1 Notes")
+
+      # no contacts because we're only showing case 1 and that occurred before the filter dates
+      visit root_path
+      click_on "Case Contacts"
+      within "#ddmenu_case-contacts" do
+        click_on case_number
+      end
+      expect(page).to have_no_text("Case 1 Notes")
+      expect(page).to have_no_text("Case 2 Notes")
     end
   end
 
   context "without case contacts" do
-    before(:each) do
+    before do
       sign_in volunteer
       visit case_contacts_path
     end
+
     it "shows helper text" do
       expect(page).to have_text("You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!")
     end

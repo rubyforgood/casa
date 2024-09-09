@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, js: true do
+RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :system do
   let(:casa_org) { create :casa_org, :all_reimbursements_enabled }
   let(:casa_case) { volunteer.casa_cases.first }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
@@ -19,7 +19,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
   end
 
   def notes_section
-    page.find("#contact-form-notes")
+    page.find_by_id("contact-form-notes")
   end
 
   it "has no topic inputs shown until 'Add Note' button is clicked" do
@@ -79,7 +79,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
   end
 
   it "prevents adding more answers than topics",
-   pending: "TODO: use stimulus controller to filter select options on selection" do
+    pending: "TODO: use stimulus controller to filter select options on selection" do
     subject
 
     contact_topics.size.times do
@@ -103,7 +103,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
     expect(notes_section).to have_select(class: topic_select_class, with_options: [topic_one_question], count: 1)
   end
 
-  context "organization has no contact topics" do
+  context "when casa org has no contact topics" do
     let(:contact_topics) { [] }
 
     it "displays an 'Additional Notes' option in the topic select" do
@@ -128,7 +128,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
     end
   end
 
-  context "editing existing an case contact" do
+  context "when editing existing an case contact" do
     let(:case_contact) { create :case_contact, casa_case:, creator: user }
 
     subject do
@@ -158,29 +158,21 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
         )
       end
 
-    it "can remove an existing answer", pending: "TODO: nested form delete behavior" do
-      # doesn't do anything currently
-      # different nested form wrapper per outer form's nested forms?
-      # also needs confirmation before deleting
-      # should it happen immediately or on submit?
-      # - if not immediate, need _destroy hidden field checked & hide row until submit...
-      #   - is this how stimulus nested form component works?
-      #   - implications for limiting to one answer per topic?
-      # - if immediate, basically do an autoupdate?
-      subject
-      fill_in_contact_details
+      it "can remove an existing answer", pending: "TODO: nested form delete behavior" do
+        subject
+        fill_in_contact_details
 
-      expect(notes_section).to have_select(class: topic_select_class, count: 2)
+        expect(notes_section).to have_select(class: topic_select_class, count: 2)
 
-      notes_section.find_button(text: "Delete", match: :first).click
+        notes_section.find_button(text: "Delete", match: :first).click
 
-      expect { click_on "Submit" }.to change(ContactTopicAnswer, :count).by(-1)
+        expect { click_on "Submit" }.to change(ContactTopicAnswer, :count).by(-1)
 
-      case_contact.reload
-      expect(case_contact.contact_topic_answers.size).to eq(1)
-      expect(case_contact.contact_topic_answers.first.value).to eq "Second discussion topic answer."
+        case_contact.reload
+        expect(case_contact.contact_topic_answers.size).to eq(1)
+        expect(case_contact.contact_topic_answers.first.value).to eq "Second discussion topic answer."
+      end
     end
-  end
 
     it "autosaves form with answer inputs", pending: "TODO: re-implement autosave" do
       expect { subject }.to change(CaseContact, :count).by(1)
@@ -188,11 +180,11 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system, 
       expect(case_contact.casa_case).to eq casa_case
       # will need contact type i think...
       fill_in_contact_details(
-        contact_made: false, medium: "In Person", occurred_on: 1.day.ago, hours: 1, minutes: 5,
+        contact_made: false, medium: "In Person", occurred_on: 1.day.ago, hours: 1, minutes: 5
       )
 
       click_on "Add Note"
-      expect { answer_topic contact_topics.first.question, "Topic One answer."}
+      expect { answer_topic contact_topics.first.question, "Topic One answer." }
         .to change(ContactTopicAnswer, :count).by(1)
       case_contact.reload
       expect(case_contact.contact_topic_answers.size).to eq(1)
