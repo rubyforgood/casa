@@ -13,6 +13,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   let(:topic_select_class) { "contact-topic-id-select" }
   let(:topic_answer_input_class) { "contact-topic-answer-input" }
 
+  let(:autosave_alert_div) { "#contact-form-notes" }
+  let(:autosave_alert_css) { 'small[role="alert"]' }
+  let(:autosave_alert_text) { "Saved!" }
+
   subject do
     sign_in user
     visit new_case_contact_path(casa_case)
@@ -174,17 +178,21 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       end
     end
 
-    it "autosaves form with answer inputs", pending: "TODO: re-implement autosave" do
+    it "autosaves form with answer inputs" do
       expect { subject }.to change(CaseContact, :count).by(1)
       case_contact = CaseContact.last
       expect(case_contact.casa_case).to eq casa_case
-      # will need contact type i think...
       fill_in_contact_details(
-        contact_made: false, medium: "In Person", occurred_on: 1.day.ago, hours: 1, minutes: 5
+        contact_made: false, medium: "In Person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
       )
 
       click_on "Add Note"
-      expect { answer_topic contact_topics.first.question, "Topic One answer." }
+      expect {
+        answer_topic contact_topics.first.question, "Topic One answer."
+        within autosave_alert_div do
+          find(autosave_alert_css, text: autosave_alert_text)
+        end
+      }
         .to change(ContactTopicAnswer, :count).by(1)
       case_contact.reload
       expect(case_contact.contact_topic_answers.size).to eq(1)
@@ -193,7 +201,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       expect(case_contact.contact_made).to be false
       expect(case_contact.medium_type).to eq "in-person"
       expect(case_contact.duration_minutes).to eq 65
-      expect(case_contact.occurred_at).to eq 1.day.ago
+      expect(case_contact.occurred_at).to eq 1.day.ago.to_date
     end
 
     context "when contact notes exist" do

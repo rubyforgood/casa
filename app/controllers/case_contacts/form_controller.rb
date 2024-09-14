@@ -64,21 +64,23 @@ class CaseContacts::FormController < ApplicationController
     # ? limiting to one case.. also disable input if this happens?
     @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
 
-    @case_contact_types = ContactType.includes(:contact_type_group)
+    case_contact_types = ContactType.includes(:contact_type_group)
       .joins(:casa_case_contact_types)
       .active
       .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    @contact_types = if @case_contact_types.present?
-      @case_contact_types
+    contact_types = if case_contact_types.present?
+      case_contact_types
     else
       ContactType
         .includes(:contact_type_group)
         .joins(:contact_type_group)
         .active
         .where(contact_type_group: {casa_org: current_organization})
-        .order("contact_type_group.name ASC", :name) # template builds grouped type checkboxes
+        .order("contact_type_group.name ASC", :name)
     end
+
+    @grouped_contact_types = contact_types.group_by { |ct| ct.contact_type_group.name }
 
     @contact_topics = ContactTopic
       .active

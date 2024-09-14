@@ -4,10 +4,7 @@
   </div>
 </div>
 
-<%# TODO: re-implement autosave: problems creating duplicate answers, too many requests, etc. %>
-<!--<div data-controller="autosave" data-autosave-good-alert-class="text-muted" data-autosave-bad-alert-class="text-danger">-->
-  <!--<small data-autosave-target="alert alert-light" role="alert"></small>-->
-
+<div data-controller="autosave" data-autosave-good-alert-class="text-muted" data-autosave-bad-alert-class="text-danger">
   <%= form_with(
     model: @case_contact,
     url: wizard_path(nil, case_contact_id: @case_contact.id),
@@ -61,31 +58,18 @@
 
       <!--CONTACT TYPE-->
       <h5><label>Contact Type(s)<span class="red-letter">*</span></label></h5>
-      <%# TODO this is a gross workaround for using collection_check_boxes grouped by parent group name %>
-      <%# use current output as a reference (need to include the hidden field) %>
-      <%# - contact_type_groups.each -> fieldset, legend + group.contact_types.each -> field/label; /fieldset %>
-      <div id="form-contact-types-by-group" class="">
-        <% @displayed_contact_type_group_ids = [] %>
-        <%= form.collection_check_boxes(:contact_type_ids, @contact_types, :id, :name) do |b| %>
-          <% if @displayed_contact_type_group_ids.exclude?(b.object.contact_type_group&.id) %>
-            <%#- Have not started this contact type group yet -%>
-            <% unless @displayed_contact_type_group_ids.size == 0 %>
-              <%#- Close previous group's fieldset unless this is the first group -%>
-              </fieldset>
-            <% end %>
-            <%#- Start new group fieldset -%>
-            <% @displayed_contact_type_group_ids << b.object.contact_type_group.id %>
-            <fieldset class="form-group p-2">
-              <legend><%= b.object.contact_type_group.name %></legend>
-          <% end %>
-          <%#- Contact type checkbox fields -%>
-          <div class="form-check">
-            <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox"]) %>
-            <%= b.label(class: "form-check-label") %>
-          </div>
+      <div id="contact-form-types" class="mb-3">
+        <% @grouped_contact_types.each do |group_name, contact_types| %>
+          <fieldset class="form-group p-2">
+            <legend><%= group_name %></legend>
+              <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
+                <div class="form-check ps-1">
+                  <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox", "ms-1"]) %>
+                  <%= b.label(class: "form-check-label ps-2") %>
+                </div>
+              <% end %>
+          </fieldset>
         <% end %>
-        <%#- Close the last fieldset -%>
-        </fieldset>
       </div>
 
       <!--CONTACT MADE-->
@@ -121,12 +105,13 @@
 
     <!--NOTES-->
     <%#- https://www.stimulus-components.com/docs/stimulus-rails-nested-form/ -%>
-    <!--<div id="contact-form-notes" class="card-style-1 px-4 mb-10" data-controller="nested-form" data-nested_form_wrapper_selector_value=".topic-answers-nested-form">-->
     <div id="contact-form-notes"
       class="card-style-1 px-4 mb-10"
       data-controller="nested-form"
       data-nested_form_wrapper_selector_value=".nested-form-wrapper">
       <h2 class="mb-4">Notes</h2>
+
+      <small data-autosave-target="alert alert-light" role="alert"></small>
 
       <% if @contact_topics.empty? %>
         <p class="mb-5"><small>
@@ -261,4 +246,4 @@
       <% end %>
     </div>
   <% end %>
-<!--</div>-->
+</div>

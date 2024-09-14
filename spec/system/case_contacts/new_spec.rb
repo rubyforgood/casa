@@ -143,6 +143,9 @@ RSpec.describe "case_contacts/new", :js, type: :system do
         create(:contact_topic, casa_org:, question: "Inactive Soft Deleted", active: false, soft_delete: true)
       ]
     end
+    let(:autosave_alert_div) { "#contact-form-notes" }
+    let(:autosave_alert_css) { 'small[role="alert"]' }
+    let(:autosave_alert_text) { "Saved!" }
 
     it "does not show topic questions that are inactive or soft deleted in select" do
       contact_topics
@@ -155,8 +158,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       expect(page).to have_no_text("Inactive Soft Deleted")
     end
 
-    it "autosaves notes & answers",
-      pending: "TODO: reimplement autosave" do
+    it "autosaves notes & answers" do
       contact_topics
       expect { subject }.to change(CaseContact.started, :count).by(1)
       case_contact = CaseContact.started.last
@@ -170,8 +172,8 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       click_on "Add Note"
       answer_topic "Active Topic", "Hello world"
 
-      within 'div[data-controller="autosave"]' do
-        find('small[data-autosave-target="alert"]', text: "Saved!")
+      within autosave_alert_div do
+        find(autosave_alert_css, text: autosave_alert_text)
       end
 
       expect(case_contact.reload.contact_topic_answers.first.value).to eq "Hello world"

@@ -1,18 +1,18 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
-#form-contact-types-by-group {
+#contact-form-types {
     display: grid;
     grid-template-columns: 1fr;
 }
 
 @media only screen and (min-width: screen-sizes.$small) {
-    #form-contact-types-by-group {
+    #contact-form-types {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media only screen and (min-width: screen-sizes.$medium) {
-    #form-contact-types-by-group {
+    #contact-form-types {
         grid-template-columns: 1fr 1fr 1fr;
     }
  }
