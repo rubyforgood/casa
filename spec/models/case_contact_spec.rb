@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe CaseContact, type: :model do
-  it { should have_many(:contact_topic_answers).dependent(:destroy) }
+  it { is_expected.to have_many(:contact_topic_answers).dependent(:destroy) }
   it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
 
@@ -98,7 +98,7 @@ RSpec.describe CaseContact, type: :model do
   context "status is details" do
     it "ignores some validations" do
       case_contact = build_stubbed(:case_contact, :details_status)
-      expect(case_contact.casa_case).to be nil
+      expect(case_contact.casa_case).to be_nil
       expect(case_contact).to be_valid
     end
 
@@ -126,11 +126,9 @@ RSpec.describe CaseContact, type: :model do
       expect(obj).not_to be_valid
       expect(obj.errors.full_messages).to include("Duration minutes can't be blank")
     end
-  end
 
-  context "status is expenses" do
     it "validates miles driven if want reimbursement" do
-      obj = build_stubbed(:case_contact, :expenses_status, want_driving_reimbursement: true)
+      obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
       expect(obj).not_to be_valid
       expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
@@ -151,12 +149,12 @@ RSpec.describe CaseContact, type: :model do
       case_contact = create(:case_contact, contact_types: [type1])
 
       expect(case_contact.case_contact_contact_types.count).to be 1
-      expect(case_contact.contact_types).to match_array([type1])
+      expect(case_contact.contact_types).to contain_exactly(type1)
 
       case_contact.update_cleaning_contact_types(contact_type_ids: [type2.id])
 
       expect(case_contact.case_contact_contact_types.count).to eq 1
-      expect(case_contact.contact_types.reload).to match_array([type2])
+      expect(case_contact.contact_types.reload).to contain_exactly(type2)
     end
   end
 
@@ -225,7 +223,7 @@ RSpec.describe CaseContact, type: :model do
         subject(:occurred_starting_at) { described_class.occurred_starting_at(date) }
 
         context "with specified date" do
-          it { is_expected.to match_array([case_contacts.second, case_contacts.third]) }
+          it { is_expected.to contain_exactly(case_contacts.second, case_contacts.third) }
         end
 
         context "with no specified date" do
@@ -239,7 +237,7 @@ RSpec.describe CaseContact, type: :model do
         subject(:occurred_ending_at) { described_class.occurred_ending_at(date) }
 
         context "with specified date" do
-          it { is_expected.to match_array([case_contacts.first, case_contacts.second]) }
+          it { is_expected.to contain_exactly(case_contacts.first, case_contacts.second) }
         end
 
         context "with no specified date" do
@@ -277,7 +275,7 @@ RSpec.describe CaseContact, type: :model do
           case_contact_1 = create(:case_contact, contact_made: false)
           case_contact_2 = create(:case_contact, contact_made: true)
 
-          expect(CaseContact.contact_made("")).to match_array([case_contact_1, case_contact_2])
+          expect(CaseContact.contact_made("")).to contain_exactly(case_contact_1, case_contact_2)
         end
       end
 
@@ -286,7 +284,7 @@ RSpec.describe CaseContact, type: :model do
           case_contact = create(:case_contact, contact_made: true)
           build_stubbed(:case_contact, contact_made: false)
 
-          expect(CaseContact.contact_made(true)).to match_array([case_contact])
+          expect(CaseContact.contact_made(true)).to contain_exactly(case_contact)
         end
       end
 
@@ -295,7 +293,7 @@ RSpec.describe CaseContact, type: :model do
           case_contact = create(:case_contact, contact_made: false)
           build_stubbed(:case_contact, contact_made: true)
 
-          expect(CaseContact.contact_made(false)).to match_array([case_contact])
+          expect(CaseContact.contact_made(false)).to contain_exactly(case_contact)
         end
       end
     end
@@ -309,9 +307,7 @@ RSpec.describe CaseContact, type: :model do
         let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
 
         it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned).to match_array(
-            [case_contact_1, case_contact_2]
-          )
+          expect(described_class.has_transitioned).to contain_exactly(case_contact_1, case_contact_2)
         end
       end
 
@@ -320,7 +316,7 @@ RSpec.describe CaseContact, type: :model do
         let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
 
         it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned(true)).to match_array([case_contact_1])
+          expect(described_class.has_transitioned(true)).to contain_exactly(case_contact_1)
         end
       end
 
@@ -329,7 +325,7 @@ RSpec.describe CaseContact, type: :model do
         let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
 
         it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned(false)).to match_array([case_contact_2])
+          expect(described_class.has_transitioned(false)).to contain_exactly(case_contact_2)
         end
       end
     end
@@ -340,7 +336,7 @@ RSpec.describe CaseContact, type: :model do
           case_contact_1 = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
           case_contact_2 = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
-          expect(CaseContact.want_driving_reimbursement("")).to match_array([case_contact_1, case_contact_2])
+          expect(CaseContact.want_driving_reimbursement("")).to contain_exactly(case_contact_1, case_contact_2)
         end
       end
 
@@ -349,7 +345,7 @@ RSpec.describe CaseContact, type: :model do
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
           build_stubbed(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
-          expect(CaseContact.want_driving_reimbursement(true)).to match_array([case_contact])
+          expect(CaseContact.want_driving_reimbursement(true)).to contain_exactly(case_contact)
         end
       end
 
@@ -358,7 +354,7 @@ RSpec.describe CaseContact, type: :model do
           build_stubbed(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
 
-          expect(CaseContact.want_driving_reimbursement(false)).to match_array([case_contact])
+          expect(CaseContact.want_driving_reimbursement(false)).to contain_exactly(case_contact)
         end
       end
     end
@@ -416,13 +412,13 @@ RSpec.describe CaseContact, type: :model do
           context "when sorting by ascending order" do
             let(:direction) { "asc" }
 
-            it { is_expected.to match_array [case_contacts[0], case_contacts[2], case_contacts[1]] }
+            it { is_expected.to contain_exactly(case_contacts[0], case_contacts[2], case_contacts[1]) }
           end
 
           context "when sorting by descending order" do
             let(:direction) { "desc" }
 
-            it { is_expected.to match_array [case_contacts[1], case_contacts[2], case_contacts[0]] }
+            it { is_expected.to contain_exactly(case_contacts[1], case_contacts[2], case_contacts[0]) }
           end
         end
 
@@ -448,13 +444,13 @@ RSpec.describe CaseContact, type: :model do
           context "when sorting by ascending order" do
             let(:direction) { "asc" }
 
-            it { is_expected.to match_array [case_contacts[1], case_contacts[0], case_contacts[2]] }
+            it { is_expected.to contain_exactly(case_contacts[1], case_contacts[0], case_contacts[2]) }
           end
 
           context "when sorting by descending order" do
             let(:direction) { "desc" }
 
-            it { is_expected.to match_array [case_contacts[2], case_contacts[0], case_contacts[1]] }
+            it { is_expected.to contain_exactly(case_contacts[2], case_contacts[0], case_contacts[1]) }
           end
         end
 
@@ -472,13 +468,13 @@ RSpec.describe CaseContact, type: :model do
           context "when sorting by ascending order" do
             let(:direction) { "asc" }
 
-            it { is_expected.to match_array [case_contacts[0], case_contacts[2], case_contacts[1]] }
+            it { is_expected.to contain_exactly(case_contacts[0], case_contacts[2], case_contacts[1]) }
           end
 
           context "when sorting by descending order" do
             let(:direction) { "desc" }
 
-            it { is_expected.to match_array [case_contacts[1], case_contacts[2], case_contacts[0]] }
+            it { is_expected.to contain_exactly(case_contacts[1], case_contacts[2], case_contacts[0]) }
           end
         end
 
@@ -495,13 +491,13 @@ RSpec.describe CaseContact, type: :model do
           context "when sorting by ascending order" do
             let(:direction) { "asc" }
 
-            it { is_expected.to match_array [case_contacts[0], case_contacts[1]] }
+            it { is_expected.to contain_exactly(case_contacts[0], case_contacts[1]) }
           end
 
           context "when sorting by descending order" do
             let(:direction) { "desc" }
 
-            it { is_expected.to match_array [case_contacts[1], case_contacts[0]] }
+            it { is_expected.to contain_exactly(case_contacts[1], case_contacts[0]) }
           end
         end
 
@@ -518,13 +514,13 @@ RSpec.describe CaseContact, type: :model do
           context "when sorting by ascending order" do
             let(:direction) { "asc" }
 
-            it { is_expected.to match_array [case_contacts[1], case_contacts[0]] }
+            it { is_expected.to contain_exactly(case_contacts[1], case_contacts[0]) }
           end
 
           context "when sorting by descending order" do
             let(:direction) { "desc" }
 
-            it { is_expected.to match_array [case_contacts[0], case_contacts[1]] }
+            it { is_expected.to contain_exactly(case_contacts[0], case_contacts[1]) }
           end
         end
       end
@@ -577,9 +573,9 @@ RSpec.describe CaseContact, type: :model do
 
       groups_with_types = case_contact.contact_groups_with_types
 
-      expect(groups_with_types.keys).to match_array(["Family", "Health"])
-      expect(groups_with_types["Family"]).to match_array(["Parent"])
-      expect(groups_with_types["Health"]).to match_array(["Medical Professional", "Other Therapist"])
+      expect(groups_with_types.keys).to contain_exactly("Family", "Health")
+      expect(groups_with_types["Family"]).to contain_exactly("Parent")
+      expect(groups_with_types["Health"]).to contain_exactly("Medical Professional", "Other Therapist")
     end
   end
 
@@ -685,7 +681,7 @@ RSpec.describe CaseContact, type: :model do
 
       context "when casa case has no volunteers assigned" do
         it "volunteer is nil" do
-          expect(case_contact.volunteer).to be nil
+          expect(case_contact.volunteer).to be_nil
         end
 
         it "disbales address field" do
@@ -703,7 +699,7 @@ RSpec.describe CaseContact, type: :model do
         }
 
         it "volunteer is nil" do
-          expect(case_contact.volunteer).to be nil
+          expect(case_contact.volunteer).to be_nil
         end
 
         it "disbales address field" do
