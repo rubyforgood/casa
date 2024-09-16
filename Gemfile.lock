@@ -354,7 +354,7 @@ GEM
       cliver (~> 0.3.2)
       rexml (~> 3.2, >= 3.2.6)
       safe_shell (>= 1.0.3, < 2.0)
-    pg (1.5.7)
+    pg (1.5.8)
     pretender (0.5.0)
       actionpack (>= 6.1)
     pry (0.14.2)
