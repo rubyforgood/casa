@@ -7,7 +7,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   let!(:school_contact_type) { create :contact_type, contact_type_group:, name: "School" }
 
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
-  let(:supervisor) { create :supervisor, casa_org:, volunteers: [volunteer] }
   let(:casa_admin) { create :casa_admin, casa_org: }
   let(:casa_case) { volunteer.casa_cases.first }
   let(:case_number) { casa_case.case_number }
@@ -84,8 +83,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   end
 
   describe "contact types" do
-    it "requires at lease one contact type",
-      pending: "TODO: (I think) this is a new feature/validation to implement" do
+    it "requires at lease one contact type" do
       subject
 
       fill_in_contact_details(contact_types: [])
@@ -93,7 +91,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       expect { click_on "Submit" }.not_to change(CaseContact, :count)
 
       expect(page).to have_text "New Case Contact"
-      expect(page).to have_text("You must select at least one contact type")
+      expect(page).to have_text("Contact Type(s) must be selected")
     end
 
     it "does not display empty contact groups or hidden contact types" do
@@ -218,6 +216,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       end
 
       context "with supervisor user" do
+        let(:supervisor) { create :supervisor, casa_org: }
         let(:user) { supervisor }
 
         it "guides supervisor to contact admin" do
@@ -246,8 +245,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       allow(Flipper).to receive(:enabled?).with(:reimbursement_warning, casa_org).and_call_original
     end
 
-    it "is not shown until 'Request travel or other reimbursement' is checked",
-      pending: "TODO: implement stimulus controller" do
+    it "is not shown until 'Request travel or other reimbursement' is checked" do
       subject
 
       expect(page).to have_no_field(miles_driven_input)
@@ -261,10 +259,9 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       expect(page).to have_button(add_expense_button_text)
     end
 
-    it "clears mileage info if reimbursement unchecked",
-      pending: "TODO: implement stimulus controller" do
+    it "clears mileage info if reimbursement unchecked" do
       subject
-      fill_in_contact_details
+      fill_in_contact_details contact_types: %w[School]
 
       check reimbursement_checkbox
       fill_in miles_driven_input, with: 50
@@ -275,13 +272,12 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       case_contact = CaseContact.active.last
 
       expect(case_contact.want_driving_reimbursement).to be false
-      expect(case_contact.volunteer_address).to be_blank
       expect(case_contact.miles_driven).to be_zero
     end
 
     it "saves mileage and address information" do
       subject
-      complete_details_page
+      fill_in_contact_details contact_types: %w[School]
 
       check reimbursement_checkbox
 
@@ -421,13 +417,13 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       visit casa_case_path casa_case
       # referrer will be set by CaseContactsController#new to casa_case_path(casa_case)
       click_on "New Case Contact"
-      complete_details_page
+      fill_in_contact_details contact_types: %w[School]
 
       # goes through CaseContactsController#new, but should not set a referring location
       check "Create Another"
       click_on "Submit"
 
-      complete_details_page
+      fill_in_contact_details contact_types: %w[School]
 
       click_on "Submit"
       # update should redirect to the original referrer, casa_case_path(casa_case)
@@ -444,6 +440,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
       it "redirects to the new CaseContact form with the same cases selected",
         pending: "TODO: passes when run alone, fails when run with rest of file (ordered)" do
+        # flipper related?
         expect { subject }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 

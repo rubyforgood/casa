@@ -1,25 +1,26 @@
-<!--<div class="d-flex gap-1 topic-answers-nested-form" data-new-record="<%#= form.object.new_record? %>">-->
-<div class="d-flex gap-1 nested-form-wrapper" data-new-record="<%= form.object.new_record? %>">
-  <div class="col-md-4">
-    <%= form.label :contact_topic_id, "Discussion Topic" %>
-    <%= form.select :contact_topic_id, select_options, {include_blank: false}, class: ["form-select", "contact-topic-id-select"] %>
-  </div>
-  <div class="flex-grow-1">
-    <%= form.label :value, "Discussion Notes" %>
-    <%= form.text_area(
-      :value,
-      data: { action: "input->autosave#save" },
-      rows: 5,
-      class: ["form-control", "contact-topic-answer-input"],
-    ) %>
-  </div>
-  <div class="flex-shrink-1">
-    <button type="button"
-      data-action="nested-form#remove"
-      class="mt-4 btn btn-sm danger-btn-outline btn-hover">
-      Delete
-    </button>
-  </div>
+<div class="nested-form-wrapper " data-new-record="<%= form.object.new_record? %>">
+  <div class="d-flex gap-1 flex-wrap">
+    <div class="col-md-4">
+      <%= form.label :contact_topic_id, "Discussion Topic" %>
+      <%= form.select :contact_topic_id, select_options, {include_blank: false}, class: ["form-select", "contact-topic-id-select"] %>
+    </div>
+    <div class="flex-grow-1">
+      <%= form.label :value, "Discussion Notes" %>
+      <%= form.text_area(
+        :value,
+        data: { action: "input->autosave#save" },
+        rows: 5,
+        class: ["form-control", "contact-topic-answer-input"],
+      ) %>
+    </div>
+    <div class="flex-shrink-1">
+      <button type="button"
+        data-action="casa-nested-form#remove"
+        class="mt-4 btn btn-sm danger-btn-outline btn-hover">
+        Delete
+      </button>
+    </div>
 
-  <%= form.hidden_field :_destroy %>
+    <%= form.hidden_field :_destroy %>
+  </div>
 </div>

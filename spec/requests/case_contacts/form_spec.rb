@@ -442,18 +442,18 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         expect(case_contact.contact_made).to be true
       end
 
-      it "changes status from 'started' to 'details'" do
+      it "does not change status" do
         expect(case_contact.status).to eq "started"
         request
 
-        expect(case_contact.reload.status).to eq "details"
+        expect(case_contact.reload.status).to eq "started"
       end
 
-      context "when contact is in started status" do
-        let(:case_contact) { create(:case_contact, :started_status, casa_case:, creator: volunteer) }
+      context "when contact is in details status" do
+        let(:case_contact) { create(:case_contact, :details_status, casa_case:, creator: volunteer) }
 
-        it "cahnges to details status" do
-          expect(case_contact.status).to eq "started"
+        it "does not change status" do
+          expect(case_contact.status).to eq "details"
           request
 
           expect(case_contact.reload.status).to eq "details"
@@ -478,14 +478,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect { request }.not_to change(case_contact.reload, :attributes)
         end
 
-        it "responds success and re-renders the form" do
+        it "responds :unprocessable_entity and returns the errors" do
           request
 
-          expect(response).to have_http_status(:internal_server_error)
-        end
-
-        it "does not change the contact status" do
-          expect { request }.not_to change(case_contact, :status)
+          expect(response).to have_http_status(:unprocessable_entity)
         end
       end
     end

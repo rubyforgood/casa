@@ -24,6 +24,7 @@ export default class extends Controller {
   submitForm () {
     fetch(this.formTarget.action, {
       method: 'POST',
+      headers: { Accept: 'application/json' },
       body: new FormData(this.formTarget)
     }).then(response => {
       if (response.ok) {

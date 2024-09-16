@@ -23,28 +23,32 @@ class CaseContacts::FormController < ApplicationController
 
   def update
     authorize @case_contact
-    params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
+
     remove_unwanted_contact_types
     remove_nil_draft_ids
 
-    if @case_contact.update(case_contact_params)
-      respond_to do |format|
-        format.html {
+    respond_to do |format|
+      format.html do
+        # Don't want to update status if coming from autosave json request, only during form submission
+        params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
+
+        if @case_contact.update(case_contact_params)
           if step == steps.last
             finish_editing
           else
             render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
           end
-        }
-        format.json { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.html {
+        else
           get_cases_and_contact_types
           render step
-        }
-        format.json { head :internal_server_error }
+        end
+      end
+      format.json do
+        if @case_contact.update(case_contact_params)
+          render json: @case_contact, status: :ok
+        else
+          render json: @case_contact.errors, status: :unprocessable_entity
+        end
       end
     end
   end

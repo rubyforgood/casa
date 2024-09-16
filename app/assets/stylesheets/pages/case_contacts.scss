@@ -1,21 +1,3 @@
-@use "../base/breakpoints.scss" as screen-sizes;
-
-#contact-form-types {
-    display: grid;
-    grid-template-columns: 1fr;
-}
-
-@media only screen and (min-width: screen-sizes.$small) {
-    #contact-form-types {
-        grid-template-columns: 1fr 1fr;
-    }
-}
-
-@media only screen and (min-width: screen-sizes.$medium) {
-    #contact-form-types {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
- }
 
 .slide-container {
     padding: 0rem 1rem;

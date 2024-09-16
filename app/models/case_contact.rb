@@ -32,7 +32,6 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
-  # can remove draft ids? do we use case groups in here?
   # Draft support requires the casa_case to be nil if the contact is in_progress
   belongs_to :casa_case, optional: true
   has_one :casa_org, through: :casa_case
@@ -41,6 +40,7 @@ class CaseContact < ApplicationRecord
 
   has_many :case_contact_contact_types
   has_many :contact_types, through: :case_contact_contact_types
+  validates :contact_types, presence: {message: :must_be_selected}, if: :active_or_details?
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy

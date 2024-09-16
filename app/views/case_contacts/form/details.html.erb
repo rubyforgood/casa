@@ -4,12 +4,18 @@
   </div>
 </div>
 
-<div data-controller="autosave" data-autosave-good-alert-class="text-muted" data-autosave-bad-alert-class="text-danger">
+<div
+  data-controller="autosave"
+  data-autosave-good-alert-class="text-muted"
+  data-autosave-bad-alert-class="text-danger">
   <%= form_with(
     model: @case_contact,
     url: wizard_path(nil, case_contact_id: @case_contact.id),
     id: "casa-contact-form",
-    data: { "autosave-target": "form" },
+    data: {
+      controller: "case-contact-form",
+      "autosave-target": "form",
+    },
     local: true
   ) do |form| %>
 
@@ -103,12 +109,10 @@
       </div>
     </div>
 
-    <!--NOTES-->
-    <%#- https://www.stimulus-components.com/docs/stimulus-rails-nested-form/ -%>
+    <!--NOTES (CONTACT TOPIC ANSWERS)-->
     <div id="contact-form-notes"
       class="card-style-1 px-4 mb-10"
-      data-controller="nested-form"
-      data-nested_form_wrapper_selector_value=".nested-form-wrapper">
+      data-controller="casa-nested-form">
       <h2 class="mb-4">Notes</h2>
 
       <small data-autosave-target="alert alert-light" role="alert"></small>
@@ -136,7 +140,7 @@
       <% end %>
 
       <!--template to add new topic answer-->
-      <template data-nested-form-target="template">
+      <template data-casa-nested-form-target="template">
         <%= form.fields_for :contact_topic_answers, ContactTopicAnswer.new, child_index: "NEW_RECORD" do |topic_fields| %>
           <%= render( "contact_topic_answer", form: topic_fields, select_options:) %>
         <% end %>
@@ -148,9 +152,9 @@
         <% end %>
       <% end %>
 
-      <div data-nested-form-target="target"></div>
+      <div data-casa-nested-form-target="target"></div>
 
-      <button type="button" class="btn btn-sm btn-link" data-action="nested-form#add">
+      <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#add">
         + Add Note
       </button>
     </div>
@@ -178,50 +182,70 @@
 
         <div>
           <div class="checkbox-style py-1 mb-3">
-            <%= form.check_box :want_driving_reimbursement, class: "form-check-input" %>
+            <%= form.check_box(:want_driving_reimbursement,
+              class: "form-check-input",
+              data: {
+                case_contact_form_target: "wantDrivingReimbursement",
+                action: "click->case-contact-form#setReimbursementFormVisibility",
+              }
+            ) %>
             <%= form.label :want_driving_reimbursement, "Request travel or other reimbursement", class: "form-check-label d-inline align-bottom" %>
           </div>
         </div>
 
         <!-- DRIVING REIMBURSEMENT -->
-        <div class="row py-2">
-          <div class="col-md-4">
-            <%= form.label :miles_driven, "Total miles driven" %>
-            <%= form.number_field :miles_driven, class: "form-control", min: "0", max: 10000, placeholder: "0" %>
+        <div data-case-contact-form-target="reimbursementForm" class="d-none">
+          <div class="row py-2">
+            <div class="col-md-4">
+              <%= form.label :miles_driven, "Total miles driven" %>
+              <%= form.number_field(:miles_driven,
+                min: "0", max: 10000, placeholder: "0",
+                class: "form-control",
+                data: { case_contact_form_target: "milesDriven" },
+              ) %>
+            </div>
+
+            <div class="col">
+              <%= form.label :volunteer_address, "Your current address (for reimbursement check)" %>
+              <%= form.text_area(:volunteer_address,
+                value: @case_contact.decorate.address_of_volunteer,
+                disabled: @case_contact.address_field_disabled?,
+                class: "form-control",
+                data: { case_contact_form_target: "volunteerAddress" },
+              ) %>
+              <% if @case_contact.address_field_disabled? %>
+                <small class="text-danger">
+                  <%= @case_contact.decorate.ambiguous_volunteer_address_message %>
+                </small>
+              <% end %>
+            </div>
           </div>
 
-          <div class="col">
-            <%= form.label :volunteer_address, "Your current address (for reimbursement check)" %>
-            <%= form.text_area :volunteer_address, value: @case_contact.decorate.address_of_volunteer, disabled: @case_contact.address_field_disabled?, class: "form-control" %>
-          </div>
+          <% if show_additional_expenses %>
+            <!-- ADDITIONAL EXPENSES -->
+            <div id="contact-form-expenses"
+              class="other-expenses"
+              data-controller="casa-nested-form">
+              <template data-casa-nested-form-target="template">
+                <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |expense_fields| %>
+                  <%= render "shared/additional_expense_form", form: expense_fields %>
+                <% end %>
+              </template>
+
+              <% if form.object.additional_expenses.any? %>
+                <%= form.fields_for :additional_expenses do |expense_fields| %>
+                  <%= render "shared/additional_expense_form", form: expense_fields %>
+                <% end %>
+              <% end %>
+
+              <div data-casa-nested-form-target="target"></div>
+
+              <button type="button" class="btn btn-link" data-action="casa-nested-form#add">
+                + Add Expense
+              </button>
+            </div>
+          <% end %>
         </div>
-
-        <% if show_additional_expenses %>
-          <!-- ADDITIONAL EXPENSES -->
-          <%#- https://www.stimulus-components.com/docs/stimulus-rails-case-contact-nested-form/ -%>
-          <div id="contact-form-expenses"
-            class="other-expenses"
-            data-controller="nested-form"
-            data-nested_form_wrapper_selector_value=".nested-form-wrapper">
-            <template data-nested-form-target="template">
-              <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |expense_fields| %>
-                <%= render "shared/additional_expense_form", form: expense_fields %>
-              <% end %>
-            </template>
-
-            <% if form.object.additional_expenses.any? %>
-              <%= form.fields_for :additional_expenses do |expense_fields| %>
-                <%= render "shared/additional_expense_form", form: expense_fields %>
-              <% end %>
-            <% end %>
-
-            <div data-nested-form-target="target"></div>
-
-            <button type="button" class="btn btn-link" data-action="nested-form#add">
-              + Add Expense
-            </button>
-          </div>
-        <% end %>
       </div>
     <% end %>
 

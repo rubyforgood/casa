@@ -1,5 +1,22 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
+#contact-form-types {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media only screen and (min-width: screen-sizes.$small) {
+  #contact-form-types {
+      grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media only screen and (min-width: screen-sizes.$medium) {
+  #contact-form-types {
+      grid-template-columns: 1fr 1fr 1fr;
+  }
+}
+
 .case-contacts-form {
   &-buttons {
     display: flex;
@@ -20,12 +37,12 @@
   &-title {
     @media only screen and (max-width: screen-sizes.$mobile) {
       font-size: 28px;
-    } 
+    }
   }
 
   &-subtitle {
     @media only screen and (max-width: screen-sizes.$mobile) {
       font-size: 24px;
-    } 
+    }
   }
 }

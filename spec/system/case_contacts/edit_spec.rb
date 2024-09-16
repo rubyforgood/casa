@@ -63,8 +63,9 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
       complete_notes_page
 
-      expect(find_by_id("case_contact_volunteer_address").value)
-        .to eq("There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible.")
+      check "Request travel or other reimbursement"
+      expect(page).to have_field("case_contact_volunteer_address", disabled: true)
+      expect(page).to have_text("There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible.")
 
       click_on "Submit"
       expect(case_contact.reload.volunteer_address).to be_blank

@@ -94,7 +94,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   end
 
   it "prevents adding more than one answer per topic",
-    pending: "TODO: use stimulus controller to show/hide button" do
+    pending: "TODO: use stimulus controller to disable/enable Add Note button" do
     subject
 
     click_on "Add Note"
@@ -162,7 +162,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
         )
       end
 
-      it "can remove an existing answer", pending: "TODO: nested form delete behavior" do
+      it "can remove an existing answer" do
         subject
         fill_in_contact_details
 
@@ -170,11 +170,12 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
         notes_section.find_button(text: "Delete", match: :first).click
 
-        expect { click_on "Submit" }.to change(ContactTopicAnswer, :count).by(-1)
+        expect { click_on "Submit" }
+          .to change(ContactTopicAnswer, :count).by(-1)
 
         case_contact.reload
         expect(case_contact.contact_topic_answers.size).to eq(1)
-        expect(case_contact.contact_topic_answers.first.value).to eq "Second discussion topic answer."
+        expect(case_contact.contact_topic_answers.first.value).to eq answer_two.value
       end
     end
 

@@ -1,25 +1,30 @@
-<div class="nested-form-wrapper d-flex gap-1" data-new-record="<%= form.object.new_record? %>">
-  <div class="col-md-4">
-    <%= form.label :other_expense_amount, "Expense amount" %>
-    <%= form.number_field :other_expense_amount,
-      value: number_with_precision(form.object.other_expense_amount, precision: 2),
-      placeholder: "0",
-      class: ["form-control", "expense-amount-input"],
-      min: "0", max: 1000, step: 0.01 %>
-  </div>
-  <div class="flex-grow-1">
-    <%= form.label :other_expenses_describe, "Expense details" %>
-    <%= form.text_area :other_expenses_describe,
-        placeholder: "Enter additional details",
-        class: ["form-control", "expense-describe-input"] %>
-  </div>
-  <div class="flex-shrink-1">
-    <button type="button"
-      class="remove-expense-button mt-4 btn btn-sm danger-btn-outline btn-hover"
-      data-action="nested-form#remove">
-      Remove
-    </button>
-  </div>
+<div class="nested-form-wrapper" data-new-record="<%= form.object.new_record? %>">
+  <div class="d-flex gap-1">
+    <div class="col-md-4">
+      <%= form.label :other_expense_amount, "Expense amount" %>
+      <%= form.number_field(:other_expense_amount,
+        value: number_with_precision(form.object.other_expense_amount, precision: 2),
+        placeholder: "0", min: "0", max: 1000, step: 0.01,
+        class: ["form-control", "expense-amount-input"],
+        data: { case_contact_form_target: "expenseAmount" },
+      ) %>
+    </div>
+    <div class="flex-grow-1">
+      <%= form.label :other_expenses_describe, "Expense details" %>
+      <%= form.text_area(:other_expenses_describe,
+          placeholder: "Enter additional details",
+          class: ["form-control", "expense-describe-input"],
+          data: { case_contact_form_target: "expenseDescribe" },
+      ) %>
+    </div>
+    <div class="flex-shrink-1">
+      <button type="button"
+        class="remove-expense-button mt-4 btn btn-sm danger-btn-outline btn-hover"
+        data-action="casa-nested-form#remove">
+        Remove
+      </button>
+    </div>
 
-  <%= form.hidden_field :_destroy %>
+    <%= form.hidden_field :_destroy %>
+  </div>
 </div>
