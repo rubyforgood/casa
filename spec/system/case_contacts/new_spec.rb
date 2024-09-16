@@ -83,15 +83,12 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   end
 
   describe "contact types" do
-    it "requires at lease one contact type" do
+    it "does not require a contact type" do
       subject
 
       fill_in_contact_details(contact_types: [])
 
-      expect { click_on "Submit" }.not_to change(CaseContact, :count)
-
-      expect(page).to have_text "New Case Contact"
-      expect(page).to have_text("Contact Type(s) must be selected")
+      expect { click_on "Submit" }.to change(CaseContact.active, :count)
     end
 
     it "does not display empty contact groups or hidden contact types" do
@@ -439,8 +436,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       let(:draft_case_ids) { [casa_case.id, casa_case_two.id] }
 
       it "redirects to the new CaseContact form with the same cases selected",
-        pending: "TODO: passes when run alone, fails when run with rest of file (ordered)" do
-        # flipper related?
+        pending: "passes when run spec alone, fail when run with rest of file/suite" do
         expect { subject }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
@@ -461,7 +457,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
         expect(next_case_contact.status).to eq "started"
         expect(page).to have_text case_number
-
         expect(page).to have_text case_number_two
         expect(next_case_contact.draft_case_ids).to match_array draft_case_ids
       end

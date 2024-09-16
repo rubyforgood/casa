@@ -4,6 +4,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
   let(:casa_org) { build :casa_org, :all_reimbursements_enabled }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:casa_case) { volunteer.casa_cases.first }
+  let!(:contact_type) { create :contact_type, casa_org: }
 
   before do
     allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
@@ -12,7 +13,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
 
   subject do
     visit new_case_contact_path(casa_case)
-    fill_in_contact_details
+    fill_in_contact_details(contact_types: [contact_type.name])
     fill_in_mileage want_reimbursement: true, miles: 50, address: "123 Params St"
   end
 
@@ -117,7 +118,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
   end
 
   context "when editing existing case contact expenses" do
-    let(:case_contact) { create :case_contact, :wants_reimbursement, casa_case:, creator: volunteer }
+    let(:case_contact) { create :case_contact, :wants_reimbursement, casa_case:, creator: volunteer, contact_types: [contact_type] }
     let!(:additional_expenses) do
       [
         create(:additional_expense, case_contact:, other_expense_amount: 1.11, other_expenses_describe: "First Expense"),

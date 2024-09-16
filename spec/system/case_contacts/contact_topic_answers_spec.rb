@@ -6,6 +6,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:user) { volunteer }
 
+  let!(:contact_type) { create :contact_type, casa_org: }
   let(:topic_count) { 2 }
   let!(:contact_topics) { create_list :contact_topic, topic_count, casa_org: }
   let(:contact_topic_questions) { contact_topics.map(&:question) }
@@ -60,7 +61,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
   it "adds contact answers for the topics" do
     subject
-    fill_in_contact_details
+    fill_in_contact_details(contact_types: [contact_type.name])
 
     topic_one = contact_topics.first
     topic_two = contact_topics.last
@@ -119,7 +120,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
     it "saves 'Additional Notes' answer as contact.notes" do
       subject
-      fill_in_contact_details
+      fill_in_contact_details(contact_types: [contact_type.name])
 
       click_on "Add Note"
       answer_topic "Additional Notes", "This is a fake a topic answer."
