@@ -46,10 +46,11 @@ RSpec.describe "/case_contacts", type: :request do
 
     it { is_expected.to have_http_status(:redirect) }
 
-    it "creates a new case contact" do
-      expect {
-        request
-      }.to change(CaseContact, :count).by(1)
+    it "creates a 'started' status case contact and redirects to the form" do
+      expect { request }.to change(CaseContact, :count).by(1)
+      new_case_contact = CaseContact.last
+      expect(new_case_contact.status).to eq "started"
+      expect(response).to redirect_to(case_contact_form_path(:details, case_contact_id: new_case_contact.id))
     end
 
     context "when current org has contact topics" do
@@ -78,6 +79,11 @@ RSpec.describe "/case_contacts", type: :request do
     end
 
     it { is_expected.to have_http_status(:redirect) }
+
+    it "redirects to case contact form" do
+      request
+      expect(response).to redirect_to(case_contact_form_path(:details, case_contact_id: case_contact.id))
+    end
   end
 
   describe "GET /drafts" do

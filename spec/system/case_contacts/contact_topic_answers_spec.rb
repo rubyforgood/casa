@@ -66,10 +66,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     topic_one = contact_topics.first
     topic_two = contact_topics.last
 
-    click_on "Add Note"
-    answer_topic topic_one.question, "First discussion topic answer."
-    click_on "Add Note"
-    answer_topic topic_two.question, "Second discussion topic answer."
+    fill_in_notes(contact_topic_answers_attrs: [
+      {question: topic_one.question, answer: "First discussion topic answer."},
+      {question: topic_two.question, answer: "Second discussion topic answer."}
+    ])
 
     expect { click_on "Submit" }
       .to change(CaseContact.active, :count).by(1)
@@ -169,7 +169,9 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
         expect(notes_section).to have_select(class: topic_select_class, count: 2)
 
-        notes_section.find_button(text: "Delete", match: :first).click
+        accept_confirm do
+          notes_section.find_button(text: "Delete", match: :first).click
+        end
 
         expect { click_on "Submit" }
           .to change(ContactTopicAnswer, :count).by(-1)

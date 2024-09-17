@@ -7,18 +7,12 @@ class CaseContacts::FormController < ApplicationController
 
   steps :details
 
-  # wizard_path
   def show
     authorize @case_contact
 
-    get_cases_and_contact_types
-
-    if @case_contact.started?
-      @case_contact.contact_made = true
-    end
-
+    @case_contact.contact_made = true if @case_contact.started?
+    prepare_form
     render_wizard
-    wizard_path
   end
 
   def update
@@ -29,17 +23,12 @@ class CaseContacts::FormController < ApplicationController
 
     respond_to do |format|
       format.html do
-        # Don't want to update status if coming from autosave json request, only during form submission
+        # only update status during form submission, not json/autosave requests
         params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
-
         if @case_contact.update(case_contact_params)
-          if step == steps.last
-            finish_editing
-          else
-            render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-          end
+          finish_editing
         else
-          get_cases_and_contact_types
+          prepare_form
           render step
         end
       end
@@ -56,24 +45,30 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    # ? includes additional_expenses
-    # ? includes contact_topic_answers: :contact_topic
     @case_contact = CaseContact
       .includes(:creator)
       .find(params[:case_contact_id])
   end
 
-  def get_cases_and_contact_types
-    @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
-    # ? limiting to one case.. also disable input if this happens?
-    @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+  def prepare_form
+    @casa_cases = get_casa_cases
+    @grouped_contact_types = group_contact_types_by_name(get_contact_types)
+    @contact_topics = get_contact_topics
+  end
 
+  def get_casa_cases
+    casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
+    casa_cases = casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+    casa_cases
+  end
+
+  def get_contact_types
     case_contact_types = ContactType.includes(:contact_type_group)
       .joins(:casa_case_contact_types)
       .active
       .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    contact_types = if case_contact_types.present?
+    if case_contact_types.present?
       case_contact_types
     else
       ContactType
@@ -83,13 +78,17 @@ class CaseContacts::FormController < ApplicationController
         .where(contact_type_group: {casa_org: current_organization})
         .order("contact_type_group.name ASC", :name)
     end
+  end
 
-    @grouped_contact_types = contact_types.group_by { |ct| ct.contact_type_group.name }
-
-    @contact_topics = ContactTopic
+  def get_contact_topics
+    ContactTopic
       .active
       .where(casa_org: current_organization)
       .order(:question)
+  end
+
+  def group_contact_types_by_name(contact_types)
+    contact_types.group_by { |ct| ct.contact_type_group.name }
   end
 
   def finish_editing
@@ -101,7 +100,6 @@ class CaseContacts::FormController < ApplicationController
     else
       message = "Case #{"contact".pluralize(draft_case_ids.count)} successfully created."
       create_additional_case_contacts(@case_contact)
-      # save all draft case ids in metadata?
       first_casa_case_id = draft_case_ids.first
       @case_contact.update(status: "active", draft_case_ids: [first_casa_case_id], casa_case_id: first_casa_case_id)
     end

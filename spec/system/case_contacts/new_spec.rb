@@ -435,14 +435,11 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       let(:case_number_two) { casa_case_two.case_number }
       let(:draft_case_ids) { [casa_case.id, casa_case_two.id] }
 
-      it "redirects to the new CaseContact form with the same cases selected",
-        pending: "passes when run spec alone, fail when run with rest of file/suite" do
+      it "redirects to the new CaseContact form with the same cases selected" do
         expect { subject }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
-        complete_details_page(
-          case_numbers: [case_number, case_number_two], contact_types: %w[School]
-        )
+        complete_details_page(case_numbers: [case_number, case_number_two], contact_types: %w[School])
 
         check "Create Another"
 

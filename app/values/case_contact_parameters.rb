@@ -2,6 +2,7 @@
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
     params = normalize_params(params)
+    params = normalize_topic_answers_and_notes(params)
     new_params =
       params.require(:case_contact).permit(
         :duration_minutes,
@@ -36,7 +37,7 @@ class CaseContactParameters < SimpleDelegator
       params[:case_contact][:miles_driven] = convert_miles_driven(params)
     end
 
-    normalize_topic_answers_and_notes(params)
+    params
   end
 
   def convert_metadata(metadata)
@@ -68,8 +69,8 @@ class CaseContactParameters < SimpleDelegator
 
     answers_attributes = params[:case_contact][:contact_topic_answers_attributes].to_unsafe_h
     no_topic_answers = answers_attributes&.filter do |_k, v|
-      # may be sent as id vs. contact_topic_id somewhere
-      # ! may be both missing due to accepts_nest_attributes, update_only: true
+      # id is id of a ContactTopicAnswer. If neither ContactTopicAnswer nor ContactTopic
+      # are present, this 'answer' is treated as a case_contact.note.
       v[:contact_topic_id].blank? && v[:id].blank?
     end
     no_topic_answers&.each do |k, v|

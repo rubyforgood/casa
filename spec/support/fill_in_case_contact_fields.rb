@@ -14,8 +14,8 @@ module FillInCaseContactFields
   # @param occurred_on [String], date in the format MM/dd/YYYY
   # @param hours [Integer]
   # @param minutes [Integer]
-  def fill_in_contact_details(contact_made: true, medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil,
-    case_numbers: [], contact_types: [], contact_topics: [])
+  def fill_in_contact_details(case_numbers: [], contact_types: [], contact_made: true,
+    medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
     within DETAILS_ID do
       within "#draft-case-id-selector" do
         if !case_numbers.empty?
@@ -51,38 +51,19 @@ module FillInCaseContactFields
       fill_in "case_contact_duration_hours", with: hours if hours
       fill_in "case_contact_duration_minutes", with: minutes if minutes
     end
-
-    within NOTES_ID do
-      Array.wrap(contact_topics).each do |topic|
-        click_on "Add Note"
-        # topic only, answer done in fill_in_notes
-        # artifact of wizard form steps -
-        # TODO: consolidate topic/answer and fix what fails
-        answer_topic_unscoped topic, nil
-      end
-    end
   end
   alias_method :complete_details_page, :fill_in_contact_details
 
-  def fill_in_notes(notes: nil, contact_topic_answers: [], topic_answers_attributes: [])
+  def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
     within NOTES_ID do
-      Array.wrap(topic_answers_attributes).each do |attributes|
-        answer_topic_unscoped attributes[:question], attributes[:answer], attributes[:index].presence
+      Array.wrap(contact_topic_answers_attrs).each do |attributes|
+        click_on "Add Note"
+        answer_topic_unscoped attributes[:question], attributes[:answer]
       end
 
       if notes.present?
         click_on "Add Note"
         answer_topic_unscoped "Additional Notes", notes
-      end
-
-      return if topic_answers_attributes.any?
-
-      # needs topics to already be added & selected (via complete_details_page)
-      contact_topic_answers = Array.wrap(contact_topic_answers)
-      if contact_topic_answers.any?
-        contact_topic_answers.each_with_index do |answer, index|
-          answer_topic_unscoped(nil, answer, index:)
-        end
       end
     end
   end

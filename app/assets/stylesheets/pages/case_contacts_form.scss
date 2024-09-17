@@ -1,48 +1,51 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
-#contact-form-types {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-
-@media only screen and (min-width: screen-sizes.$small) {
+#case-contact-form {
   #contact-form-types {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  @media only screen and (min-width: screen-sizes.$small) {
+    #contact-form-types {
       grid-template-columns: 1fr 1fr;
+    }
   }
-}
 
-@media only screen and (min-width: screen-sizes.$medium) {
-  #contact-form-types {
+  @media only screen and (min-width: screen-sizes.$medium) {
+    #contact-form-types {
       grid-template-columns: 1fr 1fr 1fr;
+    }
   }
-}
 
-.case-contacts-form {
-  &-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
+  .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 
-    @media only screen and (max-width: screen-sizes.$mobile) {
-      & > a, & > button {
-        flex-grow: 1;
+  .case-contacts-form {
+    &-buttons {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+
+      @media only screen and (max-width: screen-sizes.$mobile) {
+        & > a, & > button {
+          flex-grow: 1;
+        }
       }
     }
-  }
 
-  &-checkbox {
-    border-color: #757575;
-  }
-
-  &-title {
-    @media only screen and (max-width: screen-sizes.$mobile) {
-      font-size: 28px;
+    &-title {
+      @media only screen and (max-width: screen-sizes.$mobile) {
+        font-size: 28px;
+      }
     }
-  }
 
-  &-subtitle {
-    @media only screen and (max-width: screen-sizes.$mobile) {
-      font-size: 24px;
+    &-subtitle {
+      @media only screen and (max-width: screen-sizes.$mobile) {
+        font-size: 24px;
+      }
     }
   }
 }

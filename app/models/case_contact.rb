@@ -21,9 +21,9 @@ class CaseContact < ApplicationRecord
     message: :cant_be_future,
     allow_nil: true
   }
-  validate :reimbursement_only_when_miles_driven, unless: :started?
-  validate :volunteer_address_when_reimbursement_wanted, unless: :started?
-  validate :volunteer_address_is_valid, unless: :started?
+  validate :reimbursement_only_when_miles_driven, if: :active_or_details?
+  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_details?
+  validate :volunteer_address_is_valid, if: :active_or_details?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -49,12 +49,9 @@ class CaseContact < ApplicationRecord
 
   after_save_commit ::CaseContactMetadataCallback.new
 
-  # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
-  # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
-  FORM_STEPS = %i[details].freeze
-  # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
-  # string values for wizard form steps, integer column would make db queries faster
-  # migrate any legacy notes/expenses 'back' to details status (draft)
+  # NOTE: 'notes' & 'expenses' status are no longer used.
+  # migrate any legacy notes/expenses 'back' to started/details status (draft) & remove notes/expenses from enum
+  # NOTE: enum defines methods (active?) and scopes (.active, .not_active) for each member
   enum :status, {
     started: "started",
     active: "active",
@@ -276,16 +273,6 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  def self.create_with_answers(casa_org, **kwargs)
-    create(kwargs).tap do |case_contact|
-      casa_org.contact_topics.active.each do |topic|
-        unless case_contact.contact_topic_answers << ContactTopicAnswer.new(contact_topic: topic)
-          case_contact.errors.add(:contact_topic_answers, "could not create topic #{topic&.question.inspect}")
-        end
-      end
-    end
-  end
-
   def self.options_for_sorted_by
     sorted_by_params.each.map { |option_pair| option_pair.reverse }
   end
@@ -295,12 +282,6 @@ class CaseContact < ApplicationRecord
     casa_case_ids.each_with_object({}) do |casa_case_id, hash|
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
-  end
-
-  def form_steps
-    steps = FORM_STEPS.dup
-    steps.delete(:expenses) unless casa_org_any_expenses_enabled?
-    steps.freeze
   end
 
   def casa_org_any_expenses_enabled?

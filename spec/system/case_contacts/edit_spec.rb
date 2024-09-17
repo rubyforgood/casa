@@ -1,10 +1,13 @@
 require "rails_helper"
 
 RSpec.describe "case_contacts/edit", :js, type: :system do
-  let(:organization) { build(:casa_org) }
+  let(:organization) { build(:casa_org, :all_reimbursements_enabled) }
   let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
   let(:casa_case) { volunteer.casa_cases.first }
-  let(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer) }
+  let(:contact_types) { create_list(:contact_type, 2, casa_org: organization) }
+  let(:case_contact) do
+    create(:case_contact, duration_minutes: 105, casa_case:, creator: volunteer, contact_types: [contact_types.first])
+  end
 
   let(:user) { volunteer }
 
@@ -82,21 +85,47 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     end
   end
 
-  it "is successful" do
+  it "can update case contact attributes" do
+    expect(case_contact.active?).to be true
+    expect(case_contact.contact_types).to contain_exactly(contact_types.first)
+    expect(case_contact.contact_made).to be false
+    expect(case_contact.medium_type).to eq "in-person"
+    expect(case_contact.duration_minutes).to eq 105
+    expect(case_contact.volunteer_address).to be_blank
+    expect(case_contact.notes).to be_blank
+    expect(case_contact.contact_topic_answers).to be_empty
+    expect(case_contact.miles_driven).to be_zero
+    expect(case_contact.want_driving_reimbursement).to be false
+    expect(case_contact.additional_expenses).to be_empty
+
+    contact_topic = create(:contact_topic, casa_org: organization)
+
     visit edit_case_contact_path(case_contact)
 
-    complete_details_page(contact_made: true, medium: "Letter")
-    complete_notes_page
-    fill_in_expenses_page
-
+    uncheck contact_types.first.name
+    complete_details_page(
+      case_numbers: [], contact_made: true, medium: "Letter", contact_types: [contact_types.second.name],
+      occurred_on: Time.zone.today - 5.days, hours: 1, minutes: 5
+    )
+    click_on "Add Note"
+    answer_topic contact_topic.question, "Topic 1 Answer."
+    fill_in_expenses_page(miles: 50, want_reimbursement: true, address: "123 Form St")
     click_on "Submit"
 
     case_contact.reload
     expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
-    expect(case_contact.casa_case_id).to eq casa_case.id
-    expect(case_contact.duration_minutes).to eq 105
+    expect(case_contact.duration_minutes).to eq 65
     expect(case_contact.medium_type).to eq "letter"
     expect(case_contact.contact_made).to be true
+    expect(case_contact.contact_types).to contain_exactly(contact_types.second)
+    # notes
+    expect(case_contact.contact_topic_answers).to be_present
+    expect(case_contact.contact_topic_answers.first.contact_topic).to eq contact_topic
+    expect(case_contact.contact_topic_answers.first.value).to eq "Topic 1 Answer."
+    # reimbursement
+    expect(case_contact.miles_driven).to eq 50
+    expect(case_contact.want_driving_reimbursement).to be true
+    expect(case_contact.volunteer_address).to eq "123 Form St"
   end
 
   it "is successful with mileage reimbursement on" do

@@ -237,7 +237,6 @@ function safeInstantiateComponent (componentName, instantiate) {
   }
 }
 
-// ? re-implement for details?
 $(() => { // JQuery's callback for the DOM loading
   const validatedFormCollection = $('.component-validated-form')
   const validatableFormSectionComponents = []

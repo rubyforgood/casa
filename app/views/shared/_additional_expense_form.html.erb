@@ -2,12 +2,17 @@
   <div class="d-flex gap-1">
     <div class="col-md-4">
       <%= form.label :other_expense_amount, "Expense amount" %>
-      <%= form.number_field(:other_expense_amount,
-        value: number_with_precision(form.object.other_expense_amount, precision: 2),
-        placeholder: "0", min: "0", max: 1000, step: 0.01,
-        class: ["form-control", "expense-amount-input"],
-        data: { case_contact_form_target: "expenseAmount" },
-      ) %>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <span class="input-group-text">$</span>
+        </div>
+        <%= form.number_field(:other_expense_amount,
+          value: number_with_precision(form.object.other_expense_amount, precision: 2),
+          placeholder: "0", min: "0", max: 1000, step: 0.01,
+          class: ["form-control", "expense-amount-input"],
+          data: { case_contact_form_target: "expenseAmount" },
+        ) %>
+      </div>
     </div>
     <div class="flex-grow-1">
       <%= form.label :other_expenses_describe, "Expense details" %>

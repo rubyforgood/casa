@@ -34,10 +34,8 @@ module CaseContactsHelper
   end
 
   def show_volunteer_reimbursement(casa_cases)
-    # TODO: any or all or first? policy? array.wrap @casa_case?
     if current_user.role == "Volunteer"
       show = casa_cases.map do |casa_case|
-        # casa_case.case_assignments.where(volunteer_id: current_user, allow_reimbursement: true)
         casa_case.case_assignments.where(volunteer_id: current_user).first&.allow_reimbursement == true
       end
       show.any?

@@ -1,17 +1,16 @@
 <div class="title-wrapper">
-  <div class="title my-3">
-    <h1><%= @case_contact.decorate.form_title %></h1>
-  </div>
+  <h1 class="title my-3">
+    <%= @case_contact.decorate.form_title %>
+  </h1>
 </div>
 
-<div
-  data-controller="autosave"
+<div data-controller="autosave"
   data-autosave-good-alert-class="text-muted"
   data-autosave-bad-alert-class="text-danger">
   <%= form_with(
     model: @case_contact,
     url: wizard_path(nil, case_contact_id: @case_contact.id),
-    id: "casa-contact-form",
+    id: "case-contact-form",
     data: {
       controller: "case-contact-form",
       "autosave-target": "form",
@@ -68,12 +67,12 @@
         <% @grouped_contact_types.each do |group_name, contact_types| %>
           <fieldset class="form-group p-2">
             <legend><%= group_name %></legend>
-              <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
-                <div class="form-check ps-1">
-                  <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox", "ms-1"]) %>
-                  <%= b.label(class: "form-check-label ps-2") %>
-                </div>
-              <% end %>
+            <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
+              <div class="form-check ps-1">
+                <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox", "ms-1"]) %>
+                <%= b.label(class: "form-check-label ps-2") %>
+              </div>
+            <% end %>
           </fieldset>
         <% end %>
       </div>
@@ -139,7 +138,6 @@
         <% select_options << notes_option # no selectable topics to answer, allow notes %>
       <% end %>
 
-      <!--template to add new topic answer-->
       <template data-casa-nested-form-target="template">
         <%= form.fields_for :contact_topic_answers, ContactTopicAnswer.new, child_index: "NEW_RECORD" do |topic_fields| %>
           <%= render( "contact_topic_answer", form: topic_fields, select_options:) %>
@@ -163,10 +161,7 @@
     <% show_driving_reimbursement = org_driving_reimbursement && show_volunteer_reimbursement(@casa_cases) %>
     <% org_additional_expenses = current_organization.additional_expenses_enabled %>
     <% show_additional_expenses = org_additional_expenses && Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
-    <%# show_additional_expenses = true %>
     <% if show_driving_reimbursement %>
-      <%# NOTE: only shows additional expenses if mileage reimbursement is enabled %>
-      <%# as both depend on mileage reimbursement checkbox checked state %>
       <!-- REIMBURSMENT -->
       <div id="contact-form-reimbursement" class="card-style-1 px-4 mb-10">
         <h2 class="mb-4">Reimbursement</h2>
@@ -180,17 +175,15 @@
           </article>
         <% end %>
 
-        <div>
-          <div class="checkbox-style py-1 mb-3">
-            <%= form.check_box(:want_driving_reimbursement,
-              class: "form-check-input",
-              data: {
-                case_contact_form_target: "wantDrivingReimbursement",
-                action: "click->case-contact-form#setReimbursementFormVisibility",
-              }
-            ) %>
-            <%= form.label :want_driving_reimbursement, "Request travel or other reimbursement", class: "form-check-label d-inline align-bottom" %>
-          </div>
+        <div class="checkbox-style py-1 mb-3">
+          <%= form.check_box(:want_driving_reimbursement,
+            class: "form-check-input",
+            data: {
+              case_contact_form_target: "wantDrivingReimbursement",
+              action: "click->case-contact-form#setReimbursementFormVisibility",
+            }
+          ) %>
+          <%= form.label :want_driving_reimbursement, "Request travel or other reimbursement", class: "form-check-label d-inline align-bottom" %>
         </div>
 
         <!-- DRIVING REIMBURSEMENT -->
@@ -226,6 +219,7 @@
             <div id="contact-form-expenses"
               class="other-expenses"
               data-controller="casa-nested-form">
+
               <template data-casa-nested-form-target="template">
                 <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |expense_fields| %>
                   <%= render "shared/additional_expense_form", form: expense_fields %>
