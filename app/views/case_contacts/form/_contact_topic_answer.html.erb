@@ -1,4 +1,8 @@
-<div class="nested-form-wrapper " data-new-record="<%= form.object.new_record? %>">
+<div class="nested-form-wrapper"
+  data-new-record="<%= form.object.new_record? %>"
+  data-casa-nested-form-target="wrapper"
+  data-child-index="<%= form.options[:child_index] %>"
+  data-record-id="<%= form.object.id || "" %>">
   <div class="d-flex gap-1 flex-wrap">
     <div class="col-md-4">
       <%= form.label :contact_topic_id, "Discussion Topic" %>
@@ -15,12 +19,12 @@
     </div>
     <div class="flex-shrink-1">
       <button type="button"
-        data-action="casa-nested-form#windowConfirmRemove"
+        data-action="casa-nested-form#windowConfirmDestroyAndRemove"
         class="mt-4 btn btn-sm danger-btn-outline btn-hover">
         Delete
       </button>
     </div>
-
-    <%= form.hidden_field :_destroy %>
   </div>
+  <%= form.hidden_field(:id, value: form.object.id) %>
+  <%= form.hidden_field :_destroy %>
 </div>

@@ -73,14 +73,45 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
     expect { click_on "Submit" }
       .to change(CaseContact.active, :count).by(1)
-      .and change(ContactTopicAnswer, :count).by(2)
 
     case_contact = CaseContact.active.last
     expect(case_contact.reload.contact_topic_answers).to be_present
+    expect(case_contact.reload.contact_topic_answers.size).to eq 2
     first_topic_answer = case_contact.contact_topic_answers.find_by(contact_topic_id: topic_one.id)
     second_topic_answer = case_contact.contact_topic_answers.find_by(contact_topic_id: topic_two.id)
     expect(first_topic_answer.value).to eq "First discussion topic answer."
     expect(second_topic_answer.value).to eq "Second discussion topic answer."
+  end
+
+  it "does not add multiple records for the same answer due to autosave", :js do
+    subject
+    fill_in_contact_details(contact_types: [contact_type.name])
+
+    expect {
+      click_on "Add Note"
+
+      # autosave debounce is longer than capybara's wait time
+      using_wait_time 6 do
+        answer_topic contact_topics.first.question, "First discussion topic answer."
+        within("#contact-form-notes") { expect(page).to have_text "Saved" }  # autosave success notification
+        answer_topic nil, "Changing the first topic answer."
+        within("#contact-form-notes") { expect(page).to have_text "Saved" }
+        answer_topic nil, "Adding to the first topic answer... again."
+        within("#contact-form-notes") { expect(page).to have_text "Saved" }
+        expect(page).to have_field(class: "contact-topic-answer-input", count: 1) # still only one input field
+      end
+
+      click_on "Submit"
+    }
+      .to change(CaseContact.active, :count).by(1)
+      .and change(ContactTopicAnswer, :count).by(1)
+
+    case_contact = CaseContact.active.last
+    created_answer = ContactTopicAnswer.last
+    expect(created_answer.contact_topic).to eq(contact_topics.first)
+    expect(created_answer.value).to eq "Adding to the first topic answer... again."
+    expect(case_contact.contact_topic_answers.size).to eq 1
+    expect(case_contact.contact_topic_answers).to include created_answer
   end
 
   it "prevents adding more answers than topics",
@@ -169,11 +200,13 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
         expect(notes_section).to have_select(class: topic_select_class, count: 2)
 
-        accept_confirm do
-          notes_section.find_button(text: "Delete", match: :first).click
-        end
+        expect {
+          accept_confirm do
+            notes_section.find_button(text: "Delete", match: :first).click
+          end
 
-        expect { click_on "Submit" }
+          click_on "Submit"
+        }
           .to change(ContactTopicAnswer, :count).by(-1)
 
         case_contact.reload
@@ -190,11 +223,11 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
         contact_made: false, medium: "In Person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
       )
 
-      click_on "Add Note"
       expect {
+        click_on "Add Note"
         answer_topic contact_topics.first.question, "Topic One answer."
         within autosave_alert_div do
-          find(autosave_alert_css, text: autosave_alert_text)
+          find(autosave_alert_css, text: autosave_alert_text, wait: 3)
         end
       }
         .to change(ContactTopicAnswer, :count).by(1)

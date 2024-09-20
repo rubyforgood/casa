@@ -114,8 +114,8 @@ module FillInCaseContactFields
 
   # use when already 'within' notes div
   def answer_topic_unscoped(question, answer, index: nil)
-    topic_select = index.present? ? all(TOPIC_SELECT_CLASS)[index] : all(TOPIC_SELECT_CLASS).last
-    answer_field = index.present? ? all(TOPIC_VALUE_CLASS)[index] : all(TOPIC_VALUE_CLASS).last
+    topic_select = index.nil? ? all(TOPIC_SELECT_CLASS).last : all(TOPIC_SELECT_CLASS)[index]
+    answer_field = index.nil? ? all(TOPIC_VALUE_CLASS).last : all(TOPIC_VALUE_CLASS)[index]
     topic_select.select(question) if question
     answer_field.fill_in(with: answer) if answer
   end

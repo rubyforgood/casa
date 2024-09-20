@@ -141,6 +141,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     let(:autosave_alert_div) { "#contact-form-notes" }
     let(:autosave_alert_css) { 'small[role="alert"]' }
     let(:autosave_alert_text) { "Saved!" }
+    let(:autosave_wait_time) { 3 }
 
     it "does not show topic questions that are inactive or soft deleted in select" do
       contact_topics
@@ -168,7 +169,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       answer_topic "Active Topic", "Hello world"
 
       within autosave_alert_div do
-        find(autosave_alert_css, text: autosave_alert_text)
+        find(autosave_alert_css, text: autosave_alert_text, wait: autosave_wait_time)
       end
 
       expect(case_contact.reload.contact_topic_answers.first.value).to eq "Hello world"

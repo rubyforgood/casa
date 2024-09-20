@@ -5,6 +5,7 @@
 </div>
 
 <div data-controller="autosave"
+  data-autosave-delay-value="2000"
   data-autosave-good-alert-class="text-muted"
   data-autosave-bad-alert-class="text-danger">
   <%= form_with(
@@ -111,7 +112,12 @@
     <!--NOTES (CONTACT TOPIC ANSWERS)-->
     <div id="contact-form-notes"
       class="card-style-1 px-4 mb-10"
-      data-controller="casa-nested-form">
+      data-controller="casa-nested-form"
+      data-casa-nested-form-route-value="/contact_topic_answers"
+      data-casa-nested-form-parent-name-value="case_contact"
+      data-casa-nested-form-parent-id-value="<%= @case_contact.id %>"
+      data-casa-nested-form-required-fields-value='["contact_topic_id"]'
+      data-casa-nested-form-model-name-value="contact_topic_answer">
       <h2 class="mb-4">Notes</h2>
 
       <small data-autosave-target="alert alert-light" role="alert"></small>
@@ -140,7 +146,7 @@
 
       <template data-casa-nested-form-target="template">
         <%= form.fields_for :contact_topic_answers, ContactTopicAnswer.new, child_index: "NEW_RECORD" do |topic_fields| %>
-          <%= render( "contact_topic_answer", form: topic_fields, select_options:) %>
+          <%= render("contact_topic_answer", form: topic_fields, select_options:) %>
         <% end %>
       </template>
 
@@ -152,7 +158,7 @@
 
       <div data-casa-nested-form-target="target"></div>
 
-      <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#add">
+      <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#addAndCreate">
         + Add Note
       </button>
     </div>
