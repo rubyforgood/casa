@@ -123,13 +123,16 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card-style mb-30">
+        <div class="title mb-30">
+          <h2>Volunteers without Supervisors</h2>
+        </div>
         <% if @available_volunteers.any? %>
           <div class="table-wrapper table-responsive">
             <table id="active_volunteers" class="table">
               <thead>
               <tr>
-                <th><h6>Active volunteers not assigned to supervisors</h6></th>
-                <th><h6>Assigned to Case(s)</h6></th>
+                <th>Active volunteers not assigned to supervisors</th>
+                <th>Assigned to Case(s)</th>
               </tr>
               <!-- end table row-->
               </thead>
