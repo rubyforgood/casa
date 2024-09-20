@@ -16,7 +16,7 @@ class CaseContact < ApplicationRecord
     allow_nil: true
   }
   validates :occurred_at, comparison: {
-    less_than: Date.tomorrow,
+    less_than: 2.day.from_now,
     message: :cant_be_future,
     allow_nil: true
   }
