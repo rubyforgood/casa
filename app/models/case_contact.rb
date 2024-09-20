@@ -15,8 +15,9 @@ class CaseContact < ApplicationRecord
     message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
     allow_nil: true
   }
+  # NOTE: 'extra' day is a temporary fix for user selecting current date, but this validation failing
   validates :occurred_at, comparison: {
-    less_than: Date.tomorrow,
+    less_than: Time.zone.tomorrow + 1.day,
     message: :cant_be_future,
     allow_nil: true
   }
