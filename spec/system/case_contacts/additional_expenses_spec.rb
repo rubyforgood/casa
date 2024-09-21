@@ -51,27 +51,11 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
 
     expect { click_on "Submit" }
       .to change(CaseContact.active, :count).by(1)
-      .and not_change(AdditionalExpense, :count)
 
     case_contact = CaseContact.active.last
     expect(case_contact.additional_expenses).to be_empty
     expect(case_contact.miles_driven).to be_zero
     expect(case_contact.want_driving_reimbursement).to be false
-  end
-
-  it "ignores expenses with empty fields" do
-    subject
-
-    click_on "Add Expense"
-    click_on "Add Expense"
-    click_on "Add Expense"
-    expect(page).to have_field(class: "expense-describe-input", count: 3, with: nil)
-    expect(page).to have_field(class: "expense-amount-input", count: 3, with: "")
-    expect { click_on "Submit" }
-      .to change(CaseContact.active, :count).by(1)
-      .and not_change(AdditionalExpense, :count)
-    case_contact = CaseContact.active.last
-    expect(case_contact.additional_expenses).to be_empty
   end
 
   it "can remove an expense" do
@@ -81,20 +65,22 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
     fill_in "case_contact_miles_driven", with: 50
     fill_in "case_contact_volunteer_address", with: "123 Params St"
 
-    click_on "Add Expense"
-    fill_expense_fields 1.50, "1st meal"
-    click_on "Add Expense"
-    fill_expense_fields 2.50, "2nd meal"
-    click_on "Add Expense"
-    fill_expense_fields 2.00, "3rd meal"
+    expect {
+      click_on "Add Expense"
+      fill_expense_fields 1.50, "1st meal"
+      click_on "Add Expense"
+      fill_expense_fields 2.50, "2nd meal"
+      click_on "Add Expense"
+      fill_expense_fields 2.00, "3rd meal"
 
-    within "#contact-form-expenses" do
-      click_on "Remove", match: :first
-    end
+      within "#contact-form-expenses" do
+        click_on "Remove", match: :first
+      end
 
-    expect(page).to have_field(class: "expense-amount-input", count: 2)
+      expect(page).to have_field(class: "expense-amount-input", count: 2)
 
-    expect { click_on "Submit" }
+      click_on "Submit"
+    }
       .to change(CaseContact.active, :count).by(1)
       .and change(AdditionalExpense, :count).by(2)
 
@@ -112,9 +98,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
       .to not_change(CaseContact.active, :count)
       .and not_change(AdditionalExpense, :count)
 
-    expect(page).to have_text("Additional expenses is invalid")
-    # this is not a great error message!
-    expect(page).to have_text("Additional expenses other expenses describe Expense description cannot be blank")
+    expect(page).to have_text("Expense description can't be blank")
   end
 
   context "when editing existing case contact expenses" do
@@ -126,9 +110,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
       ]
     end
 
-    subject do
-      visit edit_case_contact_path case_contact
-    end
+    subject { visit edit_case_contact_path case_contact }
 
     it "shows existing expenses in the form" do
       subject
@@ -148,14 +130,16 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
       expect(page).to have_css(".expense-amount-input", count: 2)
       expect(page).to have_css(".expense-describe-input", count: 2)
 
-      within "#contact-form-expenses" do
-        click_on "Remove", match: :first
-      end
+      expect {
+        within "#contact-form-expenses" do
+          click_on "Remove", match: :first
+        end
 
-      expect(page).to have_css(".expense-amount-input", count: 1)
-      expect(page).to have_css(".expense-describe-input", count: 1)
+        expect(page).to have_css(".expense-amount-input", count: 1)
+        expect(page).to have_css(".expense-describe-input", count: 1)
 
-      expect { click_on "Submit" }
+        click_on "Submit"
+      }
         .to not_change(CaseContact.active, :count)
         .and change(AdditionalExpense, :count).by(-1)
 
@@ -165,9 +149,11 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
     it "can add an expense" do
       subject
 
-      click_on "Add Expense"
-      fill_expense_fields 11.50, "Gas"
-      expect { click_on "Submit" }
+      expect {
+        click_on "Add Expense"
+        fill_expense_fields 11.50, "Gas"
+        click_on "Submit"
+      }
         .to change(AdditionalExpense, :count).by(1)
       expect(case_contact.reload.additional_expenses.size).to eq(3)
     end

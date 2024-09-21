@@ -3,10 +3,10 @@ import NestedForm from '@stimulus-components/rails-nested-form'
 
 // Connects to data-controller="casa-nested-form"
 // Allows nested forms to be used with autosave controller, adding and deleting records
-//   so that autosave updates do not create/destroy nested records multiple times.
+//   so that autosave does not create/destroy nested records multiple times.
 // add() & remove() are kept standard, can be used without autosave just fine:
 //   no values are necessary in that case.
-// Created for the CaseContact form, see its usage there.
+// Created for the CaseContact form (details), see usage there.
 export default class extends NestedForm {
   static values = {
     route: String, // path to create/destroy a record, e.g. "/contact_topic_answers"
@@ -29,15 +29,45 @@ export default class extends NestedForm {
       headers.append('X-CSRF-Token', tokenTag.content)
     }
     this.headers = headers
+
+    document.addEventListener('autosave:success', (e) => {
+      this.onAutosaveSuccess(e)
+    })
+  }
+
+  getRecordId (wrapper) {
+    const recordInput = wrapper.querySelector('input[name*="id"]')
+    if (!recordInput) {
+      console.warn('id input not found for nested item:', wrapper)
+      return ''
+    }
+    return recordInput.value
+  }
+
+  /* removes any items that have been marked destroy: true on autosave:success */
+  /* can be marked for destroy elsewhere, as in case_contact_form_controller hide reimbursement */
+  onAutosaveSuccess (_e) {
+    const wrappers = this.element.querySelectorAll(this.wrapperSelectorValue)
+    wrappers.forEach(wrapper => {
+      const destroyInput = wrapper.querySelector("input[name*='_destroy']")
+      if (!destroyInput) {
+        console.warn('Destroy input not found for nested item:', wrapper)
+        return
+      }
+      if (destroyInput.value === '1') {
+        // autosave has already destroyed the record, remove the element from DOM
+        wrapper.remove()
+      }
+    })
   }
 
   /* Adds item to the form. Item will not be created until form submission. */
-  add = (e) => {
+  add (e) {
     super.add(e)
   }
 
   /* Creates a new record for the added item (before submission). */
-  addAndCreate = (e) => {
+  addAndCreate (e) {
     this.add(e)
     const items = this.element.querySelectorAll(this.wrapperSelectorValue)
     const addedItem = items[items.length - 1]
@@ -83,7 +113,6 @@ export default class extends NestedForm {
         const idField = document.querySelector(`#${idAttr}`)
         idField.setAttribute('value', data.id)
         addedItem.dataset.newRecord = false
-        addedItem.dataset.recordId = data.id
       })
       .catch(error => {
         console.error(error.status, error.statusText)
@@ -99,9 +128,9 @@ export default class extends NestedForm {
   }
 
   /* Destroys a record when removing the item (before submission). */
-  destroyAndRemove = (e) => {
+  destroyAndRemove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
-    const recordId = wrapper.dataset.recordId
+    const recordId = this.getRecordId(wrapper)
     if (wrapper.dataset.newRecord === 'false' && (recordId.length > 0)) {
       fetch(`${this.routeValue}/${recordId}`, {
         method: 'DELETE',
@@ -109,9 +138,8 @@ export default class extends NestedForm {
       })
         .then(response => {
           if (response.ok) {
-            // deleted from db; update as non-persisted, remove as usual.
+            // destroy successful; remove as if new record
             wrapper.dataset.newRecord = true
-            wrapper.dataset.recordId = ''
             this.remove(e)
           } else {
             return Promise.reject(response)
@@ -119,13 +147,19 @@ export default class extends NestedForm {
         })
         .catch(error => {
           console.error(error.status, error.statusText)
-          error.json().then(errorJson => {
-            console.error('errorJson', errorJson)
-          })
+          if (error.status === 404) {
+            // NOT FOUND: already deleted -> remove as if new record
+            wrapper.dataset.newRecord = true
+            this.remove(e)
+          } else {
+            error.json().then(errorJson => {
+              console.error('errorJson', errorJson)
+            })
+          }
         })
     } else {
       console.warn(
-        'Not enough information to destroy record:', {
+        'Conflicting information while trying to destroy record:', {
           wrapperDatasetNewRecord: wrapper.dataset.newRecord,
           recordId
         }

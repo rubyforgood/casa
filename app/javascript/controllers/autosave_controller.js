@@ -29,12 +29,29 @@ export default class extends Controller {
     }).then(response => {
       if (response.ok) {
         this.goodAlert()
+        const event = new CustomEvent('autosave:success', { bubbles: true }) // eslint-disable-line no-undef
+        this.element.dispatchEvent(event)
       } else {
-        if (response.status === 504) {
+        return Promise.reject(response)
+      }
+    }).catch(error => {
+      console.error(error.status, error.statusText)
+      switch (error.status) {
+        case 504:
           this.badAlert('Connection lost: Changes will be saved when connection is restored.')
-        } else {
+          break
+        case 422:
+          error.json().then(errorJson => {
+            console.error('errorJson', errorJson)
+            const errorMessage = errorJson.join('. ')
+            this.badAlert(`Unable to save: ${errorMessage}`)
+          })
+          break
+        case 401:
+          this.badAlert('You must be signed in to save changes.')
+          break
+        default:
           this.badAlert('Error: Unable to save changes.')
-        }
       }
     })
   }

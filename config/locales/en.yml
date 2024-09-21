@@ -49,6 +49,9 @@ en:
       case_contact/additional_expenses:
         other_expenses_amount: Expense amount
         other_expenses_describe: Expense description
+      additional_expense:
+        other_expenses_describe: Description
+        other_expenses_amount: Amount
     errors:
       messages:
         cant_be_future: can't be in the future

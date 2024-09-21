@@ -10,7 +10,6 @@ class CaseContacts::FormController < ApplicationController
   def show
     authorize @case_contact
 
-    @case_contact.contact_made = true if @case_contact.started?
     prepare_form
     render_wizard
   end
@@ -36,7 +35,7 @@ class CaseContacts::FormController < ApplicationController
         if @case_contact.update(case_contact_params)
           render json: @case_contact, status: :ok
         else
-          render json: @case_contact.errors, status: :unprocessable_entity
+          render json: @case_contact.errors.full_messages, status: :unprocessable_entity
         end
       end
     end

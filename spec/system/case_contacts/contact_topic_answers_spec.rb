@@ -205,6 +205,8 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
             notes_section.find_button(text: "Delete", match: :first).click
           end
 
+          expect(notes_section).to have_select(class: topic_select_class, count: 1, visible: :all)
+
           click_on "Submit"
         }
           .to change(ContactTopicAnswer, :count).by(-1)

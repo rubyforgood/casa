@@ -22,15 +22,15 @@
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <!-- DETAILS -->
-    <div id="contact-form-details" class="card-style-1 px-4 mb-10">
+    <section id="contact-form-details" class="card-style-1 px-4 mb-10">
       <h2 class="mb-3">Details</h2>
 
       <div class="row">
         <!-- RELEVANT CASES -->
         <div class="col">
-          <h5>
+          <h3>
             <label for="case_contact_draft_case_ids">Relevant Case(s)<span class="red-letter">*</span></label>
-          </h5>
+          </h3>
           <div id="draft-case-id-selector">
             <%= render(Form::MultipleSelectComponent.new(
               form: form,
@@ -44,11 +44,11 @@
 
         <!--DATE-->
         <div class="col">
-          <h5>
+          <h3>
             <%= form.label :occurred_at do %>
               Contact Date<span class="red-letter">*</span>
             <% end %>
-          </h5>
+          </h3>
           <div class="input-style-1">
             <% min_date = CaseContact::MINIMUM_DATE %>
             <% current_date = Date.current %>
@@ -63,7 +63,7 @@
       </div>
 
       <!--CONTACT TYPE-->
-      <h5><label>Contact Type(s)<span class="red-letter">*</span></label></h5>
+      <h3>Contact Type(s)<span class="red-letter">*</span></h3>
       <div id="contact-form-types" class="mb-3">
         <% @grouped_contact_types.each do |group_name, contact_types| %>
           <fieldset class="form-group p-2">
@@ -82,35 +82,34 @@
       <div id="enter-contact-details">
         <div class="checkbox-style py-1 mb-20">
           <%= form.check_box :contact_made, class: "form-check-input" %>
-          <h5 class="d-inline">
-            <%= form.label :contact_made, "Contact was made", class: "form-check-label align-middle" %>
-          </h5>
+          <h3 class="d-inline">
+            <%= form.label :contact_made, "Contact was made", class: "form-check-label align-middle mt-2" %>
+          </h3>
         </div>
 
         <!--MEDIUM-->
-        <!--TODO tab navigation skips these fields??? -->
-        <div class="form-group">
-          <h5>
-            <label class="mb-3">Contact Medium</label>
-          </h5>
+        <fieldset class="form-group mb-20">
+          <h3>
+            <legend class="mb-3">Contact Medium</legend>
+          </h3>
           <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
-            <div class="form-check radio-style mb-20">
+            <div class="form-check form-check-inline radio-style">
               <%= b.radio_button(class: "form-check-input") %>
               <%= b.label(class: "form-check-label") %>
             </div>
           <% end %>
-        </div>
+        </fieldset>
 
         <!--DURATION-->
         <div class="">
-          <h5 class="mb-3">Duration of contact</h5>
+          <h3 class="mb-3">Duration of contact</h3>
           <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
         </div>
       </div>
-    </div>
+    </section>
 
     <!--NOTES (CONTACT TOPIC ANSWERS)-->
-    <div id="contact-form-notes"
+    <section id="contact-form-notes"
       class="card-style-1 px-4 mb-10"
       data-controller="casa-nested-form"
       data-casa-nested-form-route-value="/contact_topic_answers"
@@ -161,7 +160,7 @@
       <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#addAndCreate">
         + Add Note
       </button>
-    </div>
+    </section>
 
     <% org_driving_reimbursement = current_organization.show_driving_reimbursement %>
     <% show_driving_reimbursement = org_driving_reimbursement && show_volunteer_reimbursement(@casa_cases) %>
@@ -169,11 +168,11 @@
     <% show_additional_expenses = org_additional_expenses && Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
     <% if show_driving_reimbursement %>
       <!-- REIMBURSMENT -->
-      <div id="contact-form-reimbursement" class="card-style-1 px-4 mb-10">
+      <section id="contact-form-reimbursement" class="card-style-1 px-4 mb-10">
         <h2 class="mb-4">Reimbursement</h2>
         <% if Flipper.enabled?(:reimbursement_warning, current_organization) %>
           <article class="card-style-1 p-3 mb-10" style="background-color: #fcab553d;">
-            <h5 class="mb-3"><label>Volunteers are eligible to be reimbursed for case-related travel.</label></h5>
+            <h4 class="mb-3"><label>Volunteers are eligible to be reimbursed for case-related travel.</label></h4>
             <span> Volunteers are reimbursed at the federal mileage rate.</span>
             <br>
             <span>Please note that there is a $35.00 per month cap per volunteer for your mileage.</span>
@@ -224,7 +223,11 @@
             <!-- ADDITIONAL EXPENSES -->
             <div id="contact-form-expenses"
               class="other-expenses"
-              data-controller="casa-nested-form">
+              data-controller="casa-nested-form"
+              data-casa-nested-form-route-value="/additional_expenses"
+              data-casa-nested-form-parent-name-value="case_contact"
+              data-casa-nested-form-parent-id-value="<%= @case_contact.id %>"
+              data-casa-nested-form-model-name-value="additional_expense">
 
               <template data-casa-nested-form-target="template">
                 <%= form.fields_for :additional_expenses, AdditionalExpense.new, child_index: "NEW_RECORD" do |expense_fields| %>
@@ -240,13 +243,15 @@
 
               <div data-casa-nested-form-target="target"></div>
 
-              <button type="button" class="btn btn-link" data-action="casa-nested-form#add">
+              <!--<button type="button" class="btn btn-link" data-action="casa-nested-form#add">-->
+              <button type="button" class="btn btn-link"
+                data-action="casa-nested-form#addAndCreate">
                 + Add Expense
               </button>
             </div>
           <% end %>
         </div>
-      </div>
+      </section>
     <% end %>
 
     <div id="contact-form-action-buttons" class="actions mb-10 case-contacts-form-buttons">

@@ -73,9 +73,7 @@ class CaseContact < ApplicationRecord
   end
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
-  validates_associated :additional_expenses
 
-  accepts_nested_attributes_for :casa_case
   accepts_nested_attributes_for :contact_topic_answers, allow_destroy: true,
     reject_if: proc { |attrs| attrs["contact_topic_id"].blank? && attrs["value"].blank? }  # .notes sent without topic_id, but must have a value.
 

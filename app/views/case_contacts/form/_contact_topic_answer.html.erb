@@ -1,8 +1,7 @@
 <div class="nested-form-wrapper"
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
-  data-child-index="<%= form.options[:child_index] %>"
-  data-record-id="<%= form.object.id || "" %>">
+  data-child-index="<%= form.options[:child_index] %>">
   <div class="d-flex gap-1 flex-wrap">
     <div class="col-md-4">
       <%= form.label :contact_topic_id, "Discussion Topic" %>
