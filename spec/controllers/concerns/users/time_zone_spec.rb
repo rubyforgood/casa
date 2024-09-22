@@ -7,7 +7,7 @@ end
 RSpec.describe MockController, type: :controller do
   let(:browser_time_zone) { "America/Los_Angeles" }
   let(:default_time_zone) { "Eastern Time (US & Canada)" }
-  let(:time_date) { "2024-09-18 15:00:00 UTC" }
+  let(:time_date) { Time.zone.now }
   before do
     allow(controller).to receive(:cookies).and_return(browser_time_zone: browser_time_zone)
   end
@@ -41,9 +41,16 @@ RSpec.describe MockController, type: :controller do
   end
 
   describe "#to_user_timezone" do
-    it "returns the default time even if browser time zone has an invalid value" do
-      expected_time = time_date.in_time_zone(default_time_zone)
-      expect(controller.send(:to_user_timezone, time_date.in_time_zone(Time.zone))).to eq(expected_time)
+    context "when browser time zone has an invalid value" do
+      before do
+        allow(controller).to receive(:cookies).and_return(browser_time_zone: "Invalid/Timezone")
+      end
+
+      it "returns the default time even if browser time zone has an invalid value" do
+        expected_time = time_date.in_time_zone(default_time_zone)
+        returned_time = controller.to_user_timezone(time_date.in_time_zone(Time.zone))
+        expect(returned_time).to eq(expected_time)
+      end
     end
 
     context "when browser time zone is not set" do
@@ -53,6 +60,20 @@ RSpec.describe MockController, type: :controller do
 
       it "returns the default timezone" do
         expect(controller.send(:to_user_timezone, time_date)).to eq(time_date.in_time_zone(default_time_zone))
+      end
+    end
+
+    context "when invalid param is sent" do
+      it "returns the empty string for nil param" do
+        expect(controller.send(:to_user_timezone, nil)).to eq("")
+      end
+
+      it "returns empty string if empty string param provided" do
+        expect(controller.send(:to_user_timezone, "")).to eq("")
+      end
+
+      it "returns nil for invalid date string" do
+        expect(controller.send(:to_user_timezone, "invalid-date")).to eq(nil)
       end
     end
   end
