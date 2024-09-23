@@ -15,9 +15,9 @@ export default class extends Controller {
   }
 
   clearExpenses = () => {
-    // mark for destruction. autosave has already created the records.
-    // if autosaved, nested form controller will remove destroy: true items
-    // if form submitted, it will be destroyed.
+    // mark as _destroy: true. autosave has already created the records.
+    // if autosaved again, nested form controller will remove destroy: true items
+    // if the form is submitted, expense will be destroyed.
     this.expenseDestroyTargets.forEach(el => (el.value = '1'))
   }
 

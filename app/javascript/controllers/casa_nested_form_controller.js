@@ -1,12 +1,18 @@
-// https://www.stimulus-components.com/docs/stimulus-rails-nested-form/
 import NestedForm from '@stimulus-components/rails-nested-form'
 
-// Connects to data-controller="casa-nested-form"
-// Allows nested forms to be used with autosave controller, adding and deleting records
-//   so that autosave does not create/destroy nested records multiple times.
-// add() & remove() are kept standard, can be used without autosave just fine:
-//   no values are necessary in that case.
-// Created for the CaseContact form (details), see usage there.
+/**
+ * Allows nested forms to be used with the autosave controller,
+ * creating and destroying records so that the autosave updates do not attempt
+ * to create/destroy same nested records repeatedly.
+ *
+ * add() & remove() are standard, so can be used as stimulus-rails-nested-form.
+ * https://www.stimulus-components.com/docs/stimulus-rails-nested-form/
+ * No values are necessary in that case.
+ *
+ * Created for the the CaseContact form (details), see its usage there.
+ *
+ * Connects to data-controller="casa-nested-form"
+ */
 export default class extends NestedForm {
   static values = {
     route: String, // path to create/destroy a record, e.g. "/contact_topic_answers"
@@ -30,9 +36,14 @@ export default class extends NestedForm {
     }
     this.headers = headers
 
-    document.addEventListener('autosave:success', (e) => {
-      this.onAutosaveSuccess(e)
-    })
+    // document.addEventListener('autosave:success', (e) => {
+    //   this.onAutosaveSuccess(e)
+    // })
+    document.addEventListener('autosave:success', this.onAutosaveSuccess)
+  }
+
+  disconnect () {
+    document.removeEventListener('autosave:success', this.onAutosaveSuccess)
   }
 
   getRecordId (wrapper) {
@@ -44,9 +55,9 @@ export default class extends NestedForm {
     return recordInput.value
   }
 
-  /* removes any items that have been marked destroy: true on autosave:success */
-  /* can be marked for destroy elsewhere, as in case_contact_form_controller hide reimbursement */
-  onAutosaveSuccess (_e) {
+  /* removes any items that have been marked as _destroy: true */
+  /* must be marked for destroy elsewhere, see case_contact_form_controller clearExpenses() */
+  onAutosaveSuccess = (_e) => {
     const wrappers = this.element.querySelectorAll(this.wrapperSelectorValue)
     wrappers.forEach(wrapper => {
       const destroyInput = wrapper.querySelector("input[name*='_destroy']")
@@ -168,14 +179,14 @@ export default class extends NestedForm {
     }
   }
 
-  windowConfirmRemove (e) {
+  confirmRemove (e) {
     const text = 'Are you sure you want to remove this item?'
     if (window.confirm(text)) {
       this.remove(e)
     }
   }
 
-  windowConfirmDestroyAndRemove (e) {
+  confirmDestroyAndRemove (e) {
     const text = 'Are you sure you want to remove this item?'
     if (window.confirm(text)) {
       this.destroyAndRemove(e)
