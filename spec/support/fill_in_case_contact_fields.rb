@@ -40,12 +40,10 @@ module FillInCaseContactFields
 
       choose medium if medium
 
-      within "#enter-contact-details" do
-        if contact_made
-          check "Contact was made"
-        else
-          uncheck "Contact was made"
-        end
+      if contact_made
+        check "Contact was made"
+      else
+        uncheck "Contact was made"
       end
 
       fill_in "case_contact_duration_hours", with: hours if hours

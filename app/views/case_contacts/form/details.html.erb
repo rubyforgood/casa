@@ -79,32 +79,30 @@
       </div>
 
       <!--CONTACT MADE-->
-      <div id="enter-contact-details">
-        <div class="checkbox-style py-1 mb-20">
-          <%= form.check_box :contact_made, class: "form-check-input" %>
-          <h3 class="d-inline">
-            <%= form.label :contact_made, "Contact was made", class: "form-check-label align-middle mt-2" %>
-          </h3>
-        </div>
+      <div class="checkbox-style py-1 mb-20">
+        <%= form.check_box :contact_made, class: "form-check-input" %>
+        <h3 class="d-inline">
+          <%= form.label :contact_made, "Contact was made", class: "form-check-label align-middle mt-2" %>
+        </h3>
+      </div>
 
-        <!--MEDIUM-->
-        <fieldset class="form-group mb-20">
-          <h3>
-            <legend class="mb-3">Contact Medium</legend>
-          </h3>
-          <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
-            <div class="form-check form-check-inline radio-style">
-              <%= b.radio_button(class: "form-check-input") %>
-              <%= b.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </fieldset>
+      <!--MEDIUM-->
+      <fieldset class="form-group mb-20">
+        <h3>
+          <legend class="mb-3">Contact Medium</legend>
+        </h3>
+        <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
+          <div class="form-check form-check-inline radio-style">
+            <%= b.radio_button(class: "form-check-input") %>
+            <%= b.label(class: "form-check-label") %>
+          </div>
+        <% end %>
+      </fieldset>
 
-        <!--DURATION-->
-        <div class="">
-          <h3 class="mb-3">Duration of contact</h3>
-          <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
-        </div>
+      <!--DURATION-->
+      <div class="">
+        <h3 class="mb-3">Duration of contact</h3>
+        <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
       </div>
     </section>
 
@@ -243,7 +241,6 @@
 
               <div data-casa-nested-form-target="target"></div>
 
-              <!--<button type="button" class="btn btn-link" data-action="casa-nested-form#add">-->
               <button type="button" class="btn btn-link"
                 data-action="casa-nested-form#addAndCreate">
                 + Add Expense
@@ -254,7 +251,7 @@
       </section>
     <% end %>
 
-    <div id="contact-form-action-buttons" class="actions mb-10 case-contacts-form-buttons">
+    <div id="contact-form-action-buttons" class="actions mb-10">
       <div class="checkbox-style pt-1">
         <%= form.fields_for :metadata do |metadata_form| %>
           <%= metadata_form.check_box :create_another, class: "form-check-input" %>
