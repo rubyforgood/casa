@@ -151,7 +151,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     autosave_alert_div = "#contact-form-notes"
     autosave_alert_css = 'small[role="alert"]'
     autosave_alert_text = "Saved!"
-    autosave_wait_time = 3
+    autosave_wait_time = 4
 
     case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer, notes: "Hello from the other side")
     visit edit_case_contact_path(case_contact)

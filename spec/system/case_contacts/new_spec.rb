@@ -5,6 +5,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   let(:casa_org) { create :casa_org }
   let(:contact_type_group) { create :contact_type_group, casa_org: }
   let!(:school_contact_type) { create :contact_type, contact_type_group:, name: "School" }
+  let(:contact_types) { [school_contact_type] }
 
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:casa_admin) { create :casa_admin, casa_org: }
@@ -83,12 +84,15 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   end
 
   describe "contact types" do
-    it "does not require a contact type" do
+    it "requires a contact type" do
       subject
 
       fill_in_contact_details(contact_types: [])
 
-      expect { click_on "Submit" }.to change(CaseContact.active, :count)
+      expect { click_on "Submit" }.to not_change(CaseContact.active, :count)
+      expect(page).to have_text("Contact Type(s) must be selected")
+      check contact_types.first.name
+      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
     end
 
     it "does not display empty contact groups or hidden contact types" do

@@ -5,8 +5,9 @@ import NestedForm from '@stimulus-components/rails-nested-form'
  * creating and destroying records so that the autosave updates do not attempt
  * to create/destroy same nested records repeatedly.
  *
- * add() & remove() are standard, so can be used as stimulus-rails-nested-form.
+ * Extends stimulus-rails-nested-form.
  * https://www.stimulus-components.com/docs/stimulus-rails-nested-form/
+ * add() & remove() are standard, so can be used as stimulus-rails-nested-form.
  * No values are necessary in that case.
  *
  * Created for the the CaseContact form (details), see its usage there.
@@ -36,9 +37,6 @@ export default class extends NestedForm {
     }
     this.headers = headers
 
-    // document.addEventListener('autosave:success', (e) => {
-    //   this.onAutosaveSuccess(e)
-    // })
     document.addEventListener('autosave:success', this.onAutosaveSuccess)
   }
 
@@ -82,15 +80,15 @@ export default class extends NestedForm {
     this.add(e)
     const items = this.element.querySelectorAll(this.wrapperSelectorValue)
     const addedItem = items[items.length - 1]
+    // childIndex will be 0,1,... for items at page load, timestamps for items added to form.
     const childIndex = addedItem.dataset.childIndex
-
-    const itemBase = `${this.parentNameValue}_${this.modelNameValue}s_attributes_${childIndex}`
+    const domIdBase = `${this.parentNameValue}_${this.modelNameValue}s_attributes_${childIndex}`
 
     const fields = {}
     fields[`${this.parentNameValue}_id`] = this.parentIdValue
 
     this.requiredFieldsValue.forEach(field => {
-      const fieldId = `${itemBase}_${field}`
+      const fieldId = `${domIdBase}_${field}`
       const fieldEl = document.querySelector(`#${fieldId}`)
       if (!fieldEl) {
         console.warn('Aborting: Field not found:', fieldId)
@@ -120,7 +118,7 @@ export default class extends NestedForm {
         }
       })
       .then(data => {
-        const idAttr = `${itemBase}_id`
+        const idAttr = `${domIdBase}_id`
         const idField = document.querySelector(`#${idAttr}`)
         idField.setAttribute('value', data.id)
         addedItem.dataset.newRecord = false
