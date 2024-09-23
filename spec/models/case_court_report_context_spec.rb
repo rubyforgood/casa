@@ -13,6 +13,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
   before do
     travel_to Date.new(2021, 1, 1)
   end
+  after { travel_back }
 
   describe "#context" do
     it "has the right shape" do

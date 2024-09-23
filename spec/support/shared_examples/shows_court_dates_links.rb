@@ -6,6 +6,7 @@ shared_examples_for "shows court dates links" do
     hearing_type = create(:hearing_type, name: "Some Hearing Name")
     _court_date_with_details = create(:court_date, :with_court_details, casa_case: casa_case, hearing_type: hearing_type)
   end
+  after { travel_back }
 
   it "shows court orders" do
     visit edit_casa_case_path(casa_case)

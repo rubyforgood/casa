@@ -50,6 +50,7 @@ RSpec.describe "casa_cases/show", type: :system do
       sign_in user
       visit casa_case_path(casa_case.id)
     end
+    after { travel_back }
 
     context "when first arriving to 'Generate Court Report' page" do
       it "generation modal hidden" do

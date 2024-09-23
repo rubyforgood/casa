@@ -20,6 +20,7 @@ RSpec.describe CourtDate, type: :model do
   before do
     travel_to Date.new(2021, 1, 1)
   end
+  after { travel_back }
 
   describe "date validation" do
     it "is not valid before 1989" do
@@ -148,6 +149,7 @@ RSpec.describe CourtDate, type: :model do
     it "contains case number and date" do
       travel_to Time.zone.local(2020, 1, 2)
       expect(subject).to eq("AAA123123 - Court Date - 2019-12-26")
+      travel_back
     end
   end
 end

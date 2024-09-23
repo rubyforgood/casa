@@ -40,5 +40,6 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     visit casa_case_path(casa_case)
     expect(page).to have_content(hearing_type.name)
     expect(page).to have_content(court_order_text)
+    travel_back
   end
 end

@@ -13,6 +13,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     sign_in volunteer
     visit case_court_reports_path
   end
+  after { travel_back }
 
   context "when first arriving to 'Generate Court Report' page", js: true do
     it "generation modal hidden" do
