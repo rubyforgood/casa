@@ -2,6 +2,9 @@ class ContactTopicAnswer < ApplicationRecord
   belongs_to :case_contact
   belongs_to :contact_topic
 
+  has_one :casa_case, through: :case_contact
+  has_one :casa_org, through: :casa_case
+
   validates :selected, inclusion: [true, false]
 
   default_scope { joins(:contact_topic).order("contact_topics.id") }

@@ -32,6 +32,9 @@
 en:
   activerecord:
     attributes:
+      additional_expense:
+        other_expenses_amount: Amount
+        other_expenses_describe: Description
       case_contact:
         case_contact_contact_types:
           one: Contact Type

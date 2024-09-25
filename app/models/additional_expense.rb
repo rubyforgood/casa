@@ -1,8 +1,16 @@
 class AdditionalExpense < ApplicationRecord
   belongs_to :case_contact
+  has_one :casa_case, through: :case_contact
+  has_one :casa_org, through: :casa_case
 
-  # validates :other_expense_amount, presence: true
-  validates :other_expenses_describe, presence: {message: "Expense description cannot be blank."}
+  validates :other_expenses_describe, presence: true, if: :describe_required?
+
+  alias_attribute :amount, :other_expense_amount
+  alias_attribute :describe, :other_expenses_describe
+
+  def describe_required?
+    other_expense_amount&.positive?
+  end
 end
 
 # == Schema Information
