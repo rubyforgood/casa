@@ -194,7 +194,7 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           end
 
           context "when updating contact types" do
-            let(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first.id) }
+            let!(:old_contact_type) { create(:case_contact_contact_type, case_contact: case_contact, contact_type: contact_type_group_b.contact_types.first) }
 
             it "removes unselected ones" do
               expect(case_contact.contact_types.count).to eq 1
