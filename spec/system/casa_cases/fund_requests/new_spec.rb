@@ -9,9 +9,11 @@ RSpec.describe "casa_cases/fund_requests/new", type: :system do
     sign_in volunteer
     visit new_casa_case_fund_request_path(casa_case)
 
-    expect(page).to have_field "Your email", with: volunteer.email
-    expect(page).to have_field "Name or case number of youth", with: casa_case.case_number
-    expect(page).to have_field "Requested by & relationship to youth", with: "#{volunteer.display_name} CASA Volunteer"
+    aggregate_failures do
+      expect(page).to have_field "Your email", with: volunteer.email
+      expect(page).to have_field "Name or case number of youth", with: casa_case.case_number
+      expect(page).to have_field "Requested by & relationship to youth", with: "#{volunteer.display_name} CASA Volunteer"
+    end
 
     fill_in "Amount of payment", with: "100"
     fill_in "Deadline", with: "2022-12-31"
@@ -28,15 +30,17 @@ RSpec.describe "casa_cases/fund_requests/new", type: :system do
     expect(page).to have_text "Fund Request was sent for case #{casa_case.case_number}"
 
     fr = FundRequest.last
-    expect(fr.deadline).to eq "2022-12-31"
-    expect(fr.extra_information).to eq "foo bar"
-    expect(fr.impact).to eq "provide support"
-    expect(fr.other_funding_source_sought).to eq "some other agency"
-    expect(fr.payee_name).to eq "Minnie Mouse"
-    expect(fr.payment_amount).to eq "100"
-    expect(fr.request_purpose).to eq "Fun outing"
-    expect(fr.requested_by_and_relationship).to eq "#{volunteer.display_name} CASA Volunteer"
-    expect(fr.submitter_email).to eq volunteer.email
-    expect(fr.youth_name).to eq casa_case.case_number
+    aggregate_failures do
+      expect(fr.deadline).to eq "2022-12-31"
+      expect(fr.extra_information).to eq "foo bar"
+      expect(fr.impact).to eq "provide support"
+      expect(fr.other_funding_source_sought).to eq "some other agency"
+      expect(fr.payee_name).to eq "Minnie Mouse"
+      expect(fr.payment_amount).to eq "100"
+      expect(fr.request_purpose).to eq "Fun outing"
+      expect(fr.requested_by_and_relationship).to eq "#{volunteer.display_name} CASA Volunteer"
+      expect(fr.submitter_email).to eq volunteer.email
+      expect(fr.youth_name).to eq casa_case.case_number
+    end
   end
 end
