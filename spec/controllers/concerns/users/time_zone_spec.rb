@@ -72,7 +72,7 @@ RSpec.describe MockController, type: :controller do
         allow(controller).to receive(:cookies).and_return({})
       end
 
-      it "returns the default timezone" do
+      it "returns the default time zone" do
         expect(controller.user_timezone).to eq(default_time_zone)
       end
     end

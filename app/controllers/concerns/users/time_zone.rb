@@ -17,10 +17,14 @@ module Users
     def to_user_timezone(time_date)
       return "" if time_date.nil? || (time_date.instance_of?(String) && time_date.empty?)
 
-      time_zone = (browser_time_zone && browser_time_zone != Time.zone) ? browser_time_zone : "Eastern Time (US & Canada)"
+      time_zone = user_timezone
       return time_date.in_time_zone(time_zone) if time_date.respond_to?(:in_time_zone)
 
       time_date.to_time(time_zone)
+    end
+
+    def user_timezone
+      (browser_time_zone && browser_time_zone != Time.zone) ? browser_time_zone : "Eastern Time (US & Canada)"
     end
   end
 end
