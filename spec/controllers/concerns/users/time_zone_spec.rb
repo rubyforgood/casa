@@ -59,21 +59,21 @@ RSpec.describe MockController, type: :controller do
       end
 
       it "returns the default timezone" do
-        expect(controller.send(:to_user_timezone, time_date)).to eq(time_date.in_time_zone(default_time_zone))
+        expect(controller.to_user_timezone(time_date)).to eq(time_date.in_time_zone(default_time_zone))
       end
     end
 
     context "when invalid param is sent" do
       it "returns the empty string for nil param" do
-        expect(controller.send(:to_user_timezone, nil)).to eq("")
+        expect(controller.to_user_timezone(nil)).to eq("")
       end
 
       it "returns empty string if empty string param provided" do
-        expect(controller.send(:to_user_timezone, "")).to eq("")
+        expect(controller.to_user_timezone("")).to eq("")
       end
 
       it "returns nil for invalid date string" do
-        expect(controller.send(:to_user_timezone, "invalid-date")).to eq(nil)
+        expect(controller.to_user_timezone("invalid-date")).to eq(nil)
       end
     end
   end
