@@ -45,7 +45,7 @@ end
 
 # used without docker
 Capybara.register_driver :selenium_chrome_headless do |app|
-  options.add_argument("--headless") unless ENV.fetch("HEADED", false)
+  options.add_argument("--headless")
   options.add_argument("--disable-site-isolation-trials")
   options.add_preference(:download, prompt_for_download: false, default_directory: DownloadHelpers::PATH.to_s)
 
