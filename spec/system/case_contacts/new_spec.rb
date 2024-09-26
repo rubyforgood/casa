@@ -1,5 +1,4 @@
 require "rails_helper"
-require "action_view"
 
 RSpec.describe "case_contacts/new", :js, type: :system do
   let(:casa_org) { create :casa_org }
@@ -90,7 +89,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       fill_in_contact_details(contact_types: [])
 
       expect { click_on "Submit" }.to not_change(CaseContact.active, :count)
-      expect(page).to have_text("Contact Type(s) must be selected")
+      expect(page).to have_text("Contact Type must be selected")
       check contact_types.first.name
       expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
     end

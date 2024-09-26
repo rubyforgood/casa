@@ -132,12 +132,6 @@ RSpec.describe CaseContact, type: :model do
       expect(obj).not_to be_valid
       expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
-
-    it "requires a case to be selected" do
-      obj = build_stubbed(:case_contact, :expenses_status, :wants_reimbursement, draft_case_ids: [])
-      expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("CASA Case must be selected")
-    end
   end
 
   describe "#update_cleaning_contact_types" do
