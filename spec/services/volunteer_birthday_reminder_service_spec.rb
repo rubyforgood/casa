@@ -74,7 +74,6 @@ RSpec.describe VolunteerBirthdayReminderService do
     before { travel_to(this_month_15th) }
     after { travel_back }
 
-
     let!(:volunteer) do
       create(:volunteer, :with_assigned_supervisor, date_of_birth: next_month)
     end
