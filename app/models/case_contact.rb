@@ -4,7 +4,7 @@ class CaseContact < ApplicationRecord
 
   attr_accessor :duration_hours
 
-  validate :contact_made_chosen
+  validates :contact_made, inclusion: {in: [true, false], message: :must_be_true_or_false}
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
   validates :duration_minutes, presence: true, if: :active_or_details?
@@ -36,7 +36,7 @@ class CaseContact < ApplicationRecord
   belongs_to :casa_case, optional: true
   has_one :casa_org, through: :casa_case
   validates :casa_case_id, presence: true, if: :active?
-  validate :draft_case_ids_not_empty, unless: :started?
+  validates :draft_case_ids, presence: {message: :must_be_selected}, unless: :started?
 
   has_many :case_contact_contact_types
   has_many :contact_types, through: :case_contact_contact_types
@@ -230,15 +230,6 @@ class CaseContact < ApplicationRecord
         errors.add(:base, "The volunteer's address is not valid.")
       end
     end
-  end
-
-  def contact_made_chosen
-    errors.add(:base, "Must enter whether the contact was made.") if contact_made.nil?
-    !contact_made.nil?
-  end
-
-  def draft_case_ids_not_empty
-    errors.add(:base, "You must select at least one casa case.") if draft_case_ids.empty?
   end
 
   def supervisor_id

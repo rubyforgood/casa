@@ -3,6 +3,16 @@ FactoryBot.define do
     display_name { Faker::Name.unique.name }
     active { true }
 
+    transient do
+      volunteers { [] }
+    end
+
+    after(:create) do |supervisor, evaluator|
+      Array.wrap(evaluator.volunteers).each do |volunteer|
+        create(:supervisor_volunteer, supervisor:, volunteer:)
+      end
+    end
+
     trait :with_casa_cases do
       after(:create) do |user, _|
         volunteer = create(:volunteer)

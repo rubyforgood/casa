@@ -225,7 +225,7 @@ RSpec.describe "case_contacts/new", type: :system, js: true do
 
     context "when driving reimbursement is hidden when volunteer not allowed to request" do
       let(:casa_org) { build(:casa_org, show_driving_reimbursement: true) }
-      let(:volunteer) { create(:volunteer, :with_disasllow_reimbursement, casa_org:) }
+      let(:volunteer) { create(:volunteer, :with_disallow_reimbursement, casa_org:) }
 
       it "does not show for case_contacts" do
         subject

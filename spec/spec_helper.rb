@@ -44,4 +44,6 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = :random
+
+  RSpec::Matchers.define_negated_matcher :not_change, :change
 end
