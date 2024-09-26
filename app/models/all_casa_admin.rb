@@ -1,4 +1,5 @@
 class AllCasaAdmin < ApplicationRecord
+  prepend ActiveSupport::ToJsonWithActiveSupportEncoder
   include Roles
 
   # Include default devise modules. Others available are:

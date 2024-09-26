@@ -1,4 +1,6 @@
 class ApplicationDatatable
+  prepend ActiveSupport::ToJsonWithActiveSupportEncoder
+
   attr_reader :base_relation, :params
 
   DEFAULT_PER_PAGE = 10

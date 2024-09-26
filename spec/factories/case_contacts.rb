@@ -13,7 +13,7 @@ FactoryBot.define do
     association :creator, factory: :user
     casa_case
 
-    contact_types { [create(:contact_type)] }
+    contact_types { [association(:contact_type)] }
     duration_minutes { 60 }
     occurred_at { Time.zone.today }
     contact_made { false }
@@ -38,12 +38,14 @@ FactoryBot.define do
     trait :wants_reimbursement do
       miles_driven { 456 }
       want_driving_reimbursement { true }
+      volunteer_address { "123 Contact Factory St" }
     end
 
     trait :started_status do
       started # enum trait
 
       casa_case { nil }
+      contact_types { [] }
       draft_case_ids { [] }
       medium_type { nil }
       occurred_at { nil }

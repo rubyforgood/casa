@@ -4,6 +4,7 @@ RSpec.describe CaseContactsContactDates do
   before do
     travel_to Date.new(2021, 6, 1)
   end
+  after { travel_back }
 
   describe "#contact_dates_details" do
     subject { described_class.new(interviewees).contact_dates_details }

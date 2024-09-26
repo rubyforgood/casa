@@ -308,6 +308,7 @@ RSpec.describe CasaCase, type: :model do
       before do
         travel_to the_future
       end
+      after { travel_back }
 
       context "when the status is completed" do
         let(:court_report_status) { :completed }
@@ -367,6 +368,8 @@ RSpec.describe CasaCase, type: :model do
     before do
       travel_to Date.new(2021, 1, 1)
     end
+
+    after { travel_back }
 
     context "with a past court date" do
       it "returns the latest past court date as a formatted string" do

@@ -79,4 +79,6 @@ Rails.application.configure do
 
   # https://github.com/rails/rails/issues/48468
   config.active_job.queue_adapter = :test
+
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_test_secret_key"
 end

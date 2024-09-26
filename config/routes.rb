@@ -90,7 +90,7 @@ Rails.application.routes.draw do
     member do
       post :restore
     end
-    resources :form, controller: "case_contacts/form"
+    resources :form, controller: "case_contacts/form", only: %i[show update]
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end

@@ -77,6 +77,7 @@ RSpec.describe Banner, type: :model do
       expect(expires_at_in_eastern_time.to_s).to eq("2024-06-13 08:00:00 -0400")
 
       expect(expires_at_in_pacific_time).to eq(expires_at_in_eastern_time)
+      travel_back
     end
   end
 end

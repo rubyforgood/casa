@@ -176,6 +176,7 @@ RSpec.describe "/case_court_reports", type: :request do
       before do
         travel_to server_time
       end
+      after { travel_back }
 
       it "is different than server" do
         get request.parsed_body["link"]

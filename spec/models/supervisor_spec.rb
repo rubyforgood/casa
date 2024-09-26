@@ -26,6 +26,7 @@ RSpec.describe Supervisor, type: :model do
 
       user = User.accept_invitation!(invitation_token: supervisor.invitation_token)
       expect(user.errors.full_messages).to include("Invitation token is invalid")
+      travel_back
     end
   end
 

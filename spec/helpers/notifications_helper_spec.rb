@@ -20,6 +20,7 @@ RSpec.describe NotificationsHelper do
       notification_created_before_deploy_a.update_attribute(:created_at, 2.days.ago - 1.hour)
       notification_created_before_deploy_b.update_attribute(:created_at, 3.days.ago)
     end
+    after { travel_back }
 
     describe "#notifications_after_and_including_deploy" do
       let(:notifications_after_and_including_deploy) { helper.notifications_after_and_including_deploy(Noticed::Notification.all) }
