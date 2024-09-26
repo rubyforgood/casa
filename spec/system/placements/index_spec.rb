@@ -21,6 +21,7 @@ RSpec.describe "placements", type: :system do
     sign_in admin
     visit casa_case_placements_path(casa_case, placements)
   end
+  after { travel_back }
 
   it "displays all placements for org" do
     expect(page).to have_text("Reunification")

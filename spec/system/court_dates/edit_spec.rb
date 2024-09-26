@@ -16,6 +16,7 @@ RSpec.describe "court_dates/edit", type: :system do
   before do
     travel_to now
   end
+  after { travel_back }
 
   context "as an admin" do
     before do

@@ -18,6 +18,7 @@ RSpec.describe "court_dates/new", type: :system do
     visit casa_case_path(casa_case)
     click_link("Add a court date")
   end
+  after { travel_back }
 
   context "when all fields are filled" do
     it "is successful", js: true do

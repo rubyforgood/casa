@@ -87,6 +87,7 @@ RSpec.describe "Banners", type: :request do
 
     context "when client timezone is ahead of UTC" do
       before { travel_to Time.new(2024, 6, 1, 11, 0, 0, "+03:00") } # 08:00 UTC
+      after { travel_back }
 
       context "when submitted time is behind client but ahead of UTC" do
         let(:expires_at) { Time.new(2024, 6, 1, 9, 0, 0, "UTC") } # 12:00 +03:00
@@ -112,6 +113,7 @@ RSpec.describe "Banners", type: :request do
 
     context "when client timezone is behind UTC" do
       before { travel_to Time.new(2024, 6, 1, 11, 0, 0, "-04:00") } # 15:00 UTC
+      after { travel_back }
 
       context "when submitted time is ahead of client and ahead of UTC" do
         let(:expires_at) { Time.new(2024, 6, 1, 16, 0, 0, "UTC") } # 12:00 -04:00
