@@ -30,7 +30,7 @@ class DbPopulator
     @casa_org_counter += 1
 
     options.org_name ||= "CASA Organization ##{@casa_org_counter}"
-    casa_org = CasaOrg.find_or_create_by!(name: options.org_name) { |org|
+    CasaOrg.find_or_create_by!(name: options.org_name) { |org|
       org.name = options.org_name
       org.display_name = options.org_name
       org.address = Faker::Address.full_address
@@ -41,7 +41,6 @@ class DbPopulator
       ]
       org.logo.attach(io: File.open(CasaOrg::CASA_DEFAULT_LOGO), filename: CasaOrg::CASA_DEFAULT_LOGO.basename.to_s)
     }
-        casa_org
   end
 
   # Create 2 judges for each casa_org.
@@ -355,6 +354,7 @@ class DbPopulator
   end
 
   private # -------------------------------------------------------------------------------------------------------
+
   def most_recent_past_court_date(casa_case_id)
     CourtDate.where(
       "date < ? AND casa_case_id = ?",
@@ -463,5 +463,4 @@ class DbPopulator
     @true_false_array ||= [true, false]
     @true_false_array.sample(random: rng)
   end
-
 end
