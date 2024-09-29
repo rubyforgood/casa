@@ -1,41 +1,52 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
 #case-contact-form {
-  #contact-form-types {
-    display: grid;
-    grid-template-columns: 1fr;
-  }
+  & #contact-form-types {
+    --group-width: 250px;
 
-  @media only screen and (min-width: screen-sizes.$small) {
-    #contact-form-types {
-      grid-template-columns: 1fr 1fr;
+    columns: var(--group-width);
+
+    & fieldset {
+      display: inline-block;
+      width: var(--group-width);
+      padding: .25rem;
+
+      & legend {
+        color: var(--inactive);
+      }
+
+      & .form-check {
+        padding-left: .25rem;
+
+        & input {
+          float: none;
+        }
+
+        & label {
+          display: inline;
+        }
+      }
     }
   }
 
-  @media only screen and (min-width: screen-sizes.$medium) {
-    #contact-form-types {
-      grid-template-columns: 1fr 1fr 1fr;
-    }
-  }
-
-  .input-group-text {
+  & .input-group-text {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
   }
 
-  h2 {
+  & h2 {
     font-size: 28px;
   }
 
-  h3 {
+  & h3 {
     font-size: medium;
   }
 
-  legend {
+  & legend {
     font-size: medium;
   }
 
-  #contact-form-action-buttons {
+  & #contact-form-action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;

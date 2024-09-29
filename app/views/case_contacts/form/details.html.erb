@@ -66,12 +66,12 @@
       <h3>Contact Type(s)<span class="red-letter">*</span></h3>
       <div id="contact-form-types" class="mb-3">
         <% @grouped_contact_types.each do |group_name, contact_types| %>
-          <fieldset class="form-group p-2">
+          <fieldset class="form-group">
             <legend><%= group_name %></legend>
             <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
-              <div class="form-check ps-1">
+              <div class="form-check">
                 <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox", "ms-1"]) %>
-                <%= b.label(class: "form-check-label ps-2") %>
+                <%= b.label(class: "form-check-label") %>
               </div>
             <% end %>
           </fieldset>
