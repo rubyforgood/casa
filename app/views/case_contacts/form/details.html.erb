@@ -88,9 +88,9 @@
 
       <!--MEDIUM-->
       <fieldset class="form-group mb-20">
-        <h3>
-          <legend class="mb-3">Contact Medium</legend>
-        </h3>
+        <legend>
+          <h3>Contact Medium<span class="red-letter">*</span></h3>
+        </legend>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
           <div class="form-check form-check-inline radio-style">
             <%= b.radio_button(class: "form-check-input") %>
