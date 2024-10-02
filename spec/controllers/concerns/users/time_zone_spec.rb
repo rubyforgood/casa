@@ -41,6 +41,14 @@ RSpec.describe MockController, type: :controller do
   end
 
   describe "#to_user_timezone" do
+    it "takes a time_date and converts it to user's time zone" do
+      expected = controller.to_user_timezone(time_date)
+      returned = time_date.in_time_zone(browser_time_zone)
+      expect(expected.zone).to eq(returned.zone)
+      expect(expected.day).to eq(returned.day)
+      expect(expected.hour).to eq(returned.hour)
+    end
+
     context "when invalid param is sent" do
       it "returns the empty string for nil param" do
         expect(controller.to_user_timezone(nil)).to eq("")
