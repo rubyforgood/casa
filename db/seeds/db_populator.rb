@@ -26,12 +26,11 @@ class DbPopulator
     AllCasaAdmin.create!(email: email, password: SEED_PASSWORD, password_confirmation: SEED_PASSWORD)
   end
 
-  def create_org(options_hash)
-    options = OpenStruct.new(options_hash)
+  def create_org(options)
     @casa_org_counter += 1
 
     options.org_name ||= "CASA Organization ##{@casa_org_counter}"
-    casa_org = CasaOrg.find_or_create_by!(name: options.org_name) { |org|
+    CasaOrg.find_or_create_by!(name: options.org_name) { |org|
       org.name = options.org_name
       org.display_name = options.org_name
       org.address = Faker::Address.full_address
@@ -42,22 +41,7 @@ class DbPopulator
       ]
       org.logo.attach(io: File.open(CasaOrg::CASA_DEFAULT_LOGO), filename: CasaOrg::CASA_DEFAULT_LOGO.basename.to_s)
     }
-
-    create_users(casa_org, options)
-    create_cases(casa_org, options)
-    create_hearing_types(casa_org)
-    create_checklist_items
-    create_judges(casa_org)
-    create_languages(casa_org)
-    create_mileage_rates(casa_org)
-    create_learning_hour_types(casa_org)
-    create_learning_hour_topics(casa_org)
-    create_learning_hours(casa_org)
-    create_other_duties
-    casa_org
   end
-
-  private # -------------------------------------------------------------------------------------------------------
 
   # Create 2 judges for each casa_org.
   def create_judges(casa_org)
@@ -123,54 +107,6 @@ class DbPopulator
     end
   end
 
-  def generate_case_number
-    # CINA-YY-XXXX
-    years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
-    yy = years.sample(random: rng).to_s[2..3]
-    @case_number_sequence += 1
-    "CINA-#{yy}-#{@case_number_sequence}"
-  end
-
-  def generate_court_date
-    ((Date.today + 1.month)..(Date.today + 5.months)).to_a.sample
-  end
-
-  def random_true_false
-    @true_false_array ||= [true, false]
-    @true_false_array.sample(random: rng)
-  end
-
-  def random_case_contact_count
-    @random_case_contact_counts ||= [0, 1, 2, 2, 2, 3, 3, 3, 11, 11, 11]
-    @random_case_contact_counts.sample(random: rng)
-  end
-
-  def random_past_court_date_count
-    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
-    @random_past_court_date_counts.sample(random: rng)
-  end
-
-  def random_zero_one_count
-    @random_zero_one_count ||= [0, 1]
-    @random_zero_one_count.sample(random: rng)
-  end
-
-  def random_court_order_count
-    @random_court_order_counts ||= [0, 3, 5, 10]
-    @random_court_order_counts.sample(random: rng)
-  end
-
-  def likely_contact_durations
-    @likely_contact_durations ||= [15, 30, 60, 75, 4 * 60, 6 * 60]
-  end
-
-  def note_generator
-    paragraph_count = Random.rand(6)
-    (0..paragraph_count).map { |index|
-      Faker::Lorem.paragraph(sentence_count: 5, supplemental: true, random_sentences_to_add: 20)
-    }.join("\n\n")
-  end
-
   def create_case_contacts(casa_case)
     draft_statuses = %w[started details notes expenses]
 
@@ -194,43 +130,6 @@ class DbPopulator
 
     params.merge!(status_modifications[status]) unless status == "active"
     CaseContact.create!(params)
-  end
-
-  def base_case_contact_params(casa_case, status)
-    {
-      casa_case: casa_case,
-      creator: casa_case.volunteers.sample(random: rng),
-      duration_minutes: likely_contact_durations.sample(random: rng),
-      occurred_at: rng.rand(0..6).months.ago,
-      contact_types: ContactType.all.sample(2, random: rng),
-      medium_type: CaseContact::CONTACT_MEDIUMS.sample(random: rng),
-      miles_driven: rng.rand(5..40),
-      want_driving_reimbursement: random_true_false,
-      contact_made: random_true_false,
-      notes: note_generator,
-      status: status,
-      draft_case_ids: [casa_case&.id]
-    }
-  end
-
-  def order_choices
-    [
-      "Limited guardianship of the children for medical and educational purposes to [name] shall be rescinded;",
-      "The children shall remain children in need of assistance (cina), under the jurisdiction of the juvenile court, and shall remain committed to the department of health and human services/child welfare services, for continued placement on a trial home visit with [NAME]",
-      "The youth shall continue to participate in educational tutoring, under the direction of the department;",
-      "The youth shall continue to participate in family therapy with [name], under the direction of the department;",
-      "The permanency plan for all the children of reunification is reaffirmed;",
-      "Visitation between the youth and the father shall be unsupervised, minimum once weekly, in the community or at his home, and may include overnights when he has the appropriate space for the children to sleep, under the direction of the department;",
-      "Youth shall continue to participate in individual therapy, under the direction of the department;",
-      "The youth shall continue to maintain stable employment;",
-      "The youth shall maintain appropriate housing while working towards obtaining housing that can accommodate all of the children being reunified, and make home available for inspection, under the direction of the department;",
-      "The youth shall participate in case management services, under the direction of the department;",
-      "The youth shall participate in mental health treatment and medication management, under the direction of the department;"
-    ]
-  end
-
-  def transition_aged_youth?(birth_month_year_youth)
-    (Date.today - birth_month_year_youth).days.in_years > CasaCase::TRANSITION_AGE
   end
 
   def create_cases(casa_org, options)
@@ -454,6 +353,8 @@ class DbPopulator
     end
   end
 
+  private # -------------------------------------------------------------------------------------------------------
+
   def most_recent_past_court_date(casa_case_id)
     CourtDate.where(
       "date < ? AND casa_case_id = ?",
@@ -476,5 +377,90 @@ class DbPopulator
       date,
       case_case_id
     ).any?
+  end
+
+  def order_choices
+    [
+      "Limited guardianship of the children for medical and educational purposes to [name] shall be rescinded;",
+      "The children shall remain children in need of assistance (cina), under the jurisdiction of the juvenile court, and shall remain committed to the department of health and human services/child welfare services, for continued placement on a trial home visit with [NAME]",
+      "The youth shall continue to participate in educational tutoring, under the direction of the department;",
+      "The youth shall continue to participate in family therapy with [name], under the direction of the department;",
+      "The permanency plan for all the children of reunification is reaffirmed;",
+      "Visitation between the youth and the father shall be unsupervised, minimum once weekly, in the community or at his home, and may include overnights when he has the appropriate space for the children to sleep, under the direction of the department;",
+      "Youth shall continue to participate in individual therapy, under the direction of the department;",
+      "The youth shall continue to maintain stable employment;",
+      "The youth shall maintain appropriate housing while working towards obtaining housing that can accommodate all of the children being reunified, and make home available for inspection, under the direction of the department;",
+      "The youth shall participate in case management services, under the direction of the department;",
+      "The youth shall participate in mental health treatment and medication management, under the direction of the department;"
+    ]
+  end
+
+  def transition_aged_youth?(birth_month_year_youth)
+    (Date.today - birth_month_year_youth).days.in_years > CasaCase::TRANSITION_AGE
+  end
+
+  def base_case_contact_params(casa_case, status)
+    {
+      casa_case: casa_case,
+      creator: casa_case.volunteers.sample(random: rng),
+      duration_minutes: likely_contact_durations.sample(random: rng),
+      occurred_at: rng.rand(0..6).months.ago,
+      contact_types: ContactType.all.sample(2, random: rng),
+      medium_type: CaseContact::CONTACT_MEDIUMS.sample(random: rng),
+      miles_driven: rng.rand(5..40),
+      want_driving_reimbursement: random_true_false,
+      contact_made: random_true_false,
+      notes: note_generator,
+      status: status,
+      draft_case_ids: [casa_case&.id]
+    }
+  end
+
+  def random_case_contact_count
+    @random_case_contact_counts ||= [0, 1, 2, 2, 2, 3, 3, 3, 11, 11, 11]
+    @random_case_contact_counts.sample(random: rng)
+  end
+
+  def random_past_court_date_count
+    @random_past_court_date_counts ||= [0, 2, 3, 4, 5]
+    @random_past_court_date_counts.sample(random: rng)
+  end
+
+  def random_zero_one_count
+    @random_zero_one_count ||= [0, 1]
+    @random_zero_one_count.sample(random: rng)
+  end
+
+  def random_court_order_count
+    @random_court_order_counts ||= [0, 3, 5, 10]
+    @random_court_order_counts.sample(random: rng)
+  end
+
+  def likely_contact_durations
+    @likely_contact_durations ||= [15, 30, 60, 75, 4 * 60, 6 * 60]
+  end
+
+  def note_generator
+    paragraph_count = Random.rand(6)
+    (0..paragraph_count).map { |index|
+      Faker::Lorem.paragraph(sentence_count: 5, supplemental: true, random_sentences_to_add: 20)
+    }.join("\n\n")
+  end
+
+  def generate_case_number
+    # CINA-YY-XXXX
+    years = ((DateTime.now.year - 20)..DateTime.now.year).to_a
+    yy = years.sample(random: rng).to_s[2..3]
+    @case_number_sequence += 1
+    "CINA-#{yy}-#{@case_number_sequence}"
+  end
+
+  def generate_court_date
+    ((Date.today + 1.month)..(Date.today + 5.months)).to_a.sample
+  end
+
+  def random_true_false
+    @true_false_array ||= [true, false]
+    @true_false_array.sample(random: rng)
   end
 end
