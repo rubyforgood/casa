@@ -20,6 +20,13 @@ If you have an older version of postgres, `brew postgresql-upgrade-database`
 
 For a more GUI focused postgres experience, try [Postgres.app](https://postgresapp.com/) an alternative to the CLI focused default postgres
 
+If you are having trouble connecting to your local postgres database using pgAdmin or another local tool, try the following configuration:
+Host Name: localhost
+Port: 5432
+Maintenance Database: postgres
+Username: you_mac_login_username (Can be found by calling whoami in a terminal)
+Password: password
+
 ## Ruby
 
 ### Rbenv
