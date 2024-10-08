@@ -17,6 +17,7 @@ class ApplicationController < ActionController::Base
   rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
+  rescue_from ActionController::UnknownFormat, with: :unsupported_media_type
 
   impersonates :user
 
@@ -34,6 +35,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_active_banner
+    return nil unless request.format.html?
     return nil unless current_organization
 
     @active_banner = current_organization.banners.active.first
@@ -111,6 +113,12 @@ class ApplicationController < ActionController::Base
 
   private
 
+  # Allows us to not specify respond_to formats in json-only controller or action.
+  # Same behavior as when a request format is not defined in a respond_to block.
+  def force_json_format
+    raise ActionController::UnknownFormat unless request.format.json?
+  end
+
   def store_user_location!
     # the current URL can be accessed from a session
     store_location_for(:user, request.fullpath)
@@ -135,9 +143,29 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authorized
-    session[:user_return_to] = nil
-    flash[:notice] = "Sorry, you are not authorized to perform this action."
-    redirect_to(root_url)
+    message = "Sorry, you are not authorized to perform this action."
+    respond_to do |format|
+      format.json do
+        render json: {error: message}, status: :unauthorized
+      end
+      format.any do
+        session[:user_return_to] = nil
+        flash[:notice] = message
+        redirect_to(root_url)
+      end
+    end
+  end
+
+  def unsupported_media_type
+    respond_to do |format|
+      format.json do
+        render json: {error: "json unsupported"}, status: :unsupported_media_type
+      end
+      format.any do
+        flash[:alert] = "Page not found"
+        redirect_back_or_to root_url
+      end
+    end
   end
 
   def log_and_reraise(error)

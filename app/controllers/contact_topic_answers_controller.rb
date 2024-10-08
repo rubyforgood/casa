@@ -1,14 +1,14 @@
 class ContactTopicAnswersController < ApplicationController
+  before_action :force_json_format
+
   def create
     @contact_topic_answer = ContactTopicAnswer.new(contact_topic_answer_params)
     authorize @contact_topic_answer
 
-    respond_to do |format|
-      if @contact_topic_answer.save
-        format.json { render json: @contact_topic_answer.as_json, status: :created }
-      else
-        format.json { render json: @contact_topic_answer.errors.as_json, status: :unprocessable_entity }
-      end
+    if @contact_topic_answer.save
+      render json: @contact_topic_answer.as_json, status: :created
+    else
+      render json: @contact_topic_answer.errors.as_json, status: :unprocessable_entity
     end
   end
 
@@ -18,9 +18,7 @@ class ContactTopicAnswersController < ApplicationController
 
     @contact_topic_answer.destroy!
 
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private

@@ -54,9 +54,9 @@ RSpec.describe "/additional_expenses", type: :request do
     context "html request" do
       subject { post additional_expenses_path, params: }
 
-      it "raises RoutingError" do
-        expect { subject }.to raise_error(ActionController::RoutingError)
-        expect(response).to be_blank
+      it "redirects to referrer/root without creating an additional expense" do
+        expect { subject }.to not_change(AdditionalExpense, :count)
+        expect(response).to redirect_to(root_url)
       end
     end
   end
@@ -76,9 +76,9 @@ RSpec.describe "/additional_expenses", type: :request do
     context "html request" do
       subject { delete additional_expense_url(additional_expense) }
 
-      it "redirects to the contact topic answer" do
-        expect { subject }.to raise_error(ActionController::RoutingError)
-        expect(response).to be_blank
+      it "redirects to referrer/root without destroying the additional expense" do
+        expect { subject }.to not_change(AdditionalExpense, :count)
+        expect(response).to redirect_to(root_url)
       end
     end
   end

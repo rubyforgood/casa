@@ -1,14 +1,14 @@
 class AdditionalExpensesController < ApplicationController
+  before_action :force_json_format
+
   def create
     @additional_expense = AdditionalExpense.new(additional_expense_params)
     authorize @additional_expense
 
-    respond_to do |format|
-      if @additional_expense.save
-        format.json { render json: @additional_expense.as_json, status: :created }
-      else
-        format.json { render json: @additional_expense.errors.as_json, status: :unprocessable_entity }
-      end
+    if @additional_expense.save
+      render json: @additional_expense.as_json, status: :created
+    else
+      render json: @additional_expense.errors.as_json, status: :unprocessable_entity
     end
   end
 
@@ -18,9 +18,7 @@ class AdditionalExpensesController < ApplicationController
 
     @additional_expense.destroy!
 
-    respond_to do |format|
-      format.json { head :no_content }
-    end
+    head :no_content
   end
 
   private

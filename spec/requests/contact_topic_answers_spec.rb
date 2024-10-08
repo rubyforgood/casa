@@ -3,7 +3,10 @@ require "rails_helper"
 RSpec.describe "/contact_topic_answers", type: :request do
   let(:casa_org) { create :casa_org }
   let(:contact_topic) { create :contact_topic, casa_org: }
-  let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:supervisor) { create :supervisor, casa_org: }
+  let(:volunteer) { create :volunteer, :with_single_case, supervisor:, casa_org: }
+  let(:user) { volunteer }
   let(:casa_case) { volunteer.casa_cases.first }
   let(:case_contact) { create :case_contact, casa_case:, creator: volunteer }
 
@@ -13,10 +16,11 @@ RSpec.describe "/contact_topic_answers", type: :request do
   end
   let(:invalid_attributes) { valid_attributes.merge({contact_topic_id: nil}) }
 
-  before { sign_in volunteer }
+  before { sign_in user }
 
   describe "POST /create" do
-    let(:params) { {contact_topic_answer: valid_attributes} }
+    let(:new_attributes) { valid_attributes.except(:value) }
+    let(:params) { {contact_topic_answer: new_attributes} }
 
     subject { post contact_topic_answers_path, params:, as: :json }
 
@@ -29,10 +33,18 @@ RSpec.describe "/contact_topic_answers", type: :request do
       subject
       expect(response.content_type).to match(a_string_including("application/json"))
       answer = ContactTopicAnswer.last
-      response_json = JSON.parse(response.body)
-      expect(response_json["id"]).to eq answer.id
+      expect(response_json[:id]).to eq answer.id
       expect(response_json.keys)
-        .to contain_exactly("id", "contact_topic_id", "value", "case_contact_id", "created_at", "updated_at", "selected")
+        .to contain_exactly(:id, :contact_topic_id, :value, :case_contact_id, :created_at, :updated_at, :selected)
+    end
+
+    context "as casa_admin" do
+      let(:user) { casa_admin }
+
+      it "creates a record and responds created" do
+        expect { subject }.to change(ContactTopicAnswer, :count).by(1)
+        expect(response).to have_http_status(:created)
+      end
     end
 
     context "with invalid parameters" do
@@ -47,17 +59,16 @@ RSpec.describe "/contact_topic_answers", type: :request do
         subject
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(response.body).to be_present
-        response_json = JSON.parse(response.body)
-        expect(response_json["contact_topic"]).to include("must exist")
+        expect(response_json[:contact_topic]).to include("must exist")
       end
     end
 
     context "html request" do
       subject { post contact_topic_answers_path, params: }
 
-      it "raises RoutingError" do
-        expect { subject }.to raise_error(ActionController::RoutingError)
-        expect(response).to be_blank
+      it "redirects to referrer/root without creating a contact topic answer" do
+        expect { subject }.to not_change(ContactTopicAnswer, :count)
+        expect(response).to redirect_to(root_url)
       end
     end
   end
@@ -77,9 +88,9 @@ RSpec.describe "/contact_topic_answers", type: :request do
     context "html request" do
       subject { delete contact_topic_answer_url(contact_topic_answer) }
 
-      it "raises RoutingError" do
-        expect { subject }.to raise_error(ActionController::RoutingError)
-        expect(response).to be_blank
+      it "redirects to referrer/root without destroying the contact topic answer" do
+        expect { subject }.to not_change(ContactTopicAnswer, :count)
+        expect(response).to redirect_to(root_url)
       end
     end
   end

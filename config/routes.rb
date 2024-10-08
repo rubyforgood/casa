@@ -96,8 +96,7 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :contact_topic_answers, only: %i[create destroy],
-    constraints: lambda { |req| req.format == :json }
+  resources :contact_topic_answers, only: %i[create destroy]
 
   resources :reports, only: %i[index]
   get :export_emails, to: "reports#export_emails"
@@ -194,8 +193,7 @@ Rails.application.routes.draw do
   end
   resources :case_court_orders, only: %i[destroy]
 
-  resources :additional_expenses, only: %i[create destroy],
-    constraints: lambda { |req| req.format == :json }
+  resources :additional_expenses, only: %i[create destroy]
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do
