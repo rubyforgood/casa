@@ -19,7 +19,10 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
 
   let(:same_case_volunteer) { create :volunteer, casa_org: }
   let(:same_case_volunteer_case_assignment) { create :case_assignment, volunteer: same_case_volunteer, casa_case: }
-  let(:same_case_volunteer_case_contact) { create :case_contact, casa_case:, creator: same_case_volunteer }
+  let(:same_case_volunteer_case_contact) do
+    same_case_volunteer_case_assignment
+    create :case_contact, casa_case:, creator: same_case_volunteer
+  end
   let(:same_case_volunteer_additional_expense) do
     create :additional_expense, case_contact: same_case_volunteer_case_contact
   end
@@ -34,40 +37,38 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
 
   permissions :create?, :destroy? do
     it "does not permit a nil user" do
-      expect(described_class).not_to permit(nil, additional_expense)
+      is_expected.not_to permit(nil, additional_expense)
     end
 
     it "permits volunteers assigned to the expense's case contact" do
-      same_case_volunteer_case_assignment
-      expect(described_class).to permit(volunteer, additional_expense)
-      expect(described_class).to permit(volunteer, draft_additional_expense)
-      expect(described_class).to permit(volunteer, new_additional_expense)
+      is_expected.to permit(volunteer, additional_expense)
+      is_expected.to permit(volunteer, draft_additional_expense)
+      is_expected.to permit(volunteer, new_additional_expense)
 
-      expect(same_case_volunteer.casa_cases).to include(casa_case)
-      expect(described_class).not_to permit(same_case_volunteer, additional_expense)
-      expect(described_class).not_to permit(same_case_volunteer, draft_additional_expense)
+      is_expected.not_to permit(volunteer, same_case_volunteer_additional_expense)
+      is_expected.not_to permit(volunteer, other_org_additional_expense)
     end
 
     it "permits same org supervisors" do
-      expect(described_class).to permit(supervisor, additional_expense)
-      expect(described_class).to permit(supervisor, draft_additional_expense)
-      expect(described_class).to permit(supervisor, new_additional_expense)
+      is_expected.to permit(supervisor, additional_expense)
+      is_expected.to permit(supervisor, draft_additional_expense)
+      is_expected.to permit(supervisor, draft_additional_expense)
+      is_expected.to permit(supervisor, same_case_volunteer_additional_expense)
 
-      other_org_supervisor = create :supervisor, casa_org: create(:casa_org)
-      expect(described_class).not_to permit(other_org_supervisor, additional_expense)
+      is_expected.not_to permit(supervisor, other_org_additional_expense)
     end
 
     it "permits same org casa admins" do
-      expect(described_class).to permit(casa_admin, additional_expense)
-      expect(described_class).to permit(casa_admin, draft_additional_expense)
-      expect(described_class).to permit(casa_admin, new_additional_expense)
+      is_expected.to permit(casa_admin, additional_expense)
+      is_expected.to permit(casa_admin, draft_additional_expense)
+      is_expected.to permit(casa_admin, new_additional_expense)
+      is_expected.to permit(casa_admin, same_case_volunteer_additional_expense)
 
-      other_org_casa_admin = create :casa_admin, casa_org: create(:casa_org)
-      expect(described_class).not_to permit(other_org_casa_admin, additional_expense)
+      is_expected.not_to permit(casa_admin, other_org_additional_expense)
     end
 
     it "does not permit an all casa admin" do
-      expect(described_class).not_to permit(all_casa_admin, additional_expense)
+      is_expected.not_to permit(all_casa_admin, additional_expense)
     end
   end
 

@@ -17,9 +17,11 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
 
   let(:same_case_volunteer) { create :volunteer, casa_org: }
   let(:same_case_volunteer_case_assignment) { create :case_assignment, volunteer: same_case_volunteer, casa_case: }
-  let(:same_case_volunteer_case_contact) { create :case_contact, casa_case:, creator: same_case_volunteer }
-  let(:same_case_volunteer_contact_topic_answer) do
+  let(:same_case_volunteer_case_contact) do
     same_case_volunteer_case_assignment
+    create :case_contact, casa_case:, creator: same_case_volunteer
+  end
+  let(:same_case_volunteer_contact_topic_answer) do
     create :contact_topic_answer, contact_topic:, case_contact: same_case_volunteer_case_contact
   end
 
