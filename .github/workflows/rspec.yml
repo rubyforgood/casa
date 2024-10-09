@@ -68,6 +68,10 @@ jobs:
           bundle exec rake db:schema:load
           bundle exec rails assets:precompile
 
+      # Install top
+      - name: Install procps
+        run: sudo apt-get update && sudo apt-get install -y procps
+
       - name: Run rspec and upload code coverage
         env:
           DATABASE_HOST: localhost
@@ -80,8 +84,9 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+          RUBYOPT='-W:no-deprecated -W:no-experimental' top -b -d 10 > top.log & bundle exec rspec
           ./cc-test-reporter after-build --exit-code $?
+          cat top.log
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
