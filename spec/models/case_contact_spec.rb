@@ -8,7 +8,6 @@ RSpec.describe CaseContact, type: :model do
   it { is_expected.to have_one(:casa_org).through(:casa_case) }
   it { is_expected.to have_one(:creator_casa_org).through(:creator) }
 
-
   context "status is active" do
     it "belongs to a creator" do
       case_contact = build_stubbed(:case_contact, creator: nil)

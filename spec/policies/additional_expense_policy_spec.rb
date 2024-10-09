@@ -12,7 +12,7 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
   let(:additional_expense) { create :additional_expense, case_contact: }
 
   let(:draft_case_contact) { create :case_contact, :started_status, casa_case: nil, creator: volunteer }
-  let(:draft_additional_expense) { create :additional_expense, case_contact: draft_case_contact}
+  let(:draft_additional_expense) { create :additional_expense, case_contact: draft_case_contact }
   let(:new_additional_expense) do
     build :additional_expense, case_contact: draft_case_contact, other_expense_amount: 0, other_expenses_describe: ""
   end
