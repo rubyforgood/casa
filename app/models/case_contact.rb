@@ -32,9 +32,11 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
-  # Draft support requires the casa_case to be nil if the contact is in_progress
+  # Draft casa_case_id is nil until active
   belongs_to :casa_case, optional: true
   has_one :casa_org, through: :casa_case
+  # Use creator_casa_org as fallback org relationship for drafts
+  has_one :creator_casa_org, through: :creator, source: :casa_org
   validates :casa_case_id, presence: true, if: :active?
   validates :draft_case_ids, presence: {message: :must_be_selected}, if: :active_or_details?
 

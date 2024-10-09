@@ -9,7 +9,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy do
 
   let(:contact_topic) { create :contact_topic, casa_org: }
   let(:casa_case) { volunteer.casa_cases.first }
-  let(:case_contact) { create :case_contact, casa_case:, creator: volunteer }
+  let(:case_contact) { create :case_contact, :started_status, creator: volunteer }
   let!(:contact_topic_answer) { create :contact_topic_answer, contact_topic:, case_contact: }
 
   let(:same_org_volunteer) { create :volunteer, casa_org: }
@@ -91,6 +91,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy do
       let(:user) { supervisor }
 
       it { is_expected.to include(contact_topic_answer) }
+      it { is_expected.to include(same_org_other_volunteer_contact_topic_answer) }
       it { is_expected.not_to include(other_org_contact_topic_answer) }
     end
 
@@ -98,6 +99,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy do
       let(:user) { casa_admin }
 
       it { is_expected.to include(contact_topic_answer) }
+      it { is_expected.to include(same_org_other_volunteer_contact_topic_answer) }
       it { is_expected.not_to include(other_org_contact_topic_answer) }
     end
 
@@ -105,6 +107,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy do
       let(:user) { all_casa_admin }
 
       it { is_expected.not_to include(contact_topic_answer) }
+      it { is_expected.not_to include(same_org_other_volunteer_contact_topic_answer) }
       it { is_expected.not_to include(other_org_contact_topic_answer) }
     end
   end

@@ -37,9 +37,6 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     end
 
     it "admin successfully edits case contact with mileage reimbursement" do
-      casa_case = create(:casa_case, :with_one_case_assignment, casa_org: organization)
-      case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case)
-
       visit edit_case_contact_path(case_contact)
 
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
@@ -49,7 +46,8 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
       click_on "Submit"
       case_contact.reload
       expect(page).to have_text "Case contact created at #{case_contact.created_at.strftime("%-I:%-M %p on %m-%e-%Y")}, was successfully updated."
-      expect(case_contact.casa_case.volunteers[0].address.content).to eq "123 str"
+      expect(case_contact.casa_case.volunteers[0]).to eq volunteer
+      expect(volunteer.address&.content).to eq "123 str"
       expect(case_contact.casa_case_id).to eq casa_case.id
       expect(case_contact.duration_minutes).to eq 105
       expect(case_contact.medium_type).to eq "in-person"

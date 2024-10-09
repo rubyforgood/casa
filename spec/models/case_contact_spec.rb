@@ -4,6 +4,10 @@ RSpec.describe CaseContact, type: :model do
   it { is_expected.to have_many(:contact_topic_answers).dependent(:destroy) }
   it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
   it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
+  it { is_expected.to belong_to(:creator) }
+  it { is_expected.to have_one(:casa_org).through(:casa_case) }
+  it { is_expected.to have_one(:creator_casa_org).through(:creator) }
+
 
   context "status is active" do
     it "belongs to a creator" do
@@ -584,7 +588,7 @@ RSpec.describe CaseContact, type: :model do
     end
 
     it "returns false if creator's supervisor is inactive" do
-      supervisor.update(active: false)
+      supervisor.update!(active: false)
       expect(case_contact.should_send_reimbursement_email?).to be false
     end
   end

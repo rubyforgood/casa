@@ -53,4 +53,9 @@ class CaseContactPolicy < ApplicationPolicy
   def is_creator?
     record.creator == user
   end
+
+  def same_org?
+    record_org = record.casa_org || record.creator_casa_org
+    user&.casa_org == record_org
+  end
 end

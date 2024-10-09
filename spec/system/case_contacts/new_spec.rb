@@ -399,20 +399,20 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       submitted_case_contact = CaseContact.active.last
       next_case_contact = CaseContact.started.last
 
-        expect(page).to have_text "New Case Contact"
-        expect(submitted_case_contact.reload.metadata["create_another"]).to be true
-        # new contact uses draft_case_ids from the original & form selects them
-        expect(next_case_contact.draft_case_ids).to eq [casa_case.id]
-        expect(page).to have_text case_number
-        # default values for other attributes (not from the last contact)
-        expect(next_case_contact.status).to eq "started"
-        expect(next_case_contact.miles_driven).to be_zero
-        %i[casa_case_id duration_minutes occurred_at medium_type
-          want_driving_reimbursement notes].each do |attribute|
-          expect(next_case_contact.send(attribute)).to be_blank
-        end
-        expect(next_case_contact.contact_made).to be true
+      expect(page).to have_text "New Case Contact"
+      expect(submitted_case_contact.reload.metadata["create_another"]).to be true
+      # new contact uses draft_case_ids from the original & form selects them
+      expect(next_case_contact.draft_case_ids).to eq [casa_case.id]
+      expect(page).to have_text case_number
+      # default values for other attributes (not from the last contact)
+      expect(next_case_contact.status).to eq "started"
+      expect(next_case_contact.miles_driven).to be_zero
+      %i[casa_case_id duration_minutes occurred_at medium_type
+        want_driving_reimbursement notes].each do |attribute|
+        expect(next_case_contact.send(attribute)).to be_blank
       end
+      expect(next_case_contact.contact_made).to be true
+    end
 
     it "does not reset referring location" do
       visit casa_case_path casa_case

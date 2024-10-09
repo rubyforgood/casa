@@ -3,7 +3,7 @@ class ContactTopicAnswerPolicy < ApplicationPolicy
     def resolve
       case user
       when CasaAdmin, Supervisor
-        scope.joins([:case_contact, :casa_case]).where(casa_case: {casa_org_id: user.casa_org&.id})
+        scope.unscoped.joins(:contact_topic).where(contact_topic: {casa_org: user&.casa_org})
       when Volunteer
         scope.where(case_contact: user.case_contacts)
       else
@@ -24,4 +24,11 @@ class ContactTopicAnswerPolicy < ApplicationPolicy
   end
 
   alias_method :destroy?, :create?
+
+  private
+
+  def same_org?
+    record_org = record.casa_org || record.contact_creator_casa_org
+    user&.casa_org == record_org
+  end
 end

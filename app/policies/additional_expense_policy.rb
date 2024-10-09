@@ -24,4 +24,11 @@ class AdditionalExpensePolicy < ApplicationPolicy
   end
 
   alias_method :destroy?, :create?
+
+  private
+
+  def same_org?
+    record_org = record.casa_org || record.contact_creator_casa_org
+    user&.casa_org == record_org
+  end
 end

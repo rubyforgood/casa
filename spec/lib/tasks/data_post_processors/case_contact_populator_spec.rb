@@ -15,7 +15,7 @@ RSpec.describe CaseContactPopulator do
   end
 
   it "does nothing if there are no contact types" do
-    case_contact = create(:case_contact, contact_types: [], status: 'started')
+    case_contact = create(:case_contact, contact_types: [], status: "started")
 
     described_class.populate
 
