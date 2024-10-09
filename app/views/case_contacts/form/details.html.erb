@@ -51,11 +51,11 @@
           </h3>
           <div class="input-style-1">
             <% min_date = CaseContact::MINIMUM_DATE %>
-            <% current_date = Date.current %>
+            <% current_date = Time.zone.today %>
             <% initial_value = @case_contact.occurred_at&.to_date %>
             <%= form.date_field(:occurred_at,
-              value: initial_value&.to_fs(:iso8601),
-              max: current_date.to_fs(:iso8601),
+              value: (initial_value || current_date).to_fs(:iso8601),
+              max: (current_date).to_fs(:iso8601),
               min: min_date.to_fs(:iso8601),
               class: "form-control") %>
           </div>

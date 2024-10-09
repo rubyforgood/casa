@@ -51,7 +51,7 @@ export default class extends Controller {
       },
       options: this.optionsValue,
       items: this.selectedItemsValue,
-      placeholder: 'Select or search for contacts',
+      placeholder: 'Select or search',
       hidePlaceholder: true,
       searchField: ['text', 'group'],
       render: {

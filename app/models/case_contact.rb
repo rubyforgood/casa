@@ -268,7 +268,7 @@ class CaseContact < ApplicationRecord
   def volunteer
     if creator.is_a?(Volunteer)
       creator
-    elsif CasaCase.find(draft_case_ids.first).volunteers.count == 1
+    elsif draft_case_ids.first && CasaCase.find(draft_case_ids.first).volunteers.count == 1
       CasaCase.find(draft_case_ids.first).volunteers.first
     end
   end
