@@ -17,7 +17,9 @@
       </div>
     </div>
     <div class="flex-grow-1">
-      <%= form.label :other_expenses_describe, "Expense details" %>
+      <%= form.label :other_expenses_describe do %>
+        Expense details<span class="red-letter">*</span>
+      <% end %>
       <%= form.text_area(:other_expenses_describe,
           placeholder: "Enter additional details",
           class: ["form-control", "expense-describe-input"],

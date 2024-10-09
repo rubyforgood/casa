@@ -193,7 +193,9 @@
         <div data-case-contact-form-target="reimbursementForm" class="d-none">
           <div class="row py-2">
             <div class="col-md-4">
-              <%= form.label :miles_driven, "Total miles driven" %>
+              <%= form.label :miles_driven do %>
+                Total miles driven<span class="red-letter">*</span>
+              <% end %>
               <%= form.number_field(:miles_driven,
                 min: "0", max: 10000, placeholder: "0",
                 class: "form-control",
@@ -202,7 +204,9 @@
             </div>
 
             <div class="col">
-              <%= form.label :volunteer_address, "Your current address (for reimbursement check)" %>
+              <%= form.label :volunteer_address do %>
+                Your current address (for reimbursement check)<span class="red-letter">*</span>
+              <% end %>
               <%= form.text_area(:volunteer_address,
                 value: @case_contact.decorate.address_of_volunteer,
                 disabled: @case_contact.address_field_disabled?,
