@@ -3,7 +3,7 @@ class AdditionalExpensePolicy < ApplicationPolicy
     def resolve
       case user
       when CasaAdmin, Supervisor
-        scope.joins([:case_contact, :casa_case]).where(casa_case: {casa_org_id: user.casa_org.id})
+        scope.joins(:contact_creator).where(contact_creator: {casa_org: user.casa_org})
       when Volunteer
         scope.where(case_contact: user.case_contacts)
       else
@@ -15,7 +15,7 @@ class AdditionalExpensePolicy < ApplicationPolicy
   def create?
     case user
     when Volunteer
-      user.case_contacts.include?(record.case_contact)
+      user.case_contacts.exists?(record.case_contact_id)
     when CasaAdmin, Supervisor
       same_org?
     else
