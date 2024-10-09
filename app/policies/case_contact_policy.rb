@@ -24,22 +24,15 @@ class CaseContactPolicy < ApplicationPolicy
   alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
   alias_method :restore?, :is_admin_same_org?
 
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
+  class Scope < ApplicationPolicy::Scope
     def resolve
-      case @user
+      case user
       when CasaAdmin, Supervisor
-        scope.joins(:casa_case).where(casa_case: {casa_org: @user&.casa_org})
+        scope.joins(:creator).where(creator: {casa_org: user.casa_org})
       when Volunteer
-        scope.where(casa_case: CasaCase.actively_assigned_to(@user) + [nil], creator: @user)
+        scope.where(creator: user)
       else
-        raise "unrecognized user type #{@user.type}"
+        scope.none
       end
     end
   end
