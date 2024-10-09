@@ -5,7 +5,8 @@ class ContactTopicAnswer < ApplicationRecord
   has_one :casa_case, through: :case_contact
   has_one :casa_org, through: :case_contact
   # case_contact.casa_org may be nil for draft contacts, use for fallback:
-  has_one :contact_creator_casa_org, through: :case_contact, source: :creator_casa_org
+  has_one :contact_creator, through: :case_contact, source: :creator
+  has_one :contact_creator_casa_org, through: :contact_creator, source: :casa_org
 
   validates :selected, inclusion: [true, false]
 
