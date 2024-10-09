@@ -115,6 +115,9 @@ RSpec.describe "casa_org/edit", type: :view do
     organization = build_stubbed(:casa_org)
     admin = build_stubbed(:casa_admin, casa_org: organization)
     allow(view).to receive(:current_organization).and_return(organization)
+    without_partial_double_verification do
+      allow(view).to receive(:to_user_timezone).and_return(Time.zone.local(2021, 1, 2, 12, 30, 0))
+    end
 
     sent_email = build_stubbed(:sent_email, user: admin, created_at: Time.zone.local(2021, 1, 2, 12, 30, 0))
     assign(:sent_emails, [sent_email])
