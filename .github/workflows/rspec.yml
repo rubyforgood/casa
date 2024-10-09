@@ -84,7 +84,8 @@ jobs:
           curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
-          RUBYOPT='-W:no-deprecated -W:no-experimental' ( while true; do top -b -n 1 | head -n 10 >> top.log; sleep 10; done ) & bundle exec rspec
+          ( while true; do top -b -n 1 | head -n 10 >> top.log; sleep 10; done ) &
+          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
           ./cc-test-reporter after-build --exit-code $?
           cat top.log
 
