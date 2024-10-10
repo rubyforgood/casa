@@ -9,7 +9,7 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
   let(:volunteer) { create(:volunteer, :with_single_case, supervisor:, casa_org:) }
   let(:casa_case) { volunteer.casa_cases.first }
 
-  let(:case_contact) { create(:case_contact, casa_case:, creator: volunteer, casa_org:) }
+  let(:case_contact) { create(:case_contact, casa_case:, creator: volunteer) }
   let(:draft_case_contact) { create(:case_contact, :started_status, casa_case: nil, creator: volunteer) }
 
   # another volunteer assigned to the same case
@@ -107,20 +107,24 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
   end
 
   permissions :new? do
-    it "allows casa_admins" do
-      is_expected.to permit(casa_admin, CaseContact.new)
+    it "allows same org casa_admins" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
+
+      is_expected.not_to permit(casa_admin, CaseContact.new)
     end
 
-    it "allows supervisors" do
-      is_expected.to permit(supervisor, CaseContact.new)
+    it "allows same org supervisors" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
+
+      is_expected.not_to permit(supervisor, CaseContact.new)
     end
 
-    it "allows volunteers" do
-      is_expected.to permit(volunteer, CaseContact.new)
-      is_expected.to permit(volunteer, case_contact)
-      is_expected.to permit(volunteer, draft_case_contact)
+    it "allows volunteers who are the contact creator" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
 
-      pending "require volunteer to be the contact creator?"
       is_expected.not_to permit(volunteer, CaseContact.new)
     end
   end

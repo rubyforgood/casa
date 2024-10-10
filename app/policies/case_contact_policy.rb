@@ -1,10 +1,14 @@
 class CaseContactPolicy < ApplicationPolicy
-  def is_creator_or_casa_admin?
-    is_admin_same_org? || is_creator?
+  def new?
+    is_creator? || admin_or_supervisor_same_org?
   end
 
-  def is_creator_or_supervisor_or_casa_admin?
-    is_creator? || admin_or_supervisor_same_org?
+  def show?
+    creator_or_admin?
+  end
+
+  def update?
+    creator_or_supervisor_or_admin?
   end
 
   def destroy?
@@ -17,11 +21,8 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
-  alias_method :new?, :admin_or_supervisor_or_volunteer?
-  alias_method :show?, :is_creator_or_casa_admin?
   alias_method :drafts?, :admin_or_supervisor?
-  alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
-  alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
+  alias_method :edit?, :update?
   alias_method :restore?, :is_admin_same_org?
 
   class Scope < ApplicationPolicy::Scope
@@ -38,6 +39,14 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   private
+
+  def creator_or_admin?
+    is_creator? || is_admin_same_org?
+  end
+
+  def creator_or_supervisor_or_admin?
+    is_creator? || admin_or_supervisor_same_org?
+  end
 
   def is_draft?
     !record.active?
