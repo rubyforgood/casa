@@ -85,42 +85,44 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
     context "when user is a visitor" do
       let(:user) { nil }
 
-      it { is_expected.not_to include(additional_expense) }
-      it { is_expected.not_to include(other_org_additional_expense) }
+      it "returns no expenses" do
+        is_expected.not_to include(additional_expense, other_org_additional_expense)
+      end
     end
 
     context "when user is a volunteer" do
       let(:user) { volunteer }
 
-      it { is_expected.to include(additional_expense) }
-      it { is_expected.to include(draft_additional_expense) }
-      it { is_expected.not_to include(same_case_volunteer_additional_expense) }
-      it { is_expected.not_to include(other_org_additional_expense) }
+      it "includes expenses for contacts created by volunteer only" do
+        is_expected.to include(additional_expense, draft_additional_expense)
+        is_expected.not_to include(same_case_volunteer_additional_expense, other_org_additional_expense)
+      end
     end
 
     context "when user is a supervisor" do
       let(:user) { supervisor }
 
-      it { is_expected.to include(additional_expense) }
-      it { is_expected.to include(draft_additional_expense) }
-      it { is_expected.to include(same_case_volunteer_additional_expense) }
-      it { is_expected.not_to include(other_org_additional_expense) }
+      it "includes same org expenses only" do
+        is_expected.to include(additional_expense, draft_additional_expense, same_case_volunteer_additional_expense)
+        is_expected.not_to include(other_org_additional_expense)
+      end
     end
 
     context "when user is a casa_admin" do
       let(:user) { casa_admin }
 
-      it { is_expected.to include(additional_expense) }
-      it { is_expected.to include(draft_additional_expense) }
-      it { is_expected.to include(same_case_volunteer_additional_expense) }
-      it { is_expected.not_to include(other_org_additional_expense) }
+      it "includes same org expenses only" do
+        is_expected.to include(additional_expense, draft_additional_expense, draft_additional_expense)
+        is_expected.not_to include(other_org_additional_expense)
+      end
     end
 
     context "when user is an all_casa_admin" do
       let(:user) { all_casa_admin }
 
-      it { is_expected.not_to include(additional_expense) }
-      it { is_expected.not_to include(other_org_additional_expense) }
+      it "returns no expenses" do
+        is_expected.not_to include(additional_expense, other_org_additional_expense)
+      end
     end
   end
 end

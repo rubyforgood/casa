@@ -210,49 +210,50 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
     context "when user is a visitor" do
       let(:user) { nil }
 
-      it { is_expected.not_to include(case_contact) }
-      it { is_expected.not_to include(other_org_case_contact) }
+      it "returns no case contacts" do
+        is_expected.not_to include(case_contact, other_org_case_contact)
+      end
     end
 
     context "when user is a volunteer" do
       let(:user) { volunteer }
 
-      it { is_expected.to include(case_contact) }
-      it { is_expected.to include(draft_case_contact) }
-
-      it { is_expected.not_to include(same_case_volunteer_case_contact) }
-      it { is_expected.not_to include(unassigned_case_case_contact) }
-      it { is_expected.not_to include(other_org_case_contact) }
+      it "returns case contacts created by the volunteer" do
+        is_expected.to include(case_contact, draft_case_contact)
+        is_expected
+          .not_to include(same_case_volunteer_case_contact, unassigned_case_case_contact, other_org_case_contact)
+      end
     end
 
     context "when user is a supervisor" do
       let(:user) { supervisor }
 
-      it { is_expected.to include(case_contact) }
-      it { is_expected.to include(draft_case_contact) }
-      it { is_expected.to include(same_case_volunteer_case_contact) }
-      # should supervisors see contacts for volunteers they are not assigned to?
-      it { is_expected.to include(unassigned_case_case_contact) }
+      it "returns same org case contacts" do
+        is_expected
+          .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
+        is_expected.not_to include(other_org_case_contact)
 
-      it { is_expected.not_to include(other_org_case_contact) }
+        pending "should supervisors see contacts for volunteers they are not assigned to?"
+        is_expected.not_to include(unassigned_case_case_contact)
+      end
     end
 
     context "when user is a casa_admin" do
       let(:user) { casa_admin }
 
-      it { is_expected.to include(case_contact) }
-      it { is_expected.to include(draft_case_contact) }
-      it { is_expected.to include(same_case_volunteer_case_contact) }
-      it { is_expected.to include(unassigned_case_case_contact) }
-
-      it { is_expected.not_to include(other_org_case_contact) }
+      it "returns same org case contacts" do
+        is_expected
+          .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
+        is_expected.not_to include(other_org_case_contact)
+      end
     end
 
     context "when user is an all_casa_admin" do
       let(:user) { create :all_casa_admin }
 
-      it { is_expected.not_to include(case_contact) }
-      it { is_expected.not_to include(other_org_case_contact) }
+      it "returns no case contacts" do
+        is_expected.not_to include(case_contact, other_org_case_contact)
+      end
     end
   end
 end

@@ -30,7 +30,9 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
   let(:other_org_contact_topic) { create :contact_topic, casa_org: other_org }
   let(:other_org_casa_case) { create :casa_case, casa_org: other_org }
   let(:other_org_case_contact) { create :case_contact, casa_case: other_org_casa_case, creator: other_org_volunteer }
-  let(:other_org_contact_topic_answer) { create :contact_topic_answer, case_contact: other_org_case_contact, contact_topic: other_org_contact_topic }
+  let(:other_org_contact_topic_answer) do
+    create :contact_topic_answer, case_contact: other_org_case_contact, contact_topic: other_org_contact_topic
+  end
 
   subject { described_class }
 
@@ -50,6 +52,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       is_expected.to permit(supervisor, contact_topic_answer)
       is_expected.to permit(supervisor, draft_contact_topic_answer)
       is_expected.to permit(supervisor, same_case_volunteer_contact_topic_answer)
+
       is_expected.not_to permit(supervisor, other_org_contact_topic_answer)
     end
 
@@ -57,6 +60,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       is_expected.to permit(casa_admin, contact_topic_answer)
       is_expected.to permit(casa_admin, draft_contact_topic_answer)
       is_expected.to permit(casa_admin, same_case_volunteer_contact_topic_answer)
+
       is_expected.not_to permit(casa_admin, other_org_contact_topic_answer)
     end
 
@@ -78,42 +82,46 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
     context "when user is a visitor" do
       let(:user) { nil }
 
-      it { is_expected.not_to include(contact_topic_answer) }
-      it { is_expected.not_to include(other_org_contact_topic_answer) }
+      it "returns no contact topic answers" do
+        is_expected.not_to include(contact_topic_answer, other_org_contact_topic_answer)
+      end
     end
 
     context "when user is a volunteer" do
       let(:user) { volunteer }
 
-      it { is_expected.to include(contact_topic_answer) }
-      it { is_expected.to include(draft_contact_topic_answer) }
-      it { is_expected.not_to include(same_case_volunteer_contact_topic_answer) }
-      it { is_expected.not_to include(other_org_contact_topic_answer) }
+      it "returns contact topic answers of contacts created by the volunteer" do
+        is_expected.to include(contact_topic_answer, draft_contact_topic_answer)
+        is_expected.not_to include(same_case_volunteer_contact_topic_answer, other_org_contact_topic_answer)
+      end
     end
 
     context "when user is a supervisor" do
       let(:user) { supervisor }
 
-      it { is_expected.to include(contact_topic_answer) }
-      it { is_expected.to include(draft_contact_topic_answer) }
-      it { is_expected.to include(same_case_volunteer_contact_topic_answer) }
-      it { is_expected.not_to include(other_org_contact_topic_answer) }
+      it "returns same org contact topic answers" do
+        is_expected
+          .to include(contact_topic_answer, draft_contact_topic_answer, same_case_volunteer_contact_topic_answer)
+        is_expected.not_to include(other_org_contact_topic_answer)
+      end
     end
 
     context "when user is a casa_admin" do
       let(:user) { casa_admin }
 
-      it { is_expected.to include(contact_topic_answer) }
-      it { is_expected.to include(draft_contact_topic_answer) }
-      it { is_expected.to include(same_case_volunteer_contact_topic_answer) }
-      it { is_expected.not_to include(other_org_contact_topic_answer) }
+      it "includes same org contact topic answers" do
+        is_expected
+          .to include(contact_topic_answer, draft_contact_topic_answer, same_case_volunteer_contact_topic_answer)
+        is_expected.not_to include(other_org_contact_topic_answer)
+      end
     end
 
     context "when user is an all_casa_admin" do
       let(:user) { all_casa_admin }
 
-      it { is_expected.not_to include(contact_topic_answer) }
-      it { is_expected.not_to include(other_org_contact_topic_answer) }
+      it "returns no contact topic answers" do
+        is_expected.not_to include(contact_topic_answer, other_org_contact_topic_answer)
+      end
     end
   end
 end
