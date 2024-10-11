@@ -117,8 +117,6 @@
       data-casa-nested-form-model-name-value="contact_topic_answer">
       <h2 class="mb-4">Notes</h2>
 
-      <small data-autosave-target="alert alert-light" role="alert"></small>
-
       <% if @contact_topics.empty? %>
         <p class="mb-5"><small>
         <% if current_user.casa_admin? %>
@@ -158,6 +156,12 @@
       <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#addAndCreate">
         + Add Note
       </button>
+
+      <small role="alert"
+        class="d-block invisible"
+        data-autosave-target="alert alert-light">
+        No changes have been saved.
+      </small>
     </section>
 
     <% org_driving_reimbursement = current_organization.show_driving_reimbursement %>
@@ -252,6 +256,12 @@
             </div>
           <% end %>
         </div>
+
+        <small role="alert"
+          class="d-block invisible"
+          data-autosave-target="alert alert-light">
+          No changes have been saved.
+        </small>
       </section>
     <% end %>
 

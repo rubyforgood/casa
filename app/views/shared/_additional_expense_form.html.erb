@@ -23,6 +23,7 @@
       <%= form.text_area(:other_expenses_describe,
           placeholder: "Enter additional details",
           class: ["form-control", "expense-describe-input"],
+          data: { action: "input->autosave#save" },
       ) %>
     </div>
     <div class="flex-shrink-1">
