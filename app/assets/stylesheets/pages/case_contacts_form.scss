@@ -29,6 +29,24 @@
     }
   }
 
+  & #contact-medium {
+    & .form-check {
+      margin-bottom: 0.25rem;
+
+      & .form-check-input {
+        margin-left: 0;
+      }
+
+      & .form-check-label {
+        margin-left: 0.75rem;
+      }
+    }
+
+    & .radio-style {
+      padding-left: 0;
+    }
+  }
+
   & .input-group-text {
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;

@@ -51,7 +51,8 @@ class CaseContacts::FormController < ApplicationController
 
   def prepare_form
     @casa_cases = get_casa_cases
-    @grouped_contact_types = group_contact_types_by_name(get_contact_types)
+    contact_types = get_contact_types.decorate
+    @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
   end
 
