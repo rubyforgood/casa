@@ -7,14 +7,6 @@ class SupervisorVolunteer < ApplicationRecord
   validates :volunteer_id, uniqueness: {scope: :is_active}, if: :is_active?
   validate :ensure_supervisor_and_volunteer_belong_to_same_casa_org, if: -> { supervisor.present? && volunteer.present? }
 
-  scope :supervisor_volunteers_learning_hours, ->(supervisor_id) {
-    left_outer_joins(volunteer: [{supervisor: :learning_hours}])
-      .where(supervisor_volunteers: {supervisor_id: supervisor_id})
-      .select("users.id as user_id, users.display_name, SUM(learning_hours.duration_minutes + learning_hours.duration_hours * 60) AS total_time_spent")
-      .group("users.display_name, users.id")
-      .order("users.display_name")
-  }
-
   private
 
   def ensure_supervisor_and_volunteer_belong_to_same_casa_org
