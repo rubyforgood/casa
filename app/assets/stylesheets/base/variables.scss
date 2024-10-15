@@ -7,8 +7,20 @@ $sidebar-active: #365CF5;
 $sidebar-dark: #1A2142;
 
 :root {
-  --dark: #262d3f; 
+  --casa-red: #D50100;
+  --casa-primary-blue: #4A6CF7;
+
+  --gunmetal: #262D3F;
+  --dark-gunmetal: #212529;
+  --dark: #262d3f;
+  --dark-electric-blue: #5D657B;
   --gray: #5d657b;
+  --dark-gray: #AAAAAA;
+  --gray-80: #CCCCCC;
   --silver: #D9D9D9;
+
   --inactive: #9AA4CA;
+
+  --input-placeholder-text: var(--gray);
+  --input-border-color: var(--gray-80);
 }

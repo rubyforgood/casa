@@ -2,7 +2,6 @@
 class CaseContactParameters < SimpleDelegator
   def initialize(params)
     params = normalize_params(params)
-    params = normalize_topic_answers_and_notes(params)
     new_params =
       params.require(:case_contact).permit(
         :duration_minutes,
@@ -57,30 +56,6 @@ class CaseContactParameters < SimpleDelegator
   def convert_miles_driven(params)
     miles_driven = params[:case_contact][:miles_driven]
     miles_driven.to_i
-  end
-
-  def normalize_topic_answers_and_notes(params)
-    # Should never be used after params.require/permit - uses `to_unsafe_h`
-    # allows form submission of contact.notes as a 'topic-less' topic answer (contact_topic_id: "")
-    return params unless params[:case_contact][:contact_topic_answers_attributes]
-
-    notes = ""
-    notes << params[:case_contact][:notes] if params[:case_contact][:notes]
-
-    answers_attributes = params[:case_contact][:contact_topic_answers_attributes].to_unsafe_h
-    no_topic_answers = answers_attributes&.filter do |_k, v|
-      # id is id of a ContactTopicAnswer. If neither ContactTopicAnswer nor ContactTopic
-      # are present, this 'answer' is treated as a case_contact.note.
-      v[:contact_topic_id].blank? && v[:id].blank?
-    end
-    no_topic_answers&.each do |k, v|
-      notes << v["value"]
-      params[:case_contact][:contact_topic_answers_attributes].delete(k)
-    end
-
-    params[:case_contact][:notes] = notes
-
-    params
   end
 
   private

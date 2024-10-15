@@ -1,5 +1,5 @@
 <div class="title-wrapper">
-  <h1 class="title my-3">
+  <h1 class="title my-4">
     <%= @case_contact.decorate.form_title %>
   </h1>
 </div>
@@ -22,14 +22,16 @@
     <%= render "/shared/error_messages", resource: @case_contact %>
 
     <!-- DETAILS -->
-    <section id="contact-form-details" class="card-style-1 px-4 mb-10">
-      <h2 class="mb-3">Details</h2>
+    <section id="contact-form-details">
+      <h2>Details</h2>
 
       <div class="row">
         <!-- RELEVANT CASES -->
         <div class="col">
           <h3>
-            <label for="case_contact_draft_case_ids">Relevant Case(s)<span class="red-letter">*</span></label>
+            <label class="form-label" for="case_contact_draft_case_ids">
+              Relevant Case(s)<span class="red-letter">*</span>
+            </label>
           </h3>
           <div id="draft-case-id-selector">
             <%= render(Form::MultipleSelectComponent.new(
@@ -37,7 +39,8 @@
               name: :draft_case_ids,
               options: @casa_cases.decorate.map { |casa_case| casa_case.hash_for_multi_select },
               selected_items: @case_contact.draft_case_ids,
-              render_option_subtext: current_user.supervisor?
+              render_option_subtext: current_user.supervisor?,
+              placeholder_term: "case(s)"
             )) %>
           </div>
         </div>
@@ -45,25 +48,25 @@
         <!--DATE-->
         <div class="col">
           <h3>
-            <%= form.label :occurred_at do %>
+            <%= form.label :occurred_at, class: "form-label" do %>
               Contact Date<span class="red-letter">*</span>
             <% end %>
           </h3>
-          <div class="input-style-1">
-            <% min_date = CaseContact::MINIMUM_DATE %>
-            <% current_date = Time.zone.today %>
-            <% initial_value = @case_contact.occurred_at&.to_date %>
-            <%= form.date_field(:occurred_at,
-              value: (initial_value || current_date).to_fs(:iso8601),
-              max: (current_date).to_fs(:iso8601),
-              min: min_date.to_fs(:iso8601),
-              class: "form-control") %>
-          </div>
+          <% min_date = CaseContact::MINIMUM_DATE %>
+          <% current_date = Time.zone.today %>
+          <% initial_value = @case_contact.occurred_at&.to_date %>
+          <%= form.date_field(:occurred_at,
+            required: true,
+            max: (current_date + 1.day).to_fs(:iso8601),
+            min: min_date.to_fs(:iso8601),
+            class: "form-control") %>
         </div>
       </div>
 
       <!--CONTACT TYPE-->
-      <h3>Contact Type(s)<span class="red-letter">*</span></h3>
+      <h3 class="mb-2">
+        Contact Type(s)<span class="red-letter">*</span>
+      </h3>
       <div id="contact-form-types" class="mb-3">
         <% casa_case_ids = @casa_cases.collect(&:id) %>
         <% @grouped_contact_types.each do |group_name, contact_types| %>
@@ -71,10 +74,10 @@
             <legend><%= group_name %></legend>
             <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
               <div class="form-check">
-                <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox", "ms-1"]) %>
+                <%= b.check_box(class: "form-check-input") %>
                 <%= b.label(class: "form-check-label") %>
-                <small class="d-block ms-4 fst-italic fw-lighter">
-                  <em><%= b.object.last_time_used_with_cases(casa_case_ids) %></em>
+                <small>
+                  <%= b.object.last_time_used_with_cases(casa_case_ids) %>
                 </small>
               </div>
             <% end %>
@@ -83,11 +86,11 @@
       </div>
 
       <!--CONTACT MADE-->
-      <div class="checkbox-style py-1 mb-20">
+      <div class="form-check mb-20">
         <%= form.check_box :contact_made, class: "form-check-input" %>
-        <h3 class="d-inline">
-          <%= form.label :contact_made, "Contact was made", class: "form-check-label align-middle mt-2" %>
-        </h3>
+        <%= form.label :contact_made, class: "form-check-label" do %>
+          <h3>Contact was made</h3>
+        <% end %>
       </div>
 
       <!--MEDIUM-->
@@ -96,7 +99,7 @@
           <h3>Contact Medium<span class="red-letter">*</span></h3>
         </legend>
         <%= form.collection_radio_buttons(:medium_type, contact_mediums, 'value', 'label') do |b| %>
-          <div class="form-check radio-style">
+          <div class="form-check">
             <%= b.radio_button(class: "form-check-input") %>
             <%= b.label(class: "form-check-label") %>
           </div>
@@ -104,22 +107,21 @@
       </fieldset>
 
       <!--DURATION-->
-      <div class="">
-        <h3 class="mb-3">Duration of contact</h3>
-        <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))) %>
-      </div>
+      <h3 class="mb-3">Contact Duration</h3>
+      <%= render(Form::HourMinuteDurationComponent.new(
+        form: form, hour_value: duration_hours(@case_contact), minute_value: duration_minutes(@case_contact))
+      ) %>
     </section>
 
     <!--NOTES (CONTACT TOPIC ANSWERS)-->
     <section id="contact-form-notes"
-      class="card-style-1 px-4 mb-10"
       data-controller="casa-nested-form"
       data-casa-nested-form-route-value="/contact_topic_answers"
       data-casa-nested-form-parent-name-value="case_contact"
       data-casa-nested-form-parent-id-value="<%= @case_contact.id %>"
       data-casa-nested-form-required-fields-value='["contact_topic_id"]'
       data-casa-nested-form-model-name-value="contact_topic_answer">
-      <h2 class="mb-4">Notes</h2>
+      <h2>Notes</h2>
 
       <% if @contact_topics.empty? %>
         <p class="mb-5"><small>
@@ -129,37 +131,39 @@
           Your organization has not set any Court Report Topics yet. Contact your admin to learn more.
         <% end %>
         </small></p>
-      <% end %>
+      <% else %>
+        <% select_options = @contact_topics.map { |topic| [topic.question, topic.id] } %>
 
-      <% select_options = @contact_topics.map { |topic| [topic.question, topic.id] } %>
-      <% notes_option = ["Additional Notes", ""] # Fake topic question for contact.notes %>
+        <template data-casa-nested-form-target="template">
+          <%= form.fields_for :contact_topic_answers, ContactTopicAnswer.new, child_index: "NEW_RECORD" do |topic_fields| %>
+            <%= render("contact_topic_answer", form: topic_fields, select_options:) %>
+          <% end %>
+        </template>
 
-      <% if form.object.notes.present? %>
-        <%#- Present contact.notes as a contact_topic_answer to enable edit and/or assigning to a ContactTopic -%>
-        <%#- ! Empty contact_topic_id ("") indicates this is a notes answer in params -%>
-        <% form.object.contact_topic_answers.build(value: form.object.notes, contact_topic_id: "") %>
-        <% select_options << notes_option %>
-      <% elsif @contact_topics.empty? %>
-        <% select_options << notes_option # no selectable topics to answer, allow notes %>
-      <% end %>
-
-      <template data-casa-nested-form-target="template">
-        <%= form.fields_for :contact_topic_answers, ContactTopicAnswer.new, child_index: "NEW_RECORD" do |topic_fields| %>
-          <%= render("contact_topic_answer", form: topic_fields, select_options:) %>
+        <% if form.object.contact_topic_answers.any? %>
+          <%= form.fields_for :contact_topic_answers do |topic_fields| %>
+            <%= render("contact_topic_answer", form: topic_fields, select_options:) %>
+          <% end %>
         <% end %>
-      </template>
 
-      <% if form.object.contact_topic_answers.any? %>
-        <%= form.fields_for :contact_topic_answers do |topic_fields| %>
-          <%= render("contact_topic_answer", form: topic_fields, select_options:) %>
-        <% end %>
+        <div data-casa-nested-form-target="target"></div>
+
+        <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#addAndCreate">
+          + Add Another Discussion Topic
+        </button>
       <% end %>
 
-      <div data-casa-nested-form-target="target"></div>
-
-      <button type="button" class="btn btn-sm btn-link" data-action="casa-nested-form#addAndCreate">
-        + Add Note
-      </button>
+      <% if form.object.notes.present? || @contact_topics.empty? %>
+        <div class="col mb-3">
+          <%= form.label :notes, "Additional Notes", class: "form-label" %>
+          <%= form.text_area(
+            :notes,
+            data: { action: "input->autosave#save" },
+            rows: 5,
+            class: ["form-control"],
+          ) %>
+        </div>
+      <% end %>
 
       <small role="alert"
         class="d-block invisible"
@@ -174,8 +178,8 @@
     <% show_additional_expenses = org_additional_expenses && Pundit.policy(current_user, @case_contact).additional_expenses_allowed? %>
     <% if show_driving_reimbursement %>
       <!-- REIMBURSMENT -->
-      <section id="contact-form-reimbursement" class="card-style-1 px-4 mb-10">
-        <h2 class="mb-4">Reimbursement</h2>
+      <section id="contact-form-reimbursement">
+        <h2>Reimbursement</h2>
         <% if Flipper.enabled?(:reimbursement_warning, current_organization) %>
           <article class="card-style-1 p-3 mb-10" style="background-color: #fcab553d;">
             <h4 class="mb-3"><label>Volunteers are eligible to be reimbursed for case-related travel.</label></h4>
@@ -186,7 +190,7 @@
           </article>
         <% end %>
 
-        <div class="checkbox-style py-1 mb-3">
+        <div class="form-check mb-3">
           <%= form.check_box(:want_driving_reimbursement,
             class: "form-check-input",
             data: {
@@ -194,15 +198,17 @@
               action: "click->case-contact-form#setReimbursementFormVisibility",
             }
           ) %>
-          <%= form.label :want_driving_reimbursement, "Request travel or other reimbursement", class: "form-check-label d-inline align-bottom" %>
+          <%= form.label :want_driving_reimbursement, class: "form-check-label" do %>
+            <h3>Request travel or other reimbursement</h3>
+          <% end %>
         </div>
 
         <!-- DRIVING REIMBURSEMENT -->
         <div data-case-contact-form-target="reimbursementForm" class="d-none">
           <div class="row py-2">
             <div class="col-md-4">
-              <%= form.label :miles_driven do %>
-                Total miles driven<span class="red-letter">*</span>
+              <%= form.label :miles_driven, class: "form-label" do %>
+                Total Miles Driven<span class="red-letter">*</span>
               <% end %>
               <%= form.number_field(:miles_driven,
                 min: "0", max: 10000, placeholder: "0",
@@ -212,12 +218,13 @@
             </div>
 
             <div class="col">
-              <%= form.label :volunteer_address do %>
-                Your current address (for reimbursement check)<span class="red-letter">*</span>
+              <%= form.label :volunteer_address, class: "form-label" do %>
+                Mailing Address for Reimbursement Check<span class="red-letter">*</span>
               <% end %>
               <%= form.text_area(:volunteer_address,
                 value: @case_contact.decorate.address_of_volunteer,
                 disabled: @case_contact.address_field_disabled?,
+                placeholder: "Enter mailing address",
                 class: "form-control",
                 data: { case_contact_form_target: "volunteerAddress" },
               ) %>
@@ -232,7 +239,6 @@
           <% if show_additional_expenses %>
             <!-- ADDITIONAL EXPENSES -->
             <div id="contact-form-expenses"
-              class="other-expenses"
               data-controller="casa-nested-form"
               data-casa-nested-form-route-value="/additional_expenses"
               data-casa-nested-form-parent-name-value="case_contact"
@@ -253,9 +259,9 @@
 
               <div data-casa-nested-form-target="target"></div>
 
-              <button type="button" class="btn btn-link"
+              <button type="button" class="btn btn-sm btn-link"
                 data-action="casa-nested-form#addAndCreate">
-                + Add Expense
+                + Add Another Expense
               </button>
             </div>
           <% end %>
@@ -270,7 +276,7 @@
     <% end %>
 
     <div id="contact-form-action-buttons" class="actions mb-10">
-      <div class="checkbox-style pt-1">
+      <div class="pt-1">
         <%= form.fields_for :metadata do |metadata_form| %>
           <%= metadata_form.check_box :create_another, class: "form-check-input" %>
           <%= metadata_form.label :create_another, class: "form-check-label d-inline align-bottom" do %>
@@ -280,10 +286,6 @@
           <% end %>
         <% end %>
       </div>
-
-      <%= link_to leave_case_contacts_form_path, class: "btn-sm main-btn #{@case_contact.draft_case_ids.empty? ? 'danger' : 'primary'}-btn-outline btn-hover", data: { controller: "alert", "action": "alert#confirm", "alert-ignore-value": !@case_contact.draft_case_ids.empty?, "alert-title-value": "Discard draft?", "alert-message-value": "Are you sure? If you don't save and continue to the next step, this draft will not be recoverable." } do %>
-        Back
-      <% end %>
 
       <%= button_tag type: "submit", class: "btn-sm main-btn primary-btn btn-hover" do %>
         <i class="lni lni-checkmark-circle mr-5"></i>Submit

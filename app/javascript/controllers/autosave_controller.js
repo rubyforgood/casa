@@ -7,6 +7,10 @@ export default class extends Controller {
     delay: {
       type: Number,
       default: 1000 // milliseconds to delay form submission
+    },
+    clearDelay: {
+      type: Number,
+      default: 3000 // milliseconds to delay hiding alert
     }
   }
 
@@ -103,7 +107,7 @@ export default class extends Controller {
     if (hide) {
       setTimeout(() => {
         this.hideAlert()
-      }, this.delayValue)
+      }, this.clearDelayValue)
     }
   }
 }

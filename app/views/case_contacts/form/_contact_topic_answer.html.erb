@@ -1,25 +1,30 @@
-<div class="nested-form-wrapper"
+<div class="nested-form-wrapper mb-2"
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
-  <div class="d-flex gap-1 flex-wrap">
-    <div class="col-md-4">
-      <%= form.label :contact_topic_id, "Discussion Topic" %>
-      <%= form.select :contact_topic_id, select_options, {include_blank: false}, class: ["form-select", "contact-topic-id-select"] %>
+  <div class="row gy-3">
+    <div class="col-12 col-md-4">
+      <%= form.label :contact_topic_id, "Discussion Topic", class: "form-label" %>
+      <%= form.select(:contact_topic_id,
+        select_options,
+        {include_blank: "Select a discussion topic"},
+        class: ["form-select", "contact-topic-id-select"],
+      ) %>
     </div>
-    <div class="flex-grow-1">
-      <%= form.label :value, "Discussion Notes" %>
+    <div class="col-12 col-md">
+      <%= form.label :value, "Discussion Notes", class: "form-label" %>
       <%= form.text_area(
         :value,
         data: { action: "input->autosave#save" },
-        rows: 5,
+        rows: 3,
         class: ["form-control", "contact-topic-answer-input"],
+        placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
       ) %>
     </div>
-    <div class="flex-shrink-1">
+    <div class="col-12 col-lg-auto d-flex align-items-end justify-content-end">
       <button type="button"
         data-action="casa-nested-form#confirmDestroyAndRemove"
-        class="mt-4 btn btn-sm danger-btn-outline btn-hover">
+        class="btn btn-sm danger-btn-outline btn-hover">
         Delete
       </button>
     </div>

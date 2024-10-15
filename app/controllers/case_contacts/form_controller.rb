@@ -11,6 +11,11 @@ class CaseContacts::FormController < ApplicationController
     authorize @case_contact
 
     prepare_form
+
+    if @case_contact.started? && @case_contact.contact_topic_answers.empty?
+      @case_contact.contact_topic_answers.build()
+    end
+
     render_wizard
   end
 
@@ -22,7 +27,6 @@ class CaseContacts::FormController < ApplicationController
 
     respond_to do |format|
       format.html do
-        # only update status during form submission, not json/autosave requests
         params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
         if @case_contact.update(case_contact_params)
           finish_editing
@@ -45,7 +49,7 @@ class CaseContacts::FormController < ApplicationController
 
   def set_case_contact
     @case_contact = CaseContact
-      .includes(:creator)
+      .includes(:creator, :contact_topic_answers)
       .find(params[:case_contact_id])
   end
 
