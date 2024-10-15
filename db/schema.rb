@@ -301,6 +301,17 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_16_194609) do
     t.index ["judge_id"], name: "index_court_dates_on_judge_id"
   end
 
+  create_table "custom_links", force: :cascade do |t|
+    t.string "text"
+    t.text "url"
+    t.bigint "casa_org_id", null: false
+    t.boolean "soft_delete", default: false, null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_org_id"], name: "index_custom_links_on_casa_org_id"
+  end
+
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
@@ -718,6 +729,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_07_16_194609) do
   add_foreign_key "contact_topic_answers", "contact_topics"
   add_foreign_key "contact_topics", "casa_orgs"
   add_foreign_key "court_dates", "casa_cases"
+  add_foreign_key "custom_links", "casa_orgs"
   add_foreign_key "emancipation_options", "emancipation_categories"
   add_foreign_key "followups", "users", column: "creator_id"
   add_foreign_key "judges", "casa_orgs"
