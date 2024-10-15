@@ -56,11 +56,6 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
       is_expected.not_to permit(casa_admin, unassigned_case_case_contact)
       is_expected.not_to permit(supervisor, other_org_case_contact)
-
-      pending "allow supervisors of the case creator volunteer?"
-      # are they supervisors of volunteer, or of the case? both?
-      is_expected.to permit(supervisor, case_contact)
-      is_expected.to permit(supervisor, draft_case_contact)
     end
 
     it "allows volunteer only if they created the case contact" do
@@ -69,9 +64,6 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
 
       is_expected.not_to permit(volunteer, unassigned_case_case_contact)
       is_expected.not_to permit(volunteer, other_org_case_contact)
-
-      pending "should volunteers be able to view contacts from other volunteer for same case?"
-      is_expected.to permit(volunteer, same_case_volunteer_case_contact)
     end
   end
 
@@ -91,9 +83,6 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       is_expected.to permit(supervisor, same_case_volunteer_case_contact)
 
       is_expected.not_to permit(supervisor, other_org_case_contact)
-
-      pending "restrict supervisors who are not assigned to the volunteer/case?"
-      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
     end
 
     it "allows volunteer only if they created the case contact" do
@@ -159,9 +148,6 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       is_expected.to permit(supervisor, same_case_volunteer_case_contact)
 
       is_expected.not_to permit(supervisor, other_org_case_contact)
-
-      pending "resctrict supervisors to their volunteers/cases?"
-      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
     end
 
     it "allows volunteer only for draft contacts they created" do
@@ -236,9 +222,6 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
         is_expected
           .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
         is_expected.not_to include(other_org_case_contact)
-
-        pending "should supervisors see contacts for volunteers they are not assigned to?"
-        is_expected.not_to include(unassigned_case_case_contact)
       end
     end
 

@@ -177,13 +177,6 @@ export default class extends NestedForm {
     }
   }
 
-  confirmRemove (e) {
-    const text = 'Are you sure you want to remove this item?'
-    if (window.confirm(text)) {
-      this.remove(e)
-    }
-  }
-
   confirmDestroyAndRemove (e) {
     const text = 'Are you sure you want to remove this item?'
     if (window.confirm(text)) {
