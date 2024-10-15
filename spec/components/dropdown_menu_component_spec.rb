@@ -25,8 +25,7 @@ RSpec.describe DropdownMenuComponent, type: :component do
     render_inline(DropdownMenuComponent.new(menu_title: "Example Title")) { "Example Item" }
 
     expect(page).to have_css("div.dropdown")
-    expect(page).to have_css("button.btn.btn-secondary.dropdown-toggle svg")
-    expect(page).to have_css("svg title", text: "Example Title")
+    expect(page).to have_css("button.btn.btn-secondary.dropdown-toggle")
     expect(page).to have_css(".dropdown-menu", text: "Example Item")
   end
 
@@ -37,7 +36,7 @@ RSpec.describe DropdownMenuComponent, type: :component do
   end
 
   it "renders the dropdown menu with additional classes" do
-    render_inline(DropdownMenuComponent.new(menu_title: "Example", klass: "example-class")) { "Example Content" }
+    render_inline(DropdownMenuComponent.new(menu_title: "Example", container_klass: "example-class")) { "Example Content" }
 
     expect(page).to have_css("div.dropdown.example-class")
   end
