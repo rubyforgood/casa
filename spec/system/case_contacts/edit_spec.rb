@@ -105,7 +105,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
       case_numbers: [], contact_made: true, medium: "Letter", contact_types: [contact_types.second.name],
       occurred_on: Time.zone.today - 5.days, hours: 1, minutes: 5
     )
-    click_on "Add Note"
+    click_on "Add Another Discussion Topic"
     answer_topic contact_topic.question, "Topic 1 Answer."
     fill_in_expenses_page(miles: 50, want_reimbursement: true, address: "123 Form St")
     click_on "Submit"
@@ -157,7 +157,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     complete_details_page(contact_made: true)
     expect(case_contact.reload.notes).to eq "Hello from the other side"
 
-    answer_topic "Additional Notes", "Hello world"
+    fill_in "Additional Notes", with: "Hello world"
 
     within autosave_alert_div do
       find(autosave_alert_css, text: autosave_alert_text, wait: autosave_wait_time)

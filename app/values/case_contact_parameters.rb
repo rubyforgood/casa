@@ -35,6 +35,7 @@ class CaseContactParameters < SimpleDelegator
     if params.dig(:case_contact, :miles_driven)
       params[:case_contact][:miles_driven] = convert_miles_driven(params)
     end
+    params[:case_contact][:notes] = params.dig(:case_contact, :notes).presence
 
     params
   end

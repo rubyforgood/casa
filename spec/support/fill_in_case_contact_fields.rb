@@ -7,25 +7,18 @@ module FillInCaseContactFields
   EXPENSE_AMOUNT_CLASS = ".expense-amount-input"
   EXPENSE_DESCRIBE_CLASS = ".expense-describe-input"
 
-  # @param case_numbers [Array[String]]
-  # @param contact_types [Array[String]]
-  # @param contact_made [Boolean]
-  # @param medium [String]
-  # @param occurred_on [String], date in the format MM/dd/YYYY
-  # @param hours [Integer]
-  # @param minutes [Integer]
   def fill_in_contact_details(case_numbers: [], contact_types: [], contact_made: true,
     medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
     within DETAILS_ID do
       within "#draft-case-id-selector" do
-        if !case_numbers.empty?
+        if case_numbers.nil?
           all(:element, "a", title: "Remove this item").each(&:click)
         end
 
         find(".ts-control").click
 
-        Array.wrap(case_numbers).each do |case_number|
-          checkbox_for_case_number = find("span", text: case_number).sibling("input")
+        Array.wrap(case_numbers).each_with_index do |case_number, index|
+          checkbox_for_case_number = first("span", text: "#{case_number}").sibling("input")
           checkbox_for_case_number.click unless checkbox_for_case_number.checked?
         end
 
@@ -34,8 +27,13 @@ module FillInCaseContactFields
 
       fill_in "case_contact_occurred_at", with: occurred_on if occurred_on
 
-      contact_types.each do |contact_type|
-        check contact_type
+      if contact_types.present?
+        contact_types.each do |contact_type|
+          check contact_type
+        end
+      elsif !contact_types.nil?
+        contact_type = ContactType.first
+        check contact_type.name
       end
 
       choose medium if medium
@@ -54,14 +52,13 @@ module FillInCaseContactFields
 
   def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
     within NOTES_ID do
-      Array.wrap(contact_topic_answers_attrs).each do |attributes|
-        click_on "Add Note"
+      Array.wrap(contact_topic_answers_attrs).each_with_index do |attributes, index|
+        click_on "Add Another Discussion Topic" if index > 0
         answer_topic_unscoped attributes[:question], attributes[:answer]
       end
 
       if notes.present?
-        click_on "Add Note"
-        answer_topic_unscoped "Additional Notes", notes
+        fill_in "Additional Notes", with: notes
       end
     end
   end

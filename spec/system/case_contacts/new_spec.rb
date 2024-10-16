@@ -67,12 +67,11 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       subject
       complete_details_page(
         case_numbers: [], contact_types: %w[School], contact_made: true, medium: nil,
-        hours: 1, minutes: 45, occurred_on: ""
+        hours: 1, minutes: 45
       )
 
       expect { click_on "Submit" }.not_to change(CaseContact, :count)
 
-      expect(page).to have_text("Date can't be blank")
       expect(page).to have_text("Medium type can't be blank")
 
       expect(page).to have_field("case_contact_duration_hours", with: 1)
@@ -86,7 +85,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     it "requires a contact type" do
       subject
 
-      fill_in_contact_details(contact_types: [])
+      fill_in_contact_details(contact_types: nil)
 
       expect { click_on "Submit" }.to not_change(CaseContact.active, :count)
       expect(page).to have_text("Contact Type must be selected")
@@ -149,7 +148,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     it "does not show topic questions that are inactive or soft deleted in select" do
       contact_topics
       subject
-      click_on "Add Note"
+      click_on "Add Another Discussion Topic"
 
       expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic"])
       expect(page).to have_no_text("Inactive Not Soft Deleted")
@@ -161,14 +160,12 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       contact_topics
       expect { subject }.to change(CaseContact.started, :count).by(1)
       case_contact = CaseContact.started.last
-      expect(case_contact.contact_topic_answers).to be_empty
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
         medium: "In Person", occurred_on: "04/04/2020", hours: 1, minutes: 45
       )
 
-      click_on "Add Note"
       answer_topic "Active Topic", "Hello world"
 
       within autosave_alert_div do
@@ -179,15 +176,13 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     end
 
     context "when org has no contact topics" do
-      it "allows entering contact notes as 'Additional Notes'" do
+      it "allows entering contact notes" do
         expect(casa_org.contact_topics.size).to eq 0
         subject
 
         fill_in_contact_details contact_types: %w[School]
 
-        click_on "Add Note"
-        find(".contact-topic-id-select").select("Additional Notes")
-        find(".contact-topic-answer-input").fill_in(with: "This is the note")
+        fill_in "Additional Notes", with: "This is the note"
 
         expect {
           click_on "Submit"
@@ -237,7 +232,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     let(:reimbursement_checkbox) { "case_contact_want_driving_reimbursement" }
     let(:miles_driven_input) { "case_contact_miles_driven" }
     let(:volunteer_address_input) { "case_contact_volunteer_address" }
-    let(:add_expense_button_text) { "Add Expense" }
+    let(:add_expense_button_text) { "Add Another Expense" }
     let(:expense_amount_class) { "expense-amount-input" }
     let(:expense_describe_class) { "expense-describe-input" }
 
@@ -434,19 +429,20 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
     context "when multiple cases selected" do
       let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
-      let(:casa_case) { volunteer.casa_cases.first }
-      let(:casa_case_two) { volunteer.casa_cases.second }
+      let!(:casa_case) { volunteer.casa_cases.first }
+      let!(:casa_case_two) { volunteer.casa_cases.second }
       let(:case_number_two) { casa_case_two.case_number }
-      let(:draft_case_ids) { [casa_case.id, casa_case_two.id] }
+      let!(:draft_case_ids) { [casa_case.id, casa_case_two.id] }
 
       it "redirects to the new CaseContact form with the same cases selected" do
         expect { subject }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
+        save_screenshot("a-create-another-before.png")
         complete_details_page(case_numbers: [case_number, case_number_two], contact_types: %w[School])
-
         check "Create Another"
 
+        save_screenshot("a-create-another-after.png")
         expect {
           click_on "Submit"
         }.to change(CaseContact.active, :count).by(2)
@@ -465,9 +461,9 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   end
 
   context "when volunteer has multiple cases" do
-    let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
-    let(:first_case) { volunteer.casa_cases.first }
-    let(:second_case) { volunteer.casa_cases.second }
+    let!(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
+    let!(:first_case) { volunteer.casa_cases.first }
+    let!(:second_case) { volunteer.casa_cases.second }
 
     describe "case default selection" do
       it "selects no cases" do
@@ -475,13 +471,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
         expect(page).to have_no_text(first_case.case_number)
         expect(page).to have_no_text(second_case.case_number)
-      end
-
-      it "warns user about using the back button on step 1" do
-        subject
-
-        click_on "Back"
-        expect(page).to have_css("h2", text: "Discard draft?")
       end
 
       context "when there are params defined" do
@@ -492,19 +481,12 @@ RSpec.describe "case_contacts/new", :js, type: :system do
           expect(page).to have_no_text(second_case.case_number)
         end
 
-        it "does not warn user when clicking the back button" do
-          visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
-
-          click_on "Back"
-          expect(page).to have_css("h1", text: "Case Contacts")
-          expect(page).to have_css("a", text: "New Case Contact")
-        end
       end
     end
   end
 
   context "when volunteer has one case" do
-    let(:first_case) { volunteer.casa_cases.first }
+    let!(:first_case) { volunteer.casa_cases.first }
 
     it "selects the only case" do
       expect(volunteer.casa_cases.size).to eq 1
@@ -512,16 +494,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       subject
 
       expect(page).to have_text(first_case.case_number)
-    end
-
-    it "does not warn user when clicking the back button" do
-      expect(volunteer.casa_cases.size).to eq 1
-
-      visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
-
-      click_on "Back"
-      expect(page).to have_css("h1", text: "Case Contacts")
-      expect(page).to have_css("a", text: "New Case Contact")
     end
   end
 

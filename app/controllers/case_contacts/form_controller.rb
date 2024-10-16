@@ -12,10 +12,6 @@ class CaseContacts::FormController < ApplicationController
 
     prepare_form
 
-    if @case_contact.started? && @case_contact.contact_topic_answers.empty?
-      @case_contact.contact_topic_answers.build()
-    end
-
     render_wizard
   end
 
@@ -58,6 +54,12 @@ class CaseContacts::FormController < ApplicationController
     contact_types = get_contact_types.decorate
     @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
+
+    if @case_contact.contact_topic_answers.empty? && !@case_contact.active?
+      if @contact_topics.present?
+        @case_contact.contact_topic_answers.create(contact_topic: @contact_topics.first)
+      end
+    end
   end
 
   def get_casa_cases

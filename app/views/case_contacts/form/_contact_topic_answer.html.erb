@@ -7,7 +7,7 @@
       <%= form.label :contact_topic_id, "Discussion Topic", class: "form-label" %>
       <%= form.select(:contact_topic_id,
         select_options,
-        {include_blank: "Select a discussion topic"},
+        {include_blank: false},
         class: ["form-select", "contact-topic-id-select"],
       ) %>
     </div>

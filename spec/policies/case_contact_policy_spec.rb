@@ -54,7 +54,7 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       is_expected.not_to permit(supervisor, case_contact)
       is_expected.not_to permit(supervisor, draft_case_contact)
       is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
-      is_expected.not_to permit(casa_admin, unassigned_case_case_contact)
+      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
       is_expected.not_to permit(supervisor, other_org_case_contact)
     end
 

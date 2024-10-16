@@ -265,18 +265,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect(topic_one_contact_answers.first.value).to eq "Topic 1 Answer"
         end
       end
-
-      context "when answer attribute has no contact_topic_id" do
-        let(:contact_topic_answers_attributes) { {"0" => {value: "Topic 1 Answer"}} }
-
-        it "saves the answer in contact.notes" do
-          request
-
-          expect(response).to redirect_to(case_contacts_path(success: true))
-          expect(case_contact.reload.contact_topic_answers).to be_empty
-          expect(case_contact.notes).to eq "Topic 1 Answer"
-        end
-      end
     end
 
     context "when notes attribute in params" do
@@ -288,18 +276,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
 
         case_contact.reload
         expect(case_contact.notes).to eq "This is a note."
-      end
-
-      context "when answer with no contact topic id in attributes" do
-        let(:contact_topic_answers_attributes) { {"0" => {value: "Topic 1 Answer"}} }
-        let(:attributes) { valid_attributes.merge({notes:, contact_topic_answers_attributes:}) }
-
-        it "combines notes and answer in contact.notes" do
-          request
-
-          expect(case_contact.reload.contact_topic_answers).to be_empty
-          expect(case_contact.notes).to eq "This is a note.Topic 1 Answer"
-        end
       end
     end
 

@@ -74,7 +74,7 @@
             <legend><%= group_name %></legend>
             <%= form.collection_check_boxes(:contact_type_ids, contact_types, :id, :name) do |b| %>
               <div class="form-check">
-                <%= b.check_box(class: "form-check-input") %>
+                <%= b.check_box(class: ["form-check-input", "contact-form-type-checkbox"]) %>
                 <%= b.label(class: "form-check-label") %>
                 <small>
                   <%= b.object.last_time_used_with_cases(casa_case_ids) %>
