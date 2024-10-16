@@ -17,7 +17,7 @@ class LearningHour < ApplicationRecord
   validates :learning_hour_topic, presence: true, if: :user_org_learning_topic_enable?
 
   scope :supervisor_volunteers_learning_hours, ->(supervisor_id) {
-    joins(user: :supervisor_volunteer)
+    left_outer_joins(user: [{ supervisor_volunteer: {supervisor: :learning_hours} }])
       .where(supervisor_volunteers: {supervisor_id: supervisor_id})
       .select("users.id as user_id, users.display_name, SUM(learning_hours.duration_minutes + learning_hours.duration_hours * 60) AS total_time_spent")
       .group("users.display_name, users.id")
