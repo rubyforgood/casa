@@ -1,14 +1,5 @@
-
-fieldset {
-    border: 1px double #CCC;
-}
-
 .slide-container {
     padding: 0rem 1rem;
-}
-
-legend {
-    font-size: small;
 }
 
 .slider {
@@ -90,7 +81,7 @@ legend {
         }
     }
  }
- 
+
 .other-expenses li {
     margin-bottom: .2rem;
 }
@@ -118,7 +109,7 @@ legend {
     display: flex;
     align-items: center;
   }
-  
+
 .dollar-sign .other-expense-amount {
     position: relative;
     padding-left: 32px;
@@ -135,7 +126,7 @@ legend {
     left: 28px;
     z-index: 100;
 }
-  
+
 .pr-7 {
     padding-right: 1.5rem !important;
     padding-left: 2.5rem !important;

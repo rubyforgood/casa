@@ -21,9 +21,9 @@ class CaseContact < ApplicationRecord
     message: :cant_be_future,
     allow_nil: true
   }
-  validate :reimbursement_only_when_miles_driven, if: :active_or_expenses?
-  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_expenses?
-  validate :volunteer_address_is_valid, if: :active_or_expenses?
+  validate :reimbursement_only_when_miles_driven, if: :active_or_details?
+  validate :volunteer_address_when_reimbursement_wanted, if: :active_or_details?
+  validate :volunteer_address_is_valid, if: :active_or_details?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -32,25 +32,27 @@ class CaseContact < ApplicationRecord
   has_one :supervisor, through: :creator
   has_many :followups
 
-  # Draft support requires the casa_case to be nil if the contact is in_progress
+  # Draft casa_case_id is nil until active
   belongs_to :casa_case, optional: true
   has_one :casa_org, through: :casa_case
+  # Use creator_casa_org as fallback org relationship for drafts
+  has_one :creator_casa_org, through: :creator, source: :casa_org
   validates :casa_case_id, presence: true, if: :active?
-  validates :draft_case_ids, presence: {message: :must_be_selected}, unless: :started?
+  validates :draft_case_ids, presence: {message: :must_be_selected}, if: :active_or_details?
 
   has_many :case_contact_contact_types
+  validates :case_contact_contact_types, presence: {message: :must_be_selected}, if: :active_or_details?
   has_many :contact_types, through: :case_contact_contact_types
 
   has_many :additional_expenses
   has_many :contact_topic_answers, dependent: :destroy
+  has_many :contact_topics, through: :contact_topic_answers
 
   after_save_commit ::CaseContactMetadataCallback.new
 
-  # Corresponds to the steps in the controller, so validations for certain columns can happen at those steps.
-  # These steps must be listed in order, have an html template in case_contacts/form, & be listed in the status enum
-  FORM_STEPS = %i[details notes expenses].freeze
-  # note: enum defines methods (active?) and scopes (.active, .not_active) for each member
-  # string values for wizard form steps, integer column would make db queries faster
+  # NOTE: 'notes' & 'expenses' statuses are no longer used. Could be removed from enum if
+  # existing records are migrated to started/details status (draft).
+  # NOTE: enum defines methods (active?) and scopes (.active, .not_active) for each member
   enum :status, {
     started: "started",
     active: "active",
@@ -72,10 +74,9 @@ class CaseContact < ApplicationRecord
   end
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
-  validates_associated :additional_expenses
 
-  accepts_nested_attributes_for :casa_case
-  accepts_nested_attributes_for :contact_topic_answers, update_only: true
+  accepts_nested_attributes_for :contact_topic_answers, allow_destroy: true,
+    reject_if: proc { |attrs| attrs["contact_topic_id"].blank? && attrs["value"].blank? }  # .notes sent without topic_id, but must have a value.
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
@@ -267,18 +268,8 @@ class CaseContact < ApplicationRecord
   def volunteer
     if creator.is_a?(Volunteer)
       creator
-    elsif CasaCase.find(draft_case_ids.first).volunteers.count == 1
+    elsif draft_case_ids.first && CasaCase.find(draft_case_ids.first).volunteers.count == 1
       CasaCase.find(draft_case_ids.first).volunteers.first
-    end
-  end
-
-  def self.create_with_answers(casa_org, **kwargs)
-    create(kwargs).tap do |case_contact|
-      casa_org.contact_topics.active.each do |topic|
-        unless case_contact.contact_topic_answers << ContactTopicAnswer.new(contact_topic: topic)
-          case_contact.errors.add(:contact_topic_answers, "could not create topic #{topic&.question.inspect}")
-        end
-      end
     end
   end
 
@@ -291,12 +282,6 @@ class CaseContact < ApplicationRecord
     casa_case_ids.each_with_object({}) do |casa_case_id, hash|
       hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
-  end
-
-  def form_steps
-    steps = FORM_STEPS.dup
-    steps.delete(:expenses) unless casa_org_any_expenses_enabled?
-    steps.freeze
   end
 
   def casa_org_any_expenses_enabled?
