@@ -23,7 +23,7 @@ end
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
 #  case_contact_id  :bigint           not null
-#  contact_topic_id :bigint           not null
+#  contact_topic_id :bigint
 #
 # Indexes
 #
