@@ -112,13 +112,15 @@ class CaseContactDecorator < Draper::Decorator
       volunteer_address
     elsif volunteer
       volunteer.address&.content
-    else
-      "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
     end
   end
 
+  def ambiguous_volunteer_address_message
+    "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
+  end
+
   def form_title
-    active? ? "Editing existing case contact" : "Record new case contact"
+    active? ? "Editing Existing Case Contact" : "Record New Case Contact"
   end
 
   def form_page_notes

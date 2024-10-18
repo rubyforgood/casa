@@ -3,7 +3,7 @@
   <div class="col-sm-12 form-header d-flex flex-wrap justify-content-between">
     <h1 class="pull-left my-4"><%= @casa_case.decorate.transition_aged_youth_icon %>CASA Case Details</h1>
     <div class="d-inline-flex flex-wrap my-4 gap-3">
-      <%- if policy(:case_contact).new? & @casa_case.active? %>
+      <%- if @casa_case.active? %>
         <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: "main-btn primary-btn btn-sm btn-hover pull-left" do %>
           <i class="lni lni-plus mr-10"></i>
           New Case Contact

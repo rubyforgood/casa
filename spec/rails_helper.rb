@@ -39,6 +39,7 @@ RSpec.configure do |config|
   config.include ActionText::SystemTestHelper, type: :system
   config.include TwilioHelper, type: :request
   config.include TwilioHelper, type: :system
+  config.include Support::RequestHelpers, type: :request
 
   config.after do
     Warden.test_reset!

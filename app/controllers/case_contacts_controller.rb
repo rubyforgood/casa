@@ -33,25 +33,24 @@ class CaseContactsController < ApplicationController
 
   def new
     store_referring_location
-    authorize CaseContact
 
     casa_cases = policy_scope(current_organization.casa_cases)
     draft_case_ids = build_draft_case_ids(params, casa_cases)
 
-    @case_contact = CaseContact.create_with_answers(current_organization,
-      creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
+    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
+    authorize @case_contact
 
     if @case_contact.errors.any?
       flash[:alert] = @case_contact.errors.full_messages.join("\n")
       redirect_to request.referer
     else
-      redirect_to case_contact_form_path(@case_contact.form_steps.first, case_contact_id: @case_contact.id)
+      redirect_to case_contact_form_path(:details, case_contact_id: @case_contact.id)
     end
   end
 
   def edit
     authorize @case_contact
-    redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
+    redirect_to case_contact_form_path(:details, case_contact_id: @case_contact.id)
   end
 
   def destroy

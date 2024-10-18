@@ -1,77 +1,120 @@
 module FillInCaseContactFields
-  # @param case_numbers [Array[String]]
-  # @param contact_types [Array[String]]
-  # @param contact_made [Boolean]
-  # @param medium [String]
-  # @param occurred_on [String], date in the format MM/dd/YYYY
-  # @param hours [Integer]
-  # @param minutes [Integer]
-  def complete_details_page(contact_made:, medium: nil, occurred_on: nil, hours: nil, minutes: nil, case_numbers: [], contact_types: [], contact_topics: [])
-    within find("#draft-case-id-selector") do
-      find(".ts-control").click
-    end
+  DETAILS_ID = "#contact-form-details"
+  NOTES_ID = "#contact-form-notes"
+  TOPIC_VALUE_CLASS = ".contact-topic-answer-input"
+  TOPIC_SELECT_CLASS = ".contact-topic-id-select"
+  REIMBURSEMENT_ID = "#contact-form-reimbursement"
+  EXPENSE_AMOUNT_CLASS = ".expense-amount-input"
+  EXPENSE_DESCRIBE_CLASS = ".expense-describe-input"
 
-    case_numbers.each do |case_number|
-      checkbox_for_case_number = find("span", text: case_number).sibling("input")
-      checkbox_for_case_number.click unless checkbox_for_case_number.checked?
-    end
+  def fill_in_contact_details(case_numbers: [], contact_types: [], contact_made: true,
+    medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
+    within DETAILS_ID do
+      within "#draft-case-id-selector" do
+        if case_numbers.nil?
+          all(:element, "a", title: "Remove this item").each(&:click)
+        end
 
-    within find("#draft-case-id-selector") do
-      find(".ts-control").click
-    end
+        if case_numbers.present?
+          find(".ts-control").click
 
-    within find("#contact-type-id-selector") do
-      find(".ts-control").click
-    end
+          Array.wrap(case_numbers).each_with_index do |case_number, index|
+            checkbox_for_case_number = first("span", text: case_number).sibling("input")
+            checkbox_for_case_number.click unless checkbox_for_case_number.checked?
+          end
 
-    contact_types.each do |contact_type|
-      find("span", text: contact_type).click
-    end
+          find(".ts-control").click
+        end
+      end
 
-    within find("#contact-type-id-selector") do
-      find(".ts-control").click
-    end
+      fill_in "case_contact_occurred_at", with: occurred_on if occurred_on
 
-    within "#enter-contact-details" do
-      choose contact_made ? "Yes" : "No"
-    end
-    choose medium if medium
-    fill_in "case_contact_occurred_at", with: occurred_on if occurred_on
-    fill_in "case_contact_duration_hours", with: hours if hours
-    fill_in "case_contact_duration_minutes", with: minutes if minutes
+      if contact_types.present?
+        contact_types.each do |contact_type|
+          check contact_type
+        end
+      elsif !contact_types.nil?
+        contact_type = ContactType.first
+        check contact_type.name
+      end
 
-    contact_topics.each do |contact_topic|
-      check contact_topic
-    end
+      choose medium if medium
 
-    click_on "Save and Continue"
+      if contact_made
+        check "Contact was made"
+      else
+        uncheck "Contact was made"
+      end
+
+      fill_in "case_contact_duration_hours", with: hours if hours
+      fill_in "case_contact_duration_minutes", with: minutes if minutes
+    end
   end
+  alias_method :complete_details_page, :fill_in_contact_details
 
-  def choose_medium(medium, click_continue: true)
-    choose medium if medium
+  def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
+    within NOTES_ID do
+      Array.wrap(contact_topic_answers_attrs).each_with_index do |attributes, index|
+        click_on "Add Another Discussion Topic" if index > 0
+        answer_topic_unscoped attributes[:question], attributes[:answer]
+      end
 
-    click_on "Save and Continue" if click_continue
+      if notes.present?
+        fill_in "Additional Notes", with: notes
+      end
+    end
   end
+  alias_method :complete_notes_page, :fill_in_notes
 
-  # @param notes [String]
-  def complete_notes_page(notes: "", click_continue: true)
-    fill_in "Additional notes", with: notes
-
-    click_on "Save and Continue" if click_continue
-  end
-
-  # This intentionally does not submit the form
   # @param miles [Integer]
   # @param want_reimbursement [Boolean]
   # @param address [String]
-  def fill_in_expenses_page(miles: 0, want_reimbursement: false, address: nil)
-    fill_in "case_contact_miles_driven", with: miles
+  def fill_in_mileage(miles: 0, want_reimbursement: false, address: nil)
+    within REIMBURSEMENT_ID do
+      check_reimbursement(want_reimbursement)
+      return unless want_reimbursement
 
-    within ".want-driving-reimbursement" do
-      choose want_reimbursement ? "Yes" : "No"
+      fill_in "case_contact_miles_driven", with: miles if miles.present?
+      fill_in "case_contact_volunteer_address", with: address if address
     end
+  end
+  alias_method :fill_in_expenses_page, :fill_in_mileage
 
-    fill_in "case_contact_volunteer_address", with: address if address
+  def choose_medium(medium)
+    choose medium if medium
+  end
+
+  def check_reimbursement(want_reimbursement = true)
+    if want_reimbursement
+      check "Request travel or other reimbursement"
+    else
+      uncheck "Request travel or other reimbursement"
+    end
+  end
+
+  def fill_expense_fields(amount, describe, index: nil)
+    within REIMBURSEMENT_ID do
+      amount_field = index.present? ? all(EXPENSE_AMOUNT_CLASS)[index] : all(EXPENSE_AMOUNT_CLASS).last
+      describe_field = index.present? ? all(EXPENSE_DESCRIBE_CLASS)[index] : all(EXPENSE_DESCRIBE_CLASS).last
+      amount_field.fill_in(with: amount) if amount
+      describe_field.fill_in(with: describe) if describe
+    end
+  end
+
+  def answer_topic(question, answer, index: nil)
+    within NOTES_ID do
+      answer_topic_unscoped(question, answer, index:)
+    end
+  end
+
+  private
+
+  # use when already 'within' notes div
+  def answer_topic_unscoped(question, answer, index: nil)
+    topic_select = index.nil? ? all(TOPIC_SELECT_CLASS).last : all(TOPIC_SELECT_CLASS)[index]
+    answer_field = index.nil? ? all(TOPIC_VALUE_CLASS).last : all(TOPIC_VALUE_CLASS)[index]
+    topic_select.select(question) if question
+    answer_field.fill_in(with: answer) if answer
   end
 end
 
