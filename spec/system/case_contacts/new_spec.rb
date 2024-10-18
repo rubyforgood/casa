@@ -440,11 +440,9 @@ RSpec.describe "case_contacts/new", :js, type: :system do
         expect { subject }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
-        save_screenshot("a-create-another-before.png")
         complete_details_page(case_numbers: [case_number, case_number_two], contact_types: %w[School])
         check "Create Another"
 
-        save_screenshot("a-create-another-after.png")
         expect {
           click_on "Submit"
         }.to change(CaseContact.active, :count).by(2)
@@ -482,7 +480,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
           expect(page).to have_text(first_case.case_number)
           expect(page).to have_no_text(second_case.case_number)
         end
-
       end
     end
   end

@@ -57,7 +57,7 @@ class CaseContacts::FormController < ApplicationController
 
     if @case_contact.contact_topic_answers.empty? && !@case_contact.active?
       if @contact_topics.present?
-        @case_contact.contact_topic_answers.create()
+        @case_contact.contact_topic_answers.create
       end
     end
   end

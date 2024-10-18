@@ -18,7 +18,7 @@ module FillInCaseContactFields
         find(".ts-control").click
 
         Array.wrap(case_numbers).each_with_index do |case_number, index|
-          checkbox_for_case_number = first("span", text: "#{case_number}").sibling("input")
+          checkbox_for_case_number = first("span", text: case_number).sibling("input")
           checkbox_for_case_number.click unless checkbox_for_case_number.checked?
         end
 

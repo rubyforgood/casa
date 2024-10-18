@@ -66,13 +66,13 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
     expect {
       using_wait_time 6 do # autosave debounce may be longer than capybara's wait time
-          answer_topic contact_topics.first.question, "First discussion topic answer."
-          within notes_section do
-            expect(page).to have_text "Saved"  # autosave success alert
-            expect(page).to have_no_text "Saved" # wait for clearing of alert
-          end
-          answer_topic contact_topics.first.question, "Changing the first topic answer."
-          within notes_section {expect(page).to have_text "Saved"}
+        answer_topic contact_topics.first.question, "First discussion topic answer."
+        within notes_section do
+          expect(page).to have_text "Saved"  # autosave success alert
+          expect(page).to have_no_text "Saved" # wait for clearing of alert
+        end
+        answer_topic contact_topics.first.question, "Changing the first topic answer."
+        within notes_section { expect(page).to have_text "Saved" }
       end
 
       click_on "Submit"

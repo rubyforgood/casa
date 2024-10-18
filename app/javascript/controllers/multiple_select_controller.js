@@ -10,7 +10,7 @@ export default class extends Controller {
     placeholderTerm: {
       type: String,
       default: 'contact(s)'
-    },
+    }
   }
 
   connect () {

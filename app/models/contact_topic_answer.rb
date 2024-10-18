@@ -9,8 +9,7 @@ class ContactTopicAnswer < ApplicationRecord
   has_one :contact_creator_casa_org, through: :contact_creator, source: :casa_org
 
   validates :selected, inclusion: [true, false]
-  validates :contact_topic, presence: { if: ->(cta) { cta.value&.present? }, message: :must_be_selected }
-
+  validates :contact_topic, presence: {if: ->(cta) { cta.value&.present? }, message: :must_be_selected}
 end
 
 # == Schema Information
