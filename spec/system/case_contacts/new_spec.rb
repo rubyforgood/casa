@@ -431,16 +431,21 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
     context "when multiple cases selected" do
       let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
-      let!(:casa_case) { volunteer.casa_cases.first }
-      let!(:casa_case_two) { volunteer.casa_cases.second }
+      let(:casa_case) { volunteer.casa_cases.first }
+      let(:casa_case_two) { volunteer.casa_cases.second }
       let(:case_number_two) { casa_case_two.case_number }
       let!(:draft_case_ids) { [casa_case.id, casa_case_two.id] }
 
       it "redirects to the new CaseContact form with the same cases selected" do
-        expect { subject }.to change(CaseContact.started, :count).by(1)
+        expect {
+          visit new_case_contact_path(casa_case, {draft_case_ids:})
+        }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
-        complete_details_page(case_numbers: [case_number, case_number_two], contact_types: %w[School])
+        expect(page).to have_select('case_contact_draft_case_ids', selected: [case_number, case_number_two])
+        complete_details_page(case_numbers: [])
+        expect(page).to have_select('case_contact_draft_case_ids', selected: [case_number, case_number_two])
+
         check "Create Another"
 
         expect {
