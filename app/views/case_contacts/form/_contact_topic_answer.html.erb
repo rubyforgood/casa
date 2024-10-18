@@ -7,8 +7,12 @@
       <%= form.label :contact_topic_id, "Discussion Topic", class: "form-label" %>
       <%= form.select(:contact_topic_id,
         select_options,
-        {include_blank: false},
+        {include_blank: "Select a discussion topic"},
         class: ["form-select", "contact-topic-id-select"],
+        data: {
+          action: "change->case-contact-form#onContactTopicSelect",
+          case_contact_form_target: "contactTopicSelect"
+        }
       ) %>
     </div>
     <div class="col-12 col-md">

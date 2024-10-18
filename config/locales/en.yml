@@ -50,10 +50,10 @@ en:
           other: CASA Cases
         occurred_at: Date
       case_contact/additional_expenses:
-        other_expenses_amount: Other Expense Amount
+        other_expense_amount: Other Expense Amount
         other_expenses_describe: Other Expense Details
-      case_contact/contact_topic_answer:
-        contact_topic_id: Discussion Topic
+      case_contact/contact_topic_answers:
+        contact_topic: Discussion Topic
         value: Discussion Notes
     errors:
       messages:

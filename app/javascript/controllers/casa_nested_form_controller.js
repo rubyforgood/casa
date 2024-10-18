@@ -70,9 +70,16 @@ export default class extends NestedForm {
     })
   }
 
+  dispatchChangeEvent (action) {
+    const detail = { modelName: this.modelNameValue, action }
+    const changeEvent = new CustomEvent('casa-nested-form:change', { detail, bubbles: true }) // eslint-disable-line no-undef
+    document.dispatchEvent(changeEvent)
+  }
+
   /* Adds item to the form. Item will not be created until form submission. */
   add (e) {
     super.add(e)
+    this.dispatchChangeEvent('add')
   }
 
   /* Creates a new record for the added item (before submission). */
@@ -134,6 +141,7 @@ export default class extends NestedForm {
   /* Removes item from the form. Will not destroy record until form submission. */
   remove (e) {
     super.remove(e)
+    this.dispatchChangeEvent('remove')
   }
 
   /* Destroys a record when removing the item (before submission). */

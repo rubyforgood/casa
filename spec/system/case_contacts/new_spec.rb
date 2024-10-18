@@ -140,6 +140,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
         create(:contact_topic, casa_org:, question: "Inactive Soft Deleted", active: false, soft_delete: true)
       ]
     end
+    let(:notes_section_selector) { "#contact-form-notes" }
     let(:autosave_alert_div) { "#contact-form-notes" }
     let(:autosave_alert_css) { 'small[role="alert"]' }
     let(:autosave_alert_text) { "Saved!" }
@@ -148,12 +149,13 @@ RSpec.describe "case_contacts/new", :js, type: :system do
     it "does not show topic questions that are inactive or soft deleted in select" do
       contact_topics
       subject
-      click_on "Add Another Discussion Topic"
 
-      expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic"])
-      expect(page).to have_no_text("Inactive Not Soft Deleted")
-      expect(page).to have_no_text("Active Soft Deleted")
-      expect(page).to have_no_text("Inactive Soft Deleted")
+      within notes_section_selector do
+        expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic", "Select a discussion topic"])
+        expect(page).to have_no_text("Inactive Not Soft Deleted")
+        expect(page).to have_no_text("Active Soft Deleted")
+        expect(page).to have_no_text("Inactive Soft Deleted")
+      end
     end
 
     it "autosaves notes & answers" do

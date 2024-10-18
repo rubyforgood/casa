@@ -14,7 +14,7 @@ RSpec.describe "/contact_topic_answers", type: :request do
     attributes_for(:contact_topic_answer)
       .merge({contact_topic_id: contact_topic.id, case_contact_id: case_contact.id})
   end
-  let(:invalid_attributes) { valid_attributes.merge({contact_topic_id: nil}) }
+  let(:invalid_attributes) { valid_attributes.merge({contact_topic_id: nil, value: "something"}) }
 
   before { sign_in user }
 
@@ -59,7 +59,7 @@ RSpec.describe "/contact_topic_answers", type: :request do
         subject
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(response.body).to be_present
-        expect(response_json[:contact_topic]).to include("must exist")
+        expect(response_json[:contact_topic]).to include("must be selected")
       end
     end
 

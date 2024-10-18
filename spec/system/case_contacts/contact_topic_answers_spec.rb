@@ -10,6 +10,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   let(:topic_count) { 2 }
   let!(:contact_topics) { create_list :contact_topic, topic_count, casa_org: }
   let(:contact_topic_questions) { contact_topics.map(&:question) }
+  let(:select_options) { contact_topic_questions + ["Select a discussion topic"] }
 
   let(:topic_select_class) { "contact-topic-id-select" }
   let(:topic_answer_input_class) { "contact-topic-answer-input" }
@@ -33,19 +34,6 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     expect(notes_section).to have_field(class: topic_select_class)
     expect(notes_section).to have_field(class: topic_answer_input_class)
     expect(notes_section).to have_select(class: topic_select_class, with_options: contact_topic_questions)
-  end
-
-  it "shows selected topic details in tooltip",
-    pending: "TODO: must use stimulus controller to swap tooltip on selection" do
-    subject
-
-    click_on "Add Another Discussion Topic"
-    answer_topic contact_topics.first.question, nil
-    expect(notes_section.find(".contact-topic-tooltip")).to have_content(contact_topics.first.details)
-
-    answer_topic contact_topics.last.question, nil
-
-    expect(notes_section.find(".contact-topic-tooltip")).to have_content(contact_topics.last.details)
   end
 
   it "adds contact answers for the topics" do
@@ -100,29 +88,27 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     expect(case_contact.contact_topic_answers).to include created_answer
   end
 
-  it "prevents adding more answers than topics",
-    pending: "TODO: use stimulus controller to filter select options on selection" do
+  it "prevents adding more answers than topics" do
     subject
 
-    contact_topics.size.times do
+    (contact_topics.size - 1).times do
       click_on "Add Another Discussion Topic"
     end
 
-    expect(notes_section).to have_no_button "Add Another Discussion Topic"
+    expect(notes_section).to have_button("Add Another Discussion Topic", disabled: true)
   end
 
-  it "prevents adding more than one answer per topic",
-    pending: "TODO: use stimulus controller to disable/enable Add Another Discussion Topic button" do
+  it "disables contact topics that are already selected" do
     subject
-
-    click_on "Add Another Discussion Topic"
 
     topic_one_question = contact_topics.first.question
     answer_topic topic_one_question, "First discussion topic answer."
 
+    expect(notes_section).to have_select(class: topic_select_class, count: 1)
+    expect(notes_section).to have_no_select(class: topic_select_class, disabled_options: [topic_one_question])
     click_on "Add Another Discussion Topic"
     expect(notes_section).to have_select(class: topic_select_class, count: 2)
-    expect(notes_section).to have_select(class: topic_select_class, with_options: [topic_one_question], count: 1)
+    expect(notes_section).to have_select(class: topic_select_class, disabled_options: [topic_one_question], count: 1)
   end
 
   context "when casa org has no contact topics" do
@@ -179,11 +165,12 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
         expect(notes_section).to have_field(class: topic_answer_input_class, with: answer_one.value)
         expect(notes_section).to have_field(class: topic_answer_input_class, with: answer_two.value)
+
         expect(notes_section).to have_select(
-          class: topic_select_class, selected: topic_one.question, options: contact_topic_questions
+          class: topic_select_class, selected: topic_one.question, options: select_options
         )
         expect(notes_section).to have_select(
-          class: topic_select_class, selected: topic_two.question, options: contact_topic_questions
+          class: topic_select_class, selected: topic_two.question, options: select_options
         )
       end
 
