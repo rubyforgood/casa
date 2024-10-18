@@ -442,9 +442,9 @@ RSpec.describe "case_contacts/new", :js, type: :system do
         }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
-        expect(page).to have_select('case_contact_draft_case_ids', selected: [case_number, case_number_two])
+        expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
         complete_details_page(case_numbers: [])
-        expect(page).to have_select('case_contact_draft_case_ids', selected: [case_number, case_number_two])
+        expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
 
         check "Create Another"
 

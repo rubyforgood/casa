@@ -28,10 +28,9 @@ RSpec.describe "/additional_expenses", type: :request do
       subject
       expect(response.content_type).to match(a_string_including("application/json"))
       answer = AdditionalExpense.last
-      response_json = JSON.parse(response.body)
-      expect(response_json["id"]).to eq answer.id
+      expect(response_json[:id]).to eq answer.id
       expect(response_json.keys)
-        .to include("id", "case_contact_id", "other_expense_amount", "other_expenses_describe")
+        .to include(:id, :case_contact_id, :other_expense_amount, :other_expenses_describe)
     end
 
     context "with invalid parameters" do
@@ -46,8 +45,7 @@ RSpec.describe "/additional_expenses", type: :request do
         subject
         expect(response.content_type).to match(a_string_including("application/json"))
         expect(response.body).to be_present
-        response_json = JSON.parse(response.body)
-        expect(response_json["other_expenses_describe"]).to include("can't be blank")
+        expect(response_json[:other_expenses_describe]).to include("can't be blank")
       end
     end
 
