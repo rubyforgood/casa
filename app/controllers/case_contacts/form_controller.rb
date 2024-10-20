@@ -55,7 +55,7 @@ class CaseContacts::FormController < ApplicationController
     @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
 
-    if @case_contact.contact_topic_answers.empty? && !@case_contact.active?
+    if !@case_contact.active? && @case_contact.contact_topic_answers.empty?
       if @contact_topics.present?
         @case_contact.contact_topic_answers.create
       end

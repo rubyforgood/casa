@@ -68,7 +68,7 @@
         Contact Type(s)<span class="red-letter">*</span>
       </h3>
       <div id="contact-form-types" class="mb-3">
-        <% casa_case_ids = @casa_cases.collect(&:id) %>
+        <% casa_case_ids = @casa_cases.pluck(:id) %>
         <% @grouped_contact_types.each do |group_name, contact_types| %>
           <fieldset class="form-group">
             <legend><%= group_name %></legend>

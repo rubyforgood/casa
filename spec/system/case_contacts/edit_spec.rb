@@ -15,7 +15,6 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
 
   context "when admin" do
     let(:admin) { create(:casa_admin, casa_org: organization) }
-    let(:case_contact) { create(:case_contact, duration_minutes: 105, casa_case:, creator: admin) }
 
     let(:user) { admin }
 
@@ -56,6 +55,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
 
     it "does not allow volunteer address edit for case contact with ambiguous volunteer" do
       create(:case_assignment, casa_case:, volunteer: create(:volunteer, casa_org: organization))
+      case_contact.update!(creator: admin)
       expect(casa_case.volunteers).not_to include case_contact.creator
       expect(casa_case.volunteers.size).to be > 1
 
