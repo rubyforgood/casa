@@ -1,14 +1,18 @@
 class CaseContactPolicy < ApplicationPolicy
-  def is_creator_or_casa_admin?
-    is_admin? || is_creator?
+  def new?
+    is_creator? || admin_or_supervisor_same_org?
   end
 
-  def is_creator_or_supervisor_or_casa_admin?
-    is_creator? || admin_or_supervisor?
+  def show?
+    creator_or_admin?
+  end
+
+  def update?
+    creator_or_supervisor_or_admin?
   end
 
   def destroy?
-    admin_or_supervisor? || (is_creator? && is_draft?)
+    admin_or_supervisor_same_org? || (is_creator? && is_draft?)
   end
 
   def additional_expenses_allowed?
@@ -17,34 +21,32 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
-  alias_method :new?, :admin_or_supervisor_or_volunteer?
-  alias_method :show?, :is_creator_or_casa_admin?
   alias_method :drafts?, :admin_or_supervisor?
-  alias_method :update?, :is_creator_or_supervisor_or_casa_admin?
-  alias_method :edit?, :is_creator_or_supervisor_or_casa_admin?
-  alias_method :restore?, :is_admin?
+  alias_method :edit?, :update?
+  alias_method :restore?, :is_admin_same_org?
 
-  class Scope
-    attr_reader :user, :scope
-
-    def initialize(user, scope)
-      @user = user
-      @scope = scope
-    end
-
+  class Scope < ApplicationPolicy::Scope
     def resolve
-      case @user
+      case user
       when CasaAdmin, Supervisor
-        scope.joins(:casa_case).where(casa_case: {casa_org: @user&.casa_org})
+        scope.joins(:creator).where(creator: {casa_org: user.casa_org})
       when Volunteer
-        scope.where(casa_case: CasaCase.actively_assigned_to(@user) + [nil], creator: @user)
+        scope.where(creator: user)
       else
-        raise "unrecognized user type #{@user.type}"
+        scope.none
       end
     end
   end
 
   private
+
+  def creator_or_admin?
+    is_creator? || is_admin_same_org?
+  end
+
+  def creator_or_supervisor_or_admin?
+    is_creator? || admin_or_supervisor_same_org?
+  end
 
   def is_draft?
     !record.active?
@@ -52,5 +54,10 @@ class CaseContactPolicy < ApplicationPolicy
 
   def is_creator?
     record.creator == user
+  end
+
+  def same_org?
+    record_org = record.casa_org || record.creator_casa_org
+    user&.casa_org_id == record_org&.id
   end
 end

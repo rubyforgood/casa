@@ -1,7 +1,142 @@
 @use "../base/breakpoints.scss" as screen-sizes;
 
-.case-contacts-form {
-  &-buttons {
+#case-contact-form {
+  color: var(--gunmetal);
+
+  & section {
+    background: var(--white, #FFFFFF);
+    border: 1px solid var(--form-element-stroke, #E5E5E5);
+    border-radius: 10px;
+    box-shadow: 0px 0px 5px 0px #1A252F0D;
+    margin-bottom: 30px;
+    padding: 30px 20px;
+  }
+
+  & h2 {
+    font-size: 28px;
+    margin-bottom: 24px;
+  }
+
+  & h3 {
+    font-size: 16px;
+  }
+
+  & legend {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 19px;
+    color: var(--dark-electric-blue);
+  }
+
+  & label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 19px;
+  }
+
+  & input,
+  textarea,
+  select {
+    border: 1px solid var(--input-border-color);
+
+    &::placeholder {
+      color: var(--input-placeholder-text);
+      opacity: 1;
+    }
+  }
+
+  & input[type="text"],
+  input[type="date"],
+  input[type="number"],
+  textarea,
+  select {
+    padding: 16px;
+  }
+
+  & .form-check {
+    margin-left: 0px;
+    padding-left: 0px;
+
+    & input {
+      width: 20px;
+      height: 20px;
+      margin-left: 0px;
+      margin-right: 3px;
+      float: none;
+
+      &:checked {
+        background-color: var(--casa-primary-blue);
+        border-color: var(--casa-primary-blue);
+      }
+
+      &[type="checkbox"] + label {
+        padding-top: 5px;
+        font-weight: 300;
+      }
+
+      &[type="radio"] + label {
+        padding-top: 1px;
+        font-size: 16px;
+        font-weight: 300;
+        line-height: 25px;
+        color: var(--dark-electric-blue)
+      }
+    }
+
+    label {
+      font-size: 16px;
+      font-weight: 600;
+    }
+  }
+
+  & button {
+    --bs-link-color: var(--casa-primary-blue);
+
+    &.btn-link {
+      text-decoration: none;
+      padding: 0px;
+    }
+  }
+
+  & .row {
+    --bs-gutter-x: .5rem;
+  }
+
+  & #contact-form-types {
+    --group-width: 250px;
+
+    columns: var(--group-width);
+
+    & fieldset {
+      display: inline-block;
+      width: var(--group-width);
+      margin-bottom: .25rem;
+
+      & .form-check {
+        & label {
+          display: inline;
+          color: var(--dark);
+          font-weight: 400;
+          color: var(--dark-gunmetal);
+        }
+
+        & small {
+          display: block;
+          margin-left: 28px;
+          font-style: italic;
+          font-weight: 300;
+          color: var(--dark-electric-blue);
+        }
+      }
+    }
+  }
+
+  & .input-group-text {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  & #contact-form-action-buttons {
     display: flex;
     justify-content: flex-end;
     gap: 10px;
@@ -12,20 +147,5 @@
       }
     }
   }
-
-  &-checkbox {
-    border-color: #757575;
-  }
-
-  &-title {
-    @media only screen and (max-width: screen-sizes.$mobile) {
-      font-size: 28px;
-    } 
-  }
-
-  &-subtitle {
-    @media only screen and (max-width: screen-sizes.$mobile) {
-      font-size: 24px;
-    } 
-  }
 }
+

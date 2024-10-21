@@ -12,7 +12,7 @@ class ContactType < ApplicationRecord
     joins(:contact_type_group)
       .where(contact_type_groups: {casa_org: org})
   }
-
+  scope :active, -> { where(active: true) }
   scope :alphabetically, -> { order(:name) }
 end
 

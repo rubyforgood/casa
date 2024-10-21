@@ -1,12 +1,30 @@
 require "rails_helper"
 
-RSpec.describe CaseContactPolicy do
+RSpec.describe CaseContactPolicy, aggregate_failures: true do
   subject { described_class }
 
-  let(:casa_admin) { build(:casa_admin) }
-  let(:case_contact) { build(:case_contact) }
-  let(:volunteer) { build(:volunteer) }
-  let(:supervisor) { build(:supervisor) }
+  let(:casa_org) { create(:casa_org) }
+  let(:casa_admin) { build(:casa_admin, casa_org:) }
+  let(:supervisor) { build(:supervisor, casa_org:) }
+  let(:volunteer) { create(:volunteer, :with_single_case, supervisor:, casa_org:) }
+  let(:casa_case) { volunteer.casa_cases.first }
+
+  let(:case_contact) { create(:case_contact, casa_case:, creator: volunteer) }
+  let(:draft_case_contact) { create(:case_contact, :started_status, casa_case: nil, creator: volunteer) }
+
+  # another volunteer assigned to the same case
+  let(:same_case_volunteer) { create :volunteer, casa_org: }
+  let(:same_case_volunteer_case_assignment) { create :case_assignment, volunteer: same_case_volunteer, casa_case: }
+  let(:same_case_volunteer_case_contact) do
+    same_case_volunteer_case_assignment
+    create :case_contact, casa_case:, creator: same_case_volunteer
+  end
+
+  # same org case that volunteer is not assigned to
+  let(:unassigned_case_case_contact) do
+    create :case_contact, casa_case: create(:casa_case, casa_org:), creator: create(:volunteer, casa_org:)
+  end
+  let(:other_org_case_contact) { build(:case_contact, casa_org: create(:casa_org)) }
 
   permissions :index? do
     it "allows casa_admins" do
@@ -23,103 +41,205 @@ RSpec.describe CaseContactPolicy do
   end
 
   permissions :show? do
-    it "allows casa_admins" do
+    it "allows same org casa_admins" do
       is_expected.to permit(casa_admin, case_contact)
+      is_expected.to permit(casa_admin, draft_case_contact)
+      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
+      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+
+      is_expected.not_to permit(casa_admin, other_org_case_contact)
     end
 
-    context "when volunteer is the creator" do
-      let(:case_contact) { build_stubbed(:case_contact, creator: volunteer) }
-
-      it "allows the volunteer" do
-        is_expected.to permit(volunteer, case_contact)
-      end
+    it "does not allow supervisors" do
+      is_expected.not_to permit(supervisor, case_contact)
+      is_expected.not_to permit(supervisor, draft_case_contact)
+      is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
+      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
+      is_expected.not_to permit(supervisor, other_org_case_contact)
     end
 
-    context "when volunteer is not the creator" do
-      it "does not allow the volunteer" do
-        is_expected.not_to permit(volunteer, case_contact)
-      end
+    it "allows volunteer only if they created the case contact" do
+      is_expected.to permit(volunteer, case_contact)
+      is_expected.to permit(volunteer, draft_case_contact)
+
+      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
+      is_expected.not_to permit(volunteer, other_org_case_contact)
     end
   end
 
-  permissions :edit? do
-    it "allows casa_admins" do
+  permissions :edit?, :update? do
+    it "allows same org casa_admins" do
       is_expected.to permit(casa_admin, case_contact)
+      is_expected.to permit(casa_admin, draft_case_contact)
+      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
+      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+
+      is_expected.not_to permit(casa_admin, other_org_case_contact)
     end
 
-    it "allows supervisors" do
+    it "allows same org supervisors" do
       is_expected.to permit(supervisor, case_contact)
+      is_expected.to permit(supervisor, draft_case_contact)
+      is_expected.to permit(supervisor, same_case_volunteer_case_contact)
+
+      is_expected.not_to permit(supervisor, other_org_case_contact)
     end
 
-    context "when volunteer is assigned" do
-      it "allows the volunteer" do
-        case_contact = build_stubbed(:case_contact, creator: volunteer)
+    it "allows volunteer only if they created the case contact" do
+      is_expected.to permit(volunteer, case_contact)
+      is_expected.to permit(volunteer, draft_case_contact)
 
-        is_expected.to permit(volunteer, case_contact)
-      end
-    end
-
-    context "when volunteer is not the creator" do
-      it "does not allow the volunteer" do
-        is_expected.not_to permit(volunteer, case_contact)
-      end
+      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
+      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
+      is_expected.not_to permit(volunteer, other_org_case_contact)
     end
   end
 
   permissions :new? do
+    it "allows same org casa_admins" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
+
+      is_expected.not_to permit(casa_admin, CaseContact.new)
+    end
+
+    it "allows same org supervisors" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
+
+      is_expected.not_to permit(supervisor, CaseContact.new)
+    end
+
+    it "allows volunteers who are the contact creator" do
+      is_expected.to permit(volunteer, case_contact.dup)
+      is_expected.to permit(volunteer, draft_case_contact.dup)
+
+      is_expected.not_to permit(volunteer, CaseContact.new)
+    end
+  end
+
+  permissions :drafts? do
     it "allows casa_admins" do
       is_expected.to permit(casa_admin)
     end
 
-    it "does allow volunteers" do
-      is_expected.to permit(volunteer, CaseContact.new)
-    end
-  end
-
-  permissions :update?, :drafts? do
-    it "allows casa_admins" do
-      is_expected.to permit(casa_admin, case_contact)
-    end
-
     it "allows supervisors" do
-      is_expected.to permit(supervisor, case_contact)
+      is_expected.to permit(supervisor)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer, case_contact)
+      is_expected.not_to permit(volunteer)
     end
   end
 
   permissions :destroy? do
-    it "allows casa_admins" do
+    it "allows same org casa_admins" do
       is_expected.to permit(casa_admin, case_contact)
+      is_expected.to permit(casa_admin, draft_case_contact)
+      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
+      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+
+      is_expected.not_to permit(casa_admin, other_org_case_contact)
     end
 
-    context "when volunteer is assigned" do
-      context "case_contact is a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, :started_status, creator: volunteer) }
+    it "allows supervisors" do
+      is_expected.to permit(supervisor, case_contact)
+      is_expected.to permit(supervisor, draft_case_contact)
+      is_expected.to permit(supervisor, same_case_volunteer_case_contact)
 
-        it { is_expected.to permit(volunteer, case_contact) }
-      end
+      is_expected.not_to permit(supervisor, other_org_case_contact)
+    end
 
-      context "case_contact is not a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, :active, creator: volunteer) }
+    it "allows volunteer only for draft contacts they created" do
+      is_expected.to permit(volunteer, draft_case_contact)
 
-        it { is_expected.not_to permit(volunteer, case_contact) }
+      is_expected.not_to permit(volunteer, case_contact)
+      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
+      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
+      is_expected.not_to permit(volunteer, other_org_case_contact)
+    end
+  end
+
+  permissions :restore? do
+    it "allows same org casa_admins" do
+      is_expected.to permit(casa_admin, case_contact)
+      is_expected.to permit(casa_admin, draft_case_contact)
+      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
+      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+      is_expected.not_to permit(casa_admin, other_org_case_contact)
+    end
+
+    it "does not allow supervisors" do
+      is_expected.not_to permit(supervisor, case_contact)
+      is_expected.not_to permit(supervisor, draft_case_contact)
+      is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
+      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
+      is_expected.not_to permit(supervisor, other_org_case_contact)
+    end
+
+    it "does not allow volunteers" do
+      is_expected.not_to permit(volunteer, draft_case_contact)
+      is_expected.not_to permit(volunteer, case_contact)
+      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
+      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
+      is_expected.not_to permit(volunteer, other_org_case_contact)
+    end
+  end
+
+  describe "Scope#resolve" do
+    subject { described_class::Scope.new(user, CaseContact.all).resolve }
+
+    before do
+      case_contact
+      draft_case_contact
+      same_case_volunteer_case_contact
+      unassigned_case_case_contact
+      other_org_case_contact
+    end
+
+    context "when user is a visitor" do
+      let(:user) { nil }
+
+      it "returns no case contacts" do
+        is_expected.not_to include(case_contact, other_org_case_contact)
       end
     end
 
-    context "when volunteer is not assigned" do
-      context "case_contact is a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, :started_status, creator: build_stubbed(:volunteer)) }
+    context "when user is a volunteer" do
+      let(:user) { volunteer }
 
-        it { is_expected.not_to permit(volunteer, case_contact) }
+      it "returns case contacts created by the volunteer" do
+        is_expected.to include(case_contact, draft_case_contact)
+        is_expected
+          .not_to include(same_case_volunteer_case_contact, unassigned_case_case_contact, other_org_case_contact)
       end
+    end
 
-      context "case_contact is not a draft" do
-        let(:case_contact) { build_stubbed(:case_contact, :active, creator: build_stubbed(:volunteer)) }
+    context "when user is a supervisor" do
+      let(:user) { supervisor }
 
-        it { is_expected.not_to permit(volunteer, case_contact) }
+      it "returns same org case contacts" do
+        is_expected
+          .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
+        is_expected.not_to include(other_org_case_contact)
+      end
+    end
+
+    context "when user is a casa_admin" do
+      let(:user) { casa_admin }
+
+      it "returns same org case contacts" do
+        is_expected
+          .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
+        is_expected.not_to include(other_org_case_contact)
+      end
+    end
+
+    context "when user is an all_casa_admin" do
+      let(:user) { create :all_casa_admin }
+
+      it "returns no case contacts" do
+        is_expected.not_to include(case_contact, other_org_case_contact)
       end
     end
   end

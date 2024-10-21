@@ -1,0 +1,38 @@
+<div class="nested-form-wrapper mb-2"
+  data-new-record="<%= form.object.new_record? %>"
+  data-casa-nested-form-target="wrapper"
+  data-child-index="<%= form.options[:child_index] %>">
+  <div class="row gy-3">
+    <div class="col-12 col-md-4">
+      <%= form.label :contact_topic_id, "Discussion Topic", class: "form-label" %>
+      <%= form.select(:contact_topic_id,
+        select_options,
+        {include_blank: "Select a discussion topic"},
+        class: ["form-select", "contact-topic-id-select"],
+        data: {
+          action: "change->case-contact-form#onContactTopicSelect",
+          case_contact_form_target: "contactTopicSelect"
+        }
+      ) %>
+    </div>
+    <div class="col-12 col-md">
+      <%= form.label :value, "Discussion Notes", class: "form-label" %>
+      <%= form.text_area(
+        :value,
+        data: { action: "input->autosave#save" },
+        rows: 3,
+        class: ["form-control", "contact-topic-answer-input"],
+        placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
+      ) %>
+    </div>
+    <div class="col-12 col-lg-auto d-flex align-items-end justify-content-end">
+      <button type="button"
+        data-action="casa-nested-form#confirmDestroyAndRemove"
+        class="btn btn-sm danger-btn-outline btn-hover">
+        Delete
+      </button>
+    </div>
+  </div>
+  <%= form.hidden_field(:id, value: form.object.id) %>
+  <%= form.hidden_field :_destroy %>
+</div>

@@ -1,20 +1,18 @@
-<div class="d-flex flex-column flex-lg-row gap-2">
-  <div class="col input-style-1">
+<div class="row input-style-1">
+  <div class="col-12 col-md">
     <%= @form.label :duration_hours, "Hour(s)" %>
     <%= @form.number_field :duration_hours,
       min: 0,
       class: "form-control",
-      size: "10",
       style: "background:white",
       value: @hour_value,
       required: true %>
   </div>
-  <div class="col input-style-1">
+  <div class="col-12 col-md">
     <%= @form.label :duration_minutes, "Minute(s)" %>
     <%= @form.number_field :duration_minutes,
       min: 0,
       class: "form-control",
-      size: "10",
       style: "background:white",
       value: @minute_value,
       required: true %>

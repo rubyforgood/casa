@@ -1,47 +1,42 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
-  before_action :set_progress
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
-  prepend_before_action :set_steps, only: [:show, :update]
   after_action :verify_authorized
 
-  # wizard_path
+  steps :details
+
   def show
     authorize @case_contact
-    get_cases_and_contact_types
-    @page = wizard_steps.index(step) + 1
-    @total_pages = steps.count
+
+    prepare_form
 
     render_wizard
-    wizard_path
   end
 
   def update
     authorize @case_contact
-    params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
+
     remove_unwanted_contact_types
     remove_nil_draft_ids
 
-    if @case_contact.update(case_contact_params)
-      respond_to do |format|
-        format.html {
-          if step == steps.last
-            finish_editing
-          else
-            render_wizard @case_contact, {}, {case_contact_id: @case_contact.id}
-          end
-        }
-        format.json { head :ok }
-      end
-    else
-      respond_to do |format|
-        format.html {
-          get_cases_and_contact_types
+    respond_to do |format|
+      format.html do
+        params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
+        if @case_contact.update(case_contact_params)
+          finish_editing
+        else
+          prepare_form
           render step
-        }
-        format.json { head :internal_server_error }
+        end
+      end
+      format.json do
+        if @case_contact.update(case_contact_params)
+          render json: @case_contact, status: :ok
+        else
+          render json: @case_contact.errors.full_messages, status: :unprocessable_entity
+        end
       end
     end
   end
@@ -49,23 +44,57 @@ class CaseContacts::FormController < ApplicationController
   private
 
   def set_case_contact
-    @case_contact = CaseContact.includes(:creator, contact_topic_answers: :contact_topic)
+    @case_contact = CaseContact
+      .includes(:creator, :contact_topic_answers)
       .find(params[:case_contact_id])
   end
 
-  def get_cases_and_contact_types
-    @casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
-    @casa_cases = @casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+  def prepare_form
+    @casa_cases = get_casa_cases
+    contact_types = get_contact_types.decorate
+    @grouped_contact_types = group_contact_types_by_name(contact_types)
+    @contact_topics = get_contact_topics
 
-    @contact_types = ContactType.includes(:contact_type_group)
+    if !@case_contact.active? && @case_contact.contact_topic_answers.empty?
+      if @contact_topics.present?
+        @case_contact.contact_topic_answers.create
+      end
+    end
+  end
+
+  def get_casa_cases
+    casa_cases = policy_scope(current_organization.casa_cases).includes([:volunteers])
+    casa_cases = casa_cases.where(id: @case_contact.casa_case_id) if @case_contact.active?
+    casa_cases
+  end
+
+  def get_contact_types
+    case_contact_types = ContactType.includes(:contact_type_group)
       .joins(:casa_case_contact_types)
+      .active
       .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    @contact_types = current_organization.contact_types.includes(:contact_type_group) if @contact_types.empty?
-    @contact_types.order(name: :asc)
+    if case_contact_types.present?
+      case_contact_types
+    else
+      ContactType
+        .includes(:contact_type_group)
+        .joins(:contact_type_group)
+        .active
+        .where(contact_type_group: {casa_org: current_organization})
+        .order("contact_type_group.name ASC", :name)
+    end
+  end
 
-    @selected_cases = @case_contact.draft_case_ids
-    @selected_contact_type_ids = @case_contact.contact_type_ids
+  def get_contact_topics
+    ContactTopic
+      .active
+      .where(casa_org: current_organization)
+      .order(:question)
+  end
+
+  def group_contact_types_by_name(contact_types)
+    contact_types.group_by { |ct| ct.contact_type_group.name }
   end
 
   def finish_editing
@@ -143,17 +172,5 @@ class CaseContacts::FormController < ApplicationController
 
   def remove_nil_draft_ids
     params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
-  end
-
-  def set_progress
-    @progress = if wizard_steps.any? && wizard_steps.index(step).present?
-      ((wizard_steps.index(step) + 1).to_d / wizard_steps.count.to_d) * 100
-    else
-      0
-    end
-  end
-
-  def set_steps
-    self.steps = CaseContact.find(params[:case_contact_id]).form_steps
   end
 end
