@@ -28,7 +28,7 @@ You will need the following local tools installed:
 
 Install a ruby version manager like [rbenv](https://github.com/rbenv/rbenv#installation)
 
-  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
+  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.4.**
 
 Instructions for rbenv:
 
@@ -48,13 +48,13 @@ Instructions for rbenv:
 
 5.  **[Install Ruby](https://github.com/rbenv/rbenv#installing-ruby-versions)**
 
-      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
+      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.4.**
 
-      `rbenv install 3.2.2`
+      `rbenv install 3.2.4`
 
 6. **Set a Ruby version to finish installation and start**
 
-    `rbenv global 3.2.2` OR `rbenv local 3.2.2`
+    `rbenv global 3.2.4` OR `rbenv local 3.2.4`
 
 #### Troubleshooting
     If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
