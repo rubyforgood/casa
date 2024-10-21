@@ -18,7 +18,7 @@
     "@hotwired/turbo-rails": "^8.0.10",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^7.2.0",
-    "@rails/actiontext": "^7.2.100",
+    "@rails/actiontext": "^7.2.101",
     "@rails/activestorage": "^7.2.100",
     "@rails/ujs": "^7.1.400",
     "@stimulus-components/rails-nested-form": "^5.0.0",
