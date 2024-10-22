@@ -7,6 +7,7 @@ require:
   - standard-custom
   - standard-performance
   - rubocop-performance
+  - rubocop-rails
   - rubocop-rspec
   - rubocop-rspec_rails
 
@@ -14,6 +15,7 @@ inherit_gem:
   standard: config/ruby-3.2.yml
   standard-performance: config/base.yml
   standard-custom: config/base.yml
+  standard-rails: config/base.yml
 
 inherit_from:
   - .rubocop_todo.yml
@@ -22,6 +24,7 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
   TargetRubyVersion: 3.2
+  TargetRailsVersion: 7.2
   Exclude:
     - 'bin/**/*' # todo?
     - 'db/migrate/2020*.rb'
@@ -39,9 +42,38 @@ AllCops:
 Lint/Debugger: # don't leave binding.pry or debugger
   Enabled: true
   Exclude: []
+
+Rails/Output: # Don't leave puts-debugging
+  Enabled: true
+  Exclude: []
+
+Rails/FindEach: # each could severely affect the performance, use find_each
+  Enabled: true
+  Exclude: []
+
+Rails/UniqBeforePluck: # uniq.pluck and not pluck.uniq
+  Enabled: true
+  Exclude: []
+
 RSpec/Focus: # run ALL tests on CI
   Enabled: true
   Exclude: []
+
+# RAILS
+Rails/DefaultScope:
+  Enabled: true
+  Details: >-
+    Default scopes lead to unexpected behavior for future devs, use named scopes where needed.
+Rails/OrderById:
+  Enabled: true
+  Details: >-
+    No guaranteed order by id, use timestamps (created_at/updated_at) or no order at all.
+Rails/SaveBang:
+  Enabled: true
+  Include:
+    - 'spec/**/*' # TODO: enable everywhere?
+  Details: >-
+    Specs should fail if saved/updated record is invalid.
 
 # RSPEC
 RSpec/ExampleLength:
@@ -74,3 +106,6 @@ RSpec/NestedGroups:
 RSpec/NotToNot:
   Enabled: false # consistency only, no difference in to_not/not_to
 
+# TODO: I thought this was causing flaky specs but rubocop-rails says I'm wrong
+Rails/RedundantTravelBack:
+  Enabled: false
