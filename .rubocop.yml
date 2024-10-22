@@ -1,0 +1,39 @@
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  - standard
+  - standard-custom
+  - standard-performance
+  - rubocop-performance
+
+inherit_gem:
+  standard: config/ruby-3.2.yml
+  standard-performance: config/base.yml
+  standard-custom: config/base.yml
+
+inherit_from:
+  - .rubocop_todo.yml
+
+AllCops:
+  NewCops: enable
+  SuggestExtensions: false
+  TargetRubyVersion: 3.2
+  Exclude:
+    - 'bin/**/*' # todo?
+    - 'db/migrate/2020*.rb'
+    - 'db/migrate/2021*.rb'
+    - 'db/migrate/2022*.rb'
+    - 'db/migrate/2023*.rb'
+    - 'db/migrate/202405*.rb'
+    - 'db/migrate/202406*.rb'
+    - 'lib/tasks/deployment/2020*'
+    - 'lib/tasks/deployment/2021*'
+    - 'lib/tasks/deployment/2022*'
+    - 'lib/tasks/deployment/2023*'
+
+# Override Todos for these rules:
+Lint/Debugger: # don't leave binding.pry or debugger
+  Enabled: true
+  Exclude: []

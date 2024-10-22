@@ -648,6 +648,8 @@ DEPENDENCIES
   rswag-api
   rswag-specs
   rswag-ui
+  rubocop
+  rubocop-performance
   sablon
   scout_apm
   selenium-webdriver
@@ -656,7 +658,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   sprockets-rails
-  standard (~> 1.40.0)
+  standard
   stimulus-rails
   strong_migrations
   traceroute
