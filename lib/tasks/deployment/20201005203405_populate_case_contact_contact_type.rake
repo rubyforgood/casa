@@ -1,4 +1,4 @@
-require_relative '../data_post_processors/case_contact_populator'
+require_relative "../data_post_processors/case_contact_populator"
 
 namespace :after_party do
   desc "Deployment task: populate_case_contact_contact_type"
