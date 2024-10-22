@@ -126,9 +126,9 @@ RSpec/LetSetup:
     let! leads to unnecessary database calls and obscures necessary setup.
 
     Instead, call a let var in the example, before block, or let block of a variable that depends on it:
-      let(:nececessary_thing) { create(:thing) }
+      let(:necessary_thing) { create(:thing) }
       let(:dependent_thing) do
-        nececessary_thing
+        necessary_thing
         create(:dependent_thing)
       end
 
@@ -148,4 +148,5 @@ RSpec/NestedGroups:
   Max: 5
 
 RSpec/NotToNot:
-  Enabled: false # consistency only, no difference between to_not/not_to
+  # consistency only, no difference between to_not/not_to (these days)
+  Enabled: false
