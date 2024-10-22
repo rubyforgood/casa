@@ -473,6 +473,11 @@ GEM
     rubocop-performance (1.21.1)
       rubocop (>= 1.48.1, < 2.0)
       rubocop-ast (>= 1.31.1, < 2.0)
+    rubocop-rspec (3.1.0)
+      rubocop (~> 1.61)
+    rubocop-rspec_rails (2.30.0)
+      rubocop (~> 1.61)
+      rubocop-rspec (~> 3, >= 3.0.1)
     ruby-progressbar (1.13.0)
     ruby-vips (2.2.2)
       ffi (~> 1.12)
@@ -650,6 +655,8 @@ DEPENDENCIES
   rswag-ui
   rubocop
   rubocop-performance
+  rubocop-rspec
+  rubocop-rspec_rails
   sablon
   scout_apm
   selenium-webdriver

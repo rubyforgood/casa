@@ -45,5 +45,9 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = :random
 
+  config.define_derived_metadata do |meta|
+    meta[:aggregate_failures] = true
+  end
+
   RSpec::Matchers.define_negated_matcher :not_change, :change
 end
