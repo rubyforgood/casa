@@ -46,7 +46,7 @@ RSpec.configure do |config|
   config.order = :random
 
   config.define_derived_metadata do |meta|
-    meta[:aggregate_failures] = true
+    meta[:aggregate_failures] = true unless meta[:type] == :system
   end
 
   RSpec::Matchers.define_negated_matcher :not_change, :change

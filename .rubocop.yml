@@ -1,3 +1,7 @@
+# https://evilmartians.com/chronicles/rubocoping-with-legacy-bring-your-ruby-code-up-to-standard
+# Todo generated via `bundle exec rubocop --auto-gen-config --auto-gen-only-exclude --no-exclude-limit`
+# We may want to remove the todo file and use --disable-uncorrectable to generate todo comments instead
+
 inherit_mode:
   merge:
     - Exclude
@@ -20,15 +24,16 @@ inherit_gem:
   standard-rails: config/base.yml
 
 inherit_from:
+<% unless ENV['BYPASS_RUBOCOP_TODO'] %>
   - .rubocop_todo.yml
+<% end %>
 
 AllCops:
+  ExtraDetails: true
   NewCops: enable
   SuggestExtensions: false
-  TargetRubyVersion: 3.2
-  TargetRailsVersion: 7.2
   Exclude:
-    - 'bin/**/*' # todo?
+    - 'bin/**/*'
     - 'db/migrate/2020*.rb'
     - 'db/migrate/2021*.rb'
     - 'db/migrate/2022*.rb'
@@ -40,79 +45,93 @@ AllCops:
     - 'lib/tasks/deployment/2022*'
     - 'lib/tasks/deployment/2023*'
 
-# Override Todos for these rules:
-Lint/Debugger: # don't leave binding.pry or debugger
+# OVERRIDE rubocop-todo.yml for these rules:
+Lint/Debugger:
+  # Don't leave binding.pry or debugger
   Enabled: true
   Exclude: []
 
-Rails/Output: # Don't leave puts-debugging
+Rails/Output:
+  # Don't leave puts-debugging
   Enabled: true
   Exclude: []
 
-Rails/FindEach: # each could severely affect the performance, use find_each
+Rails/FindEach:
+  # each could severely affect performance, use find_each
   Enabled: true
   Exclude: []
 
-Rails/UniqBeforePluck: # uniq.pluck and not pluck.uniq
+Rails/UniqBeforePluck:
+  # uniq.pluck and not pluck.uniq
   Enabled: true
   Exclude: []
 
-RSpec/Focus: # run ALL tests on CI
+RSpec/Focus:
+  # run ALL tests on CI
   Enabled: true
   Exclude: []
 
-# Custom Rules:
-# FACTORY BOT
+# TODO:
+Rails/RedundantTravelBack:
+  # I thought this caused flaky specs (PR #6054) but rubocop-rails thinks I'm wrong
+  Enabled: false
+
+# CUSTOMIZED RULES
+# FactoryBot
 FactoryBot/ConsistentParenthesesStyle:
-  Enabled: false # they are just method calls, let other method call rules handle this
+  # build/create are just method calls, no FactoryBot-specific rules needed
+  Enabled: false
 
-# RAILS
+# Rails
 Rails/DefaultScope:
   Enabled: true
   Details: >-
-    Default scopes lead to unexpected behavior for future devs, use named scopes where needed.
+    Default scopes lead to unexpected behavior for future devs.
+
 Rails/OrderById:
   Enabled: true
-  Details: >-
-    No guaranteed order by id, use timestamps (created_at/updated_at) or no order at all.
+
 Rails/SaveBang:
   Enabled: true
   Include:
-    - 'spec/**/*' # TODO: enable everywhere?
+    - 'spec/**/*'
   Details: >-
-    Specs should fail if saved/updated record is invalid.
+    Specs should fail if setup record is invalid.
 
-# RSPEC
+# RSpec
 RSpec/ExampleLength:
   CountAsOne: ['array', 'hash', 'heredoc', 'method_call']
   Max: 15 # could be lower; default is 5
   Exclude:
     - 'spec/system/**/*'
+
 RSpec/LetSetup:
   Details: >-
-    Let bangs (!) lead to unnecessary database calls during test execution.
-    They can also obscure what setup is necessary for the test.
-    Instead of immediate execution in a let!, call the variable where it is necessary: that is,
-    where tests or other variables depend on it: in an example before `subject`, a before block,
-    or the let block of a dependant variable:
-      let(:some_needed_thing) { create(:bang) }
+
+    let! leads to unnecessary database calls and obscures necessary setup.
+
+    Instead, call a let var in the example, before block, or let block of a variable that depends on it:
+      let(:nececessary_thing) { create(:thing) }
       let(:dependent_thing) do
-        some_needed_thing # instead of let!(:some_needed_thing) above
+        nececessary_thing
         create(:dependent_thing)
       end
+
 RSpec/MultipleExpectations:
-  Max: 10 # failures are aggregated by default (spec_helper.rb)
+  # failures are aggregated by default (spec_helper.rb)
+  Max: 10
   Exclude:
     - 'spec/system/**/*' # async behaviors may require expecting things on page
+
 RSpec/MultipleMemoizedHelpers:
   Max: 20
+
 RSpec/NamedSubject:
   Enabled: false
+
 RSpec/NestedGroups:
   Max: 5
-RSpec/NotToNot:
-  Enabled: false # consistency only, no difference in to_not/not_to
 
-# TODO: I thought this was causing flaky specs but rubocop-rails says I'm wrong
-Rails/RedundantTravelBack:
-  Enabled: false
+RSpec/NotToNot:
+  Enabled: false # consistency only, no difference between to_not/not_to
+
