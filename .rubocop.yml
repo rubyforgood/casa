@@ -1,6 +1,21 @@
+# Config adapted from:
 # https://evilmartians.com/chronicles/rubocoping-with-legacy-bring-your-ruby-code-up-to-standard
-# Todo generated via `bundle exec rubocop --auto-gen-config --auto-gen-only-exclude --no-exclude-limit`
-# We may want to remove the todo file and use --disable-uncorrectable to generate todo comments instead
+
+# To fix the file with the most offenses:
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
+#  - Remove the file from the rubocop_todo.yml
+#  - Run `bundle exec rubocop -A`
+#  OR
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
+
+# If you want to fix one rule instead:
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
+#    - add --display-only-safe-correctable to see only safe autocorrect-able offenses
+#    - OR --display-only-correctable to see all autocorrect-able offenses
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop -A --only Department/Cop
+
+# After fixes, regenerate the todo file with:
+#  - bundle exec rubocop --auto-gen-config --auto-gen-only-exclude --no-exclude-limit
 
 # To see which todos to work one next, you can run:
 # BY FILE:
@@ -29,6 +44,7 @@ require:
   - rubocop-rspec_rails
 
 inherit_gem:
+  pundit: config/rubocop-rspec.yml
   standard: config/ruby-3.2.yml
   standard-performance: config/base.yml
   standard-custom: config/base.yml
@@ -56,7 +72,7 @@ AllCops:
     - 'lib/tasks/deployment/2022*'
     - 'lib/tasks/deployment/2023*'
 
-# OVERRIDE rubocop-todo.yml for these rules:
+# OVERRIDE .rubocop_todo.yml for these rules:
 Lint/Debugger:
   # Don't leave binding.pry or debugger
   Enabled: true
@@ -90,17 +106,12 @@ Rails/UniqBeforePluck:
       - Exclude
 
 RSpec/Focus:
-  # run ALL tests on CI
+  # ensure all tests run on CI
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
-
-# TODO:
-Rails/RedundantTravelBack:
-  # I thought this caused flaky specs (PR #6054) but rubocop-rails thinks I'm wrong
-  Enabled: false
 
 # CUSTOMIZED RULES
 # FactoryBot
@@ -112,7 +123,7 @@ FactoryBot/ConsistentParenthesesStyle:
 Rails/DefaultScope:
   Enabled: true
   Details: >-
-    Default scopes lead to unexpected behavior for future devs.
+    Default scopes lead to unexpected behavior for future developers.
 
 Rails/OrderById:
   Enabled: true
