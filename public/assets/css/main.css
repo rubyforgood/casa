@@ -1085,6 +1085,12 @@ h6,
     color: #262d3f;
     display: block;
     margin-bottom: 10px; }
+  .input-style-1 select{
+    width: 465px; 
+    height: 40px; 
+    border-radius: 5px;
+    border: 1px solid #4a6cf7;
+  }
   .input-style-1 input,
   .input-style-1 textarea {
     width: 100%;
