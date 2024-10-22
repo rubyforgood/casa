@@ -50,26 +50,41 @@ Lint/Debugger:
   # Don't leave binding.pry or debugger
   Enabled: true
   Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
 
 Rails/Output:
   # Don't leave puts-debugging
   Enabled: true
   Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
 
 Rails/FindEach:
   # each could severely affect performance, use find_each
   Enabled: true
   Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
 
 Rails/UniqBeforePluck:
   # uniq.pluck and not pluck.uniq
   Enabled: true
   Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
 
 RSpec/Focus:
   # run ALL tests on CI
   Enabled: true
   Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
 
 # TODO:
 Rails/RedundantTravelBack:
@@ -134,4 +149,3 @@ RSpec/NestedGroups:
 
 RSpec/NotToNot:
   Enabled: false # consistency only, no difference between to_not/not_to
-
