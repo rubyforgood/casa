@@ -7,6 +7,8 @@ require:
   - standard-custom
   - standard-performance
   - rubocop-performance
+  - rubocop-rspec
+  - rubocop-rspec_rails
 
 inherit_gem:
   standard: config/ruby-3.2.yml
@@ -37,3 +39,38 @@ AllCops:
 Lint/Debugger: # don't leave binding.pry or debugger
   Enabled: true
   Exclude: []
+RSpec/Focus: # run ALL tests on CI
+  Enabled: true
+  Exclude: []
+
+# RSPEC
+RSpec/ExampleLength:
+  CountAsOne: ['array', 'hash', 'heredoc', 'method_call']
+  Max: 15 # could be lower; default is 5
+  Exclude:
+    - 'spec/system/**/*'
+RSpec/LetSetup:
+  Details: >-
+    Let bangs (!) lead to unnecessary database calls during test execution.
+    They can also obscure what setup is necessary for the test.
+    Instead of immediate execution in a let!, call the variable where it is necessary: that is,
+    where tests or other variables depend on it: in an example before `subject`, a before block,
+    or the let block of a dependant variable:
+      let(:some_needed_thing) { create(:bang) }
+      let(:dependent_thing) do
+        some_needed_thing # instead of let!(:some_needed_thing) above
+        create(:dependent_thing)
+      end
+RSpec/MultipleExpectations:
+  Max: 10 # failures are aggregated by default (spec_helper.rb)
+  Exclude:
+    - 'spec/system/**/*' # async behaviors may require expecting things on page
+RSpec/MultipleMemoizedHelpers:
+  Max: 20
+RSpec/NamedSubject:
+  Enabled: false
+RSpec/NestedGroups:
+  Max: 5
+RSpec/NotToNot:
+  Enabled: false # consistency only, no difference in to_not/not_to
+
