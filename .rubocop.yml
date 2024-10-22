@@ -7,6 +7,7 @@ require:
   - standard-custom
   - standard-performance
   - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-performance
   - rubocop-rails
   - rubocop-rspec
@@ -59,6 +60,11 @@ Rails/UniqBeforePluck: # uniq.pluck and not pluck.uniq
 RSpec/Focus: # run ALL tests on CI
   Enabled: true
   Exclude: []
+
+# Custom Rules:
+# FACTORY BOT
+FactoryBot/ConsistentParenthesesStyle:
+  Enabled: false # they are just method calls, let other method call rules handle this
 
 # RAILS
 Rails/DefaultScope:
