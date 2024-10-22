@@ -2,6 +2,17 @@
 # Todo generated via `bundle exec rubocop --auto-gen-config --auto-gen-only-exclude --no-exclude-limit`
 # We may want to remove the todo file and use --disable-uncorrectable to generate todo comments instead
 
+# To see which todos to work one next, you can run:
+# BY FILE:
+#   - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
+#   - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
+# BY OFFENSE COUNT:
+#   BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
+# Other useful options:
+# --display-only-safe-correctable - Only output safe correctable (-a) offense messages.
+# --display-only-correctable - Only output correctable (-A) offense messages.
+# --disable-uncorrectable - Used with autocorrect to annotate any offenses that do not support autocorrect with rubocop:todo comments.
+
 inherit_mode:
   merge:
     - Exclude
