@@ -82,7 +82,7 @@ rbenv init
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install 3.2.2
+rbenv install 3.2.4
 ```
 
 If you would like RVM instead of rbenv
@@ -93,9 +93,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.2.2
-rvm alias create ruby 3.2.2
-rvm alias create default ruby-3.2.2
+rvm install 3.2.4
+rvm alias create ruby 3.2.4
+rvm alias create default ruby-3.2.4
 ```
 
 ```# Download the Chrome browser (for RSpec testing):
