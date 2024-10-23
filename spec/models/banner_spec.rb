@@ -9,7 +9,7 @@ RSpec.describe Banner, type: :model do
       create(:banner, casa_org: casa_org, user: supervisor)
 
       banner = build(:banner, casa_org: casa_org, user: supervisor)
-      expect(banner).to_not be_valid
+      expect(banner).not_to be_valid
     end
 
     it "does allow multiple active banners for different organization" do
@@ -23,7 +23,7 @@ RSpec.describe Banner, type: :model do
 
     it "does not allow an expiry date set in the past" do
       banner = build(:banner, casa_org: casa_org, user: supervisor, expires_at: 1.hour.ago)
-      expect(banner).to_not be_valid
+      expect(banner).not_to be_valid
     end
 
     it "allows an expiry date set in the future" do
@@ -33,7 +33,7 @@ RSpec.describe Banner, type: :model do
 
     it "does not allow content to be empty" do
       banner = build(:banner, casa_org: casa_org, user: supervisor, content: nil)
-      expect(banner).to_not be_valid
+      expect(banner).not_to be_valid
     end
   end
 

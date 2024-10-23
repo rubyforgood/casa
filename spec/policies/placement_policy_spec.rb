@@ -16,7 +16,7 @@ RSpec.describe PlacementPolicy do
   let(:supervisor_diff_org) { build(:supervisor, casa_org: diff_org) }
   let(:volunteer_diff_org) { build(:volunteer, casa_org: diff_org) }
 
-  permissions :create?, :edit?, :update?, :show?, :new? do
+  permissions :create?, :edit?, :new?, :show?, :update? do
     it { is_expected.to permit(casa_admin, placement) }
 
     context "when a supervisor belongs to the same org as the case" do

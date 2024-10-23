@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", type: :system, js: true do
+RSpec.describe "view all volunteers", :js, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
   context "admin user" do
     context "when no logo_url" do
-      it "can see volunteers and navigate to their cases", js: true do
+      it "can see volunteers and navigate to their cases", :js do
         volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
         volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
         volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
@@ -41,7 +41,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
     end
 
-    it "displays last attempted contact by default", js: true do
+    it "displays last attempted contact by default", :js do
       create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
 
       sign_in admin
@@ -51,7 +51,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       expect(page).to have_content(:visible, "Last Attempted Contact")
     end
 
-    it "can show/hide columns on volunteers table", js: true do
+    it "can show/hide columns on volunteers table", :js do
       sign_in admin
 
       visit volunteers_path
@@ -78,7 +78,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
     end
 
-    it "can filter volunteers", js: true do
+    it "can filter volunteers", :js do
       assigned_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
       inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
       unassigned_volunteers = create_list(:volunteer, 1, casa_org: organization)
@@ -114,7 +114,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       expect(page).to have_css("table#volunteers tbody tr", count: assigned_volunteers.count)
     end
 
-    it "can go to the volunteer edit page from the volunteer list", js: true do
+    it "can go to the volunteer edit page from the volunteer list", :js do
       create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       sign_in admin
 
@@ -139,7 +139,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
     end
 
     describe "supervisor column of volunteers table" do
-      it "is blank when volunteer has no supervisor", js: true do
+      it "is blank when volunteer has no supervisor", :js do
         create(:volunteer, casa_org: organization)
         sign_in admin
 
@@ -150,7 +150,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         expect(page).to have_css("tbody .supervisor-column", text: "")
       end
 
-      it "displays supervisor's name when volunteer has supervisor", js: true do
+      it "displays supervisor's name when volunteer has supervisor", :js do
         name = "Superduper Visor"
         supervisor = create(:supervisor, display_name: name, casa_org: organization)
         create(:volunteer, supervisor: supervisor, casa_org: organization)
@@ -160,7 +160,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
         expect(page).to have_css("tbody .supervisor-column", text: name)
       end
 
-      it "is blank when volunteer's supervisor is inactive", js: true do
+      it "is blank when volunteer's supervisor is inactive", :js do
         create(:volunteer, :with_inactive_supervisor, casa_org: organization)
         sign_in admin
 
@@ -345,7 +345,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
   context "supervisor user" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
 
-    it "can filter volunteers", js: true do
+    it "can filter volunteers", :js do
       active_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
       active_volunteers[2].supervisor = supervisor
 
@@ -370,7 +370,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       expect(page).to have_css("table#volunteers tbody tr", count: inactive_volunteers.count)
     end
 
-    it "can show/hide columns on volunteers table", js: true do
+    it "can show/hide columns on volunteers table", :js do
       sign_in supervisor
 
       visit volunteers_path
@@ -397,7 +397,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
       end
     end
 
-    it "can persist 'show/hide' column preference settings", js: true do
+    it "can persist 'show/hide' column preference settings", :js do
       sign_in supervisor
 
       visit volunteers_path
@@ -450,7 +450,7 @@ RSpec.describe "view all volunteers", type: :system, js: true do
     context "with volunteers" do
       let(:supervisor) { create(:supervisor, :with_volunteers) }
 
-      it "Search history is clean after navigating away from volunteers view", js: true do
+      it "Search history is clean after navigating away from volunteers view", :js do
         sign_in supervisor
         visit volunteers_path
 

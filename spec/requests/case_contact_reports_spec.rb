@@ -8,8 +8,6 @@ RSpec.describe "/case_contact_reports", type: :request do
     sign_in user
   end
 
-  after { travel_back }
-
   describe "GET /case_contact_reports" do
     context "as volunteer" do
       let(:user) { build(:volunteer) }
@@ -124,6 +122,7 @@ RSpec.describe "/case_contact_reports", type: :request do
       end
 
       let(:user) { build(:casa_admin) }
+
       it "passes in casa_org_id to CaseContractReport" do
         allow(CaseContactReport).to receive(:new).and_return([])
 

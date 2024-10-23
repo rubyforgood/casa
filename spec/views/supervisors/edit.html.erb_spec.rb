@@ -19,7 +19,7 @@ RSpec.describe "supervisors/edit", type: :view do
     render template: "supervisors/edit"
 
     expect(rendered).to include(unassign_supervisor_volunteer_path(volunteer))
-    expect(rendered).to_not include("Unassigned")
+    expect(rendered).not_to include("Unassigned")
   end
 
   it "does not display the 'Unassign' button next to volunteer no longer supervised by the supervisor" do
@@ -35,7 +35,7 @@ RSpec.describe "supervisors/edit", type: :view do
 
     render template: "supervisors/edit"
 
-    expect(rendered).to_not include(unassign_supervisor_volunteer_path(volunteer))
+    expect(rendered).not_to include(unassign_supervisor_volunteer_path(volunteer))
     expect(rendered).to include("Unassigned")
   end
 
@@ -84,9 +84,9 @@ RSpec.describe "supervisors/edit", type: :view do
 
       render template: "supervisors/edit"
 
-      expect(rendered).not_to have_field("supervisor_email")
-      expect(rendered).not_to have_field("supervisor_display_name")
-      expect(rendered).not_to have_field("supervisor_phone_number")
+      expect(rendered).to have_no_field("supervisor_email")
+      expect(rendered).to have_no_field("supervisor_display_name")
+      expect(rendered).to have_no_field("supervisor_phone_number")
     end
 
     it "shows for an admin editing a supervisor" do
@@ -128,7 +128,7 @@ RSpec.describe "supervisors/edit", type: :view do
       allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       render template: "supervisors/edit"
 
-      expect(rendered).not_to have_text("Change to Admin")
+      expect(rendered).to have_no_text("Change to Admin")
       expect(rendered).not_to include(change_to_admin_supervisor_path(supervisor))
     end
   end

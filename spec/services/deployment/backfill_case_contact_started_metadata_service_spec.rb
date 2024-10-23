@@ -8,7 +8,6 @@ RSpec.describe Deployment::BackfillCaseContactStartedMetadataService do
   let(:parsed_present) { present.as_json }
 
   before { travel_to present }
-  after { travel_back }
 
   context "when a case contact has status metadata" do
     let(:case_contact) { create(:case_contact) }

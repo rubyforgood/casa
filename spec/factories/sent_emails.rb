@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :sent_email do
-    association :user, factory: :user
+    association :user
     casa_org { CasaOrg.first || create(:casa_org) }
     mailer_type { "Mailer Type" }
     category { "Mail Action Category" }

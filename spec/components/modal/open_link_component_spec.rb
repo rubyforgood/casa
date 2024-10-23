@@ -15,7 +15,7 @@ RSpec.describe Modal::OpenLinkComponent, type: :component do
     render_inline(Modal::OpenLinkComponent.new(target: "myModal", text: "Example Text"))
 
     expect(page).to have_css("a[href='#'][role='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("a i")
+    expect(page).to have_no_css("a i")
     expect(page).to have_text("Example Text")
   end
 
@@ -25,7 +25,7 @@ RSpec.describe Modal::OpenLinkComponent, type: :component do
     end
 
     expect(page).to have_css("a[href='#'][role='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("a i")
+    expect(page).to have_no_css("a i")
     expect(page).to have_text("Example Text")
   end
 
@@ -35,20 +35,20 @@ RSpec.describe Modal::OpenLinkComponent, type: :component do
     end
 
     expect(page).to have_css("a[href='#'][role='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("a i")
+    expect(page).to have_no_css("a i")
     expect(page).to have_text("Example Text")
-    expect(page).to_not have_text("Override")
+    expect(page).to have_no_text("Override")
   end
 
   it "doesn't render anything if both text and content are absent" do
     render_inline(Modal::OpenLinkComponent.new(target: "myModal"))
 
-    expect(page).not_to have_css("a")
+    expect(page).to have_no_css("a")
   end
 
   it "doesn't render if render_check is false" do
     render_inline(Modal::OpenLinkComponent.new(target: "myModal", text: "Example Text", render_check: false))
 
-    expect(page).not_to have_css("a")
+    expect(page).to have_no_css("a")
   end
 end

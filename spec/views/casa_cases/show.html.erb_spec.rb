@@ -89,9 +89,9 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match(casa_case.case_number)
-      expect(rendered).not_to have_content("Current Placement:")
-      expect(rendered).not_to have_content("Unknown")
-      expect(rendered).not_to have_content("See All Placements")
+      expect(rendered).to have_no_content("Current Placement:")
+      expect(rendered).to have_no_content("Unknown")
+      expect(rendered).to have_no_content("See All Placements")
     end
   end
 end

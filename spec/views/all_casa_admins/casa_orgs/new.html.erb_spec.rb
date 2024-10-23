@@ -16,13 +16,13 @@ RSpec.describe "all_casa_admins/casa_orgs/new", type: :view do
   end
 
   it "shows new CASA Organization form" do
-    expect(rendered).to have_selector("input", id: "casa_org_name")
-    expect(rendered).to have_selector("input", id: "casa_org_display_name")
-    expect(rendered).to have_selector("input", id: "casa_org_address")
-    expect(rendered).to have_selector("button", id: "submit")
+    expect(rendered).to have_css("input", id: "casa_org_name")
+    expect(rendered).to have_css("input", id: "casa_org_display_name")
+    expect(rendered).to have_css("input", id: "casa_org_address")
+    expect(rendered).to have_css("button", id: "submit")
   end
 
   it "requires name text field" do
-    expect(rendered).to have_selector("input[required=required]", id: "casa_org_name")
+    expect(rendered).to have_css("input[required=required]", id: "casa_org_name")
   end
 end

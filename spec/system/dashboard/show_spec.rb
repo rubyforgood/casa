@@ -20,7 +20,7 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).to have_text("My Cases")
       expect(page).to have_text(casa_case_1.case_number)
       expect(page).to have_text(casa_case_2.case_number)
-      expect(page).not_to have_text(casa_case_3.case_number)
+      expect(page).to have_no_text(casa_case_3.case_number)
     end
 
     it "volunteer does not see his name in Cases table" do
@@ -29,14 +29,14 @@ RSpec.describe "dashboard/show", type: :system do
 
       visit casa_cases_path
 
-      expect(page).not_to have_css("td", text: "Bob Loblaw")
+      expect(page).to have_no_css("td", text: "Bob Loblaw")
     end
 
-    it "displays 'No active cases' when they don't have any assignments", js: true do
+    it "displays 'No active cases' when they don't have any assignments", :js do
       visit casa_cases_path
       expect(page).to have_text("My Cases")
-      expect(page).not_to have_css("td", text: "Bob Loblaw")
-      expect(page).not_to have_text("Detail View")
+      expect(page).to have_no_css("td", text: "Bob Loblaw")
+      expect(page).to have_no_text("Detail View")
     end
   end
 

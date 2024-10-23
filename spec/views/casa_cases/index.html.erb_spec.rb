@@ -14,8 +14,8 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).not_to have_text "Assigned To"
-      expect(rendered).not_to have_text("Bob Loblaw")
+      expect(rendered).to have_no_text "Assigned To"
+      expect(rendered).to have_no_text("Bob Loblaw")
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).to_not have_link "New Case"
+      expect(rendered).to have_no_link "New Case"
     end
   end
 end

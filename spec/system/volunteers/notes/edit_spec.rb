@@ -19,7 +19,7 @@ RSpec.describe "volunteers/notes/edit", type: :system do
 
       click_on("Update Note")
 
-      expect(page.current_path).to eq edit_volunteer_path(volunteer)
+      expect(page).to have_current_path edit_volunteer_path(volunteer), ignore_query: true
 
       expect(page).to have_text("Great job!")
 

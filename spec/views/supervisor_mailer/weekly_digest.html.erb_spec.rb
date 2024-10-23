@@ -14,13 +14,13 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   let(:contact_topic_answer_2) { create(:contact_topic_answer, contact_topic: contact_topic_2, value: "") }
 
   context "when there are successful and unsuccessful contacts" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       inactive_volunteer.update active: false
       supervisor.volunteers_ever_assigned << inactive_volunteer
       volunteer.casa_cases << casa_case
-      create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: Time.current - 6.days
-      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days, contact_topic_answers: [contact_topic_answer_1, contact_topic_answer_2]
+      create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: 6.days.ago
+      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: 6.days.ago, contact_topic_answers: [contact_topic_answer_1, contact_topic_answer_2]
       assign :supervisor, supervisor
       assign :inactive_volunteers, []
       sign_in supervisor
@@ -31,7 +31,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("Here's a summary of what happened with your volunteers this last week.") }
     it { expect(rendered).to have_link(volunteer.display_name) }
     it { expect(rendered).to have_link(casa_case.case_number) }
-    it { expect(rendered).not_to have_text(inactive_volunteer.display_name) }
+    it { expect(rendered).to have_no_text(inactive_volunteer.display_name) }
     it { expect(rendered).to have_text("Number of unsuccessful case contacts made this week: 2") }
     it { expect(rendered).to have_text("Number of successful case contacts made this week: 1") }
     it { expect(rendered).to have_text("- Date: #{I18n.l(@case_contact.occurred_at, format: :full, default: nil)}") }
@@ -42,11 +42,11 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("- Notes: #{@case_contact.notes}") }
     it { expect(rendered).to have_text("Contact Topic 1") }
     it { expect(rendered).to have_text("Contact Topic 1 Answer") }
-    it { expect(rendered).to_not have_text("Contact Topic 2") }
+    it { expect(rendered).to have_no_text("Contact Topic 2") }
   end
 
   context "when there are no volunteers" do
-    before(:each) do
+    before do
       sign_in supervisor
       assign :supervisor, supervisor
       assign :inactive_volunteers, []
@@ -58,7 +58,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when there are volunteers but no contacts" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       inactive_volunteer.update active: false
       supervisor.volunteers_ever_assigned << inactive_volunteer
@@ -74,7 +74,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer has been reassigned to a new supervisor" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       volunteer.casa_cases << casa_case
 
@@ -95,7 +95,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer has been unassigned" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       volunteer.supervisor_volunteer.update(is_active: false)
@@ -115,7 +115,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer unassigned and has not been assigned to a new supervisor" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor
@@ -132,7 +132,8 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
 
   context "when a volunteer has not recently signed in, within 30 days" do
     let(:volunteer) { create(:volunteer, casa_org: organization, last_sign_in_at: 39.days.ago) }
-    before(:each) do
+
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor

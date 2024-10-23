@@ -11,6 +11,6 @@ RSpec.describe "languages/new", type: :system do
   end
 
   it "requires name text field" do
-    expect(page).to have_selector("input[required=required]", id: "language_name")
+    expect(page).to have_css("input[required=required]", id: "language_name")
   end
 end

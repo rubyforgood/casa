@@ -1,20 +1,16 @@
 require "rails_helper"
 
 RSpec.describe "/imports", type: :request do
-  let(:volunteer_file) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
-  let(:supervisor_file) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
-  let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
-  let(:existing_case_file) { Rails.root.join("spec", "fixtures", "existing_casa_case.csv") }
-  let(:supervisor_volunteers_file) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
+  let(:volunteer_file) { Rails.root.join("spec/fixtures/volunteers.csv") }
+  let(:supervisor_file) { Rails.root.join("spec/fixtures/supervisors.csv") }
+  let(:case_file) { Rails.root.join("spec/fixtures/casa_cases.csv") }
+  let(:existing_case_file) { Rails.root.join("spec/fixtures/existing_casa_case.csv") }
+  let(:supervisor_volunteers_file) { Rails.root.join("spec/fixtures/supervisor_volunteers.csv") }
   let(:casa_admin) { build(:casa_admin) }
 
   before do
     # next_court_date in casa_cases.csv needs to be a future date
     travel_to Date.parse("Sept 15 2022")
-  end
-
-  after do
-    travel_back
   end
 
   describe "GET /index" do
@@ -23,7 +19,7 @@ RSpec.describe "/imports", type: :request do
 
       get imports_url
 
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
     end
 
     it "renders a successful response when the user is an admin" do
@@ -170,7 +166,7 @@ RSpec.describe "/imports", type: :request do
             import_type: "casa_case",
             file: upload_file(existing_case_file)
           }
-      }.to change(CasaCase, :count).by(0)
+      }.not_to change(CasaCase, :count)
 
       expect(request.session[:import_error]).to include("Not all rows were imported.")
       expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")

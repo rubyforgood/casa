@@ -4,6 +4,7 @@ RSpec.describe MileageRatesHelper do
   describe "#effective_date_parser" do
     context "with date" do
       let(:date) { DateTime.parse("01-01-2021") }
+
       it "returns date formated" do
         expect(helper.effective_date_parser(date)).to eq "January 01, 2021"
       end

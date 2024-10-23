@@ -7,8 +7,8 @@ FactoryBot.define do
       court_date { nil }
       volunteer { nil }
       case_court_orders { nil }
-      path_to_report { Rails.root.join("tmp", "test_report.docx").to_s }
-      path_to_template { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
+      path_to_report { Rails.root.join("tmp/test_report.docx").to_s }
+      path_to_template { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
       start_date { nil }
       end_date { nil }
       time_zone { nil }

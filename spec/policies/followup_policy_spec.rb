@@ -9,15 +9,15 @@ RSpec.describe FollowupPolicy do
 
   permissions :create?, :resolve? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "allows supervisor" do
-      is_expected.to permit(supervisor)
+      expect(subject).to permit(supervisor)
     end
 
     it "allows volunteer" do
-      is_expected.to permit(volunteer)
+      expect(subject).to permit(volunteer)
     end
   end
 end

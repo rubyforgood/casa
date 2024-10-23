@@ -15,7 +15,7 @@ RSpec.describe Sidebar::LinkComponent, type: :component do
     it "doesn't happen if render_check is false" do
       render_inline(described_class.new(title: "Supervisors", path: "/supervisors", icon: "network", render_check: false))
 
-      expect(page).not_to have_css "span[data-sidebar-target='linkTitle']", text: "Supervisors"
+      expect(page).to have_no_css "span[data-sidebar-target='linkTitle']", text: "Supervisors"
     end
   end
 
@@ -23,7 +23,7 @@ RSpec.describe Sidebar::LinkComponent, type: :component do
     it "doesn't happen if icon not set" do
       render_inline(described_class.new(title: "Supervisors", path: "/supervisors"))
 
-      expect(page).not_to have_css "i"
+      expect(page).to have_no_css "i"
     end
   end
 

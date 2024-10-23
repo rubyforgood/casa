@@ -15,13 +15,13 @@ RSpec.describe "volunteers", type: :view do
   end
 
   context "when NOT signed in as an admin" do
-    it { is_expected.not_to have_selector("a", text: "New Volunteer") }
+    it { is_expected.to have_no_css("a", text: "New Volunteer") }
   end
 
   context "when signed in as an admin" do
     let(:user) { build_stubbed :casa_admin }
 
-    it { is_expected.to have_selector("a", text: "New Volunteer") }
+    it { is_expected.to have_css("a", text: "New Volunteer") }
   end
 
   describe "supervisor's dropdown" do

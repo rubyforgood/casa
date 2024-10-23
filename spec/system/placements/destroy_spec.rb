@@ -14,7 +14,6 @@ RSpec.describe "placements/destroy", type: :system do
     visit casa_case_placements_path(casa_case, placement)
     click_on "Delete"
   end
-  after { travel_back }
 
   it "does not delete on modal close" do
     expect(page).to have_text("Delete Placement?")
@@ -29,7 +28,7 @@ RSpec.describe "placements/destroy", type: :system do
     click_on "Confirm"
 
     expect(page).to have_text("Placement was successfully deleted.")
-    expect(page).not_to have_text("Reunification")
-    expect(page).not_to have_text("August 15, 2024 - Present")
+    expect(page).to have_no_text("Reunification")
+    expect(page).to have_no_text("August 15, 2024 - Present")
   end
 end

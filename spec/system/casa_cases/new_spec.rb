@@ -11,7 +11,7 @@ RSpec.describe "casa_cases/new", type: :system do
       let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
       let!(:volunteer) { create(:volunteer, display_name: volunteer_display_name, supervisor: supervisor, casa_org: casa_org) }
 
-      it "is successful", js: true do
+      it "is successful", :js do
         case_number = "12345"
 
         sign_in admin
@@ -45,7 +45,7 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content(case_number)
           expect(page).to have_content(I18n.l(court_date, format: :day_and_date))
           expect(page).to have_content("CASA case was successfully created.")
-          expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
+          expect(page).to have_no_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
           expect(page).to have_content("Transition Aged Youth: Yes")
           expect(page).to have_content(volunteer_display_name)
         end
@@ -53,7 +53,7 @@ RSpec.describe "casa_cases/new", type: :system do
     end
 
     context "when non-mandatory fields are not filled" do
-      it "is successful", js: true do
+      it "is successful", :js do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
@@ -79,7 +79,7 @@ RSpec.describe "casa_cases/new", type: :system do
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
         expect(page).to have_content("Next Court Date: ")
-        expect(page).not_to have_content("Court Report Due Date:")
+        expect(page).to have_no_content("Court Report Due Date:")
         expect(page).to have_content("Transition Aged Youth: No")
       end
     end
@@ -97,7 +97,7 @@ RSpec.describe "casa_cases/new", type: :system do
           click_on "Create CASA Case"
         end
 
-        expect(find("#casa_case_empty_court_date")).to be_checked
+        expect(find_by_id("casa_case_empty_court_date")).to be_checked
         expect(page).to have_current_path(casa_cases_path, ignore_query: true)
         expect(page).to have_content("Case number can't be blank")
       end
@@ -105,7 +105,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
     context "when the court date field is not filled" do
       context "when empty court date checkbox is checked" do
-        it "creates a new case", js: true do
+        it "creates a new case", :js do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)
@@ -131,13 +131,13 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content(case_number)
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).to have_content("Next Court Date:")
-          expect(page).not_to have_content("Court Report Due Date:")
+          expect(page).to have_no_content("Court Report Due Date:")
           expect(page).to have_content("Transition Aged Youth: No")
         end
       end
 
       context "when empty court date checkbox is not checked" do
-        it "does not create a new case", js: true do
+        it "does not create a new case", :js do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)

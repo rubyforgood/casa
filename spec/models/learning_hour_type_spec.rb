@@ -23,7 +23,7 @@ RSpec.describe LearningHourType, type: :model do
     }.to raise_error(ActiveRecord::RecordInvalid)
     expect {
       create(:learning_hour_type, casa_org: casa_org_2, name: "Book")
-    }.to_not raise_error
+    }.not_to raise_error
   end
 
   describe "for_organization" do

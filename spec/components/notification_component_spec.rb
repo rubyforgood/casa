@@ -25,7 +25,7 @@ RSpec.describe NotificationComponent, type: :component do
 
     render_inline(component)
     expect(page).to have_text("New followup")
-    expect(page).not_to have_text("Note: ")
+    expect(page).to have_no_text("Note: ")
     expect(page).to have_text("#{user.display_name} has flagged a Case Contact that needs follow up. Click to see more.")
   end
 
@@ -34,7 +34,7 @@ RSpec.describe NotificationComponent, type: :component do
 
     render_inline(component)
     expect(page).to have_css("a.bg-light.text-muted")
-    expect(page).not_to have_css("i.fas.fa-bell")
+    expect(page).to have_no_css("i.fas.fa-bell")
   end
 
   it "renders an emancipation checklist reminder" do

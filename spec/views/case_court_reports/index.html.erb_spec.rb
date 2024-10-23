@@ -16,16 +16,16 @@ RSpec.describe "case_court_reports/index", type: :view do
     end
 
     it "has a card with card title 'Generate Court Report'", :aggregate_failures do
-      expect(rendered).to have_selector("h6", text: "Court Reports", count: 1)
-      expect(rendered).to have_selector("div", class: "card-style", count: 1)
+      expect(rendered).to have_css("h6", text: "Court Reports", count: 1)
+      expect(rendered).to have_css("div", class: "card-style", count: 1)
     end
 
     it "page has title 'Gererate Reports'" do
-      expect(rendered).to have_selector("h1", text: "Generate Reports", count: 1)
+      expect(rendered).to have_css("h1", text: "Generate Reports", count: 1)
     end
 
     it "has button with 'Download Court Report as .docx' text" do
-      expect(rendered).to have_selector("button", text: /Download Court Report as \.docx/i, count: 1)
+      expect(rendered).to have_css("button", text: /Download Court Report as \.docx/i, count: 1)
     end
   end
 end

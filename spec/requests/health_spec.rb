@@ -29,7 +29,7 @@ RSpec.describe "Health", type: :request do
     it "has key latest_deploy_time" do
       hash_body = nil # This is here for the linter
       expect { hash_body = JSON.parse(response.body).with_indifferent_access }.not_to raise_exception
-      expect(hash_body.keys).to match_array(["latest_deploy_time"])
+      expect(hash_body.keys).to contain_exactly("latest_deploy_time")
     end
   end
 
@@ -57,10 +57,6 @@ RSpec.describe "Health", type: :request do
       # Create associated contact_topic_answers
       create(:contact_topic_answer, case_contact: CaseContact.first)
       create(:contact_topic_answer, case_contact: CaseContact.last)
-    end
-
-    after do
-      travel_back
     end
 
     it "returns case contacts creation times in the last year" do
@@ -117,10 +113,6 @@ RSpec.describe "Health", type: :request do
       create(:login_activity, user: volunteer2, created_at: 9.months.ago, success: true)
       create(:login_activity, user: supervisor, created_at: 9.months.ago, success: true)
       create(:login_activity, user: casa_admin, created_at: 9.months.ago, success: true)
-    end
-
-    after do
-      travel_back
     end
 
     it "returns monthly unique users data for volunteers, supervisors, and admins in the last year" do

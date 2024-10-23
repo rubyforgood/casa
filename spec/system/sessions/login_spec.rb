@@ -8,7 +8,7 @@ RSpec.describe "User Login", type: :system do
       fill_in "Email", with: user.email
       fill_in "Password", with: "12345678"
       within ".actions" do
-        find("#log-in").click
+        find_by_id("log-in").click
       end
 
       expect(page).to have_text user.email
@@ -23,7 +23,7 @@ RSpec.describe "User Login", type: :system do
       fill_in "Email", with: user.email
       fill_in "Password", with: "wrong_password"
       within ".actions" do
-        find("#log-in").click
+        find_by_id("log-in").click
       end
 
       expect(page).to have_content("Invalid Email or password.")

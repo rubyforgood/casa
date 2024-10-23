@@ -22,7 +22,7 @@ RSpec.describe "casa_cases/edit", type: :view do
       render template: "casa_cases/edit"
 
       expect(rendered).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}")
-      expect(rendered).to_not have_selector("input[value='#{casa_case.case_number}']")
+      expect(rendered).to have_no_css("input[value='#{casa_case.case_number}']")
     end
 
     it "does not include volunteer assignment" do
@@ -47,7 +47,7 @@ RSpec.describe "casa_cases/edit", type: :view do
       render template: "casa_cases/edit"
 
       expect(rendered).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}")
-      expect(rendered).to have_selector("input[value='#{casa_case.case_number}']")
+      expect(rendered).to have_css("input[value='#{casa_case.case_number}']")
     end
 
     it "includes volunteer assignment" do

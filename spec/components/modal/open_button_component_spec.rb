@@ -17,7 +17,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
     render_inline(Modal::OpenButtonComponent.new(target: "myModal", text: "Example Text"))
 
     expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("button i")
+    expect(page).to have_no_css("button i")
     expect(page).to have_text("Example Text")
   end
 
@@ -27,7 +27,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
     end
 
     expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("button i")
+    expect(page).to have_no_css("button i")
     expect(page).to have_text("Example Text")
   end
 
@@ -37,20 +37,20 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
     end
 
     expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
-    expect(page).not_to have_css("button i")
+    expect(page).to have_no_css("button i")
     expect(page).to have_text("Example Text")
-    expect(page).to_not have_text("Overwritten")
+    expect(page).to have_no_text("Overwritten")
   end
 
   it "doesn't render anything if both text and content are absent" do
     render_inline(Modal::OpenButtonComponent.new(target: "myModal"))
 
-    expect(page).not_to have_css("button")
+    expect(page).to have_no_css("button")
   end
 
   it "doesn't render if render_check is false" do
     render_inline(Modal::OpenButtonComponent.new(target: "myModal", text: "Example Text", render_check: false))
 
-    expect(page).not_to have_css("button")
+    expect(page).to have_no_css("button")
   end
 end

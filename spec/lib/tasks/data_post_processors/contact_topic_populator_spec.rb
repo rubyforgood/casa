@@ -42,7 +42,7 @@ RSpec.describe "populates each existing organization with contact groups and typ
         create_list(:case_contact, 3, casa_case: case_two)
       end
 
-      it "it creates 3 topic answers for each case contact" do
+      it "creates 3 topic answers for each case contact" do
         expect { ContactTopicPopulator.populate }.to change(ContactTopicAnswer, :count).from(0).to(18)
         expect(case_one.case_contacts.map(&:contact_topic_answers).flatten.size).to eq(9)
         expect(case_two.case_contacts.map(&:contact_topic_answers).flatten.size).to eq(9)

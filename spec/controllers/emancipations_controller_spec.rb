@@ -36,7 +36,7 @@ RSpec.describe EmancipationsController, type: :controller do
             allow_any_instance_of(Organizational::UnknownOrganization).to receive(:backtrace).and_return(["", "", "save'"])
           end
 
-          it "will render the correct json message" do
+          it "renders the correct json message" do
             show
             expect(response).to have_http_status(:unauthorized)
             expect(response.body).to eq({error: "Sorry, you are not authorized to perform this action. Did the session expire?"}.to_json)

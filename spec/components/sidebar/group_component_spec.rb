@@ -33,7 +33,7 @@ RSpec.describe Sidebar::GroupComponent, type: :component do
   it "does not render component if no links are added" do
     render_inline(@component)
 
-    expect(page).not_to have_css "li[class='nav-item nav-item-has-children group-item']"
+    expect(page).to have_no_css "li[class='nav-item nav-item-has-children group-item']"
   end
 
   it "does not render component if all links are not rendered" do

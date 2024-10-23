@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Banners", type: :system, js: true do
+RSpec.describe "Banners", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -70,7 +70,7 @@ RSpec.describe "Banners", type: :system, js: true do
     click_on "Submit"
 
     visit banners_path
-    expect(page).to_not have_text("Announcement not created")
+    expect(page).to have_no_text("Announcement not created")
   end
 
   describe "when an organization has an active banner" do
@@ -96,7 +96,7 @@ RSpec.describe "Banners", type: :system, js: true do
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
 
-          expect(already_existing_banner_row).to have_selector("td.min-width", text: "No")
+          expect(already_existing_banner_row).to have_css("td.min-width", text: "No")
         end
 
         expect(page).to have_text("New active banner content.")
@@ -121,7 +121,7 @@ RSpec.describe "Banners", type: :system, js: true do
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
 
-          expect(already_existing_banner_row).to have_selector("td.min-width", text: "Yes")
+          expect(already_existing_banner_row).to have_css("td.min-width", text: "Yes")
         end
 
         expect(page).to have_text(active_banner.content.body.to_plain_text)

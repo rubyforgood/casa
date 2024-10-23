@@ -5,7 +5,7 @@ RSpec.describe "sessions/new", type: :system do
     it "renders sign in page with no flash messages" do
       visit "/"
       expect(page).to have_text "Login"
-      expect(page).to_not have_text "sign in before continuing"
+      expect(page).to have_no_text "sign in before continuing"
     end
 
     %w[volunteer supervisor casa_admin].each do |user_type|
@@ -20,7 +20,7 @@ RSpec.describe "sessions/new", type: :system do
 
       it "renders sign in page with no flash messages" do
         expect(page).to have_text "Login"
-        expect(page).to_not have_text "sign in before continuing"
+        expect(page).to have_no_text "sign in before continuing"
       end
 
       context "when a #{user_type} fills in their email and password" do
@@ -31,7 +31,7 @@ RSpec.describe "sessions/new", type: :system do
           fill_in "Email", with: user.email
           fill_in "Password", with: "12345678"
           within ".actions" do
-            find("#log-in").click
+            find_by_id("log-in").click
           end
         end
 
@@ -54,12 +54,12 @@ RSpec.describe "sessions/new", type: :system do
 
       visit "/users/sign_in"
       expect(page).to have_text "Log In"
-      expect(page).to_not have_text "sign in before continuing"
+      expect(page).to have_no_text "sign in before continuing"
 
       fill_in "Email", with: user.email
       fill_in "Password", with: "12345678"
       within ".actions" do
-        find("#log-in").click
+        find_by_id("log-in").click
       end
 
       expect(page).to have_text "Invalid Email or password"

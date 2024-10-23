@@ -18,7 +18,7 @@ RSpec.describe Modal::HeaderComponent, type: :component do
 
     expect(page).to have_css("div.modal-header")
     expect(page).to have_css("div.modal-header h1#modalHeader-label.modal-title.fs-5")
-    expect(page).not_to have_css("div.modal-header i")
+    expect(page).to have_no_css("div.modal-header i")
     expect(page).to have_text("Example Header")
     expect(page).to have_css("div.modal-header button.btn-close")
   end
@@ -40,19 +40,19 @@ RSpec.describe Modal::HeaderComponent, type: :component do
 
     expect(page).to have_css("div.modal-header")
     expect(page).to have_text("Header Content")
-    expect(page).to_not have_text("Missing")
+    expect(page).to have_no_text("Missing")
     expect(page).to have_css("div.modal-header button.btn-close")
   end
 
   it "doesn't render anything if both text and content are absent" do
     render_inline(Modal::HeaderComponent.new(id: "modalHeader"))
 
-    expect(page).not_to have_css("div.modal-header")
+    expect(page).to have_no_css("div.modal-header")
   end
 
   it "doesn't render if render_check is false" do
     render_inline(Modal::HeaderComponent.new(text: "Example Header", id: "modalHeader", render_check: false))
 
-    expect(page).not_to have_css("div.modal-header")
+    expect(page).to have_no_css("div.modal-header")
   end
 end

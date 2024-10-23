@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case Groups", type: :system, js: true do
+RSpec.describe "Case Groups", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -16,7 +16,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
     find(".ts-control > input").click
     find("div.option", text: casa_case1.case_number).click
     find("div.option", text: casa_case2.case_number).click
-    find("#case_group_name").click
+    find_by_id("case_group_name").click
 
     click_on "Submit"
 
@@ -45,7 +45,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
     find(".ts-control > input").click
     find("div.option", text: casa_case1.case_number).click
     find("div.option", text: casa_case2.case_number).click
-    find("#case_group_name").click
+    find_by_id("case_group_name").click
 
     click_on "Submit"
 
@@ -64,10 +64,10 @@ RSpec.describe "Case Groups", type: :system, js: true do
 
     visit case_groups_path
     expect(page).to have_text(casa_case1.case_number)
-    expect(page).to_not have_text(casa_case2.case_number)
+    expect(page).to have_no_text(casa_case2.case_number)
   end
 
-  it "will not create a case group if the name is not unique" do
+  it "does not create a case group if the name is not unique" do
     casa_case = create(:casa_case)
 
     sign_in admin
@@ -77,7 +77,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
     fill_in "Name", with: "A family"
     find(".ts-control > input").click
     find("div.option", text: casa_case.case_number).click
-    find("#case_group_name").click
+    find_by_id("case_group_name").click
     click_on "Submit"
 
     visit case_groups_path
@@ -85,7 +85,7 @@ RSpec.describe "Case Groups", type: :system, js: true do
     fill_in "Name", with: "A Family "
     find(".ts-control > input").click
     find("div.option", text: casa_case.case_number).click
-    find("#case_group_name").click
+    find_by_id("case_group_name").click
     click_on "Submit"
 
     expect(page).to have_text("Name has already been taken")

@@ -29,8 +29,8 @@ RSpec.describe Modal::GroupComponent, type: :component do
     expect(page).to have_css("div.modal-dialog.modal-dialog-centered")
     expect(page).to have_css("div.modal-content")
     expect(page).to have_text("Example Header")
-    expect(page).not_to have_css("div.modal-body")
-    expect(page).not_to have_css("div.modal-footer")
+    expect(page).to have_no_css("div.modal-body")
+    expect(page).to have_no_css("div.modal-footer")
   end
 
   it "renders the modal group with only a body" do
@@ -41,16 +41,16 @@ RSpec.describe Modal::GroupComponent, type: :component do
     expect(page).to have_css("div.modal-dialog.modal-dialog-centered")
     expect(page).to have_css("div.modal-content")
     expect(page).to have_text("Example Body")
-    expect(page).not_to have_css("div.modal-header")
-    expect(page).not_to have_css("div.modal-footer")
+    expect(page).to have_no_css("div.modal-header")
+    expect(page).to have_no_css("div.modal-footer")
   end
 
   it "doesn't render anything if no content provided" do
     render_inline(@component)
 
-    expect(page).not_to have_css("div.modal.fade.example-class#exampleModal")
-    expect(page).not_to have_css("div.modal-dialog.modal-dialog-centered")
-    expect(page).not_to have_css("div.modal-content")
+    expect(page).to have_no_css("div.modal.fade.example-class#exampleModal")
+    expect(page).to have_no_css("div.modal-dialog.modal-dialog-centered")
+    expect(page).to have_no_css("div.modal-content")
   end
 
   it "doesn't render if render_check is false" do
@@ -60,8 +60,8 @@ RSpec.describe Modal::GroupComponent, type: :component do
     @component.with_footer { "Example Footer" }
     render_inline(@component)
 
-    expect(page).not_to have_css("div.modal.fade.example-class#exampleModal")
-    expect(page).not_to have_css("div.modal-dialog.modal-dialog-centered")
-    expect(page).not_to have_css("div.modal-content")
+    expect(page).to have_no_css("div.modal.fade.example-class#exampleModal")
+    expect(page).to have_no_css("div.modal-dialog.modal-dialog-centered")
+    expect(page).to have_no_css("div.modal-content")
   end
 end

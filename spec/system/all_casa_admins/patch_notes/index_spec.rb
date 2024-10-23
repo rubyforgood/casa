@@ -5,7 +5,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
     let(:all_casa_admin) { create(:all_casa_admin) }
 
     context "when the new patch note form's textarea is blank" do
-      it "displays a warning after trying to create", js: true do
+      it "displays a warning after trying to create", :js do
         sign_in all_casa_admin
         visit all_casa_admins_patch_notes_path
 
@@ -13,7 +13,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
           click_on "Create"
         end
 
-        expect(page).to have_selector(".warning-notification", text: "Cannot save an empty patch note")
+        expect(page).to have_css(".warning-notification", text: "Cannot save an empty patch note")
       end
     end
 
@@ -22,7 +22,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
       let!(:patch_note_group) { create(:patch_note_group, :all_users) }
       let!(:patch_note_type) { create(:patch_note_type, name: "5[1ht=d\\%*^qRON") }
 
-      it "displays a the new patch note text on the page", js: true do
+      it "displays a the new patch note text on the page", :js do
         sign_in all_casa_admin
         visit all_casa_admins_patch_notes_path
 

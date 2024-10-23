@@ -20,7 +20,6 @@ RSpec.describe NotificationsHelper do
       notification_created_before_deploy_a.update_attribute(:created_at, 2.days.ago - 1.hour)
       notification_created_before_deploy_b.update_attribute(:created_at, 3.days.ago)
     end
-    after { travel_back }
 
     describe "#notifications_after_and_including_deploy" do
       let(:notifications_after_and_including_deploy) { helper.notifications_after_and_including_deploy(Noticed::Notification.all) }
@@ -32,8 +31,8 @@ RSpec.describe NotificationsHelper do
       end
 
       it "does not contain notifications before the deploy time" do
-        expect(notifications_after_and_including_deploy).to_not include(notification_created_before_deploy_a)
-        expect(notifications_after_and_including_deploy).to_not include(notification_created_before_deploy_b)
+        expect(notifications_after_and_including_deploy).not_to include(notification_created_before_deploy_a)
+        expect(notifications_after_and_including_deploy).not_to include(notification_created_before_deploy_b)
       end
     end
 
@@ -46,9 +45,9 @@ RSpec.describe NotificationsHelper do
       end
 
       it "does not contain notifications after and including the deploy time" do
-        expect(notifications_before_deploy).to_not include(notification_created_after_deploy_a)
-        expect(notifications_before_deploy).to_not include(notification_created_after_deploy_b)
-        expect(notifications_before_deploy).to_not include(notification_created_at_deploy)
+        expect(notifications_before_deploy).not_to include(notification_created_after_deploy_a)
+        expect(notifications_before_deploy).not_to include(notification_created_after_deploy_b)
+        expect(notifications_before_deploy).not_to include(notification_created_at_deploy)
       end
     end
   end

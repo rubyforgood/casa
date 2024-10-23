@@ -47,11 +47,11 @@ RSpec.describe "volunteers/new", type: :system do
     it "redirects the user with an error message" do
       visit new_volunteer_path
 
-      expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
+      expect(page).to have_css(".alert", text: "Sorry, you are not authorized to perform this action.")
     end
   end
 
-  it "displays learning hour topic for volunteers when enabled", js: true do
+  it "displays learning hour topic for volunteers when enabled", :js do
     organization = create(:casa_org, learning_topic_active: true)
     volunteer = create(:volunteer, casa_org: organization)
 
@@ -60,12 +60,12 @@ RSpec.describe "volunteers/new", type: :system do
     expect(page).to have_text("Learning Topic")
   end
 
-  it "learning hour topic hidden when disabled", js: true do
+  it "learning hour topic hidden when disabled", :js do
     organization = create(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
 
     sign_in volunteer
     visit new_learning_hour_path
-    expect(page).to_not have_text("Learning Topic")
+    expect(page).to have_no_text("Learning Topic")
   end
 end

@@ -31,18 +31,18 @@ RSpec.describe Modal::BodyComponent, type: :component do
     end
 
     expect(page).to have_css("div.modal-body", text: "Content Override")
-    expect(page).not_to have_css("div.modal-body", text: "Example Body")
+    expect(page).to have_no_css("div.modal-body", text: "Example Body")
   end
 
   it "does not render if text and content missing" do
     render_inline(Modal::BodyComponent.new)
 
-    expect(page).not_to have_css("div.modal-body")
+    expect(page).to have_no_css("div.modal-body")
   end
 
   it "doesn't render if render_check is false" do
     render_inline(Modal::BodyComponent.new(text: "Example Body", render_check: false))
 
-    expect(page).not_to have_css("div.modal-body")
+    expect(page).to have_no_css("div.modal-body")
   end
 end

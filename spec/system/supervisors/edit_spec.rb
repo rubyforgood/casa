@@ -6,7 +6,7 @@ RSpec.describe "supervisors/edit", type: :system do
   context "logged in as an admin" do
     let(:user) { create(:casa_admin, casa_org: organization) }
 
-    it "can edit supervisor by clicking on the edit link from the supervisors list page", js: true do
+    it "can edit supervisor by clicking on the edit link from the supervisors list page", :js do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -22,7 +22,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
-    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page", js: true do
+    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page", :js do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -39,11 +39,13 @@ RSpec.describe "supervisors/edit", type: :system do
     context "with invalid data" do
       let(:role) { "supervisor" }
       let(:supervisor) { create(:supervisor, display_name: "Leslie Knope", casa_org: organization) }
+
       before do
         sign_in user
         visit edit_supervisor_path(supervisor)
       end
-      it_should_behave_like "shows error for invalid phone numbers"
+
+      it_behaves_like "shows error for invalid phone numbers"
 
       it "shows error for invalid date of birth" do
         fill_in "Date of birth", with: 5.days.from_now.strftime("%Y/%m/%d")
@@ -75,7 +77,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text "Password reset last sent never"
     end
 
-    it "can deactivate a supervisor", js: true do
+    it "can deactivate a supervisor", :js do
       supervisor = create :supervisor, casa_org: organization
 
       sign_in user
@@ -103,12 +105,12 @@ RSpec.describe "supervisors/edit", type: :system do
 
       click_on "Activate supervisor"
 
-      expect(page).not_to have_text("Supervisor was deactivated on")
+      expect(page).to have_no_text("Supervisor was deactivated on")
 
       expect(inactive_supervisor.reload).to be_active
     end
 
-    it "can resend invitation to a supervisor", js: true do
+    it "can resend invitation to a supervisor", :js do
       supervisor = create :supervisor, casa_org: organization
 
       sign_in user
@@ -124,7 +126,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
     end
 
-    it "can convert the supervisor to an admin", js: true do
+    it "can convert the supervisor to an admin", :js do
       supervisor = create(:supervisor, casa_org_id: organization.id)
 
       sign_in user
@@ -140,13 +142,14 @@ RSpec.describe "supervisors/edit", type: :system do
 
     context "logged in as a supervisor" do
       let(:supervisor) { create(:supervisor) }
-      it "can't deactivate a supervisor", js: true do
+
+      it "can't deactivate a supervisor", :js do
         supervisor2 = create :supervisor, casa_org: organization
 
         sign_in supervisor
         visit edit_supervisor_path(supervisor2)
 
-        expect(page).to_not have_text("Deactivate supervisor")
+        expect(page).to have_no_text("Deactivate supervisor")
       end
 
       it "can't activate a supervisor" do
@@ -157,7 +160,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
         visit edit_supervisor_path(inactive_supervisor)
 
-        expect(page).not_to have_text("Activate supervisor")
+        expect(page).to have_no_text("Activate supervisor")
       end
     end
 
@@ -208,6 +211,7 @@ RSpec.describe "supervisors/edit", type: :system do
         click_on "Submit"
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end
+
       it "shows error message for invalid date of birth" do
         fill_in "supervisor_date_of_birth", with: 5.days.from_now.strftime("%Y/%m/%d")
         click_on "Submit"
@@ -248,7 +252,7 @@ RSpec.describe "supervisors/edit", type: :system do
       end
 
       it "does not have a submit button" do
-        expect(page).not_to have_selector(:link_or_button, "Submit")
+        expect(page).to have_no_selector(:link_or_button, "Submit")
       end
     end
 
@@ -289,8 +293,8 @@ RSpec.describe "supervisors/edit", type: :system do
           visit edit_supervisor_path(supervisor)
 
           expect(page).to have_text "Assigned Volunteers"
-          expect(page).to_not have_button("Include unassigned")
-          expect(page).to_not have_text("Currently Assigned To")
+          expect(page).to have_no_button("Include unassigned")
+          expect(page).to have_no_text("Currently Assigned To")
           supervisor.volunteers.each do |volunteer|
             expect(page).to have_text volunteer.email
           end
@@ -302,7 +306,7 @@ RSpec.describe "supervisors/edit", type: :system do
           it "does not show them by default" do
             visit edit_supervisor_path(supervisor)
 
-            expect(page).to_not have_text unassigned_volunteer.email
+            expect(page).to have_no_text unassigned_volunteer.email
             expect(page).to have_button("Include unassigned")
 
             click_on "Include unassigned"
@@ -325,7 +329,7 @@ RSpec.describe "supervisors/edit", type: :system do
             visit edit_supervisor_path(supervisor)
 
             expect(page).to have_text "Assigned Volunteers"
-            expect(page).to_not have_text unassigned_volunteer.email
+            expect(page).to have_no_text unassigned_volunteer.email
             expect(page).to have_button("Include unassigned")
 
             click_on "Include unassigned"
@@ -337,8 +341,8 @@ RSpec.describe "supervisors/edit", type: :system do
 
             click_on "Hide unassigned"
 
-            expect(page).to_not have_text "Currently Assigned To"
-            expect(page).to_not have_text "No One"
+            expect(page).to have_no_text "Currently Assigned To"
+            expect(page).to have_no_text "No One"
           end
         end
       end

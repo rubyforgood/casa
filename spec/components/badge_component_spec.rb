@@ -9,8 +9,8 @@ RSpec.describe BadgeComponent, type: :component do
     render_inline(component)
     expect(page).to have_css("span.bg-success", text: "success")
     expect(page).to have_css(".text-uppercase")
-    expect(page).not_to have_css(".text-dark")
-    expect(page).not_to have_css(".rounded-pill")
+    expect(page).to have_no_css(".text-dark")
+    expect(page).to have_no_css(".rounded-pill")
     expect(page).to have_css(".my-1")
   end
 
@@ -20,9 +20,9 @@ RSpec.describe BadgeComponent, type: :component do
     render_inline(component)
     expect(page).to have_css("span.bg-danger", text: "danger")
     expect(page).to have_css(".text-uppercase")
-    expect(page).not_to have_css(".text-dark")
+    expect(page).to have_no_css(".text-dark")
     expect(page).to have_css(".rounded-pill")
-    expect(page).not_to have_css(".my-1")
+    expect(page).to have_no_css(".my-1")
   end
 
   it "renders the dark text badges" do

@@ -16,7 +16,7 @@ RSpec.describe Modal::FooterComponent, type: :component do
   it "does not render the footer if content missing" do
     render_inline(Modal::FooterComponent.new)
 
-    expect(page).not_to have_css("div.modal-footer")
+    expect(page).to have_no_css("div.modal-footer")
   end
 
   it "doesn't render if render_check is false" do
@@ -24,6 +24,6 @@ RSpec.describe Modal::FooterComponent, type: :component do
       "Footer Content"
     end
 
-    expect(page).not_to have_css("div.modal-footer")
+    expect(page).to have_no_css("div.modal-footer")
   end
 end

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "banners/dismiss", type: :system, js: true do
+RSpec.describe "banners/dismiss", :js, type: :system do
   let!(:casa_org) { create(:casa_org) }
   let!(:active_banner) { create(:banner, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }
@@ -13,7 +13,7 @@ RSpec.describe "banners/dismiss", type: :system, js: true do
       expect(page).to have_text("Please fill out this survey")
 
       click_on "Dismiss"
-      expect(page).not_to have_text("Please fill out this survey")
+      expect(page).to have_no_text("Please fill out this survey")
     end
   end
 end

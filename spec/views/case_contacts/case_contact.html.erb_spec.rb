@@ -36,7 +36,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         expect(rendered).to have_text("Some question:")
         expect(rendered).to have_text("Some answer")
-        expect(rendered).to_not have_text("Hidden question")
+        expect(rendered).to have_no_text("Hidden question")
       end
     end
 
@@ -49,7 +49,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).not_to have_text("Additional Notes:")
+        expect(rendered).to have_no_text("Additional Notes:")
       end
     end
 
@@ -129,20 +129,20 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         allow(view).to receive(:current_user).and_return(volunteer)
       end
 
-      it "should not show delete button" do
+      it "does not show delete button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).not_to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
+        expect(rendered).to have_no_link("Delete", href: "/case_contacts/#{case_contact.id}")
       end
 
-      it "should not show undelete button" do
+      it "does not show undelete button" do
         assign :case_contact, case_contact2
         assign :casa_cases, [case_contact2.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact2})
-        expect(rendered).not_to have_link("undelete", href: "/case_contacts/#{case_contact2.id}/restore")
+        expect(rendered).to have_no_link("undelete", href: "/case_contacts/#{case_contact2.id}/restore")
       end
     end
 
@@ -160,12 +160,12 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
       end
 
-      it "should not show undelete button" do
+      it "does not show undelete button" do
         assign :case_contact, case_contact2
         assign :casa_cases, [case_contact2.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact2})
-        expect(rendered).not_to have_link("undelete", href: "/case_contacts/#{case_contact2.id}/restore")
+        expect(rendered).to have_no_link("undelete", href: "/case_contacts/#{case_contact2.id}/restore")
       end
     end
   end

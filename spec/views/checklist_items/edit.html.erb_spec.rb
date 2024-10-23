@@ -16,17 +16,17 @@ RSpec.describe "checklist_items/edit", type: :view do
   end
 
   it "shows edit checklist item form" do
-    expect(rendered).to have_selector("input", id: "checklist_item_category")
-    expect(rendered).to have_selector("input", id: "checklist_item_description")
-    expect(rendered).to have_selector("input", id: "checklist_item_mandatory")
+    expect(rendered).to have_css("input", id: "checklist_item_category")
+    expect(rendered).to have_css("input", id: "checklist_item_description")
+    expect(rendered).to have_css("input", id: "checklist_item_mandatory")
     expect(rendered).to have_selector(:link_or_button, "Submit")
   end
 
   it "requires category text field" do
-    expect(rendered).to have_selector("input[required=required]", id: "checklist_item_category")
+    expect(rendered).to have_css("input[required=required]", id: "checklist_item_category")
   end
 
   it "requires description text field" do
-    expect(rendered).to have_selector("input[required=required]", id: "checklist_item_description")
+    expect(rendered).to have_css("input[required=required]", id: "checklist_item_description")
   end
 end

@@ -5,8 +5,8 @@ class Banner < ApplicationRecord
 
   scope :active, -> { where(active: true) }
 
-  validates_presence_of :name
-  validates_presence_of :content
+  validates :name, presence: true
+  validates :content, presence: true
   validate :only_one_banner_is_active_per_organization
   validate :expires_at_must_be_in_future
 

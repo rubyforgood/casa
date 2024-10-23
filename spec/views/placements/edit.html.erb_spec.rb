@@ -19,7 +19,7 @@ RSpec.describe "placements/edit", type: :view do
     render
   end
 
-  it { is_expected.to have_selector("h1", text: "Editing Placement") }
+  it { is_expected.to have_css("h1", text: "Editing Placement") }
 
   it "has a date input for placement started at with the correct value" do
     expect(rendered).to have_field("placement[placement_started_at]", with: "2024-08-15")

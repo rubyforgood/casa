@@ -33,7 +33,7 @@ RSpec.describe DropdownMenuComponent, type: :component do
   it "doesn't render anything if no content provided" do
     render_inline(DropdownMenuComponent.new(menu_title: nil))
 
-    expect(page).not_to have_css("div.dropdown")
+    expect(page).to have_no_css("div.dropdown")
   end
 
   it "renders the dropdown menu with additional classes" do
@@ -45,6 +45,6 @@ RSpec.describe DropdownMenuComponent, type: :component do
   it "doesn't render if render_check is false" do
     render_inline(DropdownMenuComponent.new(menu_title: "Example", render_check: false))
 
-    expect(page).not_to have_css("div.dropdown")
+    expect(page).to have_no_css("div.dropdown")
   end
 end

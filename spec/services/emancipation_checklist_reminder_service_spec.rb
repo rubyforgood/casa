@@ -10,12 +10,12 @@ RSpec.describe EmancipationChecklistReminderService do
   end
 
   after do
-    travel_back
     clear_enqueued_jobs
   end
 
   context "with only two eligible cases" do
     subject(:task) { described_class.new }
+
     let!(:eligible_case1) { create(:case_assignment) }
     let!(:eligible_case2) { create(:case_assignment) }
     let!(:ineligible_case1) { create(:case_assignment, pre_transition: true) }
@@ -23,7 +23,7 @@ RSpec.describe EmancipationChecklistReminderService do
 
     it "#initialize correctly captures the eligible cases" do
       expect(CasaCase.count).to eq(4)
-      expect(task.cases).to_not be_empty
+      expect(task.cases).not_to be_empty
       expect(task.cases.length).to eq(2)
     end
   end
@@ -31,7 +31,7 @@ RSpec.describe EmancipationChecklistReminderService do
   context "volunteer with transition age youth case" do
     let!(:casa_case) { create(:casa_case, :with_one_case_assignment) }
 
-    it "should send notification" do
+    it "sends notification" do
       expect { send_reminders }.to change { casa_case.case_assignments.first.volunteer.notifications.count }.by(1)
     end
   end
@@ -47,7 +47,7 @@ RSpec.describe EmancipationChecklistReminderService do
   context "volunteer without transition age youth case" do
     let!(:casa_case) { create(:casa_case, :with_one_case_assignment, birth_month_year_youth: 13.years.ago) }
 
-    it "should not send notification" do
+    it "does not send notification" do
       expect { send_reminders }.not_to change { casa_case.case_assignments.first.volunteer.notifications.count }
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe EmancipationChecklistReminderService do
   context "when the case assignment is inactive" do
     let!(:case_assignment) { create(:case_assignment, :inactive) }
 
-    it "should not send notification" do
+    it "does not send notification" do
       expect { send_reminders }.not_to change { case_assignment.volunteer.notifications.count }
     end
   end

@@ -1,6 +1,8 @@
 require "rails_helper"
 
-RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true do
+RSpec.describe AdditionalExpensePolicy, :aggregate_failures, type: :policy do
+  subject { described_class }
+
   let(:casa_org) { create :casa_org }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:supervisor) { create :supervisor, casa_org: }
@@ -33,42 +35,40 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
   let(:other_org_case_contact) { create :case_contact, casa_case: other_org_casa_case, creator: other_org_volunteer }
   let(:other_org_additional_expense) { create :additional_expense, case_contact: other_org_case_contact }
 
-  subject { described_class }
-
   permissions :create?, :destroy? do
     it "does not permit a nil user" do
-      is_expected.not_to permit(nil, additional_expense)
+      expect(subject).not_to permit(nil, additional_expense)
     end
 
     it "permits volunteers assigned to the expense's case contact" do
-      is_expected.to permit(volunteer, additional_expense)
-      is_expected.to permit(volunteer, draft_additional_expense)
-      is_expected.to permit(volunteer, new_additional_expense)
+      expect(subject).to permit(volunteer, additional_expense)
+      expect(subject).to permit(volunteer, draft_additional_expense)
+      expect(subject).to permit(volunteer, new_additional_expense)
 
-      is_expected.not_to permit(volunteer, same_case_volunteer_additional_expense)
-      is_expected.not_to permit(volunteer, other_org_additional_expense)
+      expect(subject).not_to permit(volunteer, same_case_volunteer_additional_expense)
+      expect(subject).not_to permit(volunteer, other_org_additional_expense)
     end
 
     it "permits same org supervisors" do
-      is_expected.to permit(supervisor, additional_expense)
-      is_expected.to permit(supervisor, draft_additional_expense)
-      is_expected.to permit(supervisor, draft_additional_expense)
-      is_expected.to permit(supervisor, same_case_volunteer_additional_expense)
+      expect(subject).to permit(supervisor, additional_expense)
+      expect(subject).to permit(supervisor, draft_additional_expense)
+      expect(subject).to permit(supervisor, draft_additional_expense)
+      expect(subject).to permit(supervisor, same_case_volunteer_additional_expense)
 
-      is_expected.not_to permit(supervisor, other_org_additional_expense)
+      expect(subject).not_to permit(supervisor, other_org_additional_expense)
     end
 
     it "permits same org casa admins" do
-      is_expected.to permit(casa_admin, additional_expense)
-      is_expected.to permit(casa_admin, draft_additional_expense)
-      is_expected.to permit(casa_admin, new_additional_expense)
-      is_expected.to permit(casa_admin, same_case_volunteer_additional_expense)
+      expect(subject).to permit(casa_admin, additional_expense)
+      expect(subject).to permit(casa_admin, draft_additional_expense)
+      expect(subject).to permit(casa_admin, new_additional_expense)
+      expect(subject).to permit(casa_admin, same_case_volunteer_additional_expense)
 
-      is_expected.not_to permit(casa_admin, other_org_additional_expense)
+      expect(subject).not_to permit(casa_admin, other_org_additional_expense)
     end
 
     it "does not permit an all casa admin" do
-      is_expected.not_to permit(all_casa_admin, additional_expense)
+      expect(subject).not_to permit(all_casa_admin, additional_expense)
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
       let(:user) { nil }
 
       it "returns no expenses" do
-        is_expected.not_to include(additional_expense, other_org_additional_expense)
+        expect(subject).not_to include(additional_expense, other_org_additional_expense)
       end
     end
 
@@ -94,8 +94,8 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
       let(:user) { volunteer }
 
       it "includes expenses for contacts created by volunteer only" do
-        is_expected.to include(additional_expense, draft_additional_expense)
-        is_expected.not_to include(same_case_volunteer_additional_expense, other_org_additional_expense)
+        expect(subject).to include(additional_expense, draft_additional_expense)
+        expect(subject).not_to include(same_case_volunteer_additional_expense, other_org_additional_expense)
       end
     end
 
@@ -103,8 +103,8 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
       let(:user) { supervisor }
 
       it "includes same org expenses only" do
-        is_expected.to include(additional_expense, draft_additional_expense, same_case_volunteer_additional_expense)
-        is_expected.not_to include(other_org_additional_expense)
+        expect(subject).to include(additional_expense, draft_additional_expense, same_case_volunteer_additional_expense)
+        expect(subject).not_to include(other_org_additional_expense)
       end
     end
 
@@ -112,8 +112,8 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
       let(:user) { casa_admin }
 
       it "includes same org expenses only" do
-        is_expected.to include(additional_expense, draft_additional_expense, draft_additional_expense)
-        is_expected.not_to include(other_org_additional_expense)
+        expect(subject).to include(additional_expense, draft_additional_expense, draft_additional_expense)
+        expect(subject).not_to include(other_org_additional_expense)
       end
     end
 
@@ -121,7 +121,7 @@ RSpec.describe AdditionalExpensePolicy, type: :policy, aggregate_failures: true 
       let(:user) { all_casa_admin }
 
       it "returns no expenses" do
-        is_expected.not_to include(additional_expense, other_org_additional_expense)
+        expect(subject).not_to include(additional_expense, other_org_additional_expense)
       end
     end
   end

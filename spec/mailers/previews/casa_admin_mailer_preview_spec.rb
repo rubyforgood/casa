@@ -1,5 +1,5 @@
 require "rails_helper"
-require File.join(Rails.root, "lib", "mailers", "previews", "casa_admin_mailer_preview")
+require Rails.root.join("lib/mailers/previews/casa_admin_mailer_preview").to_s
 
 RSpec.describe CasaAdminMailerPreview do
   let!(:casa_admin) { create(:casa_admin) }

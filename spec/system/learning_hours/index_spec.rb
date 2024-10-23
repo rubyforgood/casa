@@ -28,7 +28,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       visit learning_hours_path
     end
 
-    it "displays a list of volunteers and the learning hours they completed", js: true do
+    it "displays a list of volunteers and the learning hours they completed", :js do
       expect(page).to have_content("Learning Hours")
       expect(page).to have_content("Volunteer")
       expect(page).to have_content(volunteer.display_name)
@@ -43,16 +43,16 @@ RSpec.describe "Learning Hours Index", type: :system do
 
     shared_examples_for "functioning sort buttons" do
       it "sorts table columns" do
-        expect(page).to have_selector("tr:nth-child(1)", text: expected_first_ordered_value)
+        expect(page).to have_css("tr:nth-child(1)", text: expected_first_ordered_value)
 
         find("th", text: column_to_sort).click
 
-        expect(page).to have_selector("th.sorting_asc", text: column_to_sort)
-        expect(page).to have_selector("tr:nth-child(1)", text: expected_last_ordered_value)
+        expect(page).to have_css("th.sorting_asc", text: column_to_sort)
+        expect(page).to have_css("tr:nth-child(1)", text: expected_last_ordered_value)
       end
     end
 
-    it "shows pagination", js: true do
+    it "shows pagination", :js do
       expect(page).to have_content("Previous")
       expect(page).to have_content("Next")
     end

@@ -1,7 +1,7 @@
 class Supervisor < User
   devise :invitable, invite_for: 2.weeks
 
-  has_many :supervisor_volunteers, foreign_key: "supervisor_id"
+  has_many :supervisor_volunteers
   has_many :active_supervisor_volunteers, -> { where(is_active: true) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
   has_many :unassigned_supervisor_volunteers, -> { where(is_active: false) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
 

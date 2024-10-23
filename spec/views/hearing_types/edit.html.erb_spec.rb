@@ -12,12 +12,12 @@ RSpec.describe "hearing_types/edit", type: :view do
 
   it "shows edit hearing type form" do
     expect(rendered).to have_text("Edit")
-    expect(rendered).to have_selector("input", id: "hearing_type_name")
-    expect(rendered).to have_selector("input", id: "hearing_type_active")
-    expect(rendered).to have_selector("button[type=submit]")
+    expect(rendered).to have_css("input", id: "hearing_type_name")
+    expect(rendered).to have_css("input", id: "hearing_type_active")
+    expect(rendered).to have_css("button[type=submit]")
   end
 
   it "requires name text_field" do
-    expect(rendered).to have_selector("input[required=required]", id: "hearing_type_name")
+    expect(rendered).to have_css("input[required=required]", id: "hearing_type_name")
   end
 end

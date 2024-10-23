@@ -123,7 +123,7 @@ class CaseCourtReportContext
       }
 
       formatted_date = CourtReportFormatContactDate.new(topic).format_long
-      answer_value = topic.value.blank? ? "No Answer Provided" : topic.value
+      answer_value = topic.value.presence || "No Answer Provided"
       answer = {
         date: formatted_date,
         medium: topic.medium_types,
