@@ -46,7 +46,6 @@ AllCops:
   NewCops: enable
   SuggestExtensions: false
   Exclude:
-    - 'bin/**/*'
     - 'db/migrate/2020*.rb'
     - 'db/migrate/2021*.rb'
     - 'db/migrate/2022*.rb'
