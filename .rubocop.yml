@@ -7,11 +7,11 @@
 
 # If you want to fix by rule instead:
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
-#    - add --display-only-safe-correctable to see only safe autocorrect-able offenses
-#    - OR --display-only-correctable to see all autocorrect-able offenses
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop -A --only Department/Cop
 
-# After fixes, regenerate the todo file with:
+# add --display-only-safe-correctable or --display-only-correctable to filter on autocorrect-able offenses
+
+# ! NOTE: After fixes are complete, update .rubocop_todo.yml (You do not have to fix every offense in the file):
 #  - bundle exec rubocop --regenerate-todo
 
 inherit_mode:
@@ -43,6 +43,7 @@ inherit_from:
 
 AllCops:
   ExtraDetails: true
+  DocumentationBaseURL: https://docs.rubocop.org/rubocop
   NewCops: enable
   SuggestExtensions: false
   Exclude:
@@ -59,57 +60,51 @@ AllCops:
     - 'lib/tasks/deployment/2023*'
 
 # OVERRIDE .rubocop_todo.yml for these rules:
-Lint/Debugger:
-  # Don't leave binding.pry or debugger
+Lint/Debugger: # Don't leave binding.pry or debugger
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
 
-Rails/Output:
-  # Don't leave puts-debugging
+Rails/Output: # Don't leave puts-debugging, use Rails.logger for logging
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
 
-Rails/FindEach:
-  # each could severely affect performance, use find_each
+Rails/FindEach: # each could severely affect performance, use find_each
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
 
-Rails/UniqBeforePluck:
-  # uniq.pluck and not pluck.uniq
+Rails/UniqBeforePluck: # uniq.pluck/distinct.pluck not pluck.uniq
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
 
-RSpec/Focus:
-  # ensure all tests run on CI
+RSpec/Focus: # Ensure all tests run on CI
   Enabled: true
   Exclude: []
   inherit_mode:
     override:
       - Exclude
 
-# CUSTOMIZED RULES
-# FactoryBot
+# CUSTOM RULES (keep these simple please! see https://en.wikipedia.org/wiki/Law_of_triviality)
 FactoryBot/ConsistentParenthesesStyle:
-  # build/create are just method calls, no FactoryBot-specific rules needed
+  # build/create are just method calls, let base rubocop handle them (allows variation by context)!
   Enabled: false
 
-# Rails
 Rails/DefaultScope:
   Enabled: true
-  Details: >-
-    Default scopes lead to unexpected behavior for future developers.
+  Details: |-
+
+    Default scopes lead to unexpected behavior for future developers!
 
 Rails/OrderById:
   Enabled: true
@@ -118,41 +113,46 @@ Rails/SaveBang:
   Enabled: true
   Include:
     - 'spec/**/*'
-  Details: >-
-    Specs should fail if setup record is invalid.
+  Details: |-
 
-# RSpec
+    Specs `should fail` if a setup record is invalid.
+
 RSpec/ExampleLength:
   CountAsOne: ['array', 'hash', 'heredoc', 'method_call']
-  Max: 15 # could be lower; default is 5
+  Max: 15
   Exclude:
     - 'spec/system/**/*'
 
 RSpec/LetSetup:
-  Details: >+
-    let! leads to unnecessary database calls and obscures necessary setup.
-    Instead, call a let var in the example, before block, or let block of a variable that depends on it.
-      let(:necessary_thing) { create(:thing) }
+  # Only here for the extra details as let! use is extremely common... counter-examples? not so common!
+  Details: |-
+
+    Using let! obscures test setup and leads to extra database calls.
+    Instead of `let!(:unreferenced_thing) { create(:thing) }`
+    Do shared setup in a before block:
+      before do
+        `create(:thing)`
+      end
+    OR do the setup in the example itself:
+      it "does something" do
+        `create(:thing)`
+        subject
+        ...
+      end
+    OR when needed for a another let variable, call in the let block of the dependant variable:
+      let(:necessary_thing) { `create(:thing)` }
       let(:dependent_thing) do
-        necessary_thing
+        `necessary_thing`
         create(:dependent_thing)
       end
 
 RSpec/MultipleExpectations:
-  # failures are aggregated by default (spec_helper.rb)
-  Max: 10
+  Max: 10 # Allow because we can aggregate failures by default (spec_helper.rb)
   Exclude:
-    - 'spec/system/**/*' # async behaviors may require expecting things on page
+    - 'spec/system/**/*' # expensive per example & async behaviors require expect calls as setup
 
 RSpec/MultipleMemoizedHelpers:
   Max: 20
 
-RSpec/NamedSubject:
-  Enabled: false
-
 RSpec/NestedGroups:
   Max: 5
-
-RSpec/NotToNot:
-  # consistency only, no difference between to_not/not_to (these days)
-  Enabled: false
