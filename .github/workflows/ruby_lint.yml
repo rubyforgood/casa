@@ -30,4 +30,4 @@ jobs:
           bundler-cache: true
 
       - name: lint
-        run: bundle exec rubocop --ignore-disable-comments
+        run: bundle exec rubocop

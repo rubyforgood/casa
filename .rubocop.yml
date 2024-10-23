@@ -42,7 +42,6 @@ inherit_from:
 <% end %>
 
 AllCops:
-  ExtraDetails: true
   DocumentationBaseURL: https://docs.rubocop.org/rubocop
   NewCops: enable
   SuggestExtensions: false
