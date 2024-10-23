@@ -3,9 +3,6 @@
 
 # To fix the file with the most offenses:
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
-#  - Remove the file from the rubocop_todo.yml
-#  - Run `bundle exec rubocop -A`
-#  OR
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
 
 # If you want to fix one rule instead:
@@ -15,7 +12,7 @@
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop -A --only Department/Cop
 
 # After fixes, regenerate the todo file with:
-#  - bundle exec rubocop --auto-gen-config --auto-gen-only-exclude --no-exclude-limit
+#  - bundle exec rubocop --regenerate-todo
 
 # To see which todos to work one next, you can run:
 # BY FILE:
