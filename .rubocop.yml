@@ -6,7 +6,7 @@
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
 
-# If you want to fix one rule instead:
+# If you want to fix by rule instead:
 #  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
 #    - add --display-only-safe-correctable to see only safe autocorrect-able offenses
 #    - OR --display-only-correctable to see all autocorrect-able offenses
@@ -14,17 +14,6 @@
 
 # After fixes, regenerate the todo file with:
 #  - bundle exec rubocop --regenerate-todo
-
-# To see which todos to work one next, you can run:
-# BY FILE:
-#   - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
-#   - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
-# BY OFFENSE COUNT:
-#   BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
-# Other useful options:
-# --display-only-safe-correctable - Only output safe correctable (-a) offense messages.
-# --display-only-correctable - Only output correctable (-A) offense messages.
-# --disable-uncorrectable - Used with autocorrect to annotate any offenses that do not support autocorrect with rubocop:todo comments.
 
 inherit_mode:
   merge:
