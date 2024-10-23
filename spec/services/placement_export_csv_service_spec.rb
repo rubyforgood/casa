@@ -6,7 +6,7 @@ RSpec.describe PlacementExportCsvService do
     casa_org = create(:casa_org, name: "Fake Name", display_name: "Fake Display Name")
     placement_type = create(:placement_type, casa_org: casa_org)
     creator = create(:user)
-    placement = create(:placement, creator: creator, placement_type: placement_type) # rubocop:disable Lint/UselessAssignment
+    create(:placement, creator: creator, placement_type: placement_type)
 
     csv_headers = "Casa Org,Casa Case Number,Placement Type,Placement Started At,Created At,Creator Name\n"
     result = PlacementExportCsvService.new(casa_org: casa_org).perform
