@@ -29,89 +29,69 @@
   <div class="row volunteer-filters">
     <div class="col-sm-12 flex align-items-center">
       <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Supervisor
-        </button>
-        <div class="dropdown-menu supervisor-options">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "supervisor-option-none", "", true,
-                              class: "form-check-input",
-                              data: { value: "" },
-                              id: "unassigned-vol-filter" %>
-            <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
-          </div>
-          <% current_organization.supervisors.where(active: true).each do |supervisor| %>
-            <div class="dropdown-item form-check checkbox-style">
-              <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
-              <% tag_name = "supervisor-option-#{option_for_name}" -%>
-              <%= check_box_tag tag_name, supervisor.id,
-                                policy(User).edit_name?(supervisor), # checked?
-                                class: "form-check-input",
-                                data: { value: supervisor.id } %>
-              <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
-            </div>
-          <% end %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Supervisor", container_klass: "pull-left mx-2 my-1 supervisor-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "supervisor-option-none", "", true,
+                            class: "form-check-input",
+                            data: { value: "" },
+                            id: "unassigned-vol-filter" %>
+          <%= label_tag "supervisor-option-none", "No supervisor assignment", class: "form-check-label", for: "unassigned-vol-filter" %>
         </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
-        </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton">
+        <% current_organization.supervisors.where(active: true).each do |supervisor| %>
           <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_active", "true", true,
+            <% option_for_name = supervisor.display_name.downcase.gsub(/ /, '_').gsub(/[^a-z_]+/, '') -%>
+            <% tag_name = "supervisor-option-#{option_for_name}" -%>
+            <%= check_box_tag tag_name, supervisor.id,
+                              policy(User).edit_name?(supervisor), # checked?
                               class: "form-check-input",
-                              data: { value: "true" } %>
-            <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
+                              data: { value: supervisor.id } %>
+            <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
           </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_inactive", "false", false,
-                              class: "form-check-input",
-                              data: { value: "false" } %>
-            <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
-          </div>
+        <% end %>
+      <% end %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Status", container_klass: "pull-left mx-2 my-1 status-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_active", "true", true,
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
         </div>
-      </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "status_option_inactive", "false", false,
+                            class: "form-check-input",
+                            data: { value: "false" } %>
+          <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
+        </div>
+      <% end %>
 
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Transition Aged Youth
-        </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_yes", "true", true,
-                              class: "form-check-input",
-                              data: { value: "true" } %>
-            <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_no", "false", true,
-                              class: "form-check-input",
-                              data: { value: "false" } %>
-            <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
-          </div>
+      <%= render(DropdownMenuComponent.new(menu_title: "Assigned to Transition Aged Youth", container_klass: "pull-left mx-2 my-1 transition-youth-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "transition_youth_option_yes", "true", true,
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
         </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Has Extra Languages
-        </button>
-        <div class="dropdown-menu extra-language-options" aria-labelledby="dropdownMenuButton">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "extra_language_option_yes", "true", true,
-                              class: "form-check-input",
-                              data: { value: "true" } %>
-            <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "extra_language_option_no", "false", true,
-                              class: "form-check-input",
-                              data: { value: "false" } %>
-            <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
-          </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "transition_youth_option_no", "false", true,
+                            class: "form-check-input",
+                            data: { value: "false" } %>
+          <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
         </div>
-      </div>
+      <% end %>
+      <%= render(DropdownMenuComponent.new(menu_title: "Has Extra Languages", container_klass: "pull-left mx-2 my-1 extra-language-options")) do %>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "extra_language_option_yes", "true", true,
+                            class: "form-check-input",
+                            data: { value: "true" } %>
+          <%= label_tag "extra_language_option_yes", "Yes", class: "form-check-label" %>
+        </div>
+        <div class="dropdown-item form-check checkbox-style">
+          <%= check_box_tag "extra_language_option_no", "false", true,
+                            class: "form-check-input",
+                            data: { value: "false" } %>
+          <%= label_tag "extra_language_option_no", "No", class: "form-check-label" %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
