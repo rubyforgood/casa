@@ -1,3 +1,4 @@
+---
 # Config adapted from:
 # https://evilmartians.com/chronicles/rubocoping-with-legacy-bring-your-ruby-code-up-to-standard
 
@@ -47,10 +48,11 @@ inherit_gem:
   standard-custom: config/base.yml
   standard-rails: config/base.yml
 
-inherit_from:
+# yamllint disable
 <% unless ENV['BYPASS_RUBOCOP_TODO'] %>
-  - .rubocop_todo.yml
+inherit_from: .rubocop_todo.yml
 <% end %>
+# yamllint enable
 
 AllCops:
   ExtraDetails: true
@@ -140,11 +142,9 @@ RSpec/ExampleLength:
     - 'spec/system/**/*'
 
 RSpec/LetSetup:
-  Details: >-
-
+  Details: >+
     let! leads to unnecessary database calls and obscures necessary setup.
-
-    Instead, call a let var in the example, before block, or let block of a variable that depends on it:
+    Instead, call a let var in the example, before block, or let block of a variable that depends on it-
       let(:necessary_thing) { create(:thing) }
       let(:dependent_thing) do
         necessary_thing
