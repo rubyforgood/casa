@@ -57,9 +57,9 @@ RSpec.describe "/casa_cases", type: :request do
       end
 
       it "doesn't show other organizations' cases" do
-        my_case_assignment = build(:case_assignment, casa_org: user.casa_org)
-        different_org = build(:casa_org)
-        not_my_case_assignment = build_stubbed(:case_assignment, casa_org: different_org)
+        my_case_assignment = create(:case_assignment, casa_org: user.casa_org)
+        different_org = create(:casa_org)
+        not_my_case_assignment = create(:case_assignment, casa_org: different_org)
 
         get casa_cases_url
 

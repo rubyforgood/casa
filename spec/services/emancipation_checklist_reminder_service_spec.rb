@@ -18,7 +18,7 @@ RSpec.describe EmancipationChecklistReminderService do
 
     let!(:eligible_case1) { create(:case_assignment) }
     let!(:eligible_case2) { create(:case_assignment) }
-    let!(:ineligible_case1) { create(:case_assignment, pre_transition: true) }
+    let!(:ineligible_case1) { create(:case_assignment, :pre_transition) }
     let!(:inactive_case) { create(:case_assignment, :inactive) }
 
     it "#initialize correctly captures the eligible cases" do
