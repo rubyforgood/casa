@@ -3,4 +3,3 @@ class ChangeCasaCaseTeenToRequired < ActiveRecord::Migration[6.0]
     change_column :casa_cases, :teen_program_eligible, :boolean, null: false, default: false
   end
 end
-# rubocop:enable Style/Documentation

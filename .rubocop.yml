@@ -1,0 +1,156 @@
+# Config adapted from:
+# https://evilmartians.com/chronicles/rubocoping-with-legacy-bring-your-ruby-code-up-to-standard
+
+# To fix the file with the most offenses:
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format worst
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop path/to/worst_offender.rb -A
+
+# If you want to fix by rule instead:
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop --format offenses
+#  - BYPASS_RUBOCOP_TODO=1 bundle exec rubocop -A --only Department/Cop
+
+# add --display-only-safe-correctable or --display-only-correctable to filter on autocorrect-able offenses
+
+# ! NOTE: After fixes are complete, update .rubocop_todo.yml (You do not have to fix every offense in the file):
+#  - bundle exec rubocop --regenerate-todo
+
+inherit_mode:
+  merge:
+    - Exclude
+
+require:
+  - standard
+  - standard-custom
+  - standard-performance
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-performance
+  - rubocop-rails
+  - rubocop-rspec
+  - rubocop-rspec_rails
+
+inherit_gem:
+  pundit: config/rubocop-rspec.yml
+  standard: config/ruby-3.2.yml
+  standard-performance: config/base.yml
+  standard-custom: config/base.yml
+  standard-rails: config/base.yml
+
+inherit_from:
+<% unless ENV['BYPASS_RUBOCOP_TODO'] %>
+  - .rubocop_todo.yml
+<% end %>
+
+AllCops:
+  DocumentationBaseURL: https://docs.rubocop.org/rubocop
+  NewCops: enable
+  SuggestExtensions: false
+  Exclude:
+    - 'db/migrate/2020*.rb'
+    - 'db/migrate/2021*.rb'
+    - 'db/migrate/2022*.rb'
+    - 'db/migrate/2023*.rb'
+    - 'db/migrate/202405*.rb'
+    - 'db/migrate/202406*.rb'
+    - 'lib/tasks/deployment/2020*'
+    - 'lib/tasks/deployment/2021*'
+    - 'lib/tasks/deployment/2022*'
+    - 'lib/tasks/deployment/2023*'
+
+# OVERRIDE .rubocop_todo.yml for these rules:
+Lint/Debugger: # Don't leave binding.pry or debugger
+  Enabled: true
+  Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
+
+Rails/Output: # Don't leave puts-debugging, use Rails.logger for logging
+  Enabled: true
+  Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
+
+Rails/FindEach: # each could severely affect performance, use find_each
+  Enabled: true
+  Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
+
+Rails/UniqBeforePluck: # uniq.pluck/distinct.pluck not pluck.uniq
+  Enabled: true
+  Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
+
+RSpec/Focus: # Ensure all tests run on CI
+  Enabled: true
+  Exclude: []
+  inherit_mode:
+    override:
+      - Exclude
+
+# CUSTOM RULES (keep these simple please! see https://en.wikipedia.org/wiki/Law_of_triviality)
+FactoryBot/ConsistentParenthesesStyle:
+  # build/create are just method calls, let base rubocop handle them (allows variation by context)!
+  Enabled: false
+
+Rails/DefaultScope:
+  Enabled: true
+  Details: |-
+
+    Default scopes lead to unexpected behavior for future developers!
+
+Rails/OrderById:
+  Enabled: true
+
+Rails/SaveBang:
+  Enabled: true
+  Include:
+    - 'spec/**/*'
+  Details: |-
+
+    Specs `should fail` if a setup record is invalid.
+
+RSpec/ExampleLength:
+  CountAsOne: ['array', 'hash', 'heredoc', 'method_call']
+  Max: 15
+  Exclude:
+    - 'spec/system/**/*'
+
+RSpec/LetSetup:
+  # Only here for the extra details as let! use is extremely common... counter-examples? not so common!
+  Details: |-
+
+    Using let! obscures test setup and leads to extra database calls.
+    Instead of `let!(:unreferenced_thing) { create(:thing) }`
+    Do shared setup in a before block:
+      before do
+        `create(:thing)`
+      end
+    OR do the setup in the example itself:
+      it "does something" do
+        `create(:thing)`
+        subject
+        ...
+      end
+    OR when needed for a another let variable, call in the let block of the dependant variable:
+      let(:necessary_thing) { `create(:thing)` }
+      let(:dependent_thing) do
+        `necessary_thing`
+        create(:dependent_thing)
+      end
+
+RSpec/MultipleExpectations:
+  Max: 10 # Allow because we can aggregate failures by default (spec_helper.rb)
+  Exclude:
+    - 'spec/system/**/*' # expensive per example & async behaviors require expect calls as setup
+
+RSpec/MultipleMemoizedHelpers:
+  Max: 20
+
+RSpec/NestedGroups:
+  Max: 5

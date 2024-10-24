@@ -86,7 +86,7 @@ class DbPopulator
     create_users_of_type.call(Supervisor, options.supervisor_count)
     create_users_of_type.call(Volunteer, options.volunteer_count)
     supervisors = Supervisor.all.to_a
-    Volunteer.all.each { |v| v.supervisor = supervisors.sample(random: rng) }
+    Volunteer.find_each { |v| v.supervisor = supervisors.sample(random: rng) }
   end
 
   # Create other duties (Volunteer only)

@@ -1,4 +1,4 @@
-name: standardrb lint
+name: rubocop lint
 
 on:
   push:
@@ -30,4 +30,4 @@ jobs:
           bundler-cache: true
 
       - name: lint
-        run: bundle exec standardrb
+        run: bundle exec rubocop

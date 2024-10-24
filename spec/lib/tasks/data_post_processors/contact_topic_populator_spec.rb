@@ -47,7 +47,7 @@ RSpec.describe "populates each existing organization with contact groups and typ
         expect(case_one.case_contacts.map(&:contact_topic_answers).flatten.size).to eq(9)
         expect(case_two.case_contacts.map(&:contact_topic_answers).flatten.size).to eq(9)
 
-        CaseContact.all.each do |case_contact|
+        CaseContact.find_each do |case_contact|
           expect(case_contact.contact_topic_answers.size).to eq(3)
         end
       end

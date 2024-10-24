@@ -1,6 +1,6 @@
 module ContactTopicPopulator
   def self.populate
-    CasaOrg.all.each do |casa_org|
+    CasaOrg.find_each do |casa_org|
       ContactTopic.generate_for_org!(casa_org)
 
       casa_org.contact_topics.each do |topic|

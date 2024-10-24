@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-bundle exec standardrb --fix --format progress
+bundle exec rubocop --autocorrect --extra-details
 bundle exec erblint --lint-all --autocorrect
 yarn lint:fix
 echo "Linting Factories"

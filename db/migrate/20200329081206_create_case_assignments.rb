@@ -9,4 +9,3 @@ class CreateCaseAssignments < ActiveRecord::Migration[6.0]
     end
   end
 end
-# rubocop:enable Style/Documentation

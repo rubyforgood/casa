@@ -2,7 +2,7 @@
 
 [![rspec](https://github.com/rubyforgood/casa/workflows/rspec/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/rspec.yml)
 [![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
-[![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
+[![rubocop lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
 [![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
 [![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml)
 
@@ -189,7 +189,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
 Run `bin/lint` to run all linters and fix issues. This will run:
 
-1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
+1. `bundle exec rubocop --autocorrect` auto-fix Ruby linting issues [more linter info](https://docs.rubocop.org/rubocop/1.67/index.html)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects

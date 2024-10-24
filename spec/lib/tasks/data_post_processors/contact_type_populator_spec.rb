@@ -9,7 +9,7 @@ RSpec.describe "populates each existing organization with contact groups and typ
   it "creates the expected contact groups and contact types for each existing organization" do
     ContactTypePopulator.populate
 
-    CasaOrg.all.each do |org|
+    CasaOrg.find_each do |org|
       casa_group = org.contact_type_groups.find_by(name: "CASA")
       expect(casa_group.contact_types.pluck(:name)).to contain_exactly("Youth", "Supervisor")
 
