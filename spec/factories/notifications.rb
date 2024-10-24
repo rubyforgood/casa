@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :notification, class: "Noticed::Notification" do
-    association :recipient, factory: :volunteer
-    association :event, factory: :followup_notifier
+    recipient factory: :volunteer
+    event factory: :followup_notifier
     recipient_type { "User" }
     type { "FollowupNotifier::Notification" }
 
@@ -16,31 +16,31 @@ FactoryBot.define do
     end
 
     trait :followup_with_note do
-      association :event, factory: [:followup_notifier, :with_note]
+      event factory: %i[followup_notifier with_note]
     end
 
     trait :followup_without_note do
-      association :event, factory: [:followup_notifier, :without_note]
+      event factory: %i[followup_notifier without_note]
     end
 
     trait :followup_read do
-      association :event, factory: [:followup_notifier, :read]
+      event factory: %i[followup_notifier read]
       read_at { DateTime.current }
       seen_at { DateTime.current }
     end
 
     trait :emancipation_checklist_reminder do
-      association :event, factory: :emancipation_checklist_reminder_notifier
+      event factory: :emancipation_checklist_reminder_notifier
       type { "EmancipationChecklistReminderNotifier::Notification" }
     end
 
     trait :youth_birthday do
-      association :event, factory: :youth_birthday_notifier
+      event factory: :youth_birthday_notifier
       type { "YouthBirthdayNotifier::Notification" }
     end
 
     trait :reimbursement_complete do
-      association :event, factory: :reimbursement_complete_notifier
+      event factory: :reimbursement_complete_notifier
       type { "ReimbursementCompleteNotifier::Notification" }
     end
   end

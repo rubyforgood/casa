@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :followup do
-    association :creator, factory: :user
+    creator factory: :user
     status { :requested }
     case_contact
 

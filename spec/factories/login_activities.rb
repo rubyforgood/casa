@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :login_activity do
-    association :user
+    user
     scope { "user" }
     strategy { "database_authenticatable" }
     identity { user.email }

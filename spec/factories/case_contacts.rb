@@ -10,7 +10,7 @@ FactoryBot.define do
   # So, rather than `status { "active" }` - use enum trait like so:
   factory :case_contact do
     active # use the `:active` enum trait
-    association :creator, factory: :user
+    creator factory: :user
     casa_case
 
     contact_types { [association(:contact_type)] }
