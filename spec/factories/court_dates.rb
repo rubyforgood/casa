@@ -15,7 +15,7 @@ FactoryBot.define do
     trait :with_court_order do
       after(:create) do |court_date|
         court_date.case_court_orders << build(:case_court_order, casa_case: court_date.casa_case)
-        court_date.save
+        court_date.save!
       end
     end
   end

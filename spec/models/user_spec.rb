@@ -292,7 +292,7 @@ RSpec.describe User, type: :model do
     end
 
     it "saves the old email when a volunteer changes their email" do
-      new_volunteer.update(email: "secondemail@example.com")
+      new_volunteer.update!(email: "secondemail@example.com")
       new_volunteer.confirm
 
       expect(new_volunteer.email).to eq("secondemail@example.com")
@@ -305,11 +305,11 @@ RSpec.describe User, type: :model do
     let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "correctly filters out reinstated emails from old_emails when updating" do
-      new_volunteer.update(email: "secondemail@example.com")
+      new_volunteer.update!(email: "secondemail@example.com")
       new_volunteer.confirm
       new_volunteer.filter_old_emails!(new_volunteer.email)
 
-      new_volunteer.update(email: "firstemail@example.com")
+      new_volunteer.update!(email: "firstemail@example.com")
       new_volunteer.confirm
       new_volunteer.filter_old_emails!(new_volunteer.email)
 

@@ -45,8 +45,8 @@ RSpec.describe "/notifications", type: :request do
       let(:patch_note_2) { create(:patch_note, note: "Patch Note B", patch_note_type: patch_note_type_b) }
 
       before do
-        patch_note_1.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
-        patch_note_2.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
+        patch_note_1.update!(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
+        patch_note_2.update!(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
       end
 
       context "when logged in as an admin" do
@@ -101,8 +101,8 @@ RSpec.describe "/notifications", type: :request do
         before do
           sign_in volunteer
           Health.instance.update_attribute(:latest_deploy_time, Date.new(2021, 1, 1))
-          patch_note_1.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
-          patch_note_2.update(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
+          patch_note_1.update!(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_all_users)
+          patch_note_2.update!(created_at: Date.new(2020, 12, 31), patch_note_group: patch_note_group_no_volunteers)
         end
 
         it "shows only the patch notes available to their user group" do

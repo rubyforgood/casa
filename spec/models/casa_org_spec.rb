@@ -54,8 +54,6 @@ RSpec.describe CasaOrg, type: :model do
       allow(Twilio::REST::Client).to receive(:new).and_return(twillio_client)
       allow(twillio_client).to receive_message_chain(:messages, :list).and_raise(URI::InvalidURIError)
 
-      casa_org.update(twilio_account_sid: "some bad value")
-
       aggregate_failures do
         expect(casa_org).not_to be_valid
         expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]

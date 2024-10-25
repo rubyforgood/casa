@@ -73,7 +73,7 @@ RSpec.describe CaseAssignmentPolicy do
 
       context "in a different organization" do
         it "does not allow user to show or hide contacts" do
-          other_case_assignment.update(active: false)
+          other_case_assignment.update!(active: false)
           expect(subject).not_to permit(casa_admin, other_case_assignment)
         end
       end
@@ -88,7 +88,7 @@ RSpec.describe CaseAssignmentPolicy do
 
       context "in a different organization" do
         it "does not allow user to show or hide contacts" do
-          other_case_assignment.update(active: false)
+          other_case_assignment.update!(active: false)
           expect(subject).not_to permit(supervisor, other_case_assignment)
         end
       end

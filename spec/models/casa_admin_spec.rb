@@ -13,7 +13,7 @@ RSpec.describe CasaAdmin, type: :model do
 
     it "activates the casa admin" do
       casa_admin.active = false
-      casa_admin.save
+      casa_admin.save!
       casa_admin.activate
 
       casa_admin.reload

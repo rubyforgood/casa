@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "/users", type: :request do
   before {
     sms_notification_event = SmsNotificationEvent.new(name: "test", user_type: Volunteer)
-    sms_notification_event.save
+    sms_notification_event.save!
   }
 
   describe "GET /edit" do

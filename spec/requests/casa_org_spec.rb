@@ -67,7 +67,7 @@ RSpec.describe "CasaOrg", type: :request do
           let(:params) { {casa_org: {name: "name"}} }
 
           it "does not revert logo to default" do
-            casa_org.update(logo: logo)
+            casa_org.update!(logo: logo)
 
             expect { request }.not_to change(ActiveStorage::Attachment, :count)
           end

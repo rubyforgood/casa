@@ -16,7 +16,7 @@ RSpec.describe ContactType, type: :model do
   describe "#update" do
     it "can update to a valid name" do
       contact_type.name = "New name"
-      contact_type.save
+      contact_type.save!
       expect(contact_type.name).to eq("New name")
     end
 

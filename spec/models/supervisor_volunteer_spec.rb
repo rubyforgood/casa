@@ -14,7 +14,7 @@ RSpec.describe SupervisorVolunteer do
 
   it "only allow 1 supervisor per volunteer" do
     supervisor_1.volunteers << volunteer_1
-    supervisor_1.save
+    supervisor_1.save!
     expect { supervisor_2.volunteers << volunteer_1 }.to raise_error(StandardError)
   end
 

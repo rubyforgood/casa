@@ -44,9 +44,9 @@ RSpec.describe "users/edit", type: :system do
       volunteer = create(:volunteer, casa_org: organization)
 
       SmsNotificationEvent.delete_all
-      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
-      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
-      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save!
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save!
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save!
 
       sign_in volunteer
       visit edit_users_path
@@ -185,9 +185,9 @@ RSpec.describe "users/edit", type: :system do
       volunteer = create(:volunteer, casa_org: organization)
 
       SmsNotificationEvent.delete_all
-      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
-      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
-      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save!
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save!
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save!
 
       sign_in volunteer
       visit edit_users_path
@@ -201,9 +201,9 @@ RSpec.describe "users/edit", type: :system do
       volunteer = create(:volunteer, casa_org: organization)
 
       SmsNotificationEvent.delete_all
-      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
-      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
-      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save!
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save!
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save!
 
       sign_in volunteer
       visit edit_users_path
@@ -292,9 +292,9 @@ RSpec.describe "users/edit", type: :system do
       supervisor = create(:supervisor, casa_org: org)
 
       SmsNotificationEvent.delete_all
-      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
-      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
-      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save!
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save!
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save!
 
       sign_in supervisor
       visit edit_users_path
@@ -490,9 +490,9 @@ RSpec.describe "users/edit", type: :system do
       admin = create(:casa_admin, casa_org: org)
 
       SmsNotificationEvent.delete_all
-      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save
-      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save
-      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save
+      SmsNotificationEvent.new(name: "sms_event_test_volunteer", user_type: Volunteer).save!
+      SmsNotificationEvent.new(name: "sms_event_test_supervisor", user_type: Supervisor).save!
+      SmsNotificationEvent.new(name: "sms_event_test_casa_admin", user_type: CasaAdmin).save!
 
       sign_in admin
       visit edit_users_path

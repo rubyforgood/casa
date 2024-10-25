@@ -243,7 +243,7 @@ RSpec.describe Volunteer, type: :model do
       new_supervisor = build :supervisor
       volunteer = build :volunteer, supervisor: old_supervisor
 
-      volunteer.update supervisor: new_supervisor
+      volunteer.update! supervisor: new_supervisor
 
       expect(volunteer).not_to be_supervised_by(old_supervisor)
       expect(volunteer).to be_supervised_by(new_supervisor)

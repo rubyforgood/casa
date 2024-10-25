@@ -49,7 +49,7 @@ RSpec.describe PreferenceSetTableStateService do
     context "when there is no data for that table name" do
       before do
         preference_set.table_state = {}
-        preference_set.save
+        preference_set.save!
       end
 
       it "returns nil" do

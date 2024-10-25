@@ -131,7 +131,7 @@ RSpec.describe "/hearing_types", type: :request do
 
         put hearing_type_path(hearing_type), params: params
 
-        hearing_type.update(active: false)
+        hearing_type.update!(active: false)
         hearing_type.reload
         expect(hearing_type.name).to eq "New Name"
         expect(hearing_type.active).to be_falsey

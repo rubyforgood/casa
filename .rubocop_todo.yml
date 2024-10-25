@@ -1117,38 +1117,6 @@ Rails/RootPathnameMethods:
     - 'spec/rails_helper.rb'
     - 'spec/views/templates/email_templates_spec.rb'
 
-# Offense count: 95
-# This cop supports unsafe autocorrection (--autocorrect-all).
-# Configuration parameters: AllowImplicitReturn, AllowedReceivers.
-Rails/SaveBang:
-  Exclude:
-    - 'spec/decorators/case_contact_decorator_spec.rb'
-    - 'spec/decorators/user_decorator_spec.rb'
-    - 'spec/factories/casa_cases.rb'
-    - 'spec/factories/court_dates.rb'
-    - 'spec/mailers/supervisor_mailer_spec.rb'
-    - 'spec/models/additional_expense_spec.rb'
-    - 'spec/models/casa_admin_spec.rb'
-    - 'spec/models/casa_case_spec.rb'
-    - 'spec/models/casa_org_spec.rb'
-    - 'spec/models/case_assignment_spec.rb'
-    - 'spec/models/contact_type_spec.rb'
-    - 'spec/models/supervisor_volunteer_spec.rb'
-    - 'spec/models/user_spec.rb'
-    - 'spec/models/volunteer_spec.rb'
-    - 'spec/policies/case_assignment_policy_spec.rb'
-    - 'spec/requests/casa_org_spec.rb'
-    - 'spec/requests/hearing_types_spec.rb'
-    - 'spec/requests/learning_hours_spec.rb'
-    - 'spec/requests/notifications_spec.rb'
-    - 'spec/requests/users_spec.rb'
-    - 'spec/services/preference_set_table_state_service_spec.rb'
-    - 'spec/system/casa_cases/show_spec.rb'
-    - 'spec/system/users/edit_spec.rb'
-    - 'spec/system/volunteers/edit_spec.rb'
-    - 'spec/views/all_casa_admins/patch_notes/index.html.erb_spec.rb'
-    - 'spec/views/supervisor_mailer/weekly_digest.html.erb_spec.rb'
-
 # Offense count: 39
 # This cop supports unsafe autocorrection (--autocorrect-all).
 # Configuration parameters: EnforcedStyle.

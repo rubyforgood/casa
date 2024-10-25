@@ -83,7 +83,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
       it "do not shows a summary of pending volunteers if the volunteer already accepted" do
         volunteer2.invitation_accepted_at = DateTime.current
-        volunteer2.save
+        volunteer2.save!
 
         expect(mail.body.encoded).not_to match(volunteer2.display_name.to_s)
       end

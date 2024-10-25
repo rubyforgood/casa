@@ -41,7 +41,7 @@ FactoryBot.define do
     trait :with_one_court_order do
       after(:create) do |casa_case|
         casa_case.case_court_orders << build(:case_court_order)
-        casa_case.save
+        casa_case.save!
       end
     end
 

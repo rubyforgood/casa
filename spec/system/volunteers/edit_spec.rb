@@ -300,8 +300,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       case_assignment_1.active = false
       case_assignment_2.active = false
-      case_assignment_1.save
-      case_assignment_2.save
+      case_assignment_1.save!
+      case_assignment_2.save!
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -360,8 +360,8 @@ RSpec.describe "volunteers/edit", type: :system do
       volunteer = create(:volunteer, casa_org: casa_org, display_name: "AAA")
       casa_case_1 = build(:casa_case, casa_org: casa_org, case_number: "CINA1")
       casa_case_2 = build(:casa_case, casa_org: casa_org, case_number: "CINA2")
-      assignment1 = volunteer.case_assignments.create(casa_case: casa_case_1, active: true)
-      assignment2 = volunteer.case_assignments.create(casa_case: casa_case_2, active: false)
+      assignment1 = volunteer.case_assignments.create!(casa_case: casa_case_1, active: true)
+      assignment2 = volunteer.case_assignments.create!(casa_case: casa_case_2, active: false)
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer)
@@ -608,9 +608,9 @@ RSpec.describe "volunteers/edit", type: :system do
       organization = create(:casa_org)
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
+      volunteer.notes.create!(creator: admin, content: "Note_1")
+      volunteer.notes.create!(creator: admin, content: "Note_2")
+      volunteer.notes.create!(creator: admin, content: "Note_3")
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -635,9 +635,9 @@ RSpec.describe "volunteers/edit", type: :system do
       organization = create(:casa_org)
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
+      volunteer.notes.create!(creator: admin, content: "Note_1")
+      volunteer.notes.create!(creator: admin, content: "Note_2")
+      volunteer.notes.create!(creator: admin, content: "Note_3")
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -656,9 +656,9 @@ RSpec.describe "volunteers/edit", type: :system do
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = volunteer.supervisor
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
+      volunteer.notes.create!(creator: admin, content: "Note_1")
+      volunteer.notes.create!(creator: admin, content: "Note_2")
+      volunteer.notes.create!(creator: admin, content: "Note_3")
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer)
@@ -684,9 +684,9 @@ RSpec.describe "volunteers/edit", type: :system do
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = volunteer.supervisor
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
+      volunteer.notes.create!(creator: admin, content: "Note_1")
+      volunteer.notes.create!(creator: admin, content: "Note_2")
+      volunteer.notes.create!(creator: admin, content: "Note_3")
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer)

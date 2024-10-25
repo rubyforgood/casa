@@ -151,7 +151,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when all information is available" do
       it "returns a properly formatted string" do
-        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update!(status: "started", occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
@@ -162,7 +162,7 @@ RSpec.describe CaseContactDecorator do
 
     context "when some information is missing" do
       it "returns a properly formatted string without extra pipes" do
-        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update!(status: "started", occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
