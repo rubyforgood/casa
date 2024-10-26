@@ -104,9 +104,6 @@ Rails/DefaultScope:
 
     Default scopes lead to unexpected behavior for future developers!
 
-Rails/OrderById:
-  Enabled: true
-
 Rails/SaveBang:
   Enabled: true
   Include:
