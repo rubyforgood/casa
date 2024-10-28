@@ -2,9 +2,10 @@ FactoryBot.define do
   factory :case_assignment do
     transient do
       casa_org do
-        case_org = @overrides[:casa_case].try(:casa_org)
-        volunteer_org = @overrides[:volunteer].try(:casa_org)
-        case_org || volunteer_org || CasaOrg.first || create(:casa_org)
+        @overrides[:casa_case].try(:casa_org) ||
+          @overrides[:volunteer].try(:casa_org) ||
+          CasaOrg.first ||
+          association(:casa_org)
       end
     end
 

@@ -96,7 +96,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     it "can activate a supervisor" do
-      inactive_supervisor = create(:supervisor, casa_org_id: organization.id)
+      inactive_supervisor = create(:supervisor, casa_org: organization)
       inactive_supervisor.deactivate
 
       sign_in user
@@ -127,7 +127,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     it "can convert the supervisor to an admin", :js do
-      supervisor = create(:supervisor, casa_org_id: organization.id)
+      supervisor = create(:supervisor, casa_org: organization)
 
       sign_in user
 
@@ -153,7 +153,7 @@ RSpec.describe "supervisors/edit", type: :system do
       end
 
       it "can't activate a supervisor" do
-        inactive_supervisor = create(:supervisor, casa_org_id: organization.id)
+        inactive_supervisor = create(:supervisor, casa_org: organization)
         inactive_supervisor.deactivate
 
         sign_in supervisor
@@ -220,7 +220,7 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when the email exists already" do
-      let!(:existing_supervisor) { create(:supervisor, casa_org_id: organization.id) }
+      let!(:existing_supervisor) { create(:supervisor, casa_org: organization) }
 
       it "responds with a notice" do
         sign_in user

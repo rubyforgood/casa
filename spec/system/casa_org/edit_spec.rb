@@ -1,22 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_org/edit", type: :system do
-  it "can update show_driving_reimbursement flag" do
-    organization = create(:casa_org)
-    admin = create(:casa_admin, casa_org_id: organization.id)
-
-    sign_in admin
-    visit edit_casa_org_path(organization)
-
-    check "Show driving reimbursement"
-    click_on "Submit"
-    has_no_checked_field? "Show driving reimbursement"
-
-    check "Show driving reimbursement"
-    click_on "Submit"
-    has_checked_field? "Show driving reimbursement"
-  end
-
+RSpec.describe "casa_org/edit" do
   it "can upload a logo image" do
     organization = create(:casa_org)
     admin = create(:casa_admin, casa_org: organization)

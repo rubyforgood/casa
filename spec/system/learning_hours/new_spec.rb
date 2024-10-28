@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe "learning_hours/new", :js, type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
+RSpec.describe "learning_hours/new", :js do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
 
   before do
-    create(:learning_hour_type, casa_org: organization, name: "Book")
+    create(:learning_hour_type, casa_org:, name: "Book")
 
     sign_in volunteer
 

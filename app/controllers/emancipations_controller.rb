@@ -77,13 +77,4 @@ class EmancipationsController < ApplicationController
       render json: {error: "Tried to destroy an association that does not exist"}, status: :bad_request
     end
   end
-
-  # Render a json error for json endpoints
-  def not_authorized(exception)
-    if exception.backtrace[2].end_with?("save'")
-      render json: {error: "Sorry, you are not authorized to perform this action. Did the session expire?"}, status: :unauthorized
-    else
-      super()
-    end
-  end
 end

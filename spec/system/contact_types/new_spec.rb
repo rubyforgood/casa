@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "contact_types/new", type: :system do
-  let!(:organization) { create(:casa_org) }
-  let!(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let!(:contact_type_group) { create(:contact_type_group, casa_org: organization, name: "Contact type group 1") }
-  let!(:contact_type) { create(:contact_type, name: "Contact type 1") }
+RSpec.describe "contact_types/new" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:contact_type_group) { create(:contact_type_group, casa_org:, name: "Contact type group 1") }
+  let(:contact_type) { create(:contact_type, name: "Contact type 1", contact_type_group:) }
 
   before do
     sign_in admin

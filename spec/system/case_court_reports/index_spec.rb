@@ -1,15 +1,28 @@
 require "rails_helper"
 
-RSpec.describe "case_court_reports/index", type: :system do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
-  let(:supervisor) { volunteer.supervisor }
-  let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.find(&:in_transition_age?) }
+RSpec.describe "case_court_reports/index" do
+  let(:today) { Date.current }
+  let(:date_format) { "%B %-d, %Y" }
+
+  let(:casa_org) { create :casa_org }
+  let(:supervisor) { create :supervisor, casa_org: }
+  let(:pre_transition_case) { create :casa_case, :pre_transition, casa_org: }
+  let(:ten_year_olds_case) { create :casa_case, casa_org:, birth_month_year_youth: 10.years.ago }
+  let(:fifteen_year_olds_case) { create :casa_case, casa_org:, birth_month_year_youth: 15.years.ago }
+
+  let(:volunteer) do
+    create(
+      :volunteer, display_name: "Name Last", supervisor:,
+      casa_cases: [pre_transition_case, ten_year_olds_case, fifteen_year_olds_case]
+    )
+  end
+  let(:casa_cases) { volunteer.casa_cases }
+  let(:contact_types) { create_list :contact_type, 3, contact_type_group: create(:contact_type_group, casa_org:) }
+  let(:pre_transition_contact) { create :case_contact, creator: volunteer, casa_case: pre_transition_case, contact_types: }
+
   let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
 
   before do
-    travel_to Date.new(2021, 1, 1)
     sign_in volunteer
     visit case_court_reports_path
   end
@@ -30,12 +43,12 @@ RSpec.describe "case_court_reports/index", type: :system do
     # putting all this in the same system test shaves 3 seconds off the test suite
     it "modal has correct contents" do
       start_date = page.find_by_id("start_date").value
-      expect(start_date).to eq("January 01, 2021") # default date
+      expect(start_date).to eq(today.strftime(date_format)) # default date
 
       end_date = page.find_by_id("end_date").value
-      expect(end_date).to eq("January 01, 2021") # default date
+      expect(end_date).to eq(today.strftime(date_format)) # default date
 
-      expect(page).to have_css "#btnGenerateReport", text: "Generate Report", visible: true
+      expect(page).to have_css "#btnGenerateReport", text: "Generate Report"
       expect(page).to have_no_css ".select2"
 
       # shows n+1 options in total, e.g 3 options <- 2 assigned cases + 1 prompt text
@@ -43,7 +56,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_css "#case-selection option", count: expected_number_of_options
 
       # shows transition stamp for transitioned case
-      expected_text = "#{at_least_transition_age.case_number} - transition"
+      expected_text = "#{fifteen_year_olds_case.case_number} - transition"
       expect(page).to have_css "#case-selection option", text: expected_text
 
       # adds data-lookup attribute for searching by volunteer name
@@ -53,7 +66,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       # shows non-transition stamp for non-transitioned case
-      expected_text = "#{younger_than_transition_age.case_number} - non-transition"
+      expected_text = "#{pre_transition_case.case_number} - non-transition"
       expect(page).to have_css "#case-selection option", text: expected_text
 
       # shows a select element with default selection 'Select case number'

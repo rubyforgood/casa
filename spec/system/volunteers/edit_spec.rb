@@ -1,12 +1,12 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/edit", type: :system do
+RSpec.describe "volunteers/edit" do
   describe "updating volunteer personal data" do
     context "with valid data" do
       it "updates successfully" do
         organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
         sign_in admin
         visit edit_volunteer_path(volunteer)
@@ -24,8 +24,8 @@ RSpec.describe "volunteers/edit", type: :system do
       context "shows error for invalid phone number" do
         it "shows error message for phone number < 12 digits" do
           organization = create(:casa_org)
-          admin = create(:casa_admin, casa_org_id: organization.id)
-          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
           sign_in admin
           visit edit_volunteer_path(volunteer)
@@ -37,8 +37,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
         it "shows error message for phone number > 12 digits" do
           organization = create(:casa_org)
-          admin = create(:casa_admin, casa_org_id: organization.id)
-          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
           sign_in admin
           visit edit_volunteer_path(volunteer)
@@ -51,8 +51,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
         it "shows error message for bad phone number" do
           organization = create(:casa_org)
-          admin = create(:casa_admin, casa_org_id: organization.id)
-          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
           sign_in admin
           visit edit_volunteer_path(volunteer)
@@ -65,8 +65,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
         it "shows error message for phone number without country code" do
           organization = create(:casa_org)
-          admin = create(:casa_admin, casa_org_id: organization.id)
-          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
           sign_in admin
           visit edit_volunteer_path(volunteer)
@@ -79,8 +79,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
         it "shows error message for invalid date of birth" do
           organization = create(:casa_org)
-          admin = create(:casa_admin, casa_org_id: organization.id)
-          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+          admin = create(:casa_admin, casa_org: organization)
+          volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
           sign_in admin
           visit edit_volunteer_path(volunteer)
@@ -94,8 +94,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       it "shows error message for duplicate email" do
         organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
         volunteer.supervisor = build(:supervisor)
 
         sign_in admin
@@ -111,8 +111,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       it "shows error message for empty fields" do
         organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
         volunteer.supervisor = create(:supervisor)
 
         sign_in admin
@@ -249,8 +249,8 @@ RSpec.describe "volunteers/edit", type: :system do
   context "when the volunteer is unassigned from all of their cases" do
     it "does not show any active assignment status in the Manage Cases section" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
       casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
       create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
@@ -268,8 +268,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "shows the unassigned cases in the Manage Cases section" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
       casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
       case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
@@ -291,8 +291,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "shows assignment status as 'Volunteer is Unassigned' for each unassigned case" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
       casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
       case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
@@ -319,8 +319,8 @@ RSpec.describe "volunteers/edit", type: :system do
   context "with a deactivated case" do
     it "displays inactive message" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       deactivated_casa_case = create(:casa_case, active: false, casa_org: volunteer.casa_org, volunteers: [volunteer])
 
       sign_in admin
@@ -405,7 +405,7 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "resend invite" do
     it "allows a supervisor resend invitation to a volunteer" do
       organization = create(:casa_org)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       supervisor = create(:supervisor, casa_org: organization)
 
       sign_in supervisor
@@ -423,7 +423,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
   it "allows an administrator resend invitation to a volunteer" do
     organization = create(:casa_org)
-    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+    volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
     admin = create(:casa_admin, casa_org: organization)
 
     sign_in admin
@@ -441,7 +441,7 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "Send Reactivation (SMS)" do
     it "allows admin to send a reactivation SMS to a volunteer if their org has twilio enabled" do
       organization = create(:casa_org, twilio_enabled: true)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       admin = create(:casa_admin, casa_org: organization)
 
       sign_in admin
@@ -470,7 +470,7 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "send reminder as a supervisor" do
     it "emails the volunteer" do
       organization = create(:casa_org)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       supervisor = create(:supervisor, casa_org: organization)
 
       sign_in supervisor
@@ -487,7 +487,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "emails volunteer and cc's the supervisor" do
       organization = create(:casa_org)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       supervisor = create(:supervisor, casa_org: organization)
 
       sign_in supervisor
@@ -519,8 +519,8 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "send reminder as admin" do
     it "emails the volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -535,8 +535,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "emails the volunteer and cc's their supervisor and admin" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -606,8 +606,8 @@ RSpec.describe "volunteers/edit", type: :system do
   context "logged in as an admin" do
     it "can save notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       volunteer.notes.create!(creator: admin, content: "Note_1")
       volunteer.notes.create!(creator: admin, content: "Note_2")
       volunteer.notes.create!(creator: admin, content: "Note_3")
@@ -633,8 +633,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "can delete notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       volunteer.notes.create!(creator: admin, content: "Note_1")
       volunteer.notes.create!(creator: admin, content: "Note_2")
       volunteer.notes.create!(creator: admin, content: "Note_3")
@@ -653,8 +653,8 @@ RSpec.describe "volunteers/edit", type: :system do
   context "logged in as a supervisor" do
     it "can save notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       supervisor = volunteer.supervisor
       volunteer.notes.create!(creator: admin, content: "Note_1")
       volunteer.notes.create!(creator: admin, content: "Note_2")
@@ -681,8 +681,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
     it "can delete notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+      admin = create(:casa_admin, casa_org: organization)
+      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
       supervisor = volunteer.supervisor
       volunteer.notes.create!(creator: admin, content: "Note_1")
       volunteer.notes.create!(creator: admin, content: "Note_2")
@@ -715,8 +715,8 @@ RSpec.describe "volunteers/edit", type: :system do
     context "with mileage reimbursement turned on" do
       it "shows 'Mailing address' label" do
         organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
         sign_in admin
         visit edit_volunteer_path(volunteer)
@@ -727,8 +727,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       it "updates successfully" do
         organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org_id: organization.id)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
         sign_in admin
         visit edit_volunteer_path(volunteer)

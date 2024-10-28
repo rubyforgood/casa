@@ -49,7 +49,7 @@ RSpec.describe CaseContactReport, type: :model do
       let(:case_contact) { create(:case_contact, casa_case: casa_case) }
 
       it "includes case contacts from current org" do
-        report = CaseContactReport.new(casa_org_id: casa_org.id)
+        report = CaseContactReport.new(casa_org:)
 
         expect(report.case_contacts).to contain_exactly(case_contact)
       end
@@ -59,7 +59,7 @@ RSpec.describe CaseContactReport, type: :model do
         let(:casa_case) { create(:casa_case, casa_org: other_casa_org) }
 
         it "excludes case contacts" do
-          report = CaseContactReport.new(casa_org_id: casa_org.id)
+          report = CaseContactReport.new(casa_org:)
 
           expect(report.case_contacts).to be_empty
         end

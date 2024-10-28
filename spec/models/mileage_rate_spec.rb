@@ -1,22 +1,22 @@
 require "rails_helper"
 
-RSpec.describe MileageRate, type: :model do
-  subject { build(:mileage_rate) }
-
+RSpec.describe MileageRate do
   it { is_expected.to belong_to(:casa_org) }
   it { is_expected.to validate_presence_of(:effective_date) }
   it { is_expected.to validate_presence_of(:casa_org) }
   it { is_expected.to validate_presence_of(:amount) }
 
   describe "for_organization" do
-    let!(:casa_org_1) { create(:casa_org) }
-    let!(:casa_org_2) { create(:casa_org) }
-    let!(:record_1) { create(:mileage_rate, casa_org: casa_org_1) }
-    let!(:record_2) { create(:mileage_rate, casa_org: casa_org_2) }
+    subject { described_class.for_organization(casa_org) }
+
+    let(:casa_org) { create(:casa_org) }
+    let(:other_casa_org) { create(:casa_org) }
+    let!(:record) { create(:mileage_rate, casa_org:) }
+    let!(:other_record) { create(:mileage_rate, casa_org: other_casa_org) }
 
     it "returns only records matching the specified organization" do
-      expect(described_class.for_organization(casa_org_1)).to eq([record_1])
-      expect(described_class.for_organization(casa_org_2)).to eq([record_2])
+      expect(subject).to contain_exactly(record)
+      expect(subject).not_to include(other_record)
     end
   end
 

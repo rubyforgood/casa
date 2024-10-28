@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "learning_hours/edit", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:volunteer) { create(:volunteer, casa_org_id: organization.id) }
+RSpec.describe "learning_hours/edit" do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
   let(:learning_hours) { create(:learning_hour, user: volunteer) }
 
   before do

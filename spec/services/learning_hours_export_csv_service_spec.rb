@@ -1,10 +1,11 @@
 require "rails_helper"
 
 RSpec.describe LearningHoursExportCsvService do
-  let!(:user) { create(:user) }
-  let!(:learning_hour_type) { create(:learning_hour_type) }
+  let(:user) { create(:user) }
+  let(:learning_hour_type) { create(:learning_hour_type, casa_org: user.casa_org) }
   let!(:learning_hour) do
     create(:learning_hour,
+      user:,
       duration_hours: 2,
       duration_minutes: 30,
       occurred_at: "2022-06-20",
@@ -12,7 +13,7 @@ RSpec.describe LearningHoursExportCsvService do
   end
 
   describe "#perform" do
-    let(:result) { described_class.new(LearningHour.all).perform }
+    subject(:result) { described_class.new(LearningHour.all).perform }
 
     it "returns a csv as a string starting with the learning hours headers" do
       csv_headers = "Volunteer Name,Learning Hours Title,Learning Hours Type,Duration,Date Of Learning\n"

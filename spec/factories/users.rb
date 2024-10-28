@@ -6,41 +6,17 @@ FactoryBot.define do
     password { "12345678" }
     password_confirmation { "12345678" }
     date_of_birth { nil }
-    case_assignments { [] }
     phone_number { "" }
-    confirmed_at { Time.now }
+    confirmed_at { Time.zone.now }
     token { "verysecuretoken" }
+    active { true }
 
     trait :inactive do
-      type { "Volunteer" }
       active { false }
-      role { :inactive }
     end
 
-    trait :with_casa_cases do
-      after(:create) do |user, _|
-        create_list(:case_assignment, 2, volunteer: user)
-      end
-    end
-
-    trait :with_single_case do
-      after(:create) do |user, _|
-        create_list(:case_assignment, 1, volunteer: user)
-      end
-    end
-
-    trait :with_case_contact do
-      after(:create) do |user, _|
-        create(:case_assignment, volunteer: user)
-        create(:case_contact, creator: user, casa_case: user.casa_cases.first, contact_made: true)
-      end
-    end
-
-    trait :with_case_contact_wants_driving_reimbursement do
-      after(:create) do |user, _|
-        create(:case_assignment, volunteer: user)
-        create(:case_contact, :wants_reimbursement, creator: user, casa_case: user.casa_cases.first, contact_made: true)
-      end
+    trait :receive_reimbursement_attachment do
+      receive_reimbursement_email { true }
     end
   end
 end

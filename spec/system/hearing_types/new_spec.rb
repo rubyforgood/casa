@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "hearing_types/new", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:hearing_type) { build_stubbed(:hearing_type, casa_org: organization, name: "Spec Test Hearing Type") }
+RSpec.describe "hearing_types/new" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:hearing_type) { build_stubbed(:hearing_type, casa_org:, name: "Spec Test Hearing Type") }
 
   before do
     sign_in admin

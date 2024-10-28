@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "judges/new", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
+RSpec.describe "judges/new" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
 
   before do
     sign_in admin

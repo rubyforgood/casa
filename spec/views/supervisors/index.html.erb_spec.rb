@@ -48,7 +48,7 @@ RSpec.describe "supervisors/index", type: :view do
       it "shows positive and negative numbers" do
         supervisor = create(:supervisor)
         enable_pundit(view, supervisor)
-        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        create(:volunteer, :with_case_contact, supervisor: supervisor)
         create(:volunteer, :with_casa_cases, supervisor: supervisor)
 
         assign :supervisors, [supervisor]
@@ -68,7 +68,7 @@ RSpec.describe "supervisors/index", type: :view do
         user = create(:casa_admin)
         enable_pundit(view, user)
         supervisor = create(:supervisor)
-        create_list(:volunteer, 2, :with_cases_and_contacts, supervisor: supervisor)
+        create_list(:volunteer, 2, :with_case_contact, supervisor: supervisor)
         create(:volunteer, :with_casa_cases, supervisor: supervisor)
         casa_cases = create_list(:casa_case, 2, court_dates: [])
 
@@ -122,7 +122,7 @@ RSpec.describe "supervisors/index", type: :view do
         user = create(:casa_admin)
         enable_pundit(view, user)
         supervisor = create(:supervisor)
-        create(:volunteer, :with_cases_and_contacts, supervisor: supervisor)
+        create(:volunteer, :with_case_contact, supervisor: supervisor)
         casa_cases = create_list(:casa_case, 2, court_dates: [])
 
         assign :supervisors, [supervisor]

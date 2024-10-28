@@ -1,14 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "other_duties/new", type: :system do
-  let(:casa_org) { build(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: casa_org) }
+RSpec.describe "other_duties/new" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
   let(:case_number) { "12345" }
-  let!(:next_year) { (Date.today.year + 1).to_s }
+  let(:next_year) { (Time.zone.now.year + 1).to_s }
   let(:court_date) { 21.days.from_now }
 
-  let(:organization) { build(:casa_org) }
-  let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org: organization) }
+  let(:volunteer) { create(:volunteer, :with_casa_cases, casa_org:) }
 
   before do
     sign_in volunteer

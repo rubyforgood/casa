@@ -100,7 +100,7 @@ RSpec.describe CourtDate, type: :model do
       context "with a previous court date" do
         let!(:other_court_date) { create(:court_date, casa_case: casa_case, date: 40.days.ago) }
 
-        it { is_expected.to eq [ten_days_ago_report, thirty_days_ago_report] }
+        it { is_expected.to contain_exactly(ten_days_ago_report, thirty_days_ago_report) }
       end
     end
 

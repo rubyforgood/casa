@@ -16,7 +16,7 @@ RSpec.describe CaseContactTypesReminder do
   let!(:volunteer) do
     create(
       :volunteer,
-      casa_org_id: casa_org.id,
+      casa_org: casa_org,
       phone_number: "+12222222222",
       receive_sms_notifications: true
     )

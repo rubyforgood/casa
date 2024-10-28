@@ -1,19 +1,20 @@
 require "rails_helper"
 
-RSpec.describe "LearningHours::Volunteers #show", type: :system do
-  let!(:volunteer) { create(:volunteer) }
-  let!(:supervisor) { create(:supervisor) }
-  let!(:learning_hours) { create_list(:learning_hour, 5, user: volunteer) }
+RSpec.describe "LearningHours::Volunteers #show" do
+  let(:volunteer) { create(:volunteer) }
+  let(:supervisor) { create(:supervisor) }
+  let(:learning_hours) { create_list(:learning_hour, 1, user: volunteer) }
 
   before do
-    login_as user, scope: :user
+    learning_hours
+    sign_in user
   end
 
   context "when the user is a volunteer" do
     let(:user) { volunteer }
 
     it "cannot access this page" do
-      visit learning_hours_volunteer_path(volunteer.id)
+      visit learning_hours_volunteer_path(volunteer)
       expect(page).to have_content("Sorry, you are not authorized to perform this action.")
     end
   end
@@ -22,7 +23,7 @@ RSpec.describe "LearningHours::Volunteers #show", type: :system do
     let(:user) { supervisor }
 
     before do
-      visit learning_hours_volunteer_path(volunteer.id)
+      visit learning_hours_volunteer_path(volunteer)
     end
 
     it "displays the volunteer's name" do

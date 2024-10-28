@@ -1,7 +1,7 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/edit", :js, type: :system do
-  let(:organization) { build(:casa_org, :all_reimbursements_enabled) }
+RSpec.describe "case_contacts/edit", :js do
+  let(:organization) { create(:casa_org, :all_reimbursements_enabled) }
   let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
   let(:casa_case) { volunteer.casa_cases.first }
   let(:contact_types) { create_list(:contact_type, 2, casa_org: organization) }
@@ -73,7 +73,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     end
 
     context "when user is part of a different organization" do
-      let(:other_organization) { build(:casa_org) }
+      let(:other_organization) { create(:casa_org) }
       let(:admin) { create(:casa_admin, casa_org: other_organization) }
 
       it "fails across organizations", js: false do

@@ -1,12 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "case_contact_reports/index", type: :system do
-  let(:admin) { create(:casa_admin) }
+RSpec.describe "case_contact_reports/index" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
 
   it "filters report by date and selected contact type", :js do
     sign_in admin
 
-    contact_type_group = create(:contact_type_group)
+    contact_type_group = create(:contact_type_group, casa_org:)
     court = create(:contact_type, name: "Court", contact_type_group: contact_type_group)
     school = create(:contact_type, name: "School", contact_type_group: contact_type_group)
 
@@ -37,11 +38,11 @@ RSpec.describe "case_contact_reports/index", type: :system do
   it "filters report by contact type group", :js do
     sign_in admin
 
-    contact_type_group = create(:contact_type_group)
+    contact_type_group = create(:contact_type_group, casa_org:)
     court = create(:contact_type, name: "Court", contact_type_group: contact_type_group)
     contact1 = create(:case_contact, occurred_at: Date.yesterday, contact_types: [court], notes: "Case Contact 1")
 
-    excluded_contact_type_group = create(:contact_type_group)
+    excluded_contact_type_group = create(:contact_type_group, casa_org:)
     school = create(:contact_type, name: "School", contact_type_group: excluded_contact_type_group)
     excluded_by_contact_type_group = create(:case_contact, occurred_at: Date.yesterday, contact_types: [school], notes: "Excluded by Contact Type")
 

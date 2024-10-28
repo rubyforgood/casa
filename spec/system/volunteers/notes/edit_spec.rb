@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "volunteers/notes/edit", type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org_id: organization.id) }
-  let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id) }
+RSpec.describe "volunteers/notes/edit" do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org:) }
   let(:note) { volunteer.notes.create(creator: admin, content: "Good job.") }
 
   context "when logged in as an admin" do
