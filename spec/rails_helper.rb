@@ -63,6 +63,13 @@ RSpec.configure do |config|
   config.define_derived_metadata(file_path: Regexp.new("/spec/datatables/")) do |metadata|
     metadata[:type] = :datatable
   end
+  config.define_derived_metadata(file_path: Regexp.new("/spec/system//")) do |metadata|
+    metadata[:type] = :system
+  end
+  # Aggregate failures by default. Not as useful for system specs, they need to fail fast.
+  config.define_derived_metadata do |metadata|
+    metadata[:aggregate_failures] = true unless metadata[:type] == :system
+  end
 
   config.example_status_persistence_file_path = "#{Rails.root.join("tmp/persistent_examples.txt")}"
 

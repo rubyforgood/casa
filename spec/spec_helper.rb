@@ -45,10 +45,5 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = :random
 
-  # Aggregate failures by default. Not as useful for system specs, they need to fail fast.
-  config.define_derived_metadata do |meta|
-    meta[:aggregate_failures] = true unless meta[:type] == :system
-  end
-
   RSpec::Matchers.define_negated_matcher :not_change, :change
 end

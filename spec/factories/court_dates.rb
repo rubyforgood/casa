@@ -13,9 +13,10 @@ FactoryBot.define do
     trait(:with_hearing_type) { hearing_type }
 
     trait :with_court_order do
-      after(:create) do |court_date|
-        court_date.case_court_orders << build(:case_court_order, casa_case: court_date.casa_case)
-        court_date.save!
+      case_court_orders do
+        Array.new(1) do
+          association(:case_court_order, casa_case:)
+        end
       end
     end
   end

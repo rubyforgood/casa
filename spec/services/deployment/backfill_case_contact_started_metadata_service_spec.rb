@@ -43,9 +43,10 @@ RSpec.describe Deployment::BackfillCaseContactStartedMetadataService do
   end
 
   context "when a case contact has no metadata" do
-    let!(:case_contact) { create(:case_contact, created_at: past, metadata: {}) }
+    let!(:case_contact) { create(:case_contact, created_at: past) }
 
     it "does not change metadata" do
+      case_contact.update_attribute(:metadata, {})
       described_class.new.backfill_metadata
 
       expect(case_contact.reload.metadata.dig("status", "started")).to be_nil

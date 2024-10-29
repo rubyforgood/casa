@@ -9,17 +9,28 @@ FactoryBot.define do
   # https://github.com/thoughtbot/factory_bot/blob/main/GETTING_STARTED.md#traits-within-traits
   # So, rather than `status { "active" }` - use enum trait like so:
   factory :case_contact do
-    active # use the `:active` enum trait
-    creator factory: :user
-    casa_case
+    transient do
+      casa_org do
+        @overrides[:casa_case].try(:casa_org) ||
+          @overrides[:creator].try(:casa_org) ||
+          @overrides[:contact_types]&.first.try(:casa_org) ||
+          CasaOrg.first ||
+          association(:casa_org)
+      end
+    end
 
-    contact_types { [association(:contact_type)] }
+    active # use the `:active` enum trait
     duration_minutes { 60 }
     occurred_at { Time.zone.today }
     contact_made { false }
     medium_type { CaseContact::CONTACT_MEDIUMS.first }
     want_driving_reimbursement { false }
     deleted_at { nil }
+    metadata { {} }
+
+    creator { association :volunteer, casa_org: }
+    casa_case { association :casa_case, casa_org: }
+    contact_types { [association(:contact_type, casa_org:)] }
     draft_case_ids { [casa_case&.id] }
 
     trait :multi_line_note do
@@ -75,25 +86,6 @@ FactoryBot.define do
       expenses # enum trait
 
       draft_case_ids { [1] }
-    end
-
-    after(:create) do |case_contact, evaluator|
-      if evaluator.metadata
-        case_contact.update_columns(metadata: evaluator.metadata)
-      elsif case_contact.status
-        case_contact.update_columns(metadata: {"status" => {case_contact.status => case_contact.created_at}})
-      end
-    end
-
-    trait :with_org_topics do
-      after(:create) do |case_contact, _|
-        return if case_contact.casa_case.nil?
-
-        casa_org = case_contact.casa_case.casa_org
-        casa_org.contact_topics.active.each do |contact_topic|
-          case_contact.contact_topic_answers << build(:contact_topic_answer, contact_topic: contact_topic)
-        end
-      end
     end
   end
 end

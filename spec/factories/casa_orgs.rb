@@ -1,5 +1,9 @@
 FactoryBot.define do
   factory :casa_org do
+    transient do
+      placement_names { [] }
+    end
+
     sequence(:name) { |n| "CASA Org #{n}" }
     sequence(:display_name) { |n| "CASA Org #{n}" }
     address { "123 Main St" }
@@ -19,11 +23,11 @@ FactoryBot.define do
     end
 
     trait :with_placement_types do
-      transient { placement_names { ["Reunification", "Adoption", "Foster Care", "Kinship"] } }
+      placement_names { ["Reunification", "Adoption", "Foster Care", "Kinship"] }
 
-      after(:create) do |org, evaluator|
-        evaluator.placement_names.each do |name|
-          org.placement_types.create!(name: name)
+      placement_types do
+        Array.wrap(placement_names).map do |name|
+          association(:placement_type, name:, casa_org: instance)
         end
       end
     end

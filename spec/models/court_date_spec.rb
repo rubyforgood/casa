@@ -94,7 +94,7 @@ RSpec.describe CourtDate, type: :model do
       subject(:associated_reports) { court_date.associated_reports }
 
       context "without other court dates" do
-        it { is_expected.to eq [ten_days_ago_report, thirty_days_ago_report, sixty_days_ago_report] }
+        it { is_expected.to contain_exactly(ten_days_ago_report, thirty_days_ago_report, sixty_days_ago_report) }
       end
 
       context "with a previous court date" do

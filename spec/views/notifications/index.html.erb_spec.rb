@@ -57,7 +57,7 @@ RSpec.describe "notifications/index", type: :view do
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
         expect(patch_note_index).to eq(3)
-        expect(notifications_html[patch_note_index + 1].text).to match(/Volunteer User \d+'s request for reimbursement for 0mi on .* has been processed and is en route./)
+        expect(notifications_html[patch_note_index + 1].text).to match(/Volunteer Volunteer \d+'s request for reimbursement for 0mi on .* has been processed and is en route./)
       end
     end
 
