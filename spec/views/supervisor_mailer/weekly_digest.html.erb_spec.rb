@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
+RSpec.describe "supervisor_mailer/weekly_digest" do
   let(:organization) { create(:casa_org) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let(:volunteer) { create(:volunteer, supervisor:, casa_org: organization) }
@@ -86,7 +86,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    let(:other_supervisor) { create(:supervisor) }
+    let(:other_supervisor) { create(:supervisor, casa_org: organization) }
 
     it { expect(rendered).to include("The following volunteers have been unassigned from you", volunteer.display_name) }
   end
@@ -104,7 +104,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    let(:new_supervisor) { create(:supervisor) }
+    let(:new_supervisor) { create(:supervisor, casa_org: organization) }
 
     it { expect(rendered).to have_text("The following volunteers have been unassigned from you") }
     it { expect(rendered).to have_text("- #{volunteer.display_name}") }

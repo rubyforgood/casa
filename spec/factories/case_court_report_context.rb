@@ -12,11 +12,16 @@ FactoryBot.define do
       start_date { nil }
       end_date { nil }
       time_zone { nil }
+      casa_org do
+        @overrides[:casa_case].try(:casa_org) ||
+          @overrides[:volunteer].try(:casa_org) ||
+          association(:casa_org)
+      end
     end
 
     initialize_with {
-      volunteer_for_context = volunteer.nil? ? create(:volunteer) : volunteer
-      casa_case_for_context = casa_case.nil? ? create(:casa_case) : casa_case
+      volunteer_for_context = volunteer.nil? ? create(:volunteer, casa_org:) : volunteer
+      casa_case_for_context = casa_case.nil? ? create(:casa_case, casa_org:) : casa_case
 
       if volunteer_for_context && volunteer_for_context.casa_cases.where(id: casa_case_for_context.id).none?
         volunteer_for_context.casa_cases << casa_case_for_context

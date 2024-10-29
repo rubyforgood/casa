@@ -4,7 +4,6 @@ FactoryBot.define do
       casa_org do
         @overrides[:learning_hour_type].try(:casa_org) ||
           @overrides[:user].try(:casa_org) ||
-          CasaOrg.first ||
           association(:casa_org)
       end
     end

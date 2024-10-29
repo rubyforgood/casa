@@ -1,7 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "supervisors/edit", type: :system do
+RSpec.describe "supervisors/edit" do
   let(:organization) { create(:casa_org) }
+  let(:casa_org) { organization }
 
   context "logged in as an admin" do
     let(:user) { create(:casa_admin, casa_org: organization) }
@@ -49,6 +50,8 @@ RSpec.describe "supervisors/edit", type: :system do
 
       it "shows error for invalid date of birth" do
         fill_in "Date of birth", with: 5.days.from_now.strftime("%Y/%m/%d")
+        click_on("Submit")
+        expect(page).to have_text "Date of birth must be in the past"
       end
     end
 
@@ -165,17 +168,19 @@ RSpec.describe "supervisors/edit", type: :system do
     end
 
     context "when entering valid information" do
+      let(:supervisor) { create(:supervisor, casa_org:) }
+      let(:old_email) { supervisor.email }
+      let(:new_email) { "new_supervisor_email@example.com" }
+
       before do
+        old_email
         sign_in user
-        @supervisor = create(:supervisor)
-        @old_email = @supervisor.email
-        visit edit_supervisor_path(@supervisor)
-        fill_in "supervisor_email", with: "new_supervisor_email@example.com"
+        visit edit_supervisor_path(supervisor)
+        fill_in "supervisor_email", with: new_email
         fill_in "supervisor_phone_number", with: "+14155556876"
         fill_in "supervisor_date_of_birth", with: "2003/05/06"
 
         click_on "Submit"
-        @supervisor.reload
       end
 
       it "sends a confirmation email to the supervisor and displays current email" do
@@ -185,25 +190,27 @@ RSpec.describe "supervisors/edit", type: :system do
           .to match("You can confirm your account email through the link below:")
 
         expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: @old_email)
-        expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
+        expect(page).to have_field("Email", with: old_email)
+        expect(supervisor.reload.unconfirmed_email).to eq(new_email)
       end
 
       it "correctly updates the supervisor email once confirmed" do
-        @supervisor.confirm
-        @supervisor.reload
-        visit edit_supervisor_path(@supervisor)
+        expect(supervisor.email).to eq(old_email)
+        supervisor.update!(unconfirmed_email: new_email)
+        supervisor.confirm
+        visit edit_supervisor_path(supervisor)
 
-        expect(page).to have_field("Email", with: "new_supervisor_email@example.com")
-        expect(@supervisor.old_emails).to match([@old_email])
+        expect(page).to have_field("Email", with: new_email)
+        expect(supervisor.old_emails).to match([old_email])
       end
     end
 
     context "when entering invalid information" do
+      let(:supervisor) { create(:supervisor, casa_org:) }
+
       before do
         sign_in user
-        @supervisor = create(:supervisor)
-        visit edit_supervisor_path(@supervisor)
+        visit edit_supervisor_path(supervisor)
       end
 
       it "shows error message for invalid phone number" do
@@ -224,7 +231,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
       it "responds with a notice" do
         sign_in user
-        supervisor = create(:supervisor)
+        supervisor = create(:supervisor, casa_org:)
         visit edit_supervisor_path(supervisor)
         fill_in "supervisor_email", with: ""
         fill_in "supervisor_email", with: existing_supervisor.email

@@ -1,9 +1,11 @@
 require "rails_helper"
 require "stringio"
 
-RSpec.describe "Edit CASA Case", type: :system do
-  context "logged in as admin" do
-    let(:organization) { build(:casa_org) }
+RSpec.describe "Edit CASA Case" do
+  let(:casa_org) { create(:casa_org) }
+
+  context "with admin user" do
+    let(:organization) { casa_org }
     let(:other_organization) { build(:casa_org) }
     let(:admin) { create(:casa_admin, casa_org: organization) }
     let(:other_org_admin) { create(:casa_admin, casa_org: other_organization) }
@@ -201,7 +203,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     let!(:contact_type_group) { build(:contact_type_group, casa_org: casa_org) }
     let!(:contact_type_1) { create(:contact_type, name: "Youth", contact_type_group: contact_type_group) }
     let!(:contact_type_2) { build(:contact_type, name: "Supervisor", contact_type_group: contact_type_group) }
-    let!(:next_year) { (Date.today.year + 1).to_s }
+    let!(:next_year) { (Time.zone.today.year + 1).to_s }
 
     before { sign_in supervisor }
 
@@ -396,8 +398,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
     end
 
-    context "deleting court orders", :js do
-      let(:casa_case) { create(:casa_case, :with_one_court_order, :with_casa_case_contact_types) }
+    describe "deleting court orders", :js do
+      let(:casa_case) { create(:casa_case, :with_one_court_order, :with_casa_case_contact_types, casa_org:) }
       let(:text) { casa_case.case_court_orders.first.text }
 
       it "can delete a court order" do
@@ -446,7 +448,7 @@ RSpec.describe "Edit CASA Case", type: :system do
   end
 
   context "logged in as volunteer" do
-    let(:volunteer) { build(:volunteer) }
+    let(:volunteer) { build(:volunteer, casa_org:) }
     let(:casa_case) { create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
@@ -555,7 +557,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
 
       it "copy button and select shouldn't be visible when a volunteer only has one case", :js do
-        volunteer = build(:volunteer)
+        volunteer = build(:volunteer, casa_org:)
         casa_case = create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org)
         create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
         visit edit_casa_case_path(casa_case)

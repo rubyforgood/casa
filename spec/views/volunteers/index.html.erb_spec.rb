@@ -1,15 +1,18 @@
 require "rails_helper"
 
-RSpec.describe "volunteers", type: :view do
+RSpec.describe "volunteers" do
   subject { render template: "volunteers/index" }
 
-  let(:user) { build_stubbed :volunteer }
-  let(:volunteer) { create :volunteer }
+  let(:casa_org) { create :casa_org }
+  let(:user) { build_stubbed :volunteer, casa_org: }
+  let(:volunteer) { create :volunteer, casa_org: }
 
   before do
     enable_pundit(view, user)
-    allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_organization).and_return user.casa_org
+    allow(view).to receive_messages(
+      current_user: user,
+      current_organization: user.casa_org
+    )
     assign :volunteers, [volunteer]
     sign_in user
   end
@@ -19,7 +22,7 @@ RSpec.describe "volunteers", type: :view do
   end
 
   context "when signed in as an admin" do
-    let(:user) { build_stubbed :casa_admin }
+    let(:user) { build_stubbed :casa_admin, casa_org: }
 
     it { is_expected.to have_css("a", text: "New Volunteer") }
   end
@@ -28,7 +31,7 @@ RSpec.describe "volunteers", type: :view do
     let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: volunteer, supervisor: supervisor) }
 
     context "when the supervisor is active" do
-      let(:supervisor) { build(:supervisor) }
+      let(:supervisor) { build(:supervisor, casa_org:) }
 
       it "shows up in the supervisor dropdown" do
         expect(subject).to include(CGI.escapeHTML(supervisor.display_name))
@@ -36,7 +39,7 @@ RSpec.describe "volunteers", type: :view do
     end
 
     context "when the supervisor is not active" do
-      let(:supervisor) { build(:supervisor, active: false) }
+      let(:supervisor) { build(:supervisor, active: false, casa_org:) }
 
       it "doesn't show up in the dropdown" do
         expect(subject).not_to include(supervisor.display_name)

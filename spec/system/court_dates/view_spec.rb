@@ -1,17 +1,19 @@
 require "rails_helper"
 
-RSpec.describe "court_dates/edit", type: :system do
+RSpec.describe "court_dates/edit" do
   context "with date"
   let(:now) { Date.new(2021, 1, 1) }
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:casa_admin, casa_org: organization) }
-  let!(:casa_case) { create(:casa_case, casa_org: organization) }
-  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
-  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
+  let(:supervisor) { create(:supervisor, casa_org:) }
+  let!(:casa_case) { create(:casa_case, casa_org:) }
+  let(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
+  let(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
 
   before do
+    court_date
+    future_court_date
     travel_to now
   end
 

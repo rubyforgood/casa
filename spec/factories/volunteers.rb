@@ -10,6 +10,11 @@ FactoryBot.define do
 
     sequence(:display_name) { |n| "Volunteer #{n}" }
     type { "Volunteer" }
+    casa_org do
+      @overrides[:supervisor].try(:casa_org) ||
+        @overrides[:casa_cases].try(:first).try(:casa_org) ||
+        association(:casa_org)
+    end
 
     supervisor_volunteer do
       if supervisor

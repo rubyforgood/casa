@@ -1,7 +1,9 @@
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
-RSpec.describe "/casa_admins", type: :request do
+RSpec.describe "/casa_admins" do
+  let(:casa_org) { create(:casa_org) }
+
   describe "GET /casa_admins" do
     it "is successful" do
       admins = create_pair(:casa_admin)
@@ -137,7 +139,7 @@ RSpec.describe "/casa_admins", type: :request do
         }
 
         casa_admin.reload
-        expect(casa_admin.email).not_to eq nil
+        expect(casa_admin.email).not_to be_nil
         expect(casa_admin.phone_number).not_to eq "dsadw323"
         expect(response).to render_template :edit
       end
@@ -269,8 +271,8 @@ RSpec.describe "/casa_admins", type: :request do
     context "logged in as admin user" do
       context "when successfully" do
         it "can successfully deactivate a casa admin user" do
-          casa_admin = create(:casa_admin)
-          casa_admin_other = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_other = create(:casa_admin, active: true, casa_org:)
 
           sign_in casa_admin
           patch deactivate_casa_admin_path(casa_admin_other)
@@ -283,8 +285,8 @@ RSpec.describe "/casa_admins", type: :request do
         end
 
         it "sends a deactivation email" do
-          casa_admin = create(:casa_admin)
-          casa_admin_active = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_active = create(:casa_admin, active: true, casa_org:)
 
           sign_in casa_admin
           expect { patch deactivate_casa_admin_path(casa_admin_active) }
@@ -293,8 +295,8 @@ RSpec.describe "/casa_admins", type: :request do
         end
 
         it "also respond as json", :aggregate_failures do
-          casa_admin = create(:casa_admin)
-          casa_admin_active = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_active = create(:casa_admin, active: true, casa_org:)
 
           sign_in casa_admin
           patch deactivate_casa_admin_path(casa_admin_active, format: :json)
@@ -307,8 +309,8 @@ RSpec.describe "/casa_admins", type: :request do
 
       context "when occurs send errors" do
         it "redirects to admin edit page" do
-          casa_admin = create(:casa_admin)
-          casa_admin_active = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_active = create(:casa_admin, active: true, casa_org:)
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }
 
           sign_in casa_admin
@@ -318,8 +320,8 @@ RSpec.describe "/casa_admins", type: :request do
         end
 
         it "shows error message" do
-          casa_admin = create(:casa_admin)
-          casa_admin_active = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_active = create(:casa_admin, active: true, casa_org:)
           allow(CasaAdminMailer).to receive_message_chain(:deactivation, :deliver) { raise Errno::ECONNREFUSED }
 
           sign_in casa_admin
@@ -329,8 +331,8 @@ RSpec.describe "/casa_admins", type: :request do
         end
 
         it "also respond as json", :aggregate_failures do
-          casa_admin = create(:casa_admin)
-          casa_admin_active = create(:casa_admin, active: true)
+          casa_admin = create(:casa_admin, casa_org:)
+          casa_admin_active = create(:casa_admin, active: true, casa_org:)
           allow_any_instance_of(CasaAdmin).to receive(:deactivate).and_return(false)
           allow_any_instance_of(CasaAdmin).to receive_message_chain(:errors, :full_messages)
             .and_return ["Error message test"]
@@ -373,12 +375,12 @@ RSpec.describe "/casa_admins", type: :request do
       casa_admin = create(:casa_admin, active: true)
 
       sign_in casa_admin
-      expect(casa_admin.invitation_created_at.present?).to eq(false)
+      expect(casa_admin.invitation_created_at.present?).to be(false)
 
       patch resend_invitation_casa_admin_path(casa_admin)
       casa_admin.reload
 
-      expect(casa_admin.invitation_created_at.present?).to eq(true)
+      expect(casa_admin.invitation_created_at.present?).to be(true)
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_casa_admin_path(casa_admin))

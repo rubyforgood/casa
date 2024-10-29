@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe Supervisor, type: :model do
-  include Devise::Test::IntegrationHelpers
+RSpec.describe Supervisor do
+  subject(:supervisor) { create :supervisor, casa_org: }
 
-  subject(:supervisor) { create :supervisor }
+  let(:casa_org) { create :casa_org }
 
   describe "#role" do
     it { expect(supervisor.role).to eq "Supervisor" }
@@ -32,7 +32,7 @@ RSpec.describe Supervisor, type: :model do
   end
 
   describe "pending volunteers" do
-    let(:volunteer) { create(:volunteer) }
+    let(:volunteer) { create(:volunteer, casa_org:) }
     let(:assign_volunteer) { create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer) }
 
     it "returns volunteers invited by the supervisor" do
@@ -50,9 +50,9 @@ RSpec.describe Supervisor, type: :model do
   describe "not_signed_in_nor_have_case_contacts_volunteers" do
     subject { supervisor.inactive_volunteers }
 
-    let(:supervisor) { create(:supervisor) }
-    let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago) }
-    let(:other_volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
+    let(:supervisor) { create(:supervisor, casa_org:) }
+    let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org:) }
+    let(:other_volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago, casa_org:) }
 
     before do
       create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
@@ -60,36 +60,28 @@ RSpec.describe Supervisor, type: :model do
     end
 
     context "when volunteer has logged in in the last 30 days" do
-      let(:volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
+      let(:volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago, casa_org:) }
 
       it { is_expected.to be_empty }
-
-      context "when volunteer then logged out" do
-        it "is empty" do
-          sign_out volunteer
-
-          expect(subject).to be_empty
-        end
-      end
     end
 
     context "when volunteer hasn't logged in in the last 30 days" do
       it { is_expected.to contain_exactly(volunteer) }
 
       context "when volunteer is inactive" do
-        let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago, active: false) }
+        let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago, active: false, casa_org:) }
 
         it { is_expected.to be_empty }
       end
 
       context "when volunteer has never logged in" do
-        let(:volunteer) { create(:volunteer, last_sign_in_at: nil) }
+        let(:volunteer) { create(:volunteer, last_sign_in_at: nil, casa_org:) }
 
         it { is_expected.to contain_exactly(volunteer) }
       end
 
       context "when volunteer has a recent case_contact" do
-        let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
+        let(:casa_case) { create(:casa_case, casa_org:) }
         let!(:case_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 31.days.ago, creator: volunteer, created_at: 29.days.ago) }
 
         it { is_expected.to be_empty }

@@ -1,12 +1,14 @@
 require "rails_helper"
 
-RSpec.describe SupervisorMailer, type: :mailer do
+RSpec.describe SupervisorMailer do
+  let(:casa_org) { create(:casa_org) }
+
   describe ".weekly_digest" do
-    let(:supervisor) { build(:supervisor, :receive_reimbursement_attachment) }
+    let(:supervisor) { build(:supervisor, :receive_reimbursement_attachment, casa_org:) }
     let(:volunteer) { build(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor) }
     let(:casa_case) { create(:casa_case, casa_org: supervisor.casa_org) }
 
-    let(:mail) { SupervisorMailer.weekly_digest(supervisor) }
+    let(:mail) { described_class.weekly_digest(supervisor) }
 
     context "when a supervisor has volunteer assigned to a casa case" do
       let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
@@ -16,13 +18,13 @@ RSpec.describe SupervisorMailer, type: :mailer do
       end
 
       it "does not show a case contact that did not occurr in the week" do
-        build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 8.days)
+        build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 8.days)
         expect(mail.body.encoded).not_to match("Most recent contact attempted:")
       end
 
       it "shows the latest case contact that occurred in the week" do
-        most_recent_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
-        other_contact = build(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBBBB")
+        most_recent_contact = create(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        other_contact = build(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 3.days, notes: "BBBBBBBBBBBBBBBBBBBB")
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
         expect(mail.body.encoded).not_to match("Notes: #{other_contact.notes}")
@@ -34,7 +36,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     context "when a supervisor has a volunteer who is unassigned from a casa case during the week" do
-      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 2.days) }
+      let!(:case_assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Time.zone.today - 2.days) }
 
       it "shows a summary for a volunteer recently unassigned from the supervisor" do
         expect(mail.body.encoded).to match("Summary for <a href=\"#{edit_volunteer_url(volunteer)}\">#{volunteer.display_name}</a>")
@@ -45,15 +47,15 @@ RSpec.describe SupervisorMailer, type: :mailer do
       end
 
       it "does not show a case contact that occurred past the unassignment date in the week" do
-        contact_past_unassignment = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        contact_past_unassignment = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
 
         expect(mail.body.encoded).not_to match("Notes: #{contact_past_unassignment.notes}")
       end
 
       it "shows the latest case contact that occurred in the week before the unassignment date" do
-        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
-        most_recent_contact_before_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBB")
-        older_contact = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 4.days, notes: "CCCCCCCCCCCCCCCCCCCC")
+        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        most_recent_contact_before_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 3.days, notes: "BBBBBBBBBBBBBBBBBB")
+        older_contact = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Time.zone.today - 4.days, notes: "CCCCCCCCCCCCCCCCCCCC")
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact_before_unassignment.notes}")
         expect(mail.body.encoded).not_to match("Notes: #{contact_past_unassignment.notes}")
@@ -62,7 +64,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     it "does not show a summary for a volunteer unassigned from the supervisor before the week" do
-      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
+      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Time.zone.today - 8.days)
       expect(mail.body.encoded).not_to match("Summary for #{volunteer.display_name}")
     end
 
@@ -98,7 +100,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
     end
 
     it "does not display 'There are no additional notes' message when there are additional notes" do
-      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today + 8.days)
+      create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.current + 8.days)
       expect(mail.body.encoded).not_to match("There are no additional notes.")
     end
 
@@ -112,9 +114,8 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
     context "when supervisor has a volunteer that has not been active for the last 30 days" do
       let!(:volunteer) do
-        create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor, last_sign_in_at: 31.days.ago)
+        create(:volunteer, casa_org:, supervisor: supervisor, last_sign_in_at: 31.days.ago)
       end
-      let(:casa_org) { volunteer.casa_org }
       let(:other_org) { create(:casa_org) }
       let!(:volunteer_for_other_supervisor_same_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: casa_org, supervisor: create(:supervisor, casa_org: casa_org)) }
       let!(:volunteer_for_other_org) { create(:volunteer, last_sign_in_at: 31.days.ago, casa_org: other_org, supervisor: create(:supervisor, casa_org: other_org)) }
@@ -139,7 +140,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
   end
 
   describe ".invitation_instructions for a supervisor" do
-    let(:supervisor) { create(:supervisor) }
+    let(:supervisor) { create(:supervisor, casa_org:) }
     let(:mail) { supervisor.invite! }
     let(:expiration_date) { I18n.l(supervisor.invitation_due_at, format: :full, default: nil) }
 
@@ -150,11 +151,11 @@ RSpec.describe SupervisorMailer, type: :mailer do
   end
 
   describe ".reimbursement_request_email" do
-    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
-    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
-    let(:casa_organization) { volunteer.casa_org }
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true, casa_org:) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org:) }
+    let(:casa_organization) { casa_org }
 
-    let(:mail) { SupervisorMailer.reimbursement_request_email(volunteer, supervisor) }
+    let(:mail) { described_class.reimbursement_request_email(volunteer, supervisor) }
 
     it "sends email reminder" do
       expect(mail.subject).to eq("New reimbursement request from #{volunteer.display_name}")

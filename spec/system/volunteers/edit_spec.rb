@@ -501,9 +501,9 @@ RSpec.describe "volunteers/edit" do
     end
 
     it "emails the volunteer without a supervisor" do
-      organization = create(:casa_org)
-      volunteer_without_supervisor = create(:volunteer)
-      supervisor = create(:supervisor, casa_org: organization)
+      casa_org = create(:casa_org)
+      volunteer_without_supervisor = create(:volunteer, casa_org:, supervisor: nil)
+      supervisor = create(:supervisor, casa_org:)
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer_without_supervisor)
@@ -616,7 +616,7 @@ RSpec.describe "volunteers/edit" do
       visit edit_volunteer_path(volunteer)
 
       freeze_time do
-        current_date = Date.today
+        current_date = Time.zone.today
         fill_in("note[content]", with: "Great job today.")
         within(".notes") do
           click_on("Save Note")
@@ -664,7 +664,7 @@ RSpec.describe "volunteers/edit" do
       visit edit_volunteer_path(volunteer)
 
       freeze_time do
-        current_date = Date.today
+        current_date = Time.zone.today
         fill_in("note[content]", with: "Great job today.")
         within(".notes") do
           click_on("Save Note")

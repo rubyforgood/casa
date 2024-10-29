@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "checklist_items/new", type: :system do
-  let(:casa_admin) { create(:casa_admin) }
-  let(:hearing_type) { create(:hearing_type) }
+RSpec.describe "checklist_items/new" do
+  let(:casa_org) { create(:casa_org) }
+  let(:casa_admin) { create(:casa_admin, casa_org:) }
+  let(:hearing_type) { create(:hearing_type, casa_org:) }
 
   before do
     sign_in casa_admin
@@ -20,7 +21,7 @@ RSpec.describe "checklist_items/new", type: :system do
     expect(page).to have_text("Optional")
 
     click_on "Submit"
-    current_date = Time.new.strftime("%m/%d/%Y")
+    current_date = Time.zone.now.strftime("%m/%d/%Y")
     expect(page).to have_text("Updated #{current_date}")
   end
 

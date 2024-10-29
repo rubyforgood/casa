@@ -23,7 +23,7 @@ RSpec.describe CourtDatesHelper do
     end
 
     describe "when casa case has dates both in the past and future" do
-      let(:casa_case) { create(:casa_case, :with_upcoming_court_date, :with_past_court_date) }
+      let(:casa_case) { create(:casa_case, :with_past_and_future_court_dates) }
 
       it { expect(subject).to be_nil }
     end

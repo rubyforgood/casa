@@ -1,16 +1,18 @@
 require "rails_helper"
 
-RSpec.describe "/case_contact_reports", type: :request do
-  let!(:case_contact) { build(:case_contact) }
+RSpec.describe "/case_contact_reports" do
+  let(:casa_org) { create(:casa_org) }
+  let(:case_contact) { build(:case_contact, casa_org:) }
 
   before do
+    case_contact
     travel_to Time.zone.local(2020, 1, 1)
     sign_in user
   end
 
   describe "GET /case_contact_reports" do
     context "as volunteer" do
-      let(:user) { build(:volunteer) }
+      let(:user) { build(:volunteer, casa_org:) }
 
       it "cannot view reports" do
         get case_contact_reports_url(format: :csv), params: {report: {}}
@@ -23,12 +25,12 @@ RSpec.describe "/case_contact_reports", type: :request do
         let(:case_contact_report_params) do
           {
             start_date: 1.month.ago,
-            end_date: Date.today
+            end_date: Time.zone.today
           }
         end
 
         it "renders a csv file to download" do
-          get case_contact_reports_url(format: :csv), params: {report: {start_date: 1.month.ago, end_date: Date.today}}
+          get case_contact_reports_url(format: :csv), params: {report: {start_date: 1.month.ago, end_date: Time.zone.today}}
 
           expect(response).to be_successful
           expect(
@@ -50,8 +52,8 @@ RSpec.describe "/case_contact_reports", type: :request do
 
       context "with supervisor_ids filter" do
         it "renders csv with only the volunteer" do
-          volunteer = create(:volunteer)
-          casa_case = create(:casa_case, casa_org: volunteer.casa_org)
+          volunteer = create(:volunteer, casa_org:)
+          casa_case = create(:casa_case, casa_org:)
           contact = create(:case_contact, creator_id: volunteer.id, casa_case: casa_case)
           build_stubbed(:case_contact, creator_id: user.id, casa_case: casa_case)
 
@@ -66,11 +68,11 @@ RSpec.describe "/case_contact_reports", type: :request do
         end
       end
 
-      context "casa_case_ids filter" do
-        let!(:casa_case) { create(:casa_case) }
+      describe "casa_case_ids filter" do
+        let!(:casa_case) { create(:casa_case, casa_org:) }
         let!(:case_contacts) { create_list(:case_contact, 3, casa_case: casa_case) }
 
-        before { create_list(:case_contact, 5) }
+        before { create_list(:case_contact, 5, casa_org:) }
 
         it "returns success with proper headers" do
           get case_contact_reports_url(format: :csv),
@@ -112,16 +114,16 @@ RSpec.describe "/case_contact_reports", type: :request do
 
     context "as supervisor" do
       it_behaves_like "can view reports" do
-        let(:user) { build(:supervisor) }
+        let(:user) { build(:supervisor, casa_org:) }
       end
     end
 
     context "as casa_admin" do
       it_behaves_like "can view reports" do
-        let(:user) { build(:casa_admin) }
+        let(:user) { build(:casa_admin, casa_org:) }
       end
 
-      let(:user) { build(:casa_admin) }
+      let(:user) { build(:casa_admin, casa_org:) }
 
       it "passes in casa_org_id to CaseContractReport" do
         allow(CaseContactReport).to receive(:new).and_return([])
@@ -137,7 +139,7 @@ RSpec.describe "/case_contact_reports", type: :request do
   def case_contact_report_params
     {
       start_date: 1.month.ago,
-      end_date: Date.today
+      end_date: Date.current
     }
   end
 end

@@ -1,7 +1,7 @@
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
-RSpec.describe "/volunteers", type: :request do
+RSpec.describe "/volunteers" do
   let(:organization) { create(:casa_org) }
   let(:admin) { build(:casa_admin, casa_org: organization) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
@@ -255,10 +255,10 @@ RSpec.describe "/volunteers", type: :request do
     end
 
     context "with invalid params" do
-      let!(:other_volunteer) { create(:volunteer) }
+      let!(:other_volunteer) { create(:volunteer, casa_org: organization) }
 
       it "does not update the volunteer" do
-        volunteer.supervisor = build(:supervisor)
+        volunteer.supervisor = build(:supervisor, casa_org: organization)
 
         patch volunteer_path(volunteer), params: {
           volunteer: {email: other_volunteer.email, display_name: "New Name", phone_number: "+15463457898"}
@@ -280,7 +280,7 @@ RSpec.describe "/volunteers", type: :request do
       }
       volunteer.reload
 
-      expect(volunteer.active).to eq(true)
+      expect(volunteer.active).to be(true)
     end
   end
 
@@ -295,7 +295,7 @@ RSpec.describe "/volunteers", type: :request do
       patch activate_volunteer_path(volunteer)
 
       volunteer.reload
-      expect(volunteer.active).to eq(true)
+      expect(volunteer.active).to be(true)
     end
 
     it "sends an activation email" do
@@ -349,7 +349,7 @@ RSpec.describe "/volunteers", type: :request do
 
     it "deactivates an active volunteer" do
       request
-      expect(volunteer.reload.active).to eq(false)
+      expect(volunteer.reload.active).to be(false)
     end
 
     it "doesn't send a deactivation email" do
@@ -361,12 +361,12 @@ RSpec.describe "/volunteers", type: :request do
     before { sign_in admin }
 
     it "resends an invitation email" do
-      expect(volunteer.invitation_created_at.present?).to eq(false)
+      expect(volunteer.invitation_created_at.present?).to be(false)
 
       get resend_invitation_volunteer_path(volunteer)
       volunteer.reload
 
-      expect(volunteer.invitation_created_at.present?).to eq(true)
+      expect(volunteer.invitation_created_at.present?).to be(true)
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_volunteer_path(volunteer))

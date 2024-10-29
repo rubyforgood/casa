@@ -1,8 +1,9 @@
 require "rails_helper"
 
 RSpec.describe "LearningHours::Volunteers #show" do
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor) }
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
+  let(:supervisor) { create(:supervisor, casa_org:) }
   let(:learning_hours) { create_list(:learning_hour, 1, user: volunteer) }
 
   before do

@@ -1,7 +1,7 @@
 require "rails_helper"
 require "csv"
 
-RSpec.describe MileageReport, type: :model do
+RSpec.describe MileageReport do
   describe "#to_csv" do
     it "includes only case contacts that are eligible for driving reimbursement and not already reimbursed" do
       user1 = create(:volunteer, display_name: "Linda")
@@ -55,8 +55,8 @@ RSpec.describe MileageReport, type: :model do
 
     it "includes case contacts from current org" do
       casa_org = create(:casa_org)
-      create(:casa_case, casa_org: casa_org)
-      create(:case_contact, want_driving_reimbursement: true, miles_driven: 15)
+      casa_case = create(:casa_case, casa_org: casa_org)
+      create(:case_contact, casa_case:, want_driving_reimbursement: true, miles_driven: 15)
 
       csv = described_class.new(casa_org.id).to_csv
       parsed_csv = CSV.parse(csv)

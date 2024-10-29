@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "/case_contacts", type: :request do
-  let(:organization) { build(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, casa_org: organization) }
+RSpec.describe "/case_contacts" do
+  let(:casa_org) { build(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
 
   before { sign_in admin }
 
@@ -14,7 +14,7 @@ RSpec.describe "/case_contacts", type: :request do
       response
     end
 
-    let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let!(:casa_case) { create(:casa_case, casa_org:) }
     let!(:past_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago) }
     let!(:recent_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago) }
     let(:filterrific) { {} }
@@ -76,7 +76,8 @@ RSpec.describe "/case_contacts", type: :request do
       response
     end
 
-    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: "Notes") }
+    let(:casa_case) { create(:casa_case, :with_case_assignments, casa_org:) }
+    let(:case_contact) { create(:case_contact, casa_case:, notes: "Notes") }
 
     it { is_expected.to have_http_status(:redirect) }
 
@@ -109,7 +110,7 @@ RSpec.describe "/case_contacts", type: :request do
       response
     end
 
-    let(:case_contact) { create(:case_contact) }
+    let(:case_contact) { create(:case_contact, casa_org:) }
 
     it { is_expected.to redirect_to(case_contacts_path) }
 
@@ -130,7 +131,7 @@ RSpec.describe "/case_contacts", type: :request do
       response
     end
 
-    let(:case_contact) { create(:case_contact) }
+    let(:case_contact) { create(:case_contact, casa_org:) }
 
     before { case_contact.destroy }
 

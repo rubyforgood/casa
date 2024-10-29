@@ -10,7 +10,7 @@ require "capybara/rspec"
 require "action_text/system_test_helper"
 
 # Require all support folder files
-Dir[Rails.root.join("spec/support/**/*.rb")].sort.each { |f| require f }
+Rails.root.glob("spec/support/**/*.rb").sort.each { |f| require f }
 
 begin
   ActiveRecord::Migration.maintain_test_schema!
@@ -53,7 +53,7 @@ RSpec.configure do |config|
   end
 
   # Changes to fix warning of Rails 7.1 has deprecated the singular fixture_path in favour of an array
-  config.fixture_paths = ["#{Rails.root.join("spec/fixtures")}"]
+  config.fixture_paths = [Rails.root.join("spec/fixtures").to_s]
 
   config.use_transactional_fixtures = true
 
@@ -64,14 +64,14 @@ RSpec.configure do |config|
     metadata[:type] = :datatable
   end
   config.define_derived_metadata(file_path: Regexp.new("/spec/system//")) do |metadata|
-    metadata[:type] = :system
+    metadata[:type] = :system # needs to be set for aggregate_failures below (vs inferred)
   end
   # Aggregate failures by default. Not as useful for system specs, they need to fail fast.
   config.define_derived_metadata do |metadata|
     metadata[:aggregate_failures] = true unless metadata[:type] == :system
   end
 
-  config.example_status_persistence_file_path = "#{Rails.root.join("tmp/persistent_examples.txt")}"
+  config.example_status_persistence_file_path = Rails.root.join("tmp/persistent_examples.txt")
 
   # Filter backtraces to gems that are not under our control.
   # Can override using `--backtrace` option to rspec to see full backtraces.

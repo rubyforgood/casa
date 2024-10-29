@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "dashboard/show", type: :system do
-  let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw") }
-  let(:casa_admin) { create(:casa_admin, display_name: "John Doe") }
+RSpec.describe "dashboard/show" do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, display_name: "Bob Loblaw", casa_org:) }
+  let(:casa_admin) { create(:casa_admin, display_name: "John Doe", casa_org:) }
 
   context "volunteer user" do
     before do

@@ -14,7 +14,6 @@ FactoryBot.define do
         @overrides[:casa_case].try(:casa_org) ||
           @overrides[:creator].try(:casa_org) ||
           @overrides[:contact_types]&.first.try(:casa_org) ||
-          CasaOrg.first ||
           association(:casa_org)
       end
     end

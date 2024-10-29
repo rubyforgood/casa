@@ -1,12 +1,13 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
+RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id" do
   include DownloadHelpers
-  let(:admin) { create(:casa_admin) }
-  let(:casa_case) { court_date.casa_case }
-  let(:court_date) { create(:court_date) }
-  let(:hearing_type) { create(:hearing_type) }
-  let(:judge) { create(:judge, name: "8`l/UR*|`=Iab'A") }
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:casa_case) { create(:casa_case, casa_org:) }
+  let(:court_date) { create(:court_date, casa_case:) }
+  let(:hearing_type) { create(:hearing_type, casa_org:) }
+  let(:judge) { create(:judge, name: "8`l/UR*|`=Iab'A", casa_org:) }
   let(:valid_attributes) do
     {
       date: Date.yesterday,
@@ -39,20 +40,21 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     subject(:show) { get casa_case_court_date_path(casa_case, court_date) }
 
     before do
-      casa_org = court_date.casa_case.casa_org
       casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec/fixtures/files/default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
       casa_org.court_report_template.save!
-      show
     end
 
     context "when the request is authenticated" do
-      it { expect(response).to have_http_status(:success) }
+      it "responds success" do
+        show
+        expect(response).to have_http_status(:success)
+      end
     end
 
     context "when the request is unauthenticated" do
       it "redirects to login page" do
         sign_out admin
-        get casa_case_court_date_path(casa_case, court_date)
+        show
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -62,7 +64,10 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       let(:headers) { {accept: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"} }
 
-      it { expect(response).to be_successful }
+      it "responds success" do
+        show
+        expect(response).to have_http_status(:success)
+      end
 
       it "displays the court date" do
         show
@@ -74,7 +79,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "when a judge is attached" do
         let!(:court_date) {
-          create(:court_date, date: Date.yesterday, judge: judge)
+          create(:court_date, date: Date.yesterday, judge: judge, casa_case:)
         }
 
         it "includes the judge's name in the document" do
@@ -88,7 +93,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "without a judge" do
         let!(:court_date) {
-          create(:court_date, date: Date.yesterday, judge: nil)
+          create(:court_date, date: Date.yesterday, judge: nil, casa_case:)
         }
 
         it "includes None for the judge's name in the document" do
@@ -104,7 +109,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "with a hearing type" do
         let!(:court_date) {
-          create(:court_date, date: Date.yesterday, hearing_type: hearing_type)
+          create(:court_date, date: Date.yesterday, hearing_type:, casa_case:)
         }
 
         it "includes the hearing type in the document" do
@@ -118,7 +123,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "without a hearing type" do
         let!(:court_date) {
-          create(:court_date, date: Date.yesterday, hearing_type: nil)
+          create(:court_date, date: Date.yesterday, hearing_type: nil, casa_case:)
         }
 
         it "includes None for the hearing type in the document" do
@@ -134,7 +139,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "with a court order" do
         let!(:court_date) {
-          create(:court_date, :with_court_order)
+          create(:court_date, :with_court_order, casa_case:)
         }
 
         it "includes court order info" do
@@ -150,7 +155,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
       context "without a court order" do
         let!(:court_date) {
-          create(:court_date)
+          create(:court_date, casa_case:)
         }
 
         it "does not include court orders section" do
@@ -165,15 +170,19 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   end
 
   describe "GET /new" do
+    subject { get new_casa_case_court_date_path(casa_case) }
+
     it "renders a successful response" do
-      get new_casa_case_court_date_path(casa_case)
+      subject
       expect(response).to be_successful
     end
   end
 
   describe "GET /edit" do
+    subject { get edit_casa_case_court_date_path(casa_case, court_date) }
+
     it "render a successful response" do
-      get edit_casa_case_court_date_path(casa_case, court_date)
+      subject
       expect(response).to be_successful
     end
 
@@ -187,7 +196,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   end
 
   describe "POST /create" do
-    let(:casa_case) { create(:casa_case) }
+    let(:casa_case) { create(:casa_case, casa_org:) }
     let(:court_date) { CourtDate.last }
 
     context "with valid parameters" do
@@ -387,7 +396,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     shared_examples "successful deletion" do
       it "removes court date record" do
         court_date
-        expect { request }.to change { CourtDate.count }.by(-1)
+        expect { request }.to change(CourtDate, :count).by(-1)
       end
 
       it { is_expected.to redirect_to(casa_case_path(casa_case)) }
@@ -401,7 +410,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     shared_examples "unsuccessful deletion" do
       it "does not remove court date record" do
         court_date
-        expect { request }.not_to change { CourtDate.count }
+        expect { request }.not_to change(CourtDate, :count)
       end
 
       it { is_expected.to redirect_to(casa_case_court_date_path(casa_case, court_date)) }
@@ -417,13 +426,13 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     end
 
     context "when the court date is today" do
-      let(:court_date) { create(:court_date, date: Date.current) }
+      let(:court_date) { create(:court_date, date: Date.current, casa_case:) }
 
       it_behaves_like "unsuccessful deletion"
     end
 
     context "when the court date is in the future" do
-      let(:court_date) { create(:court_date, date: 1.day.from_now) }
+      let(:court_date) { create(:court_date, date: 1.day.from_now, casa_case:) }
 
       it_behaves_like "successful deletion"
     end

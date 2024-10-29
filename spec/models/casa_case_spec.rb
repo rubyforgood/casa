@@ -1,7 +1,9 @@
 require "rails_helper"
 
-RSpec.describe CasaCase, type: :model do
-  subject { build(:casa_case) }
+RSpec.describe CasaCase do
+  subject { build(:casa_case, casa_org:) }
+
+  let(:casa_org) { create(:casa_org) }
 
   it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
   it { is_expected.to belong_to(:casa_org) }
@@ -20,31 +22,31 @@ RSpec.describe CasaCase, type: :model do
 
     describe "date_in_care" do
       it "is valid when blank" do
-        casa_case = CasaCase.new(date_in_care: nil)
+        casa_case = described_class.new(date_in_care: nil)
         casa_case.valid?
         expect(casa_case.errors[:date_in_care]).to eq([])
       end
 
       it "is not valid before 1989" do
-        casa_case = CasaCase.new(date_in_care: "1984-01-01".to_date)
+        casa_case = described_class.new(date_in_care: "1984-01-01".to_date)
         expect(casa_case.valid?).to be false
         expect(casa_case.errors[:date_in_care]).to eq(["is not valid: Youth's Date in Care cannot be prior to 1/1/1989."])
       end
 
       it "is not valid with a future date" do
-        casa_case = CasaCase.new(date_in_care: 1.day.from_now)
+        casa_case = described_class.new(date_in_care: 1.day.from_now)
         expect(casa_case.valid?).to be false
         expect(casa_case.errors[:date_in_care]).to eq(["is not valid: Youth's Date in Care cannot be a future date."])
       end
 
       it "is valid today" do
-        casa_case = CasaCase.new(date_in_care: Time.now)
+        casa_case = described_class.new(date_in_care: Time.zone.now)
         casa_case.valid?
         expect(casa_case.errors[:date_in_care]).to eq([])
       end
 
       it "is valid in the past after 1989" do
-        casa_case = CasaCase.new(date_in_care: "1997-08-29".to_date)
+        casa_case = described_class.new(date_in_care: "1997-08-29".to_date)
         casa_case.valid?
         expect(casa_case.errors[:date_in_care]).to eq([])
       end
@@ -54,25 +56,25 @@ RSpec.describe CasaCase, type: :model do
       it { is_expected.to validate_presence_of(:birth_month_year_youth) }
 
       it "is not valid before 1989" do
-        casa_case = CasaCase.new(birth_month_year_youth: "1984-01-01".to_date)
+        casa_case = described_class.new(birth_month_year_youth: "1984-01-01".to_date)
         expect(casa_case.valid?).to be false
         expect(casa_case.errors[:birth_month_year_youth]).to eq(["is not valid: Youth's Birth Month & Year cannot be prior to 1/1/1989."])
       end
 
       it "is not valid with a future date" do
-        casa_case = CasaCase.new(birth_month_year_youth: 1.day.from_now)
+        casa_case = described_class.new(birth_month_year_youth: 1.day.from_now)
         expect(casa_case.valid?).to be false
         expect(casa_case.errors[:birth_month_year_youth]).to eq(["is not valid: Youth's Birth Month & Year cannot be a future date."])
       end
 
       it "is valid today" do
-        casa_case = CasaCase.new(birth_month_year_youth: Time.now)
+        casa_case = described_class.new(birth_month_year_youth: Time.zone.now)
         casa_case.valid?
         expect(casa_case.errors[:birth_month_year_youth]).to eq([])
       end
 
       it "is valid in the past after 1989" do
-        casa_case = CasaCase.new(birth_month_year_youth: "1997-08-29".to_date)
+        casa_case = described_class.new(birth_month_year_youth: "1997-08-29".to_date)
         casa_case.valid?
         expect(casa_case.errors[:birth_month_year_youth]).to eq([])
       end
@@ -84,14 +86,14 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.due_date_passed }
 
       context "when casa_case is present" do
-        let!(:court_date) { create(:court_date, date: 3.days.ago) }
+        let!(:court_date) { create(:court_date, date: 3.days.ago, casa_org:) }
         let(:casa_case) { court_date.casa_case }
 
         it { is_expected.to include(casa_case) }
       end
 
       context "when casa_case is not present" do
-        let!(:court_date) { create(:court_date, date: 3.days.from_now) }
+        let!(:court_date) { create(:court_date, date: 3.days.from_now, casa_org:) }
         let(:casa_case) { court_date.casa_case }
 
         it { is_expected.not_to include(casa_case) }
@@ -102,13 +104,13 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.birthday_next_month }
 
       context "when a youth has a birthday next month" do
-        let(:casa_case) { create(:casa_case, birth_month_year_youth: 10.years.ago + 1.month) }
+        let(:casa_case) { create(:casa_case, birth_month_year_youth: 10.years.ago + 1.month, casa_org:) }
 
         it { is_expected.to include(casa_case) }
       end
 
       context "when no youth has a birthday next month" do
-        let(:casa_case) { create(:casa_case) }
+        let(:casa_case) { create(:casa_case, casa_org:) }
 
         it { is_expected.to be_empty }
       end
@@ -116,10 +118,10 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe ".unassigned_volunteers" do
-    let!(:casa_case) { create(:casa_case) }
-    let!(:volunteer_same_org) { create(:volunteer, display_name: "Yelena Belova", casa_org: casa_case.casa_org) }
-    let!(:volunteer_same_org_1_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Natasha Romanoff", casa_org: casa_case.casa_org) }
-    let!(:volunteer_same_org_2_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Melina Vostokoff", casa_org: casa_case.casa_org) }
+    let!(:casa_case) { create(:casa_case, casa_org:) }
+    let!(:volunteer_same_org) { create(:volunteer, display_name: "Yelena Belova", casa_org:) }
+    let!(:volunteer_same_org_1_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Natasha Romanoff", casa_org:) }
+    let!(:volunteer_same_org_2_with_cases) { create(:volunteer, :with_casa_cases, display_name: "Melina Vostokoff", casa_org:) }
     let!(:volunteer_different_org) { create(:volunteer, casa_org: create(:casa_org)) }
 
     it "only shows volunteers for the current volunteers organization" do
@@ -134,9 +136,9 @@ RSpec.describe CasaCase, type: :model do
 
   describe ".ordered" do
     it "orders the casa cases by updated at date" do
-      very_old_casa_case = create(:casa_case, updated_at: 5.days.ago)
-      old_casa_case = create(:casa_case, updated_at: 1.day.ago)
-      new_casa_case = create(:casa_case)
+      very_old_casa_case = create(:casa_case, updated_at: 5.days.ago, casa_org:)
+      old_casa_case = create(:casa_case, updated_at: 1.day.ago, casa_org:)
+      new_casa_case = create(:casa_case, casa_org:)
 
       ordered_casa_cases = described_class.ordered
 
@@ -146,17 +148,17 @@ RSpec.describe CasaCase, type: :model do
 
   describe ".actively_assigned_to" do
     it "only returns cases actively assigned to a volunteer" do
-      current_user = build(:volunteer)
-      inactive_case = build(:casa_case, casa_org: current_user.casa_org)
+      current_user = build(:volunteer, casa_org:)
+      inactive_case = build(:casa_case, casa_org:)
       build_stubbed(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
-      active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
+      active_cases = create_list(:casa_case, 2, casa_org:)
       active_cases.each do |casa_case|
         create(:case_assignment, casa_case: casa_case, volunteer: current_user, active: true)
       end
 
-      other_user = build(:volunteer)
-      other_active_case = build(:casa_case, casa_org: other_user.casa_org)
-      other_inactive_case = build(:casa_case, casa_org: other_user.casa_org)
+      other_user = build(:volunteer, casa_org:)
+      other_active_case = build(:casa_case, casa_org:)
+      other_inactive_case = build(:casa_case, casa_org:)
       create(:case_assignment, casa_case: other_active_case, volunteer: other_user, active: true)
       create(
         :case_assignment,
@@ -169,44 +171,44 @@ RSpec.describe CasaCase, type: :model do
 
   describe ".not_assigned" do
     it "only returns cases NOT actively assigned to ANY volunteer" do
-      current_user = create(:volunteer)
+      current_user = create(:volunteer, casa_org:)
 
-      never_assigned_case = create(:casa_case, casa_org: current_user.casa_org)
+      never_assigned_case = create(:casa_case, casa_org:)
 
-      inactive_case = create(:casa_case, casa_org: current_user.casa_org)
+      inactive_case = create(:casa_case, casa_org:)
       create(:case_assignment, casa_case: inactive_case, volunteer: current_user, active: false)
-      active_cases = create_list(:casa_case, 2, casa_org: current_user.casa_org)
+      active_cases = create_list(:casa_case, 2, casa_org:)
       active_cases.each do |casa_case|
         create(:case_assignment, casa_case: casa_case, volunteer: current_user, active: true)
       end
 
-      other_user = create(:volunteer)
-      other_active_case = create(:casa_case, casa_org: other_user.casa_org)
-      other_inactive_case = create(:casa_case, casa_org: other_user.casa_org)
+      other_user = create(:volunteer, casa_org:)
+      other_active_case = create(:casa_case, casa_org:)
+      other_inactive_case = create(:casa_case, casa_org:)
       create(:case_assignment, casa_case: other_active_case, volunteer: other_user, active: true)
       create(
         :case_assignment,
         casa_case: other_inactive_case, volunteer: other_user, active: false
       )
 
-      expect(described_class.not_assigned(current_user.casa_org)).to contain_exactly(never_assigned_case, inactive_case, other_inactive_case)
+      expect(described_class.not_assigned(casa_org)).to contain_exactly(never_assigned_case, inactive_case, other_inactive_case)
     end
   end
 
   describe ".should_transition" do
     it "returns only youth who should have transitioned but have not" do
-      not_transitioned_13_yo = build(:casa_case,
+      not_transitioned_13_yo = build(:casa_case, casa_org:,
         birth_month_year_youth: Date.current - 13.years)
-      transitioned_14_yo = build(:casa_case,
+      transitioned_14_yo = build(:casa_case, casa_org:,
         birth_month_year_youth: pre_transition_aged_youth_age)
-      not_transitioned_14_yo = create(:casa_case,
+      not_transitioned_14_yo = create(:casa_case, casa_org:,
         birth_month_year_youth: pre_transition_aged_youth_age)
-      cases = CasaCase.should_transition
+      cases = described_class.should_transition
       aggregate_failures do
         expect(cases.length).to eq 1
-        expect(cases.include?(not_transitioned_14_yo)).to eq true
-        expect(cases.include?(not_transitioned_13_yo)).to eq false
-        expect(cases.include?(transitioned_14_yo)).to eq false
+        expect(cases.include?(not_transitioned_14_yo)).to be true
+        expect(cases.include?(not_transitioned_13_yo)).to be false
+        expect(cases.include?(transitioned_14_yo)).to be false
       end
     end
   end
@@ -225,7 +227,7 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe "#add_emancipation_category" do
-    let(:casa_case) { create(:casa_case) }
+    let(:casa_case) { create(:casa_case, casa_org:) }
     let(:emancipation_category) { create(:emancipation_category) }
 
     it "associates an emacipation category with the case when passed the id of the category" do
@@ -236,7 +238,7 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe "#add_emancipation_option" do
-    let(:casa_case) { create(:casa_case) }
+    let(:casa_case) { create(:casa_case, casa_org:) }
     let(:emancipation_category) { build(:emancipation_category, mutually_exclusive: true) }
     let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
     let(:emancipation_option_b) { create(:emancipation_option, emancipation_category: emancipation_category, name: "Not the same name as option A to satisfy unique contraints") }
@@ -294,7 +296,7 @@ RSpec.describe CasaCase, type: :model do
 
     let(:casa_case) { build(:casa_case) }
 
-    let(:submitted_time) { Time.parse("Sun Nov 08 11:06:20 2020") }
+    let(:submitted_time) { Time.zone.parse("Sun Nov 08 11:06:20 2020") }
     let(:the_future) { submitted_time + 2.days }
 
     before do

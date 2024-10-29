@@ -1,18 +1,30 @@
 FactoryBot.define do
   factory :casa_case do
+    casa_org do
+      @overrides[:volunteers].try(:first).try(:casa_org) ||
+        association(:casa_org)
+    end
     sequence(:case_number) { |n| "CINA-#{n}" }
     birth_month_year_youth { 16.years.ago }
-    casa_org { CasaOrg.first || create(:casa_org) }
     court_report_status { :not_submitted }
     case_court_orders { [] }
 
     transient do
       volunteers { [] }
+      volunteer_count { 0 }
     end
 
-    after(:create) do |casa_case, evaluator|
-      Array.wrap(evaluator.volunteers).each do |volunteer|
-        create(:case_assignment, casa_case:, volunteer:)
+    case_assignments do
+      if volunteers&.any?
+        volunteers.map do |volunteer|
+          association(:case_assignment, casa_case: instance, volunteer:)
+        end
+      elsif volunteer_count.positive?
+        Array.new(volunteer_count) do
+          association(:case_assignment, casa_case: instance)
+        end
+      else
+        []
       end
     end
 
@@ -21,27 +33,16 @@ FactoryBot.define do
     end
 
     trait :with_one_case_assignment do
-      after(:create) do |casa_case, _|
-        casa_org = casa_case.casa_org
-        volunteer = create(:volunteer, casa_org: casa_org)
-        create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
-      end
+      volunteer_count { 1 }
     end
 
     trait :with_case_assignments do
-      after(:create) do |casa_case, _|
-        casa_org = casa_case.casa_org
-        2.times.map do
-          volunteer = create(:volunteer, casa_org: casa_org)
-          create(:case_assignment, casa_case: casa_case, volunteer: volunteer)
-        end
-      end
+      volunteer_count { 2 }
     end
 
     trait :with_one_court_order do
-      after(:create) do |casa_case|
-        casa_case.case_court_orders << build(:case_court_order)
-        casa_case.save!
+      case_court_orders do
+        Array.new(1) { association(:case_court_order, casa_case: instance) }
       end
     end
 
@@ -55,39 +56,43 @@ FactoryBot.define do
   end
 
   trait :with_case_contacts do
-    after(:create) do |casa_case|
-      3.times do
-        create(:case_contact, casa_case_id: casa_case.id)
-      end
+    case_contacts do
+      Array.new(3) { association(:case_contact, casa_case: instance) }
     end
   end
 
   trait :with_casa_case_contact_types do
-    after(:create) do |casa_case, _|
-      casa_org = casa_case.casa_org
-      2.times.map do
-        contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        contact_type = create(:contact_type, contact_type_group: contact_type_group)
-        create(:casa_case_contact_type, casa_case: casa_case, contact_type: contact_type)
+    casa_case_contact_types do
+      Array.new(2) do
+        association(:casa_case_contact_type, casa_case: instance)
       end
     end
   end
 
   trait :with_upcoming_court_date do
-    after(:create) do |casa_case|
-      create(:court_date, casa_case: casa_case, date: Date.tomorrow)
+    court_dates do
+      Array.new(1) { association(:court_date, casa_case: instance, date: Date.tomorrow) }
     end
   end
 
   trait :with_past_court_date do
-    after(:create) do |casa_case|
-      create(:court_date, casa_case: casa_case, date: Date.yesterday)
+    court_dates do
+      Array.new(1) { association(:court_date, casa_case: instance, date: Date.yesterday) }
+    end
+  end
+
+  trait :with_past_and_future_court_dates do
+    court_dates do
+      [
+        association(:court_date, casa_case: instance, date: Date.yesterday),
+        association(:court_date, casa_case: instance, date: Date.tomorrow)
+      ]
     end
   end
 
   trait :with_placement do
-    after(:create) do |casa_case|
-      create(:placement, casa_case: casa_case, placement_started_at: Date.tomorrow)
+    placements do
+      Array.new(1) { association(:placement, casa_case: instance, placement_started_at: Date.tomorrow) }
     end
   end
 end

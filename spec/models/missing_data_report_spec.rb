@@ -1,7 +1,7 @@
 require "rails_helper"
 require "csv"
 
-RSpec.describe MissingDataReport, type: :model do
+RSpec.describe MissingDataReport do
   describe "#to_csv" do
     let!(:casa_org) { create(:casa_org) }
     let(:result) { CSV.parse(described_class.new(casa_org.id).to_csv) }
@@ -20,14 +20,14 @@ RSpec.describe MissingDataReport, type: :model do
     context "when there are casa cases" do
       let!(:incomplete_casa_cases) do
         [
-          create(:casa_case),
-          create(:casa_case, :with_one_court_order),
-          create(:casa_case, :with_upcoming_court_date)
+          create(:casa_case, casa_org:),
+          create(:casa_case, :with_one_court_order, casa_org:),
+          create(:casa_case, :with_upcoming_court_date, casa_org:)
         ]
       end
 
       let!(:incomplete_casa_cases_from_other_org) { create_list(:casa_case, 3, casa_org: create(:casa_org)) }
-      let!(:complete_casa_cases) { create_list(:casa_case, 3, :with_upcoming_court_date, :with_one_court_order) }
+      let!(:complete_casa_cases) { create_list(:casa_case, 3, :with_upcoming_court_date, :with_one_court_order, casa_org:) }
 
       let(:expected_result) do
         [

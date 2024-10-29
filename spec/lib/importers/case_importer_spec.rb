@@ -1,10 +1,10 @@
 require "rails_helper"
 
 RSpec.describe CaseImporter do
-  subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
+  subject(:case_importer) { described_class.new(import_file_path, casa_org_id) }
 
-  let(:casa_org_id) { import_user.casa_org.id }
-  let!(:import_user) { build(:casa_admin) }
+  let(:casa_org) { create :casa_org }
+  let(:casa_org_id) { casa_org.id }
   let(:import_file_path) { Rails.root.join("spec/fixtures/casa_cases.csv") }
 
   before do
@@ -37,7 +37,7 @@ RSpec.describe CaseImporter do
     end
 
     context "when updating records" do
-      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4348") }
+      let!(:existing_case) { create(:casa_case, case_number: "CINA-01-4348", casa_org:) }
 
       it "assigns new volunteers to the case" do
         expect { case_importer.import_cases }.to change(existing_case.volunteers, :count).by(2)
@@ -66,12 +66,12 @@ RSpec.describe CaseImporter do
     end
 
     specify "static and instance methods have identical results" do
-      CaseImporter.new(import_file_path, casa_org_id).import_cases
+      described_class.new(import_file_path, casa_org_id).import_cases
       data_using_instance = CasaCase.pluck(:case_number).sort
 
       CourtDate.delete_all
       CasaCase.delete_all
-      CaseImporter.import_cases(import_file_path, casa_org_id)
+      described_class.import_cases(import_file_path, casa_org_id)
       data_using_static = CasaCase.pluck(:case_number).sort
 
       expect(data_using_static).to eq(data_using_instance)

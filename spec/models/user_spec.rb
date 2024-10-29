@@ -1,6 +1,8 @@
 require "rails_helper"
 
-RSpec.describe User, type: :model do
+RSpec.describe User do
+  let(:casa_org) { create :casa_org }
+
   it { is_expected.to belong_to(:casa_org) }
 
   it { is_expected.to have_many(:case_assignments) }
@@ -134,7 +136,7 @@ RSpec.describe User, type: :model do
     end
 
     describe "#no_attempt_for_two_weeks" do
-      let(:supervisor) { create(:supervisor) }
+      let(:supervisor) { create(:supervisor, casa_org:) }
 
       it "returns zero for a volunteer that has attempted contact in at least one contact_case within the last 2 weeks" do
         volunteer_1 = create(:volunteer, :with_casa_cases, supervisor: supervisor)
@@ -274,12 +276,12 @@ RSpec.describe User, type: :model do
     it "returns users who haven't signed in in 30 days" do
       old_sign_in_user = create(:user, last_sign_in_at: 39.days.ago)
       create(:user, last_sign_in_at: 5.days.ago)
-      expect(User.no_recent_sign_in).to contain_exactly(old_sign_in_user)
+      expect(described_class.no_recent_sign_in).to contain_exactly(old_sign_in_user)
     end
 
     it "returns users who haven't signed in ever" do
       user = create(:user, last_sign_in_at: nil)
-      expect(User.no_recent_sign_in).to contain_exactly(user)
+      expect(described_class.no_recent_sign_in).to contain_exactly(user)
     end
   end
 

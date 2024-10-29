@@ -1,15 +1,16 @@
 require "rails_helper"
 
 RSpec.describe SupervisorImporter do
-  let!(:import_user) { build_stubbed(:casa_admin) }
-  let(:casa_org_id) { import_user.casa_org.id }
+  let!(:import_user) { build_stubbed(:casa_admin, casa_org:) }
+  let(:casa_org) { create :casa_org }
+  let(:casa_org_id) { casa_org.id }
 
   # Use of the static method SupervisorImporter.import_volunteers functions identically to SupervisorImporter.new(...).import_volunteers
   # but is preferred.
   let(:supervisor_import_data_path) { Rails.root.join("spec/fixtures/supervisors.csv") }
 
   let(:supervisor_importer) do
-    importer = SupervisorImporter.new(supervisor_import_data_path, casa_org_id)
+    importer = described_class.new(supervisor_import_data_path, casa_org_id)
 
     allow(importer).to receive(:email_addresses_to_users) do |_clazz, supervisor_volunteers|
       create_list(:volunteer, supervisor_volunteers.split(",").size, casa_org: import_user.casa_org)
@@ -39,11 +40,11 @@ RSpec.describe SupervisorImporter do
     end
 
     context "when any volunteer could not be assigned to the supervisor during the import" do
-      let!(:existing_volunteer) { build(:volunteer, email: "volunteer1@example.net") }
+      let!(:existing_volunteer) { build(:volunteer, email: "volunteer1@example.net", casa_org:) }
       let(:supervisor_import_data_path) { Rails.root.join("spec/fixtures/supervisor_volunteers.csv") }
 
       it "returns an error message" do
-        alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
+        alert = described_class.new(supervisor_import_data_path, casa_org_id).import_supervisors
 
         expect(alert[:type]).to eq(:error)
         expect(alert[:message]).to include("Not all rows were imported.")
@@ -53,7 +54,7 @@ RSpec.describe SupervisorImporter do
         let!(:supervisor_volunteer) { create(:supervisor_volunteer, volunteer: existing_volunteer) }
 
         it "returns an error message" do
-          alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
+          alert = described_class.new(supervisor_import_data_path, casa_org_id).import_supervisors
 
           expect(alert[:type]).to eq(:error)
           expect(alert[:exported_rows]).to include("Volunteer #{existing_volunteer.email} already has a supervisor")
@@ -63,7 +64,7 @@ RSpec.describe SupervisorImporter do
   end
 
   context "when updating supervisors" do
-    let!(:existing_supervisor) { create(:supervisor, display_name: "#", email: "supervisor2@example.net") }
+    let!(:existing_supervisor) { create(:supervisor, display_name: "#", email: "supervisor2@example.net", casa_org:) }
 
     it "assigns unassigned volunteers" do
       expect {
@@ -126,12 +127,12 @@ RSpec.describe SupervisorImporter do
   end
 
   specify "static and instance methods have identical results" do
-    SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
+    described_class.new(supervisor_import_data_path, casa_org_id).import_supervisors
     data_using_instance = Supervisor.pluck(:email).sort
 
     SentEmail.destroy_all
     Supervisor.destroy_all
-    SupervisorImporter.import_supervisors(supervisor_import_data_path, casa_org_id)
+    described_class.import_supervisors(supervisor_import_data_path, casa_org_id)
     data_using_static = Supervisor.pluck(:email).sort
 
     expect(data_using_static).to eq(data_using_instance)

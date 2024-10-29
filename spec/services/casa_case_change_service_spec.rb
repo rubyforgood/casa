@@ -8,13 +8,14 @@ RSpec.describe CasaCaseChangeService do
     let(:changed) { original }
 
     it "does not show diff" do
-      expect(subject).to eq(nil)
+      expect(subject).to be_nil
     end
   end
 
   context "with different original and changed" do
-    let(:original) { create(:casa_case).full_attributes_hash }
-    let(:changed) { create(:casa_case, :with_case_assignments, :with_one_court_order, :active, :with_case_contacts).full_attributes_hash }
+    let(:casa_org) { create(:casa_org) }
+    let(:original) { create(:casa_case, casa_org:).full_attributes_hash }
+    let(:changed) { create(:casa_case, :with_case_assignments, :with_one_court_order, :active, :with_case_contacts, casa_org:).full_attributes_hash }
 
     it "shows useful diff" do
       expect(subject).to contain_exactly("Changed Id", "Changed Case number", "Changed Created at", "Changed Birth month year youth", "1 Court order added or updated")

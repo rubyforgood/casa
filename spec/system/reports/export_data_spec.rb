@@ -58,7 +58,7 @@ RSpec.describe "case_contact_reports/index" do
   it "downloads mileage report", :js do
     sign_in admin
 
-    supervisor = create(:supervisor)
+    supervisor = create(:supervisor, casa_org:)
     volunteer = create(:volunteer, supervisor: supervisor)
     case_contact_with_mileage = create(:case_contact, want_driving_reimbursement: true, miles_driven: 10, creator: volunteer)
     case_contact_without_mileage = create(:case_contact)

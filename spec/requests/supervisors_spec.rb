@@ -3,7 +3,7 @@
 require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
-RSpec.describe "/supervisors", type: :request do
+RSpec.describe "/supervisors" do
   let(:org) { create(:casa_org) }
   let(:admin) { build(:casa_admin, casa_org: org) }
   let(:supervisor) { create(:supervisor, casa_org: org) }
@@ -171,8 +171,8 @@ RSpec.describe "/supervisors", type: :request do
       end
 
       context "when the email exists already and the supervisor has volunteers assigned" do
-        let(:other_supervisor) { create(:supervisor) }
-        let(:supervisor) { create(:supervisor, :with_volunteers) }
+        let(:other_supervisor) { create(:supervisor, casa_org: org) }
+        let(:supervisor) { create(:supervisor, :with_volunteers, casa_org: org) }
 
         it "gracefully fails" do
           patch supervisor_path(supervisor), params: {supervisor: {email: other_supervisor.email}}
@@ -331,7 +331,7 @@ RSpec.describe "/supervisors", type: :request do
   end
 
   describe "PATCH /activate" do
-    let(:inactive_supervisor) { create(:supervisor, :inactive) }
+    let(:inactive_supervisor) { create(:supervisor, :inactive, casa_org: org) }
 
     before { sign_in admin }
 
@@ -368,12 +368,12 @@ RSpec.describe "/supervisors", type: :request do
     before { sign_in admin }
 
     it "resends an invitation email" do
-      expect(supervisor.invitation_created_at.present?).to eq(false)
+      expect(supervisor.invitation_created_at.present?).to be(false)
 
       patch resend_invitation_supervisor_path(supervisor)
       supervisor.reload
 
-      expect(supervisor.invitation_created_at.present?).to eq(true)
+      expect(supervisor.invitation_created_at.present?).to be(true)
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_supervisor_path(supervisor))

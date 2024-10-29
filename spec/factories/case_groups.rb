@@ -4,7 +4,7 @@ FactoryBot.define do
       case_count { 1 }
       casa_cases { nil }
     end
-    casa_org { CasaOrg.first || create(:casa_org) }
+    casa_org { association(:casa_org) }
     sequence(:name) { |n| "Family #{n}" }
 
     after(:build) do |case_group, evaluator|

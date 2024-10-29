@@ -144,7 +144,7 @@ RSpec.describe "case_court_reports/index" do
       end
 
       it "does not allow admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
+        casa_admin = build(:casa_admin, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in casa_admin
@@ -172,7 +172,7 @@ RSpec.describe "case_court_reports/index" do
       end
 
       it "allows admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
+        casa_admin = build(:casa_admin, casa_org: volunteer.casa_org)
 
         sign_out volunteer
         sign_in casa_admin

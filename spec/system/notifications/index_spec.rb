@@ -1,8 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "notifications/index", :js, type: :system do
-  let(:admin) { create(:casa_admin) }
-  let(:volunteer) { build(:volunteer) }
+RSpec.describe "notifications/index", :js do
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org:) }
+  let(:volunteer) { build(:volunteer, casa_org:) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
   let(:casa_case) { case_contact.casa_case }
 

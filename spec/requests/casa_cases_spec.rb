@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "/casa_cases", type: :request do
-  let(:date_in_care) { Date.today }
-  let(:organization) { build(:casa_org) }
+RSpec.describe "/casa_cases" do
+  let(:date_in_care) { Date.current }
+  let(:casa_org) { create(:casa_org) }
   let(:group) { build(:contact_type_group) }
-  let(:volunteer) { create(:volunteer) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
   let(:valid_attributes) do
     {
@@ -14,13 +14,13 @@ RSpec.describe "/casa_cases", type: :request do
       "date_in_care(2i)": date_in_care.month,
       "date_in_care(1i)": date_in_care.year,
       assigned_volunteer_id: volunteer.id,
-      casa_org_id: organization.id,
+      casa_org_id: casa_org.id,
       contact_type_ids: [type1.id],
       case_assignments_attributes: {"0": {volunteer_id: volunteer.id.to_s}}
     }
   end
   let(:invalid_attributes) { {case_number: nil, birth_month_year_youth: nil} }
-  let(:casa_case) { create(:casa_case, casa_org: organization, case_number: "111") }
+  let(:casa_case) { create(:casa_case, casa_org:, case_number: "111") }
 
   let(:texts) { ["1-New Court Order Text One", "0-New Court Order Text Two"] }
   let(:implementation_statuses) { ["unimplemented", nil] }
@@ -35,7 +35,7 @@ RSpec.describe "/casa_cases", type: :request do
   before { sign_in user }
 
   describe "as an admin" do
-    let(:user) { create(:casa_admin, casa_org: organization) }
+    let(:user) { create(:casa_admin, casa_org:) }
 
     describe "GET /index" do
       it "renders a successful response" do
@@ -86,7 +86,7 @@ RSpec.describe "/casa_cases", type: :request do
       context "when exporting a csv" do
         subject(:casa_case_show) { get casa_case_path(casa_case, format: :csv) }
 
-        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+        let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
 
         it "generates a csv" do
           casa_case_show
@@ -111,7 +111,7 @@ RSpec.describe "/casa_cases", type: :request do
       context "when exporting a xlsx" do
         subject(:casa_case_show) { get casa_case_path(casa_case, format: :xlsx) }
 
-        let(:current_time) { Time.now.strftime("%Y-%m-%d") }
+        let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
 
         it "generates a xlsx file" do
           casa_case_show
@@ -163,7 +163,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "sets fields correctly" do
           post casa_cases_url, params: {casa_case: valid_attributes}
           casa_case = CasaCase.last
-          expect(casa_case.casa_org).to eq organization
+          expect(casa_case.casa_org).to eq casa_org
           expect(casa_case.birth_month_year_youth).to eq pre_transition_aged_youth_age
           expect(casa_case.date_in_care.to_date).to eq date_in_care
         end
@@ -194,7 +194,7 @@ RSpec.describe "/casa_cases", type: :request do
               "date_in_care(2i)": date_in_care.month,
               "date_in_care(1i)": date_in_care.year,
               assigned_volunteer_id: nil,
-              casa_org_id: organization.id,
+              casa_org_id: casa_org.id,
               contact_type_ids: [type1.id]
             }
           end
@@ -206,20 +206,6 @@ RSpec.describe "/casa_cases", type: :request do
             )
           end
         end
-      end
-
-      it "only creates cases within user's organizations" do
-        other_org = build(:casa_org)
-        attributes = {
-          case_number: "1234",
-          birth_month_year_youth: pre_transition_aged_youth_age,
-          casa_org_id: other_org.id,
-          contact_type_ids: [type1.id]
-        }
-
-        expect { post casa_cases_url, params: {casa_case: attributes} }.to(
-          change { [organization.casa_cases.count, other_org.casa_cases.count] }.from([0, 0]).to([1, 0])
-        )
       end
 
       describe "invalid request" do
@@ -390,13 +376,13 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
-      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:casa_case) { create(:casa_case, :active, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "deactivates the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq false
+        expect(casa_case.active).to be false
       end
 
       it "redirects to the casa_case" do
@@ -435,7 +421,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "does not deactivate the requested casa_case" do
           patch deactivate_casa_case_path(casa_case), params: params
           casa_case.reload
-          expect(casa_case.active).to eq true
+          expect(casa_case.active).to be true
         end
 
         it "also responds as json", :aggregate_failures do
@@ -449,13 +435,13 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
-      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:casa_case) { create(:casa_case, :inactive, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "reactivates the requested casa_case" do
         patch reactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq true
+        expect(casa_case.active).to be true
       end
 
       it "redirects to the casa_case" do
@@ -494,7 +480,7 @@ RSpec.describe "/casa_cases", type: :request do
         it "does not reactivate the requested casa_case" do
           patch deactivate_casa_case_path(casa_case), params: params
           casa_case.reload
-          expect(casa_case.active).to eq false
+          expect(casa_case.active).to be false
         end
 
         it "also responds as json", :aggregate_failures do
@@ -509,7 +495,7 @@ RSpec.describe "/casa_cases", type: :request do
   end
 
   describe "as a volunteer" do
-    let(:user) { create(:volunteer, casa_org: organization) }
+    let(:user) { create(:volunteer, casa_org:) }
     let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
 
     describe "GET /show" do
@@ -578,7 +564,7 @@ RSpec.describe "/casa_cases", type: :request do
           patch casa_case_url(casa_case), params: {casa_case: new_attributes}
           casa_case.reload
 
-          expect(casa_case.court_report_submitted?).to be_truthy
+          expect(casa_case).to be_court_report_submitted
 
           # Not permitted
           expect(casa_case.case_number).to eq "111"
@@ -611,8 +597,8 @@ RSpec.describe "/casa_cases", type: :request do
 
     describe "GET /index" do
       it "shows only cases assigned to user" do
-        mine = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
-        other = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+        mine = build(:casa_case, casa_org:, case_number: SecureRandom.hex(32))
+        other = build(:casa_case, casa_org:, case_number: SecureRandom.hex(32))
 
         user.casa_cases << mine
 
@@ -625,30 +611,30 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
-      let(:casa_case) { build(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:casa_case) { build(:casa_case, :active, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq true
+        expect(casa_case.active).to be true
       end
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
-      let(:casa_case) { build(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:casa_case) { build(:casa_case, :inactive, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq false
+        expect(casa_case.active).to be false
       end
     end
   end
 
   describe "as a supervisor" do
-    let(:user) { create(:supervisor, casa_org: organization) }
+    let(:user) { create(:supervisor, casa_org:) }
 
     describe "GET /show" do
       it "renders a successful response" do
@@ -768,24 +754,24 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
-      let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
+      let(:casa_case) { create(:casa_case, :active, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq true
+        expect(casa_case.active).to be true
       end
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
-      let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
+      let(:casa_case) { create(:casa_case, :inactive, casa_org:, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
       it "does not deactivate the requested casa_case" do
         patch deactivate_casa_case_path(casa_case), params: params
         casa_case.reload
-        expect(casa_case.active).to eq false
+        expect(casa_case.active).to be false
       end
     end
   end

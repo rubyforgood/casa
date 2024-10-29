@@ -1,6 +1,8 @@
 require "rails_helper"
 
-RSpec.describe FundRequestsController, type: :request do
+RSpec.describe FundRequestsController do
+  let(:casa_org) { create(:casa_org) }
+
   describe "GET /casa_cases/:casa_id/fund_request/new" do
     context "when volunteer" do
       context "when casa_case is within organization" do
@@ -192,8 +194,8 @@ RSpec.describe FundRequestsController, type: :request do
 
     context "when supervisor" do
       it "creates fund request, calls mailer, and redirects to casa case" do
-        supervisor = create(:supervisor)
-        casa_case = create(:casa_case)
+        supervisor = create(:supervisor, casa_org:)
+        casa_case = create(:casa_case, casa_org:)
         mailer_mock = double("mailer", deliver: nil)
 
         sign_in supervisor
@@ -210,8 +212,8 @@ RSpec.describe FundRequestsController, type: :request do
 
     context "when admin" do
       it "creates fund request, calls mailer, and redirects to casa case" do
-        admin = create(:casa_admin)
-        casa_case = create(:casa_case)
+        admin = create(:casa_admin, casa_org:)
+        casa_case = create(:casa_case, casa_org:)
         mailer_mock = double("mailer", deliver: nil)
 
         sign_in admin

@@ -1,7 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", type: :view do
-  let(:user) { build_stubbed(:volunteer) }
+RSpec.describe "case_contacts/index" do
+  let(:casa_org) { create(:casa_org) }
+  let(:user) { build_stubbed(:volunteer, casa_org:) }
   let(:case_contacts) { CaseContact.all }
 
   let(:filterrific_param_set) do

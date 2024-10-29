@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Banners", :js, type: :system do
+RSpec.describe "Banners", :js do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -74,9 +74,9 @@ RSpec.describe "Banners", :js, type: :system do
   end
 
   describe "when an organization has an active banner" do
-    let(:admin) { create(:casa_admin) }
-    let(:organization) { create(:casa_org) }
-    let(:active_banner) { create(:banner, casa_org: organization) }
+    let(:admin) { create(:casa_admin, casa_org:) }
+    let(:casa_org) { create(:casa_org) }
+    let(:active_banner) { create(:banner, casa_org:) }
 
     context "when a banner is submitted as active" do
       it "deactivates and replaces the current active banner" do

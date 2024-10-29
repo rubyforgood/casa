@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/edit", type: :view do
+RSpec.describe "casa_cases/edit" do
   let(:organization) { create(:casa_org) }
   let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
   let(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
@@ -8,8 +8,7 @@ RSpec.describe "casa_cases/edit", type: :view do
   before do
     enable_pundit(view, user)
     assign :contact_types, []
-    allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_organization).and_return(user.casa_org)
+    allow(view).to receive_messages(current_user: user, current_organization: user.casa_org)
   end
 
   context "when accessed by a volunteer" do
@@ -69,9 +68,9 @@ RSpec.describe "casa_cases/edit", type: :view do
       casa_case = create(:casa_case, casa_org: organization)
       assign :casa_case, casa_case
       assign :contact_types, organization.contact_types
-      assigned_volunteer = build_stubbed(:volunteer)
+      assigned_volunteer = build_stubbed(:volunteer, casa_org: organization)
       build_stubbed(:case_assignment, volunteer: assigned_volunteer, casa_case: casa_case)
-      unassigned_volunteer = create(:volunteer)
+      unassigned_volunteer = create(:volunteer, casa_org: organization)
 
       render template: "casa_cases/edit"
 

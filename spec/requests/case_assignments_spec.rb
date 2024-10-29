@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "/case_assignments", type: :request do
+RSpec.describe "/case_assignments" do
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }
@@ -25,7 +25,7 @@ RSpec.describe "/case_assignments", type: :request do
       let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
       it "reassigns the volunteer to the casa_case" do
-        expect { request }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
+        expect { request }.to change { casa_case.reload.case_assignments.first.active }.from(false).to(true)
       end
 
       it { is_expected.to redirect_to edit_casa_case_path(casa_case) }

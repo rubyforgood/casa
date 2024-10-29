@@ -1,13 +1,13 @@
 require "rails_helper"
 
 RSpec.describe VolunteerImporter do
-  let!(:import_user) { build(:casa_admin) }
-  let(:casa_org_id) { import_user.casa_org.id }
+  let(:casa_org) { create :casa_org }
+  let(:casa_org_id) { casa_org.id }
 
   # Use of the static method VolunteerImporter.import_volunteers functions identically to VolunteerImporter.new(...).import_volunteers
   # but is preferred.
   let(:import_file_path) { Rails.root.join("spec/fixtures/volunteers.csv") }
-  let(:volunteer_importer) { -> { VolunteerImporter.import_volunteers(import_file_path, casa_org_id) } }
+  let(:volunteer_importer) { -> { described_class.import_volunteers(import_file_path, casa_org_id) } }
 
   it "imports volunteers from a csv file" do
     expect { volunteer_importer.call }.to change(User, :count).by(3)
@@ -27,12 +27,12 @@ RSpec.describe VolunteerImporter do
     end
 
     specify "static and instance methods have identical results" do
-      VolunteerImporter.new(import_file_path, casa_org_id).import_volunteers
+      described_class.new(import_file_path, casa_org_id).import_volunteers
       data_using_instance = Volunteer.pluck(:email).sort
 
       SentEmail.destroy_all
       Volunteer.destroy_all
-      VolunteerImporter.import_volunteers(import_file_path, casa_org_id)
+      described_class.import_volunteers(import_file_path, casa_org_id)
       data_using_static = Volunteer.pluck(:email).sort
 
       expect(data_using_static).to eq(data_using_instance)
