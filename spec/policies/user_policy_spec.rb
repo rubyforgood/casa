@@ -14,7 +14,7 @@ RSpec.describe UserPolicy, :aggregate_failures do
   let(:other_org_supervisor) { build_stubbed :supervisor, casa_org: other_org }
   let(:other_org_volunteer) { build_stubbed :volunteer, casa_org: other_org }
 
-
+  # ! TODO: ! ANY User edit ANY user! ???
   permissions :edit?, :update?, :update_email?, :update_password? do
     it "allows any user to edit any other user", :aggregate_failures do # rubocop:todo RSpec/ExampleLength
       expect(subject).to permit(casa_admin, casa_admin)
@@ -46,6 +46,7 @@ RSpec.describe UserPolicy, :aggregate_failures do
       expect(subject).to permit(casa_admin, casa_admin)
       expect(subject).to permit(casa_admin, supervisor)
       expect(subject).to permit(casa_admin, volunteer)
+      # TODO: shold not access other org records!
 
       expect(subject).to permit(casa_admin, other_org_admin)
       expect(subject).to permit(casa_admin, other_org_supervisor)
