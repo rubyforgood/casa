@@ -3,21 +3,19 @@ require "rails_helper"
 RSpec.describe User do
   let(:casa_org) { create :casa_org }
 
-  it { is_expected.to belong_to(:casa_org) }
-
-  it { is_expected.to have_many(:case_assignments) }
-  it { is_expected.to have_many(:casa_cases).through(:case_assignments) }
-  it { is_expected.to have_many(:case_contacts) }
-  it { is_expected.to have_many(:sent_emails) }
-  it { is_expected.to have_many(:user_languages) }
-  it { is_expected.to have_many(:languages).through(:user_languages) }
-
-  it { is_expected.to have_many(:followups).with_foreign_key(:creator_id) }
-
-  it { is_expected.to have_one(:supervisor_volunteer) }
-  it { is_expected.to have_one(:supervisor).through(:supervisor_volunteer) }
-
-  it { is_expected.to have_many(:notes) }
+  specify(:aggregate_failures) do
+    expect(subject).to belong_to(:casa_org)
+    expect(subject).to have_many(:case_assignments)
+    expect(subject).to have_many(:casa_cases).through(:case_assignments)
+    expect(subject).to have_many(:case_contacts)
+    expect(subject).to have_many(:sent_emails)
+    expect(subject).to have_many(:user_languages)
+    expect(subject).to have_many(:languages).through(:user_languages)
+    expect(subject).to have_many(:followups).with_foreign_key(:creator_id)
+    expect(subject).to have_one(:supervisor_volunteer)
+    expect(subject).to have_one(:supervisor).through(:supervisor_volunteer)
+    expect(subject).to have_many(:notes)
+  end
 
   describe "model validations" do
     it "requires display name" do

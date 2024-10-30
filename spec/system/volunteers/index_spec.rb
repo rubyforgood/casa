@@ -96,10 +96,10 @@ RSpec.describe "view all volunteers", :js, type: :system do
       end
 
       click_on "Status"
-      find(:css, 'input[data-value="true"]').set(false)
+      uncheck "status_option_active"
       expect(page).to have_text("No matching records found")
 
-      find(:css, 'input[data-value="false"]').set(true)
+      check "status_option_inactive"
       inactive_volunteers.each do |inactive_volunteer|
         expect(page).to have_text inactive_volunteer.display_name
       end

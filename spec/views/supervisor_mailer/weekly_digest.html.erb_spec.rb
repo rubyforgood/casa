@@ -27,21 +27,23 @@ RSpec.describe "supervisor_mailer/weekly_digest" do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    it { expect(rendered).to have_text("Here's a summary of what happened with your volunteers this last week.") }
-    it { expect(rendered).to have_link(volunteer.display_name) }
-    it { expect(rendered).to have_link(casa_case.case_number) }
-    it { expect(rendered).to have_no_text(inactive_volunteer.display_name) }
-    it { expect(rendered).to have_text("Number of unsuccessful case contacts made this week: 2") }
-    it { expect(rendered).to have_text("Number of successful case contacts made this week: 1") }
-    it { expect(rendered).to have_text("- Date: #{I18n.l(@case_contact.occurred_at, format: :full, default: nil)}") }
-    it { expect(rendered).to have_text("- Type: #{@case_contact.decorate.contact_types}") }
-    it { expect(rendered).to have_text("- Duration: #{@case_contact.duration_minutes}") }
-    it { expect(rendered).to have_text("- Contact Made: #{@case_contact.contact_made}") }
-    it { expect(rendered).to have_text("- Medium Type: #{@case_contact.medium_type}") }
-    it { expect(rendered).to have_text("- Notes: #{@case_contact.notes}") }
-    it { expect(rendered).to have_text("Contact Topic 1") }
-    it { expect(rendered).to have_text("Contact Topic 1 Answer") }
-    it { expect(rendered).to have_no_text("Contact Topic 2") }
+    specify(:aggregate_failures) do
+      expect(rendered).to have_text("Here's a summary of what happened with your volunteers this last week.")
+      expect(rendered).to have_link(volunteer.display_name)
+      expect(rendered).to have_link(casa_case.case_number)
+      expect(rendered).to have_no_text(inactive_volunteer.display_name)
+      expect(rendered).to have_text("Number of unsuccessful case contacts made this week: 2")
+      expect(rendered).to have_text("Number of successful case contacts made this week: 1")
+      expect(rendered).to have_text("- Date: #{I18n.l(@case_contact.occurred_at, format: :full, default: nil)}")
+      expect(rendered).to have_text("- Type: #{@case_contact.decorate.contact_types}")
+      expect(rendered).to have_text("- Duration: #{@case_contact.duration_minutes}")
+      expect(rendered).to have_text("- Contact Made: #{@case_contact.contact_made}")
+      expect(rendered).to have_text("- Medium Type: #{@case_contact.medium_type}")
+      expect(rendered).to have_text("- Notes: #{@case_contact.notes}")
+      expect(rendered).to have_text("Contact Topic 1")
+      expect(rendered).to have_text("Contact Topic 1 Answer")
+      expect(rendered).to have_no_text("Contact Topic 2")
+    end
   end
 
   context "when there are no volunteers" do
@@ -106,8 +108,10 @@ RSpec.describe "supervisor_mailer/weekly_digest" do
 
     let(:new_supervisor) { create(:supervisor, casa_org: organization) }
 
-    it { expect(rendered).to have_text("The following volunteers have been unassigned from you") }
-    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
+    specify do
+      expect(rendered).to have_text("The following volunteers have been unassigned from you")
+      expect(rendered).to have_text("- #{volunteer.display_name}")
+    end
   end
 
   context "when a volunteer unassigned and has not been assigned to a new supervisor" do
@@ -120,9 +124,11 @@ RSpec.describe "supervisor_mailer/weekly_digest" do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    it { expect(rendered).to have_text("The following volunteers have been unassigned from you") }
-    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
-    it { expect(rendered).to have_text("(not assigned to a new supervisor)") }
+    specify do
+      expect(rendered).to have_text("The following volunteers have been unassigned from you")
+      expect(rendered).to have_text("- #{volunteer.display_name}")
+      expect(rendered).to have_text("(not assigned to a new supervisor)")
+    end
   end
 
   context "when a volunteer has not recently signed in, within 30 days" do
@@ -136,7 +142,9 @@ RSpec.describe "supervisor_mailer/weekly_digest" do
       render template: "supervisor_mailer/weekly_digest"
     end
 
-    it { expect(rendered).to have_text("The following volunteers have not signed in or created case contacts in the last 30 days") }
-    it { expect(rendered).to have_text("- #{volunteer.display_name}") }
+    specify do
+      expect(rendered).to have_text("The following volunteers have not signed in or created case contacts in the last 30 days")
+      expect(rendered).to have_text("- #{volunteer.display_name}")
+    end
   end
 end

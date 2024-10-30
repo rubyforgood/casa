@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe UserSmsNotificationEvent, type: :model do
-  it { is_expected.to belong_to(:user) }
-  it { is_expected.to belong_to(:sms_notification_event) }
+  specify do
+    expect(subject).to belong_to(:user)
+    expect(subject).to belong_to(:sms_notification_event)
+  end
 end

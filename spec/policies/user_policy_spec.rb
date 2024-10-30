@@ -1,98 +1,92 @@
 require "rails_helper"
 
-RSpec.describe UserPolicy do
+RSpec.describe UserPolicy, :aggregate_failures do
   subject { described_class }
 
-  let(:org_a) { build_stubbed(:casa_org) }
-  let(:org_b) { build_stubbed(:casa_org) }
+  let(:casa_org) { build_stubbed :casa_org }
+  let(:casa_admin) { build_stubbed :casa_admin, casa_org: }
+  let(:supervisor) { build_stubbed :supervisor, casa_org: }
+  let(:volunteer) { build_stubbed :volunteer, casa_org: }
+  let(:supervised_volunteer) { build_stubbed :volunteer, supervisor:, casa_org: }
 
-  let(:casa_admin_a) { build_stubbed(:casa_admin, casa_org: org_a) }
-  let(:casa_admin_b) { build_stubbed(:casa_admin, casa_org: org_b) }
-  let(:supervisor_a) { build_stubbed(:supervisor, casa_org: org_a) }
-  let(:supervisor_b) { build_stubbed(:supervisor, casa_org: org_b) }
-  let(:volunteer_a) { build_stubbed(:volunteer, casa_org: org_a) }
-  let(:volunteer_b) { build_stubbed(:volunteer, casa_org: org_b) }
+  let(:other_org) { build_stubbed :casa_org }
+  let(:other_org_admin) { build_stubbed :casa_admin, casa_org: other_org }
+  let(:other_org_supervisor) { build_stubbed :supervisor, casa_org: other_org }
+  let(:other_org_volunteer) { build_stubbed :volunteer, casa_org: other_org }
 
-  permissions :edit?, :update?, :update_password? do
-    it "allows casa_admins" do
-      expect(subject).to permit(casa_admin_a)
-    end
 
-    it "allows supervisor" do
-      expect(subject).to permit(supervisor_a)
-    end
+  permissions :edit?, :update?, :update_email?, :update_password? do
+    it "allows any user to edit any other user", :aggregate_failures do # rubocop:todo RSpec/ExampleLength
+      expect(subject).to permit(casa_admin, casa_admin)
+      expect(subject).to permit(casa_admin, supervisor)
+      expect(subject).to permit(casa_admin, volunteer)
+      expect(subject).to permit(casa_admin, other_org_admin)
+      expect(subject).to permit(casa_admin, other_org_supervisor)
+      expect(subject).to permit(casa_admin, other_org_volunteer)
 
-    it "allows volunteer" do
-      expect(subject).to permit(volunteer_a)
+      expect(subject).to permit(supervisor, casa_admin)
+      expect(subject).to permit(supervisor, supervisor)
+      expect(subject).to permit(supervisor, volunteer)
+      expect(subject).to permit(supervisor, supervised_volunteer)
+      expect(subject).to permit(supervisor, other_org_admin)
+      expect(subject).to permit(supervisor, other_org_supervisor)
+      expect(subject).to permit(supervisor, other_org_volunteer)
+
+      expect(subject).to permit(volunteer, casa_admin)
+      expect(subject).to permit(volunteer, supervisor)
+      expect(subject).to permit(volunteer, volunteer)
+      expect(subject).to permit(volunteer, other_org_admin)
+      expect(subject).to permit(volunteer, other_org_supervisor)
+      expect(subject).to permit(volunteer, other_org_volunteer)
     end
   end
 
   permissions :update_user_setting? do
-    context "when user is an admin" do
-      it "allows update settings of all roles" do
-        expect(subject).to permit(casa_admin_a)
-        expect(subject).to permit(casa_admin_b)
-      end
-    end
+    it "allows update settings of all roles" do # rubocop:disable RSpec/ExampleLength
+      expect(subject).to permit(casa_admin, casa_admin)
+      expect(subject).to permit(casa_admin, supervisor)
+      expect(subject).to permit(casa_admin, volunteer)
 
-    context "when user is a supervisor" do
-      it "allows supervisors to update another volunteer settings in their casa org" do
-        expect(subject).to permit(supervisor_a, volunteer_a)
-        expect(subject).to permit(supervisor_b, volunteer_b)
-      end
+      expect(subject).to permit(casa_admin, other_org_admin)
+      expect(subject).to permit(casa_admin, other_org_supervisor)
+      expect(subject).to permit(casa_admin, other_org_volunteer)
 
-      it "does not allow supervisor to update a volunteer in a different casa org" do
-        expect(subject).not_to permit(supervisor_a, volunteer_b)
-        expect(subject).not_to permit(supervisor_b, volunteer_a)
-      end
+      expect(subject).not_to permit(supervisor, casa_admin)
+      expect(subject).to permit(supervisor, supervisor)
+      expect(subject).to permit(supervisor, volunteer)
+      expect(subject).not_to permit(supervisor, other_org_admin)
+      expect(subject).not_to permit(supervisor, other_org_supervisor)
+      expect(subject).not_to permit(supervisor, other_org_volunteer)
 
-      it "allows supervisors to update their own settings" do
-        expect(subject).to permit(supervisor_a, supervisor_a)
-        expect(subject).to permit(supervisor_b, supervisor_b)
-      end
-
-      it "does not allow supervisor to update another supervisor settings" do
-        expect(subject).not_to permit(supervisor_a, supervisor_b)
-        expect(subject).not_to permit(supervisor_b, supervisor_a)
-      end
+      expect(subject).not_to permit(volunteer, casa_admin)
+      expect(subject).not_to permit(volunteer, supervisor)
+      expect(subject).not_to permit(volunteer, volunteer)
     end
   end
 
-  permissions :add_language? do
-    context "when user is a volunteer" do
-      it "allows volunteer to add a language to themselves" do
-        expect(subject).to permit(volunteer_a, volunteer_a)
-        expect(subject).to permit(volunteer_b, volunteer_b)
-      end
+  permissions :add_language?, :remove_language? do
+    specify do # rubocop:disable RSpec/ExampleLength
+      expect(subject).to permit(casa_admin, casa_admin)
+      expect(subject).to permit(casa_admin, supervisor)
+      expect(subject).to permit(casa_admin, volunteer)
+      expect(subject).not_to permit(casa_admin, other_org_admin)
+      expect(subject).not_to permit(casa_admin, other_org_supervisor)
+      expect(subject).not_to permit(casa_admin, other_org_volunteer)
 
-      it "does not allow another volunteer to add a language to another volunteer" do
-        expect(subject).not_to permit(volunteer_a, volunteer_b)
-        expect(subject).not_to permit(volunteer_b, volunteer_a)
-      end
-    end
+      expect(subject).to permit(supervisor, casa_admin)
+      expect(subject).to permit(supervisor, supervisor)
+      expect(subject).to permit(supervisor, volunteer)
+      expect(subject).to permit(supervisor, supervised_volunteer)
+      expect(subject).not_to permit(supervisor, other_org_admin)
+      expect(subject).not_to permit(supervisor, other_org_supervisor)
+      expect(subject).not_to permit(supervisor, other_org_volunteer)
 
-    context "when user is a supervisor" do
-      it "allows supervisors to add a language to a volunteer in their organizations" do
-        expect(subject).to permit(supervisor_a, volunteer_a)
-        expect(subject).to permit(supervisor_b, volunteer_b)
-      end
-
-      it "does not allow a supervisor to add a language to a volunteer in a different organization" do
-        expect(subject).not_to permit(supervisor_a, volunteer_b)
-        expect(subject).not_to permit(supervisor_b, volunteer_a)
-      end
-    end
-
-    context "when user is an admin" do
-      it "allows admins to add a language to a volunteer in their organizations" do
-        expect(subject).to permit(casa_admin_a, volunteer_a)
-        expect(subject).to permit(casa_admin_b, volunteer_b)
-      end
-
-      it "does not allow an admin to add a language to a volunteer in a different organization" do
-        expect(subject).not_to permit(casa_admin_a, volunteer_b)
-        expect(subject).not_to permit(casa_admin_b, volunteer_a)
-      end
+      expect(subject).not_to permit(volunteer, casa_admin)
+      expect(subject).not_to permit(volunteer, supervisor)
+      expect(subject).to permit(volunteer, volunteer)
+      expect(subject).not_to permit(volunteer, other_org_admin)
+      expect(subject).not_to permit(volunteer, other_org_supervisor)
+      expect(subject).not_to permit(volunteer, other_org_volunteer)
     end
   end
 end

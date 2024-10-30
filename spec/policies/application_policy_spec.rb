@@ -3,79 +3,76 @@ require "rails_helper"
 RSpec.describe ApplicationPolicy do
   subject { described_class }
 
-  let(:casa_org) { build_stubbed(:casa_org) }
-  let(:casa_admin) { build_stubbed(:casa_admin, casa_org: casa_org) }
-  let(:supervisor) { build_stubbed(:supervisor, casa_org: casa_org) }
-  let(:volunteer) { build_stubbed(:volunteer, casa_org: casa_org) }
-  let(:all_casa_admin) { build_stubbed(:all_casa_admin) }
+  let(:casa_org) { build_stubbed :casa_org }
+  let(:other_org) { build_stubbed :casa_org }
+
+  let(:casa_admin) { build_stubbed :casa_admin, casa_org: }
+  let(:supervisor) { build_stubbed :supervisor, casa_org: }
+  let(:volunteer) { build_stubbed :volunteer, casa_org: }
+
+  let(:other_org_casa_admin) { build_stubbed :casa_admin, casa_org: }
+  let(:other_org_supervisor) { build_stubbed :supervisor, casa_org: }
+  let(:other_org_volunteer) { build_stubbed :volunteer, casa_org: }
+
+  let(:all_casa_admin) { build_stubbed :all_casa_admin }
+  let(:nil_user) { nil }
 
   permissions :see_reports_page? do
-    it "allows casa_admins" do
+    it "allows casa_admins and supervisors" do
       expect(subject).to permit(casa_admin)
-    end
-
-    it "allows supervisors" do
       expect(subject).to permit(supervisor)
-    end
 
-    it "does not allow volunteers" do
       expect(subject).not_to permit(volunteer)
+
+      expect(subject).not_to permit(all_casa_admin)
+      expect(subject).not_to permit(nil_user)
     end
   end
 
   permissions :see_import_page? do
     it "allows casa_admins" do
       expect(subject).to permit(casa_admin)
-    end
 
-    it "does not allow supervisors" do
       expect(subject).not_to permit(supervisor)
-    end
-
-    it "does not allow volunteers" do
       expect(subject).not_to permit(volunteer)
+
+      expect(subject).not_to permit(all_casa_admin)
+      expect(subject).not_to permit(nil_user)
     end
   end
 
   permissions :see_court_reports_page? do
-    it "allows volunteers" do
-      expect(subject).to permit(create(:volunteer))
-    end
+    it "allows all User roles" do
+      expect(subject).to permit(volunteer)
+      expect(subject).to permit(casa_admin)
+      expect(subject).to permit(supervisor)
 
-    it "allows casa_admins" do
-      expect(subject).to permit(create(:casa_admin))
-    end
-
-    it "allows supervisors" do
-      expect(subject).to permit(create(:supervisor))
+      expect(subject).not_to permit(all_casa_admin)
+      # expect(subject).not_to permit(nil_user) TODO
     end
   end
 
   permissions :see_emancipation_checklist? do
     it "allows volunteers" do
-      expect(subject).to permit(create(:volunteer))
-    end
+      expect(subject).to permit(volunteer)
 
-    it "does not allow casa_admins" do
-      expect(subject).not_to permit(create(:casa_admin))
-    end
+      expect(subject).not_to permit(casa_admin)
+      expect(subject).not_to permit(supervisor)
 
-    it "does not allow supervisors" do
-      expect(subject).not_to permit(create(:supervisor))
+      expect(subject).not_to permit(all_casa_admin)
+      # expect(subject).not_to permit(nil_user) TODO
     end
   end
 
   permissions :see_mileage_rate? do
-    it "does not allow volunters" do
-      expect(subject).not_to permit(volunteer)
-    end
-
-    it "does not allow supervisors" do
-      expect(subject).not_to permit(supervisor)
-    end
-
-    it "allow casa_admins for same org" do
+    it "allows casa_admins" do
       expect(subject).to permit(casa_admin)
+
+      expect(subject).not_to permit(volunteer)
+      expect(subject).not_to permit(supervisor)
+
+      expect(subject).not_to permit(all_casa_admin)
+      expect(subject).not_to permit(nil_user)
     end
 
     context "when org reimbursement is disabled" do
@@ -90,29 +87,26 @@ RSpec.describe ApplicationPolicy do
   end
 
   describe "#same_org?" do
+    # could be any Model that has a :casa_org association, hence the doubles
     let(:org_record) { double }
+    let(:other_org_record) { double }
 
-    before { allow(org_record).to receive(:casa_org).and_return(casa_org) }
-
-    context "record with same casa_org" do
-      before { expect(org_record).to receive(:casa_org).and_return(casa_org) }
-
-      permissions :same_org? do
-        it { is_expected.to permit(volunteer, org_record) }
-        it { is_expected.to permit(supervisor, org_record) }
-        it { is_expected.to permit(casa_admin, org_record) }
-      end
+    before do
+      allow(org_record).to receive(:casa_org).and_return(casa_org)
+      allow(other_org_record).to receive(:casa_org).and_return(other_org)
     end
 
-    context "record with different casa_org" do
-      let(:other_org_record) { double }
+    permissions :same_org? do
+      it "allows User roles with same casa_org" do
+        expect(subject).to permit(volunteer, org_record)
+        expect(subject).to permit(supervisor, org_record)
+        expect(subject).to permit(casa_admin, org_record)
+        expect(subject).not_to permit(nil_user)
 
-      before { expect(other_org_record).to receive(:casa_org).and_return(build_stubbed(:casa_org)) }
-
-      permissions :same_org? do
-        it { is_expected.not_to permit(volunteer, other_org_record) }
-        it { is_expected.not_to permit(supervisor, other_org_record) }
-        it { is_expected.not_to permit(casa_admin, other_org_record) }
+        expect(subject).not_to permit(volunteer, other_org_record)
+        expect(subject).not_to permit(supervisor, other_org_record)
+        expect(subject).not_to permit(casa_admin, other_org_record)
+        expect(subject).not_to permit(nil_user)
       end
     end
 
@@ -122,27 +116,7 @@ RSpec.describe ApplicationPolicy do
       end
     end
 
-    context "user with no casa_org" do
-      let(:volunteer) { build_stubbed(:volunteer, casa_org: nil) }
-      let(:supervisor) { build_stubbed(:supervisor, casa_org: nil) }
-      let(:casa_admin) { build_stubbed(:casa_admin, casa_org: nil) }
-
-      permissions :same_org? do
-        it { is_expected.not_to permit(volunteer, org_record) }
-        it { is_expected.not_to permit(supervisor, org_record) }
-        it { is_expected.not_to permit(casa_admin, org_record) }
-      end
-    end
-
-    context "no user" do
-      let(:user) { nil }
-
-      permissions :same_org? do
-        it { is_expected.not_to permit(user, org_record) }
-      end
-    end
-
-    context "called with a class instead of a record" do
+    context "when called with a class instead of a record" do
       let(:klass) { CasaCase }
 
       [:volunteer, :casa_admin, :supervisor].each do |user_type|

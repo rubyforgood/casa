@@ -1,21 +1,20 @@
 require "rails_helper"
 
-RSpec.describe CasaCaseEmancipationCategory, type: :model do
-  it { is_expected.to belong_to(:casa_case) }
-  it { is_expected.to belong_to(:emancipation_category) }
+RSpec.describe CasaCaseEmancipationCategory do
+  subject(:casa_case_emancipation_category) { build_stubbed(:casa_case_emancipation_category) }
 
-  it "does not allow adding the same category twice to a case" do
-    expect {
-      casa_case = create(:casa_case)
-      emancipation_category = create(:emancipation_category)
-
-      casa_case.emancipation_categories << emancipation_category
-      casa_case.emancipation_categories << emancipation_category
-    }.to raise_error(ActiveRecord::RecordInvalid)
+  specify do
+    expect(subject).to belong_to(:casa_case)
+    expect(subject).to belong_to(:emancipation_category)
   end
 
-  it "has a valid factory" do
-    case_category_association = build(:casa_case_emancipation_category)
-    expect(case_category_association.valid?).to be true
+  it "does not allow adding the same category twice to a case" do
+    casa_case = create(:casa_case)
+    emancipation_category = create(:emancipation_category)
+    casa_case.emancipation_categories << emancipation_category
+
+    expect {
+      casa_case.emancipation_categories << emancipation_category
+    }.to raise_error(ActiveRecord::RecordInvalid)
   end
 end

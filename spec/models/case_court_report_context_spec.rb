@@ -58,7 +58,7 @@ RSpec.describe CaseCourtReportContext do
         {order: "Court order 1", status: "Unimplemented"},
         {order: "Court order 2", status: "Implemented"}
       ]
-      context = create(:case_court_report_context, casa_org:)
+      context = build_stubbed(:case_court_report_context, casa_org:)
 
       expect(context.case_orders(court_orders)).to match_array(expected)
     end

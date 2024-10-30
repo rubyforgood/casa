@@ -68,16 +68,15 @@ class ApplicationPolicy
   end
 
   def is_supervisor_same_org?
-    # eventually everything should use this
     is_supervisor? && same_org?
   end
 
-  def is_volunteer? # deprecated in favor of is_volunteer_same_org?
-    user.volunteer?
+  def is_volunteer?
+    user&.volunteer?
   end
 
   def is_volunteer_same_org?
-    user.volunteer? && same_org?
+    user&.volunteer? && same_org?
   end
 
   def admin_or_supervisor?
@@ -110,7 +109,7 @@ class ApplicationPolicy
   end
 
   def see_mileage_rate?
-    is_admin? && reimbursement_enabled? # && matches_casa_org? # TODO do this *in* is_admin - what might that break?
+    is_admin? && reimbursement_enabled?
   end
 
   def matches_casa_org?

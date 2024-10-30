@@ -3,12 +3,15 @@ require "rails_helper"
 RSpec.describe SupervisorPolicy do
   subject { described_class }
 
-  let(:organization) { create(:casa_org) }
-  let(:different_organization) { create(:casa_org) }
+  let(:casa_org) { build_stubbed :casa_org }
+  let(:other_org) { build_stubbed :casa_org }
 
-  let!(:casa_admin) { create(:casa_admin, casa_org: organization) }
-  let!(:supervisor) { create(:supervisor, casa_org: organization) }
-  let(:volunteer) { create(:volunteer, casa_org: organization) }
+  let(:casa_admin) { build_stubbed :casa_admin, casa_org: }
+  let(:supervisor) { build_stubbed :supervisor, casa_org: }
+  let(:volunteer) { build_stubbed :volunteer, casa_org: }
+
+  let(:org_supervisor) { build_stubbed :supervisor, casa_org: }
+  let(:other_org_supervisor) { build_stubbed :supervisor, casa_org: other_org }
 
   permissions :update_supervisor_email? do
     context "when user is an admin or is the record" do
@@ -42,7 +45,7 @@ RSpec.describe SupervisorPolicy do
     end
 
     context "different organization" do
-      let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
+      let(:other_admin) { build_stubbed(:casa_admin, casa_org: other_org) }
 
       it "does not allow casa_admins" do
         expect(subject).not_to permit(other_admin, supervisor)
@@ -54,9 +57,7 @@ RSpec.describe SupervisorPolicy do
     end
 
     it "does not allow supervisors to update other supervisors" do
-      another_supervisor = build_stubbed(:supervisor)
-
-      expect(subject).not_to permit(supervisor, another_supervisor)
+      expect(subject).not_to permit(supervisor, org_supervisor)
     end
   end
 
@@ -78,7 +79,7 @@ RSpec.describe SupervisorPolicy do
     end
 
     context "different org" do
-      let(:record) { build_stubbed(:supervisor, casa_org: different_organization) }
+      let(:record) { build_stubbed(:supervisor, casa_org: other_org) }
 
       context "when user is admin" do
         it "cannot edit a supervisor" do
@@ -138,7 +139,7 @@ RSpec.describe SupervisorPolicy do
     end
 
     context "different organization" do
-      let(:other_admin) { create(:casa_admin, casa_org: different_organization) }
+      let(:other_admin) { build_stubbed(:casa_admin, casa_org: other_org) }
 
       it "does not allow admin to modify supervisors" do
         expect(subject).not_to permit(other_admin, supervisor)

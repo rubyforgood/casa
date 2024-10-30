@@ -1,11 +1,11 @@
 require "rails_helper"
 
-RSpec.describe CourtDate, type: :model do
-  subject(:court_date) { create(:court_date, casa_case: casa_case) }
+RSpec.describe CourtDate do
+  subject(:court_date) { build_stubbed :court_date, casa_case: }
 
-  let(:casa_case) { create(:casa_case, case_number: "AAA123123") }
-  let(:volunteer) { create(:volunteer, casa_org: casa_case.casa_org) }
-  let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+  let(:casa_case) { create :casa_case, case_number: "AAA123123" }
+  let(:casa_org) { casa_case.casa_org }
+  let(:volunteer) { create :volunteer, casa_org: }
   let(:this_court_date) { subject.date }
   let(:older_court_date) { subject.date - 6.months }
   let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
@@ -15,61 +15,56 @@ RSpec.describe CourtDate, type: :model do
     travel_to Date.new(2021, 1, 1)
   end
 
-  it { is_expected.to belong_to(:casa_case) }
-  it { is_expected.to validate_presence_of(:date) }
-  it { is_expected.to have_many(:case_court_orders) }
-  it { is_expected.to belong_to(:hearing_type).optional }
-  it { is_expected.to belong_to(:judge).optional }
+  specify do
+    expect(court_date).to belong_to(:casa_case).optional(false)
+    expect(court_date).to have_many(:case_court_orders)
+    expect(court_date).to belong_to(:hearing_type).optional
+    expect(court_date).to belong_to(:judge).optional
 
-  describe "date validation" do
-    it "is not valid before 1989" do
-      court_date = CourtDate.new(date: "1984-01-01".to_date)
-      expect(court_date.valid?).to be false
-      expect(court_date.errors[:date]).to eq(["is not valid. Court date cannot be prior to 1/1/1989."])
-    end
-
-    it "is not valid more than 1 year in the future" do
-      court_date = CourtDate.new(date: 367.days.from_now)
-      expect(court_date.valid?).to be false
-      expect(court_date.errors[:date]).to eq(["is not valid. Court date must be within one year from today."])
-    end
-
-    it "is valid within one year in the future" do
-      court_date = CourtDate.new(date: 6.months.from_now)
-      court_date.valid?
-      expect(court_date.errors[:date]).to eq([])
-    end
-
-    it "is valid in the past after 1989" do
-      court_date = CourtDate.new(date: "1997-08-29".to_date)
-      court_date.valid?
-      expect(court_date.errors[:date]).to eq([])
-    end
+    expect(court_date).to validate_presence_of(:date)
   end
 
-  it "is invalid without a casa_case" do
-    court_date = build(:court_date, casa_case: nil)
-    expect do
-      court_date.casa_case = casa_case
-    end.to change { court_date.valid? }.from(false).to(true)
+  specify "date validations" do
+    # it "is not valid before 1989" do
+    court_date.date = "1988-12-31".to_date
+    expect(court_date.valid?).to be false
+    expect(court_date.errors[:date]).to eq(["is not valid. Court date cannot be prior to 1/1/1989."])
+
+    # it "is not valid more than 1 year in the future" do
+    court_date.date = 367.days.from_now
+    expect(court_date.valid?).to be false
+    expect(court_date.errors[:date]).to eq(["is not valid. Court date must be within one year from today."])
+
+    # it "is valid within one year in the future" do
+    court_date.date = 364.days.from_now
+    court_date.valid?
+    expect(court_date.errors[:date]).to eq([])
+
+    # it "is valid in the past after 1989" do
+    court_date.date = "1989-01-02".to_date
+    court_date.valid?
+    expect(court_date.errors[:date]).to eq([])
   end
 
-  describe ".ordered_ascending" do
-    subject { described_class.ordered_ascending }
+  describe "scopes" do
+    describe ".ordered_ascending" do
+      subject { described_class.ordered_ascending }
 
-    it "orders the casa cases by updated at date" do
-      very_old_pcd = create(:court_date, date: 10.days.ago)
-      old_pcd = create(:court_date, date: 5.day.ago)
-      recent_pcd = create(:court_date, date: 1.day.ago)
+      it "orders the casa cases by updated at date" do
+        very_old_pcd = create(:court_date, date: 10.days.ago)
+        old_pcd = create(:court_date, date: 5.day.ago)
+        recent_pcd = create(:court_date, date: 1.day.ago)
 
-      ordered_pcds = described_class.ordered_ascending
+        ordered_pcds = described_class.ordered_ascending
 
-      expect(ordered_pcds.map(&:id)).to eq [very_old_pcd.id, old_pcd.id, recent_pcd.id]
+        expect(ordered_pcds.map(&:id)).to eq [very_old_pcd.id, old_pcd.id, recent_pcd.id]
+      end
     end
   end
 
   describe "reports" do
     let!(:reports) do
+      create(:case_assignment, volunteer:, casa_case:)
       [10, 30, 60].map do |days_ago|
         path_to_template = "app/documents/templates/default_report_template.docx"
         args = {
@@ -98,7 +93,7 @@ RSpec.describe CourtDate, type: :model do
       end
 
       context "with a previous court date" do
-        let!(:other_court_date) { create(:court_date, casa_case: casa_case, date: 40.days.ago) }
+        before { create :court_date, casa_case: casa_case, date: 40.days.ago }
 
         it { is_expected.to contain_exactly(ten_days_ago_report, thirty_days_ago_report) }
       end
@@ -122,17 +117,21 @@ RSpec.describe CourtDate, type: :model do
     end
 
     context "with hearing type" do
+      subject(:court_date) { build_stubbed :court_date, casa_case:, hearing_type: }
+
+      let(:hearing_type) { create :hearing_type, casa_org: }
+
       it "returns true" do
-        hearing_type = create(:hearing_type)
-        court_date.update!(hearing_type_id: hearing_type.id)
         expect(subject).to be_truthy
       end
     end
 
     context "with judge" do
+      subject(:court_date) { build_stubbed :court_date, casa_case:, judge: }
+
+      let(:judge) { create :judge, casa_org: }
+
       it "returns true" do
-        judge = create(:judge)
-        court_date.update!(judge_id: judge.id)
         expect(subject).to be_truthy
       end
     end

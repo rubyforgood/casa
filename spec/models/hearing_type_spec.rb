@@ -1,11 +1,14 @@
 require "rails_helper"
 
 RSpec.describe HearingType do
-  it { is_expected.to belong_to(:casa_org) }
-  it { is_expected.to validate_presence_of(:name) }
-  it { is_expected.to have_many(:checklist_items) }
+  specify do
+    expect(subject).to belong_to(:casa_org)
+    expect(subject).to have_many(:checklist_items)
 
-  describe "for_organization" do
+    expect(subject).to validate_presence_of(:name)
+  end
+
+  describe ".for_organization" do
     subject { described_class.for_organization(casa_org) }
 
     let(:casa_org) { create(:casa_org) }

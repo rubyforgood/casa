@@ -2,16 +2,21 @@ require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CasaOrg, type: :model do
-  it { is_expected.to validate_presence_of(:name) }
-  it { is_expected.to have_many(:users).dependent(:destroy) }
-  it { is_expected.to have_many(:casa_cases).dependent(:destroy) }
-  it { is_expected.to have_many(:contact_type_groups).dependent(:destroy) }
-  it { is_expected.to have_many(:hearing_types).dependent(:destroy) }
-  it { is_expected.to have_many(:mileage_rates).dependent(:destroy) }
-  it { is_expected.to have_many(:case_assignments).through(:users) }
-  it { is_expected.to have_one_attached(:logo) }
-  it { is_expected.to have_one_attached(:court_report_template) }
-  it { is_expected.to have_many(:contact_topics) }
+  subject(:casa_org) { build_stubbed :casa_org }
+
+  specify(:aggregate_failures) do
+    expect(casa_org).to have_many(:users).dependent(:destroy)
+    expect(casa_org).to have_many(:casa_cases).dependent(:destroy)
+    expect(casa_org).to have_many(:contact_type_groups).dependent(:destroy)
+    expect(casa_org).to have_many(:hearing_types).dependent(:destroy)
+    expect(casa_org).to have_many(:mileage_rates).dependent(:destroy)
+    expect(casa_org).to have_many(:case_assignments).through(:users)
+    expect(casa_org).to have_one_attached(:logo)
+    expect(casa_org).to have_one_attached(:court_report_template)
+    expect(casa_org).to have_many(:contact_topics)
+
+    expect(casa_org).to validate_presence_of(:name)
+  end
 
   it "has unique name" do
     org = create(:casa_org)

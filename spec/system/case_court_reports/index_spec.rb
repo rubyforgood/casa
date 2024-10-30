@@ -191,8 +191,10 @@ RSpec.describe "case_court_reports/index" do
       visit case_court_reports_path
     end
 
-    it { expect(page).to have_css ".select2" }
-    it { expect(page).to have_text "Search by volunteer name or case number" }
+    specify do
+      expect(page).to have_css ".select2"
+      expect(page).to have_text "Search by volunteer name or case number"
+    end
 
     context "when searching for cases" do
       let(:casa_case) { volunteer.casa_cases.first }

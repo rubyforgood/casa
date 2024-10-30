@@ -1,35 +1,29 @@
 require "rails_helper"
 
-RSpec.describe Placement, type: :model do
-  let!(:object) { create(:placement) }
+RSpec.describe Placement do
+  subject(:placement) { build_stubbed(:placement) }
 
-  it { is_expected.to belong_to(:placement_type) }
-  it { is_expected.to belong_to(:creator) }
-  it { is_expected.to belong_to(:casa_case) }
+  specify do
+    expect(subject).to belong_to(:placement_type).optional(false)
+    expect(subject).to belong_to(:creator).optional(false)
+    expect(subject).to belong_to(:casa_case).optional(false)
+  end
 
-  context "placement_started_at" do
-    it "cannot be before 1/1/1989" do
-      placement = build_stubbed(:placement, placement_started_at: "1984-01-01".to_date)
-      expect(placement).not_to be_valid
-      expect(placement.errors[:placement_started_at]).to eq(["cannot be prior to 1/1/1989."])
-    end
+  specify "placement_started_at validations" do
+    placement.placement_started_at = "1988-12-31".to_date
+    expect(placement).not_to be_valid
+    expect(placement.errors[:placement_started_at]).to eq(["cannot be prior to 1/1/1989."])
 
-    it "cannot be more than one year in the future" do
-      placement = build_stubbed(:placement, placement_started_at: 367.days.from_now)
-      expect(placement).not_to be_valid
-      expect(placement.errors[:placement_started_at]).to eq(["must not be more than one year in the future."])
-    end
+    placement.placement_started_at = 367.days.from_now
+    expect(placement).not_to be_valid
+    expect(placement.errors[:placement_started_at]).to eq(["must not be more than one year in the future."])
 
-    it "is valid in the past after 1/1/1989" do
-      placement = build_stubbed(:placement, placement_started_at: "1997-08-29".to_date)
-      expect(placement).to be_valid
-      expect(placement.errors[:placement_started_at]).to eq([])
-    end
+    placement.placement_started_at = "1989-01-02".to_date
+    expect(placement).to be_valid
+    expect(placement.errors[:placement_started_at]).to eq([])
 
-    it "is valid today" do
-      placement = build_stubbed(:placement, placement_started_at: DateTime.now)
-      expect(placement).to be_valid
-      expect(placement.errors[:placement_started_at]).to eq([])
-    end
+    placement.placement_started_at = DateTime.now
+    expect(placement).to be_valid
+    expect(placement.errors[:placement_started_at]).to eq([])
   end
 end

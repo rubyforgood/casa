@@ -3,13 +3,14 @@ require "rails_helper"
 RSpec.describe Followup, type: :model do
   subject { build(:followup) }
 
-  it { is_expected.to belong_to(:case_contact) } # TOOD polymorph remove after migraion complete
-  it { is_expected.to belong_to(:creator).class_name("User") }
-  it { is_expected.to belong_to(:followupable).optional }
+  specify do
+    expect(subject).to belong_to(:case_contact)
+    expect(subject).to belong_to(:creator).class_name("User")
 
-  it "has polymorphic fields" do
-    expect(Followup.new).to respond_to(:followupable_id)
-    expect(Followup.new).to respond_to(:followupable_type)
+    # polymorphic fields
+    expect(subject).to belong_to(:followupable).optional
+    expect(subject).to respond_to(:followupable_id)
+    expect(subject).to respond_to(:followupable_type)
   end
 
   # TODO polymorph temporary test for dual writing
@@ -52,11 +53,8 @@ RSpec.describe Followup, type: :model do
     let!(:followup_second_org) { create(:followup, case_contact: case_contact) }
     let!(:followup_second_org_another) { create(:followup, case_contact: case_contact_another) }
 
-    it "includes followups from same organization" do
+    it "includes followups from same organization only" do
       expect(subject).to contain_exactly(followup_second_org, followup_second_org_another)
-    end
-
-    it "excludes followups from other organizations" do
       expect(subject).not_to include(followup_first_org)
     end
   end

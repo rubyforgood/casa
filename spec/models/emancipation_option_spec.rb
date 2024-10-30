@@ -1,10 +1,13 @@
 require "rails_helper"
 
 RSpec.describe EmancipationOption, type: :model do
-  it { is_expected.to belong_to(:emancipation_category) }
-  it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
-  it { is_expected.to have_many(:casa_cases).through(:casa_cases_emancipation_options) }
-  it { is_expected.to validate_presence_of(:name) }
+  specify do
+    expect(subject).to belong_to(:emancipation_category)
+    expect(subject).to have_many(:casa_cases_emancipation_options).dependent(:destroy)
+    expect(subject).to have_many(:casa_cases).through(:casa_cases_emancipation_options)
+
+    expect(subject).to validate_presence_of(:name)
+  end
 
   context "When creating a new option" do
     context "duplicate name entries" do

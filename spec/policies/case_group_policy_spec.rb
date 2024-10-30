@@ -79,38 +79,48 @@ RSpec.describe CaseGroupPolicy, type: :policy do
     context "when user is a visitor" do
       let(:user) { nil }
 
-      it { is_expected.not_to include(casa_org_case_group) }
-      it { is_expected.not_to include(other_casa_org_case_group) }
+      specify do
+        expect(subject).not_to include(casa_org_case_group)
+        expect(subject).not_to include(other_casa_org_case_group)
+      end
     end
 
     context "when user is a volunteer" do
       let(:user) { volunteer }
       let!(:user_case_group) { volunteer_case_group }
 
-      it { is_expected.not_to include(user_case_group) }
-      it { is_expected.not_to include(casa_org_case_group) }
-      it { is_expected.not_to include(other_casa_org_case_group) }
+      specify do
+        expect(subject).not_to include(user_case_group)
+        expect(subject).not_to include(casa_org_case_group)
+        expect(subject).not_to include(other_casa_org_case_group)
+      end
     end
 
     context "when user is a supervisor" do
       let(:user) { supervisor }
 
-      it { is_expected.to include(casa_org_case_group) }
-      it { is_expected.not_to include(other_casa_org_case_group) }
+      specify do
+        expect(subject).to include(casa_org_case_group)
+        expect(subject).not_to include(other_casa_org_case_group)
+      end
     end
 
     context "when user is a casa_admin" do
       let(:user) { casa_admin }
 
-      it { is_expected.to include(casa_org_case_group) }
-      it { is_expected.not_to include(other_casa_org_case_group) }
+      specify do
+        expect(subject).to include(casa_org_case_group)
+        expect(subject).not_to include(other_casa_org_case_group)
+      end
     end
 
     context "when user is an all_casa_admin" do
       let(:user) { all_casa_admin }
 
-      it { is_expected.not_to include(casa_org_case_group) }
-      it { is_expected.not_to include(other_casa_org_case_group) }
+      specify do
+        expect(subject).not_to include(casa_org_case_group)
+        expect(subject).not_to include(other_casa_org_case_group)
+      end
     end
   end
 end

@@ -48,7 +48,9 @@ RSpec.describe ReimbursementPolicy do
     let!(:contact1) { create(:case_contact, casa_case: casa_case1) }
     let!(:contact2) { create(:case_contact, casa_case: casa_case2) }
 
-    it { is_expected.to include(contact1) }
-    it { is_expected.not_to include(contact2) }
+    specify do
+      expect(subject).to include(contact1)
+      expect(subject).not_to include(contact2)
+    end
   end
 end

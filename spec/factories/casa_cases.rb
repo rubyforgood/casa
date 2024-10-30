@@ -10,7 +10,8 @@ FactoryBot.define do
     case_court_orders { [] }
 
     transient do
-      volunteers { [] }
+      volunteer { nil }
+      volunteers { Array.wrap(volunteer) }
       volunteer_count { 0 }
     end
 

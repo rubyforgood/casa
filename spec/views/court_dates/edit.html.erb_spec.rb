@@ -24,9 +24,11 @@ RSpec.describe "court_dates/edit", type: :view do
     allow(view).to receive(:current_organization).and_return(user.casa_org)
   end
 
-  it { is_expected.to have_select("court_date_judge_id", selected: court_date.judge.name) }
-  it { is_expected.to have_select("court_date_hearing_type_id", selected: court_date.hearing_type.name) }
-  it { is_expected.to have_css("textarea", text: court_order.text) }
-  it { is_expected.to have_select(implementation_status_name, selected: implementation_status) }
-  it { is_expected.to have_css(".primary-btn") }
+  specify do
+    expect(subject).to have_select("court_date_judge_id", selected: court_date.judge.name)
+    expect(subject).to have_select("court_date_hearing_type_id", selected: court_date.hearing_type.name)
+    expect(subject).to have_css("textarea", text: court_order.text)
+    expect(subject).to have_select(implementation_status_name, selected: implementation_status)
+    expect(subject).to have_css(".primary-btn")
+  end
 end

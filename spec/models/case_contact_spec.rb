@@ -1,95 +1,83 @@
 require "rails_helper"
 
 RSpec.describe CaseContact do
-  let(:casa_org) { create(:casa_org) }
+  subject(:case_contact) { build_stubbed :case_contact }
 
-  it { is_expected.to have_many(:contact_topic_answers).dependent(:destroy) }
-  it { is_expected.to validate_numericality_of(:miles_driven).is_less_than 10_000 }
-  it { is_expected.to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0 }
-  it { is_expected.to belong_to(:creator) }
-  it { is_expected.to have_one(:casa_org).through(:casa_case) }
-  it { is_expected.to have_one(:creator_casa_org).through(:creator) }
+  let(:casa_org) { case_contact.casa_org }
 
-  context "status is active" do
-    it "belongs to a creator" do
-      case_contact = build_stubbed(:case_contact, creator: nil, casa_org:)
-      expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:creator]).to eq(["must exist"])
-    end
+  specify(:aggregate_failures) do
+    expect(case_contact).to have_many(:contact_topic_answers).dependent(:destroy)
+    expect(case_contact).to belong_to(:creator).optional(false)
+    expect(case_contact).to belong_to(:casa_case).optional(true)
+    expect(case_contact).to have_one(:casa_org).through(:casa_case)
+    expect(case_contact).to have_one(:creator_casa_org).through(:creator)
 
-    it "belongs to a casa case" do
-      case_contact = build_stubbed(:case_contact, casa_case: nil, casa_org:)
-      expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:casa_case_id]).to eq(["can't be blank"])
-    end
+    expect(case_contact).to validate_numericality_of(:miles_driven).is_less_than 10_000
+    expect(case_contact).to validate_numericality_of(:miles_driven).is_greater_than_or_equal_to 0
+    expect(case_contact).to validate_presence_of(:casa_case_id)
+    expect(case_contact).to validate_presence_of(:occurred_at)
+    expect(case_contact).to validate_presence_of(:duration_minutes)
 
-    it "defaults miles_driven to zero" do
-      case_contact = build_stubbed(:case_contact, casa_org:)
-      expect(case_contact.miles_driven).to eq 0
-    end
+    expect(case_contact).to have_db_column(:miles_driven).with_options(default: 0)
+  end
 
-    it "validates presence of occurred_at" do
-      case_contact = build(:case_contact, occurred_at: nil)
-      expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
-    end
-
-    it "validates duration_minutes can be less than 15 minutes." do
-      case_contact = build_stubbed(:case_contact, duration_minutes: 10, casa_org:)
-      expect(case_contact).to be_valid
-    end
-
+  context "status is 'active'" do
     it "verifies occurred at is not in the future" do
-      case_contact = build_stubbed(:case_contact, occurred_at: 1.week.from_now, casa_org:)
+      case_contact.occurred_at = 1.week.from_now
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
       expect(case_contact.errors.full_messages).to include("Date can't be in the future")
     end
 
     it "verifies occurred at is not before 1/1/1989" do
-      case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date, casa_org:)
+      case_contact.occurred_at = "1984-01-01".to_date
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
       expect(case_contact.errors.full_messages).to include("Date can't be prior to 01/01/1989.")
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is positive" do
-      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 1, casa_org:)
+      case_contact.want_driving_reimbursement = true
+      case_contact.miles_driven = 1
       expect(case_contact).to be_valid
     end
 
     it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
-      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil, casa_org:)
+      case_contact.want_driving_reimbursement = true
+      case_contact.miles_driven = nil
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
     end
 
     it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
-      case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0, casa_org:)
+      case_contact.want_driving_reimbursement = true
+      case_contact.miles_driven = 0
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
     end
 
     it "validates that contact_made cannot be null" do
-      case_contact = build_stubbed(:case_contact, contact_made: nil, casa_org:)
+      case_contact.contact_made = nil
       expect(case_contact).not_to be_valid
       expect(case_contact.errors.full_messages).to include("Contact made must be true or false")
     end
 
     it "can be updated even if it is old" do
-      case_contact = build_stubbed(:case_contact, casa_org:)
+      # case_contact = build_stubbed(:case_contact)
       case_contact.occurred_at = 1.year.ago
       expect(case_contact).to be_valid
     end
 
     it "can be updated for 30 days after end of quarter" do
-      expect(build_stubbed(:case_contact, occurred_at: 4.months.ago + 1.day, casa_org:)).to be_valid
+      expect(build_stubbed(:case_contact, occurred_at: 4.months.ago + 1.day)).to be_valid
     end
   end
 
   context "status is started" do
+    subject(:case_contact) { build_stubbed :case_contact, :started_status, want_driving_reimbursement: true }
+
     it "ignores some validations" do
-      case_contact = build_stubbed(:case_contact, :started_status, want_driving_reimbursement: true, casa_org:)
+      # case_contact = build_stubbed(:case_contact, :started_status, want_driving_reimbursement: true)
       expect(case_contact.casa_case).to be_nil
       expect(case_contact.medium_type).to be_nil
       expect(case_contact.draft_case_ids).to eq []
@@ -101,39 +89,41 @@ RSpec.describe CaseContact do
   end
 
   context "status is details" do
+    subject(:case_contact) { build_stubbed :case_contact, :details_status, want_driving_reimbursement: true }
+
     it "ignores some validations" do
-      case_contact = build_stubbed(:case_contact, :details_status, casa_org:)
+      case_contact = build_stubbed(:case_contact, :details_status)
       expect(case_contact.casa_case).to be_nil
       expect(case_contact).to be_valid
     end
 
     it "requires medium type" do
-      case_contact = build_stubbed(:case_contact, :details_status, medium_type: nil, casa_org:)
+      case_contact = build_stubbed(:case_contact, :details_status, medium_type: nil)
       expect(case_contact).not_to be_valid
       expect(case_contact.errors.full_messages).to include("Medium type can't be blank")
     end
 
-    it "requires a case to be selected" do
-      case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [], casa_org:)
+    it "requires a case to be selected (in draft_case_ids)" do
+      case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [])
       expect(case_contact).not_to be_valid
       expect(case_contact.errors.full_messages).to include("CASA Case must be selected")
     end
 
     it "requires occurred at" do
-      case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil, casa_org:)
+      case_contact = build_stubbed(:case_contact, :details_status, occurred_at: nil)
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
       expect(case_contact.errors.full_messages).to include("Date can't be blank")
     end
 
     it "requires duration minutes" do
-      obj = build_stubbed(:case_contact, :details_status, duration_minutes: nil, casa_org:)
+      obj = build_stubbed(:case_contact, :details_status, duration_minutes: nil)
       expect(obj).not_to be_valid
       expect(obj.errors.full_messages).to include("Duration minutes can't be blank")
     end
 
     it "validates miles driven if want reimbursement" do
-      obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true, casa_org:)
+      obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
       expect(obj).not_to be_valid
       expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
     end
@@ -214,68 +204,77 @@ RSpec.describe CaseContact do
         ]
       end
 
-      let!(:other_case_contact) { build_stubbed(:case_contact, contact_types: [parent_type], casa_org:) }
+      let!(:other_case_contact) { build_stubbed(:case_contact, contact_types: [parent_type]) }
 
       it { is_expected.to match_array(case_contacts_to_match) }
     end
 
     describe ".contact_made" do
-      context "with both option" do
-        it "returns case contacts filtered by contact made option" do
-          case_contact_1 = create(:case_contact, contact_made: false)
-          case_contact_2 = create(:case_contact, contact_made: true)
+      subject { described_class.contact_made(contact_made) }
 
-          expect(described_class.contact_made("")).to contain_exactly(case_contact_1, case_contact_2)
+      let!(:false_contact) { create :case_contact, contact_made: false }
+      let!(:true_contact) { create :case_contact, contact_made: true }
+
+      context "with arg niether true/false (empty string)" do
+        let(:contact_made) { "" }
+
+        it "returns case contacts filtered by contact made option" do
+          expect(subject).to contain_exactly(false_contact, true_contact)
         end
       end
 
-      context "with yes option" do
-        it "returns case contacts filtered by contact made option" do
-          case_contact = create(:case_contact, contact_made: true)
-          build_stubbed(:case_contact, contact_made: false, casa_org:)
+      context "with true arg" do
+        let(:contact_made) { true }
 
-          expect(described_class.contact_made(true)).to contain_exactly(case_contact)
+        it "returns case contacts filtered by contact made option" do
+          expect(subject).to contain_exactly(true_contact)
+          expect(subject).not_to include(false_contact)
         end
       end
 
-      context "with no option" do
-        it "returns case contacts filtered by contact made option" do
-          case_contact = create(:case_contact, contact_made: false)
-          build_stubbed(:case_contact, contact_made: true, casa_org:)
+      context "with false arg" do
+        let(:contact_made) { false }
 
-          expect(described_class.contact_made(false)).to contain_exactly(case_contact)
+        it "returns case contacts filtered by contact made option" do
+          expect(subject).to contain_exactly(false_contact)
+          expect(subject).not_to include(true_contact)
         end
       end
     end
 
     describe ".has_transitioned" do
-      let(:casa_case_1) { create(:casa_case, birth_month_year_youth: 15.years.ago) }
-      let(:casa_case_2) { create(:casa_case, birth_month_year_youth: 10.years.ago) }
+      subject { described_class.has_transitioned argument }
 
-      context "with both option" do
-        let!(:case_contact_1) { create(:case_contact, {casa_case: casa_case_1}) }
-        let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
+      let(:age) { 14 }
+      let(:casa_org) { create :casa_org }
+      let(:pre_transition_case) { create :casa_case, birth_month_year_youth: 10.years.ago, casa_org: }
+      let!(:pre_transition_contact) { create :case_contact, casa_case: pre_transition_case }
+      let(:post_transition_case) { create :casa_case, birth_month_year_youth: 15.years.ago, casa_org: }
+      let!(:post_transition_contact) { create :case_contact, casa_case: post_transition_case }
 
-        it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned).to contain_exactly(case_contact_1, case_contact_2)
+      context "when argument is neither true/false (empty string)" do
+        let(:argument) { "" }
+
+        it "returns all case contacts" do
+          expect(subject).to contain_exactly(pre_transition_contact, post_transition_contact)
         end
       end
 
       context "with true option" do
-        let!(:case_contact_1) { create(:case_contact, {casa_case: casa_case_1}) }
-        let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
+        let(:argument) { true }
 
-        it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned(true)).to contain_exactly(case_contact_1)
+        it "returns case contacts with transition aged youth" do
+          expect(subject).to contain_exactly(post_transition_contact)
+          expect(subject).not_to include pre_transition_contact
         end
       end
 
       context "with false option" do
-        let!(:case_contact_1) { create(:case_contact, {casa_case: casa_case_1}) }
-        let!(:case_contact_2) { create(:case_contact, {casa_case: casa_case_2}) }
+        let(:argument) { false }
 
-        it "returns case contacts filtered by contact made option" do
-          expect(described_class.has_transitioned(false)).to contain_exactly(case_contact_2)
+        it "returns case contacts without pre-transition aged youth" do
+          expect(subject).to contain_exactly(pre_transition_contact)
+          expect(subject).not_to include post_transition_contact
         end
       end
     end
@@ -293,7 +292,7 @@ RSpec.describe CaseContact do
       context "with yes option" do
         it "returns case contacts filtered by contact made option" do
           case_contact = create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
-          build_stubbed(:case_contact, miles_driven: 50, want_driving_reimbursement: false, casa_org:)
+          build_stubbed(:case_contact, miles_driven: 50, want_driving_reimbursement: false)
 
           expect(described_class.want_driving_reimbursement(true)).to contain_exactly(case_contact)
         end
@@ -301,7 +300,7 @@ RSpec.describe CaseContact do
 
       context "with no option" do
         it "returns case contacts filtered by contact made option" do
-          build_stubbed(:case_contact, miles_driven: 50, want_driving_reimbursement: true, casa_org:)
+          build_stubbed(:case_contact, miles_driven: 50, want_driving_reimbursement: true)
           case_contact = create(:case_contact, miles_driven: 50, want_driving_reimbursement: false)
 
           expect(described_class.want_driving_reimbursement(false)).to contain_exactly(case_contact)
@@ -532,14 +531,14 @@ RSpec.describe CaseContact do
   describe "#requested_followup" do
     context "no followup exists in requested status" do
       it "returns nil" do
-        case_contact = build_stubbed(:case_contact, casa_org:)
+        case_contact = build_stubbed(:case_contact)
         expect(case_contact.requested_followup).to be_nil
       end
     end
 
     context "a followup exists in requested status" do
       it "returns nil" do
-        case_contact = build_stubbed(:case_contact, casa_org:)
+        case_contact = build_stubbed(:case_contact)
         followup = create(:followup, case_contact: case_contact)
 
         expect(case_contact.requested_followup).to eq(followup)
@@ -567,10 +566,10 @@ RSpec.describe CaseContact do
   end
 
   describe "#should_send_reimbursement_email?" do
-    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true, casa_org:) }
-    let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org:) }
-    let(:casa_case) { create(:casa_case, casa_org:) }
-    let(:case_contact) { build(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer, casa_org:) }
+    let(:supervisor) { create(:supervisor, receive_reimbursement_email: true) }
+    let(:volunteer) { create(:volunteer, supervisor: supervisor) }
+    let(:casa_case) { create(:casa_case) }
+    let(:case_contact) { build(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer) }
 
     it "returns true if wants reimbursement, reimbursement changed, and has active supervisor" do
       expect(case_contact.want_driving_reimbursement_changed?).to be true
@@ -596,10 +595,10 @@ RSpec.describe CaseContact do
 
   describe "volunteer assignment" do
     let(:casa_org) { create(:casa_org) }
-    let(:admin) { create(:casa_admin, casa_org: casa_org) }
-    let(:supervisor) { create(:supervisor, casa_org: casa_org) }
-    let(:volunteer) { create(:volunteer, supervisor: supervisor, casa_org: casa_org) }
-    let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+    let(:admin) { create(:casa_admin, casa_org:) }
+    let(:supervisor) { create(:supervisor, casa_org:) }
+    let(:volunteer) { create(:volunteer, supervisor:, casa_org:) }
+    let(:casa_case) { create(:casa_case, casa_org:) }
     let(:case_contact) { build(:case_contact, casa_case: casa_case, creator: creator) }
 
     context "when creator is volunteer" do

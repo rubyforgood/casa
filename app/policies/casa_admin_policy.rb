@@ -8,8 +8,9 @@ class CasaAdminPolicy < UserPolicy
   alias_method :update?, :index?
   alias_method :activate?, :index?
   alias_method :resend_invitation?, :index?
-  alias_method :restore?, :is_admin?
   alias_method :datatable?, :index?
+
+  alias_method :restore?, :is_admin?
   alias_method :change_to_supervisor?, :is_admin?
 
   def edit?

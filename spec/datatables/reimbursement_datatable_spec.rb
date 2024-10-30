@@ -53,17 +53,21 @@ RSpec.describe "ReimbursementDatatable" do
     describe ":casa_case" do
       subject(:casa_case) { first_result[:casa_case] }
 
-      it { is_expected.to include(id: first_contact.casa_case.id.to_s) }
-      it { is_expected.to include(case_number: first_contact.casa_case.case_number.to_s) }
+      specify do
+        expect(casa_case).to include(id: first_contact.casa_case.id.to_s)
+        expect(casa_case).to include(case_number: first_contact.casa_case.case_number.to_s)
+      end
     end
 
     describe ":volunteer" do
       subject(:volunteer) { first_result[:volunteer] }
 
-      it { is_expected.to include(id: first_contact.creator.id.to_s) }
-      it { is_expected.to include(display_name: first_contact.creator.display_name.to_s) }
-      it { is_expected.to include(email: first_contact.creator.email.to_s) }
-      it { is_expected.to include(address: first_contact.creator.address.to_s) }
+      specify do
+        expect(volunteer).to include(id: first_contact.creator.id.to_s)
+        expect(volunteer).to include(display_name: first_contact.creator.display_name.to_s)
+        expect(volunteer).to include(email: first_contact.creator.email.to_s)
+        expect(volunteer).to include(address: first_contact.creator.address.to_s)
+      end
     end
 
     describe ":contact_types" do

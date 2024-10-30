@@ -22,15 +22,11 @@ RSpec.describe "placements/index", type: :view do
     render
   end
 
-  it "displays the case number in the header" do
+  it "displays case number, information for each placement and new placement link" do
     expect(rendered).to have_css("h1", text: "CINA-12345")
-  end
 
-  it "has a link to create a new placement" do
     expect(rendered).to have_link("New Placement", href: new_casa_case_placement_path(casa_case))
-  end
 
-  it "displays placement information for each placement" do
     expect(rendered).to have_content("Reunification")
     expect(rendered).to have_content(/August 15, 2024/)
     expect(rendered).to have_content(/Present/)

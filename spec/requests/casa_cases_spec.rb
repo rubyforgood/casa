@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/casa_cases" do
   let(:date_in_care) { Date.current }
+  let(:current_date) { Date.current.strftime("%Y-%m-%d") }
   let(:casa_org) { create(:casa_org) }
   let(:group) { build(:contact_type_group) }
   let(:volunteer) { create(:volunteer, casa_org:) }
@@ -69,31 +70,32 @@ RSpec.describe "/casa_cases" do
     end
 
     describe "GET /show" do
+      subject(:casa_case_show) { get casa_case_path casa_case, format: }
+
+      let(:format) { :html }
+
       it "renders a successful response" do
-        get casa_case_url(casa_case)
+        casa_case_show
         expect(response).to be_successful
       end
 
       it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
+        sign_in create(:casa_admin, casa_org: create(:casa_org))
 
-        get casa_case_url(other_case)
+        subject
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       context "when exporting a csv" do
-        subject(:casa_case_show) { get casa_case_path(casa_case, format: :csv) }
-
-        let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
+        let(:format) { :csv }
 
         it "generates a csv" do
           casa_case_show
 
           expect(response).to have_http_status :ok
           expect(response.headers["Content-Type"]).to include "text/csv"
-          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_date}"
         end
 
         it "adds the correct headers to the csv" do
@@ -109,16 +111,14 @@ RSpec.describe "/casa_cases" do
       end
 
       context "when exporting a xlsx" do
-        subject(:casa_case_show) { get casa_case_path(casa_case, format: :xlsx) }
-
-        let(:current_time) { Time.zone.now.strftime("%Y-%m-%d") }
+        let(:format) { :xlsx }
 
         it "generates a xlsx file" do
           casa_case_show
 
           expect(response).to have_http_status :ok
           expect(response.headers["Content-Type"]).to include "application/vnd.openxmlformats"
-          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_time}"
+          expect(response.headers["Content-Disposition"]).to include "case-contacts-#{current_date}"
         end
       end
     end
@@ -137,10 +137,9 @@ RSpec.describe "/casa_cases" do
       end
 
       it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
+        sign_in create(:casa_admin, casa_org: create(:casa_org))
 
-        get edit_casa_case_url(other_case)
+        get edit_casa_case_url(casa_case)
         expect(response).to be_redirect
         expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
       end

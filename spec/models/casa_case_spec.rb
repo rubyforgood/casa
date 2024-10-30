@@ -1,23 +1,27 @@
 require "rails_helper"
 
 RSpec.describe CasaCase do
-  subject { build(:casa_case, casa_org:) }
+  subject { build_stubbed(:casa_case, casa_org:) }
 
   let(:casa_org) { create(:casa_org) }
 
-  it { is_expected.to have_many(:case_assignments).dependent(:destroy) }
-  it { is_expected.to belong_to(:casa_org) }
-  it { is_expected.to have_many(:casa_case_emancipation_categories).dependent(:destroy) }
-  it { is_expected.to have_many(:emancipation_categories).through(:casa_case_emancipation_categories) }
-  it { is_expected.to have_many(:casa_cases_emancipation_options).dependent(:destroy) }
-  it { is_expected.to have_many(:emancipation_options).through(:casa_cases_emancipation_options) }
-  it { is_expected.to have_many(:case_court_orders).dependent(:destroy) }
-  it { is_expected.to have_many(:volunteers).through(:case_assignments) }
+  specify(:aggregate_failures) do
+    expect(subject).to belong_to(:casa_org)
+
+    expect(subject).to have_many(:case_assignments).dependent(:destroy)
+    expect(subject).to have_many(:casa_case_emancipation_categories).dependent(:destroy)
+    expect(subject).to have_many(:emancipation_categories).through(:casa_case_emancipation_categories)
+    expect(subject).to have_many(:casa_cases_emancipation_options).dependent(:destroy)
+    expect(subject).to have_many(:emancipation_options).through(:casa_cases_emancipation_options)
+    expect(subject).to have_many(:case_court_orders).dependent(:destroy)
+    expect(subject).to have_many(:volunteers).through(:case_assignments)
+
+    expect(subject).to have_db_column(:case_number).with_options(null: false)
+  end
 
   describe "validations" do
-    describe "case_number" do
-      it { is_expected.to validate_presence_of(:case_number) }
-      it { is_expected.to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive }
+    it "validates uniqueness of case_number scoped to casa_org" do
+      expect(create(:casa_case)).to validate_uniqueness_of(:case_number).scoped_to(:casa_org_id).case_insensitive
     end
 
     describe "date_in_care" do

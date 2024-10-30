@@ -111,22 +111,28 @@ RSpec.describe VolunteerPolicy do
       context "when admin" do
         let(:user) { build_stubbed(:casa_admin, casa_org: casa_org) }
 
-        it { is_expected.to include(volunteer1) }
-        it { is_expected.not_to include(another_org_volunteer) }
+        specify do
+          expect(subject).to include(volunteer1)
+          expect(subject).not_to include(another_org_volunteer)
+        end
       end
 
       context "when supervisor" do
         let(:user) { build_stubbed(:supervisor, casa_org: casa_org) }
 
-        it { is_expected.to include(volunteer1) }
-        it { is_expected.not_to include(another_org_volunteer) }
+        specify do
+          expect(subject).to include(volunteer1)
+          expect(subject).not_to include(another_org_volunteer)
+        end
       end
 
       context "when volunteer" do
         let(:user) { build_stubbed(:volunteer, casa_org: casa_org) }
 
-        it { is_expected.to include(volunteer1) }
-        it { is_expected.not_to include(another_org_volunteer) }
+        specify do
+          expect(subject).to include(volunteer1)
+          expect(subject).not_to include(another_org_volunteer)
+        end
       end
     end
   end

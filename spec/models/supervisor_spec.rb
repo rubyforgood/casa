@@ -6,13 +6,14 @@ RSpec.describe Supervisor do
   let(:casa_org) { create :casa_org }
 
   describe "#role" do
-    it { expect(supervisor.role).to eq "Supervisor" }
-
-    it { is_expected.to have_many(:supervisor_volunteers) }
-    it { is_expected.to have_many(:active_supervisor_volunteers) }
-    it { is_expected.to have_many(:unassigned_supervisor_volunteers) }
-    it { is_expected.to have_many(:volunteers).through(:active_supervisor_volunteers) }
-    it { is_expected.to have_many(:volunteers_ever_assigned).through(:supervisor_volunteers) }
+    specify do
+      expect(supervisor.role).to eq "Supervisor"
+      expect(subject).to have_many(:supervisor_volunteers)
+      expect(subject).to have_many(:active_supervisor_volunteers)
+      expect(subject).to have_many(:unassigned_supervisor_volunteers)
+      expect(subject).to have_many(:volunteers).through(:active_supervisor_volunteers)
+      expect(subject).to have_many(:volunteers_ever_assigned).through(:supervisor_volunteers)
+    end
   end
 
   describe "invitation expiration" do

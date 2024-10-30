@@ -1,12 +1,10 @@
 require "rails_helper"
 
 RSpec.describe Note, type: :model do
-  it { is_expected.to belong_to(:notable) }
-  it { is_expected.to belong_to(:creator) }
+  subject(:note) { build_stubbed(:note) }
 
-  it "has a valid factory" do
-    note = build(:note)
-
-    expect(note).to be_valid
+  specify do
+    expect(subject).to belong_to(:notable)
+    expect(subject).to belong_to(:creator)
   end
 end

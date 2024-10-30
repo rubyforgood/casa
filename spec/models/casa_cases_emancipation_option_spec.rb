@@ -1,8 +1,10 @@
 require "rails_helper"
 
 RSpec.describe CasaCasesEmancipationOption, type: :model do
-  it { is_expected.to belong_to(:casa_case) }
-  it { is_expected.to belong_to(:emancipation_option) }
+  specify do
+    expect(subject).to belong_to(:casa_case)
+    expect(subject).to belong_to(:emancipation_option)
+  end
 
   it "does not allow adding the same category twice to a case" do
     expect {

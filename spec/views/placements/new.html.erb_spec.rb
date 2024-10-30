@@ -13,8 +13,10 @@ RSpec.describe "placements/new", type: :view do
   let(:user) { build_stubbed(:casa_admin) }
   let(:casa_case) { create(:casa_case) }
 
-  it { is_expected.to have_css("h1", text: "New Placement") }
-  it { is_expected.to have_css("h6", text: casa_case.case_number) }
-  it { is_expected.to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}") }
-  it { is_expected.to have_css(".primary-btn") }
+  specify do
+    expect(subject).to have_css("h1", text: "New Placement")
+    expect(subject).to have_css("h6", text: casa_case.case_number)
+    expect(subject).to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}")
+    expect(subject).to have_css(".primary-btn")
+  end
 end

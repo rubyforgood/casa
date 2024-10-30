@@ -1,8 +1,10 @@
 require "rails_helper"
 
 RSpec.describe UserLanguage, type: :model do
-  it { is_expected.to belong_to(:language) }
-  it { is_expected.to belong_to(:user) }
+  specify do
+    expect(subject).to belong_to(:language)
+    expect(subject).to belong_to(:user)
+  end
 
   it "validates uniqueness of language scoped to user" do
     existing_record = create(:user_language)
