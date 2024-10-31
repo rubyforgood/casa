@@ -38,6 +38,8 @@ if ENV["RUN_SIMPLECOV"]
     add_group "Config", "/config"
     add_group "Database", "/db"
   end
+  # https://github.com/simplecov-ruby/simplecov?tab=readme-ov-file#want-to-use-spring-with-simplecov
+  # Rails.application.eager_load!
 end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
