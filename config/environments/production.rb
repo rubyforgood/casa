@@ -3,20 +3,6 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
-  config.action_mailer.default_url_options = {host: ENV["DOMAIN"]}
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.show_previews = ENV["APP_ENVIRONMENT"] != "production"
-  # Do not send emails in staging or qa
-  config.action_mailer.perform_deliveries = ENV["APP_ENVIRONMENT"] == "production"
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    address: "smtp-relay.sendinblue.com",
-    port: 587,
-    user_name: ENV["SENDINBLUE_EMAIL"],
-    password: ENV["SENDINBLUE_PASSWORD"],
-    authentication: "login",
-    enable_starttls_auto: true
-  }
   # Code is not reloaded between requests.
   config.enable_reloading = false
 
@@ -65,6 +51,9 @@ Rails.application.configure do
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
 
+  # Skip http-to-https redirect for the default health check endpoint.
+  # config.ssl_options = { redirect: { exclude: ->(request) { request.path == "/up" } } }
+
   # Log to STDOUT by default
   config.logger = ActiveSupport::Logger.new($stdout)
     .tap { |logger| logger.formatter = ::Logger::Formatter.new }
@@ -73,10 +62,10 @@ Rails.application.configure do
   # Prepend all log lines with the following tags.
   config.log_tags = [:request_id]
 
-  # Info include generic and useful information about system operation, but avoids logging too much
+  # "info" includes generic and useful information about system operation, but avoids logging too much
   # information to avoid inadvertent exposure of personally identifiable information (PII). If you
   # want to log everything, set the level to "debug".
-  config.log_level = :info
+  config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -85,11 +74,26 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job # production.rb
   # config.active_job.queue_name_prefix = "casa_production"
 
+  # Disable caching for Action Mailer templates even if Action Controller
+  # caching is enabled.
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
-  # config.action_mailer.raise_delivery_errors = false
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default_url_options = {host: ENV["DOMAIN"]}
+  config.action_mailer.show_previews = ENV["APP_ENVIRONMENT"] != "production"
+  # Do not send emails in staging or qa
+  config.action_mailer.perform_deliveries = ENV["APP_ENVIRONMENT"] == "production"
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: "smtp-relay.sendinblue.com",
+    port: 587,
+    user_name: ENV["SENDINBLUE_EMAIL"],
+    password: ENV["SENDINBLUE_PASSWORD"],
+    authentication: "login",
+    enable_starttls_auto: true
+  }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
