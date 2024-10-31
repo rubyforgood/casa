@@ -75,9 +75,6 @@ class CasaCase < ApplicationRecord
       .where("case_assignments.id IS NULL OR NOT case_assignments.active")
       .order(:case_number)
   }
-  scope :should_transition, -> {
-    where("birth_month_year_youth <= ?", TRANSITION_AGE.years.ago)
-  }
 
   scope :birthday_next_month, -> {
     where("EXTRACT(month from birth_month_year_youth) = ?", DateTime.now.next_month.month)

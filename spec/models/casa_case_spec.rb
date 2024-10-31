@@ -199,24 +199,6 @@ RSpec.describe CasaCase do
     end
   end
 
-  describe ".should_transition" do
-    it "returns only youth who should have transitioned but have not" do
-      not_transitioned_13_yo = build(:casa_case, casa_org:,
-        birth_month_year_youth: Date.current - 13.years)
-      transitioned_14_yo = build(:casa_case, casa_org:,
-        birth_month_year_youth: pre_transition_aged_youth_age)
-      not_transitioned_14_yo = create(:casa_case, casa_org:,
-        birth_month_year_youth: pre_transition_aged_youth_age)
-      cases = described_class.should_transition
-      aggregate_failures do
-        expect(cases.length).to eq 1
-        expect(cases.include?(not_transitioned_14_yo)).to be true
-        expect(cases.include?(not_transitioned_13_yo)).to be false
-        expect(cases.include?(transitioned_14_yo)).to be false
-      end
-    end
-  end
-
   describe "#active_case_assignments" do
     it "only includes active assignments" do
       casa_org = create(:casa_org)
