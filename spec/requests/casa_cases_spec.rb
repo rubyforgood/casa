@@ -7,6 +7,7 @@ RSpec.describe "/casa_cases" do
   let(:group) { build(:contact_type_group) }
   let(:volunteer) { create(:volunteer, casa_org:) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
+  let(:pre_transition_aged_youth_age) { Date.current - CasaCase::TRANSITION_AGE.years }
   let(:valid_attributes) do
     {
       case_number: "1234",
@@ -188,7 +189,7 @@ RSpec.describe "/casa_cases" do
           let(:valid_attributes) do
             {
               case_number: "1234",
-              birth_month_year_youth: pre_transition_aged_youth_age,
+              birth_month_year_youth: 10.years.ago,
               "date_in_care(3i)": date_in_care.day,
               "date_in_care(2i)": date_in_care.month,
               "date_in_care(1i)": date_in_care.year,

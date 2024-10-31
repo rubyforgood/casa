@@ -1,4 +1,5 @@
 require "rails_helper"
+require_relative "../../../spec/support/shared_examples/shows_court_dates_links"
 
 RSpec.describe "casa_cases/show", type: :system do
   include ActionView::Helpers::DateHelper

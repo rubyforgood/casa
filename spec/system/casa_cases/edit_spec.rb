@@ -1,5 +1,6 @@
 require "rails_helper"
 require "stringio"
+require_relative "../../../spec/support/shared_examples/shows_court_dates_links"
 
 RSpec.describe "Edit CASA Case" do
   let(:casa_org) { create(:casa_org) }

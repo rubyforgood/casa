@@ -1,5 +1,29 @@
 require "rails_helper"
 
+# Requires the following to be defined:
+# - `sorted_case_contacts` = array of reimbursement records ordered in the expected way
+RSpec.shared_examples_for "a sorted results set" do
+  it "should order ascending by default" do
+    expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
+  end
+
+  describe "explicit ascending order" do
+    let(:order_direction) { "ASC" }
+
+    it "should order correctly" do
+      expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
+    end
+  end
+
+  describe "descending order" do
+    let(:order_direction) { "DESC" }
+
+    it "should order correctly" do
+      expect(first_result[:id]).to eq(sorted_case_contacts.last.id.to_s)
+    end
+  end
+end
+
 RSpec.describe "ReimbursementDatatable" do
   let(:org) { CasaOrg.first }
   let(:case_contacts) { CaseContact.joins(:casa_case) }
@@ -17,30 +41,6 @@ RSpec.describe "ReimbursementDatatable" do
       page: page,
       per_page: per_page
     )
-  end
-
-  # Requires the following to be defined:
-  # - `sorted_case_contacts` = array of reimbursement records ordered in the expected way
-  shared_examples_for "a sorted results set" do
-    it "orders ascending by default" do
-      expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
-    end
-
-    describe "explicit ascending order" do
-      let(:order_direction) { "ASC" }
-
-      it "orders correctly" do
-        expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
-      end
-    end
-
-    describe "descending order" do
-      let(:order_direction) { "DESC" }
-
-      it "orders correctly" do
-        expect(first_result[:id]).to eq(sorted_case_contacts.last.id.to_s)
-      end
-    end
   end
 
   describe "the data shape" do
