@@ -1,10 +1,14 @@
 require "rails_helper"
 
 RSpec.describe "/contact_type_groups", type: :request do
+  let(:casa_org) { create :casa_org }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:volunteer) { create :volunteer, casa_org: }
+
   describe "GET /contact_type_groups/new" do
     context "logged in as admin user" do
       it "can successfully access a contact type group create page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get new_contact_type_group_path
 
@@ -14,7 +18,7 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot access a contact type group create page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get new_contact_type_group_path
 
@@ -56,7 +60,7 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot create a contact type group" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         post contact_type_groups_path, params: params
 
@@ -77,7 +81,7 @@ RSpec.describe "/contact_type_groups", type: :request do
   describe "GET /contact_type_groups/:id/edit" do
     context "logged in as admin user" do
       it "can successfully access a contact type group edit page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get edit_contact_type_group_path(create(:contact_type_group))
 
@@ -87,7 +91,7 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot access a contact type group edit page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get edit_contact_type_group_path(create(:contact_type_group))
 
@@ -129,7 +133,7 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot update a update a contact type group" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         put contact_type_group_path(create(:contact_type_group)), params: params
 

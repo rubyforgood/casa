@@ -1,10 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "/hearing_types", type: :request do
+  let(:casa_org) { create :casa_org }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:volunteer) { create :volunteer, casa_org: }
+  let(:hearing_type) { create :hearing_type, casa_org: }
+
   describe "GET /hearing_types/new" do
     context "when logged in as admin user" do
       it "allows access to hearing type create page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get new_hearing_type_path
 
@@ -14,7 +19,7 @@ RSpec.describe "/hearing_types", type: :request do
 
     context "when logged in as a non-admin user" do
       it "does not allow access to hearing type create page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get new_hearing_type_path
 
@@ -55,7 +60,7 @@ RSpec.describe "/hearing_types", type: :request do
 
     context "when logged in as a non-admin user" do
       it "does not create a hearing type" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         post hearing_types_path, params: params
 
@@ -76,7 +81,7 @@ RSpec.describe "/hearing_types", type: :request do
   describe "GET /hearing_types/:id/edit" do
     context "when logged in as admin user" do
       it "allows access to hearing type edit page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get edit_hearing_type_path(create(:hearing_type))
 
@@ -86,7 +91,7 @@ RSpec.describe "/hearing_types", type: :request do
 
     context "when logged in as a non-admin user" do
       it "does not allow access to hearing type edit page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get edit_hearing_type_path(create(:hearing_type))
 
@@ -143,7 +148,7 @@ RSpec.describe "/hearing_types", type: :request do
 
     context "when logged in as a non-admin user" do
       it "does not update hearing type" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         put hearing_type_path(create(:hearing_type)), params: params
 

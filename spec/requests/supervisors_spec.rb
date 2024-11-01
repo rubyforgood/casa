@@ -115,7 +115,7 @@ RSpec.describe "/supervisors" do
       let(:supervisor_diff_org) { create(:supervisor, casa_org: diff_org) }
 
       it "admin cannot view the edit supervisor page" do
-        sign_in_as_admin
+        sign_in admin
 
         get edit_supervisor_url(supervisor_diff_org)
 
@@ -124,7 +124,7 @@ RSpec.describe "/supervisors" do
       end
 
       it "supervisor cannot view the edit supervisor page" do
-        sign_in_as_supervisor
+        sign_in supervisor
 
         get edit_supervisor_url(supervisor_diff_org)
 

@@ -2,7 +2,8 @@ require "rails_helper"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe "/casa_admins" do
-  let(:casa_org) { create(:casa_org) }
+  let(:casa_org) { create :casa_org }
+  let(:volunteer) { create :volunteer, casa_org: }
 
   describe "GET /casa_admins" do
     it "is successful" do
@@ -46,7 +47,7 @@ RSpec.describe "/casa_admins" do
 
     context "logged in as a non-admin user" do
       it "cannot access a casa admin edit page" do
-        sign_in_as_volunteer
+        sign_in volunteer
         admin = create(:casa_admin)
 
         get edit_casa_admin_path(admin)
@@ -160,7 +161,7 @@ RSpec.describe "/casa_admins" do
 
     context "logged in as a non-admin user" do
       it "cannot update a casa admin user" do
-        sign_in_as_volunteer
+        sign_in volunteer
         admin = create(:casa_admin)
 
         put casa_admin_path(admin), params: {
@@ -351,7 +352,7 @@ RSpec.describe "/casa_admins" do
       it "cannot update a casa admin user" do
         admin = create(:casa_admin)
 
-        sign_in_as_volunteer
+        sign_in volunteer
         patch deactivate_casa_admin_path(admin)
 
         expect(response).to redirect_to root_path
@@ -531,7 +532,7 @@ RSpec.describe "/casa_admins" do
       it "changes the admin to a supervisor" do
         casa_admin = create(:casa_admin)
 
-        sign_in_as_admin
+        sign_in casa_admin
         patch change_to_supervisor_casa_admin_path(casa_admin)
 
         expect(response).to redirect_to(edit_supervisor_path(casa_admin))

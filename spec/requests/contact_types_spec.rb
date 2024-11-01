@@ -1,12 +1,15 @@
 require "rails_helper"
 
 RSpec.describe "/contact_types", type: :request do
-  let(:group) { create(:contact_type_group) }
+  let(:casa_org) { create :casa_org }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:volunteer) { create :volunteer, casa_org: }
+  let(:group) { create :contact_type_group, casa_org: }
 
   describe "GET /contact_types/new" do
     context "logged in as admin user" do
       it "can successfully access a contact type create page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get new_contact_type_path
 
@@ -16,7 +19,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot access a contact type create page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get new_contact_type_path
 
@@ -58,7 +61,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot create a contact type" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         post contact_types_path, params: params
 
@@ -79,7 +82,7 @@ RSpec.describe "/contact_types", type: :request do
   describe "GET /contact_types/:id/edit" do
     context "logged in as admin user" do
       it "can successfully access a contact type edit page" do
-        sign_in_as_admin
+        sign_in casa_admin
 
         get edit_contact_type_path(create(:contact_type))
 
@@ -89,7 +92,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot access a contact type edit page" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         get edit_contact_type_path(create(:contact_type))
 
@@ -132,7 +135,7 @@ RSpec.describe "/contact_types", type: :request do
 
     context "logged in as a non-admin user" do
       it "cannot update a update a contact type" do
-        sign_in_as_volunteer
+        sign_in volunteer
 
         put contact_type_path(create(:contact_type)), params: params
 

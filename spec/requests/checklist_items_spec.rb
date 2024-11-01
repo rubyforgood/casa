@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "ChecklistItems" do
-  let(:casa_org) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org:) }
-  let(:volunteer) { create(:volunteer, casa_org:) }
+  let(:casa_org) { create :casa_org }
+  let(:casa_admin) { create :casa_admin, casa_org: }
+  let(:volunteer) { create :volunteer, casa_org: }
+  let(:hearing_type) { create :hearing_type, casa_org: }
   let(:user) { volunteer }
 
   before { sign_in user }
@@ -11,20 +12,20 @@ RSpec.describe "ChecklistItems" do
   describe "GET new" do
     subject { get new_hearing_type_checklist_item_path(hearing_type) }
 
-    let(:hearing_type) { create(:hearing_type, casa_org:) }
-
     context "when logged in as an admin user" do
       let(:user) { admin }
 
       it "the new checklist item page should load successfully" do
-        get new_hearing_type_checklist_item_path(hearing_type)
+        sign_in casa_admin
+        subject
         expect(response).to be_successful
       end
     end
 
     context "when logged in as a non-admin user" do
       it "does not allow access to the new checklist item page" do
-        get new_hearing_type_checklist_item_path(hearing_type)
+        sign_in volunteer
+        subject
         expect(response).to redirect_to root_path
         expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
       end
@@ -33,10 +34,9 @@ RSpec.describe "ChecklistItems" do
 
   describe "POST create" do
     context "when logged in as an admin user" do
-      let(:user) { admin }
-
       it "allows for the creation of checklist items" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_admin
+        hearing_type = create(:hearing_type)
         post hearing_type_checklist_items_path(
           {
             hearing_type_id: hearing_type.id,
@@ -54,7 +54,8 @@ RSpec.describe "ChecklistItems" do
 
     context "when logged in as a non-admin user" do
       it "does not allow for the creation of checklist items" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_volunteer
+        hearing_type = create(:hearing_type)
         post hearing_type_checklist_items_path(
           {
             hearing_type_id: hearing_type.id,
@@ -76,6 +77,7 @@ RSpec.describe "ChecklistItems" do
       let(:user) { admin }
 
       it "the edit page should load successfully" do
+        sign_in casa_admin
         hearing_type = create(:hearing_type, casa_org:)
         checklist_item = create(:checklist_item)
         get edit_hearing_type_checklist_item_path(hearing_type, checklist_item)
@@ -85,7 +87,8 @@ RSpec.describe "ChecklistItems" do
 
     context "when logged in as a non-admin user" do
       it "does not allow access to the edit page" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_volunteer
+        hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
         get edit_hearing_type_checklist_item_path(hearing_type, checklist_item)
         expect(response).to redirect_to root_path
@@ -96,10 +99,9 @@ RSpec.describe "ChecklistItems" do
 
   describe "PATCH update" do
     context "when logged in as an admin user" do
-      let(:user) { admin }
-
       it "lets admin users update checklist items" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_admin
+        hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
         patch hearing_type_checklist_item_path(
           {
@@ -122,7 +124,8 @@ RSpec.describe "ChecklistItems" do
 
     context "when logged in as a non-admin user" do
       it "does not allow updates" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_volunteer
+        hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
         patch hearing_type_checklist_item_path(
           {
@@ -147,10 +150,9 @@ RSpec.describe "ChecklistItems" do
 
   describe "DELETE destroy" do
     context "when logged in as an admin user" do
-      let(:user) { admin }
-
       it "allows for the deletion of checklist items" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_admin
+        hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
         delete hearing_type_checklist_item_path(hearing_type, checklist_item)
         expect(response).to redirect_to edit_hearing_type_path(hearing_type)
@@ -160,7 +162,8 @@ RSpec.describe "ChecklistItems" do
 
     context "when logged in as a non-admin user" do
       it "does not allow for the deletion of checklist items" do
-        hearing_type = create(:hearing_type, casa_org:)
+        sign_in_as_volunteer
+        hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
         delete hearing_type_checklist_item_path(hearing_type, checklist_item)
         expect(response).to redirect_to root_path
