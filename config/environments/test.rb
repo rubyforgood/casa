@@ -5,18 +5,20 @@ require "active_support/core_ext/integer/time"
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
+ci_env = ENV.fetch("CI", false) || ENV.fetch("GITHUB_ACTIONS", false)
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
   # config.enable_reloading = false
-  config.enable_reloading = ENV["CI"].blank? # enable for spring + bin/rspec
+  config.enable_reloading = !ci_env # enable for spring + bin/rspec
 
   # Eager loading loads your entire application. When running a single test locally,
   # this is usually not necessary, and can slow down your test suite. However, it's
   # recommended that you enable it in continuous integration systems to ensure eager
   # loading is working properly before deploying your code.
-  config.eager_load = ENV["CI"].present?
+  config.eager_load = ci_env
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.headers = {
@@ -27,8 +29,10 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
   # config.cache_store = :null_store
+  config.cache_store = :file_store, "#{Rails.root}/tmp/cache/" # default (when not set)
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
+  # TODO: enable and fix specs
   # config.action_dispatch.show_exceptions = :rescuable
   config.action_dispatch.show_exceptions = :none
 
@@ -91,4 +95,11 @@ Rails.application.configure do
   config.active_job.queue_adapter = :test
 
   config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_test_secret_key"
+
+  if ci_env
+    config.logger = Logger.new(nil)
+    config.log_level = :fatal
+  else
+    config.log_level = ENV.fetch("LOG_LEVEL", "warn")
+  end
 end

@@ -18,6 +18,8 @@ require "view_component/test_helpers"
 require "capybara/rspec"
 require "action_text/system_test_helper"
 
+ci_environment = (ENV["GITHUB_ACTIONS"] || ENV["CI"]).present?
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -138,11 +140,11 @@ RSpec.configure do |config|
     raise StandardError.new "\"#{example.full_description}\" in #{example.location} timed out."
   end
 
-  config.around :each, :disable_bullet do |example|
-    Bullet.raise = false
-    example.run
-    Bullet.raise = true
-  end
+  # config.around :each, :disable_bullet do |example|
+  #   Bullet.raise = false
+  #   example.run
+  #   Bullet.raise = true
+  # end
 
   # TODO: think this is good
   config.around do |example|
@@ -150,7 +152,7 @@ RSpec.configure do |config|
     example.run
   end
 
-  config.filter_run_excluding :ci_only unless ENV["GITHUB_ACTIONS"]
+  config.filter_run_excluding :ci_only unless ci_environment
 end
 
 RSpec::Matchers.define_negated_matcher :not_change, :change
@@ -166,3 +168,28 @@ WebMock.disable_net_connect!(
   allow_localhost: true,
   allow: "selenium_chrome:4444"
 )
+
+if !ci_environment
+  require "test-prof"
+  require "test_prof/recipes/rspec/sample"
+  # require "test_prof/recipes/rspec/factory_default"
+  # require "test_prof/recipes/rspec/factory_all_stub"
+
+  # TODO: is this any use on CI? should we not require it there?
+  TestProf.configure do |config|
+    # the directory to put artifacts (reports) in ('tmp/test_prof' by default)
+    config.output_dir = "tmp/test_prof"
+    # use unique filenames for reports (by simply appending current timestamp)
+    config.timestamps = true
+    # color output
+    config.color = true
+    # where to write logs (defaults)
+    config.output = $stdout
+    # alternatively, you can specify a custom logger instance
+    # config.logger = MyLogger.new
+  end
+
+  TestProf::StackProf.configure do |config|
+    config.format = "json"
+  end
+end

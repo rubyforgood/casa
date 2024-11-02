@@ -62,12 +62,15 @@ gem "flipper-ui"
 
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
-  gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  # switch to debug gem!
+  # rspec -rdebug, or require 'debug' in file/ .rspec-local
+  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
+  gem "byebug", platforms: %i[mri mingw x64_mingw] , require: false # not a big savings - ~4 seconds
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "parallel_tests"
-  gem "pry"
-  gem "pry-byebug"
+  gem "pry", require: false
+  gem "pry-byebug", require: false
   gem "rspec_junit_formatter"
   gem "rspec-rails"
   gem "rswag-specs"
@@ -107,6 +110,10 @@ group :test do
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "webmock" # HTTP request stubber
+
+  gem "test-prof", require: false
+  gem "stackprof", require: false
+  gem "factory_trace", require: false
 end
 
 # gem "pdf-reader", "~> 2.9"
