@@ -2,6 +2,7 @@ class HealthController < ApplicationController
   skip_before_action :authenticate_user!
   skip_after_action :verify_authorized
 
+  # TODO: gem "group-date" is used in this controller only..
   def index
     respond_to do |format|
       format.html do

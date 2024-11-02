@@ -20,6 +20,7 @@ module DatatableHelper
     class_name = self.class.name.split("::")[2]
     class_name.constantize
   rescue NameError
+    # TODO: what is going on here?
     # TODO warning log to bugsnag here ?
   end
 

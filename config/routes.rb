@@ -10,10 +10,11 @@
 # end
 
 Rails.application.routes.draw do
+  # TODO: IS THIS NEEDED?
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
 
-  # set_up_flipper
+  # set_up_flipper TODO: ???
 
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
@@ -243,6 +244,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
       namespace :users do
+        # TODO: IS THIS NEEDED?
         post "sign_in", to: "sessions#create"
         # get 'sign_out', to: 'sessions#destroy'
       end
