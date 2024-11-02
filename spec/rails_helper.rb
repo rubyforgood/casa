@@ -10,6 +10,9 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 
 require "rspec/rails"
 # Add additional requires below this line. Rails is not loaded until this point!
+require "webmock/rspec"
+require "email_spec"
+require "email_spec/rspec"
 require "pundit/rspec"
 require "view_component/test_helpers"
 require "capybara/rspec"
@@ -28,7 +31,9 @@ require "action_text/system_test_helper"
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Rails.root.glob("spec/support/**/*.rb").sort_by(&:to_s).each { |f| require f }
+Rails.root.glob("spec/support/config/**/*.rb").each { |f| require f }
+Rails.root.glob("spec/support/shared_examples/**/*.rb").each { |f| require f }
+Rails.root.glob("spec/support/stubbed_requests/**/*.rb").each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -40,28 +45,31 @@ end
 
 RSpec.configure do |config|
   config.include ActiveSupport::Testing::TimeHelpers
-  config.include DatatableHelper, type: :datatable
+
   config.include Devise::Test::ControllerHelpers, type: :controller
   config.include Devise::Test::ControllerHelpers, type: :view
   config.include Devise::Test::IntegrationHelpers, type: :request
   config.include Devise::Test::IntegrationHelpers, type: :system
+
   config.include Organizational, type: :helper
   config.include Organizational, type: :view
-  config.include PunditHelper, type: :view
-  config.include SessionHelper, type: :view
-  config.include SessionHelper, type: :request
-  config.include TemplateHelper
+
   config.include ViewComponent::TestHelpers, type: :component
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
-  config.include ActionText::SystemTestHelper, type: :system
+
+  require_relative 'support/datatable_helper.rb'
+  config.include DatatableHelper, type: :datatable
+
+  require_relative 'support/pundit_helper'
+  config.include PunditHelper, type: :view
+
+  require_relative 'support/twilio_helper.rb'
   config.include TwilioHelper, type: :request
   config.include TwilioHelper, type: :system
-  config.include Support::RequestHelpers, type: :request
 
-  config.after do
-    Warden.test_reset!
-  end
+  require_relative 'support/request_helpers'
+  config.include Support::RequestHelpers, type: :request
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [

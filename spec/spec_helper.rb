@@ -11,11 +11,6 @@
 # a separate helper file that requires the additional dependencies and performs
 # the additional setup, and require it from the spec files that actually need
 # it.
-# TODO:RSPEC - remove this and require support files as needed?
-require "pry"
-require "webmock/rspec"
-require "email_spec"
-require "email_spec/rspec"
 
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
