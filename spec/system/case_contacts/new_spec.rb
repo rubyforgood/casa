@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../../support/fill_in_case_contact_fields"
 
 RSpec.describe "case_contacts/new", :js, type: :system do
+  include FillInCaseContactFields
+
   subject { visit new_case_contact_path casa_case }
 
   let(:casa_org) { create :casa_org }

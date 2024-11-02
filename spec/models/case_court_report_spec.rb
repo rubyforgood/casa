@@ -2,6 +2,7 @@
 
 require "rails_helper"
 require "sablon"
+require_relative "../support/download_helpers"
 
 RSpec.describe CaseCourtReport do
   include DownloadHelpers

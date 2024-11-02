@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../support/user_input_helpers"
 
 RSpec.describe Volunteer do
+  include UserInputHelpers
+
   let(:casa_org) { build :casa_org }
 
   describe "#send_court_report_reminder" do
@@ -139,6 +142,7 @@ RSpec.describe Volunteer do
 
   describe "#display_name" do
     it "allows user to input dangerous values" do
+      # this is a model, no input here???
       volunteer = build(:volunteer)
       UserInputHelpers::DANGEROUS_STRINGS.each do |dangerous_string|
         volunteer.update_attribute(:display_name, dangerous_string)

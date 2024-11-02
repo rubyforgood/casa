@@ -1,4 +1,4 @@
-class UserInputHelpers
+module UserInputHelpers
   DANGEROUS_STRINGS = [
     "مرحبا بالعالم هذا اسم من ترجمة جوجل",
     "שלום עולם זה שם מגוגל תרגם",

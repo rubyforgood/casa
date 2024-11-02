@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../support/upload_helpers"
 
 RSpec.describe "CasaOrg", type: :request do
+  include UploadHelpers
+
   let(:casa_org) { build(:casa_org) }
   let(:casa_case) { build_stubbed(:casa_case, casa_org: casa_org) }
 

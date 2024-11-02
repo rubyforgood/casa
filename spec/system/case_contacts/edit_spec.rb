@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../../support/fill_in_case_contact_fields"
 
 RSpec.describe "case_contacts/edit", :js do
+  include FillInCaseContactFields
+
   let(:organization) { create(:casa_org, :all_reimbursements_enabled) }
   let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
   let(:casa_case) { volunteer.casa_cases.first }

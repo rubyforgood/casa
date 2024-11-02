@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../../support/fill_in_case_contact_fields"
 
 RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :system do
+  include FillInCaseContactFields
+
   subject do
     visit new_case_contact_path(casa_case)
     fill_in_contact_details(contact_types: [contact_type.name])

@@ -1,6 +1,9 @@
 require "rails_helper"
+require_relative "../support/upload_helpers"
 
 RSpec.describe "/imports" do
+  include UploadHelpers
+
   let(:volunteer_file) { Rails.root.join("spec/fixtures/volunteers.csv") }
   let(:supervisor_file) { Rails.root.join("spec/fixtures/supervisors.csv") }
   let(:case_file) { Rails.root.join("spec/fixtures/casa_cases.csv") }
