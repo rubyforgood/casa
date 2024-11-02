@@ -160,7 +160,7 @@ RSpec.describe "/imports" do
     it "produces an error when a deactivated case already exists in cases CSV imports" do
       sign_in casa_admin
 
-      create(:casa_case, :pre_transition, case_number: "CINA-00-0000", active: "false")
+      create(:casa_case, :pre_transition, case_number: "CINA-00-0000", active: "false", casa_org:)
 
       expect(CasaCase.count).to eq(1)
 

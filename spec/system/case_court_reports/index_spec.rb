@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "case_court_reports/index" do
   let(:today) { Date.current }
-  let(:date_format) { "%B %-d, %Y" }
+  let(:date_format) { "%B %d, %Y" }
 
   let(:casa_org) { create :casa_org }
   let(:supervisor) { create :supervisor, casa_org: }
