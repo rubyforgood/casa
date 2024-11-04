@@ -29,7 +29,7 @@ Rails.application.configure do
   config.consider_all_requests_local = true
   config.action_controller.perform_caching = false
   # config.cache_store = :null_store
-  config.cache_store = :file_store, "#{Rails.root}/tmp/cache/" # default (when not set)
+  config.cache_store = :file_store, Rails.root.join("tmp/cache/").to_s # default (when not set)
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
   config.action_dispatch.show_exceptions = :rescuable

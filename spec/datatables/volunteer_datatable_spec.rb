@@ -73,6 +73,7 @@ RSpec.describe VolunteerDatatable do
 
   context "with supervisors who have volunteers who have cases" do
     before :all do
+      # TODO: let it be instead? could remvoe db cleaner...
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.start
 

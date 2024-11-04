@@ -8,7 +8,7 @@ namespace :after_party do
     if down_tasks.empty?
       Health.instance.update_attribute(:latest_deploy_time, Time.now)
     else
-      puts("failed tasks found, latest_deploy_time will not be updated!")
+      Rails.logger.info { "failed tasks found, latest_deploy_time will not be updated!" }
     end
   end
 end
