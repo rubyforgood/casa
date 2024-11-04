@@ -118,6 +118,10 @@ RSpec/ExampleLength:
   Exclude:
     - 'spec/system/**/*'
 
+RSpec/LeadingSubject:
+  # Too many existing examples, style preference only
+  Enabled: false
+
 RSpec/LetSetup:
   # Only here for the extra details as let! use is extremely common... counter-examples? not so common!
   Details: |-
@@ -149,5 +153,13 @@ RSpec/MultipleExpectations:
 RSpec/MultipleMemoizedHelpers:
   Max: 20
 
+RSpec/NamedSubject:
+  # Too many existing examples for a slight gain in readability
+  Enabled: false
+
 RSpec/NestedGroups:
   Max: 5
+
+RSpec/NotToNot:
+  # consistency only, no difference between to_not/not_to
+  Enabled: false
