@@ -492,8 +492,9 @@ RSpec.describe "/users", type: :request do
         }
       end
 
-      it "raises error when Language do not exist" do
-        expect { delete remove_language_users_path(999) }.to raise_error(ActiveRecord::RecordNotFound)
+      it "responds not found when Language do not exist" do
+        delete remove_language_users_path(999)
+        expect(response).to have_http_status :not_found
       end
     end
   end

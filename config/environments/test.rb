@@ -32,9 +32,7 @@ Rails.application.configure do
   config.cache_store = :file_store, "#{Rails.root}/tmp/cache/" # default (when not set)
 
   # Render exception templates for rescuable exceptions and raise for other exceptions.
-  # TODO: enable and fix specs
-  # config.action_dispatch.show_exceptions = :rescuable
-  config.action_dispatch.show_exceptions = :none
+  config.action_dispatch.show_exceptions = :rescuable
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

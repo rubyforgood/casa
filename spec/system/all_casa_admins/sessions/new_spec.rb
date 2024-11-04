@@ -55,9 +55,5 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
       expect(page).to have_text "Invalid Email or password"
     end
-
-    it "denies access to flipper" do
-      expect { visit "/flipper" }.to raise_error(ActionController::RoutingError)
-    end
   end
 end

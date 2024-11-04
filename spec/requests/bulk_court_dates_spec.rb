@@ -56,8 +56,9 @@ RSpec.describe "BulkCourtDates", type: :request do
     context "when different casa org's case group" do
       let(:case_group) { create :case_group, case_count:, casa_org: build(:casa_org) }
 
-      it "raises ActiveRecord::RecordNotFound" do
-        expect { subject }.to raise_error(ActiveRecord::RecordNotFound)
+      it "responds not found" do
+        subject
+        expect(response).to have_http_status :not_found
       end
     end
 

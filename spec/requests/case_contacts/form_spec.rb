@@ -174,9 +174,9 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       expect(case_contact.reload.status).to eq "active"
     end
 
-    it "raises RoutingError if no step in url" do
-      expect { patch "/case_contacts/#{case_contact.id}/form", params: {case_contact: attributes} }
-        .to raise_error(ActionController::RoutingError)
+    it "responds not found if no step in url" do
+      patch "/case_contacts/#{case_contact.id}/form", params: {case_contact: attributes}
+      expect(response).to have_http_status :not_found
     end
 
     it "redirects to referrer (fallback /case_contacts?success=true)" do
