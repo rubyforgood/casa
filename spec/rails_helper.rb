@@ -33,9 +33,7 @@ ci_environment = (ENV["GITHUB_ACTIONS"] || ENV["CI"]).present?
 # directory. Alternatively, in the individual `*_spec.rb` files, manually
 # require only the support files necessary.
 #
-Rails.root.glob("spec/support/config/**/*.rb").each { |f| require f }
-Rails.root.glob("spec/support/shared_examples/**/*.rb").each { |f| require f }
-Rails.root.glob("spec/support/stubbed_requests/**/*.rb").each { |f| require f }
+Rails.root.glob("spec/support/**/*.rb").sort.each { |f| require f }
 
 # Checks for pending migrations and applies them before tests are run.
 # If you are not using ActiveRecord, you can remove these lines.
@@ -60,17 +58,13 @@ RSpec.configure do |config|
   config.include ViewComponent::SystemTestHelpers, type: :component
   config.include Capybara::RSpecMatchers, type: :component
 
-  require_relative 'support/datatable_helper.rb'
   config.include DatatableHelper, type: :datatable
 
-  require_relative 'support/pundit_helper'
   config.include PunditHelper, type: :view
 
-  require_relative 'support/twilio_helper.rb'
   config.include TwilioHelper, type: :request
   config.include TwilioHelper, type: :system
 
-  require_relative 'support/request_helpers'
   config.include Support::RequestHelpers, type: :request
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
@@ -140,13 +134,13 @@ RSpec.configure do |config|
     raise StandardError.new "\"#{example.full_description}\" in #{example.location} timed out."
   end
 
+  # NOTE: not applicable currently, leaving to show how to skip bullet errrors for later
   # config.around :each, :disable_bullet do |example|
   #   Bullet.raise = false
   #   example.run
   #   Bullet.raise = true
   # end
 
-  # TODO: think this is good
   config.around do |example|
     Capybara.server_port = 7654 + ENV["TEST_ENV_NUMBER"].to_i
     example.run
@@ -169,25 +163,25 @@ WebMock.disable_net_connect!(
   allow: "selenium_chrome:4444"
 )
 
-if !ci_environment
-  require "test-prof"
-  require "test_prof/recipes/rspec/sample"
-  # require "test_prof/recipes/rspec/factory_default"
-  # require "test_prof/recipes/rspec/factory_all_stub"
+require "test-prof"
 
-  # TODO: is this any use on CI? should we not require it there?
-  TestProf.configure do |config|
-    # the directory to put artifacts (reports) in ('tmp/test_prof' by default)
-    config.output_dir = "tmp/test_prof"
-    # use unique filenames for reports (by simply appending current timestamp)
-    config.timestamps = true
-    # color output
-    config.color = true
-    # where to write logs (defaults)
-    config.output = $stdout
-    # alternatively, you can specify a custom logger instance
-    # config.logger = MyLogger.new
-  end
+TestProf.configure do |config|
+  # the directory to put artifacts (reports) in ('tmp/test_prof' by default)
+  config.output_dir = "tmp/test_prof"
+  # use unique filenames for reports (by simply appending current timestamp)
+  config.timestamps = true
+  # color output
+  config.color = true
+  # where to write logs (defaults)
+  config.output = $stdout
+  # alternatively, you can specify a custom logger instance
+  # config.logger = MyLogger.new
+end
+
+if ci_environment
+  # profiling tools not used in CI
+
+  require "test_prof/recipes/rspec/sample"
 
   TestProf::StackProf.configure do |config|
     config.format = "json"

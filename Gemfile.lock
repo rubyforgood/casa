@@ -569,6 +569,7 @@ GEM
     unicode-display_width (2.5.0)
     uniform_notifier (1.16.0)
     useragent (0.16.10)
+    vernier (1.3.0)
     view_component (3.13.0)
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
@@ -695,6 +696,7 @@ DEPENDENCIES
   turbo-rails (~> 2.0)
   twilio-ruby
   tzinfo-data
+  vernier
   view_component
   web-console (>= 3.3.0)
   webmock

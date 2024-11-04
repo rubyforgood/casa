@@ -5,20 +5,20 @@ require "active_support/core_ext/integer/time"
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
-ci_env = ENV.fetch("CI", false) || ENV.fetch("GITHUB_ACTIONS", false)
+ci_environment = (ENV.fetch("CI", false) || ENV.fetch("GITHUB_ACTIONS", false)).present?
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
   # config.enable_reloading = false
-  config.enable_reloading = !ci_env # enable for spring + bin/rspec
+  config.enable_reloading = !ci_environment # enable for local bin/rspec w/ spring
 
   # Eager loading loads your entire application. When running a single test locally,
   # this is usually not necessary, and can slow down your test suite. However, it's
   # recommended that you enable it in continuous integration systems to ensure eager
   # loading is working properly before deploying your code.
-  config.eager_load = ci_env
+  config.eager_load = ci_environment # !config.enable_reloading is default
 
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.headers = {
@@ -82,11 +82,16 @@ Rails.application.configure do
   ENV["IP_BLOCKLIST"] = "4.5.6.7, 9.8.7.6,100.101.102.103"
 
   config.after_initialize do
-    Bullet.enable = true
-    Bullet.console = true
-    Bullet.bullet_logger = true
+    # https://github.com/flyerhzm/bullet#configuration
+    Bullet.enable = false # disable until we are actually raising to affect specs
+    Bullet.skip_user_in_notification = true
+    Bullet.console = false
+    Bullet.bullet_logger = false
     Bullet.rails_logger = true
     # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/2441
+    # Bullet.unused_eager_loading_enable = false
+    Bullet.skip_html_injection = true
+    Bullet.skip_http_headers = ci_environment
   end
 
   # https://github.com/rails/rails/issues/48468
@@ -94,7 +99,7 @@ Rails.application.configure do
 
   config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_test_secret_key"
 
-  if ci_env
+  if ci_environment
     config.logger = Logger.new(nil)
     config.log_level = :fatal
   else

@@ -65,12 +65,12 @@ group :development, :test do
   # switch to debug gem!
   # rspec -rdebug, or require 'debug' in file/ .rspec-local
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem "byebug", platforms: %i[mri mingw x64_mingw] , require: false # not a big savings - ~4 seconds
+  gem "byebug", platforms: %i[mri mingw x64_mingw]
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "parallel_tests"
-  gem "pry", require: false
-  gem "pry-byebug", require: false
+  gem "pry"
+  gem "pry-byebug"
   gem "rspec_junit_formatter"
   gem "rspec-rails"
   gem "rswag-specs"
@@ -108,11 +108,12 @@ group :test do
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov", require: false
+  gem "simplecov", require: false # CI-only (spec_helper.rb)
   gem "webmock" # HTTP request stubber
 
   gem "test-prof", require: false
   gem "stackprof", require: false
+  gem "vernier", require: false
   gem "factory_trace", require: false
 end
 
