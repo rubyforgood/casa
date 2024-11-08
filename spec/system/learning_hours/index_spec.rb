@@ -41,7 +41,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       expect(page).to have_current_path(learning_hours_volunteer_path(volunteer.id))
     end
 
-    shared_examples_for "functioning sort buttons" do
+    RSpec.shared_examples_for "functioning sort buttons" do
       it "sorts table columns" do
         expect(page).to have_selector("tr:nth-child(1)", text: expected_first_ordered_value)
 
