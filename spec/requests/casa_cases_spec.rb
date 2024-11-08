@@ -6,6 +6,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:group) { build(:contact_type_group) }
   let(:volunteer) { create(:volunteer) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
+  let(:pre_transition_aged_youth_age) { Date.current - 14.years }
   let(:valid_attributes) do
     {
       case_number: "1234",

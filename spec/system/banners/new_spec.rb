@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "Banners", type: :system, js: true do
+  include ActionText::SystemTestHelper
+
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
