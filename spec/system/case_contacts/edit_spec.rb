@@ -100,11 +100,12 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
 
     visit edit_case_contact_path(case_contact)
 
-    uncheck contact_types.first.name
     complete_details_page(
-      case_numbers: [], contact_made: true, medium: "Letter", contact_types: [contact_types.second.name],
+      case_numbers: [], contact_made: true, medium: "Letter",
       occurred_on: Time.zone.today - 5.days, hours: 1, minutes: 5
     )
+    uncheck contact_types.first.name
+    check contact_types.second.name
     click_on "Add Another Discussion Topic"
     answer_topic contact_topic.question, "Topic 1 Answer."
     fill_in_expenses_page(miles: 50, want_reimbursement: true, address: "123 Form St")

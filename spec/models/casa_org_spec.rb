@@ -81,7 +81,7 @@ RSpec.describe CasaOrg, type: :model do
         expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
 
         subject.logo.attach(
-          io: File.open(file_fixture "company_logo.png"),
+          io: File.open(file_fixture("company_logo.png")),
           filename: "company_logo.png", content_type: "image/png"
         )
 
