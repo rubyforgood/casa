@@ -40,7 +40,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "volunteer",
-        file: upload_file(supervisor_file),
+        file: supervisor_file,
         sms_opt_in: "1"
       }
 
@@ -53,7 +53,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "supervisor",
-        file: upload_file(volunteer_file),
+        file: volunteer_file,
         sms_opt_in: "1"
       }
 
@@ -66,7 +66,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "casa_case",
-        file: upload_file(supervisor_file),
+        file: supervisor_file,
         sms_opt_in: "1"
       }
 
@@ -83,7 +83,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "volunteer",
-            file: upload_file(volunteer_file),
+            file: volunteer_file,
             sms_opt_in: "1"
           }
       }.to change(Volunteer, :count).by(3)
@@ -103,7 +103,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: upload_file(supervisor_file),
+            file: supervisor_file,
             sms_opt_in: "1"
           }
       }.to change(Supervisor, :count).by(3)
@@ -127,7 +127,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: upload_file(supervisor_volunteers_file),
+            file: supervisor_volunteers_file,
             sms_opt_in: "1"
           }
       }.to change(Supervisor, :count).by(2)
@@ -147,7 +147,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: upload_file(case_file),
+            file: case_file,
             sms_opt_in: "1"
           }
       }.to change(CasaCase, :count).by(3)
@@ -169,7 +169,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: upload_file(existing_case_file)
+            file: existing_case_file
           }
       }.to change(CasaCase, :count).by(0)
 

@@ -47,7 +47,7 @@ RSpec.describe "CasaOrg", type: :request do
       end
 
       describe "on logo update" do
-        let(:logo) { upload_file("#{Rails.root}/spec/fixtures/company_logo.png") }
+        let(:logo) { fixture_file_upload "company_logo.png", "image/png" }
 
         subject(:request) do
           patch casa_org_url(casa_org), params: params

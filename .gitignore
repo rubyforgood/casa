@@ -48,9 +48,6 @@ vendor/bundle/
 # produced by tests (?)
 .rakeTasks
 
-# produced by tests (?)
-*.csv
-
 .*.swp
 
 # Used for local developmen on Nix systems

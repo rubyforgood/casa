@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe CaseImporter do
   subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
 
-  let(:casa_org_id) { import_user.casa_org.id }
-  let!(:import_user) { build(:casa_admin) }
-  let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
+  let(:casa_org) { create :casa_org }
+  let(:casa_org_id) { casa_org.id }
+  let(:import_file_path) { file_fixture "casa_cases.csv" }
 
   before do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
@@ -91,7 +91,7 @@ RSpec.describe CaseImporter do
     end
 
     context "when there's no case number" do
-      let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases_without_case_number.csv") }
+      let(:import_file_path) { file_fixture "casa_cases_without_case_number.csv" }
 
       it "returns an error message if row does not contain a case number" do
         alert = case_importer.import_cases
