@@ -6,7 +6,7 @@ RSpec.describe "Learning Hours Index", type: :system do
   let!(:learning_hours) { create_list(:learning_hour, 2, user: volunteer) }
 
   before do
-    login_as user, scope: :user
+    sign_in user
   end
 
   context "when the user is a volunteer" do
