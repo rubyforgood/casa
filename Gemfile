@@ -99,6 +99,3 @@ group :test do
   gem "simplecov"
   gem "webmock" # HTTP request stubber
 end
-
-# gem "pdf-reader", "~> 2.9"
-# gem "redis", "~> 4.0" # Redis is required for Turbo Streams but is not available in production yet until the need arises.
