@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe OtherDutiesHelper do
+RSpec.describe OtherDutiesHelper, type: :helper do
   describe "#duration_minutes" do
     it "returns remainder if duration_minutes is set" do
       other_duty = build(:other_duty, duration_minutes: 80)

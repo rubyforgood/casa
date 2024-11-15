@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe NotificationsHelper do
+RSpec.describe NotificationsHelper, type: :helper do
   context "notifications with respect to deploy time" do
     let(:notification_created_after_deploy_a) { create(:notification) }
     let(:notification_created_after_deploy_b) { create(:notification, created_at: 1.day.ago) }

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe BannerHelper do
+RSpec.describe BannerHelper, type: :helper do
   describe "#conditionally_add_hidden_class" do
     it "returns d-none if current banner is inactive" do
       current_organization = double

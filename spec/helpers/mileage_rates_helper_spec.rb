@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe MileageRatesHelper do
+RSpec.describe MileageRatesHelper, type: :helper do
   describe "#effective_date_parser" do
     context "with date" do
       let(:date) { DateTime.parse("01-01-2021") }

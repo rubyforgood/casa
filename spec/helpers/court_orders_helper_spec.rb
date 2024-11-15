@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CourtDatesHelper do
+RSpec.describe CourtDatesHelper, type: :helper do
   describe "#court_order_select_options" do
     context "when no court orders" do
       it "empty" do
