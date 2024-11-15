@@ -163,3 +163,6 @@ RSpec/NestedGroups:
 RSpec/NotToNot:
   # consistency only, no difference between to_not/not_to
   Enabled: false
+
+RSpecRails/InferredSpecType:
+  Enabled: false
