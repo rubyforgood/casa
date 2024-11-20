@@ -52,9 +52,9 @@ sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
 ```
 # Install NVM and Node JS
 #   you can use curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 #   or wget
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
 #   Restart your terminal
 
@@ -70,6 +70,11 @@ npm i -g npm@latest
 ```
 # Install Yarn
 npm i -g yarn
+```
+
+```
+# add node and node tools to the path
+nvm alias default lts/jod
 ```
 
 ```
