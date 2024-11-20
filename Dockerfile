@@ -20,16 +20,17 @@ ARG RAILS_ROOT=/usr/src/app/
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   bash \
+  curl \
   imagemagick \
-  nodejs \
   postgresql-client \
   tzdata \
-  vim \
-  yarn && rm -rf /var/cache/apk/*
+  vim && rm -rf /var/cache/apk/*
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs=22.11.0-r0 npm
 
 WORKDIR $RAILS_ROOT
 
 COPY . .
+RUN npm install --global yarn
 RUN yarn install
 RUN yarn build && yarn build:css
 
