@@ -1464,14 +1464,14 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.2.100.tgz#86ec1c2e00c357cef1e421fd63863d5c34339ce8"
   integrity sha512-7xtIENf0Yw59AFDM3+xqxPCZxev3QVAqjPmUzmgsB9eL8S/zTpB0IU9srNc7XknzJI4e09XKNnCaJRx3gfYzXA==
 
-"@rails/actiontext@^7.2.101":
-  version "7.2.101"
-  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-7.2.101.tgz#b4b9c59f38d1800b75cb0d6a8d713b60dfdb876d"
-  integrity sha512-iSqj5mvzHTwHkG5kUO/2a8wGkB6qf72keJpPgQcle2Hb/V8k9xTp3T8YpqlSYJMTcEhQhHeDJsXOaOx4abRDZg==
+"@rails/actiontext@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@rails/actiontext/-/actiontext-8.0.0.tgz#01133b7bbb2eb541890bf3a8bdc761fc27f9a649"
+  integrity sha512-8pvXDEHqlVHptzfYDUXmBpstHsfHAVacYxO47cWDRjRmp1zdVXusLcom8UvqkRdTcAPXpte+LkjcfpD9S4DSSQ==
   dependencies:
-    "@rails/activestorage" ">= 7.2.0-alpha"
+    "@rails/activestorage" ">= 8.0.0-alpha"
 
-"@rails/activestorage@>= 7.2.0-alpha", "@rails/activestorage@^8.0.0":
+"@rails/activestorage@>= 8.0.0-alpha", "@rails/activestorage@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@rails/activestorage/-/activestorage-8.0.0.tgz#be5dd10acc141b95ffa2b3026e61790c36f1679c"
   integrity sha512-qoA7U1gMcWXhDnImwDIyRQDXkQKzThT2lu2Xpim8CnTOCEeAgkQ5Co2kzodpAI2grF1JSDvwXSPYNWwVAswndA==
