@@ -24,7 +24,7 @@ class CaseContacts::FormController < ApplicationController
     respond_to do |format|
       format.html do
         params[:case_contact][:status] = CaseContact.statuses[step] if !@case_contact.active?
-        if @case_contact.update(case_contact_params)
+        if @case_contact.update_cleaning_contact_types(case_contact_params)
           finish_editing
         else
           prepare_form
@@ -32,7 +32,7 @@ class CaseContacts::FormController < ApplicationController
         end
       end
       format.json do
-        if @case_contact.update(case_contact_params)
+        if @case_contact.update_cleaning_contact_types(case_contact_params)
           render json: @case_contact, status: :ok
         else
           render json: @case_contact.errors.full_messages, status: :unprocessable_entity
