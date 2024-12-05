@@ -6,9 +6,10 @@ class User < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
-  before_update :record_previous_email
-  after_create :skip_email_confirmation_upon_creation
   before_save :normalize_phone_number
+  after_create :skip_email_confirmation_upon_creation
+  after_create :create_preference_set
+  before_update :record_previous_email
   has_secure_token :token, length: 36
 
   validates_with UserValidator
@@ -46,8 +47,6 @@ class User < ApplicationRecord
   has_many :login_activities, as: :user
 
   accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
-
-  after_create :create_preference_set
 
   scope :active, -> { where(active: true) }
 
@@ -122,7 +121,7 @@ class User < ApplicationRecord
       if volunteer.supervisor.active? &&
           volunteer.case_assignments.any? { |assignment| assignment.active? } &&
           (volunteer.case_contacts.none? ||
-          volunteer.case_contacts.maximum(:created_at) < (Time.zone.now - 14.days))
+          volunteer.case_contacts.maximum(:created_at) < (14.days.ago))
 
         no_attempt_count += 1
       end

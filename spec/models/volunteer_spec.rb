@@ -320,10 +320,6 @@ RSpec.describe Volunteer, type: :model do
       travel_to Date.new(2022, 10, 1)
     end
 
-    after do
-      travel_back
-    end
-
     context "there are volunteers whose birthdays are not next month" do
       let!(:volunteer1) { create(:volunteer, date_of_birth: Date.new(1990, 9, 1)) }
       let!(:volunteer2) { create(:volunteer, date_of_birth: Date.new(1998, 10, 15)) }
@@ -405,7 +401,7 @@ RSpec.describe Volunteer, type: :model do
       [
         create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, learning_hour_type: learning_hour_type),
         create(:learning_hour, user: volunteer, duration_hours: 3, duration_minutes: 45, learning_hour_type: learning_hour_type),
-        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.years.ago, learning_hour_type: learning_hour_type)
+        create(:learning_hour, user: volunteer, duration_hours: 1, duration_minutes: 30, occurred_at: 2.year.ago, learning_hour_type: learning_hour_type)
       ]
     end
 

@@ -19,8 +19,8 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
       inactive_volunteer.update active: false
       supervisor.volunteers_ever_assigned << inactive_volunteer
       volunteer.casa_cases << casa_case
-      create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: Time.current - 6.days
-      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: Time.current - 6.days, contact_topic_answers: [contact_topic_answer_1, contact_topic_answer_2]
+      create_list :case_contact, 2, creator: volunteer, casa_case: casa_case, contact_made: false, occurred_at: 6.days.ago
+      @case_contact = create :case_contact, creator: volunteer, casa_case: casa_case, contact_made: true, occurred_at: 6.days.ago, contact_topic_answers: [contact_topic_answer_1, contact_topic_answer_2]
       assign :supervisor, supervisor
       assign :inactive_volunteers, []
       sign_in supervisor

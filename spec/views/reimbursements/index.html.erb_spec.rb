@@ -11,7 +11,7 @@ RSpec.describe "reimbursements/index", type: :view do
     supervisor = create :supervisor
     volunteer = create :volunteer, supervisor: supervisor
 
-    case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: Time.current - 6.days
+    case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: 6.days.ago
     assign :reimbursements, [case_contact]
     assign :grouped_reimbursements, []
     assign :volunteers_for_filter, []

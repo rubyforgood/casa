@@ -22,8 +22,6 @@ RSpec.describe "placements", type: :system do
     visit casa_case_placements_path(casa_case, placements)
   end
 
-  after { travel_back }
-
   it "displays all placements for org" do
     expect(page).to have_text("Reunification")
     expect(page).to have_text("August 15, 2024 - Present")

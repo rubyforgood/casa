@@ -59,10 +59,6 @@ RSpec.describe "Health", type: :request do
       create(:contact_topic_answer, case_contact: CaseContact.last)
     end
 
-    after do
-      travel_back
-    end
-
     it "returns case contacts creation times in the last year" do
       travel_to Time.zone.local(2024, 5, 2)
       setup
@@ -117,10 +113,6 @@ RSpec.describe "Health", type: :request do
       create(:login_activity, user: volunteer2, created_at: 9.months.ago, success: true)
       create(:login_activity, user: supervisor, created_at: 9.months.ago, success: true)
       create(:login_activity, user: casa_admin, created_at: 9.months.ago, success: true)
-    end
-
-    after do
-      travel_back
     end
 
     it "returns monthly unique users data for volunteers, supervisors, and admins in the last year" do

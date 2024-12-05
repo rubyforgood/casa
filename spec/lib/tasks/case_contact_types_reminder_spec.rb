@@ -49,7 +49,7 @@ RSpec.describe CaseContactTypesReminder do
 
   context "volunteer with contacted contact types within last 60 days, sms notifications on, and no reminder in last quarter" do
     it "does not send sms reminder" do
-      CaseContact.update_all(occurred_at: 1.month.ago)
+      CaseContact.update_all(occurred_at: 1.months.ago)
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to match 0
     end
