@@ -73,7 +73,7 @@ class FileImporter
   end
 
   def failed?
-    failed_imports.present?
+    !failed_imports.blank?
   end
 
   def message

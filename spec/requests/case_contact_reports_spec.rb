@@ -8,8 +8,6 @@ RSpec.describe "/case_contact_reports", type: :request do
     sign_in user
   end
 
-  after { travel_back }
-
   describe "GET /case_contact_reports" do
     context "as volunteer" do
       let(:user) { build(:volunteer) }

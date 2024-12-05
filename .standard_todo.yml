@@ -2,23 +2,15 @@
 # Remove from this list as you refactor files.
 ---
 ignore:
-- app/callbacks/case_contact_metadata_callback.rb:
-  - Rails/SkipsModelValidations
-- app/components/modal/body_component.rb:
-  - Rails/OutputSafety
 - app/controllers/all_casa_admins/sessions_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/casa_cases_controller.rb:
   - Rails/TimeZone
-  - Rails/DynamicFindBy
-- app/controllers/case_assignments_controller.rb:
-  - Rails/SkipsModelValidations
 - app/controllers/case_contacts_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/checklist_items_controller.rb:
-  - Rails/SkipsModelValidations
   - Rails/TimeZone
 - app/controllers/court_dates_controller.rb:
   - Rails/TimeZone
@@ -26,27 +18,18 @@ ignore:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/reimbursements_controller.rb:
   - Rails/TimeZone
-  - Rails/SkipsModelValidations
 - app/controllers/users/sessions_controller.rb:
   - Rails/LexicallyScopedActionFilter
+- app/datatables/volunteer_datatable.rb:
+  - Rails/CompactBlank
 - app/decorators/casa_case_decorator.rb:
   - Rails/Date
 - app/decorators/case_assignment_decorator.rb:
   - Rails/Date
-- app/helpers/all_casa_admins/casa_orgs_helper.rb:
-  - Rails/HelperInstanceVariable
 - app/helpers/banner_helper.rb:
-  - Rails/HelperInstanceVariable
   - Rails/TimeZone
-- app/helpers/contact_types_helper.rb:
-  - Rails/HelperInstanceVariable
 - app/helpers/phone_number_helper.rb:
   - Rails/Blank
-- app/helpers/sidebar_helper.rb:
-  - Rails/OutputSafety
-- app/helpers/ui_helper.rb:
-  - Rails/HelperInstanceVariable
-  - Rails/OutputSafety
 - app/mailers/fund_request_mailer.rb:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:
@@ -54,21 +37,19 @@ ignore:
 - app/mailers/supervisor_mailer.rb:
   - Rails/Date
 - app/models/casa_case.rb:
-  - Rails/HasManyOrHasOneDependent
-  - Rails/InverseOf
+  - Rails/IgnoredColumnsAssignment
   - Rails/Date
+  - Rails/PluckInWhere
 - app/models/casa_case_contact_type.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/casa_case_emancipation_category.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/casa_org.rb:
   - Rails/UniqueValidationWithoutIndex
-  - Rails/HasManyOrHasOneDependent
 - app/models/case_assignment.rb:
   - Rails/UniqueValidationWithoutIndex
+  - Rails/RedundantPresenceValidationOnBelongsTo
 - app/models/case_contact.rb:
-  - Rails/HasManyOrHasOneDependent
-  - Rails/InverseOf
   - Rails/FindEach
 - app/models/case_contact_contact_type.rb:
   - Rails/UniqueValidationWithoutIndex
@@ -76,25 +57,15 @@ ignore:
   - Rails/UniqueValidationWithoutIndex
 - app/models/concerns/CasaCase/validations.rb:
   - Rails/TimeZone
-- app/models/contact_topic.rb:
-  - Rails/HasManyOrHasOneDependent
 - app/models/contact_type.rb:
-  - Rails/HasManyOrHasOneDependent
   - Rails/UniqueValidationWithoutIndex
 - app/models/contact_type_group.rb:
-  - Rails/HasManyOrHasOneDependent
   - Rails/UniqueValidationWithoutIndex
-- app/models/court_date.rb:
-  - Rails/HasManyOrHasOneDependent
-- app/models/emancipation_category.rb:
-  - Rails/HasManyOrHasOneDependent
 - app/models/hearing_type.rb:
-  - Rails/HasManyOrHasOneDependent
   - Rails/UniqueValidationWithoutIndex
 - app/models/judge.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/language.rb:
-  - Rails/HasManyOrHasOneDependent
   - Rails/UniqueValidationWithoutIndex
 - app/models/learning_hour.rb:
   - Rails/Date
@@ -102,48 +73,35 @@ ignore:
   - Rails/UniqueValidationWithoutIndex
 - app/models/learning_hour_type.rb:
   - Rails/UniqueValidationWithoutIndex
-- app/models/sms_notification_event.rb:
-  - Rails/HasManyOrHasOneDependent
-- app/models/supervisor.rb:
-  - Rails/HasManyOrHasOneDependent
-  - Rails/InverseOf
-  - Rails/SkipsModelValidations
+- app/models/mileage_rate.rb:
+  - Rails/IgnoredColumnsAssignment
 - app/models/supervisor_volunteer.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/user.rb:
-  - Rails/InverseOf
-  - Rails/HasManyOrHasOneDependent
   - Rails/Date
 - app/models/volunteer.rb:
-  - Rails/SkipsModelValidations
-- app/services/backfill_followupable_service.rb:
-  - Rails/SkipsModelValidations
+  - Rails/WhereEquals
+- app/services/casa_case_change_service.rb:
+  - Rails/Pluck
 - app/services/fdf_inputs_service.rb:
   - Rails/Blank
+  - Rails/RootPathnameMethods
 - app/validators/user_validator.rb:
   - Rails/Blank
 - config/application.rb:
   - Style/RedundantInterpolation
-- db/migrate/20240415160842_add_followupable_to_followups.rb:
-  - Rails/BulkChangeTable
 - db/seeds/db_populator.rb:
   - Rails/TimeZone
   - Rails/FindEach
   - Rails/Date
-  - Rails/SkipsModelValidations
-- db/seeds/emancipation_options_prune.rb:
-  - Rails/SkipsModelValidations
 - lib/mailers/debug_preview_mailer.rb:
   - Rails/ApplicationMailer
 - lib/mailers/previews/devise_mailer_preview.rb:
-  - Rails/SkipsModelValidations
   - Rails/Date
 - lib/mailers/previews/fund_request_mailer_preview.rb:
   - Rails/Date
 - lib/mailers/previews/volunteer_mailer_preview.rb:
   - Rails/Date
-- lib/tasks/auto_annotate_models.rake:
-  - Rails/RakeEnvironment
 - lib/tasks/case_contact_types_reminder.rb:
   - Rails/ActiveRecordAliases
 - lib/tasks/data_post_processors/contact_topic_populator.rb:
@@ -153,7 +111,6 @@ ignore:
 - lib/tasks/deployment/20240604121427_migrate_notifications.rake:
   - Rails/ApplicationRecord
 - lib/tasks/deployment/99991023145114_store_deploy_time.rake:
-  - Rails/SkipsModelValidations
   - Rails/TimeZone
 - lib/tasks/no_contact_made_reminder.rb:
   - Rails/ActiveRecordAliases
@@ -255,6 +212,7 @@ ignore:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/NestedGroups
   - RSpec/NamedSubject
+  - Rails/Pluck
 - spec/datatables/volunteer_datatable_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/SubjectDeclaration
@@ -264,9 +222,9 @@ ignore:
   - RSpec/ExpectInLet
   - RSpec/NoExpectationExample
   - RSpec/IndexedLet
+  - Rails/Pluck
   - RSpec/NamedSubject
   - RSpec/MultipleExpectations
-  - Rails/SkipsModelValidations
 - spec/decorators/android_app_association_decorator_spec.rb:
   - RSpec/EmptyExampleGroup
 - spec/decorators/casa_case_decorator_spec.rb:
@@ -278,7 +236,6 @@ ignore:
   - RSpec/MessageSpies
   - RSpec/VerifiedDoubles
 - spec/decorators/case_contact_decorator_spec.rb:
-  - Rails/SkipsModelValidations
   - RSpec/NestedGroups
 - spec/decorators/case_contacts/form_decorator_spec.rb:
   - RSpec/EmptyExampleGroup
@@ -288,20 +245,15 @@ ignore:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/IndexedLet
   - RSpec/NamedSubject
-- spec/decorators/other_duty_decorator_spec.rb:
-  - Rails/SkipsModelValidations
 - spec/decorators/patch_note_decorator_spec.rb:
   - RSpec/EmptyExampleGroup
 - spec/decorators/placement_decorator_spec.rb:
   - RSpec/SpecFilePathFormat
-  - Rails/SkipsModelValidations
 - spec/decorators/user_decorator_spec.rb:
   - RSpec/RepeatedDescription
   - Rails/TimeZone
 - spec/decorators/volunteer_decorator_spec.rb:
   - RSpec/MultipleExpectations
-- spec/factories/case_contacts.rb:
-  - Rails/SkipsModelValidations
 - spec/factories/healths.rb:
   - Rails/TimeZone
 - spec/factories/login_activities.rb:
@@ -316,7 +268,6 @@ ignore:
   - RSpec/ExampleLength
   - RSpec/VerifiedDoubles
   - RSpec/BeEq
-  - Rails/SkipsModelValidations
 - spec/helpers/case_contacts_helper_spec.rb:
   - RSpec/InstanceVariable
   - RSpec/BeEq
@@ -335,7 +286,6 @@ ignore:
 - spec/helpers/notifications_helper_spec.rb:
   - RSpec/ContextWording
   - Rails/TimeZone
-  - Rails/SkipsModelValidations
   - RSpec/MultipleMemoizedHelpers
   - RSpec/MultipleExpectations
   - RSpec/ExampleLength
@@ -377,7 +327,6 @@ ignore:
   - RSpec/ContextWording
   - RSpec/MultipleExpectations
   - RSpec/DescribedClass
-  - Rails/SkipsModelValidations
   - RSpec/ExampleLength
 - spec/lib/tasks/data_post_processors/case_contact_populator_spec.rb:
   - RSpec/MultipleExpectations
@@ -440,7 +389,6 @@ ignore:
   - RSpec/ExampleLength
   - RSpec/NamedSubject
 - spec/models/banner_spec.rb:
-  - Rails/SkipsModelValidations
   - RSpec/MultipleExpectations
   - RSpec/ExampleLength
 - spec/models/casa_admin_spec.rb:
@@ -472,6 +420,7 @@ ignore:
   - RSpec/MessageChain
   - RSpec/ContextWording
   - Style/RedundantInterpolation
+  - Rails/Pluck
   - Rails/Date
   - RSpec/LetSetup
   - RSpec/MultipleExpectations
@@ -520,7 +469,6 @@ ignore:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/DescribedClass
   - RSpec/NamedSubject
-  - Rails/SkipsModelValidations
   - RSpec/RepeatedDescription
 - spec/models/case_group_spec.rb:
   - RSpec/ExampleLength
@@ -531,6 +479,7 @@ ignore:
   - RSpec/DescribedClass
   - RSpec/NestedGroups
   - RSpec/ContextWording
+  - Rails/Pluck
 - spec/models/contact_type_group_spec.rb:
   - RSpec/IndexedLet
   - RSpec/MultipleExpectations
@@ -642,7 +591,6 @@ ignore:
   - RSpec/MessageSpies
   - RSpec/BeEq
   - RSpec/ExampleLength
-  - Rails/SkipsModelValidations
   - RSpec/NestedGroups
   - RSpec/DescribedClass
   - RSpec/ContextWording
@@ -717,7 +665,6 @@ ignore:
 - spec/policies/hearing_type_policy_spec.rb:
   - RSpec/NamedSubject
   - RSpec/ExampleLength
-  - Rails/SkipsModelValidations
 - spec/policies/import_policy_spec.rb:
   - RSpec/NamedSubject
 - spec/policies/judge_policy_spec.rb:
@@ -771,6 +718,7 @@ ignore:
 - spec/requests/all_casa_admins/casa_orgs_spec.rb:
   - RSpec/MessageSpies
   - RSpec/MultipleExpectations
+  - Rails/Pluck
 - spec/requests/all_casa_admins/patch_notes_spec.rb:
   - RSpec/MultipleExpectations
   - RSpec/MultipleMemoizedHelpers
@@ -793,7 +741,6 @@ ignore:
   - RSpec/ExampleLength
   - RSpec/MultipleExpectations
   - RSpec/LetSetup
-  - Rails/SkipsModelValidations
   - RSpec/MultipleMemoizedHelpers
   - RSpec/NestedGroups
 - spec/requests/bulk_court_dates_spec.rb:
@@ -958,7 +905,6 @@ ignore:
   - RSpec/NestedGroups
 - spec/requests/notifications_spec.rb:
   - RSpec/NestedGroups
-  - Rails/SkipsModelValidations
   - Rails/Date
   - RSpec/MultipleMemoizedHelpers
   - RSpec/IndexedLet
@@ -1369,7 +1315,6 @@ ignore:
   - RSpec/NestedGroups
   - RSpec/ExampleLength
   - RSpec/IndexedLet
-  - Rails/OutputSafety
   - RSpec/VoidExpect
 - spec/system/supervisors/new_spec.rb:
   - RSpec/ExampleLength
@@ -1495,7 +1440,6 @@ ignore:
 - spec/views/notifications/index.html.erb_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/IndexedLet
-  - Rails/SkipsModelValidations
   - RSpec/ExampleLength
   - RSpec/MultipleExpectations
   - RSpec/BeEql
@@ -1526,6 +1470,7 @@ ignore:
   - RSpec/EmptyExampleGroup
   - RSpec/ContextWording
 - spec/views/templates/email_templates_spec.rb:
+  - Rails/RootPathnameMethods
   - RSpec/MultipleDescribes
 - spec/views/volunteers/edit.html.erb_spec.rb:
   - RSpec/ExampleLength

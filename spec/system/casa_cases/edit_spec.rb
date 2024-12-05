@@ -288,8 +288,6 @@ RSpec.describe "Edit CASA Case", type: :system do
         travel_to Time.zone.local(2020, 8, 29, 4, 5, 6)
       end
 
-      after { travel_back }
-
       context "when a volunteer is assigned to a case" do
         it "marks the volunteer as assigned and shows the start date of the assignment", :js do
           sign_in_and_assign_volunteer

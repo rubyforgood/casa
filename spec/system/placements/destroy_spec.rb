@@ -15,8 +15,6 @@ RSpec.describe "placements/destroy", type: :system do
     click_on "Delete"
   end
 
-  after { travel_back }
-
   it "does not delete on modal close" do
     expect(page).to have_text("Delete Placement?")
     click_on "Close"

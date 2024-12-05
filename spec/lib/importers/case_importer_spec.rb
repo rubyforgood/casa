@@ -16,10 +16,6 @@ RSpec.describe CaseImporter do
     travel_to Date.parse("Sept 15 2022")
   end
 
-  after do
-    travel_back
-  end
-
   describe "#import_cases" do
     it "imports cases and associates volunteers with them" do
       expect { case_importer.import_cases }.to change(CasaCase, :count).by(3)

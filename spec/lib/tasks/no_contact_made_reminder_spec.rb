@@ -101,7 +101,7 @@ RSpec.describe NoContactMadeReminder do
   end
 
   context "volunteer with no contact made reminder sent within last 30 days" do
-    let(:no_contact_made_reminder) { create(:user_reminder_time, no_contact_made: 1.week.ago) }
+    let(:no_contact_made_reminder) { create(:user_reminder_time, no_contact_made: 1.weeks.ago) }
 
     it "sends not sms reminder" do
       CaseContact.destroy_all

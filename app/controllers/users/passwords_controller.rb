@@ -61,11 +61,11 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def email?
-    @email.present?
+    !@email.blank?
   end
 
   def phone_number?
-    @phone_number.present?
+    !@phone_number.blank?
   end
 
   def empty_fields_error

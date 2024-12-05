@@ -5,8 +5,6 @@ RSpec.describe "/notifications", type: :request do
     travel_to Date.new(2021, 1, 1)
   end
 
-  after { travel_back }
-
   describe "GET /index" do
     context "when there are no patch notes" do
       context "when logged in as an admin" do

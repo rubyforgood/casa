@@ -233,7 +233,9 @@ class CaseContact < ApplicationRecord
     end
   end
 
-  delegate :id, to: :supervisor, prefix: true
+  def supervisor_id
+    supervisor.id
+  end
 
   def has_casa_case_transitioned
     casa_case.in_transition_age?
@@ -256,7 +258,7 @@ class CaseContact < ApplicationRecord
   end
 
   def supervisor_active?
-    supervisor.present? && supervisor.active?
+    !supervisor.blank? && supervisor.active?
   end
 
   def address_field_disabled?
@@ -277,8 +279,8 @@ class CaseContact < ApplicationRecord
 
   def self.case_hash_from_cases(cases)
     casa_case_ids = cases.map(&:draft_case_ids).flatten.uniq.sort
-    casa_case_ids.index_with do |casa_case_id|
-      cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
+    casa_case_ids.each_with_object({}) do |casa_case_id, hash|
+      hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
     end
   end
 

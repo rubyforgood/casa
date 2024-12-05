@@ -8,7 +8,7 @@ class Api::V1::BaseController < ActionController::API
     if user && token && ActiveSupport::SecurityUtils.secure_compare(user.token, token)
       @current_user = user
     else
-      render json: {message: "Wrong password or email"}, status: :unauthorized
+      render json: {message: "Wrong password or email"}, status: 401
     end
   end
 

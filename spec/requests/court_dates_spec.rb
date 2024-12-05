@@ -35,8 +35,6 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
     sign_in admin
   end
 
-  after { travel_back }
-
   describe "GET /show" do
     subject(:show) { get casa_case_court_date_path(casa_case, court_date) }
 

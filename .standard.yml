@@ -1,6 +1,9 @@
 extend_config:
   - .rubocop.yml
 
+plugins:
+  - standard-rails
+
 ignore:
   - 'storage/**/*'
   - 'db/migrate/2020*.rb'

@@ -11,8 +11,6 @@ RSpec.describe CourtDate, type: :model do
   let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp/test_report.docx").to_s }
 
-  after { travel_back }
-
   before do
     travel_to Date.new(2021, 1, 1)
   end
@@ -61,7 +59,7 @@ RSpec.describe CourtDate, type: :model do
 
     it "orders the casa cases by updated at date" do
       very_old_pcd = create(:court_date, date: 10.days.ago)
-      old_pcd = create(:court_date, date: 5.days.ago)
+      old_pcd = create(:court_date, date: 5.day.ago)
       recent_pcd = create(:court_date, date: 1.day.ago)
 
       ordered_pcds = described_class.ordered_ascending

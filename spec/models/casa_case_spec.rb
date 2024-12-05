@@ -84,14 +84,14 @@ RSpec.describe CasaCase, type: :model do
       subject { described_class.due_date_passed }
 
       context "when casa_case is present" do
-        let!(:court_date) { create(:court_date, date: Time.current - 3.days) }
+        let!(:court_date) { create(:court_date, date: 3.days.ago) }
         let(:casa_case) { court_date.casa_case }
 
         it { is_expected.to include(casa_case) }
       end
 
       context "when casa_case is not present" do
-        let!(:court_date) { create(:court_date, date: Time.current + 3.days) }
+        let!(:court_date) { create(:court_date, date: 3.days.from_now) }
         let(:casa_case) { court_date.casa_case }
 
         it { is_expected.not_to include(casa_case) }
@@ -301,18 +301,12 @@ RSpec.describe CasaCase, type: :model do
       travel_to submitted_time
     end
 
-    after do
-      travel_back
-    end
-
     context "when the case is already submitted" do
       let(:casa_case) { build(:casa_case, court_report_status: :submitted, court_report_submitted_at: submitted_time) }
 
       before do
         travel_to the_future
       end
-
-      after { travel_back }
 
       context "when the status is completed" do
         let(:court_report_status) { :completed }
@@ -372,8 +366,6 @@ RSpec.describe CasaCase, type: :model do
     before do
       travel_to Date.new(2021, 1, 1)
     end
-
-    after { travel_back }
 
     context "with a past court date" do
       it "returns the latest past court date as a formatted string" do

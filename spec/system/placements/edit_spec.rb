@@ -17,8 +17,6 @@ RSpec.describe "placements/edit", type: :system do
     click_link("Edit")
   end
 
-  after { travel_back }
-
   it "updates placement with valid form data", :js do
     expect(page).to have_content("123")
 

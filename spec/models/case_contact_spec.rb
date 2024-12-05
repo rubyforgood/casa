@@ -76,12 +76,12 @@ RSpec.describe CaseContact, type: :model do
 
     it "can be updated even if it is old" do
       case_contact = build_stubbed(:case_contact)
-      case_contact.occurred_at = Time.zone.now - 1.year
+      case_contact.occurred_at = 1.year.ago
       expect(case_contact).to be_valid
     end
 
     it "can be updated for 30 days after end of quarter" do
-      expect(build_stubbed(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
+      expect(build_stubbed(:case_contact, occurred_at: 4.months.ago + 1.day)).to be_valid
     end
   end
 

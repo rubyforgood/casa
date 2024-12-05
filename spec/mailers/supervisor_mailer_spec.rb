@@ -21,7 +21,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       end
 
       it "shows the latest case contact that occurred in the week" do
-        most_recent_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.day, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        most_recent_contact = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
         other_contact = build(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBBBB")
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
@@ -45,13 +45,13 @@ RSpec.describe SupervisorMailer, type: :mailer do
       end
 
       it "does not show a case contact that occurred past the unassignment date in the week" do
-        contact_past_unassignment = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.day, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        contact_past_unassignment = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
 
         expect(mail.body.encoded).not_to match("Notes: #{contact_past_unassignment.notes}")
       end
 
       it "shows the latest case contact that occurred in the week before the unassignment date" do
-        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.day, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
+        contact_past_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
         most_recent_contact_before_unassignment = create(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBB")
         older_contact = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 4.days, notes: "CCCCCCCCCCCCCCCCCCCC")
 

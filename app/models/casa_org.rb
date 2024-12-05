@@ -2,13 +2,13 @@ class CasaOrg < ApplicationRecord
   prepend ActiveSupport::ToJsonWithActiveSupportEncoder
   # NOTE: location of the default report template
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app/documents/templates/default_report_template.docx"), "r")
-  CASA_DEFAULT_LOGO = Rails.root.join("public/logo.jpeg")
+  CASA_DEFAULT_LOGO = Rails.public_path.join("logo.jpeg")
 
   scope :with_logo, -> { joins(:logo_attachment) }
 
+  before_save :normalize_phone_number
   before_create :set_slug
   before_update :sanitize_svg
-  before_save :normalize_phone_number
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
@@ -57,7 +57,9 @@ class CasaOrg < ApplicationRecord
     Followup.in_organization(self)
   end
 
-  delegate :count, to: :case_contacts, prefix: true
+  def case_contacts_count
+    case_contacts.count
+  end
 
   def org_logo
     if logo.attached?
