@@ -15,14 +15,7 @@ end
 Capybara.disable_animation = true
 
 Capybara::Screenshot.autosave_on_failure = true
-
-module Capybara
-  module Screenshot
-    def self.capybara_tmp_path
-      Rails.root.join("tmp", "screenshots#{ENV["GROUPS_UNDERSCORE"]}")
-    end
-  end
-end
+Capybara.save_path = Rails.root.join("tmp", "screenshots#{ENV["GROUPS_UNDERSCORE"]}")
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument("--disable-gpu")

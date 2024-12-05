@@ -54,7 +54,6 @@
           </h3>
           <% min_date = CaseContact::MINIMUM_DATE %>
           <% current_date = Time.zone.today %>
-          <% initial_value = @case_contact.occurred_at&.to_date %>
           <%= form.date_field(:occurred_at,
             required: true,
             max: (current_date + 1.day).to_fs(:iso8601),
