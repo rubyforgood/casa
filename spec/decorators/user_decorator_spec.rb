@@ -1,6 +1,9 @@
 require "rails_helper"
 
 RSpec.describe UserDecorator do
+  let(:decorated_user) { user.decorate }
+  let(:user) { create(:user) }
+
   describe "#status" do
     context "when user role is inactive" do
       it "returns Inactive" do
@@ -18,9 +21,6 @@ RSpec.describe UserDecorator do
       end
     end
   end
-
-  let(:user) { create(:user) }
-  let(:decorated_user) { user.decorate }
 
   describe "#formatted_created_at" do
     context "when using the 'default'format string"

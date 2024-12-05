@@ -14,7 +14,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   let(:contact_topic_answer_2) { create(:contact_topic_answer, contact_topic: contact_topic_2, value: "") }
 
   context "when there are successful and unsuccessful contacts" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       inactive_volunteer.update active: false
       supervisor.volunteers_ever_assigned << inactive_volunteer
@@ -42,11 +42,11 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
     it { expect(rendered).to have_text("- Notes: #{@case_contact.notes}") }
     it { expect(rendered).to have_text("Contact Topic 1") }
     it { expect(rendered).to have_text("Contact Topic 1 Answer") }
-    it { expect(rendered).to_not have_text("Contact Topic 2") }
+    it { expect(rendered).not_to have_text("Contact Topic 2") }
   end
 
   context "when there are no volunteers" do
-    before(:each) do
+    before do
       sign_in supervisor
       assign :supervisor, supervisor
       assign :inactive_volunteers, []
@@ -58,7 +58,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when there are volunteers but no contacts" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       inactive_volunteer.update active: false
       supervisor.volunteers_ever_assigned << inactive_volunteer
@@ -74,7 +74,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer has been reassigned to a new supervisor" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       volunteer.casa_cases << casa_case
 
@@ -95,7 +95,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer has been unassigned" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       volunteer.supervisor_volunteer.update(is_active: false)
@@ -115,7 +115,7 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
   end
 
   context "when a volunteer unassigned and has not been assigned to a new supervisor" do
-    before(:each) do
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor
@@ -132,7 +132,8 @@ RSpec.describe "supervisor_mailer/weekly_digest", type: :view do
 
   context "when a volunteer has not recently signed in, within 30 days" do
     let(:volunteer) { create(:volunteer, casa_org: organization, last_sign_in_at: 39.days.ago) }
-    before(:each) do
+
+    before do
       supervisor.volunteers << volunteer
       sign_in supervisor
       assign :supervisor, supervisor

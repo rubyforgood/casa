@@ -16,6 +16,8 @@ RSpec.describe "BulkCourtDates", type: :request do
   end
 
   describe "POST /create" do
+    subject { post "/bulk_court_dates", params: }
+
     let(:judge) { create :judge }
     let(:hearing_type) { create :hearing_type }
     let(:case_count) { 2 }
@@ -34,8 +36,6 @@ RSpec.describe "BulkCourtDates", type: :request do
         }
       }
     end
-
-    subject { post "/bulk_court_dates", params: }
 
     it "renders the new template on success" do
       subject

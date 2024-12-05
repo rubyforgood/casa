@@ -14,10 +14,11 @@ RSpec.describe "court_dates/edit", type: :system do
   before do
     travel_to now
   end
+
   after { travel_back }
 
   context "as a volunteer" do
-    it "can download a report which focuses on the court date", js: true do
+    it "can download a report which focuses on the court date", :js do
       volunteer.casa_cases = [casa_case]
       sign_in volunteer
 

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "followups/resolve", type: :system, js: true do
+RSpec.describe "followups/resolve", :js, type: :system do
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:supervisor) { build(:supervisor, casa_org: casa_org) }

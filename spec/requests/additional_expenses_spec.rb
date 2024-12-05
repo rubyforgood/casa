@@ -15,9 +15,9 @@ RSpec.describe "/additional_expenses", type: :request do
   before { sign_in volunteer }
 
   describe "POST /create" do
-    let(:params) { {additional_expense: valid_attributes} }
-
     subject { post additional_expenses_path, params:, as: :json }
+
+    let(:params) { {additional_expense: valid_attributes} }
 
     it "creates a record and responds created" do
       expect { subject }.to change(AdditionalExpense, :count).by(1)
@@ -37,7 +37,7 @@ RSpec.describe "/additional_expenses", type: :request do
       let(:params) { {additional_expense: invalid_attributes} }
 
       it "fails and responds unprocessable_entity" do
-        expect { subject }.to change(ContactTopicAnswer, :count).by(0)
+        expect { subject }.not_to change(ContactTopicAnswer, :count)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
@@ -60,9 +60,9 @@ RSpec.describe "/additional_expenses", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let!(:additional_expense) { create :additional_expense, case_contact: }
-
     subject { delete additional_expense_url(additional_expense), as: :json }
+
+    let!(:additional_expense) { create :additional_expense, case_contact: }
 
     it "destroys the record and responds no content" do
       expect { subject }

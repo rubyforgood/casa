@@ -21,7 +21,7 @@ RSpec.describe "casa_org/edit", type: :view do
     render template: "casa_org/edit"
 
     expect(rendered).to have_text "Editing CASA Organization"
-    expect(rendered).to_not have_text "sign in before continuing"
+    expect(rendered).not_to have_text "sign in before continuing"
     expect(rendered).to have_selector("input[required=required]", id: "casa_org_name")
   end
 

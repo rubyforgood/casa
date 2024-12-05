@@ -13,22 +13,22 @@ RSpec.describe CasaOrgPolicy do
   permissions :edit?, :update? do
     context "when admin belongs to the same org" do
       it "allows casa_admins" do
-        is_expected.to permit(casa_admin, organization)
+        expect(subject).to permit(casa_admin, organization)
       end
     end
 
     context "when admin does not belong to org" do
       it "does not permit admin" do
-        is_expected.to_not permit(casa_admin, different_organization)
+        expect(subject).not_to permit(casa_admin, different_organization)
       end
     end
 
     it "does not permit supervisor" do
-      is_expected.to_not permit(supervisor, organization)
+      expect(subject).not_to permit(supervisor, organization)
     end
 
     it "does not permit volunteer" do
-      is_expected.to_not permit(volunteer, organization)
+      expect(subject).not_to permit(volunteer, organization)
     end
   end
 end

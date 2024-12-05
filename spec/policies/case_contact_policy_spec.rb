@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseContactPolicy, aggregate_failures: true do
+RSpec.describe CaseContactPolicy, :aggregate_failures do
   subject { described_class }
 
   let(:casa_org) { create(:casa_org) }
@@ -28,161 +28,161 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
 
   permissions :index? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "allows supervisor" do
-      is_expected.to permit(supervisor)
+      expect(subject).to permit(supervisor)
     end
 
     it "allows volunteer" do
-      is_expected.to permit(volunteer)
+      expect(subject).to permit(volunteer)
     end
   end
 
   permissions :show? do
     it "allows same org casa_admins" do
-      is_expected.to permit(casa_admin, case_contact)
-      is_expected.to permit(casa_admin, draft_case_contact)
-      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
-      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+      expect(subject).to permit(casa_admin, case_contact)
+      expect(subject).to permit(casa_admin, draft_case_contact)
+      expect(subject).to permit(casa_admin, same_case_volunteer_case_contact)
+      expect(subject).to permit(casa_admin, unassigned_case_case_contact)
 
-      is_expected.not_to permit(casa_admin, other_org_case_contact)
+      expect(subject).not_to permit(casa_admin, other_org_case_contact)
     end
 
     it "does not allow supervisors" do
-      is_expected.not_to permit(supervisor, case_contact)
-      is_expected.not_to permit(supervisor, draft_case_contact)
-      is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
-      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
-      is_expected.not_to permit(supervisor, other_org_case_contact)
+      expect(subject).not_to permit(supervisor, case_contact)
+      expect(subject).not_to permit(supervisor, draft_case_contact)
+      expect(subject).not_to permit(supervisor, same_case_volunteer_case_contact)
+      expect(subject).not_to permit(supervisor, unassigned_case_case_contact)
+      expect(subject).not_to permit(supervisor, other_org_case_contact)
     end
 
     it "allows volunteer only if they created the case contact" do
-      is_expected.to permit(volunteer, case_contact)
-      is_expected.to permit(volunteer, draft_case_contact)
+      expect(subject).to permit(volunteer, case_contact)
+      expect(subject).to permit(volunteer, draft_case_contact)
 
-      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
-      is_expected.not_to permit(volunteer, other_org_case_contact)
+      expect(subject).not_to permit(volunteer, unassigned_case_case_contact)
+      expect(subject).not_to permit(volunteer, other_org_case_contact)
     end
   end
 
   permissions :edit?, :update? do
     it "allows same org casa_admins" do
-      is_expected.to permit(casa_admin, case_contact)
-      is_expected.to permit(casa_admin, draft_case_contact)
-      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
-      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+      expect(subject).to permit(casa_admin, case_contact)
+      expect(subject).to permit(casa_admin, draft_case_contact)
+      expect(subject).to permit(casa_admin, same_case_volunteer_case_contact)
+      expect(subject).to permit(casa_admin, unassigned_case_case_contact)
 
-      is_expected.not_to permit(casa_admin, other_org_case_contact)
+      expect(subject).not_to permit(casa_admin, other_org_case_contact)
     end
 
     it "allows same org supervisors" do
-      is_expected.to permit(supervisor, case_contact)
-      is_expected.to permit(supervisor, draft_case_contact)
-      is_expected.to permit(supervisor, same_case_volunteer_case_contact)
+      expect(subject).to permit(supervisor, case_contact)
+      expect(subject).to permit(supervisor, draft_case_contact)
+      expect(subject).to permit(supervisor, same_case_volunteer_case_contact)
 
-      is_expected.not_to permit(supervisor, other_org_case_contact)
+      expect(subject).not_to permit(supervisor, other_org_case_contact)
     end
 
     it "allows volunteer only if they created the case contact" do
-      is_expected.to permit(volunteer, case_contact)
-      is_expected.to permit(volunteer, draft_case_contact)
+      expect(subject).to permit(volunteer, case_contact)
+      expect(subject).to permit(volunteer, draft_case_contact)
 
-      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
-      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
-      is_expected.not_to permit(volunteer, other_org_case_contact)
+      expect(subject).not_to permit(volunteer, same_case_volunteer_case_contact)
+      expect(subject).not_to permit(volunteer, unassigned_case_case_contact)
+      expect(subject).not_to permit(volunteer, other_org_case_contact)
     end
   end
 
   permissions :new? do
     it "allows same org casa_admins" do
-      is_expected.to permit(volunteer, case_contact.dup)
-      is_expected.to permit(volunteer, draft_case_contact.dup)
+      expect(subject).to permit(volunteer, case_contact.dup)
+      expect(subject).to permit(volunteer, draft_case_contact.dup)
 
-      is_expected.not_to permit(casa_admin, CaseContact.new)
+      expect(subject).not_to permit(casa_admin, CaseContact.new)
     end
 
     it "allows same org supervisors" do
-      is_expected.to permit(volunteer, case_contact.dup)
-      is_expected.to permit(volunteer, draft_case_contact.dup)
+      expect(subject).to permit(volunteer, case_contact.dup)
+      expect(subject).to permit(volunteer, draft_case_contact.dup)
 
-      is_expected.not_to permit(supervisor, CaseContact.new)
+      expect(subject).not_to permit(supervisor, CaseContact.new)
     end
 
     it "allows volunteers who are the contact creator" do
-      is_expected.to permit(volunteer, case_contact.dup)
-      is_expected.to permit(volunteer, draft_case_contact.dup)
+      expect(subject).to permit(volunteer, case_contact.dup)
+      expect(subject).to permit(volunteer, draft_case_contact.dup)
 
-      is_expected.not_to permit(volunteer, CaseContact.new)
+      expect(subject).not_to permit(volunteer, CaseContact.new)
     end
   end
 
   permissions :drafts? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "allows supervisors" do
-      is_expected.to permit(supervisor)
+      expect(subject).to permit(supervisor)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer)
+      expect(subject).not_to permit(volunteer)
     end
   end
 
   permissions :destroy? do
     it "allows same org casa_admins" do
-      is_expected.to permit(casa_admin, case_contact)
-      is_expected.to permit(casa_admin, draft_case_contact)
-      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
-      is_expected.to permit(casa_admin, unassigned_case_case_contact)
+      expect(subject).to permit(casa_admin, case_contact)
+      expect(subject).to permit(casa_admin, draft_case_contact)
+      expect(subject).to permit(casa_admin, same_case_volunteer_case_contact)
+      expect(subject).to permit(casa_admin, unassigned_case_case_contact)
 
-      is_expected.not_to permit(casa_admin, other_org_case_contact)
+      expect(subject).not_to permit(casa_admin, other_org_case_contact)
     end
 
     it "allows supervisors" do
-      is_expected.to permit(supervisor, case_contact)
-      is_expected.to permit(supervisor, draft_case_contact)
-      is_expected.to permit(supervisor, same_case_volunteer_case_contact)
+      expect(subject).to permit(supervisor, case_contact)
+      expect(subject).to permit(supervisor, draft_case_contact)
+      expect(subject).to permit(supervisor, same_case_volunteer_case_contact)
 
-      is_expected.not_to permit(supervisor, other_org_case_contact)
+      expect(subject).not_to permit(supervisor, other_org_case_contact)
     end
 
     it "allows volunteer only for draft contacts they created" do
-      is_expected.to permit(volunteer, draft_case_contact)
+      expect(subject).to permit(volunteer, draft_case_contact)
 
-      is_expected.not_to permit(volunteer, case_contact)
-      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
-      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
-      is_expected.not_to permit(volunteer, other_org_case_contact)
+      expect(subject).not_to permit(volunteer, case_contact)
+      expect(subject).not_to permit(volunteer, same_case_volunteer_case_contact)
+      expect(subject).not_to permit(volunteer, unassigned_case_case_contact)
+      expect(subject).not_to permit(volunteer, other_org_case_contact)
     end
   end
 
   permissions :restore? do
     it "allows same org casa_admins" do
-      is_expected.to permit(casa_admin, case_contact)
-      is_expected.to permit(casa_admin, draft_case_contact)
-      is_expected.to permit(casa_admin, same_case_volunteer_case_contact)
-      is_expected.to permit(casa_admin, unassigned_case_case_contact)
-      is_expected.not_to permit(casa_admin, other_org_case_contact)
+      expect(subject).to permit(casa_admin, case_contact)
+      expect(subject).to permit(casa_admin, draft_case_contact)
+      expect(subject).to permit(casa_admin, same_case_volunteer_case_contact)
+      expect(subject).to permit(casa_admin, unassigned_case_case_contact)
+      expect(subject).not_to permit(casa_admin, other_org_case_contact)
     end
 
     it "does not allow supervisors" do
-      is_expected.not_to permit(supervisor, case_contact)
-      is_expected.not_to permit(supervisor, draft_case_contact)
-      is_expected.not_to permit(supervisor, same_case_volunteer_case_contact)
-      is_expected.not_to permit(supervisor, unassigned_case_case_contact)
-      is_expected.not_to permit(supervisor, other_org_case_contact)
+      expect(subject).not_to permit(supervisor, case_contact)
+      expect(subject).not_to permit(supervisor, draft_case_contact)
+      expect(subject).not_to permit(supervisor, same_case_volunteer_case_contact)
+      expect(subject).not_to permit(supervisor, unassigned_case_case_contact)
+      expect(subject).not_to permit(supervisor, other_org_case_contact)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer, draft_case_contact)
-      is_expected.not_to permit(volunteer, case_contact)
-      is_expected.not_to permit(volunteer, same_case_volunteer_case_contact)
-      is_expected.not_to permit(volunteer, unassigned_case_case_contact)
-      is_expected.not_to permit(volunteer, other_org_case_contact)
+      expect(subject).not_to permit(volunteer, draft_case_contact)
+      expect(subject).not_to permit(volunteer, case_contact)
+      expect(subject).not_to permit(volunteer, same_case_volunteer_case_contact)
+      expect(subject).not_to permit(volunteer, unassigned_case_case_contact)
+      expect(subject).not_to permit(volunteer, other_org_case_contact)
     end
   end
 
@@ -201,7 +201,7 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       let(:user) { nil }
 
       it "returns no case contacts" do
-        is_expected.not_to include(case_contact, other_org_case_contact)
+        expect(subject).not_to include(case_contact, other_org_case_contact)
       end
     end
 
@@ -209,8 +209,8 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       let(:user) { volunteer }
 
       it "returns case contacts created by the volunteer" do
-        is_expected.to include(case_contact, draft_case_contact)
-        is_expected
+        expect(subject).to include(case_contact, draft_case_contact)
+        expect(subject)
           .not_to include(same_case_volunteer_case_contact, unassigned_case_case_contact, other_org_case_contact)
       end
     end
@@ -219,9 +219,9 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       let(:user) { supervisor }
 
       it "returns same org case contacts" do
-        is_expected
+        expect(subject)
           .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
-        is_expected.not_to include(other_org_case_contact)
+        expect(subject).not_to include(other_org_case_contact)
       end
     end
 
@@ -229,9 +229,9 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       let(:user) { casa_admin }
 
       it "returns same org case contacts" do
-        is_expected
+        expect(subject)
           .to include(case_contact, draft_case_contact, same_case_volunteer_case_contact, unassigned_case_case_contact)
-        is_expected.not_to include(other_org_case_contact)
+        expect(subject).not_to include(other_org_case_contact)
       end
     end
 
@@ -239,7 +239,7 @@ RSpec.describe CaseContactPolicy, aggregate_failures: true do
       let(:user) { create :all_casa_admin }
 
       it "returns no case contacts" do
-        is_expected.not_to include(case_contact, other_org_case_contact)
+        expect(subject).not_to include(case_contact, other_org_case_contact)
       end
     end
   end

@@ -7,7 +7,7 @@ RSpec.describe "reimbursements/index", type: :view do
     allow(view).to receive(:current_user).and_return(admin)
   end
 
-  it "should not have any translation missing classes" do
+  it "does not have any translation missing classes" do
     supervisor = create :supervisor
     volunteer = create :volunteer, supervisor: supervisor
 

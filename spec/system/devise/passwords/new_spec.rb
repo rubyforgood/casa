@@ -8,6 +8,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
   describe "reset password page" do
     let!(:user) { create(:user, email: "glados@aperture.labs", phone_number: "+16578900012") }
+
     it "displays error messages for non-existent user" do
       fill_in "Email", with: "tangerine@forward.com"
       fill_in "Phone number", with: user.phone_number
@@ -61,7 +62,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
       token = reset_password_link(user.email).gsub("http://localhost:3000/users/password/edit?reset_password_token=", "")
       encrypted_token = Devise.token_generator.digest(User, :reset_password_token, token)
-      expect(User.find_by(reset_password_token: encrypted_token)).to_not be_nil
+      expect(User.find_by(reset_password_token: encrypted_token)).not_to be_nil
     end
 
     it "user can update password" do

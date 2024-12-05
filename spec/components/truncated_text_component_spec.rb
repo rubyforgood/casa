@@ -24,7 +24,7 @@ RSpec.describe TruncatedTextComponent, type: :component do
 
       expect(page).to have_css(".truncation-container")
       expect(page).to have_css("div.line-clamp-1", text: text)
-      expect(page).to_not have_css("span.text-bold", text: label)
+      expect(page).not_to have_css("span.text-bold", text: label)
       expect(page).to have_css('a[data-truncated-text-target="moreButton"]', text: "[read more]")
       expect(page).to have_css('a[data-truncated-text-target="hideButton"]', text: "[hide]")
     end

@@ -1,12 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "case_contacts/index", :js, type: :system do
+  subject { visit case_contacts_path }
+
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
   let(:organization) { create(:casa_org) }
 
   before { sign_in volunteer }
-
-  subject { visit case_contacts_path }
 
   context "with case contacts" do
     let(:case_number) { "CINA-1" }
@@ -97,10 +97,10 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
 
       describe "by casa_case_id" do
+        subject { visit case_contacts_path(casa_case_id: casa_case.id) }
+
         let!(:case_contact) { create(:case_contact, :details_status, creator: volunteer, draft_case_ids: [casa_case.id]) }
         let!(:other_casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-2") }
-
-        subject { visit case_contacts_path(casa_case_id: casa_case.id) }
 
         it "displays the draft" do
           subject

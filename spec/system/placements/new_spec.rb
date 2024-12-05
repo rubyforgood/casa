@@ -16,9 +16,10 @@ RSpec.describe "placements/new", type: :system do
     visit casa_case_placements_path(casa_case)
     click_link("New Placement")
   end
+
   after { travel_back }
 
-  it "creates placement with valid form data", js: true do
+  it "creates placement with valid form data", :js do
     expect(page).to have_content("123")
 
     fill_in "Placement Started At", with: now

@@ -4,10 +4,10 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
   it "requires login" do
     visit new_all_casa_admins_casa_org_path
     expect(page).to have_content "You need to sign in before continuing."
-    expect(current_path).to eq "/all_casa_admins/sign_in"
+    expect(page).to have_current_path "/all_casa_admins/sign_in", ignore_query: true
 
     visit all_casa_admins_casa_org_path(id: create(:casa_org).id)
-    expect(current_path).to eq "/all_casa_admins/sign_in"
+    expect(page).to have_current_path "/all_casa_admins/sign_in", ignore_query: true
     expect(page).to have_content "You need to sign in before continuing."
   end
 
@@ -15,10 +15,10 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     casa_admin = create(:casa_admin)
     sign_in casa_admin
     visit new_all_casa_admins_casa_org_path
-    expect(current_path).to eq "/all_casa_admins/sign_in"
+    expect(page).to have_current_path "/all_casa_admins/sign_in", ignore_query: true
     expect(page).to have_text "You need to sign in before continuing."
     visit "/"
-    expect(current_path).to eq "/supervisors"
+    expect(page).to have_current_path "/supervisors", ignore_query: true
     expect(page).to have_text "Sign Out"
   end
 
@@ -45,7 +45,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
 
     # create new org
     click_on "New CASA Organization"
-    expect(current_path).to eq "/all_casa_admins/casa_orgs/new"
+    expect(page).to have_current_path "/all_casa_admins/casa_orgs/new", ignore_query: true
     expect(page).to have_text "Create a new CASA Organization"
     fill_in "Name", with: "Cool Org Name"
     fill_in "Display name", with: "display name"
@@ -53,7 +53,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     click_on "Create CASA Organization"
     expect(page).to have_text "CASA Organization was successfully created."
     organization = CasaOrg.find_by(name: "Cool Org Name")
-    expect(current_path).to eq "/all_casa_admins/casa_orgs/#{organization.id}"
+    expect(page).to have_current_path "/all_casa_admins/casa_orgs/#{organization.id}", ignore_query: true
     expect(page).to have_content "Administrators"
     expect(page).to have_content "Details"
     expect(page).to have_content "Number of admins: 0"

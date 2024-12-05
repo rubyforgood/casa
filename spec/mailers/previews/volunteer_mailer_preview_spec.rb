@@ -49,6 +49,7 @@ RSpec.describe VolunteerMailerPreview do
       it { expect(email.to).to eq ["missing_volunteer@example.com"] }
     end
   end
+
   describe "#case_contacts_reminder" do
     context "When no ID is passed" do
       let(:preview) { described_class.new }

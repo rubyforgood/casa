@@ -40,7 +40,7 @@ RSpec.describe NoContactMadeReminder do
   end
 
   context "volunteer with no contact made in past 2 weeks in case contact" do
-    it "should send sms reminder" do
+    it "sends sms reminder" do
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 1
       expect(responses[0][:volunteer]).to eq(volunteer)
@@ -59,7 +59,7 @@ RSpec.describe NoContactMadeReminder do
       )
     end
 
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
     end
@@ -76,14 +76,14 @@ RSpec.describe NoContactMadeReminder do
       )
     end
 
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
     end
   end
 
   context "volunteer with no case contacts" do
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       CaseContact.destroy_all
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
@@ -93,7 +93,7 @@ RSpec.describe NoContactMadeReminder do
   context "volunteer with quarterly case contact type reminder sent on same day" do
     let(:quarterly_reminder) { create(:user_reminder_time, :quarterly_reminder) }
 
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       CaseContact.destroy_all
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
@@ -103,7 +103,7 @@ RSpec.describe NoContactMadeReminder do
   context "volunteer with no contact made reminder sent within last 30 days" do
     let(:no_contact_made_reminder) { create(:user_reminder_time, no_contact_made: 1.weeks.ago) }
 
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       CaseContact.destroy_all
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
@@ -120,7 +120,7 @@ RSpec.describe NoContactMadeReminder do
       )
     }
 
-    it "should send not sms reminder" do
+    it "sends not sms reminder" do
       responses = NoContactMadeReminder.new.send!
       expect(responses.count).to eq 0
     end

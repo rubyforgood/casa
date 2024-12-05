@@ -7,13 +7,13 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
   let(:casa_admin) { create(:casa_admin, casa_org: organization) }
 
   describe "GET /show" do
-    before { sign_in casa_admin }
-
     subject(:request) do
       get casa_case_emancipation_path(casa_case, :docx)
 
       response
     end
+
+    before { sign_in casa_admin }
 
     it { is_expected.to be_successful }
 
@@ -63,19 +63,20 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
   end
 
   describe "POST /save" do
-    before { sign_in casa_admin }
-
-    let(:category) { create(:emancipation_category) }
-    let(:option_a) { create(:emancipation_option, emancipation_category_id: category.id, name: "A") }
-    let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
-
     subject(:request) do
       post save_casa_case_emancipation_path(casa_case), params: params
 
       response
     end
 
+    before { sign_in casa_admin }
+
+    let(:category) { create(:emancipation_category) }
+    let(:option_a) { create(:emancipation_option, emancipation_category_id: category.id, name: "A") }
+    let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
+
     it { is_expected.to be_successful }
+
     it "authorizes save_emancipation?" do
       expect_any_instance_of(EmancipationsController).to(
         receive(:authorize).with(CasaCase, :save_emancipation?).and_call_original
@@ -90,6 +91,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       let(:params) { {check_item_action: "add_option", check_item_id: -1} }
 
       it { is_expected.not_to be_successful }
+
       it "shows correct error message" do
         body = request.parsed_body
         expect(body).to eq({"error" => "Tried to destroy an association that does not exist"})
@@ -100,6 +102,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       let(:params) { {check_item_action: "invalid", check_item_id: option_a.id} }
 
       it { is_expected.not_to be_successful }
+
       it "shows correct error message" do
         body = request.parsed_body
         expect(body).to eq({"error" => "Check item action: invalid is not a supported action"})
@@ -115,6 +118,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
       end
 
       it { is_expected.not_to be_successful }
+
       it "shows correct error message" do
         body = request.parsed_body
         expect(body).to eq({"error" => "The current case is not marked as transitioning"})
@@ -126,6 +130,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         let(:params) { {check_item_action: "add_category", check_item_id: category.id} }
 
         it { is_expected.to be_successful }
+
         it "adds the category" do
           expect { request }.to change { casa_case.emancipation_categories.count }.by(1)
         end
@@ -152,6 +157,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         let(:params) { {check_item_action: "add_option", check_item_id: option_a.id} }
 
         it { is_expected.to be_successful }
+
         it "adds the option" do
           expect { request }.to change { casa_case.emancipation_options.count }.by(1)
         end
@@ -214,6 +220,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         end
 
         it { is_expected.to be_successful }
+
         it "removes the option" do
           expect { request }.to change { casa_case.emancipation_options.count }.by(-1)
         end
@@ -247,6 +254,7 @@ RSpec.describe "/casa_case/:id/emancipation", type: :request do
         end
 
         it { is_expected.to be_successful }
+
         it "sets the option according to the right category" do
           request
           expect(casa_case.reload.emancipation_options).to contain_exactly(option_a, option)

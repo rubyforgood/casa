@@ -16,6 +16,7 @@ RSpec.describe "court_dates/edit", type: :system do
   before do
     travel_to now
   end
+
   after { travel_back }
 
   context "as an admin" do
@@ -33,7 +34,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
-    it "adds a standard court order", js: true do
+    it "adds a standard court order", :js do
       select("Family therapy", from: "Court Order Type")
       click_button("Add a court order")
 
@@ -41,14 +42,14 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(textarea.value).to eq("Family therapy")
     end
 
-    it "adds a custom court order", js: true do
+    it "adds a custom court order", :js do
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last
       expect(textarea.value).to eq("")
     end
 
-    it "edits past court date", js: true do
+    it "edits past court date", :js do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
       expect(page).to have_text(casa_case.case_number)
@@ -70,7 +71,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text("Court Order Text One")
     end
 
-    it "can delete a future court date", js: true do
+    it "can delete a future court date", :js do
       visit root_path
       click_on "Cases"
       click_on casa_case.case_number
@@ -87,7 +88,7 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   context "as a supervisor" do
-    it "can delete a future court date", js: true do
+    it "can delete a future court date", :js do
       sign_in supervisor
 
       visit root_path
@@ -106,7 +107,7 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   context "as a volunteer" do
-    it "can't delete a future court date as volunteer", js: true do
+    it "can't delete a future court date as volunteer", :js do
       volunteer.casa_cases = [casa_case]
       sign_in volunteer
 

@@ -11,16 +11,17 @@ RSpec.describe CourtDate, type: :model do
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
 
+  after { travel_back }
+
+  before do
+    travel_to Date.new(2021, 1, 1)
+  end
+
   it { is_expected.to belong_to(:casa_case) }
   it { is_expected.to validate_presence_of(:date) }
   it { is_expected.to have_many(:case_court_orders) }
   it { is_expected.to belong_to(:hearing_type).optional }
   it { is_expected.to belong_to(:judge).optional }
-
-  before do
-    travel_to Date.new(2021, 1, 1)
-  end
-  after { travel_back }
 
   describe "date validation" do
     it "is not valid before 1989" do
@@ -114,6 +115,7 @@ RSpec.describe CourtDate, type: :model do
 
   describe "#additional_info?" do
     subject(:additional_info) { court_date.additional_info? }
+
     context "with orders" do
       it "returns true" do
         create(:case_court_order, casa_case: casa_case, court_date: court_date)
@@ -146,6 +148,7 @@ RSpec.describe CourtDate, type: :model do
 
   describe "#display_name" do
     subject { court_date.display_name }
+
     it "contains case number and date" do
       travel_to Time.zone.local(2020, 1, 2)
       expect(subject).to eq("AAA123123 - Court Date - 2019-12-26")

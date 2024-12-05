@@ -175,7 +175,7 @@ RSpec.describe "supervisors/index", type: :view do
       sign_in user
       render template: "supervisors/index"
 
-      expect(rendered).to_not have_link("New Supervisor", href: new_supervisor_path)
+      expect(rendered).not_to have_link("New Supervisor", href: new_supervisor_path)
     end
   end
 end

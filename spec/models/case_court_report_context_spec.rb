@@ -13,6 +13,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
   before do
     travel_to Date.new(2021, 1, 1)
   end
+
   after { travel_back }
 
   describe "#context" do
@@ -314,7 +315,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
-      expect(result).to match_array([])
+      expect(result).to be_empty
     end
   end
 

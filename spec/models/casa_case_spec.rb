@@ -224,7 +224,7 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  context "#add_emancipation_category" do
+  describe "#add_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { create(:emancipation_category) }
 
@@ -235,7 +235,7 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  context "#add_emancipation_option" do
+  describe "#add_emancipation_option" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { build(:emancipation_category, mutually_exclusive: true) }
     let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
@@ -290,11 +290,13 @@ RSpec.describe CasaCase, type: :model do
   end
 
   describe "#court_report_status" do
-    let(:casa_case) { build(:casa_case) }
     subject { casa_case.court_report_status = court_report_status }
+
+    let(:casa_case) { build(:casa_case) }
 
     let(:submitted_time) { Time.parse("Sun Nov 08 11:06:20 2020") }
     let(:the_future) { submitted_time + 2.days }
+
     before do
       travel_to submitted_time
     end
@@ -305,16 +307,18 @@ RSpec.describe CasaCase, type: :model do
 
     context "when the case is already submitted" do
       let(:casa_case) { build(:casa_case, court_report_status: :submitted, court_report_submitted_at: submitted_time) }
+
       before do
         travel_to the_future
       end
+
       after { travel_back }
 
       context "when the status is completed" do
         let(:court_report_status) { :completed }
 
         it "completes the court report and does not update time" do
-          is_expected.to eq :completed
+          expect(subject).to eq :completed
           expect(casa_case.court_report_submitted_at).to eq(submitted_time)
         end
       end
@@ -323,7 +327,7 @@ RSpec.describe CasaCase, type: :model do
         let(:court_report_status) { :not_submitted }
 
         it "clears submission date and value" do
-          is_expected.to eq :not_submitted
+          expect(subject).to eq :not_submitted
           expect(casa_case.court_report_submitted_at).to be_nil
         end
       end
@@ -333,7 +337,7 @@ RSpec.describe CasaCase, type: :model do
       let(:court_report_status) { :submitted }
 
       it "tracks the court report submission" do
-        is_expected.to eq :submitted
+        expect(subject).to eq :submitted
         expect(casa_case.court_report_submitted_at).to eq(submitted_time)
       end
     end
@@ -342,7 +346,7 @@ RSpec.describe CasaCase, type: :model do
       let(:court_report_status) { :in_review }
 
       it "tracks the court report submission" do
-        is_expected.to eq :in_review
+        expect(subject).to eq :in_review
         expect(casa_case.court_report_submitted_at).to eq(submitted_time)
       end
     end
@@ -392,7 +396,7 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  context "#remove_emancipation_category" do
+  describe "#remove_emancipation_category" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { build(:emancipation_category) }
 
@@ -405,7 +409,7 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
-  context "#remove_emancipation_option" do
+  describe "#remove_emancipation_option" do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_option) { build(:emancipation_option) }
 
@@ -427,17 +431,18 @@ RSpec.describe CasaCase, type: :model do
       casa_case = create(:casa_case, contact_types: [type1])
 
       expect(casa_case.casa_case_contact_types.count).to be 1
-      expect(casa_case.contact_types).to match_array([type1])
+      expect(casa_case.contact_types).to contain_exactly(type1)
 
       casa_case.update_cleaning_contact_types({contact_type_ids: [type2.id]})
 
       expect(casa_case.casa_case_contact_types.count).to be 1
-      expect(casa_case.contact_types.reload).to match_array([type2])
+      expect(casa_case.contact_types.reload).to contain_exactly(type2)
     end
   end
 
   describe "report submission" do
     let(:bad_case) { build(:casa_case) }
+
     # Creating a case whith a status other than not_submitted and a nil submission date
     it "rejects cases with a court report status, but no submission date" do
       bad_case.court_report_status = :in_review
@@ -462,11 +467,12 @@ RSpec.describe CasaCase, type: :model do
 
   describe "slug" do
     let(:casa_case) { create(:casa_case, case_number: "CINA-21-1234") }
-    it "should be parameterized from the case number" do
+
+    it "is parameterized from the case number" do
       expect(casa_case.slug).to eq "cina-21-1234"
     end
 
-    it "should update when the case number changes" do
+    it "updates when the case number changes" do
       casa_case.case_number = "CINA-21-1234-changed"
       casa_case.save
       expect(casa_case.slug).to eq "cina-21-1234-changed"

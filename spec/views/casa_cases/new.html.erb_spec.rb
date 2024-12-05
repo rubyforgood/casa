@@ -22,7 +22,7 @@ RSpec.describe "casa_cases/new", type: :view do
   end
 
   context "when trying to assign a volunteer to a case" do
-    it "should be able to assign volunteers" do
+    it "is able to assign volunteers" do
       enable_pundit(view, user)
       allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(user.casa_org)

@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "casa_cases/show", js: true, type: :system do
+RSpec.describe "casa_cases/show", :js, type: :system do
   let(:user) { build_stubbed :casa_admin }
 
   let(:organization) { create(:casa_org) }

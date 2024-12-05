@@ -18,20 +18,20 @@ RSpec.describe CasaCasePolicy do
     context "when user is an admin" do
       context "from the same organization" do
         it "does allow update" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
 
       context "from a different organization" do
         it "does not allow an update" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
     end
 
     context "when user is a volunteer" do
       it "does not allow update case number" do
-        is_expected.not_to permit(volunteer, casa_case)
+        expect(subject).not_to permit(volunteer, casa_case)
       end
     end
   end
@@ -40,19 +40,19 @@ RSpec.describe CasaCasePolicy do
     context "when part of the same organization" do
       context "an admin user" do
         it "can update" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
 
       context "a supervisor user" do
         it "can update" do
-          is_expected.to permit(supervisor, casa_case)
+          expect(subject).to permit(supervisor, casa_case)
         end
       end
 
       context "a volunteer user" do
         it "can update" do
-          is_expected.to permit(volunteer, casa_case)
+          expect(subject).to permit(volunteer, casa_case)
         end
       end
     end
@@ -60,41 +60,41 @@ RSpec.describe CasaCasePolicy do
     context "when not part of the same organization" do
       context "an admin user" do
         it "can not update" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
 
       context "a supervisor user" do
         it "can not update" do
-          is_expected.not_to permit(other_org_supervisor, casa_case)
+          expect(subject).not_to permit(other_org_supervisor, casa_case)
         end
       end
 
       context "a volunteer user" do
         it "can not update" do
-          is_expected.not_to permit(other_org_volunteer, casa_case)
+          expect(subject).not_to permit(other_org_volunteer, casa_case)
         end
       end
     end
   end
 
-  permissions :update_hearing_type?, :update_judge?, :update_court_orders? do
+  permissions :update_hearing_type?, :update_court_orders?, :update_judge? do
     context "when part of the same organization" do
       context "an admin user" do
         it "is allowed to update" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
 
       context "a supervisor user" do
         it "is allowed to update" do
-          is_expected.to permit(supervisor, casa_case)
+          expect(subject).to permit(supervisor, casa_case)
         end
       end
 
       context "a volunteer user" do
         it "is allowed to update" do
-          is_expected.to permit(volunteer, casa_case)
+          expect(subject).to permit(volunteer, casa_case)
         end
       end
     end
@@ -102,19 +102,19 @@ RSpec.describe CasaCasePolicy do
     context "when not part of the same organization" do
       context "an admin user" do
         it "is not allowed to update" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
 
       context "a supervisor user" do
         it "is not allowed to update" do
-          is_expected.not_to permit(other_org_supervisor, casa_case)
+          expect(subject).not_to permit(other_org_supervisor, casa_case)
         end
       end
 
       context "a volunteer user" do
         it "is not allowed to update" do
-          is_expected.not_to permit(other_org_volunteer, casa_case)
+          expect(subject).not_to permit(other_org_volunteer, casa_case)
         end
       end
     end
@@ -124,13 +124,13 @@ RSpec.describe CasaCasePolicy do
     context "when part of the same organization" do
       context "an admin user" do
         it "can update" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
 
       context "a supervisor" do
         it "can update" do
-          is_expected.to permit(supervisor, casa_case)
+          expect(subject).to permit(supervisor, casa_case)
         end
       end
     end
@@ -138,21 +138,21 @@ RSpec.describe CasaCasePolicy do
     context "when not part of the same organization" do
       context "an admin user" do
         it "can not update" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
 
       context "a supervisor" do
         it "can not update" do
-          is_expected.not_to permit(other_org_supervisor, casa_case)
+          expect(subject).not_to permit(other_org_supervisor, casa_case)
         end
       end
     end
 
     context "a volunteer" do
       it "does not allow update" do
-        is_expected.not_to permit(volunteer, casa_case)
-        is_expected.not_to permit(other_org_volunteer, casa_case)
+        expect(subject).not_to permit(volunteer, casa_case)
+        expect(subject).not_to permit(other_org_volunteer, casa_case)
       end
     end
   end
@@ -161,7 +161,7 @@ RSpec.describe CasaCasePolicy do
     context "when part of the same organization" do
       context "an admin user" do
         it "can do volunteer assignment" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
     end
@@ -169,7 +169,7 @@ RSpec.describe CasaCasePolicy do
     context "when not part of the same organization" do
       context "an admin user" do
         it "can not do volunteer assignment" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
     end
@@ -178,8 +178,8 @@ RSpec.describe CasaCasePolicy do
 
     context "when user is a volunteer" do
       it "does not allow volunteer assignment" do
-        is_expected.not_to permit(volunteer, casa_case)
-        is_expected.not_to permit(other_org_volunteer, casa_case)
+        expect(subject).not_to permit(volunteer, casa_case)
+        expect(subject).not_to permit(other_org_volunteer, casa_case)
       end
     end
   end
@@ -210,7 +210,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the supervisor" do
         supervisor = build(:supervisor, casa_org: organization)
         casa_case = build_stubbed(:casa_case, casa_org: different_organization)
-        expect(subject).to_not permit(supervisor, casa_case)
+        expect(subject).not_to permit(supervisor, casa_case)
       end
     end
 
@@ -247,7 +247,7 @@ RSpec.describe CasaCasePolicy do
     context "when part of the same organization" do
       context "an admin user" do
         it "allows casa_admins" do
-          is_expected.to permit(casa_admin, casa_case)
+          expect(subject).to permit(casa_admin, casa_case)
         end
       end
     end
@@ -255,7 +255,7 @@ RSpec.describe CasaCasePolicy do
     context "when not part of the same organization" do
       context "and admin user" do
         it "does not allow admin to view" do
-          is_expected.not_to permit(other_org_casa_admin, casa_case)
+          expect(subject).not_to permit(other_org_casa_admin, casa_case)
         end
       end
     end
@@ -272,7 +272,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the supervisor" do
         supervisor = build_stubbed(:supervisor, casa_org: organization)
         casa_case = create(:casa_case, casa_org: different_organization)
-        expect(subject).to_not permit(supervisor, casa_case)
+        expect(subject).not_to permit(supervisor, casa_case)
       end
     end
 
@@ -281,13 +281,13 @@ RSpec.describe CasaCasePolicy do
         volunteer = create(:volunteer, casa_org: organization)
         casa_case = create(:casa_case, casa_org: organization)
         volunteer.casa_cases << casa_case
-        is_expected.to permit(volunteer, casa_case)
+        expect(subject).to permit(volunteer, casa_case)
       end
     end
 
     context "when volunteer is not assigned" do
       it "does not allow the volunteer" do
-        is_expected.not_to permit(volunteer, casa_case)
+        expect(subject).not_to permit(volunteer, casa_case)
       end
     end
 
@@ -307,13 +307,13 @@ RSpec.describe CasaCasePolicy do
   permissions :edit? do
     context "when part of the same organization" do
       it "allows casa_admins" do
-        is_expected.to permit(casa_admin, casa_case)
+        expect(subject).to permit(casa_admin, casa_case)
       end
     end
 
     context "when not part of the same organization" do
       it "does not allow admin to edit" do
-        is_expected.not_to permit(other_org_casa_admin, casa_case)
+        expect(subject).not_to permit(other_org_casa_admin, casa_case)
       end
     end
 
@@ -329,7 +329,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the supervisor" do
         supervisor = build_stubbed(:supervisor, casa_org: organization)
         casa_case = build(:casa_case, casa_org: different_organization)
-        expect(subject).to_not permit(supervisor, casa_case)
+        expect(subject).not_to permit(supervisor, casa_case)
       end
     end
 
@@ -338,13 +338,13 @@ RSpec.describe CasaCasePolicy do
         volunteer = create(:volunteer, casa_org: organization)
         casa_case = build(:casa_case, casa_org: organization)
         volunteer.casa_cases << casa_case
-        is_expected.to permit(volunteer, casa_case)
+        expect(subject).to permit(volunteer, casa_case)
       end
     end
 
     context "when volunteer is not assigned" do
       it "does not allow the volunteer" do
-        is_expected.not_to permit(volunteer, casa_case)
+        expect(subject).not_to permit(volunteer, casa_case)
       end
     end
 
@@ -364,13 +364,13 @@ RSpec.describe CasaCasePolicy do
   permissions :update? do
     context "when part of the same organization" do
       it "allows casa_admins" do
-        is_expected.to permit(casa_admin, casa_case)
+        expect(subject).to permit(casa_admin, casa_case)
       end
     end
 
     context "when not part of the same organization" do
       it "does not allow admin to update" do
-        is_expected.not_to permit(other_org_casa_admin, casa_case)
+        expect(subject).not_to permit(other_org_casa_admin, casa_case)
       end
     end
 
@@ -386,7 +386,7 @@ RSpec.describe CasaCasePolicy do
       it "does not allow the supervisor" do
         supervisor = create(:supervisor, casa_org: organization)
         casa_case = build_stubbed(:casa_case, casa_org: different_organization)
-        expect(subject).to_not permit(supervisor, casa_case)
+        expect(subject).not_to permit(supervisor, casa_case)
       end
     end
 
@@ -395,12 +395,12 @@ RSpec.describe CasaCasePolicy do
         volunteer = create(:volunteer, casa_org: organization)
         casa_case = build(:casa_case, casa_org: organization)
         volunteer.casa_cases << casa_case
-        is_expected.to permit(volunteer, casa_case)
+        expect(subject).to permit(volunteer, casa_case)
       end
     end
 
     it "does not allow volunteers who are unassigned" do
-      is_expected.not_to permit(volunteer, casa_case)
+      expect(subject).not_to permit(volunteer, casa_case)
     end
 
     context "when volunteer is from another organization" do
@@ -419,23 +419,23 @@ RSpec.describe CasaCasePolicy do
   permissions :new?, :create?, :destroy? do
     context "when part of the same organizaton" do
       it "allows casa_admins" do
-        is_expected.to permit(casa_admin, casa_case)
+        expect(subject).to permit(casa_admin, casa_case)
       end
     end
 
     context "when not part of the same organization" do
       it "does not allow admin to create" do
-        is_expected.not_to permit(other_org_casa_admin, casa_case)
+        expect(subject).not_to permit(other_org_casa_admin, casa_case)
       end
     end
 
     it "does not allow superivsors" do
-      is_expected.not_to permit(supervisor, casa_case)
+      expect(subject).not_to permit(supervisor, casa_case)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer, casa_case)
-      is_expected.not_to permit(other_org_volunteer, casa_case)
+      expect(subject).not_to permit(volunteer, casa_case)
+      expect(subject).not_to permit(other_org_volunteer, casa_case)
     end
   end
 
@@ -444,18 +444,18 @@ RSpec.describe CasaCasePolicy do
     # Because we are authorizing without an instance, should we only check a user's
     # role?
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin, CasaCase)
-      is_expected.to permit(other_org_casa_admin, CasaCase)
+      expect(subject).to permit(casa_admin, CasaCase)
+      expect(subject).to permit(other_org_casa_admin, CasaCase)
     end
 
     it "allows supervisor" do
-      is_expected.to permit(supervisor, CasaCase)
-      is_expected.to permit(other_org_supervisor, CasaCase)
+      expect(subject).to permit(supervisor, CasaCase)
+      expect(subject).to permit(other_org_supervisor, CasaCase)
     end
 
     it "allows volunteer" do
-      is_expected.to permit(volunteer, CasaCase)
-      is_expected.to permit(other_org_volunteer, CasaCase)
+      expect(subject).to permit(volunteer, CasaCase)
+      expect(subject).to permit(other_org_volunteer, CasaCase)
     end
   end
 end

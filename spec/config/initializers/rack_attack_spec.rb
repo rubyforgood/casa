@@ -6,6 +6,9 @@ RSpec.describe Rack::Attack do
   # https://makandracards.com/makandra/46189-how-to-rails-cache-for-individual-rspec-tests
   # memory store is per process and therefore no conflicts in parallel tests
   let(:memory_store) { ActiveSupport::Cache.lookup_store(:memory_store) }
+  let(:header) { {"REMOTE_ADDR" => remote_ip} }
+  let(:params) { {} }
+  let(:limit) { 5 }
   let(:cache) { Rails.cache }
 
   before do
@@ -25,16 +28,12 @@ RSpec.describe Rack::Attack do
     Rails.application
   end
 
-  let(:header) { {"REMOTE_ADDR" => remote_ip} }
-  let(:params) { {} }
-  let(:limit) { 5 }
-
   describe "throttle excessive requests by single IP address" do
     shared_examples "correctly throttles" do
       it "changes the request status to 429 if greater than limit" do
         (limit * 2).times do |i|
           post path, params, header
-          expect(last_response.status).to_not eq 429 if i < limit
+          expect(last_response.status).not_to eq 429 if i < limit
           expect(last_response.status).to eq(429) if i >= limit
         end
       end
@@ -58,7 +57,7 @@ RSpec.describe Rack::Attack do
     it "does not change the request status to 429" do
       (limit * 2).times do |i|
         post path, params, header
-        expect(last_response.status).to_not eq(429) if i > limit
+        expect(last_response.status).not_to eq(429) if i > limit
       end
     end
   end
@@ -69,7 +68,7 @@ RSpec.describe Rack::Attack do
         (limit * 2).times do |i|
           header = {"REMOTE_ADDR" => "#{remote_ip}#{i}"}
           post path, params, header
-          expect(last_response.status).to_not eq 429 if i < limit
+          expect(last_response.status).not_to eq 429 if i < limit
           expect(last_response.status).to eq(429) if i >= limit
         end
       end
@@ -113,7 +112,7 @@ RSpec.describe Rack::Attack do
 
       it "is not blocked" do
         post path, params, header
-        expect(last_response.status).to_not eq(403)
+        expect(last_response.status).not_to eq(403)
       end
     end
 

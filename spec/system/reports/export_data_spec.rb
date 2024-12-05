@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "case_contact_reports/index", type: :system do
   let(:admin) { create(:casa_admin) }
 
-  it "filters report by date and selected contact type", js: true do
+  it "filters report by date and selected contact type", :js do
     sign_in admin
 
     contact_type_group = create(:contact_type_group)
@@ -34,7 +34,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_content).not_to include(excluded_by_contact_type.notes)
   end
 
-  it "filters report by contact type group", js: true do
+  it "filters report by contact type group", :js do
     sign_in admin
 
     contact_type_group = create(:contact_type_group)
@@ -54,7 +54,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_content).not_to include(excluded_by_contact_type_group.notes)
   end
 
-  it "downloads mileage report", js: true do
+  it "downloads mileage report", :js do
     sign_in admin
 
     supervisor = create(:supervisor)
@@ -72,7 +72,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_content).not_to include(case_contact_without_mileage.creator.display_name)
   end
 
-  it "downloads missing data report", js: true do
+  it "downloads missing data report", :js do
     sign_in admin
 
     visit reports_path
@@ -82,7 +82,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_file_name).to match(/missing-data-report-\d{4}-\d{2}-\d{2}.csv/)
   end
 
-  it "downloads learning hours report", js: true do
+  it "downloads learning hours report", :js do
     sign_in admin
 
     visit reports_path
@@ -92,7 +92,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     expect(download_file_name).to match(/learning-hours-report-\d{4}-\d{2}-\d{2}.csv/)
   end
 
-  it "downloads followup report", js: true do
+  it "downloads followup report", :js do
     sign_in admin
 
     visit reports_path
@@ -109,7 +109,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
       sign_in volunteer
 
       visit reports_path
-      expect(current_path).to eq(casa_cases_path)
+      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
 
@@ -117,7 +117,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
       sign_in volunteer
 
       visit followup_reports_path
-      expect(current_path).to eq(casa_cases_path)
+      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
   end

@@ -64,13 +64,14 @@ RSpec.describe "casa_admins/edit", type: :system do
 
   context "with invalid data" do
     let(:role) { "admin" }
+
     before do
       visit edit_casa_admin_path(admin)
       fill_in "Email", with: "newemail@example.com"
       fill_in "Display name", with: "Kaedehara Kazuha"
     end
 
-    it_should_behave_like "shows error for invalid phone numbers"
+    it_behaves_like "shows error for invalid phone numbers"
 
     it "shows error message for invalid date" do
       fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
@@ -90,7 +91,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     end
   end
 
-  it "can successfully deactivate", js: true do
+  it "can successfully deactivate", :js do
     another = create(:casa_admin)
     visit edit_casa_admin_path(another)
 
@@ -108,7 +109,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     expect(another.reload.active).to be_falsey
   end
 
-  it "can resend invitation to a another admin", js: true do
+  it "can resend invitation to a another admin", :js do
     another = create(:casa_admin)
     visit edit_casa_admin_path(another)
 
@@ -117,7 +118,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     expect(page).to have_content("Invitation sent")
   end
 
-  it "can convert the admin to a supervisor", js: true do
+  it "can convert the admin to a supervisor", :js do
     visit edit_casa_admin_path(admin)
 
     click_on "Change to Supervisor"

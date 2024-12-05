@@ -12,13 +12,13 @@ RSpec.describe ReimbursementPolicy do
     permissions :index?, :change_complete_status? do
       it { is_expected.to permit(casa_admin) }
       it { is_expected.to permit(supervisor) }
-      it { is_expected.to_not permit(volunteer) }
+      it { is_expected.not_to permit(volunteer) }
     end
 
     permissions :datatable? do
       it { is_expected.to permit(casa_admin) }
       it { is_expected.to permit(supervisor) }
-      it { is_expected.to_not permit(volunteer) }
+      it { is_expected.not_to permit(volunteer) }
     end
   end
 
@@ -28,11 +28,11 @@ RSpec.describe ReimbursementPolicy do
     end
 
     permissions :index?, :change_complete_status? do
-      it { is_expected.to_not permit(casa_admin) }
+      it { is_expected.not_to permit(casa_admin) }
     end
 
     permissions :datatable? do
-      it { is_expected.to_not permit(casa_admin) }
+      it { is_expected.not_to permit(casa_admin) }
     end
   end
 

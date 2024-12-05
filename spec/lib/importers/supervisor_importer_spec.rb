@@ -35,7 +35,7 @@ RSpec.describe SupervisorImporter do
     before { supervisor_importer.import_supervisors }
 
     it "does not import duplicate supervisors from csv files" do
-      expect { supervisor_importer.import_supervisors }.to change(Supervisor, :count).by(0)
+      expect { supervisor_importer.import_supervisors }.not_to change(Supervisor, :count)
     end
 
     context "when any volunteer could not be assigned to the supervisor during the import" do
@@ -135,6 +135,6 @@ RSpec.describe SupervisorImporter do
     data_using_static = Supervisor.pluck(:email).sort
 
     expect(data_using_static).to eq(data_using_instance)
-    expect(data_using_static).to_not be_empty
+    expect(data_using_static).not_to be_empty
   end
 end

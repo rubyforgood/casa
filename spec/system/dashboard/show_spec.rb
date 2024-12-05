@@ -32,7 +32,7 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).not_to have_css("td", text: "Bob Loblaw")
     end
 
-    it "displays 'No active cases' when they don't have any assignments", js: true do
+    it "displays 'No active cases' when they don't have any assignments", :js do
       visit casa_cases_path
       expect(page).to have_text("My Cases")
       expect(page).not_to have_css("td", text: "Bob Loblaw")

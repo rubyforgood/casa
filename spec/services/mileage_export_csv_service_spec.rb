@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe MileageExportCsvService do
   subject { described_class.new(case_contacts).perform }
+
   let(:case_contacts) { CaseContact.where(id: case_contact) }
   let(:case_contact) { create(:case_contact) }
 
