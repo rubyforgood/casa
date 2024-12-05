@@ -153,7 +153,7 @@ RSpec.describe "/case_court_reports", type: :request do
     context "when a custom template is set" do
       before do
         stub_twilio
-        volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
+        volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app/documents/templates/montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
       end
 
       it "uses the custom template" do

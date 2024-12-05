@@ -8,8 +8,8 @@ RSpec.describe CourtDate, type: :model do
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
   let(:this_court_date) { subject.date }
   let(:older_court_date) { subject.date - 6.months }
-  let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
-  let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
+  let(:path_to_report) { Rails.root.join("tmp/test_report.docx").to_s }
 
   after { travel_back }
 
@@ -61,7 +61,7 @@ RSpec.describe CourtDate, type: :model do
 
     it "orders the casa cases by updated at date" do
       very_old_pcd = create(:court_date, date: 10.days.ago)
-      old_pcd = create(:court_date, date: 5.day.ago)
+      old_pcd = create(:court_date, date: 5.days.ago)
       recent_pcd = create(:court_date, date: 1.day.ago)
 
       ordered_pcds = described_class.ordered_ascending

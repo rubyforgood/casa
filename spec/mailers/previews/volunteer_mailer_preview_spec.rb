@@ -1,5 +1,5 @@
 require "rails_helper"
-require File.join(Rails.root, "lib", "mailers", "previews", "volunteer_mailer_preview")
+require Rails.root.join("lib/mailers/previews/volunteer_mailer_preview").to_s
 
 RSpec.describe VolunteerMailerPreview do
   let!(:volunteer) { create(:volunteer) }

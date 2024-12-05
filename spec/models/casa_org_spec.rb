@@ -78,7 +78,7 @@ RSpec.describe CasaOrg, type: :model do
       aggregate_failures do
         subject = build(:casa_org, twilio_enabled: false)
 
-        expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+        expect(subject.org_logo).to eq(Pathname.new("#{Rails.root.join("public/logo.jpeg")}"))
 
         subject.logo.attach(
           io: File.open(file_fixture("company_logo.png")),

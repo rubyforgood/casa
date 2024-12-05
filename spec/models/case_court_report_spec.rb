@@ -5,8 +5,8 @@ require "sablon"
 
 RSpec.describe CaseCourtReport, type: :model do
   include DownloadHelpers
-  let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
-  let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
+  let(:path_to_report) { Rails.root.join("tmp/test_report.docx").to_s }
 
   describe "#generate_to_string" do
     let(:full_context) do

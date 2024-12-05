@@ -2,9 +2,9 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
   def create
     load_resource
     if @user
-      render json: Api::V1::SessionBlueprint.render(@user), status: 201
+      render json: Api::V1::SessionBlueprint.render(@user), status: :created
     else
-      render json: {message: "Wrong password or email"}, status: 401
+      render json: {message: "Wrong password or email"}, status: :unauthorized
     end
   end
 
