@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe TruncatedTextComponent, type: :system do
-  it "renders the component with the provided text", js: true do
+  it "renders the component with the provided text", :js do
     visit("/rails/view_components/truncated_text_component/default")
 
     aggregate_failures do

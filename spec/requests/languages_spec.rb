@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe LanguagesController, type: :request do
   describe "POST /create" do
     context "when request params are valid" do
-      it "should create a new language" do
+      it "creates a new language" do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
 
@@ -23,7 +23,7 @@ RSpec.describe LanguagesController, type: :request do
 
   describe "PATCH /update" do
     context "when request params are valid" do
-      it "should create a new language" do
+      it "creates a new language" do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         language = create(:language, casa_org: organization)

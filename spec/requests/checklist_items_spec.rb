@@ -22,7 +22,7 @@ RSpec.describe "ChecklistItems", type: :request do
 
   describe "POST create" do
     context "when logged in as an admin user" do
-      it "should allow for the creation of checklist items" do
+      it "allows for the creation of checklist items" do
         sign_in_as_admin
         hearing_type = create(:hearing_type)
         post hearing_type_checklist_items_path(
@@ -41,7 +41,7 @@ RSpec.describe "ChecklistItems", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not allow for the creation of checklist items" do
+      it "does not allow for the creation of checklist items" do
         sign_in_as_volunteer
         hearing_type = create(:hearing_type)
         post hearing_type_checklist_items_path(
@@ -72,7 +72,7 @@ RSpec.describe "ChecklistItems", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not allow access to the edit page" do
+      it "does not allow access to the edit page" do
         sign_in_as_volunteer
         hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
@@ -85,7 +85,7 @@ RSpec.describe "ChecklistItems", type: :request do
 
   describe "PATCH update" do
     context "when logged in as an admin user" do
-      it "should let admin users update checklist items" do
+      it "lets admin users update checklist items" do
         sign_in_as_admin
         hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
@@ -109,7 +109,7 @@ RSpec.describe "ChecklistItems", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "shouldn't allow updates" do
+      it "does not allow updates" do
         sign_in_as_volunteer
         hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
@@ -136,7 +136,7 @@ RSpec.describe "ChecklistItems", type: :request do
 
   describe "DELETE destroy" do
     context "when logged in as an admin user" do
-      it "should allow for the deletion of checklist items" do
+      it "allows for the deletion of checklist items" do
         sign_in_as_admin
         hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)
@@ -147,7 +147,7 @@ RSpec.describe "ChecklistItems", type: :request do
     end
 
     context "when logged in as a non-admin user" do
-      it "should not allow for the deletion of checklist items" do
+      it "does not allow for the deletion of checklist items" do
         sign_in_as_volunteer
         hearing_type = create(:hearing_type)
         checklist_item = create(:checklist_item)

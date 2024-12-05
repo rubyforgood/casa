@@ -25,7 +25,7 @@ RSpec.describe "supervisors/index", type: :system do
   context "when signed in as a supervisor" do
     before { sign_in supervisor_user }
 
-    context "when editing supervisor", js: true do
+    context "when editing supervisor", :js do
       let(:supervisor_name) { "Leslie Knope" }
       let!(:supervisor) { create(:supervisor, display_name: supervisor_name, casa_org: organization) }
 
@@ -61,7 +61,7 @@ RSpec.describe "supervisors/index", type: :system do
         create(:supervisor, :inactive, display_name: "Deactivated supervisor", casa_org: organization)
       }
 
-      before(:each) do
+      before do
         # Stub our `@supervisors` collection so we've got control over column values for sorting.
         allow_any_instance_of(SupervisorPolicy::Scope).to receive(:resolve).and_return(
           Supervisor.where.not(display_name: supervisor_user.display_name).order(display_name: :asc)
@@ -84,7 +84,7 @@ RSpec.describe "supervisors/index", type: :system do
       end
 
       context "with active and deactivated supervisors" do
-        it "shows deactivated supervisor on show button click", js: true do
+        it "shows deactivated supervisor on show button click", :js do
           expect(page).to have_text("Showing 1 to 2 of 2 entries (filtered from 3 total entries)")
           expect(page).to have_no_text("Deactivated supervisor")
 
@@ -110,7 +110,7 @@ RSpec.describe "supervisors/index", type: :system do
           visit supervisors_path
         end
 
-        it "will show a list of unassigned volunteers" do
+        it "shows a list of unassigned volunteers" do
           expect(page).to have_text("Active volunteers not assigned to supervisors")
           expect(page).to have_text("Assigned to Case(s)")
           expect(page).to have_text(unassigned_volunteer_name)
@@ -130,7 +130,7 @@ RSpec.describe "supervisors/index", type: :system do
           visit supervisors_path
         end
 
-        it "will not show a list of volunteers not assigned to supervisors", js: true do
+        it "does not show a list of volunteers not assigned to supervisors", :js do
           expect(page).to have_text("There are no active volunteers without supervisors to display here")
 
           expect(page).to have_no_text("Active volunteers not assigned to supervisors")
@@ -147,7 +147,7 @@ RSpec.describe "supervisors/index", type: :system do
         visit supervisors_path
       end
 
-      describe "status", js: true do
+      describe "status", :js do
         let!(:active_supervisor) do
           create(:supervisor, display_name: "Active Supervisor", casa_org: organization, active: true)
         end
@@ -343,12 +343,12 @@ RSpec.describe "supervisors/index", type: :system do
       visit supervisors_path
     end
 
-    it "shows all active supervisors", js: true do
+    it "shows all active supervisors", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table.all("div.supervisor_case_contact_stats").length).to eq(5)
     end
 
-    it "shows the correct volunteers for the first supervisor with both volunteer types", js: true do
+    it "shows the correct volunteers for the first supervisor with both volunteer types", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table).to have_text(supervisor_user.display_name.html_safe)
 
@@ -366,7 +366,7 @@ RSpec.describe "supervisors/index", type: :system do
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
-    it "shows the correct volunteers for the second supervisor with both volunteer types", js: true do
+    it "shows the correct volunteers for the second supervisor with both volunteer types", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table).to have_text(other_supervisor.display_name.html_safe)
 
@@ -384,7 +384,7 @@ RSpec.describe "supervisors/index", type: :system do
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
-    it "shows the correct element for a supervisor with only contact volunteers", js: true do
+    it "shows the correct element for a supervisor with only contact volunteers", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table).to have_text(only_contacts_supervisor.display_name.html_safe)
 
@@ -399,7 +399,7 @@ RSpec.describe "supervisors/index", type: :system do
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
-    it "shows the correct element for a supervisor with only no contact volunteers", js: true do
+    it "shows the correct element for a supervisor with only no contact volunteers", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table).to have_text(no_contacts_supervisor.display_name.html_safe)
 
@@ -415,7 +415,7 @@ RSpec.describe "supervisors/index", type: :system do
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
-    it "shows the correct text with a supervisor with no assigned volunteers", js: true do
+    it "shows the correct text with a supervisor with no assigned volunteers", :js do
       supervisor_table = page.find("table#supervisors")
       expect(supervisor_table).to have_text(no_active_volunteers_supervisor.display_name.html_safe)
 

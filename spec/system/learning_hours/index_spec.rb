@@ -28,7 +28,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       visit learning_hours_path
     end
 
-    it "displays a list of volunteers and the learning hours they completed", js: true do
+    it "displays a list of volunteers and the learning hours they completed", :js do
       expect(page).to have_content("Learning Hours")
       expect(page).to have_content("Volunteer")
       expect(page).to have_content(volunteer.display_name)
@@ -52,7 +52,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       end
     end
 
-    it "shows pagination", js: true do
+    it "shows pagination", :js do
       expect(page).to have_content("Previous")
       expect(page).to have_content("Next")
     end

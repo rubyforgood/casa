@@ -31,10 +31,10 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   describe "CSV body serialization" do
+    subject { CaseContactReport.new(casa_org_id: long_case_contact.casa_case.casa_org.id).to_csv }
+
     let!(:long_case_contact) { create(:case_contact, :long_note) }
     let!(:multi_line_case_contact) { create(:case_contact, :multi_line_note, casa_case: long_case_contact.casa_case) }
-
-    subject { CaseContactReport.new(casa_org_id: long_case_contact.casa_case.casa_org.id).to_csv }
 
     it "includes entire note" do
       expect(subject).to include(long_case_contact.notes)
@@ -147,7 +147,7 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "case contact behavior" do
-      before(:each) do
+      before do
         create(:case_contact, {contact_made: true})
         create(:case_contact, {contact_made: false})
       end
@@ -175,7 +175,7 @@ RSpec.describe CaseContactReport, type: :model do
       let(:case_case_1) { create(:casa_case, birth_month_year_youth: 15.years.ago) }
       let(:case_case_2) { create(:casa_case, birth_month_year_youth: 10.years.ago) }
 
-      before(:each) do
+      before do
         create(:case_contact, {casa_case: case_case_1})
         create(:case_contact, {casa_case: case_case_2})
       end
@@ -200,7 +200,7 @@ RSpec.describe CaseContactReport, type: :model do
     end
 
     describe "wanting driving reimbursement functionality" do
-      before(:each) do
+      before do
         create(:case_contact, {miles_driven: 50, want_driving_reimbursement: true})
         create(:case_contact, {miles_driven: 50, want_driving_reimbursement: false})
       end
@@ -384,9 +384,8 @@ RSpec.describe CaseContactReport, type: :model do
   end
 
   context "with court topics" do
-    # rubocop:disable Layout/ExtraSpacing
     let(:report) { described_class.new(filtered_csv_cols: {court_topics: "true"}) }
-    let(:csv)    { CSV.parse(report.to_csv, headers: true) }
+    let(:csv) { CSV.parse(report.to_csv, headers: true) }
 
     let!(:used_topic_1) { create(:contact_topic, question: "Used topic 1") }
     let!(:used_topic_2) { create(:contact_topic, question: "Used topic 2") }
@@ -396,8 +395,8 @@ RSpec.describe CaseContactReport, type: :model do
 
     # Create the answers in opposite order than the topics
     before do
-      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_2, value: "Ans Contact 1 Topic 2")
-      create(:contact_topic_answer, case_contact: contacts.first,  contact_topic: used_topic_1, value: "Ans Contact 1 Topic 1")
+      create(:contact_topic_answer, case_contact: contacts.first, contact_topic: used_topic_2, value: "Ans Contact 1 Topic 2")
+      create(:contact_topic_answer, case_contact: contacts.first, contact_topic: used_topic_1, value: "Ans Contact 1 Topic 1")
       create(:contact_topic_answer, case_contact: contacts.second, contact_topic: used_topic_2, value: "Ans Contact 2 Topic 2")
     end
 
@@ -405,15 +404,15 @@ RSpec.describe CaseContactReport, type: :model do
       headers = csv.headers
       expect(headers).not_to include(unused_topic.question)
       expect(headers).to include(used_topic_1.question, used_topic_2.question)
-      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1 # rubocop:disable Performance/Count
+      expect(headers.select { |header| header == used_topic_1.question }.size).to be 1
     end
 
     it "includes topic answers in csv rows" do
       expected_rows = [
         # ['Used topic 1',        'Used topic 2'] (header)
         ["Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2"],
-        [nil,                     "Ans Contact 2 Topic 2"],
-        [nil,                     nil]
+        [nil, "Ans Contact 2 Topic 2"],
+        [nil, nil]
       ]
       csv.by_row.each do |row|
         expect(expected_rows).to include(row.fields)
@@ -433,6 +432,5 @@ RSpec.describe CaseContactReport, type: :model do
         expect(csv.first.fields).not_to include("Ans Contact 1 Topic 1", "Ans Contact 1 Topic 2")
       end
     end
-    # rubocop:enable Layout/ExtraSpacing
   end
 end

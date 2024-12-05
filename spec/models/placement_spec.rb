@@ -10,13 +10,13 @@ RSpec.describe Placement, type: :model do
   context "placement_started_at" do
     it "cannot be before 1/1/1989" do
       placement = build_stubbed(:placement, placement_started_at: "1984-01-01".to_date)
-      expect(placement).to_not be_valid
+      expect(placement).not_to be_valid
       expect(placement.errors[:placement_started_at]).to eq(["cannot be prior to 1/1/1989."])
     end
 
     it "cannot be more than one year in the future" do
       placement = build_stubbed(:placement, placement_started_at: 367.days.from_now)
-      expect(placement).to_not be_valid
+      expect(placement).not_to be_valid
       expect(placement.errors[:placement_started_at]).to eq(["must not be more than one year in the future."])
     end
 

@@ -11,13 +11,13 @@ RSpec.describe CaseContact, type: :model do
   context "status is active" do
     it "belongs to a creator" do
       case_contact = build_stubbed(:case_contact, creator: nil)
-      expect(case_contact).to_not be_valid
+      expect(case_contact).not_to be_valid
       expect(case_contact.errors[:creator]).to eq(["must exist"])
     end
 
     it "belongs to a casa case" do
       case_contact = build_stubbed(:case_contact, casa_case: nil)
-      expect(case_contact).to_not be_valid
+      expect(case_contact).not_to be_valid
       expect(case_contact.errors[:casa_case_id]).to eq(["can't be blank"])
     end
 
@@ -28,7 +28,7 @@ RSpec.describe CaseContact, type: :model do
 
     it "validates presence of occurred_at" do
       case_contact = build(:case_contact, occurred_at: nil)
-      expect(case_contact).to_not be_valid
+      expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be blank"])
     end
 
@@ -39,19 +39,19 @@ RSpec.describe CaseContact, type: :model do
 
     it "verifies occurred at is not in the future" do
       case_contact = build_stubbed(:case_contact, occurred_at: Time.now + 1.week)
-      expect(case_contact).to_not be_valid
+      expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
       expect(case_contact.errors.full_messages).to include("Date can't be in the future")
     end
 
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
-      expect(case_contact).to_not be_valid
+      expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
       expect(case_contact.errors.full_messages).to include("Date can't be prior to 01/01/1989.")
     end
 
-    it "validates want_driving_reimbursement can be true when miles_driven is  positive" do
+    it "validates want_driving_reimbursement can be true when miles_driven is positive" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 1)
       expect(case_contact).to be_valid
     end
@@ -76,12 +76,12 @@ RSpec.describe CaseContact, type: :model do
 
     it "can be updated even if it is old" do
       case_contact = build_stubbed(:case_contact)
-      case_contact.occurred_at = Time.zone.now - 1.year
+      case_contact.occurred_at = 1.year.ago
       expect(case_contact).to be_valid
     end
 
     it "can be updated for 30 days after end of quarter" do
-      expect(build_stubbed(:case_contact, occurred_at: Time.zone.now - 4.months + 1.day)).to be_valid
+      expect(build_stubbed(:case_contact, occurred_at: 4.months.ago + 1.day)).to be_valid
     end
   end
 
@@ -494,11 +494,11 @@ RSpec.describe CaseContact, type: :model do
     end
 
     describe ".used_create_another" do
+      subject { described_class.used_create_another }
+
       let!(:scope_case_contact) { create(:case_contact, metadata: {"create_another" => true}) }
       let!(:false_case_contact) { create(:case_contact, metadata: {"create_another" => false}) }
       let!(:empty_meta_case_contact) { create(:case_contact) }
-
-      subject { described_class.used_create_another }
 
       it "returns only the case contacts with the metadata key 'create_another' set to true" do
         expect(subject).to include(scope_case_contact)

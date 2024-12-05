@@ -26,7 +26,7 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Assigned To")
     end
 
-    it "filters active/inactive", js: true do
+    it "filters active/inactive", :js do
       active_case = build(:casa_case, active: true, casa_org: organization)
       active_case1 = build(:casa_case, active: true, casa_org: organization)
       inactive_case = build(:casa_case, active: false, casa_org: organization)
@@ -68,12 +68,12 @@ RSpec.describe "casa_cases/index", type: :system do
     end
 
     it "hides filters" do
-      expect(page).to_not have_text("Assigned to Volunteer")
-      expect(page).to_not have_text("Assigned to more than 1 Volunteer")
-      expect(page).to_not have_text("Assigned to Transition Aged Youth")
-      expect(page).to_not have_text("Casa Case Prefix")
-      expect(page).to_not have_text("Select columns")
-      expect(page).to_not have_selector(".casa-case-filters")
+      expect(page).not_to have_text("Assigned to Volunteer")
+      expect(page).not_to have_text("Assigned to more than 1 Volunteer")
+      expect(page).not_to have_text("Assigned to Transition Aged Youth")
+      expect(page).not_to have_text("Casa Case Prefix")
+      expect(page).not_to have_text("Select columns")
+      expect(page).not_to have_selector(".casa-case-filters")
     end
   end
 end

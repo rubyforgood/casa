@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe CaseGroupPolicy, type: :policy do
+  subject { described_class }
+
   let(:casa_org) { create :casa_org }
   let(:volunteer) { create :volunteer, :with_casa_cases, casa_org: }
   let(:supervisor) { create :supervisor, casa_org: }
@@ -10,9 +12,7 @@ RSpec.describe CaseGroupPolicy, type: :policy do
   let(:case_group) { create :case_group, casa_org: }
   let(:volunteer_case_group) { create :case_group, casa_org:, casa_cases: volunteer.casa_cases }
 
-  subject { described_class }
-
-  permissions :new?, :show?, :create?, :edit?, :update?, :destroy? do
+  permissions :new?, :create?, :destroy?, :edit?, :show?, :update? do
     it "does not permit a nil user" do
       expect(described_class).not_to permit(nil, case_group)
     end
@@ -71,10 +71,10 @@ RSpec.describe CaseGroupPolicy, type: :policy do
   end
 
   describe "Scope#resolve" do
+    subject { described_class::Scope.new(user, CaseGroup.all).resolve }
+
     let!(:casa_org_case_group) { create :case_group, casa_org: }
     let!(:other_casa_org_case_group) { create :case_group, casa_org: create(:casa_org) }
-
-    subject { described_class::Scope.new(user, CaseGroup.all).resolve }
 
     context "when user is a visitor" do
       let(:user) { nil }

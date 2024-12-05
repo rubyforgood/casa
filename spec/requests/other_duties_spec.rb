@@ -59,7 +59,7 @@ RSpec.describe "/other_duties", type: :request do
 
           expect {
             post other_duties_path, params: {other_duty: attributes_for(:other_duty, notes: "")}
-          }.to_not change(OtherDuty, :count)
+          }.not_to change(OtherDuty, :count)
           expect(response).to have_http_status(:unprocessable_entity)
         end
       end
@@ -73,7 +73,7 @@ RSpec.describe "/other_duties", type: :request do
 
         expect {
           post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
-        }.to_not change(OtherDuty, :count)
+        }.not_to change(OtherDuty, :count)
 
         expect(response).to redirect_to root_path
       end
@@ -87,7 +87,7 @@ RSpec.describe "/other_duties", type: :request do
 
         expect {
           post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
-        }.to_not change(OtherDuty, :count)
+        }.not_to change(OtherDuty, :count)
 
         expect(response).to redirect_to root_path
       end
@@ -229,7 +229,7 @@ RSpec.describe "/other_duties", type: :request do
         expect(response.body).to include(volunteer.display_name)
         expect(response.body).to include(duties.first.decorate.truncate_notes)
         expect(response.body).to include(duties.second.decorate.truncate_notes)
-        expect(response.body).to_not include(other_org_duty.decorate.truncate_notes)
+        expect(response.body).not_to include(other_org_duty.decorate.truncate_notes)
       end
     end
 
@@ -256,14 +256,14 @@ RSpec.describe "/other_duties", type: :request do
         expect(response.body).to include(duties.first.decorate.truncate_notes)
         expect(response.body).to include(duties.second.decorate.truncate_notes)
 
-        expect(response.body).to_not include(volunteer2.display_name)
-        expect(response.body).to_not include(inactive_duty.decorate.truncate_notes)
+        expect(response.body).not_to include(volunteer2.display_name)
+        expect(response.body).not_to include(inactive_duty.decorate.truncate_notes)
 
-        expect(response.body).to_not include(volunteer_other_sup.display_name)
-        expect(response.body).to_not include(other_sup_duty.decorate.truncate_notes)
+        expect(response.body).not_to include(volunteer_other_sup.display_name)
+        expect(response.body).not_to include(other_sup_duty.decorate.truncate_notes)
 
-        expect(response.body).to_not include(volunteer_other_org.display_name)
-        expect(response.body).to_not include(other_org_duty.decorate.truncate_notes)
+        expect(response.body).not_to include(volunteer_other_org.display_name)
+        expect(response.body).not_to include(other_org_duty.decorate.truncate_notes)
       end
     end
 

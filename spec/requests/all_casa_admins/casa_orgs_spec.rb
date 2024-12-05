@@ -6,14 +6,14 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
   before { sign_in all_casa_admin }
 
   describe "GET /show" do
-    let!(:casa_org) { create(:casa_org) }
-    let!(:other_casa_org) { create(:casa_org) }
-
     subject(:request) do
       get all_casa_admins_casa_org_path(casa_org)
 
       response
     end
+
+    let!(:casa_org) { create(:casa_org) }
+    let!(:other_casa_org) { create(:casa_org) }
 
     it { is_expected.to be_successful }
 

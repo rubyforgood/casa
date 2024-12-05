@@ -10,15 +10,15 @@ RSpec.describe NotificationPolicy, type: :policy do
 
   permissions :index? do
     it "allows any volunteer" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "allows any supervisor" do
-      is_expected.to permit(supervisor)
+      expect(subject).to permit(supervisor)
     end
 
     it "allows any admin" do
-      is_expected.to permit(volunteer)
+      expect(subject).to permit(volunteer)
     end
   end
 
@@ -26,19 +26,19 @@ RSpec.describe NotificationPolicy, type: :policy do
     let(:notification) { create(:notification, recipient: recipient) }
 
     it "allows recipient" do
-      is_expected.to permit(recipient, notification)
+      expect(subject).to permit(recipient, notification)
     end
 
     it "does not allow other volunteer" do
-      is_expected.to_not permit(volunteer, notification)
+      expect(subject).not_to permit(volunteer, notification)
     end
 
     it "does not permit other supervisor" do
-      is_expected.to_not permit(supervisor, notification)
+      expect(subject).not_to permit(supervisor, notification)
     end
 
     it "does not permit other admin" do
-      is_expected.to_not permit(casa_admin, notification)
+      expect(subject).not_to permit(casa_admin, notification)
     end
   end
 end

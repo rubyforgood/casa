@@ -8,7 +8,6 @@ RSpec.describe CaseContactMetadataCallback do
   let(:parsed_present) { present.as_json }
 
   before { travel_to present }
-  after { travel_back }
 
   # NOTE: as you might notice these tests are omitting quite a few cases
   # ex: notes => details, expenses => notes. I don't think it is worth dealing

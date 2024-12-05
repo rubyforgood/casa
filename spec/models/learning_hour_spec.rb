@@ -3,20 +3,20 @@ require "rails_helper"
 RSpec.describe LearningHour, type: :model do
   it "has a title" do
     learning_hour = build_stubbed(:learning_hour, name: nil)
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
     expect(learning_hour.errors[:name]).to eq(["/ Title cannot be blank"])
   end
 
   it "has a learning_hour_type" do
     learning_hour = build_stubbed(:learning_hour, learning_hour_type: nil)
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
     expect(learning_hour.errors[:learning_hour_type]).to eq(["must exist"])
   end
 
   context "duration_hours is zero" do
     it "has a duration in minutes that is greater than 0" do
       learning_hour = build_stubbed(:learning_hour, duration_hours: 0, duration_minutes: 0)
-      expect(learning_hour).to_not be_valid
+      expect(learning_hour).not_to be_valid
       expect(learning_hour.errors[:duration_minutes]).to eq(["and hours (total duration) must be greater than 0"])
     end
   end
@@ -31,18 +31,18 @@ RSpec.describe LearningHour, type: :model do
 
   it "has an occurred_at date" do
     learning_hour = build_stubbed(:learning_hour, occurred_at: nil)
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
     expect(learning_hour.errors[:occurred_at]).to eq(["can't be blank"])
   end
 
   it "has date that is not in the future" do
     learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now.strftime("%d %b %Y"))
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
   end
 
   it "Date cannot be before 01-01-1989" do
     learning_hour = build_stubbed(:learning_hour, occurred_at: "1984-01-01".to_date)
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
     expect(learning_hour.errors[:occurred_at]).to eq(["is not valid: Occurred on Date cannot be prior to 1/1/1989."])
   end
 
@@ -55,12 +55,21 @@ RSpec.describe LearningHour, type: :model do
     casa_org = build(:casa_org, learning_topic_active: true)
     user = build(:user, casa_org: casa_org)
     learning_hour = build(:learning_hour, user: user)
-    expect(learning_hour).to_not be_valid
+    expect(learning_hour).not_to be_valid
     expect(learning_hour.errors[:learning_hour_topic]).to eq(["can't be blank"])
   end
 
   describe "scopes" do
     let(:casa_org_1) { build(:casa_org) }
+    let!(:learning_hours) do
+      [
+        create(:learning_hour, user: volunteer1, duration_hours: 1, duration_minutes: 0),
+        create(:learning_hour, user: volunteer1, duration_hours: 2, duration_minutes: 0),
+        create(:learning_hour, user: volunteer2, duration_hours: 1, duration_minutes: 0),
+        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0),
+        create(:learning_hour, user: volunteer3, duration_hours: 1, duration_minutes: 0)
+      ]
+    end
     let(:casa_org_2) { build(:casa_org) }
 
     let(:casa_admin) { create(:casa_admin, display_name: "Supervisor", casa_org: casa_org_1) }
@@ -73,18 +82,9 @@ RSpec.describe LearningHour, type: :model do
       supervisor.volunteers << volunteer1
     end
 
-    let!(:learning_hours) do
-      [
-        create(:learning_hour, user: volunteer1, duration_hours: 1, duration_minutes: 0),
-        create(:learning_hour, user: volunteer1, duration_hours: 2, duration_minutes: 0),
-        create(:learning_hour, user: volunteer2, duration_hours: 1, duration_minutes: 0),
-        create(:learning_hour, user: volunteer2, duration_hours: 3, duration_minutes: 0),
-        create(:learning_hour, user: volunteer3, duration_hours: 1, duration_minutes: 0)
-      ]
-    end
-
     describe ".supervisor_volunteers_learning_hours" do
       subject(:supervisor_volunteers_learning_hours) { described_class.supervisor_volunteers_learning_hours(supervisor.id) }
+
       context "with specified supervisor" do
         it "returns the total time spent for supervisor's volunteers" do
           expect(supervisor_volunteers_learning_hours.length).to eq(1)

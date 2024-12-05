@@ -9,7 +9,7 @@ RSpec.describe "patch_notes/index", type: :view do
     ]
   }
 
-  before(:each) do
+  before do
     assign(:patch_notes, patch_notes)
     assign(:patch_note_groups, PatchNoteGroup.all)
     assign(:patch_note_types, PatchNoteType.all)

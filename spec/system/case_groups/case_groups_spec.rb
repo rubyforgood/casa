@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case Groups", type: :system, js: true do
+RSpec.describe "Case Groups", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -64,10 +64,10 @@ RSpec.describe "Case Groups", type: :system, js: true do
 
     visit case_groups_path
     expect(page).to have_text(casa_case1.case_number)
-    expect(page).to_not have_text(casa_case2.case_number)
+    expect(page).not_to have_text(casa_case2.case_number)
   end
 
-  it "will not create a case group if the name is not unique" do
+  it "does not create a case group if the name is not unique" do
     casa_case = create(:casa_case)
 
     sign_in admin

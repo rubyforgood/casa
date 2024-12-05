@@ -61,7 +61,7 @@ RSpec.describe "/supervisors", type: :request do
 
       get new_supervisor_url
 
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
     end
   end
 
@@ -97,7 +97,7 @@ RSpec.describe "/supervisors", type: :request do
         get edit_supervisor_url(supervisor), params: {include_unassigned: true}
 
         expect(response).to be_successful
-        expect(assigns(:all_volunteers_ever_assigned)).to_not be_nil
+        expect(assigns(:all_volunteers_ever_assigned)).not_to be_nil
       end
 
       it "returns no volunteers ever assigned if include_unassigned param is false" do
@@ -360,12 +360,13 @@ RSpec.describe "/supervisors", type: :request do
     it "doesn't send an deactivation email" do
       expect {
         patch deactivate_supervisor_path(supervisor)
-      }.to_not change { ActionMailer::Base.deliveries.count }
+      }.not_to change { ActionMailer::Base.deliveries.count }
     end
   end
 
   describe "PATCH /resend_invitation" do
     before { sign_in admin }
+
     it "resends an invitation email" do
       expect(supervisor.invitation_created_at.present?).to eq(false)
 

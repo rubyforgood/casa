@@ -8,6 +8,7 @@ RSpec.describe MockController, type: :controller do
   let(:browser_time_zone) { "America/Los_Angeles" }
   let(:default_time_zone) { "Eastern Time (US & Canada)" }
   let(:time_date) { Time.zone.now }
+
   before do
     allow(controller).to receive(:cookies).and_return(browser_time_zone: browser_time_zone)
   end

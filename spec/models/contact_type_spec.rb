@@ -7,7 +7,7 @@ RSpec.describe ContactType, type: :model do
   describe "#create" do
     it "does have a unique name" do
       new_contact_type = create(:contact_type, name: "Type 1", contact_type_group: contact_type_group)
-      is_expected.to validate_presence_of(:name)
+      expect(subject).to validate_presence_of(:name)
       expect(new_contact_type).to validate_uniqueness_of(:name).scoped_to(:contact_type_group_id)
         .with_message("should be unique per contact type group")
     end
@@ -31,7 +31,7 @@ RSpec.describe ContactType, type: :model do
       expect(contact_type.contact_type_group.name).to eq("New contact group")
     end
 
-    it "can deactivate contact type " do
+    it "can deactivate contact type" do
       contact_type.active = false
       expect(contact_type.active?).to be_falsey
     end
