@@ -64,7 +64,6 @@ group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "dotenv-rails"
-  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pry"
@@ -73,7 +72,15 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.40.0"
+  # linters
+  gem "erb_lint", require: false
+  gem "rubocop-capybara", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rspec_rails", require: false
+  gem "standard", require: false
+  gem "standard-rails", require: false
 end
 
 group :development do

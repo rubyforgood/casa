@@ -120,7 +120,7 @@ class SeederMain
   def log(message)
     return if Rails.env.test?
 
-    puts message
+    Rails.logger.debug { message }
   end
 
   def create_org_related_data(db_populator, casa_org, options)
@@ -144,6 +144,6 @@ load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
 begin
   load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
 rescue => e
-  puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
+  Rails.logger.error { "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}" }
 end
 load(Rails.root.join("db", "seeds", "placement_data.rb"))
