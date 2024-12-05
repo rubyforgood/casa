@@ -10,7 +10,7 @@ FactoryBot.define do
     twilio_phone_number { "+15555555555" }
 
     trait :with_logo do
-      logo { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "org_logo.jpeg")) }
+      logo { Rack::Test::UploadedFile.new(Rails.root.join("spec", "fixtures", "files", "org_logo.jpeg")) }
     end
 
     trait :all_reimbursements_enabled do

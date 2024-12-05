@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe SmsBodyHelper do
+RSpec.describe SmsBodyHelper, type: :helper do
   describe "#account_activation_msg" do
     it "correct short links provided" do
       expected_response = account_activation_msg("primogems", {0 => "www.pasta.com", 1 => "www.yogurt.com"})

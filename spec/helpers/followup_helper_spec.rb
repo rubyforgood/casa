@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe FollowupHelper do
+RSpec.describe FollowupHelper, type: :helper do
   describe "#followup_icon" do
     context "volunteer created followup" do
       it "is orange circle with an exclamation point" do

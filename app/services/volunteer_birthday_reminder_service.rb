@@ -7,7 +7,7 @@ class VolunteerBirthdayReminderService
           .deliver(volunteer.supervisor)
       end
     else
-      puts "Volunteer Birthday Reminder Rake task skipped. Today is not the 15th of the month."
+      Rails.logger.info { "Volunteer Birthday Reminder Rake task skipped. Today is not the 15th of the month." }
     end
   end
 end

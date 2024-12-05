@@ -3,7 +3,8 @@
 require "rails_helper"
 
 RSpec.describe "placements/new", type: :system do
-  let(:now) { Date.new(2025, 1, 2) }
+  let(:now) { Date.current }
+  let(:formatted_date) { now.strftime("%B %-d, %Y") }
   let(:casa_org) { create(:casa_org, :with_placement_types) }
   let(:admin) { create(:casa_admin, casa_org:) }
   let(:casa_case) { create(:casa_case, casa_org:, case_number: "123") }
@@ -11,7 +12,6 @@ RSpec.describe "placements/new", type: :system do
   let(:placement) { create(:placement, placement_started_at: "2024-08-15 20:40:44 UTC", casa_case:, placement_type:) }
 
   before do
-    travel_to now
     sign_in admin
     visit casa_case_placements_path(casa_case)
     click_link("New Placement")
@@ -28,7 +28,7 @@ RSpec.describe "placements/new", type: :system do
 
     expect(page).to have_content("Placement was successfully created.")
     expect(page).to have_content("123")
-    expect(page).to have_content("January 2, 2025")
+    expect(page).to have_content(formatted_date)
     expect(page).to have_content("Reunification")
   end
 

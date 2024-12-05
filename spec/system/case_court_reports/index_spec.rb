@@ -8,12 +8,13 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:at_least_transition_age) { volunteer.casa_cases.find(&:in_transition_age?) }
   let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
 
+  let(:date) { Date.current }
+  let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
+
   before do
-    travel_to Date.new(2021, 1, 1)
     sign_in volunteer
     visit case_court_reports_path
   end
-  after { travel_back }
 
   context "when first arriving to 'Generate Court Report' page", js: true do
     it "generation modal hidden" do
@@ -31,10 +32,10 @@ RSpec.describe "case_court_reports/index", type: :system do
     # putting all this in the same system test shaves 3 seconds off the test suite
     it "modal has correct contents" do
       start_date = page.find("#start_date").value
-      expect(start_date).to eq("January 01, 2021") # default date
+      expect(start_date).to eq(formatted_date)
 
       end_date = page.find("#end_date").value
-      expect(end_date).to eq("January 01, 2021") # default date
+      expect(end_date).to eq(formatted_date)
 
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
       expect(page).to_not have_selector ".select2"

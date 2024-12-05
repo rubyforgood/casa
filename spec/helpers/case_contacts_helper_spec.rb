@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CaseContactsHelper do
+RSpec.describe CaseContactsHelper, type: :helper do
   describe "#render_back_link" do
     it "renders back link to home page when user is a volunteer" do
       current_user = create(:volunteer)

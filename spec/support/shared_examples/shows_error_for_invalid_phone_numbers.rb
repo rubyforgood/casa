@@ -1,4 +1,4 @@
-shared_examples_for "shows error for invalid phone numbers" do
+RSpec.shared_examples_for "shows error for invalid phone numbers" do
   it "shows error message for phone number < 12 digits" do
     (role == "admin" || role == "user") ? fill_in("Phone number", with: "+141632489") : fill_in("#{role}_phone_number", with: "+141632489")
     (role == "user") ? click_on("Update Profile") : click_on("Submit")

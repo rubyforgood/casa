@@ -6,7 +6,7 @@ RSpec.describe SupervisorImporter do
 
   # Use of the static method SupervisorImporter.import_volunteers functions identically to SupervisorImporter.new(...).import_volunteers
   # but is preferred.
-  let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
+  let(:supervisor_import_data_path) { file_fixture "supervisors.csv" }
 
   let(:supervisor_importer) do
     importer = SupervisorImporter.new(supervisor_import_data_path, casa_org_id)
@@ -40,7 +40,7 @@ RSpec.describe SupervisorImporter do
 
     context "when any volunteer could not be assigned to the supervisor during the import" do
       let!(:existing_volunteer) { build(:volunteer, email: "volunteer1@example.net") }
-      let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
+      let(:supervisor_import_data_path) { file_fixture "supervisor_volunteers.csv" }
 
       it "returns an error message" do
         alert = SupervisorImporter.new(supervisor_import_data_path, casa_org_id).import_supervisors
@@ -88,7 +88,7 @@ RSpec.describe SupervisorImporter do
   end
 
   context "when row doesn't have e-mail address" do
-    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_email.csv") }
+    let(:supervisor_import_data_path) { file_fixture "supervisors_without_email.csv" }
 
     it "returns an error message" do
       alert = supervisor_importer.import_supervisors
@@ -100,7 +100,7 @@ RSpec.describe SupervisorImporter do
   end
 
   context "when row doesn't have phone number" do
-    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv") }
+    let(:supervisor_import_data_path) { file_fixture "supervisors_without_phone_numbers.csv" }
 
     let!(:existing_supervisor_with_number) { create(:supervisor, display_name: "#", email: "supervisor1@example.net", phone_number: "+11111111111", receive_sms_notifications: true) }
 
@@ -114,7 +114,7 @@ RSpec.describe SupervisorImporter do
   end
 
   context "when phone number in row is invalid" do
-    let(:supervisor_import_data_path) { Rails.root.join("spec", "fixtures", "supervisors_invalid_phone_numbers.csv") }
+    let(:supervisor_import_data_path) { file_fixture "supervisors_invalid_phone_numbers.csv" }
 
     it "returns an error message" do
       alert = supervisor_importer.import_supervisors

@@ -14,7 +14,7 @@ RSpec.describe "imports/index", type: :system do
 
   context "import volunteer csv with phone numbers", js: true do
     it "shows sms opt in modal" do
-      import_file_path = Rails.root.join("spec", "fixtures", "volunteers.csv")
+      import_file_path = file_fixture "volunteers.csv"
       admin = create(:casa_admin)
 
       sign_in admin
@@ -38,7 +38,7 @@ RSpec.describe "imports/index", type: :system do
 
   context "import volunteer csv without phone numbers", js: true do
     it "shows successful import" do
-      import_file_path = Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv")
+      import_file_path = file_fixture "volunteers_without_phone_numbers.csv"
       admin = create(:casa_admin)
 
       sign_in admin
@@ -55,7 +55,7 @@ RSpec.describe "imports/index", type: :system do
 
   context "import supervisors csv with phone numbers", js: true do
     it "shows sms opt in modal" do
-      import_file_path = Rails.root.join("spec", "fixtures", "supervisors.csv")
+      import_file_path = file_fixture "supervisors.csv"
       admin = create(:casa_admin)
 
       sign_in admin
@@ -80,7 +80,7 @@ RSpec.describe "imports/index", type: :system do
 
   context "import supervisors csv without phone numbers", js: true do
     it "shows successful import" do
-      import_file_path = Rails.root.join("spec", "fixtures", "supervisors_without_phone_numbers.csv")
+      import_file_path = file_fixture "supervisors_without_phone_numbers.csv"
       admin = create(:casa_admin)
 
       sign_in admin

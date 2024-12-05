@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "All-Casa Admin" do
+RSpec.describe "All-Casa Admin", type: :request do
   let(:all_casa_admin) { build(:all_casa_admin) }
   let(:casa_admin) { create(:casa_admin, email: "admin1@example.com", display_name: "Example Admin") }
   let(:casa_org) { create(:casa_org) }
