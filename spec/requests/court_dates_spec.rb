@@ -42,7 +42,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
     before do
       casa_org = court_date.casa_case.casa_org
-      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files", "default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
+      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec/fixtures/files/default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
       casa_org.court_report_template.save!
       show
     end

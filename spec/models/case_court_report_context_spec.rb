@@ -7,8 +7,8 @@ A_TIMEZONE = "America/New_York"
 
 RSpec.describe CaseCourtReportContext, type: :model do
   let(:volunteer) { create(:volunteer, :with_casa_cases) }
-  let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
-  let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
+  let(:path_to_report) { Rails.root.join("tmp/test_report.docx").to_s }
 
   before do
     travel_to Date.new(2021, 1, 1)
@@ -96,7 +96,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
   describe "#latest_hearing_date" do
     context "when casa_case has court_dates" do
-      let(:court_date) { build(:court_date, date: 2.day.ago) }
+      let(:court_date) { build(:court_date, date: 2.days.ago) }
       let(:casa_case) { create(:casa_case, court_dates: [court_date]) }
       let(:instance) { build(:case_court_report_context, casa_case: casa_case) }
 
@@ -135,22 +135,22 @@ RSpec.describe CaseCourtReportContext, type: :model do
   describe "#calculate_date_range" do
     context "when @time_zone is set" do
       it "converts to provided timezone" do
-        context = build_context(start_date: 10.day.ago, end_date: 2.day.ago, court_date: nil, time_zone: A_TIMEZONE)
+        context = build_context(start_date: 10.days.ago, end_date: 2.days.ago, court_date: nil, time_zone: A_TIMEZONE)
         expect(context.date_range).to eq(zone_days_ago(10)..zone_days_ago(2))
       end
 
       it "uses current time if end_date not provided" do
-        context = build_context(start_date: 10.day.ago, end_date: nil, court_date: nil, time_zone: A_TIMEZONE)
+        context = build_context(start_date: 10.days.ago, end_date: nil, court_date: nil, time_zone: A_TIMEZONE)
         expect(context.date_range).to eq(zone_days_ago(10)..nil)
       end
 
       it "uses court date if available if no start_date" do
-        context = build_context(start_date: nil, end_date: 2.day.ago, court_date: 6.day.ago, time_zone: A_TIMEZONE)
+        context = build_context(start_date: nil, end_date: 2.days.ago, court_date: 6.days.ago, time_zone: A_TIMEZONE)
         expect(context.date_range).to eq(zone_days_ago(6)..zone_days_ago(2))
       end
 
       it "uses nil(includes everything) if no court date or start_date" do
-        context = build_context(start_date: nil, end_date: 2.day.ago, court_date: nil, time_zone: A_TIMEZONE)
+        context = build_context(start_date: nil, end_date: 2.days.ago, court_date: nil, time_zone: A_TIMEZONE)
 
         expect(context.date_range).to eq(nil..zone_days_ago(2))
       end
@@ -158,22 +158,22 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     context "when @time_zone is not set" do
       it "uses server time zone" do
-        context = build_context(start_date: 10.day.ago, end_date: 2.day.ago, court_date: nil, time_zone: nil)
+        context = build_context(start_date: 10.days.ago, end_date: 2.days.ago, court_date: nil, time_zone: nil)
         expect(context.date_range).to eq(days_ago(10)..days_ago(2))
       end
 
       it "uses nil if end_date not provided" do
-        context = build_context(start_date: 10.day.ago, end_date: nil, court_date: nil, time_zone: nil)
+        context = build_context(start_date: 10.days.ago, end_date: nil, court_date: nil, time_zone: nil)
         expect(context.date_range).to eq(days_ago(10)..nil)
       end
 
       it "uses court date if available if no start_date" do
-        context = build_context(start_date: nil, end_date: 2.day.ago, court_date: 6.day.ago, time_zone: nil)
+        context = build_context(start_date: nil, end_date: 2.days.ago, court_date: 6.days.ago, time_zone: nil)
         expect(context.date_range).to eq(days_ago(6)..days_ago(2))
       end
 
       it "uses nil if no court date or start_date" do
-        context = build_context(start_date: nil, end_date: 2.day.ago, court_date: nil, time_zone: nil)
+        context = build_context(start_date: nil, end_date: 2.days.ago, court_date: nil, time_zone: nil)
 
         expect(context.date_range).to eq(nil..days_ago(2))
       end
@@ -203,11 +203,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
         contact_one = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 1.day.ago)
         create_list(:contact_topic_answer, 2, case_contact: contact_one, contact_topic: topics[0], value: "Not included")
 
-        contact_two = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 50.day.ago)
+        contact_two = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 50.days.ago)
         create_list(:contact_topic_answer, 2, case_contact: contact_two, contact_topic: topics[0], value: "Not included")
 
         other_case = create(:casa_case, casa_org: org)
-        contact_three = create(:case_contact, casa_case: other_case, medium_type: "in-person", occurred_at: 50.day.ago)
+        contact_three = create(:case_contact, casa_case: other_case, medium_type: "in-person", occurred_at: 50.days.ago)
         create_list(:contact_topic_answer, 2, case_contact: contact_three, contact_topic: topics[0], value: "Not included")
       end
 
@@ -242,7 +242,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
           ]}
         }
 
-        court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+        court_report_context = build(:case_court_report_context, start_date: 45.days.ago.to_s, end_date: 5.days.ago.to_s, casa_case: casa_case)
 
         expect(court_report_context.court_topics).to eq(expected_topics)
       end
@@ -250,7 +250,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     context "when there are no contact topics" do
       it "returns an empty hash" do
-        court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+        court_report_context = build(:case_court_report_context, start_date: 45.days.ago.to_s, end_date: 5.days.ago.to_s, casa_case: casa_case)
         expect(court_report_context.court_topics).to eq({})
       end
     end
@@ -259,11 +259,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
   describe "#filtered_interviewees" do
     it "filters based on date range" do
       casa_case = create(:casa_case)
-      court_report_context = build(:case_court_report_context, start_date: 5.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+      court_report_context = build(:case_court_report_context, start_date: 5.days.ago.to_s, end_date: 5.days.ago.to_s, casa_case: casa_case)
 
-      create_list(:case_contact, 3, occurred_at: 10.day.ago, casa_case: casa_case)
+      create_list(:case_contact, 3, occurred_at: 10.days.ago, casa_case: casa_case)
       create_list(:case_contact, 3, occurred_at: 1.day.ago, casa_case: casa_case)
-      included_interviewee = create(:case_contact, occurred_at: 5.day.ago, casa_case: casa_case)
+      included_interviewee = create(:case_contact, occurred_at: 5.days.ago, casa_case: casa_case)
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
@@ -272,11 +272,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     it "filters if start of date range is nil" do
       casa_case = create(:casa_case)
-      court_report_context = build(:case_court_report_context, start_date: nil, end_date: 5.day.ago.to_s, casa_case: casa_case)
+      court_report_context = build(:case_court_report_context, start_date: nil, end_date: 5.days.ago.to_s, casa_case: casa_case)
 
       create_list(:case_contact, 3, occurred_at: 1.day.ago, casa_case: casa_case)
-      interviewees = create_list(:case_contact, 3, occurred_at: 10.day.ago, casa_case: casa_case)
-      interviewees.append(create(:case_contact, occurred_at: 5.day.ago, casa_case: casa_case))
+      interviewees = create_list(:case_contact, 3, occurred_at: 10.days.ago, casa_case: casa_case)
+      interviewees.append(create(:case_contact, occurred_at: 5.days.ago, casa_case: casa_case))
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
@@ -285,11 +285,11 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     it "filters if end of date range is nil" do
       casa_case = create(:casa_case)
-      court_report_context = build(:case_court_report_context, start_date: 5.day.ago.to_s, end_date: nil, casa_case: casa_case)
+      court_report_context = build(:case_court_report_context, start_date: 5.days.ago.to_s, end_date: nil, casa_case: casa_case)
 
-      create_list(:case_contact, 3, occurred_at: 10.day.ago, casa_case: casa_case)
+      create_list(:case_contact, 3, occurred_at: 10.days.ago, casa_case: casa_case)
       interviewees = create_list(:case_contact, 3, occurred_at: 1.day.ago, casa_case: casa_case)
-      interviewees.append(create(:case_contact, occurred_at: 5.day.ago, casa_case: casa_case))
+      interviewees.append(create(:case_contact, occurred_at: 5.days.ago, casa_case: casa_case))
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
@@ -300,9 +300,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
       casa_case = create(:casa_case)
       court_report_context = build(:case_court_report_context, start_date: nil, end_date: nil, casa_case: casa_case)
 
-      create_list(:case_contact, 3, occurred_at: 10.day.ago, casa_case: casa_case)
+      create_list(:case_contact, 3, occurred_at: 10.days.ago, casa_case: casa_case)
       create_list(:case_contact, 3, occurred_at: 1.day.ago, casa_case: casa_case)
-      create(:case_contact, occurred_at: 5.day.ago, casa_case: casa_case)
+      create(:case_contact, occurred_at: 5.days.ago, casa_case: casa_case)
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
@@ -311,7 +311,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
     it "returns an empty array if there are no interviewees" do
       casa_case = create(:casa_case)
-      court_report_context = build(:case_court_report_context, start_date: 5.day.ago.to_s, end_date: nil, casa_case: casa_case)
+      court_report_context = build(:case_court_report_context, start_date: 5.days.ago.to_s, end_date: nil, casa_case: casa_case)
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 

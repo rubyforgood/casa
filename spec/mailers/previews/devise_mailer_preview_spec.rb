@@ -1,5 +1,5 @@
 require "rails_helper"
-require File.join(Rails.root, "lib", "mailers", "previews", "devise_mailer_preview")
+require Rails.root.join("lib/mailers/previews/devise_mailer_preview").to_s
 
 RSpec.describe DeviseMailerPreview do
   let(:subject) { described_class.new }

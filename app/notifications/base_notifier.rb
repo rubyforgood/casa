@@ -13,17 +13,11 @@ class BaseNotifier < Noticed::Event
   end
 
   # Utility methods
-  def read?
-    record.read?
-  end
+  delegate :read?, to: :record
 
-  def created_at
-    record.created_at
-  end
+  delegate :created_at, to: :record
 
-  def updated_at
-    record.updated_at
-  end
+  delegate :updated_at, to: :record
 
   def created_by
     created_by_name

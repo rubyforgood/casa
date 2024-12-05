@@ -136,7 +136,7 @@ RSpec.describe "casa_org/edit", type: :view do
       organization = create(:casa_org)
       allow(view).to receive(:current_organization).and_return(organization)
 
-      organization.court_report_template.attach(io: File.open("#{Rails.root}/app/documents/templates/default_report_template.docx"), filename: 'default_report_template
+      organization.court_report_template.attach(io: File.open("#{Rails.root.join("app/documents/templates/default_report_template.docx")}"), filename: 'default_report_template
 .docx', content_type: "application/docx")
 
       render template: "casa_org/edit"

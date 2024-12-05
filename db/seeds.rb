@@ -140,10 +140,10 @@ end
 
 SeederMain.new.seed
 
-load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
+load(Rails.root.join("db/seeds/emancipation_data.rb"))
 begin
-  load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+  load(Rails.root.join("db/seeds/emancipation_options_prune.rb"))
 rescue => e
   Rails.logger.error { "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}" }
 end
-load(Rails.root.join("db", "seeds", "placement_data.rb"))
+load(Rails.root.join("db/seeds/placement_data.rb"))

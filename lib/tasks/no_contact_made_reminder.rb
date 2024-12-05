@@ -44,7 +44,7 @@ class NoContactMadeReminder
       return false
     end
 
-    if reminder&.no_contact_made && reminder.no_contact_made >= 1.months.ago
+    if reminder&.no_contact_made && reminder.no_contact_made >= 1.month.ago
       return false
     end
 

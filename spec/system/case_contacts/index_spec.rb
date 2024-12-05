@@ -17,7 +17,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       let(:case_contacts) do
         [
           create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.days.ago),
+          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.day.ago),
           create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.now,
             contact_types: [create(:contact_type, name: "Most Recent Case Contact")]),
           create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,

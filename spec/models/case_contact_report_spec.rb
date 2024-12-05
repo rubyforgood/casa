@@ -70,8 +70,8 @@ RSpec.describe CaseContactReport, type: :model do
       it "returns only headers if result is empty" do
         report = CaseContactReport.new(
           {
-            "start_date" => 1.days.ago,
-            "end_date" => 1.days.ago,
+            "start_date" => 1.day.ago,
+            "end_date" => 1.day.ago,
             "contact_made" => true,
             "has_transitioned" => true,
             "want_driving_reimbursement" => true,
