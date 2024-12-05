@@ -46,7 +46,7 @@ RSpec.describe VolunteerBirthdayReminderService do
     end
 
     it "does not create a notification" do
-      expect { send_reminders }.to change { Noticed::Notification.count }.by(0)
+      expect { send_reminders }.not_to change { Noticed::Notification.count }
     end
   end
 
@@ -56,7 +56,7 @@ RSpec.describe VolunteerBirthdayReminderService do
     end
 
     it "does not create a notification" do
-      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(0)
+      expect { send_reminders }.not_to change { volunteer.supervisor.notifications.count }
     end
   end
 
@@ -66,7 +66,7 @@ RSpec.describe VolunteerBirthdayReminderService do
     end
 
     it "does not create a notification" do
-      expect { send_reminders }.to change { volunteer.supervisor.notifications.count }.by(0)
+      expect { send_reminders }.not_to change { volunteer.supervisor.notifications.count }
     end
   end
 
@@ -88,7 +88,7 @@ RSpec.describe VolunteerBirthdayReminderService do
     after { travel_back }
 
     it "skips the rake task" do
-      expect { send_reminders }.to change { Noticed::Notification.count }.by(0)
+      expect { send_reminders }.not_to change { Noticed::Notification.count }
     end
   end
 end

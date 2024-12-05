@@ -15,9 +15,9 @@ RSpec.describe "/case_groups", type: :request do
   before { sign_in user }
 
   describe "GET /index" do
-    let!(:case_groups) { create_list :case_group, 2, casa_org: }
-
     subject { get case_groups_path }
+
+    let!(:case_groups) { create_list :case_group, 2, casa_org: }
 
     it "renders a successful response" do
       subject
@@ -42,9 +42,9 @@ RSpec.describe "/case_groups", type: :request do
   end
 
   describe "POST /create" do
-    let(:params) { {case_group: valid_attributes} }
-
     subject { post case_groups_path, params: }
+
+    let(:params) { {case_group: valid_attributes} }
 
     it "creates new record" do
       expect { subject }.to change(CaseGroup, :count).by(1)
@@ -59,7 +59,7 @@ RSpec.describe "/case_groups", type: :request do
       let(:params) { {case_group: invalid_attributes} }
 
       it "does not create a new record" do
-        expect { subject }.to change(CaseGroup, :count).by(0)
+        expect { subject }.not_to change(CaseGroup, :count)
       end
 
       it "renders new template" do
@@ -71,9 +71,9 @@ RSpec.describe "/case_groups", type: :request do
   end
 
   describe "GET edit" do
-    let(:case_group) { create :case_group, casa_org: }
-
     subject { get edit_case_group_path(case_group) }
+
+    let(:case_group) { create :case_group, casa_org: }
 
     it "renders a successful response" do
       subject
@@ -83,9 +83,9 @@ RSpec.describe "/case_groups", type: :request do
   end
 
   describe "PATCH /update" do
-    let(:params) { {case_group: valid_attributes} }
-
     subject { patch case_group_path(case_group), params: }
+
+    let(:params) { {case_group: valid_attributes} }
 
     it "updates the requested record" do
       expect(case_group.name).not_to eq(valid_attributes[:name])
@@ -111,9 +111,9 @@ RSpec.describe "/case_groups", type: :request do
   end
 
   describe "DELETE destroy" do
-    let!(:case_group) { create :case_group, casa_org: }
-
     subject { delete case_group_path(case_group) }
+
+    let!(:case_group) { create :case_group, casa_org: }
 
     it "destroys the requested record" do
       expect { subject }.to change(CaseGroup, :count).by(-1)

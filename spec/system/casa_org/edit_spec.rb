@@ -27,14 +27,14 @@ RSpec.describe "casa_org/edit", type: :system do
 
     page.attach_file("Logo", file_fixture("company_logo.png"), visible: :visible)
 
-    expect(organization.logo).to_not be_attached
+    expect(organization.logo).not_to be_attached
 
     click_on "Submit"
 
     expect(organization.reload.logo).to be_attached
   end
 
-  it "hides Twilio Form if twilio is not enabled", js: true do
+  it "hides Twilio Form if twilio is not enabled", :js do
     organization = create(:casa_org, twilio_enabled: true)
     admin = create(:casa_admin, casa_org: organization)
 
@@ -62,7 +62,7 @@ RSpec.describe "casa_org/edit", type: :system do
     expect(page).to have_selector("#casa_org_twilio_phone_number", visible: :visible)
   end
 
-  it "requires Twilio Form to be filled in correctly", js: true do
+  it "requires Twilio Form to be filled in correctly", :js do
     organization = create(:casa_org, twilio_enabled: true)
     admin = create(:casa_admin, casa_org: organization)
 

@@ -17,7 +17,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
       it "does not show a case contact that did not occurr in the week" do
         build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 8.days)
-        expect(mail.body.encoded).to_not match("Most recent contact attempted:")
+        expect(mail.body.encoded).not_to match("Most recent contact attempted:")
       end
 
       it "shows the latest case contact that occurred in the week" do
@@ -25,7 +25,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
         other_contact = build(:case_contact, casa_case: casa_case, occurred_at: Date.today - 3.days, notes: "BBBBBBBBBBBBBBBBBBBB")
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact.notes}")
-        expect(mail.body.encoded).to_not match("Notes: #{other_contact.notes}")
+        expect(mail.body.encoded).not_to match("Notes: #{other_contact.notes}")
       end
 
       it "has a CSV attachment" do
@@ -47,7 +47,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
       it "does not show a case contact that occurred past the unassignment date in the week" do
         contact_past_unassignment = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 1.days, notes: "AAAAAAAAAAAAAAAAAAAAAAAA")
 
-        expect(mail.body.encoded).to_not match("Notes: #{contact_past_unassignment.notes}")
+        expect(mail.body.encoded).not_to match("Notes: #{contact_past_unassignment.notes}")
       end
 
       it "shows the latest case contact that occurred in the week before the unassignment date" do
@@ -56,18 +56,19 @@ RSpec.describe SupervisorMailer, type: :mailer do
         older_contact = build_stubbed(:case_contact, casa_case: casa_case, occurred_at: Date.today - 4.days, notes: "CCCCCCCCCCCCCCCCCCCC")
 
         expect(mail.body.encoded).to match("Notes: #{most_recent_contact_before_unassignment.notes}")
-        expect(mail.body.encoded).to_not match("Notes: #{contact_past_unassignment.notes}")
-        expect(mail.body.encoded).to_not match("Notes: #{older_contact.notes}")
+        expect(mail.body.encoded).not_to match("Notes: #{contact_past_unassignment.notes}")
+        expect(mail.body.encoded).not_to match("Notes: #{older_contact.notes}")
       end
     end
 
     it "does not show a summary for a volunteer unassigned from the supervisor before the week" do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today - 8.days)
-      expect(mail.body.encoded).to_not match("Summary for #{volunteer.display_name}")
+      expect(mail.body.encoded).not_to match("Summary for #{volunteer.display_name}")
     end
 
     context "when a supervisor has pending volunteer to accepts invitation" do
       let(:volunteer2) { create(:volunteer) }
+
       before do
         volunteer2.invite!(supervisor)
       end
@@ -84,11 +85,11 @@ RSpec.describe SupervisorMailer, type: :mailer do
         volunteer2.invitation_accepted_at = DateTime.current
         volunteer2.save
 
-        expect(mail.body.encoded).to_not match(volunteer2.display_name.to_s)
+        expect(mail.body.encoded).not_to match(volunteer2.display_name.to_s)
       end
 
       it "does not display 'There are no pending volunteers' message when there are pending volunteers" do
-        expect(mail.body.encoded).to_not match("There are no pending volunteers.")
+        expect(mail.body.encoded).not_to match("There are no pending volunteers.")
       end
     end
 
@@ -98,7 +99,7 @@ RSpec.describe SupervisorMailer, type: :mailer do
 
     it "does not display 'There are no additional notes' message when there are additional notes" do
       create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false, updated_at: Date.today + 8.days)
-      expect(mail.body.encoded).to_not match("There are no additional notes.")
+      expect(mail.body.encoded).not_to match("There are no additional notes.")
     end
 
     it "displays no additional notes message when there are no additional notes" do

@@ -8,7 +8,7 @@ RSpec.describe CaseCourtReport, type: :model do
   let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
   let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
 
-  context "#generate_to_string" do
+  describe "#generate_to_string" do
     let(:full_context) do
       {
         created_date: "April 9, 2024",
@@ -53,6 +53,7 @@ RSpec.describe CaseCourtReport, type: :model do
         ]
       }
     end
+
     describe "contact_topics" do
       it "all contact topics are present in the report" do
         docx_response = generate_doc(full_context, path_to_template)
@@ -93,6 +94,7 @@ RSpec.describe CaseCourtReport, type: :model do
           expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 2.*/)
           expect(docx_response.paragraphs.map(&:to_s)).to include(/Question 3.*/)
         end
+
         it "all topic details are present in the report" do
           docx_response = generate_doc(full_context, path_to_template)
           expect(docx_response.paragraphs.map(&:to_s)).to include(/Details 1.*/)
@@ -156,7 +158,7 @@ RSpec.describe CaseCourtReport, type: :model do
         end
 
         it "created_date is not nil" do
-          expect(subject[:created_date]).to_not be(nil)
+          expect(subject[:created_date]).not_to be_nil
         end
 
         context "when the case has multiple past court dates" do
@@ -193,7 +195,7 @@ RSpec.describe CaseCourtReport, type: :model do
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
-          before(:each) do
+          before do
             casa_case_with_contacts.casa_org.update_attribute(:address, document_data[:org_address])
             casa_case_with_contacts.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
             casa_case_with_contacts.update_attribute(:case_number, document_data[:case_number])
@@ -316,7 +318,7 @@ RSpec.describe CaseCourtReport, type: :model do
           let(:case_contact) { create(:case_contact, contact_made: false, occurred_at: document_data[:case_contact_time]) }
           let(:court_order) { create(:case_court_order, implementation_status: :partially_implemented) }
 
-          before(:each) do
+          before do
             casa_case.casa_org.update_attribute(:address, document_data[:org_address])
             casa_case.update_attribute(:birth_month_year_youth, document_data[:case_birthday])
             casa_case.update_attribute(:case_number, document_data[:case_number])
@@ -384,7 +386,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
 
-      it "will raise Zip::Error when generating report" do
+      it "raises Zip::Error when generating report" do
         args = {
           case_id: casa_case_with_contacts.id,
           volunteer_id: volunteer.id,
@@ -412,7 +414,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:context) { CaseCourtReportContext.new(args).context }
       let(:case_report) { CaseCourtReport.new(path_to_template: path_to_template, context: context) }
 
-      before(:each) do
+      before do
         casa_case.case_court_orders << court_order_implemented
         casa_case.case_court_orders << court_order_unimplemented
         casa_case.case_court_orders << court_order_partially_implemented

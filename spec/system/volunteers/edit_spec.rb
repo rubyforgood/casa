@@ -169,13 +169,13 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer)
 
         expect(page).to have_field("Email", with: "newemail@example.com")
-        expect(page).to_not have_field("Email", with: old_email)
+        expect(page).not_to have_field("Email", with: old_email)
         expect(volunteer.old_emails).to eq([old_email])
       end
     end
   end
 
-  it "saves the user as inactive, but only if the admin confirms", js: true do
+  it "saves the user as inactive, but only if the admin confirms", :js do
     organization = create(:casa_org)
     admin = create(:casa_admin, casa_org: organization)
     volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
@@ -452,7 +452,7 @@ RSpec.describe "volunteers/edit", type: :system do
       expect(page).to have_selector("#twilio_enabled")
     end
 
-    context " admin's organization does not have twilio enabled" do
+    context "admin's organization does not have twilio enabled" do
       it "displays a disabed (SMS) button with appropriate message" do
         org_twilio = create(:casa_org, twilio_enabled: false)
         admin_twilio = create(:casa_admin, casa_org: org_twilio)
@@ -598,7 +598,7 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer)
 
         expect(page).not_to have_link("Impersonate")
-        expect(current_path).not_to eq(edit_volunteer_path(volunteer))
+        expect(page).to have_no_current_path(edit_volunteer_path(volunteer), ignore_query: true)
       end
     end
   end
@@ -622,7 +622,7 @@ RSpec.describe "volunteers/edit", type: :system do
           click_on("Save Note")
         end
 
-        expect(current_path).to eq(edit_volunteer_path(volunteer))
+        expect(page).to have_current_path(edit_volunteer_path(volunteer), ignore_query: true)
         within(".notes") do
           expect(page).to have_text("Great job today.")
           expect(page).to have_text(admin.display_name)
@@ -670,7 +670,7 @@ RSpec.describe "volunteers/edit", type: :system do
           click_on("Save Note")
         end
 
-        expect(current_path).to eq(edit_volunteer_path(volunteer))
+        expect(page).to have_current_path(edit_volunteer_path(volunteer), ignore_query: true)
         within(".notes") do
           expect(page).to have_text("Great job today.")
           expect(page).to have_text(volunteer.supervisor.display_name)

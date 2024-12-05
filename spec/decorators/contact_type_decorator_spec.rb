@@ -20,9 +20,9 @@ RSpec.describe ContactTypeDecorator do
   end
 
   describe "last_time_used_with_cases" do
-    let(:casa_case_ids) { [] }
-
     subject { contact_type.decorate.last_time_used_with_cases casa_case_ids }
+
+    let(:casa_case_ids) { [] }
 
     context "with empty array" do
       it { is_expected.to eq "never" }

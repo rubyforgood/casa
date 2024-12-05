@@ -1,6 +1,11 @@
 require "rails_helper"
 
 RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :system do
+  subject do
+    sign_in user
+    visit new_case_contact_path(casa_case)
+  end
+
   let(:casa_org) { create :casa_org, :all_reimbursements_enabled }
   let(:casa_case) { volunteer.casa_cases.first }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
@@ -18,11 +23,6 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   let(:autosave_alert_div) { "#contact-form-notes" }
   let(:autosave_alert_css) { 'small[role="alert"]' }
   let(:autosave_alert_text) { "Saved!" }
-
-  subject do
-    sign_in user
-    visit new_case_contact_path(casa_case)
-  end
 
   def notes_section
     page.find_by_id("contact-form-notes")
@@ -144,12 +144,12 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   end
 
   context "when editing existing an case contact" do
-    let(:case_contact) { create :case_contact, casa_case:, creator: user }
-
     subject do
       sign_in user
       visit edit_case_contact_path(case_contact)
     end
+
+    let(:case_contact) { create :case_contact, casa_case:, creator: user }
 
     context "when there are existing contact topic answers" do
       let(:topic_one) { contact_topics.first }

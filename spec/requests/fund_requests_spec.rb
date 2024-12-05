@@ -134,7 +134,7 @@ RSpec.describe FundRequestsController, type: :request do
             mail = ActionMailer::Base.deliveries.last
             aggregate_failures do
               expect(mail.subject).to eq("Fund request from submitter@example.com")
-              expect(mail.to).to match_array(["recipient@example.com", "submitter@example.com"])
+              expect(mail.to).to contain_exactly("recipient@example.com", "submitter@example.com")
               expect(mail.body.encoded).to include("Youth name")
               expect(mail.body.encoded).to include("CINA-123")
               expect(mail.body.encoded).to include("Payment amount")
@@ -164,10 +164,10 @@ RSpec.describe FundRequestsController, type: :request do
             allow_any_instance_of(FundRequest).to receive(:save).and_return(false)
 
             sign_in volunteer
-            expect(FundRequestMailer).to_not receive(:send_request)
+            expect(FundRequestMailer).not_to receive(:send_request)
             expect {
               post casa_case_fund_request_path(casa_case), params: params
-            }.to_not change(FundRequest, :count)
+            }.not_to change(FundRequest, :count)
 
             expect(response).to have_http_status(:unprocessable_entity)
           end
@@ -180,10 +180,10 @@ RSpec.describe FundRequestsController, type: :request do
           casa_case = create(:casa_case, casa_org: create(:casa_org))
 
           sign_in volunteer
-          expect(FundRequestMailer).to_not receive(:send_request)
+          expect(FundRequestMailer).not_to receive(:send_request)
           expect {
             post casa_case_fund_request_path(casa_case), params: params
-          }.to_not change(FundRequest, :count)
+          }.not_to change(FundRequest, :count)
 
           expect(response).to redirect_to root_path
         end

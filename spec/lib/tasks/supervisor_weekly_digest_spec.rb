@@ -12,6 +12,7 @@ RSpec.describe SupervisorWeeklyDigest do
           create(:supervisor, active: true)
           create(:supervisor, active: false)
         end
+
         after { travel_back }
 
         it "only sends to active supervisor" do

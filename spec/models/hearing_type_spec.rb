@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe HearingType, type: :model do
   it { is_expected.to belong_to(:casa_org) }
   it { is_expected.to validate_presence_of(:name) }
-  it { should have_many(:checklist_items) }
+  it { is_expected.to have_many(:checklist_items) }
 
   describe "for_organization" do
     let!(:casa_org_1) { create(:casa_org) }

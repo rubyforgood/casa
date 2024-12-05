@@ -22,14 +22,14 @@ RSpec.describe "ReimbursementDatatable" do
   # Requires the following to be defined:
   # - `sorted_case_contacts` = array of reimbursement records ordered in the expected way
   RSpec.shared_examples_for "a sorted results set" do
-    it "should order ascending by default" do
+    it "orders ascending by default" do
       expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
     end
 
     describe "explicit ascending order" do
       let(:order_direction) { "ASC" }
 
-      it "should order correctly" do
+      it "orders correctly" do
         expect(first_result[:id]).to eq(sorted_case_contacts.first.id.to_s)
       end
     end
@@ -37,7 +37,7 @@ RSpec.describe "ReimbursementDatatable" do
     describe "descending order" do
       let(:order_direction) { "DESC" }
 
-      it "should order correctly" do
+      it "orders correctly" do
         expect(first_result[:id]).to eq(sorted_case_contacts.last.id.to_s)
       end
     end
@@ -68,6 +68,7 @@ RSpec.describe "ReimbursementDatatable" do
 
     describe ":contact_types" do
       subject(:contact_types) { first_result[:contact_types] }
+
       let(:expected_contact_types) do
         first_contact.contact_types.map do |ct|
           {
@@ -123,15 +124,15 @@ RSpec.describe "ReimbursementDatatable" do
       end.flatten
     end
 
-    it "should have the correct recordsFiltered" do
+    it "has the correct recordsFiltered" do
       expect(json_result[:recordsFiltered]).to eq(15)
     end
 
-    it "should have the correct recordsTotal" do
+    it "has the correct recordsTotal" do
       expect(json_result[:recordsTotal]).to eq(15)
     end
 
-    it "should yield the correct number of records" do
+    it "yields the correct number of records" do
       expect(json_result[:data].size).to eq 10
     end
 
@@ -168,14 +169,14 @@ RSpec.describe "ReimbursementDatatable" do
       let(:first_case_number) { first_result[:casa_case][:case_number] }
       let(:lowest_case_number) { sorted_case_contacts.first.casa_case.case_number }
 
-      it "should order ascending by default" do
+      it "orders ascending by default" do
         expect(first_case_number).to eq(lowest_case_number)
       end
 
       describe "explicit ascending order" do
         let(:order_direction) { "ASC" }
 
-        it "should order correctly" do
+        it "orders correctly" do
           expect(first_case_number).to eq(lowest_case_number)
         end
       end
@@ -184,7 +185,7 @@ RSpec.describe "ReimbursementDatatable" do
         let(:order_direction) { "DESC" }
         let(:highest_case_number) { sorted_case_contacts.last.casa_case.case_number }
 
-        it "should order correctly" do
+        it "orders correctly" do
           expect(first_case_number).to eq(highest_case_number)
         end
       end

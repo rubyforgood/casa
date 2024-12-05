@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :notification, class: Noticed::Notification do
+  factory :notification, class: "Noticed::Notification" do
     association :recipient, factory: :volunteer
     association :event, factory: :followup_notifier
     recipient_type { "User" }

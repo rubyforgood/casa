@@ -22,9 +22,11 @@ RSpec.describe "PreferenceSets", type: :request do
 
   describe "POST /preference_sets/table_state_update/volunteers_table" do
     subject { post "/preference_sets/table_state_update/volunteers_table", params: {table_name: "volunteers_table", table_state: table_state} }
+
     before do
       sign_in supervisor
     end
+
     it "updates the table state" do
       subject
       preference_set.reload

@@ -9,20 +9,20 @@ RSpec.describe HearingTypePolicy do
 
   permissions :new?, :create?, :edit?, :update? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "does not permit supervisor" do
-      is_expected.to_not permit(supervisor)
+      expect(subject).not_to permit(supervisor)
     end
 
     it "does not permit volunteer" do
-      is_expected.to_not permit(volunteer)
+      expect(subject).not_to permit(volunteer)
     end
   end
 
   describe "scope" do
-    it "should only return hearing types that belong to a given casa organization" do
+    it "onlies return hearing types that belong to a given casa organization" do
       hearing_type_1 = create(:hearing_type)
       hearing_type_2 = create(:hearing_type)
 
@@ -32,7 +32,7 @@ RSpec.describe HearingTypePolicy do
       hearing_type_3.update_attribute(:name, "unwanted hearing type")
 
       scoped_hearing_types = Pundit.policy_scope!(create(:casa_admin), HearingType).to_a
-      expect(scoped_hearing_types).to match_array([hearing_type_1, hearing_type_2])
+      expect(scoped_hearing_types).to contain_exactly(hearing_type_1, hearing_type_2)
     end
   end
 end

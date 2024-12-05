@@ -35,7 +35,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text(court_order.implementation_status.humanize)
     end
 
-    it "edits case", js: true do
+    it "edits case", :js do
       visit casa_case_path(casa_case.id)
       click_on "Edit Case Details"
       select "Submitted", from: "casa_case_court_report_status"
@@ -61,12 +61,12 @@ RSpec.describe "Edit CASA Case", type: :system do
       has_checked_field? contact_type.name
     end
 
-    it "does not display anything when not part of the organization", js: true do
+    it "does not display anything when not part of the organization", :js do
       visit casa_case_path(other_org_casa_case.id)
       expect(page).to have_text("Sorry, you are not authorized to perform this action.")
     end
 
-    it "deactivates a case when part of the same organization", js: true do
+    it "deactivates a case when part of the same organization", :js do
       visit edit_casa_case_path(casa_case)
 
       click_on "Deactivate CASA Case"
@@ -74,9 +74,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
       expect(page).to have_text("Reactivate CASA Case")
-      expect(page).to_not have_text("Court Date")
-      expect(page).to_not have_text("Court Report Due Date")
-      expect(page).to_not have_field("Court Report Due Date")
+      expect(page).not_to have_text("Court Date")
+      expect(page).not_to have_text("Court Report Due Date")
+      expect(page).not_to have_field("Court Report Due Date")
     end
 
     it "does not allow an admin to deactivate a case if not in an organization" do
@@ -84,7 +84,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Sorry, you are not authorized to perform this action.")
     end
 
-    it "reactivates a case", js: true do
+    it "reactivates a case", :js do
       visit edit_casa_case_path(casa_case)
       click_on "Deactivate CASA Case"
       click_on "Yes, deactivate"
@@ -98,37 +98,37 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "when trying to assign a volunteer to a case" do
-      it "should be able to assign volunteers if in the same organization", js: true do
+      it "is able to assign volunteers if in the same organization", :js do
         visit edit_casa_case_path(casa_case)
 
         expect(page).to have_content("Manage Volunteers")
         expect(page).to have_css("#volunteer-assignment")
       end
 
-      it "should error if trying to assign volunteers for another organization" do
+      it "errors if trying to assign volunteers for another organization" do
         visit edit_casa_case_path(other_org_casa_case)
         expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
     end
 
     context "Copy all court orders from a case" do
-      it "should not allow access to cases not within the organization" do
+      it "does not allow access to cases not within the organization" do
         visit edit_casa_case_path(other_org_casa_case)
         expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
 
-      it "copy button should be disabled when no case is selected", js: true do
+      it "copy button should be disabled when no case is selected", :js do
         visit edit_casa_case_path(casa_case)
         expect(page).to have_button("copy-court-button", disabled: true)
       end
 
-      it "copy button should be enabled when a case is selected", js: true do
+      it "copy button should be enabled when a case is selected", :js do
         visit edit_casa_case_path(casa_case)
         select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
         expect(page).to have_button("copy-court-button", disabled: false)
       end
 
-      it "should contains all case from organization except current case", js: true do
+      it "containses all case from organization except current case", :js do
         visit edit_casa_case_path(casa_case)
         within "#casa_case_siblings_casa_cases" do
           siblings_casa_cases.each do |scc|
@@ -138,7 +138,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         end
       end
 
-      it "should copy all court orders from selected case", js: true do
+      it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first
@@ -158,7 +158,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         end
       end
 
-      it "should not overwrite existing court orders", js: true do
+      it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first
@@ -177,7 +177,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(casa_case.case_court_orders.count).to be >= current_orders.count
       end
 
-      it "should not move court orders from one case to another", js: true do
+      it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first
@@ -207,7 +207,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it_behaves_like "shows court dates links"
 
-    it "edits case", js: true do
+    it "edits case", :js do
       stub_twilio
       visit casa_case_path(casa_case)
       expect(page).to have_text("Court Report Status: Not submitted")
@@ -291,7 +291,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       after { travel_back }
 
       context "when a volunteer is assigned to a case" do
-        it "marks the volunteer as assigned and shows the start date of the assignment", js: true do
+        it "marks the volunteer as assigned and shows the start date of the assignment", :js do
           sign_in_and_assign_volunteer
           expect(casa_case.case_assignments.count).to eq 1
 
@@ -313,7 +313,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
 
       context "when a volunteer is unassigned from a case" do
-        it "marks the volunteer as unassigned and shows assignment start/end dates", js: true do
+        it "marks the volunteer as unassigned and shows assignment start/end dates", :js do
           sign_in_and_assign_volunteer
           unassign_button = page.find("button.btn-outline-danger")
           expect(unassign_button.text).to eq "Unassign Volunteer"
@@ -336,7 +336,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when supervisor other than volunteer's supervisor" do
         before { volunteer.update(supervisor: build(:supervisor)) }
 
-        it "unassigns volunteer", js: true do
+        it "unassigns volunteer", :js do
           sign_in_and_assign_volunteer
           unassign_button = page.find("button.btn-outline-danger")
           expect(unassign_button.text).to eq "Unassign Volunteer"
@@ -398,7 +398,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       end
     end
 
-    context "deleting court orders", js: true do
+    context "deleting court orders", :js do
       let(:casa_case) { create(:casa_case, :with_one_court_order, :with_casa_case_contact_types) }
       let(:text) { casa_case.case_court_orders.first.text }
 
@@ -411,18 +411,19 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records of it unless it was included in a previous court report.")
 
         find("button.swal2-confirm").click
-        expect(page).to_not have_text(text)
+        expect(page).not_to have_text(text)
 
         within ".actions-cc" do
           click_on "Update CASA Case"
         end
-        expect(page).to_not have_text(text)
+        expect(page).not_to have_text(text)
       end
     end
 
     context "a casa case with contact type" do
       let(:organization) { build(:casa_org) }
       let(:casa_case_with_contact_type) { create(:casa_case, :with_casa_case_contact_types, casa_org: organization) }
+
       it "has contact type checked" do
         contact_types = casa_case_with_contact_type.contact_types.map(&:id)
         visit edit_casa_case_path(casa_case_with_contact_type)
@@ -437,7 +438,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "when trying to assign a volunteer to a case" do
-      it "should be able to assign volunteers", js: true do
+      it "is able to assign volunteers", :js do
         visit edit_casa_case_path(casa_case)
 
         expect(page).to have_content("Manage Volunteers")
@@ -526,7 +527,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Report Status: Submitted")
     end
 
-    it "adds a standard court order", js: true do
+    it "adds a standard court order", :js do
       visit edit_casa_case_path(casa_case)
       select("Family therapy", from: "Court Order Type")
       click_button("Add a court order")
@@ -535,7 +536,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(textarea.value).to eq("Family therapy")
     end
 
-    it "adds a custom court order", js: true do
+    it "adds a custom court order", :js do
       visit edit_casa_case_path(casa_case)
       click_button("Add a court order")
 
@@ -544,18 +545,18 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "Copy all court orders from a case" do
-      it "copy button should be disabled when no case is selected", js: true do
+      it "copy button should be disabled when no case is selected", :js do
         visit edit_casa_case_path(casa_case)
         expect(page).to have_button("copy-court-button", disabled: true)
       end
 
-      it "copy button should be enabled when a case is selected", js: true do
+      it "copy button should be enabled when a case is selected", :js do
         visit edit_casa_case_path(casa_case)
         select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
         expect(page).to have_button("copy-court-button", disabled: false)
       end
 
-      it "copy button and select shouldn't be visible when a volunteer only has one case", js: true do
+      it "copy button and select shouldn't be visible when a volunteer only has one case", :js do
         volunteer = build(:volunteer)
         casa_case = create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org)
         create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
@@ -564,7 +565,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).not_to have_selector("casa_case_siblings_casa_cases")
       end
 
-      it "should contains all cases associated to current volunteer except current case", js: true do
+      it "containses all cases associated to current volunteer except current case", :js do
         visit edit_casa_case_path(casa_case)
         within "#casa_case_siblings_casa_cases" do
           siblings_casa_cases.each do |scc|
@@ -574,7 +575,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         end
       end
 
-      it "should copy all court orders from selected case", js: true do
+      it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first
@@ -594,7 +595,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         end
       end
 
-      it "should not overwrite existing court orders", js: true do
+      it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first
@@ -613,7 +614,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(casa_case.case_court_orders.count).to be >= current_orders.count
       end
 
-      it "should not move court orders from one case to another", js: true do
+      it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
         click_on "Edit Case Details"
         selected_case = siblings_casa_cases.first

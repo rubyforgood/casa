@@ -12,7 +12,7 @@ RSpec.describe "deep_link", type: :system do
         within ".actions" do
           find("#log-in").click
         end
-        expect(current_path).to eq "/users/edit"
+        expect(page).to have_current_path "/users/edit", ignore_query: true
         expect(page).to have_text "Edit Profile"
       end
     end

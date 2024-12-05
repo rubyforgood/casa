@@ -40,7 +40,7 @@ RSpec.describe CaseContactParameters do
       expect(subject["contact_topic_answers_attributes"]["0"].to_h).to eq(expected_attrs)
 
       expect(subject["metadata"]["create_another"]).to eq(true)
-      expect(subject["metadata"]["bad_key"]).to_not be_present
+      expect(subject["metadata"]["bad_key"]).not_to be_present
     end
   end
 end

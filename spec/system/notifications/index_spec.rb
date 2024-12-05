@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "notifications/index", type: :system, js: true do
+RSpec.describe "notifications/index", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:volunteer) { build(:volunteer) }
   let(:case_contact) { create(:case_contact, creator: volunteer) }
@@ -48,7 +48,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
     end
   end
 
-  context "FollowupNotifier", js: true do
+  context "FollowupNotifier", :js do
     let(:note) { "Lorem ipsum dolor sit amet." }
 
     let(:notification_message_heading) { "#{admin.display_name} has flagged a Case Contact that needs follow up." }
@@ -146,7 +146,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
       visit notifications_path
     end
 
-    it "should display a notification reminder that links to the emancipation checklist" do
+    it "displays a notification reminder that links to the emancipation checklist" do
       notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Emancipation Checklist Reminder")
@@ -164,7 +164,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
       visit notifications_path
     end
 
-    it "should display a notification on the notifications page" do
+    it "displays a notification on the notifications page" do
       notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Youth Birthday Notification")
@@ -173,7 +173,7 @@ RSpec.describe "notifications/index", type: :system, js: true do
   end
 
   context "ReimbursementCompleteNotifier" do
-    it "should display a notification on the notifications page" do
+    it "displays a notification on the notifications page" do
       case_contact = create(:case_contact, :wants_reimbursement, casa_case: volunteer.casa_cases.first)
       notifier = create(:reimbursement_complete_notifier, params: {case_contact: case_contact})
       notification = create(:notification, :reimbursement_complete, event: notifier)

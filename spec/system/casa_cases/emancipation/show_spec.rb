@@ -14,7 +14,7 @@ RSpec.describe "casa_cases/show", type: :system do
     visit casa_case_emancipation_path(casa_case.id)
   end
 
-  context "volunteer user", js: true do
+  context "volunteer user", :js do
     let(:user) { volunteer }
 
     it "has a title" do
