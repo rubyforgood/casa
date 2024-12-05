@@ -212,6 +212,18 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       end
     end
 
+    context "with duplicate contact type ids in params" do
+      let(:contact_type_ids) { [contact_types.first.id, contact_types.first.id] }
+
+      it "dedupes and updates the contact type ids" do
+        expect(case_contact.contact_type_ids).to be_empty
+        request
+        expect(response).to have_http_status(:redirect)
+
+        expect(case_contact.reload.contact_type_ids).to contain_exactly(contact_types.first.id)
+      end
+    end
+
     context "when contact types were previously assigned" do
       before { case_contact.update!(contact_type_ids: [contact_types.second.id]) }
 
