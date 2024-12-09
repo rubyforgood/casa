@@ -16,9 +16,7 @@ class FollowupService
     followup
   end
 
-  private_class_method
-
-  def self.send_notification(followup, creator)
+  private_class_method def self.send_notification(followup, creator)
     FollowupNotifier
       .with(followup: followup, created_by: creator)
       .deliver(followup.case_contact.creator)
