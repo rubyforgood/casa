@@ -36,6 +36,7 @@ class CaseContactParameters < SimpleDelegator
       params[:case_contact][:miles_driven] = convert_miles_driven(params)
     end
     params[:case_contact][:notes] = params.dig(:case_contact, :notes).presence
+    params[:case_contact][:contact_type_ids] = params[:case_contact][:contact_type_ids]&.uniq
 
     params
   end
