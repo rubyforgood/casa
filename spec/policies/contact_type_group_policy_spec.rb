@@ -9,15 +9,15 @@ RSpec.describe ContactTypeGroupPolicy do
 
   permissions :new?, :create?, :edit?, :update? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "does not permit supervisor" do
-      is_expected.to_not permit(supervisor)
+      expect(subject).not_to permit(supervisor)
     end
 
     it "does not permit volunteer" do
-      is_expected.to_not permit(volunteer)
+      expect(subject).not_to permit(volunteer)
     end
   end
 end

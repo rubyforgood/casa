@@ -12,7 +12,7 @@ RSpec.describe CasaCasePolicy::Scope do
 
       scope = described_class.new(user, organization.casa_cases)
 
-      expect(scope.resolve).to contain_exactly(*all_casa_cases)
+      expect(scope.resolve).to match_array(all_casa_cases)
     end
 
     it "returns active cases of the volunteer when user is volunteer" do

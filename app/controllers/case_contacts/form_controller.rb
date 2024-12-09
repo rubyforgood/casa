@@ -74,16 +74,12 @@ class CaseContacts::FormController < ApplicationController
       .active
       .where(casa_case_contact_types: {casa_case_id: @casa_cases.pluck(:id)})
 
-    if case_contact_types.present?
-      case_contact_types
-    else
-      ContactType
-        .includes(:contact_type_group)
-        .joins(:contact_type_group)
-        .active
-        .where(contact_type_group: {casa_org: current_organization})
-        .order("contact_type_group.name ASC", :name)
-    end
+    case_contact_types.presence || ContactType
+      .includes(:contact_type_group)
+      .joins(:contact_type_group)
+      .active
+      .where(contact_type_group: {casa_org: current_organization})
+      .order("contact_type_group.name ASC", :name)
   end
 
   def get_contact_topics

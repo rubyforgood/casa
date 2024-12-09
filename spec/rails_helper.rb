@@ -111,7 +111,7 @@ RSpec.configure do |config|
     sprockets-rails pundit
   ])
 
-  config.around :each do |example|
+  config.around do |example|
     # If timeout is not set it will run without a timeout
     Timeout.timeout(ENV["TEST_MAX_DURATION"].to_i) do
       example.run

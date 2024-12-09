@@ -10,65 +10,69 @@ RSpec.describe VolunteerPolicy do
   permissions :edit? do
     context "same org" do
       let(:record) { build_stubbed(:volunteer, casa_org: admin.casa_org) }
+
       context "when user is a casa admin" do
         it "allows for same org" do
-          is_expected.to permit(admin, record)
+          expect(subject).to permit(admin, record)
         end
       end
 
       context "when user is a supervisor" do
         it "allows" do
-          is_expected.to permit(supervisor, record)
+          expect(subject).to permit(supervisor, record)
         end
       end
 
       context "when user is a volunteer" do
         it "does not permit" do
-          is_expected.not_to permit(volunteer)
+          expect(subject).not_to permit(volunteer)
         end
       end
     end
 
     context "different org" do
       let(:record) { build_stubbed(:volunteer, casa_org: build_stubbed(:casa_org)) }
+
       context "when user is a casa admin" do
         it "does not allow for different org" do
-          is_expected.not_to permit(admin, record)
+          expect(subject).not_to permit(admin, record)
         end
       end
 
       context "when user is a supervisor" do
         it "does not allow" do
-          is_expected.not_to permit(supervisor, record)
+          expect(subject).not_to permit(supervisor, record)
         end
       end
 
       context "when user is a volunteer" do
         it "does not permit" do
-          is_expected.not_to permit(volunteer)
+          expect(subject).not_to permit(volunteer)
         end
       end
     end
   end
 
-  permissions :index?, :show?, :datatable?, :update?, :activate?, :deactivate?, :create?, :new? do
+  permissions :index?, :activate?, :create?, :datatable?, :deactivate?, :new?, :show?, :update? do
     context "when user is a casa admin" do
       let(:record) { build_stubbed(:volunteer, casa_org: admin.casa_org) }
+
       it "allows" do
-        is_expected.to permit(admin, record)
+        expect(subject).to permit(admin, record)
       end
     end
 
     context "when user is a supervisor" do
       let(:record) { build_stubbed(:volunteer, casa_org: supervisor.casa_org) }
+
       it "allows" do
-        is_expected.to permit(supervisor, record)
+        expect(subject).to permit(supervisor, record)
       end
     end
 
     context "when user is a volunteer" do
       it "does not permit" do
-        is_expected.not_to permit(volunteer)
+        expect(subject).not_to permit(volunteer)
       end
     end
   end
@@ -76,19 +80,19 @@ RSpec.describe VolunteerPolicy do
   permissions :update_volunteer_email? do
     context "when user is a casa admin" do
       it "allows" do
-        is_expected.to permit(admin)
+        expect(subject).to permit(admin)
       end
     end
 
     context "when user is a supervisor" do
       it "does not permit" do
-        is_expected.to permit(supervisor)
+        expect(subject).to permit(supervisor)
       end
     end
 
     context "when user is a volunteer" do
       it "does not permit" do
-        is_expected.not_to permit(volunteer)
+        expect(subject).not_to permit(volunteer)
       end
     end
   end

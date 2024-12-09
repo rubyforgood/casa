@@ -6,6 +6,7 @@ RSpec.describe "/dashboard", type: :request do
   context "as a volunteer" do
     let(:volunteer) { create(:volunteer, casa_org: organization) }
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer) }
+
     before do
       sign_in volunteer
     end

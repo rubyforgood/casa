@@ -21,6 +21,7 @@ RSpec.describe Supervisor, type: :model do
     let(:two_weeks) { I18n.l(2.weeks.from_now, format: :full, default: nil) }
 
     it { expect(expiration_date).to eq two_weeks }
+
     it "expires invitation token after two weeks" do
       travel_to 2.weeks.from_now
 
@@ -47,11 +48,11 @@ RSpec.describe Supervisor, type: :model do
   end
 
   describe "not_signed_in_nor_have_case_contacts_volunteers" do
+    subject { supervisor.inactive_volunteers }
+
     let(:supervisor) { create(:supervisor) }
     let(:volunteer) { create(:volunteer, last_sign_in_at: 31.days.ago) }
     let(:other_volunteer) { create(:volunteer, last_sign_in_at: 29.days.ago) }
-
-    subject { supervisor.inactive_volunteers }
 
     before do
       create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer)
@@ -67,7 +68,7 @@ RSpec.describe Supervisor, type: :model do
         it "is empty" do
           sign_out volunteer
 
-          is_expected.to be_empty
+          expect(subject).to be_empty
         end
       end
     end

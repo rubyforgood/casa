@@ -7,11 +7,11 @@ RSpec.describe "reimbursements/index", type: :view do
     allow(view).to receive(:current_user).and_return(admin)
   end
 
-  it "should not have any translation missing classes" do
+  it "does not have any translation missing classes" do
     supervisor = create :supervisor
     volunteer = create :volunteer, supervisor: supervisor
 
-    case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: Time.current - 6.days
+    case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: 6.days.ago
     assign :reimbursements, [case_contact]
     assign :grouped_reimbursements, []
     assign :volunteers_for_filter, []

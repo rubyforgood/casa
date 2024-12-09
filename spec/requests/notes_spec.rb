@@ -24,7 +24,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in admin
         expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end
@@ -51,7 +51,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in supervisor
         expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end
@@ -64,7 +64,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in volunteer
         expect {
           post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end
@@ -286,7 +286,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in admin
         expect {
           delete volunteer_note_path(volunteer, note)
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end
@@ -315,7 +315,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in supervisor
         expect {
           delete volunteer_note_path(volunteer, note)
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end
@@ -328,7 +328,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in volunteer
         expect {
           delete volunteer_note_path(volunteer, note)
-        }.to_not change(Note, :count)
+        }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
     end

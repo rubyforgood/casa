@@ -36,7 +36,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
     }
   end
 
-  before(:each) { sign_in all_casa_admin }
+  before { sign_in all_casa_admin }
 
   describe "GET /index" do
     it "renders a successful response" do
@@ -57,7 +57,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       it "shows json indicating the patch note was created" do
         post all_casa_admins_patch_notes_path, params: valid_attributes
         expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(response.body).to_not be_nil
+        expect(response.body).not_to be_nil
         expect(response).to have_http_status(:created)
       end
     end
@@ -66,13 +66,13 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       it "does not create a new PatchNote" do
         expect {
           post all_casa_admins_patch_notes_path, params: invalid_attributes
-        }.to change(PatchNote, :count).by(0)
+        }.not_to change(PatchNote, :count)
       end
 
       it "shows json indicating the patch note could not be created" do
         post all_casa_admins_patch_notes_path, params: invalid_attributes
         expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(response.body).to_not be_nil
+        expect(response.body).not_to be_nil
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to have_key("errors")
       end
@@ -80,7 +80,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       it "shows json with the id of the patch note created" do
         post all_casa_admins_patch_notes_path, params: valid_attributes
         expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(response.body).to_not be_nil
+        expect(response.body).not_to be_nil
         expect(response).to have_http_status(:created)
         expect(JSON.parse(response.body)).to have_key("id")
       end
@@ -113,7 +113,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: new_attributes
         expect(response.header["Content-Type"]).to match(/application\/json/)
-        expect(response.body).to_not be_nil
+        expect(response.body).not_to be_nil
         expect(response).to have_http_status(:ok)
       end
     end
@@ -122,7 +122,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       it "renders a successful response (a json with a list of errors)" do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: invalid_attributes
-        expect(response.body).to_not be_nil
+        expect(response.body).not_to be_nil
         expect(response).to have_http_status(:unprocessable_entity)
         expect(JSON.parse(response.body)).to have_key("errors")
       end
@@ -141,7 +141,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
       patch_note = PatchNote.create! valid_attributes
       delete all_casa_admins_patch_note_path(patch_note)
       expect(response.header["Content-Type"]).to match(/application\/json/)
-      expect(response.body).to_not be_nil
+      expect(response.body).not_to be_nil
       expect(response).to have_http_status(:ok)
     end
   end

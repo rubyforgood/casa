@@ -69,7 +69,7 @@ RSpec.describe CaseContactsHelper, type: :helper do
   end
 
   describe "#show_volunteer_reimbursement" do
-    before(:each) do
+    before do
       @casa_cases = []
       @casa_cases << create(:casa_case)
       @casa_org = @casa_cases[0].casa_org

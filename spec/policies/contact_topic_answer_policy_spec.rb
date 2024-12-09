@@ -1,6 +1,8 @@
 require "rails_helper"
 
-RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true do
+RSpec.describe ContactTopicAnswerPolicy, :aggregate_failures, type: :policy do
+  subject { described_class }
+
   let(:casa_org) { create :casa_org }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:supervisor) { create :supervisor, casa_org: }
@@ -34,38 +36,36 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
     create :contact_topic_answer, case_contact: other_org_case_contact, contact_topic: other_org_contact_topic
   end
 
-  subject { described_class }
-
   permissions :create?, :destroy? do
     it "does not permit a nil user" do
-      is_expected.not_to permit(nil, contact_topic_answer)
+      expect(subject).not_to permit(nil, contact_topic_answer)
     end
 
     it "permits a volunteer who created the case contact" do
-      is_expected.to permit(volunteer, contact_topic_answer)
-      is_expected.to permit(volunteer, draft_contact_topic_answer)
-      is_expected.not_to permit(volunteer, same_case_volunteer_contact_topic_answer)
-      is_expected.not_to permit(volunteer, other_org_contact_topic_answer)
+      expect(subject).to permit(volunteer, contact_topic_answer)
+      expect(subject).to permit(volunteer, draft_contact_topic_answer)
+      expect(subject).not_to permit(volunteer, same_case_volunteer_contact_topic_answer)
+      expect(subject).not_to permit(volunteer, other_org_contact_topic_answer)
     end
 
     it "permits same_org supervisors" do
-      is_expected.to permit(supervisor, contact_topic_answer)
-      is_expected.to permit(supervisor, draft_contact_topic_answer)
-      is_expected.to permit(supervisor, same_case_volunteer_contact_topic_answer)
+      expect(subject).to permit(supervisor, contact_topic_answer)
+      expect(subject).to permit(supervisor, draft_contact_topic_answer)
+      expect(subject).to permit(supervisor, same_case_volunteer_contact_topic_answer)
 
-      is_expected.not_to permit(supervisor, other_org_contact_topic_answer)
+      expect(subject).not_to permit(supervisor, other_org_contact_topic_answer)
     end
 
     it "permits same org casa admins" do
-      is_expected.to permit(casa_admin, contact_topic_answer)
-      is_expected.to permit(casa_admin, draft_contact_topic_answer)
-      is_expected.to permit(casa_admin, same_case_volunteer_contact_topic_answer)
+      expect(subject).to permit(casa_admin, contact_topic_answer)
+      expect(subject).to permit(casa_admin, draft_contact_topic_answer)
+      expect(subject).to permit(casa_admin, same_case_volunteer_contact_topic_answer)
 
-      is_expected.not_to permit(casa_admin, other_org_contact_topic_answer)
+      expect(subject).not_to permit(casa_admin, other_org_contact_topic_answer)
     end
 
     it "does not permit an all casa admin" do
-      is_expected.not_to permit(all_casa_admin, contact_topic_answer)
+      expect(subject).not_to permit(all_casa_admin, contact_topic_answer)
     end
   end
 
@@ -83,7 +83,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       let(:user) { nil }
 
       it "returns no contact topic answers" do
-        is_expected.not_to include(contact_topic_answer, other_org_contact_topic_answer)
+        expect(subject).not_to include(contact_topic_answer, other_org_contact_topic_answer)
       end
     end
 
@@ -91,8 +91,8 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       let(:user) { volunteer }
 
       it "returns contact topic answers of contacts created by the volunteer" do
-        is_expected.to include(contact_topic_answer, draft_contact_topic_answer)
-        is_expected.not_to include(same_case_volunteer_contact_topic_answer, other_org_contact_topic_answer)
+        expect(subject).to include(contact_topic_answer, draft_contact_topic_answer)
+        expect(subject).not_to include(same_case_volunteer_contact_topic_answer, other_org_contact_topic_answer)
       end
     end
 
@@ -100,9 +100,9 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       let(:user) { supervisor }
 
       it "returns same org contact topic answers" do
-        is_expected
+        expect(subject)
           .to include(contact_topic_answer, draft_contact_topic_answer, same_case_volunteer_contact_topic_answer)
-        is_expected.not_to include(other_org_contact_topic_answer)
+        expect(subject).not_to include(other_org_contact_topic_answer)
       end
     end
 
@@ -110,9 +110,9 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       let(:user) { casa_admin }
 
       it "includes same org contact topic answers" do
-        is_expected
+        expect(subject)
           .to include(contact_topic_answer, draft_contact_topic_answer, same_case_volunteer_contact_topic_answer)
-        is_expected.not_to include(other_org_contact_topic_answer)
+        expect(subject).not_to include(other_org_contact_topic_answer)
       end
     end
 
@@ -120,7 +120,7 @@ RSpec.describe ContactTopicAnswerPolicy, type: :policy, aggregate_failures: true
       let(:user) { all_casa_admin }
 
       it "returns no contact topic answers" do
-        is_expected.not_to include(contact_topic_answer, other_org_contact_topic_answer)
+        expect(subject).not_to include(contact_topic_answer, other_org_contact_topic_answer)
       end
     end
   end

@@ -19,7 +19,7 @@ RSpec.describe "supervisors/edit", type: :view do
     render template: "supervisors/edit"
 
     expect(rendered).to include(unassign_supervisor_volunteer_path(volunteer))
-    expect(rendered).to_not include("Unassigned")
+    expect(rendered).not_to include("Unassigned")
   end
 
   it "does not display the 'Unassign' button next to volunteer no longer supervised by the supervisor" do
@@ -35,7 +35,7 @@ RSpec.describe "supervisors/edit", type: :view do
 
     render template: "supervisors/edit"
 
-    expect(rendered).to_not include(unassign_supervisor_volunteer_path(volunteer))
+    expect(rendered).not_to include(unassign_supervisor_volunteer_path(volunteer))
     expect(rendered).to include("Unassigned")
   end
 

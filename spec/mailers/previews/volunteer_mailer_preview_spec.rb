@@ -1,5 +1,5 @@
 require "rails_helper"
-require File.join(Rails.root, "lib", "mailers", "previews", "volunteer_mailer_preview")
+require Rails.root.join("lib/mailers/previews/volunteer_mailer_preview").to_s
 
 RSpec.describe VolunteerMailerPreview do
   let!(:volunteer) { create(:volunteer) }
@@ -49,6 +49,7 @@ RSpec.describe VolunteerMailerPreview do
       it { expect(email.to).to eq ["missing_volunteer@example.com"] }
     end
   end
+
   describe "#case_contacts_reminder" do
     context "When no ID is passed" do
       let(:preview) { described_class.new }

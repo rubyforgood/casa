@@ -276,7 +276,7 @@ RSpec.describe "/casa_admins", type: :request do
           patch deactivate_casa_admin_path(casa_admin_other)
 
           casa_admin_other.reload
-          expect(casa_admin_other).to_not be_active
+          expect(casa_admin_other).not_to be_active
 
           expect(response).to redirect_to edit_casa_admin_path(casa_admin_other)
           expect(response.request.flash[:notice]).to eq "Admin was deactivated."
@@ -416,7 +416,7 @@ RSpec.describe "/casa_admins", type: :request do
     end
 
     context "when creating new admin" do
-      it "sends SMS when phone number is provided " do
+      it "sends SMS when phone number is provided" do
         org = create(:casa_org, twilio_enabled: true)
         admin = create(:casa_admin, casa_org: org)
         twilio_activation_success_stub = WebMockHelper.twilio_activation_success_stub("admin")

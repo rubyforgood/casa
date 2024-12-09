@@ -1,11 +1,11 @@
 require "rails_helper"
 
 RSpec.describe ContactTopic, type: :model do
-  it { should belong_to(:casa_org) }
-  it { should have_many(:contact_topic_answers) }
+  it { is_expected.to belong_to(:casa_org) }
+  it { is_expected.to have_many(:contact_topic_answers) }
 
-  it { should validate_presence_of(:question) }
-  it { should validate_presence_of(:details) }
+  it { is_expected.to validate_presence_of(:question) }
+  it { is_expected.to validate_presence_of(:details) }
 
   describe "scopes" do
     describe ".active" do
@@ -54,7 +54,7 @@ RSpec.describe ContactTopic, type: :model do
         expect(details).to match_array(topics.map { |t| t["details"] })
       end
 
-      it "fails if not all required attrs are present " do
+      it "fails if not all required attrs are present" do
         fake_topics.first["question"] = nil
 
         expect { ContactTopic.generate_for_org!(org) }.to raise_error(ActiveRecord::RecordInvalid)

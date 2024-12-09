@@ -1,5 +1,5 @@
 class ContactTopic < ApplicationRecord
-  CASA_DEFAULT_COURT_TOPICS = Rails.root.join("db", "seeds", "default_contact_topics.yml")
+  CASA_DEFAULT_COURT_TOPICS = Rails.root.join("db/seeds/default_contact_topics.yml")
   belongs_to :casa_org
 
   has_many :contact_topic_answers

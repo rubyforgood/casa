@@ -28,7 +28,7 @@ RSpec.describe BackfillFollowupableService do
         expect(Rails.logger).to receive(:error).with(/Failed to update Followup/)
         expect {
           run_backfill
-        }.to_not change { followup.reload.followupable_id }
+        }.not_to change { followup.reload.followupable_id }
       end
     end
   end

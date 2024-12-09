@@ -28,6 +28,7 @@ RSpec.describe "LearningHours", type: :request do
 
   context "as a supervisor user" do
     let(:supervisor) { create(:supervisor) }
+
     before { sign_in supervisor }
 
     describe "GET /index" do
@@ -45,6 +46,7 @@ RSpec.describe "LearningHours", type: :request do
 
   context "as an admin user" do
     let(:admin) { create(:casa_admin) }
+
     before { sign_in admin }
 
     describe "GET /index" do

@@ -1,5 +1,5 @@
 RSpec.configure do |config|
-  config.before(:each) do
+  config.before do
     Rack::Attack.enabled = false
   end
 end

@@ -11,8 +11,8 @@ RSpec.describe VolunteerMailer, type: :mailer do
       expect(volunteer.reset_password_token).to be_nil
       expect(volunteer.reset_password_sent_at).to be_nil
       expect(mail.body.encoded.squish).to match("Set Your Password")
-      expect(volunteer.reset_password_token).to_not be_nil
-      expect(volunteer.reset_password_sent_at).to_not be_nil
+      expect(volunteer.reset_password_token).not_to be_nil
+      expect(volunteer.reset_password_sent_at).not_to be_nil
     end
   end
 

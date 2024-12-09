@@ -10,17 +10,17 @@ RSpec.describe DashboardPolicy do
 
   permissions :show? do
     it "permits user to show" do
-      is_expected.to permit(user)
+      expect(subject).to permit(user)
     end
   end
 
   permissions :see_volunteers_section? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer)
+      expect(subject).not_to permit(volunteer)
     end
   end
 
@@ -48,22 +48,22 @@ RSpec.describe DashboardPolicy do
   permissions :see_cases_section? do
     context "when user is a volunteer" do
       it "permits user to see cases section" do
-        is_expected.to permit(volunteer, :dashboard)
+        expect(subject).to permit(volunteer, :dashboard)
       end
     end
   end
 
   permissions :see_admins_section? do
     it "allows casa_admins" do
-      is_expected.to permit(casa_admin)
+      expect(subject).to permit(casa_admin)
     end
 
     it "does not allow supervisors and volunteers" do
-      is_expected.not_to permit(supervisor)
+      expect(subject).not_to permit(supervisor)
     end
 
     it "does not allow volunteers" do
-      is_expected.not_to permit(volunteer)
+      expect(subject).not_to permit(volunteer)
     end
   end
 end

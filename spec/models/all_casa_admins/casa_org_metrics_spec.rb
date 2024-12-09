@@ -6,6 +6,7 @@ RSpec.describe AllCasaAdmins::CasaOrgMetrics, type: :model do
 
   describe "#metrics" do
     subject { described_class.new(organization).metrics }
+
     context "minimal data" do
       it "shows stats" do
         expect(subject).to eq(
@@ -42,6 +43,7 @@ RSpec.describe AllCasaAdmins::CasaOrgMetrics, type: :model do
           create(obj_type, :inactive, casa_org: organization)
         end
       end
+
       it "shows stats" do
         expect(subject).to eq(
           {

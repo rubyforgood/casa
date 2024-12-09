@@ -21,7 +21,7 @@ RSpec.describe LearningHourTopic, type: :model do
     expect { create(:learning_hour_topic, casa_org: casa_org_one, name: "ethics") }
       .to raise_error(ActiveRecord::RecordInvalid)
     expect { create(:learning_hour_topic, casa_org: casa_org_two, name: "Ethics") }
-      .to_not raise_error
+      .not_to raise_error
   end
 
   describe "for_organization" do

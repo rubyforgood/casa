@@ -12,7 +12,6 @@ RSpec.describe SupervisorWeeklyDigest do
           create(:supervisor, active: true)
           create(:supervisor, active: false)
         end
-        after { travel_back }
 
         it "only sends to active supervisor" do
           expect { subject }.to change { ActionMailer::Base.deliveries.count }.by(1)
@@ -26,8 +25,6 @@ RSpec.describe SupervisorWeeklyDigest do
         travel_to Time.zone.local(2021, 9, 29, 12, 0, 0) # not monday
         create(:supervisor, active: true)
       end
-
-      after { travel_back }
 
       it "does not send email" do
         expect { subject }.not_to change { ActionMailer::Base.deliveries.count }

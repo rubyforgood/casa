@@ -1,0 +1,8 @@
+require:
+  - rubocop-capybara
+  - rubocop-factory_bot
+  - rubocop-rspec
+  - rubocop-rspec_rails
+
+inherit_gem:
+  pundit: config/rubocop-rspec.yml

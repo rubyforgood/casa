@@ -44,7 +44,7 @@ RSpec.describe ApplicationController, type: :controller do
       routes.draw { post "index" => "anonymous#index" }
       post :index
       expect(session[session_key]).not_to eq path
-      expect(session[session_key]).to be nil
+      expect(session[session_key]).to be_nil
     end
   end
 
@@ -68,14 +68,14 @@ RSpec.describe ApplicationController, type: :controller do
     end
   end
 
-  describe "Raise error: " do
-    it "should redirect to root_url if rescued Pundit::NotAuthorizedError" do
+  describe "Raise error:" do
+    it "redirects to root_url if rescued Pundit::NotAuthorizedError" do
       routes.draw { get :not_authorized_error, to: "anonymous#not_authorized_error" }
       get :not_authorized_error
       expect(response).to redirect_to(root_url)
     end
 
-    it "should redirect to root_url if rescued Organizational::UnknownOrganization" do
+    it "redirects to root_url if rescued Organizational::UnknownOrganization" do
       routes.draw { get :unknown_organization, to: "anonymous#unknown_organization" }
       get :unknown_organization
       expect(response).to redirect_to(root_url)
@@ -83,7 +83,7 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe "After signin path" do
-    it "should be equal to initial path" do
+    it "is equal to initial path" do
       routes.draw { get :index, to: "anonymous#index" }
       get :index
       path = controller.after_sign_in_path_for(volunteer)
@@ -92,11 +92,12 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe "After signout path" do
-    it "should be equal to new_all_casa_admin_session_path" do
+    it "is equal to new_all_casa_admin_session_path" do
       path = controller.after_sign_out_path_for(:all_casa_admin)
       expect(path).to eq(new_all_casa_admin_session_path)
     end
-    it "should be equal to root_path" do
+
+    it "is equal to root_path" do
       path = controller.after_sign_out_path_for(volunteer)
       expect(path).to eq(root_path)
     end
