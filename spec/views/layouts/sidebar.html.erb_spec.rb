@@ -1,10 +1,5 @@
 require "rails_helper"
 
-module PretenderContext
-  def true_user
-  end
-end
-
 RSpec.describe "layout/sidebar", type: :view do
   before do
     view.class.include PretenderContext
