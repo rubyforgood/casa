@@ -29,9 +29,9 @@ module CasaCase::Validations
 
     validates :case_number, uniqueness: {scope: :casa_org_id, case_sensitive: false}, presence: true
 
-    validates_presence_of :casa_case_contact_types,
-      message: ": At least one contact type must be selected",
-      if: :validate_contact_type
+    validates :casa_case_contact_types,
+      presence: {message: ": At least one contact type must be selected",
+                 if: :validate_contact_type}
 
     # Validation to check timestamp and submission status of a case
     validates_with CourtReportValidator, fields: [:court_report_status, :court_report_submitted_at]

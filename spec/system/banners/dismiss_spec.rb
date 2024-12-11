@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "banners/dismiss", type: :system, js: true do
+RSpec.describe "banners/dismiss", :js, type: :system do
   let!(:casa_org) { create(:casa_org) }
   let!(:active_banner) { create(:banner, casa_org: casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }

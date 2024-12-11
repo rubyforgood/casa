@@ -130,7 +130,7 @@ RSpec.describe "/users", type: :request do
 
         it "does not bypass sign in when the current user is not the true user" do
           allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
-          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          expect_any_instance_of(UsersController).not_to receive(:bypass_sign_in).with(user)
           subject
         end
       end
@@ -188,7 +188,7 @@ RSpec.describe "/users", type: :request do
 
         it "does not bypass sign in when the current user is not the true user" do
           allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
-          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          expect_any_instance_of(UsersController).not_to receive(:bypass_sign_in).with(user)
           subject
         end
       end
@@ -244,7 +244,7 @@ RSpec.describe "/users", type: :request do
           user.confirm
           expect(user.valid_password?("12345678")).to be_truthy
           expect(user.email).to eq("newemail@example.com")
-          expect(user.old_emails).to match_array(["old_email@example.com"])
+          expect(user.old_emails).to contain_exactly("old_email@example.com")
         end
 
         it "send an alert and a confirmation email" do
@@ -283,6 +283,7 @@ RSpec.describe "/users", type: :request do
         end
       end
     end
+
     context "when supervisor" do
       let(:user) { create(:supervisor) }
 
@@ -309,7 +310,7 @@ RSpec.describe "/users", type: :request do
 
         it "does not bypass sign in when the current user is not the true user" do
           allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
-          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          expect_any_instance_of(UsersController).not_to receive(:bypass_sign_in).with(user)
           subject
         end
       end
@@ -368,7 +369,7 @@ RSpec.describe "/users", type: :request do
 
         it "does not bypass sign in when the current user is not the true user" do
           allow_any_instance_of(UsersController).to receive(:true_user).and_return(User.new)
-          expect_any_instance_of(UsersController).to_not receive(:bypass_sign_in).with(user)
+          expect_any_instance_of(UsersController).not_to receive(:bypass_sign_in).with(user)
           subject
         end
       end
@@ -401,28 +402,30 @@ RSpec.describe "/users", type: :request do
 
   describe "PATCH /add_language" do
     let(:volunteer) { create(:volunteer) }
+
     before { sign_in volunteer }
 
     context "when request params are valid" do
       let(:language) { create(:language) }
-      before(:each) do
+
+      before do
         patch add_language_users_path(volunteer), params: {
           language_id: language.id
         }
       end
 
-      it "should add language to current user" do
+      it "adds language to current user" do
         expect(volunteer.languages).to include(language)
       end
 
-      it "should notify the user that the language has been added" do
+      it "notifies the user that the language has been added" do
         expect(response).to redirect_to(edit_users_path)
         expect(flash[:notice]).to eq "#{language.name} was added to your languages list."
       end
     end
 
     context "when request params are invalid" do
-      it "should display an error message when the Language id is empty" do
+      it "displays an error message when the Language id is empty" do
         patch add_language_users_path(volunteer), params: {
           language_id: ""
         }
@@ -433,6 +436,7 @@ RSpec.describe "/users", type: :request do
 
     context "when the user tries to add the same language again" do
       let(:language) { create(:language) }
+
       before do
         # Add the language once
         patch add_language_users_path(volunteer), params: {
@@ -444,28 +448,32 @@ RSpec.describe "/users", type: :request do
         }
       end
 
-      it "should not add the language again" do
+      it "does not add the language again" do
         expect(volunteer.languages.count).to eq(1) # Ensure the language count remains the same
       end
 
-      it "should notify the user that the language is already in their list" do
+      it "notifies the user that the language is already in their list" do
         expect(response).to have_http_status(:unprocessable_entity)
         expect(response.body).to include("#{language.name} is already in your languages list.")
       end
     end
   end
+
   describe "DELETE /remove_language" do
     let(:volunteer) { create(:volunteer) }
+
     before { sign_in volunteer }
 
     context "when request params are valid" do
       let(:language) { create(:language) }
-      before(:each) do
+
+      before do
         patch add_language_users_path(volunteer), params: {
           language_id: language.id
         }
       end
-      it "should remove a language from a volunteer languages list" do
+
+      it "removes a language from a volunteer languages list" do
         delete remove_language_users_path(language_id: language.id)
 
         expect(response.status).to eq 302
@@ -477,13 +485,14 @@ RSpec.describe "/users", type: :request do
 
     context "when request params are invalid" do
       let(:language) { create(:language) }
-      before(:each) do
+
+      before do
         patch add_language_users_path(volunteer), params: {
           language_id: language.id
         }
       end
 
-      it "should raise error when Language do not exist" do
+      it "raises error when Language do not exist" do
         expect { delete remove_language_users_path(999) }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end

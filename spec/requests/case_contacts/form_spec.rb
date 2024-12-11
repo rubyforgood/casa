@@ -37,9 +37,9 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   end
 
   describe "GET /show" do
-    let(:case_contact) { create(:case_contact, :started_status, casa_case:, creator:) }
-
     subject(:request) { get case_contact_form_path(:details, case_contact_id: case_contact.id) }
+
+    let(:case_contact) { create(:case_contact, :started_status, casa_case:, creator:) }
 
     it "renders details form with success status" do
       request
@@ -106,6 +106,8 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   end
 
   describe "PATCH /update" do
+    subject(:request) { patch "/case_contacts/#{case_contact.id}/form/details", params: params }
+
     let(:case_contact) { create(:case_contact, :started_status, creator: volunteer) }
     let(:contact_type_group) { create(:contact_type_group, casa_org:) }
     let!(:contact_types) { create_list(:contact_type, 2, contact_type_group:) }
@@ -133,8 +135,6 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     end
     let(:attributes) { valid_attributes }
     let(:params) { {case_contact: attributes} }
-
-    subject(:request) { patch "/case_contacts/#{case_contact.id}/form/details", params: params }
 
     it "updates the requested case_contact attributes" do
       case_contact.update!(duration_minutes: 5, contact_made: false, contact_type_ids: [contact_types.second.id])

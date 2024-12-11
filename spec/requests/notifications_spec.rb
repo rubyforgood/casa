@@ -4,7 +4,6 @@ RSpec.describe "/notifications", type: :request do
   before do
     travel_to Date.new(2021, 1, 1)
   end
-  after { travel_back }
 
   describe "GET /index" do
     context "when there are no patch notes" do
@@ -31,7 +30,7 @@ RSpec.describe "/notifications", type: :request do
 
             queryable_html = Nokogiri.HTML5(response.body)
 
-            expect(queryable_html.css("h3").text).to_not include("Patch Notes")
+            expect(queryable_html.css("h3").text).not_to include("Patch Notes")
           end
         end
       end
@@ -69,7 +68,7 @@ RSpec.describe "/notifications", type: :request do
 
             queryable_html = Nokogiri.HTML5(response.body)
 
-            expect(queryable_html.css("h3").text).to_not include("Patch Notes")
+            expect(queryable_html.css("h3").text).not_to include("Patch Notes")
           end
         end
 
@@ -81,7 +80,7 @@ RSpec.describe "/notifications", type: :request do
           it "does not show the no notification message" do
             get notifications_url
 
-            expect(response.body).to_not include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
+            expect(response.body).not_to include("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
           end
 
           it "does not show patch notes made after the deploy date" do
@@ -90,7 +89,7 @@ RSpec.describe "/notifications", type: :request do
 
             get notifications_url
 
-            expect(response.body).to_not include(CGI.escapeHTML(patch_note_1.note))
+            expect(response.body).not_to include(CGI.escapeHTML(patch_note_1.note))
             expect(response.body).to include(CGI.escapeHTML(patch_note_2.note))
           end
         end
@@ -110,7 +109,7 @@ RSpec.describe "/notifications", type: :request do
           get notifications_url
 
           expect(response.body).to include(CGI.escapeHTML(patch_note_1.note))
-          expect(response.body).to_not include(CGI.escapeHTML(patch_note_2.note))
+          expect(response.body).not_to include(CGI.escapeHTML(patch_note_2.note))
         end
       end
     end

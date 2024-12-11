@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :system do
+  subject do
+    visit new_case_contact_path(casa_case)
+    fill_in_contact_details(contact_types: [contact_type.name])
+    fill_in_mileage want_reimbursement: true, miles: 50, address: "123 Params St"
+  end
+
   let(:casa_org) { build :casa_org, :all_reimbursements_enabled }
   let(:volunteer) { create :volunteer, :with_single_case, casa_org: }
   let(:casa_case) { volunteer.casa_cases.first }
@@ -9,12 +15,6 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
   before do
     allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
     sign_in volunteer
-  end
-
-  subject do
-    visit new_case_contact_path(casa_case)
-    fill_in_contact_details(contact_types: [contact_type.name])
-    fill_in_mileage want_reimbursement: true, miles: 50, address: "123 Params St"
   end
 
   it "is not rendered when casa org expenses disabled" do
@@ -102,6 +102,8 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
   end
 
   context "when editing existing case contact expenses" do
+    subject { visit edit_case_contact_path case_contact }
+
     let(:case_contact) { create :case_contact, :wants_reimbursement, casa_case:, creator: volunteer, contact_types: [contact_type] }
     let!(:additional_expenses) do
       [
@@ -109,8 +111,6 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
         create(:additional_expense, case_contact:, other_expense_amount: 2.22, other_expenses_describe: "Second Expense")
       ]
     end
-
-    subject { visit edit_case_contact_path case_contact }
 
     it "shows existing expenses in the form" do
       subject

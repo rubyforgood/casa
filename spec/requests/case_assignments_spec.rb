@@ -15,14 +15,14 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the volunteer has been previously assigned to the casa_case" do
-      let!(:case_assignment) { create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case) }
-      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
-
       subject(:request) do
         post case_assignments_url(casa_case_id: casa_case.id), params: params
 
         response
       end
+
+      let!(:case_assignment) { create(:case_assignment, active: false, volunteer: volunteer, casa_case: casa_case) }
+      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
       it "reassigns the volunteer to the casa_case" do
         expect { request }.to change { casa_case.case_assignments.first.active }.from(false).to(true)
@@ -48,13 +48,13 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case assignment parent is a volunteer" do
-      let(:params) { {case_assignment: {casa_case_id: casa_case.id}} }
-
       subject(:request) do
         post case_assignments_url(volunteer_id: volunteer.id), params: params
 
         response
       end
+
+      let(:params) { {case_assignment: {casa_case_id: casa_case.id}} }
 
       it "creates a new case assignment for the volunteer" do
         expect { request }.to change(volunteer.casa_cases, :count).by(1)
@@ -80,13 +80,13 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case assignment parent is a casa_case" do
-      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
-
       subject(:request) do
         post case_assignments_url(casa_case_id: casa_case.id), params: params
 
         response
       end
+
+      let(:params) { {case_assignment: {volunteer_id: volunteer.id}} }
 
       it "creates a new case assignment for the casa_case" do
         expect { request }.to change(casa_case.volunteers, :count).by(1)
@@ -112,13 +112,13 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     describe "with another org params" do
-      let(:other_org) { build(:casa_org) }
-
       subject(:request) do
         post url, params: params
 
         response
       end
+
+      let(:other_org) { build(:casa_org) }
 
       context "when the case belongs to another organization" do
         let(:other_casa_case) { create(:casa_case, casa_org: other_org) }
@@ -181,15 +181,15 @@ RSpec.describe "/case_assignments", type: :request do
     end
 
     context "when the case belongs to another organization" do
-      let(:other_org) { build(:casa_org) }
-      let(:other_casa_case) { create(:casa_case, casa_org: other_org) }
-      let!(:assignment) { create(:case_assignment, casa_case: other_casa_case) }
-
       subject(:request) do
         delete case_assignment_url(assignment, casa_case_id: other_casa_case.id)
 
         response
       end
+
+      let(:other_org) { build(:casa_org) }
+      let(:other_casa_case) { create(:casa_case, casa_org: other_org) }
+      let!(:assignment) { create(:case_assignment, casa_case: other_casa_case) }
 
       it "does not destroy the case assignment" do
         expect { request }.not_to change(other_casa_case.volunteers, :count).from(1)
@@ -200,16 +200,16 @@ RSpec.describe "/case_assignments", type: :request do
   end
 
   describe "PATCH /unassign" do
-    before { sign_in admin }
-
-    let(:assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
-    let(:redirect_to_path) { "" }
-
     subject(:request) do
       patch unassign_case_assignment_url(assignment, redirect_to_path: redirect_to_path)
 
       response
     end
+
+    before { sign_in admin }
+
+    let(:assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
+    let(:redirect_to_path) { "" }
 
     it "authorizes action" do
       expect_any_instance_of(CaseAssignmentsController).to(
@@ -260,15 +260,15 @@ RSpec.describe "/case_assignments", type: :request do
   end
 
   describe "PATCH /show_hide_contacts" do
-    before { sign_in admin }
-
-    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false) }
-
     subject(:request) do
       patch show_hide_contacts_case_assignment_path(assignment)
 
       response
     end
+
+    before { sign_in admin }
+
+    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer, active: false) }
 
     it "authorizes action" do
       expect_any_instance_of(CaseAssignmentsController).to(
@@ -324,15 +324,15 @@ RSpec.describe "/case_assignments", type: :request do
   end
 
   describe "PATCH /reimbursement" do
-    before { sign_in admin }
-
-    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
-
     subject(:request) do
       patch reimbursement_case_assignment_url(assignment)
 
       response
     end
+
+    before { sign_in admin }
+
+    let(:assignment) { create(:case_assignment, casa_case: casa_case, volunteer: volunteer) }
 
     it "authorizes action" do
       expect_any_instance_of(CaseAssignmentsController).to(

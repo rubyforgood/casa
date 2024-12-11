@@ -22,6 +22,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
     context "with valid parameters" do
       let(:params) { {casa_admin: {email: "admin1@example.com", display_name: "Example Admin"}} }
+
       it "creates a new CASA admin for the organization" do
         expect { subject }.to change(CasaAdmin, :count).by(1)
       end
@@ -36,6 +37,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
     context "with invalid parameters" do
       let(:params) { {casa_admin: {email: "", display_name: ""}} }
+
       it "renders new page" do
         expect { subject }.not_to change(CasaAdmin, :count)
 
@@ -48,7 +50,7 @@ RSpec.describe "All-Casa Admin", type: :request do
   describe "GET /edit" do
     subject { get edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
 
-    it "should allow access to the edit admin page" do
+    it "allows access to the edit admin page" do
       subject
       expect(response).to be_successful
     end
@@ -65,7 +67,7 @@ RSpec.describe "All-Casa Admin", type: :request do
     context "with valid parameters" do
       let(:params) { {all_casa_admin: {email: "casa_admin@example.com"}} }
 
-      it "should allow current user to begin to update other casa admin's email and send a confirmation email" do
+      it "allows current user to begin to update other casa admin's email and send a confirmation email" do
         subject
         casa_admin.reload
         expect(casa_admin.unconfirmed_email).to eq("casa_admin@example.com")
@@ -86,7 +88,7 @@ RSpec.describe "All-Casa Admin", type: :request do
     context "with invalid parameters" do
       let(:params) { {all_casa_admin: {email: ""}} }
 
-      it "should not allow current user to successfully update other casa admin's email" do
+      it "does not allow current user to successfully update other casa admin's email" do
         expect { subject }.not_to change { casa_admin.reload.email }
       end
 
@@ -103,7 +105,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
     let(:casa_admin) { create(:casa_admin, :inactive) }
 
-    it "should successfully activate another casa admin's profile" do
+    it "successfullies activate another casa admin's profile" do
       expect { subject }.to change { casa_admin.reload.active }.from(false).to(true)
     end
 
@@ -124,7 +126,7 @@ RSpec.describe "All-Casa Admin", type: :request do
     context "when activation fails" do
       before { allow_any_instance_of(CasaAdmin).to receive(:activate).and_return(false) }
 
-      it "should not activate the casa admin's profile" do
+      it "does not activate the casa admin's profile" do
         expect { subject }.not_to change { casa_admin.reload.active }
       end
 
@@ -141,7 +143,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
     let(:casa_admin) { create(:casa_admin, active: true) }
 
-    it "should successfully deactivate another casa admin's profile" do
+    it "successfullies deactivate another casa admin's profile" do
       expect { subject }.to change { casa_admin.reload.active }.from(true).to(false)
     end
 
@@ -162,7 +164,7 @@ RSpec.describe "All-Casa Admin", type: :request do
     context "when deactivation fails" do
       before { allow_any_instance_of(CasaAdmin).to receive(:deactivate).and_return(false) }
 
-      it "should not deactivate the casa admin's profile" do
+      it "does not deactivate the casa admin's profile" do
         expect { subject }.not_to change { casa_admin.reload.active }
       end
 

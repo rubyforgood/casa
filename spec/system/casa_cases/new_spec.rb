@@ -11,7 +11,7 @@ RSpec.describe "casa_cases/new", type: :system do
       let!(:supervisor) { create(:supervisor, casa_org: casa_org) }
       let!(:volunteer) { create(:volunteer, display_name: volunteer_display_name, supervisor: supervisor, casa_org: casa_org) }
 
-      it "is successful", js: true do
+      it "is successful", :js do
         case_number = "12345"
 
         sign_in admin
@@ -53,7 +53,7 @@ RSpec.describe "casa_cases/new", type: :system do
     end
 
     context "when non-mandatory fields are not filled" do
-      it "is successful", js: true do
+      it "is successful", :js do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
@@ -105,7 +105,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
     context "when the court date field is not filled" do
       context "when empty court date checkbox is checked" do
-        it "creates a new case", js: true do
+        it "creates a new case", :js do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)
@@ -137,7 +137,7 @@ RSpec.describe "casa_cases/new", type: :system do
       end
 
       context "when empty court date checkbox is not checked" do
-        it "does not create a new case", js: true do
+        it "does not create a new case", :js do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)

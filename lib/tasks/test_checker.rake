@@ -4,7 +4,7 @@ desc "Check app rb files to verify that there are corresponding spec files."
 task test_checker: :environment do
   # File containing app filespecs that should not be flagged as errors for not having spec files.
   def deny_filespec
-    File.join(Rails.root, ".allow_skipping_tests")
+    Rails.root.join(".allow_skipping_tests").to_s
   end
 
   def dashed_line
@@ -21,7 +21,7 @@ task test_checker: :environment do
 
   # @return absolute filespec of a Rails project's top level directory.
   def top_level_dir(name)
-    File.absolute_path(File.join(Rails.root, name))
+    File.absolute_path(Rails.root.join(name).to_s)
   end
 
   # @return .rb files in a directory tree, relative to the passed directory

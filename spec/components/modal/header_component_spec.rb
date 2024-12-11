@@ -40,7 +40,7 @@ RSpec.describe Modal::HeaderComponent, type: :component do
 
     expect(page).to have_css("div.modal-header")
     expect(page).to have_text("Header Content")
-    expect(page).to_not have_text("Missing")
+    expect(page).not_to have_text("Missing")
     expect(page).to have_css("div.modal-header button.btn-close")
   end
 

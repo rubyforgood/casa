@@ -52,7 +52,7 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
-  config.before(:each, type: :system, js: true) do
+  config.before(:each, :js, type: :system) do
     config.include DownloadHelpers
     clear_downloads
     if ENV["DOCKER"]
@@ -65,7 +65,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each, type: :system, debug: true) do
+  config.before(:each, :debug, type: :system) do
     config.include DownloadHelpers
     clear_downloads
     if ENV["DOCKER"]

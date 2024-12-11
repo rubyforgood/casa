@@ -19,10 +19,10 @@ RSpec.describe "/contact_topic_answers", type: :request do
   before { sign_in user }
 
   describe "POST /create" do
+    subject { post contact_topic_answers_path, params:, as: :json }
+
     let(:new_attributes) { valid_attributes.except(:value) }
     let(:params) { {contact_topic_answer: new_attributes} }
-
-    subject { post contact_topic_answers_path, params:, as: :json }
 
     it "creates a record and responds created" do
       expect { subject }.to change(ContactTopicAnswer, :count).by(1)
@@ -51,7 +51,7 @@ RSpec.describe "/contact_topic_answers", type: :request do
       let(:params) { {contact_topic_answer: invalid_attributes} }
 
       it "fails and responds unprocessable_entity" do
-        expect { subject }.to change(ContactTopicAnswer, :count).by(0)
+        expect { subject }.not_to change(ContactTopicAnswer, :count)
         expect(response).to have_http_status(:unprocessable_entity)
       end
 
@@ -74,9 +74,9 @@ RSpec.describe "/contact_topic_answers", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let!(:contact_topic_answer) { create :contact_topic_answer, case_contact:, contact_topic: }
-
     subject { delete contact_topic_answer_url(contact_topic_answer), as: :json }
+
+    let!(:contact_topic_answer) { create :contact_topic_answer, case_contact:, contact_topic: }
 
     it "destroys the record and responds no content" do
       expect { subject }

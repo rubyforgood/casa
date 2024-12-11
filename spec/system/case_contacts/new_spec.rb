@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "case_contacts/new", :js, type: :system do
+  subject { visit new_case_contact_path casa_case }
+
   let(:casa_org) { create :casa_org }
   let(:contact_type_group) { create :contact_type_group, casa_org: }
   let!(:school_contact_type) { create :contact_type, contact_type_group:, name: "School" }
@@ -14,8 +16,6 @@ RSpec.describe "case_contacts/new", :js, type: :system do
   let(:user) { volunteer }
 
   before { sign_in user }
-
-  subject { visit new_case_contact_path casa_case }
 
   it "page load creates a case_contact with status: 'started' & draft_case_ids: [casa_case.id]" do
     expect { subject }.to change(CaseContact.started, :count).by(1)

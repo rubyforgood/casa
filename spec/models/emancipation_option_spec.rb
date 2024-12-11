@@ -22,12 +22,12 @@ RSpec.describe EmancipationOption, type: :model do
         expect {
           build_stubbed(:emancipation_option, emancipation_category_id: non_duplicate_category.id, name: duplicate_option_name)
           build_stubbed(:emancipation_option, emancipation_category_id: duplicate_category.id, name: duplicate_option_name)
-        }.to_not raise_error
+        }.not_to raise_error
       end
     end
   end
 
-  context ".category_options" do
+  describe ".category_options" do
     let(:category_a) { create(:emancipation_category, name: "A") }
     let(:category_b) { create(:emancipation_category, name: "B") }
     let(:option_a) { create(:emancipation_option, emancipation_category_id: category_a.id, name: "A") }
@@ -36,12 +36,12 @@ RSpec.describe EmancipationOption, type: :model do
     let(:option_d) { create(:emancipation_option, emancipation_category_id: category_b.id, name: "D") }
 
     it "contains exactly the options belonging to the category passed to it" do
-      expect(EmancipationOption.category_options(category_a.id)).to match_array([option_a, option_b, option_c])
-      expect(EmancipationOption.category_options(category_b.id)).to match_array([option_d])
+      expect(EmancipationOption.category_options(category_a.id)).to contain_exactly(option_a, option_b, option_c)
+      expect(EmancipationOption.category_options(category_b.id)).to contain_exactly(option_d)
     end
   end
 
-  context ".options_with_category_and_case" do
+  describe ".options_with_category_and_case" do
     let(:case_a) { create(:casa_case) }
     let(:case_b) { create(:casa_case) }
     let(:category_a) { create(:emancipation_category, name: "A") }
@@ -55,10 +55,10 @@ RSpec.describe EmancipationOption, type: :model do
       case_a.emancipation_options += [option_a, option_b]
       case_b.emancipation_options += [option_b, option_d]
 
-      expect(EmancipationOption.options_with_category_and_case(category_a.id, case_a.id)).to match_array([option_a, option_b])
-      expect(EmancipationOption.options_with_category_and_case(category_a.id, case_b.id)).to match_array([option_b])
-      expect(EmancipationOption.options_with_category_and_case(category_b.id, case_a.id)).to match_array([])
-      expect(EmancipationOption.options_with_category_and_case(category_b.id, case_b.id)).to match_array([option_d])
+      expect(EmancipationOption.options_with_category_and_case(category_a.id, case_a.id)).to contain_exactly(option_a, option_b)
+      expect(EmancipationOption.options_with_category_and_case(category_a.id, case_b.id)).to contain_exactly(option_b)
+      expect(EmancipationOption.options_with_category_and_case(category_b.id, case_a.id)).to be_empty
+      expect(EmancipationOption.options_with_category_and_case(category_b.id, case_b.id)).to contain_exactly(option_d)
     end
   end
 end

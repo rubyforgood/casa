@@ -6,6 +6,7 @@ FactoryBot.define do
     identity { user.email }
     success { true }
     context { "session" }
+
     ip { "127.0.0.1" }
     user_agent { "Mozilla/5.0 (Macintosh; Intel Mac OS X)" }
   end

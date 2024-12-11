@@ -14,17 +14,13 @@ RSpec.describe "/imports", type: :request do
     travel_to Date.parse("Sept 15 2022")
   end
 
-  after do
-    travel_back
-  end
-
   describe "GET /index" do
     it "renders an unsuccessful response when the user is not an admin" do
       sign_in create(:volunteer)
 
       get imports_url
 
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
     end
 
     it "renders a successful response when the user is an admin" do
@@ -171,7 +167,7 @@ RSpec.describe "/imports", type: :request do
             import_type: "casa_case",
             file: existing_case_file
           }
-      }.to change(CasaCase, :count).by(0)
+      }.not_to change(CasaCase, :count)
 
       expect(request.session[:import_error]).to include("Not all rows were imported.")
       expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")

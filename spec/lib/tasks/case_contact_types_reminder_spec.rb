@@ -38,7 +38,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with uncontacted contact types, sms notifications on, and no reminder in last quarter" do
-    it "should send sms reminder" do
+    it "sends sms reminder" do
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to eq 1
       expect(responses[0][:messages][0].body).to include CaseContactTypesReminder::FIRST_MESSAGE.strip
@@ -48,7 +48,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with contacted contact types within last 60 days, sms notifications on, and no reminder in last quarter" do
-    it "should not send sms reminder" do
+    it "does not send sms reminder" do
       CaseContact.update_all(occurred_at: 1.months.ago)
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to match 0
@@ -56,7 +56,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with uncontacted contact types, sms notifications off, and no reminder in last quarter" do
-    it "should not send sms reminder" do
+    it "does not send sms reminder" do
       Volunteer.update_all(receive_sms_notifications: false)
       responses = CaseContactTypesReminder.new.send!
       expect(responses.count).to match 0
@@ -64,7 +64,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with uncontacted contact types, sms notifications on, and reminder in last quarter" do
-    it "should not send sms reminder" do
+    it "does not send sms reminder" do
       create(:user_reminder_time, :case_contact_types)
       Volunteer.update_all(receive_sms_notifications: true)
       responses = CaseContactTypesReminder.new.send!
@@ -73,7 +73,7 @@ RSpec.describe CaseContactTypesReminder do
   end
 
   context "volunteer with uncontacted contact types, sms notifications on, and reminder out of last quarter" do
-    it "should send sms reminder" do
+    it "sends sms reminder" do
       UserReminderTime.destroy_all
       Volunteer.all do |v|
         create(:user_case_contact_types_reminder, user_id: v.id, reminder_sent: 4.months.ago)
