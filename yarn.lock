@@ -1464,10 +1464,10 @@
   resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-7.2.100.tgz#86ec1c2e00c357cef1e421fd63863d5c34339ce8"
   integrity sha512-7xtIENf0Yw59AFDM3+xqxPCZxev3QVAqjPmUzmgsB9eL8S/zTpB0IU9srNc7XknzJI4e09XKNnCaJRx3gfYzXA==
 
-"@rails/actioncable@^8.0.0":
-  version "8.0.0"
-  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.0.0.tgz#b12d87d4c2bb152c4445e2c168df93b585068e7c"
-  integrity sha512-9IXyJeaBggOzlD3pF4/yWELdyUWZm/KTyKBRqxNf9laLBXPqxJt3t6fO+X4s0WajMR8cIhzkxvq1gxsXVbn3LA==
+"@rails/actioncable@^8.0.100":
+  version "8.0.100"
+  resolved "https://registry.yarnpkg.com/@rails/actioncable/-/actioncable-8.0.100.tgz#83733a8fa35be5d085cf0fe10b341d0428022bc0"
+  integrity sha512-/vXTG6gzSW0CDqmA0hWasZ1UAGZC7g5NGM21jowh58rCCeTHAGbWwKExHn49VDuYXz+cHbL4MGfc5LMdTp9m3A==
 
 "@rails/actiontext@^8.0.0":
   version "8.0.0"
