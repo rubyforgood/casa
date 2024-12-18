@@ -11,7 +11,7 @@ gem "authtrail" # Track Devise login activity
 gem "azure-storage-blob", require: false
 gem "blueprinter" # for JSON serialization
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 4.1" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.2" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.4" # excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # compiles css
 gem "delayed_job_active_record"
