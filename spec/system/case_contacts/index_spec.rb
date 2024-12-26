@@ -65,7 +65,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
     end
 
-    describe "filtering case contacts" do
+    describe "automated filtering case contacts" do
       describe "by date of contact" do
         it "only shows the contacts with the correct date" do
           yesterday = Time.zone.yesterday
@@ -87,8 +87,6 @@ RSpec.describe "case_contacts/index", :js, type: :system do
 
           fill_in "filterrific_occurred_starting_at", with: yesterday
           fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
-
-          click_on "Filter"
 
           expect(page).to have_no_content day_before_yesterday_display
           expect(page).to have_content yesterday_display
@@ -125,8 +123,6 @@ RSpec.describe "case_contacts/index", :js, type: :system do
 
           check "Hide drafts"
 
-          click_on "Filter"
-
           expect(page).to have_no_content "Draft"
         end
       end
@@ -143,8 +139,6 @@ RSpec.describe "case_contacts/index", :js, type: :system do
         it "does not expand menu when filtering only by sticky filter" do
           check "Hide drafts"
 
-          click_on "Filter"
-
           expect(page).to have_field "Hide drafts", type: :checkbox
           expect(page).to have_no_content "Other filters"
         end
@@ -159,7 +153,6 @@ RSpec.describe "case_contacts/index", :js, type: :system do
           click_on "Expand / Hide"
           select "In Person", from: "Contact medium"
 
-          click_on "Filter"
 
           expect(page).to have_content "Other filters"
         end
@@ -225,7 +218,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       click_on "Expand / Hide"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
-      click_on "Filter"
+
       expect(page).to have_text("Case 2 Notes")
       expect(page).to have_no_text("Case 1 Notes")
 
@@ -237,7 +230,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       click_on "Expand / Hide"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
-      click_on "Filter"
+
       # no contacts because we're only showing case 1 and that occurred before the filter dates
       expect(page).to have_no_text("Case 1 Notes")
       expect(page).to have_no_text("Case 2 Notes")
