@@ -153,7 +153,6 @@ RSpec.describe "case_contacts/index", :js, type: :system do
           click_on "Expand / Hide"
           select "In Person", from: "Contact medium"
 
-
           expect(page).to have_content "Other filters"
         end
       end
