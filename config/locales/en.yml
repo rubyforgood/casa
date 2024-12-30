@@ -60,6 +60,7 @@ en:
         cant_be_future: can't be in the future
         must_be_selected: must be selected
         must_be_true_or_false: must be true or false
+        email_uniqueness: This email is already in use. If it does not appear on your roster, it may be associated with another CASA organization. Please use a different email address.
   time:
     formats:
       day_and_date: "%A, %b %d, %Y"
