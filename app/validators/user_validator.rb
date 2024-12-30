@@ -8,6 +8,7 @@ class UserValidator < ActiveModel::Validator
     valid_phone_number_if_receive_sms_notifications(record)
     validate_date_of_birth_in_past(record.date_of_birth, record)
     validate_date_of_birth_not_before_1920(record.date_of_birth, record)
+    validate_email_unique(record)
   end
 
   private
@@ -49,5 +50,11 @@ class UserValidator < ActiveModel::Validator
     return unless date_of_birth.present?
 
     record.errors.add(:base, " Date of birth must be on or after 1/1/1920.") unless date_of_birth >= "1920-01-01".to_date
+  end
+
+  def validate_email_unique(record)
+    if User.exists?(email: record.email)
+      record.errors.add(:base, I18n.t('activerecord.errors.messages.email_uniqueness'))
+    end
   end
 end
