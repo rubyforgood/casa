@@ -55,11 +55,11 @@ RSpec.describe User, type: :model do
       expect(user.errors[:base]).to eq([" Date of birth must be on or after 1/1/1920."])
     end
 
-    it 'shows custom email uniqueness error message' do
+    it "shows custom email uniqueness error message" do
       create(:user, email: "volunteer1@example.com")
-      user = build(:user, email: 'volunteer1@example.com')
+      user = build(:user, email: "volunteer1@example.com")
       expect(user.valid?).to be false
-      expect(user.errors[:base]).to eq ([I18n.t('activerecord.errors.messages.email_uniqueness')])
+      expect(user.errors[:base]).to eq([I18n.t("activerecord.errors.messages.email_uniqueness")])
     end
 
     it "has an empty old_emails array when initialized" do

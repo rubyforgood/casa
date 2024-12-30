@@ -54,7 +54,7 @@ class UserValidator < ActiveModel::Validator
 
   def validate_email_unique(record)
     if User.exists?(email: record.email)
-      record.errors.add(:base, I18n.t('activerecord.errors.messages.email_uniqueness'))
+      record.errors.add(:base, I18n.t("activerecord.errors.messages.email_uniqueness"))
     end
   end
 end
