@@ -90,6 +90,8 @@ ignore:
   - Rails/Blank
 - config/application.rb:
   - Style/RedundantInterpolation
+- config/initializers/bugsnag.rb:
+  - Style/FileNull
 - db/seeds/db_populator.rb:
   - Rails/TimeZone
   - Rails/FindEach
