@@ -42,6 +42,12 @@ async function fireSwalFollowupAlert () {
   })
 }
 
+$(document).on('turbo:load', function () {
+  $('.filter-form').on('change', '.filter-input', function () {
+    $(this).closest('form').submit()
+  })
+})
+
 $(() => { // JQuery's callback for the DOM loading
   $('[data-toggle="tooltip"]').tooltip()
   $('.followup-button').on('click', displayFollowupAlert)
