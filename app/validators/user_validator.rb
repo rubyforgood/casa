@@ -8,7 +8,7 @@ class UserValidator < ActiveModel::Validator
     valid_phone_number_if_receive_sms_notifications(record)
     validate_date_of_birth_in_past(record.date_of_birth, record)
     validate_date_of_birth_not_before_1920(record.date_of_birth, record)
-    validate_uniqueness(:email, record, I18n.t('activerecord.errors.messages.email_uniqueness'))
+    validate_uniqueness(:email, record, I18n.t("activerecord.errors.messages.email_uniqueness"))
   end
 
   private
