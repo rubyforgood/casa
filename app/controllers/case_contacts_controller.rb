@@ -117,25 +117,16 @@ class CaseContactsController < ApplicationController
   end
 
   def set_case_contact
-    if current_organization.case_contacts.exists?(params[:id])
-      @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
-    else
-      redirect_to authenticated_user_root_path
-    end
+    @case_contact = authorize(current_organization.case_contacts.find_by(id: params[:id]))
+    redirect_to authenticated_user_root_path unless @case_contact
   end
 
   def build_draft_case_ids(params, casa_cases)
     # Use case(s) from params if present
-    if params[:draft_case_ids].present?
-      params[:draft_case_ids]
-    elsif params.dig(:case_contact, :casa_case_id).present?
-      casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
-    elsif casa_cases.count == 1
-      # If there is only one case for user, select that case
-      [casa_cases.first.id]
-    else
-      # Otherwise, let user select cases
-      []
-    end
+    return params[:draft_case_ids] if params[:draft_case_ids].present?
+    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
+    return [casa_cases.first.id] if casa_cases.count == 1
+
+    []
   end
 end
