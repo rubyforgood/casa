@@ -148,7 +148,7 @@ RSpec.describe "/case_contacts", type: :request do
 
   describe "GET /leave" do
     subject(:request) do
-      get leave_case_contacts_path
+      get leave_case_contact_path
 
       response
     end
