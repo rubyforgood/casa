@@ -1,4 +1,5 @@
 class NilClassPolicy < ApplicationPolicy
-def method_missing(*)
-  false
+  def method_missing(*)
+    false
+  end
 end
