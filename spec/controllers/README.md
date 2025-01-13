@@ -1,0 +1,1 @@
+Tests for controllers should be in spec/requests
