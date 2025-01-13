@@ -107,7 +107,8 @@ class CaseContactsController < ApplicationController
       :creator,
       :followups,
       :contact_types,
-      contact_topic_answers: [:contact_topic]
+      contact_topic_answers: [:contact_topic],
+      casa_case: [:volunteers]
     )
   end
 
