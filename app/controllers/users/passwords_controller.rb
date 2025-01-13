@@ -5,13 +5,13 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def create
     @email = params.dig(resource_name, :email)
-    @phone_number = params[resource_name][:phone_number]
-    @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
+    @phone_number = params.dig(resource_name, :phone_number)
 
     unless valid_params?(@email, @phone_number)
       render_error
       return if @errors
     end
+    @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
 
     send_password
     redirect_to after_sending_reset_password_instructions_path_for(resource_name),
