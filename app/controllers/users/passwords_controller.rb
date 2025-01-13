@@ -4,7 +4,7 @@ class Users::PasswordsController < Devise::PasswordsController
   include SmsBodyHelper
 
   def create
-    @email = params[resource_name][:email]
+    @email = params.dig(resource_name, :email)
     @phone_number = params[resource_name][:phone_number]
     @resource = @email.blank? ? User.find_by(phone_number: @phone_number) : User.find_by(email: @email)
 
