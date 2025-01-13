@@ -675,6 +675,8 @@ ignore:
   - RSpec/NamedSubject
 - spec/policies/learning_hour_policy_spec.rb:
   - RSpec/NamedSubject
+- spec/policies/nil_class_policy_spec.rb:
+  - RSpec/NamedSubject
 - spec/policies/notification_policy_spec.rb:
   - RSpec/NamedSubject
 - spec/policies/other_duty_policy_spec.rb:
@@ -804,6 +806,7 @@ ignore:
 - spec/requests/case_contacts_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/MultipleExpectations
+  - RSpec/PendingWithoutReason
 - spec/requests/case_court_reports_spec.rb:
   - RSpec/ContextWording
   - RSpec/NestedGroups
