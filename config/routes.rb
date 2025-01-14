@@ -18,10 +18,10 @@ Rails.application.routes.draw do
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
   authenticate :all_casa_admins do
-    mount PgHero::Engine, at: 'pg_dashboard', constraints: lambda { |request|
-    admin = request.env['warden'].user(:all_casa_admin)
-    admin.present? && (admin.role == 'All Casa Admin' || admin.casa_admin?)
-  }
+    mount PgHero::Engine, at: "pg_dashboard", constraints: lambda { |request|
+      admin = request.env["warden"].user(:all_casa_admin)
+      admin.present? && (admin.role == "All Casa Admin" || admin.casa_admin?)
+    }
   end
 
   concern :with_datatable do

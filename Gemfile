@@ -59,8 +59,8 @@ gem "wicked"
 gem "flipper"
 gem "flipper-active_record"
 gem "flipper-ui"
-gem 'pghero'
-gem 'pg_query'
+gem "pghero"
+gem "pg_query"
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
