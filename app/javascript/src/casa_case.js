@@ -85,11 +85,28 @@ function showAlert (html) {
   flashContainer && flashContainer.replaceWith(alertEl)
 }
 
+function validateForm(formEl) {
+  const errorEl = document.querySelector(".select-required-error")
+
+  if (!formEl || !errorEl) {
+    return
+  }
+
+  // check html validations, checkValidity returns false if doesn't pass validation
+  if (!formEl.checkValidity()) {
+    errorEl.classList.remove("d-none")
+    return
+  }
+}
+
 function handleGenerateReport (e) {
   e.preventDefault()
 
-  const formData = Object.fromEntries(new FormData(e.currentTarget.form))
+  const form = e.currentTarget.form
 
+  const formData = Object.fromEntries(new FormData(form))
+
+  validateForm(form)
   if (formData.case_number.length === 0) return
 
   const generateBtn = e.currentTarget
@@ -127,12 +144,31 @@ function handleGenerateReport (e) {
     })
 }
 
+function clearSelectErrors () {
+  const errorEl = document.querySelector(".select-required-error")
+
+  if (!errorEl) return
+
+  errorEl.classList.add("d-none")
+}
+
+function handleModalClose() {
+  const selectEl = document.querySelector("#case-selection")
+
+  if (!selectEl) return
+
+  clearSelectErrors()
+  // TODO: clear selected case as well?
+}
+
 $(() => { // JQuery's callback for the DOM loading
   $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
 
   if ($('button.copy-court-button').length) {
     disableBtn($('button.copy-court-button')[0])
   }
+
+  $("#case-selection").on("change", clearSelectErrors)
 
   $('select.siblings-casa-cases').on('change', () => {
     if ($('select.siblings-casa-cases').find(':selected').text()) {
@@ -141,6 +177,9 @@ $(() => { // JQuery's callback for the DOM loading
       disableBtn($('button.copy-court-button')[0])
     }
   })
+  // modal id is defined in _generate_docx.html.erb so would like to be able to implement modal close logic in that file
+  // but not sure how to
+  $('#generate-docx-report-modal').on('hidden.bs.modal', () => handleModalClose())
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 
