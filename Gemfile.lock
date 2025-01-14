@@ -254,6 +254,18 @@ GEM
       activerecord (>= 4.0.0)
     globalid (1.2.1)
       activesupport (>= 6.1)
+    google-protobuf (4.29.3)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.29.3-arm64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.29.3-x86_64-darwin)
+      bigdecimal
+      rake (>= 13)
+    google-protobuf (4.29.3-x86_64-linux)
+      bigdecimal
+      rake (>= 13)
     groupdate (6.5.1)
       activesupport (>= 7)
     hashdiff (1.1.2)
@@ -354,6 +366,10 @@ GEM
       rexml (~> 3.2, >= 3.2.6)
       safe_shell (>= 1.0.3, < 2.0)
     pg (1.5.9)
+    pg_query (6.0.0)
+      google-protobuf (>= 3.25.3)
+    pghero (3.6.1)
+      activerecord (>= 6.1)
     pretender (0.5.0)
       actionpack (>= 6.1)
     pry (0.14.2)
@@ -654,6 +670,8 @@ DEPENDENCIES
   paranoia
   pdf-forms
   pg
+  pg_query
+  pghero
   pretender
   pry
   pry-byebug

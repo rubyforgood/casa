@@ -29,6 +29,12 @@
           <% end %>
         </li>
         <li class="nav-item">
+          <%= link_to "/pg_dashboard" do %>
+            <i class="lni lni-pencil-alt mr-10"></i>
+            Pg Dashboard
+          <% end %>
+        </li>
+        <li class="nav-item">
           <%= link_to destroy_all_casa_admin_session_path, id:"all-casa-log-out" do %>
             <i class="lni lni-exit mr-10"></i>
             Log Out
