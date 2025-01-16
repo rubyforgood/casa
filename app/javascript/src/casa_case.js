@@ -156,7 +156,8 @@ function handleModalClose() {
   if (!selectEl) return
 
   clearSelectErrors()
-  // TODO: clear selected case as well?
+  // this line taken from docs https://select2.org/programmatic-control/add-select-clear-items
+  $('#case-selection').val(null).trigger('change')
 }
 
 $(() => { // JQuery's callback for the DOM loading
