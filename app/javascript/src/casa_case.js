@@ -85,15 +85,13 @@ function showAlert (html) {
   flashContainer && flashContainer.replaceWith(alertEl)
 }
 
-function validateForm(formEl) {
-  const errorEl = document.querySelector(".select-required-error")
-
-  if (!formEl || !errorEl) {
+function validateForm(formEl, errorEl) {
+  if (!formEl) {
     return
   }
 
   // check html validations, checkValidity returns false if doesn't pass validation
-  if (!formEl.checkValidity()) {
+  if (errorEl && !formEl.checkValidity()) {
     errorEl.classList.remove("d-none")
     return
   }
@@ -105,8 +103,8 @@ function handleGenerateReport (e) {
   const form = e.currentTarget.form
 
   const formData = Object.fromEntries(new FormData(form))
-
-  validateForm(form)
+  const errorEl = document.querySelector(".select-required-error")
+  validateForm(form, errorEl ?? null)
   if (formData.case_number.length === 0) return
 
   const generateBtn = e.currentTarget
