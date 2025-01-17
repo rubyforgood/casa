@@ -70,14 +70,10 @@ rbenv local 3.3.6
 
 ## Nodejs
 
-The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
+The Casa package frontend leverages several javascript packages managed through `npm`.
 
 ```bash
 brew install node
-```
-
-```
-brew install yarn
 ```
 
 ## Chrome
@@ -103,19 +99,19 @@ bin/rails db:setup
 
 Install javascript dependencies with:
 ```bash
-yarn install
+npm install
 ```
 
 Compile assets with:
 
 ```bash
-yarn build
+npm run build
 ```
 
 and then:
 
 ```bash
-yarn build:css
+npm run build:css
 ```
 
 And lastly, run the app with:

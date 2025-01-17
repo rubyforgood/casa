@@ -1,0 +1,36 @@
+name: npm lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.js'
+      - '**/*.json'
+      - '**/*.jsx'
+      - 'package.lock.json'
+      - '.github/workflows/*.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**/*.js'
+      - '**/*.json'
+      - '**/*.jsx'
+      - 'package.lock.json'
+      - '.github/workflows/*.yml'
+
+jobs:
+  npm_lint:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run test
