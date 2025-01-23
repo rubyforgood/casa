@@ -6,8 +6,10 @@ class CasaCasesController < ApplicationController
 
   def index
     authorize CasaCase
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
-    @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
+    org_cases = current_user.casa_org.casa_cases
+      .includes(:assigned_volunteers, :volunteer_assignments, :casa_org, :hearing_type, :judge)
+      .with_attached_court_reports
+    @casa_cases = policy_scope(org_cases)
     @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
     @duties = OtherDuty.where(creator_id: current_user.id)
   end
@@ -131,10 +133,19 @@ class CasaCasesController < ApplicationController
 
   def copy_court_orders
     authorize @casa_case, :update_court_orders?
-    CasaCase.find_by_case_number(params[:case_number_cp]).case_court_orders.each do |court_order|
-      dup_court_order = court_order.dup
-      dup_court_order.save
-      @casa_case.case_court_orders.append dup_court_order
+    source_case = CasaCase.includes(:case_court_orders)
+      .find_by_case_number(params[:case_number_cp])
+    
+    return unless source_case
+
+    CaseCourtOrder.transaction do
+      source_case.case_court_orders.each do |court_order|
+        @casa_case.case_court_orders.create!(
+          text: court_order.text,
+          implementation_status: court_order.implementation_status,
+          court_date_id: court_order.court_date_id
+        )
+      end
     end
   end
 
@@ -176,8 +187,8 @@ class CasaCasesController < ApplicationController
   end
 
   def set_contact_types
-    @contact_types = current_organization.contact_types
-    @selected_contact_type_ids = (!@casa_case.nil?) ? @casa_case.contact_type_ids : []
+    @contact_types = current_organization.contact_types.includes(:contact_type_group)
+    @selected_contact_type_ids = @casa_case&.contact_type_ids || []
   end
 
   def case_contact_csv_name(case_contacts)

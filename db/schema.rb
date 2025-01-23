@@ -135,6 +135,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_050129) do
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["slug"], name: "index_casa_cases_on_slug"
+    t.index ["active"], name: "index_casa_cases_on_active"
+    t.index ["court_report_due_date"], name: "index_casa_cases_on_court_report_due_date"
+    t.index ["court_report_status"], name: "index_casa_cases_on_court_report_status"
   end
 
   create_table "casa_cases_emancipation_options", force: :cascade do |t|
