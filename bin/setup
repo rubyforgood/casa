@@ -49,12 +49,12 @@ FileUtils.chdir APP_ROOT do
   puts "\n== Running post-deployment tasks =="
   system! 'bin/rake after_party:run'
 
-  puts "\n== Installing yarn packages =="
-  system!('yarn') || abort('install yarn and try again')
+  puts "\n== Installing npm packages =="
+  system!('npm ci') || abort('install npm and try again')
 
-  puts "\n==Building assets =="
-  system!('yarn build')
-  system!('yarn build:css')
+  puts "\n== Building assets =="
+  system!('npm run build')
+  system!('npm run build:css')
 
   puts "\n== Done =="
 end

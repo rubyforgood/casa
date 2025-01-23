@@ -5,8 +5,8 @@ set +e
 
 echo 'Bundling js and css assets...'
 docker compose run --rm web bundle install # usually will be a no-op
-docker compose run --rm web yarn install   # usually will be a no-op
+docker compose run --rm web npm install   # usually will be a no-op
 
-docker compose run --rm web yarn build
-docker compose run --rm web yarn build:css
+docker compose run --rm web npm run build
+docker compose run --rm web npm run build:css
 echo 'Done bundling js and css assets.'

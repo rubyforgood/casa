@@ -14,8 +14,8 @@ if ! [ -x "$(command -v bundle)" ]; then
   exit 1
 fi
 
-if ! [ -x "$(command -v yarn)" ]; then
-  log error "Command yarn could not be found"
+if ! [ -x "$(command -v npm)" ]; then
+  log error "Command npm could not be found"
   exit 1
 fi
 
@@ -26,13 +26,9 @@ else
   log success "Dependencies up to date"
 fi
 
-# run yarn if package.json or yarn.lock has been changed
-# Credit to
-# https://gist.github.com/foca/3148204
-
 log info "Checking javascript dependency status"
 
-if [ $(git diff HEAD@{1}..HEAD@{0} -- "yarn.lock" | wc -l) -gt 0 ] || [ $(git diff HEAD@{1}..HEAD@{0} -- "package.json" | wc -l) -gt 0 ]; then
-  log info "Updating javascript dependencies"
-  yarn
+if [ $(git diff HEAD@{1}..HEAD@{0} -- "package-lock.json" | wc -l) -gt 0 ] || [ $(git diff HEAD@{1}..HEAD@{0} -- "package.json" | wc -l) -gt 0 ]; then
+  log info "Updating JavaScript dependencies"
+  npm install
 fi

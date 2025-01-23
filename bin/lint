@@ -2,6 +2,6 @@
 
 bundle exec standardrb --fix --format progress
 bundle exec erb_lint --lint-all --autocorrect
-yarn lint:fix
+npm run lint:fix
 echo "Linting Factories"
 rails factory_bot:lint

@@ -20,7 +20,7 @@ erb:
 
 javascript:
 - changed-files:
-  - any-glob-to-any-file: ["**/*.js", "package*.json", "yarn.lock"]
+  - any-glob-to-any-file: ["**/*.js", "package*.json", "package-lock.json"]
 
 Tests! 🎉💖👏:
 - changed-files:
@@ -28,4 +28,4 @@ Tests! 🎉💖👏:
 
 dependencies:
 - changed-files:
-  - any-glob-to-any-file: ["Gemfile*", "package*.json", "yarn.lock"]
+  - any-glob-to-any-file: ["Gemfile*", "package*.json", "package-lock.json"]

@@ -145,4 +145,19 @@ RSpec.describe "/case_contacts", type: :request do
       expect { request }.to change { case_contact.reload.deleted? }.from(true).to(false)
     end
   end
+
+  xdescribe "GET /leave" do
+    subject(:request) do
+      get leave_case_contact_path
+
+      response
+    end
+
+    it { is_expected.to redirect_to(case_contacts_path) }
+
+    it "redirects back to referer or fallback location" do
+      request
+      expect(response).to redirect_to(case_contacts_path)
+    end
+  end
 end

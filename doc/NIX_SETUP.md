@@ -2,7 +2,7 @@
 
 If you have [Nix](https://nixos.org) installed you can use the [flake.nix](flake.nix)
 configuration file located at the root of the project to build and develop within an environment
-without needing to install `rvm`, `nodejs`, `yarn`, `postgresql` or other tools separately.
+without needing to install `rvm`, `nodejs`, `postgresql` or other tools separately.
 The environment also uses the `gemset.nix` file to automatically download and install all the gems
 necessary to get the server up and running:
 

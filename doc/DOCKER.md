@@ -39,9 +39,9 @@ The following commands should just be run for the initial setup only. Rebuilding
 3. Run `docker compose build` to build images for all services.
 4. Run `docker compose run --rm web bundle install` to install ruby dependencies
 5. Run `docker compose run --rm web rails db:reset` to create the dev and test databases, load the schema, and run the seeds file.
-6. Run `docker compose run --rm web yarn` to install javascript dependencies
-7. Run `docker compose run --rm web yarn build` to bundle javascript assets
-8. Run `docker compose run --rm web yarn build:css` to bundle the css
+6. Run `docker compose run --rm web npm install` to install javascript dependencies
+7. Run `docker compose run --rm web npm run build` to bundle javascript assets
+8. Run `docker compose run --rm web npm run build:css` to bundle the css
 9. Run `docker compose up` to start all the remaining services. Or use `docker compose up -d` to start containers in the background.
 10. Run `docker compose ps` to view status of the containers. All should have state "Up". Check the [logs](#viewing-logs) if there are any containers that did not start.
 11. The web application will be available at http://localhost:3000

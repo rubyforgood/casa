@@ -68,11 +68,6 @@ npm i -g npm@latest
 ```
 
 ```
-# Install Yarn
-npm i -g yarn
-```
-
-```
 # add node and node tools to the path
 nvm alias default lts/jod
 ```
@@ -146,8 +141,8 @@ bundle exec rails db:setup                    # Create your local test database
 bundle exec rails db:migrate                  # Update the database if it's out of date
 bundle exec rake after_party:run              # Run post deployment tasks
 
-yarn                                          # install javascript dependencies
-yarn build                                    # compile javascript
-yarn build:css                                # compile css
+npm install                                   # install javascript dependencies
+npm run build                                 # compile javascript
+npm run build:css                             # compile css
 ```
 [Back to the main readme for steps to test your installation.](https://github.com/rubyforgood/casa#running-the-app--verifying-installation)
