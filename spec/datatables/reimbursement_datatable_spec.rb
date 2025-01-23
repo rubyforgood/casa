@@ -192,3 +192,84 @@ RSpec.describe "ReimbursementDatatable" do
     end
   end
 end
+require "rails_helper"
+
+RSpec.describe ReimbursementDatatable do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  
+  subject { described_class.new(params: params, view_context: view_context) }
+
+  let(:params) { ActionController::Parameters.new }
+  let(:view_context) { double("view_context") }
+
+  describe "#data" do
+    before do
+      allow(subject).to receive(:records).and_return([case_contact])
+    end
+
+    it "formats case contact data correctly" do
+      result = subject.send(:data).first
+
+      expect(result).to include(
+        casa_case: {
+          id: casa_case.id,
+          case_number: casa_case.case_number
+        },
+        complete: case_contact.reimbursement_complete,
+        contact_types: kind_of(Array),
+        id: case_contact.id,
+        mark_as_complete_path: "/reimbursements/#{case_contact.id}/mark_as_complete",
+        miles_driven: case_contact.miles_driven,
+        occurred_at: case_contact.occurred_at,
+        volunteer: {
+          address: case_contact.creator.address&.content,
+          display_name: case_contact.creator.display_name,
+          email: case_contact.creator.email,
+          id: case_contact.creator.id
+        }
+      )
+    end
+
+    it "formats contact types correctly" do
+      contact_type = create(:contact_type)
+      contact_type_group = contact_type.contact_type_group
+      case_contact.contact_types << contact_type
+
+      result = subject.send(:data).first
+      expect(result[:contact_types]).to contain_exactly(
+        {
+          name: contact_type.name,
+          group_name: contact_type_group.name
+        }
+      )
+    end
+  end
+
+  describe "#raw_records" do
+    it "includes necessary associations" do
+      expect(subject.send(:raw_records).to_sql).to include("JOIN users")
+    end
+
+    it "orders records" do
+      expect(subject.send(:raw_records).to_sql).to include("ORDER BY")
+    end
+  end
+
+  describe "filtering" do
+    let(:params) do
+      ActionController::Parameters.new(
+        order: { "0" => { column: "0", dir: "asc" } },
+        columns: {
+          "0" => { orderable: "true", search: { value: "" } }
+        }
+      )
+    end
+
+    it "applies order clause" do
+      expect(subject.send(:order_clause)).to be_present
+    end
+  end
+end
