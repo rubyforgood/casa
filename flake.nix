@@ -93,7 +93,7 @@
               pkgs.pkg-config
               pkgs.postgresql
               pkgs.sqlite
-              pkgs.yarn
+              pkgs.nodePackages.npm
             ];
           };
         };

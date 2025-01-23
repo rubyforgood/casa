@@ -31,9 +31,9 @@ RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/m
 WORKDIR $RAILS_ROOT
 
 COPY . .
-RUN npm install --global yarn
-RUN yarn install
-RUN yarn build && yarn build:css
+RUN npm install --global npm
+RUN npm install
+RUN npm run build && npm run build:css
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 

@@ -15,6 +15,6 @@
 
 /public/packs
 /public/packs-test
-/yarn-error.log
-yarn-debug.log*
-.yarn-integrity
+/node_modules
+/npm-debug.log
+/npm-error.log
