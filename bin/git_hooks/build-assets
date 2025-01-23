@@ -8,10 +8,10 @@ repo_root="$(git rev-parse --show-toplevel)"
 
 log info "Building Assets"
 
-if ! [ -x "$(command -v yarn)" ]; then
-  log error "Command yarn could not be found"
+if ! [ -x "$(command -v npm)" ]; then
+  log error "Command npm could not be found"
   exit 1
 fi
 
-yarn build
-yarn build:css
+npm run build
+npm run build:css

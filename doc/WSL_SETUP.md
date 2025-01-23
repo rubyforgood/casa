@@ -69,23 +69,11 @@ Instructions for rbenv:
 
 ### NodeJS
 
-The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
+The Casa package frontend leverages several javascript packages managed through `npm`, so if you are working on those elements you will want to have node, npm.
 
 1. **(Recommended) [Install nvm](https://github.com/nvm-sh/nvm#installing-and-updating)**
 
    NVM is a node version manager.
-
-2. **[Install yarn](https://classic.yarnpkg.com/en/docs/install)**
-
-   Expand 'Alternatives' and select 'Debian/Ubuntu' for detailed instructions.
-
-   `curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
-
-   `echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list`
-
-   `sudo apt update`
-
-   `sudo apt install yarn`
 
 ### Postgres
 
@@ -175,7 +163,7 @@ Casa's install will also install the correct version of Rails.
 
    `bundle install` -  install ruby dependencies.
 
-   `yarn` - install javascript dependencies.
+   `npm install` - install javascript dependencies.
 
 3. **Database Setup**
 
@@ -197,10 +185,10 @@ Casa's install will also install the correct version of Rails.
 
     `bin/rails db:seed:replant` - generates test data (can be rerun to regenerate test data)
 4. **Compile Assets**
--  `yarn build` compile javascript
-&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files
--  `yarn build:css` compile css
-&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files
+-  `npm run build` compile javascript
+&ensp;&ensp;`npm run build:dev` to auto recompile for when you edit js files
+-  `npm run build:css` compile css
+&ensp;&ensp;`npm run build:css:dev` to auto recompile for when you edit sass files
 
 ### Getting Started
 
