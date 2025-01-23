@@ -1,22 +1,17 @@
 require "rails_helper"
 
-RSpec.describe "ReimbursementDatatable" do
-  let(:org) { CasaOrg.first }
-  let(:case_contacts) { CaseContact.joins(:casa_case) }
-  let(:instance) { described_class.new(case_contacts, params) }
-  let(:json_result) { instance.as_json }
-  let(:first_result) { json_result[:data].first }
-  let(:order_by) { nil }
-  let(:order_direction) { nil }
-  let(:page) { 1 }
-  let(:per_page) { 10 }
-  let(:params) do
-    datatable_params(
-      order_by: order_by,
-      order_direction: order_direction,
-      page: page,
-      per_page: per_page
-    )
+RSpec.describe ReimbursementDatatable do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  let(:params) { ActionController::Parameters.new }
+  let(:view_context) { double("view_context") }
+  
+  subject { described_class.new(params: params, view_context: view_context) }
+
+  before do
+    allow(subject).to receive(:records).and_return([case_contact])
   end
 
   # Requires the following to be defined:
@@ -189,6 +184,87 @@ RSpec.describe "ReimbursementDatatable" do
           expect(first_case_number).to eq(highest_case_number)
         end
       end
+    end
+  end
+end
+require "rails_helper"
+
+RSpec.describe ReimbursementDatatable do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  
+  subject { described_class.new(params: params, view_context: view_context) }
+
+  let(:params) { ActionController::Parameters.new }
+  let(:view_context) { double("view_context") }
+
+  describe "#data" do
+    before do
+      allow(subject).to receive(:records).and_return([case_contact])
+    end
+
+    it "formats case contact data correctly" do
+      result = subject.send(:data).first
+
+      expect(result).to include(
+        casa_case: {
+          id: casa_case.id,
+          case_number: casa_case.case_number
+        },
+        complete: case_contact.reimbursement_complete,
+        contact_types: kind_of(Array),
+        id: case_contact.id,
+        mark_as_complete_path: "/reimbursements/#{case_contact.id}/mark_as_complete",
+        miles_driven: case_contact.miles_driven,
+        occurred_at: case_contact.occurred_at,
+        volunteer: {
+          address: case_contact.creator.address&.content,
+          display_name: case_contact.creator.display_name,
+          email: case_contact.creator.email,
+          id: case_contact.creator.id
+        }
+      )
+    end
+
+    it "formats contact types correctly" do
+      contact_type = create(:contact_type)
+      contact_type_group = contact_type.contact_type_group
+      case_contact.contact_types << contact_type
+
+      result = subject.send(:data).first
+      expect(result[:contact_types]).to contain_exactly(
+        {
+          name: contact_type.name,
+          group_name: contact_type_group.name
+        }
+      )
+    end
+  end
+
+  describe "#raw_records" do
+    it "includes necessary associations" do
+      expect(subject.send(:raw_records).to_sql).to include("JOIN users")
+    end
+
+    it "orders records" do
+      expect(subject.send(:raw_records).to_sql).to include("ORDER BY")
+    end
+  end
+
+  describe "filtering" do
+    let(:params) do
+      ActionController::Parameters.new(
+        order: { "0" => { column: "0", dir: "asc" } },
+        columns: {
+          "0" => { orderable: "true", search: { value: "" } }
+        }
+      )
+    end
+
+    it "applies order clause" do
+      expect(subject.send(:order_clause)).to be_present
     end
   end
 end
