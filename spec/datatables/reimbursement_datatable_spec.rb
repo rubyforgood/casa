@@ -1,22 +1,17 @@
 require "rails_helper"
 
-RSpec.describe "ReimbursementDatatable" do
-  let(:org) { CasaOrg.first }
-  let(:case_contacts) { CaseContact.joins(:casa_case) }
-  let(:instance) { described_class.new(case_contacts, params) }
-  let(:json_result) { instance.as_json }
-  let(:first_result) { json_result[:data].first }
-  let(:order_by) { nil }
-  let(:order_direction) { nil }
-  let(:page) { 1 }
-  let(:per_page) { 10 }
-  let(:params) do
-    datatable_params(
-      order_by: order_by,
-      order_direction: order_direction,
-      page: page,
-      per_page: per_page
-    )
+RSpec.describe ReimbursementDatatable do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+  let(:casa_case) { create(:casa_case, casa_org: casa_org) }
+  let(:case_contact) { create(:case_contact, creator: volunteer, casa_case: casa_case) }
+  let(:params) { ActionController::Parameters.new }
+  let(:view_context) { double("view_context") }
+  
+  subject { described_class.new(params: params, view_context: view_context) }
+
+  before do
+    allow(subject).to receive(:records).and_return([case_contact])
   end
 
   # Requires the following to be defined:
