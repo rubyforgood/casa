@@ -570,6 +570,66 @@ RSpec.describe CaseContact, type: :model do
     let(:casa_case) { create(:casa_case) }
     let(:case_contact) { build(:case_contact, :wants_reimbursement, casa_case: casa_case, creator: volunteer) }
 
+    describe "metadata handling" do
+      it "initializes with empty metadata" do
+        contact = build(:case_contact)
+        expect(contact.metadata).to eq({})
+      end
+
+      it "preserves metadata through save" do
+        contact = create(:case_contact, metadata: {"test_key" => "test_value"})
+        contact.reload
+        expect(contact.metadata["test_key"]).to eq("test_value")
+      end
+    end
+
+    describe "reimbursement calculations" do
+      it "handles zero miles driven" do
+        contact = build(:case_contact, miles_driven: 0, want_driving_reimbursement: false)
+        expect(contact.reimbursement_amount).to be_nil
+      end
+
+      it "handles nil mileage rate gracefully" do
+        contact = build(:case_contact, :wants_reimbursement, miles_driven: 100)
+        allow(contact.casa_case.casa_org).to receive(:mileage_rate_for_given_date).and_return(nil)
+        expect(contact.reimbursement_amount).to be_nil
+      end
+    end
+
+    describe "validation messages" do
+      it "includes specific message for future dates" do
+        contact = build(:case_contact, occurred_at: 1.day.from_now)
+        contact.valid?
+        expect(contact.errors[:occurred_at]).to include("can't be in the future")
+      end
+
+      it "includes specific message for dates before 1989" do
+        contact = build(:case_contact, occurred_at: Date.new(1988, 12, 31))
+        contact.valid?
+        expect(contact.errors[:occurred_at]).to include("can't be prior to 01/01/1989.")
+      end
+    end
+
+    describe "contact_made validation" do
+      it "requires contact_made to be boolean" do
+        contact = build(:case_contact, contact_made: nil)
+        expect(contact).not_to be_valid
+        expect(contact.errors[:contact_made]).to include("must be true or false")
+      end
+
+      it "accepts false for contact_made" do
+        contact = build(:case_contact, contact_made: false)
+        contact.valid?
+        expect(contact.errors[:contact_made]).to be_empty
+      end
+
+      it "accepts true for contact_made" do
+        contact = build(:case_contact, contact_made: true)
+        contact.valid?
+        expect(contact.errors[:contact_made]).to be_empty
+      end
+    end
+
     it "returns true if wants reimbursement, reimbursement changed, and has active supervisor" do
       expect(case_contact.want_driving_reimbursement_changed?).to be true
       expect(case_contact.should_send_reimbursement_email?).to be true
