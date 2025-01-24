@@ -178,6 +178,9 @@ body.casa_cases-show {
   border: 1px solid #e5e5e5;
   border-radius: 10px;
   padding: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .select-wrapper {
