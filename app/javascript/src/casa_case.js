@@ -85,15 +85,14 @@ function showAlert (html) {
   flashContainer && flashContainer.replaceWith(alertEl)
 }
 
-function validateForm(formEl, errorEl) {
+function validateForm (formEl, errorEl) {
   if (!formEl) {
     return
   }
 
   // check html validations, checkValidity returns false if doesn't pass validation
   if (errorEl && !formEl.checkValidity()) {
-    errorEl.classList.remove("d-none")
-    return
+    errorEl.classList.remove('d-none')
   }
 }
 
@@ -103,7 +102,7 @@ function handleGenerateReport (e) {
   const form = e.currentTarget.form
 
   const formData = Object.fromEntries(new FormData(form))
-  const errorEl = document.querySelector(".select-required-error")
+  const errorEl = document.querySelector('.select-required-error')
   validateForm(form, errorEl ?? null)
   if (formData.case_number.length === 0) return
 
@@ -143,15 +142,15 @@ function handleGenerateReport (e) {
 }
 
 function clearSelectErrors () {
-  const errorEl = document.querySelector(".select-required-error")
+  const errorEl = document.querySelector('.select-required-error')
 
   if (!errorEl) return
 
-  errorEl.classList.add("d-none")
+  errorEl.classList.add('d-none')
 }
 
-function handleModalClose() {
-  const selectEl = document.querySelector("#case-selection")
+function handleModalClose () {
+  const selectEl = document.querySelector('#case-selection')
 
   if (!selectEl) return
 
@@ -167,7 +166,7 @@ $(() => { // JQuery's callback for the DOM loading
     disableBtn($('button.copy-court-button')[0])
   }
 
-  $("#case-selection").on("change", clearSelectErrors)
+  $('#case-selection').on('change', clearSelectErrors)
 
   $('select.siblings-casa-cases').on('change', () => {
     if ($('select.siblings-casa-cases').find(':selected').text()) {
