@@ -53,13 +53,15 @@ class HealthController < ApplicationController
     monthly_counts_of_volunteers = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Volunteer"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
     monthly_counts_of_supervisors = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Supervisor"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
     monthly_counts_of_casa_admins = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "CasaAdmin"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-
+    monthly_logged_counts_of_volunteers = CaseContact.joins(:supervisor_volunteer).group_by_month(:created_at, format: "%b %Y").distinct.count(:creator_id)
+    
     monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
       [
         month,
         monthly_counts_of_volunteers[month] || 0,
         monthly_counts_of_supervisors[month] || 0,
-        monthly_counts_of_casa_admins[month] || 0
+        monthly_counts_of_casa_admins[month] || 0,
+        monthly_logged_counts_of_volunteers[month] || 0
       ]
     end
 

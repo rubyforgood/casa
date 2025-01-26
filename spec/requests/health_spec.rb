@@ -104,6 +104,8 @@ RSpec.describe "Health", type: :request do
       volunteer2 = create(:user, type: "Volunteer")
       supervisor = create(:user, type: "Supervisor")
       casa_admin = create(:user, type: "CasaAdmin")
+      supervisor_volunteer1 = create(:supervisor_volunteer, is_active: true)
+      supervisor_volunteer2 = create(:supervisor_volunteer, is_active: true)
 
       create(:login_activity, user: volunteer1, created_at: 11.months.ago, success: true)
       create(:login_activity, user: volunteer2, created_at: 11.months.ago, success: true)
@@ -113,6 +115,10 @@ RSpec.describe "Health", type: :request do
       create(:login_activity, user: volunteer2, created_at: 9.months.ago, success: true)
       create(:login_activity, user: supervisor, created_at: 9.months.ago, success: true)
       create(:login_activity, user: casa_admin, created_at: 9.months.ago, success: true)
+      create(:case_contact, creator_id: supervisor_volunteer1.volunteer_id, created_at: 11.months.ago)
+      create(:case_contact, creator_id: supervisor_volunteer1.volunteer_id, created_at: 11.months.ago)
+      create(:case_contact, creator_id: supervisor_volunteer2.volunteer_id, created_at: 11.months.ago)
+      create(:case_contact, creator_id: supervisor_volunteer1.volunteer_id, created_at: 10.months.ago)
     end
 
     it "returns monthly unique users data for volunteers, supervisors, and admins in the last year" do
@@ -128,9 +134,9 @@ RSpec.describe "Health", type: :request do
       expect(chart_data).to be_an(Array)
       expect(chart_data.length).to eq(12)
 
-      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1])
-      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0])
-      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1, 2])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0, 1])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1, 0])
     end
 
     it "returns monthly unique users data for volunteers, supervisors, and admins in the last year (on the first of the month)" do
@@ -146,9 +152,9 @@ RSpec.describe "Health", type: :request do
       expect(chart_data).to be_an(Array)
       expect(chart_data.length).to eq(12)
 
-      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1])
-      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0])
-      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1])
+      expect(chart_data[0]).to eq([11.months.ago.strftime("%b %Y"), 2, 1, 1, 2])
+      expect(chart_data[1]).to eq([10.months.ago.strftime("%b %Y"), 1, 0, 0, 1])
+      expect(chart_data[2]).to eq([9.months.ago.strftime("%b %Y"), 1, 1, 1, 0])
     end
   end
 end
