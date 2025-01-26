@@ -237,7 +237,7 @@ GEM
     ffi (1.17.0-arm64-darwin)
     ffi (1.17.0-x86_64-darwin)
     ffi (1.17.0-x86_64-linux-gnu)
-    filterrific (5.2.5)
+    filterrific (5.2.6)
     flipper (1.3.2)
       concurrent-ruby (< 2)
     flipper-active_record (1.3.2)
