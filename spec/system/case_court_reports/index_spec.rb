@@ -73,6 +73,26 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
       expect(page).not_to have_selector("#btnGenerateReport[disabled]")
       expect(page).to have_selector("#spinner", visible: :hidden)
+
+      # when 'Generate Report' button is clicked without a selection, should display an error saying to make a selection
+      expect(page).to have_selector(".select-required-error", visible: :visible)
+
+      test_case_number = casa_cases.find(&:in_transition_age?).case_number.to_s
+
+      # when we make a selection, the error is no longer visible
+      page.select test_case_number, from: "case-selection"
+      expect(page).not_to have_selector(".select-required-error", visible: :visible)
+
+      # test the flow for clearing case selection error message by closing modal
+      click_button "Close"
+      page.find(modal_selector).click
+      click_button "Generate Report"
+      # expect the error message to be visible because we tried to generate the doc without making a selection
+      expect(page).to have_selector(".select-required-error", visible: :visible)
+      # expect error message to be gone after we close and re-open the modal
+      click_button "Close"
+      page.find(modal_selector).click
+      expect(page).not_to have_selector(".select-required-error", visible: :visible)
     end
   end
 
