@@ -71,7 +71,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       click_button "Generate Report"
 
       expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
-      expect(page).not_to have_selector("#btnGenerateReport[disabled]") # is the button expected to be disabled?
+      expect(page).not_to have_selector("#btnGenerateReport[disabled]")
       expect(page).to have_selector("#spinner", visible: :hidden)
 
       # when 'Generate Report' button is clicked without a selection, should display an error saying to make a selection
