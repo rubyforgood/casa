@@ -32,6 +32,7 @@ gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/ne
 gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang reason
 gem "noticed" # Notifications
 gem "oj" # faster JSON parsing 🍊
+gem "pagy" # pagination
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "pg" # Use postgresql as the database for Active Record
