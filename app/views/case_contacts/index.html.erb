@@ -125,6 +125,7 @@
     </div>
   </div>
 <% end %>
+
 <%= turbo_frame_tag :case_contacts do %>
   <% @presenter.case_contacts.each do |casa_case_id, data| %>
     <div class="card-style-1 mb-5">
@@ -156,4 +157,5 @@
       </div>
     <% end %>
   <% end %>
+  <%== pagy_bootstrap_nav(@pagy) %>
 <% end %>
