@@ -3,6 +3,7 @@
      data-multiple-select-options-value="<%= @options %>"
      data-multiple-select-selected-items-value="<%= @selected_items %>"
      data-multiple-select-placeholder-term-value="<%= @placeholder_term %>"
+     data-multiple-select-show-all-option-value="<%= @show_all_option %>"
      data-multiple-select-with-options-value="true">
 
   <template data-multiple-select-target="option">
@@ -18,6 +19,18 @@
     <div class="badge rounded-pill bg-primary active px-3">DATA_LABEL</div>
   </template>
 
+  <% if @show_all_option %>
+    <template data-multiple-select-target="hiddenItem">
+      <div class="d-none"></div>
+    </template>
+
+    <template data-multiple-select-target="showAllOption">
+      <div class="fug d-flex align-items-baseline show-all-options" data-multiple-select-target="showAllOption" data-action="multiple-select#toggleSelectAll">
+        <span class='mr-5'>DATA_LABEL</span>
+      </div>
+    </template>
+  <% end %>
+  
   <%= @form.select @name, {}, { multiple: true } , {
     data: { "multiple-select-target": "select",  } , class: "form-control-lg form-select form-select-lg input-group-lg"
   } %>
