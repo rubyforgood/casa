@@ -3,6 +3,7 @@ require "rails_helper"
 RSpec.describe "case_contacts/index", type: :view do
   let(:user) { build_stubbed(:volunteer) }
   let(:case_contacts) { CaseContact.all }
+  let(:pagy) { Pagy.new(count: 0) }
 
   let(:filterrific_param_set) do
     param_set = Filterrific::ParamSet.new(case_contacts, {})
@@ -30,6 +31,7 @@ RSpec.describe "case_contacts/index", type: :view do
     assign(:current_organization_groups, groups)
     assign(:filterrific, filterrific_param_set)
     assign(:presenter, CaseContactPresenter.new(case_contacts))
+    assign(:pagy, pagy)
 
     render template: "case_contacts/index"
   end

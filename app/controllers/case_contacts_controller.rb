@@ -19,7 +19,8 @@ class CaseContactsController < ApplicationController
       }
     ) || return
 
-    case_contacts = CaseContact.case_hash_from_cases(@filterrific.find)
+    @pagy, @filtered_case_contacts = pagy(@filterrific.find)
+    case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
     case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
@@ -103,12 +104,12 @@ class CaseContactsController < ApplicationController
   end
 
   def all_case_contacts
-    policy_scope(current_organization.case_contacts).includes(
+    policy_scope(current_organization.case_contacts).preload(
       :creator,
       :followups,
-      :contact_types,
-      contact_topic_answers: [:contact_topic],
-      casa_case: [:volunteers]
+      contact_types: :contact_type_group,
+      contact_topic_answers: :contact_topic,
+      casa_case: :volunteers
     )
   end
 
