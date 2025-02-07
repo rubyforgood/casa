@@ -12,6 +12,8 @@ class User < ApplicationRecord
   before_update :record_previous_email
   has_secure_token :token, length: 36
 
+  self.ignored_columns += ["token"]
+
   validates_with UserValidator
 
   devise :database_authenticatable, :invitable, :recoverable, :validatable, :timeoutable, :trackable, :confirmable
@@ -217,7 +219,6 @@ end
 #  reset_password_sent_at        :datetime
 #  reset_password_token          :string
 #  sign_in_count                 :integer          default(0), not null
-#  token                         :string
 #  type                          :string
 #  unconfirmed_email             :string
 #  created_at                    :datetime         not null

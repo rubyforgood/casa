@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_10_17_050129) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_07_080511) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -87,6 +87,21 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_050129) do
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
     t.index ["invitation_token"], name: "index_all_casa_admins_on_invitation_token", unique: true
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
+  end
+
+  create_table "api_credentials", force: :cascade do |t|
+    t.bigint "user_id", null: false
+    t.string "api_token"
+    t.string "refresh_token"
+    t.datetime "token_expires_at", default: -> { "(now() + 'PT7H'::interval)" }
+    t.datetime "refresh_token_expires_at", default: -> { "(now() + 'P30D'::interval)" }
+    t.string "api_token_digest"
+    t.string "refresh_token_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_token_digest"], name: "index_api_credentials_on_api_token_digest", unique: true, where: "(api_token_digest IS NOT NULL)"
+    t.index ["refresh_token_digest"], name: "index_api_credentials_on_refresh_token_digest", unique: true, where: "(refresh_token_digest IS NOT NULL)"
+    t.index ["user_id"], name: "index_api_credentials_on_user_id"
   end
 
   create_table "banners", force: :cascade do |t|
@@ -683,7 +698,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_050129) do
     t.string "unconfirmed_email"
     t.string "old_emails", default: [], array: true
     t.boolean "receive_reimbursement_email", default: false
-    t.string "token"
     t.boolean "monthly_learning_hours_report", default: false, null: false
     t.datetime "date_of_birth"
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
@@ -700,6 +714,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_10_17_050129) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "additional_expenses", "case_contacts"
   add_foreign_key "addresses", "users"
+  add_foreign_key "api_credentials", "users"
   add_foreign_key "banners", "casa_orgs"
   add_foreign_key "banners", "users"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
