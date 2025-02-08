@@ -10,9 +10,6 @@ class User < ApplicationRecord
   after_create :skip_email_confirmation_upon_creation
   after_create :create_preference_set
   before_update :record_previous_email
-  has_secure_token :token, length: 36
-
-  self.ignored_columns += ["token"]
 
   validates_with UserValidator
 
@@ -39,6 +36,7 @@ class User < ApplicationRecord
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
   has_one :preference_set, dependent: :destroy
+  has_one :api_credential, dependent: :destroy
 
   has_many :user_sms_notification_events
   has_many :sms_notification_events, through: :user_sms_notification_events
