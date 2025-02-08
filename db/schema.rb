@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_07_080511) do
+ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -91,8 +91,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_07_080511) do
 
   create_table "api_credentials", force: :cascade do |t|
     t.bigint "user_id", null: false
-    t.string "api_token"
-    t.string "refresh_token"
     t.datetime "token_expires_at", default: -> { "(now() + 'PT7H'::interval)" }
     t.datetime "refresh_token_expires_at", default: -> { "(now() + 'P30D'::interval)" }
     t.string "api_token_digest"

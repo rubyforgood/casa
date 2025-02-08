@@ -3,6 +3,7 @@
 # model for all user roles: volunteer supervisor casa_admin inactive
 class User < ApplicationRecord
   include Roles
+  include Api
   include ByOrganizationScope
   include DateHelper
 
@@ -36,7 +37,6 @@ class User < ApplicationRecord
   }, foreign_key: "volunteer_id", dependent: :destroy
   has_one :supervisor, through: :supervisor_volunteer
   has_one :preference_set, dependent: :destroy
-  has_one :api_credential, dependent: :destroy
 
   has_many :user_sms_notification_events
   has_many :sms_notification_events, through: :user_sms_notification_events
@@ -182,6 +182,10 @@ class User < ApplicationRecord
     if phone_number&.length == 10
       self.phone_number = "+1#{phone_number}"
     end
+  end
+
+  def initialize_api_credentials
+    create_api_credential unless api_credential
   end
 end
 # == Schema Information

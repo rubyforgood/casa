@@ -3,9 +3,9 @@ class Api::V1::BaseController < ActionController::API
   before_action :authenticate_user!, except: [:create]
 
   def authenticate_user!
-    token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
+    api_token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
     user = User.find_by(email: options[:email])
-    if user && token && ActiveSupport::SecurityUtils.secure_compare(user.token, token)
+    if user && api_token && ActiveSupport::SecurityUtils.secure_compare(user.api_credential.api_token_digest, Digest::SHA256.hexdigest(api_token))
       @current_user = user
     else
       render json: {message: "Wrong password or email"}, status: 401
