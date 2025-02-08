@@ -183,10 +183,6 @@ class User < ApplicationRecord
       self.phone_number = "+1#{phone_number}"
     end
   end
-
-  def initialize_api_credentials
-    create_api_credential unless api_credential
-  end
 end
 # == Schema Information
 #
