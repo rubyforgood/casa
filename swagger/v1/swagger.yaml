@@ -8,14 +8,21 @@ components:
     login_success:
       type: object
       properties:
-        id:
-          type: integer
-        display_name:
+        api_token:
           type: string
-        email:
+        refresh_token:
           type: string
-        token:
-          type: string
+        user:
+          id:
+            type: integer
+          display_name:
+            type: string
+          email:
+            type: string
+          api_token_expires_at:
+            type: datetime
+          refresh_token_expires_at:
+            type: datetime
     login_failure:
       type: object
       properties:
