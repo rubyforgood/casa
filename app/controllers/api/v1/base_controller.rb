@@ -8,7 +8,7 @@ class Api::V1::BaseController < ActionController::API
     if user && api_token && ActiveSupport::SecurityUtils.secure_compare(user.api_credential.api_token_digest, Digest::SHA256.hexdigest(api_token))
       @current_user = user
     else
-      render json: {message: "Wrong password or email"}, status: 401
+      render json: {message: "Incorrect email or password."}, status: 401
     end
   end
 
