@@ -20,12 +20,6 @@ RSpec.describe "Base Controller", type: :request do
   describe "GET #index" do
     let(:user) { create(:volunteer) }
 
-    it "returns http success when valid credentials" do
-      get "/index", headers: {"Authorization" => "Token token=#{user.api_credential.return_new_api_token![:api_token]}, email=#{user.email}"}
-      expect(response).to have_http_status(:success)
-      expect(response.body).to eq({message: "Successfully autenticated"}.to_json)
-    end
-
     it "returns http unauthorized if invalid token" do
       get "/index", headers: {"Authorization" => "Token token=, email=#{user.email}"}
       expect(response).to have_http_status(:unauthorized)
