@@ -74,7 +74,7 @@ RSpec.describe ApiCredential, type: :model do
   describe "#is_refresh_token_expired?" do
     it "returns false if token is still valid" do
       api_credential.update!(refresh_token_expires_at: 1.hour.from_now)
-      expect(api_credential.is_refresh_api_token_expired?).to be false
+      expect(api_credential.is_refresh_token_expired?).to be false
     end
 
     it "returns true if token is expired" do
