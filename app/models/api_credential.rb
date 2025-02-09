@@ -17,15 +17,15 @@ class ApiCredential < ApplicationRecord
 
   # Securely generate and then return new tokens
   def return_new_api_token!
-    generate_api_token
-    save!
-    {api_token: @api_token}
+    new_token = generate_api_token
+    update_column(:api_token_digest, api_token_digest)
+    {api_token: new_token}
   end
 
   def return_new_refresh_token!
-    generate_refresh_token
-    save!
-    {refresh_token: @refresh_token}
+    new_token = generate_refresh_token
+    update_column(:refresh_token_digest, refresh_token_digest)
+    {refresh_token: new_token}
   end
 
   # Verifying token has or has not expired
@@ -41,13 +41,15 @@ class ApiCredential < ApplicationRecord
 
   # Generate unique tokens and hashes them for secure db storage
   def generate_api_token
-    @api_token ||= SecureRandom.hex(18)
-    self.api_token_digest = Digest::SHA256.hexdigest(@api_token) if @api_token.present?
+    new_api_token = SecureRandom.hex(18)
+    self.api_token_digest = Digest::SHA256.hexdigest(new_api_token)
+    new_api_token
   end
 
   def generate_refresh_token
-    @refresh_token ||= SecureRandom.hex(18)
-    self.refresh_token_digest = Digest::SHA256.hexdigest(@refresh_token) if @refresh_token.present?
+    new_refresh_token = SecureRandom.hex(18)
+    self.refresh_token_digest = Digest::SHA256.hexdigest(new_refresh_token)
+    new_refresh_token
   end
 end
 

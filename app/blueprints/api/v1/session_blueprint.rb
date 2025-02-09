@@ -10,12 +10,12 @@ class Api::V1::SessionBlueprint < Blueprinter::Base
   end
 
   field :api_token do |user|
-    token = user.api_credential || user.create_api_credential
+    token = user.api_credential
     token.return_new_api_token![:api_token]
   end
 
   field :refresh_token do |user|
-    token = user.api_credential || user.create_api_credential
+    token = user.api_credential
     token.return_new_refresh_token![:refresh_token]
   end
 end

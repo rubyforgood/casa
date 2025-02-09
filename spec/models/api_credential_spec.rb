@@ -6,7 +6,6 @@ RSpec.describe ApiCredential, type: :model do
   let(:user) { create(:user) }
 
   it { is_expected.to belong_to(:user) }
-  it { is_expected.to have_one(:api_credential) }
 
   describe "#authenticate_api_token" do
     it "returns true for a valid api_token" do
@@ -34,7 +33,7 @@ RSpec.describe ApiCredential, type: :model do
     it "updates the api_token digest" do
       old_digest = api_credential.api_token_digest
       api_credential.return_new_api_token![:api_token]
-
+      api_credential.reload
       expect(api_credential.api_token_digest).not_to eq(old_digest)
     end
 
@@ -49,7 +48,7 @@ RSpec.describe ApiCredential, type: :model do
     it "updates the refresh_token digest" do
       old_digest = api_credential.refresh_token_digest
       api_credential.return_new_refresh_token![:refresh_token]
-
+      api_credential.reload
       expect(api_credential.refresh_token_digest).not_to eq(old_digest)
     end
 
@@ -64,6 +63,18 @@ RSpec.describe ApiCredential, type: :model do
     it "returns false if token is still valid" do
       api_credential.update!(token_expires_at: 1.hour.from_now)
       expect(api_credential.is_api_token_expired?).to be false
+    end
+
+    it "returns true if token is expired" do
+      api_credential.update!(token_expires_at: 1.hour.ago)
+      expect(api_credential.is_api_token_expired?).to be true
+    end
+  end
+
+  describe "#is_refresh_token_expired?" do
+    it "returns false if token is still valid" do
+      api_credential.update!(refresh_token_expires_at: 1.hour.from_now)
+      expect(api_credential.is_refresh_api_token_expired?).to be false
     end
 
     it "returns true if token is expired" do

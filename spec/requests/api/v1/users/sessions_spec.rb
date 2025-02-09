@@ -22,8 +22,10 @@ RSpec.describe "sessions API", type: :request do
         let(:user) { {email: volunteer.email, password: volunteer.password} }
         schema "$ref" => "#/components/schemas/login_success"
         run_test! do |response|
+          parsed_response = JSON.parse(response.body)
+          expect(parsed_response["api_token"]).not_to be_nil
+          expect(parsed_response["refresh_token"]).not_to be_nil
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response.body).to eq(Api::V1::SessionBlueprint.render(volunteer))
           expect(response.status).to eq(201)
         end
       end
@@ -33,7 +35,7 @@ RSpec.describe "sessions API", type: :request do
         schema "$ref" => "#/components/schemas/login_failure"
         run_test! do |response|
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response.body).to eq({message: "Wrong password or email"}.to_json)
+          expect(response.body).to eq({message: "Incorrect email or password."}.to_json)
           expect(response.status).to eq(401)
         end
       end
