@@ -1,12 +1,12 @@
-require 'rails_helper'
-require 'digest'
+require "rails_helper"
+require "digest"
 
 RSpec.describe ApiCredential, type: :model do
+  let(:api_credential) { create(:api_credential, user: user) }
+  let(:user) { create(:user) }
+
   it { is_expected.to belong_to(:user) }
   it { is_expected.to have_one(:api_credential) }
-
-  let(:user) { create(:user) }
-  let(:api_credential) { create(:api_credential, user: user) }
 
   describe "#authenticate_api_token" do
     it "returns true for a valid api_token" do
@@ -50,7 +50,6 @@ RSpec.describe ApiCredential, type: :model do
     end
   end
 
-
   describe "#is_api_token_expired?" do
     it "returns false if token is still valid" do
       api_credential.update!(token_expires_at: 1.hour.from_now)
@@ -62,7 +61,7 @@ RSpec.describe ApiCredential, type: :model do
       expect(api_credential.is_api_token_expired?).to be true
     end
   end
-  
+
   describe "#generate_api_token" do
     it "creates a secure hashed api_token when generated" do
       old_digest = api_credential.api_token_digest
@@ -76,11 +75,12 @@ RSpec.describe ApiCredential, type: :model do
 
   describe "#generate_refresh_token" do
     it "creates a secure hashed refresh_token when generated" do
-        old_digest = api_credential.refresh_token_digest
-        refresh_token = api_credential.return_new_refresh_token![:refresh_token]
+      old_digest = api_credential.refresh_token_digest
+      refresh_token = api_credential.return_new_refresh_token![:refresh_token]
 
-        expect(api_credential.refresh_token_digest).not_to be_nil
-        expect(api_credential.refresh_token_digest).to eq(Digest::SHA256.hexdigest(refresh_token))
-        expect(api_credential.refresh_token_digest).not_to eq(old_digest)
+      expect(api_credential.refresh_token_digest).not_to be_nil
+      expect(api_credential.refresh_token_digest).to eq(Digest::SHA256.hexdigest(refresh_token))
+      expect(api_credential.refresh_token_digest).not_to eq(old_digest)
     end
   end
+end
