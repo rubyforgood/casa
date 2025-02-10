@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import TomSelect from 'tom-select'
 
 export default class extends Controller {
-  static targets = ['select', 'option', 'item', 'hiddenItem', 'showAllOption']
+  static targets = ['select', 'option', 'item', 'hiddenItem', 'selectAllOption']
   static values = {
     options: Array,
     selectedItems: Array,
@@ -40,7 +40,7 @@ export default class extends Controller {
 
     const showAllOptionCheck = this.showAllOptionValue
     const hiddenItemTemplate = showAllOptionCheck && this.hiddenItemTarget && this.hiddenItemTarget.innerHTML
-    const showAllOptionTemplate = showAllOptionCheck && this.showAllOptionTarget && this.showAllOptionTarget.innerHTML
+    const showAllOptionTemplate = showAllOptionCheck && this.selectAllOptionTarget && this.selectAllOptionTarget.innerHTML
 
     // orderedOptionVals is of type (" " | number)[] - the " " could appear
     // because using it as the value for the select/unselect all option
