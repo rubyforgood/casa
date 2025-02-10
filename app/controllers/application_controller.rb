@@ -70,7 +70,7 @@ class ApplicationController < ActionController::Base
   # volunteer/supervisor/casa_admin controller uses to send SMS
   # returns appropriate flash notice for SMS
   def deliver_sms_to(resource, body_msg)
-    return 'blank' if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
+    return "blank" if resource.phone_number.blank? || !resource.casa_org.twilio_enabled?
 
     body = body_msg
     to = resource.phone_number
@@ -85,30 +85,30 @@ class ApplicationController < ActionController::Base
 
     begin
       twilio_res = @twilio.send_sms(req_params)
-      twilio_res.error_code.nil? ? 'sent' : 'error'
+      twilio_res.error_code.nil? ? "sent" : "error"
     rescue Twilio::REST::RestError => e
       @error = e
-      'error'
-    rescue StandardError # unverfied error isnt picked up by Twilio::Rest::RestError
+      "error"
+    rescue # unverfied error isnt picked up by Twilio::Rest::RestError
       # https://www.twilio.com/docs/errors/21608
-      @error = 'Phone number is unverifiied'
-      'error'
+      @error = "Phone number is unverifiied"
+      "error"
     end
   end
 
   def sms_acct_creation_notice(resource_name, sms_status)
     case sms_status
-    when 'blank'
+    when "blank"
       "New #{resource_name} created successfully."
-    when 'error'
+    when "error"
       "New #{resource_name} created successfully. SMS not sent. Error: #{@error}."
-    when 'sent'
+    when "sent"
       "New #{resource_name} created successfully. SMS has been sent!"
     end
   end
 
   def store_referring_location
-    return unless request.referer && !request.referer.end_with?('users/sign_in') && params[:ignore_referer].blank?
+    return unless request.referer && !request.referer.end_with?("users/sign_in") && params[:ignore_referer].blank?
 
     session[:return_to] = request.referer
   end
@@ -149,10 +149,10 @@ class ApplicationController < ActionController::Base
   end
 
   def not_authorized
-    message = 'Sorry, you are not authorized to perform this action.'
+    message = "Sorry, you are not authorized to perform this action."
     respond_to do |format|
       format.json do
-        render json: { error: message }, status: :unauthorized
+        render json: {error: message}, status: :unauthorized
       end
       format.any do
         session[:user_return_to] = nil
@@ -165,10 +165,10 @@ class ApplicationController < ActionController::Base
   def unsupported_media_type
     respond_to do |format|
       format.json do
-        render json: { error: 'json unsupported' }, status: :unsupported_media_type
+        render json: {error: "json unsupported"}, status: :unsupported_media_type
       end
       format.any do
-        flash[:alert] = 'Page not found'
+        flash[:alert] = "Page not found"
         redirect_back_or_to root_url
       end
     end
@@ -181,7 +181,7 @@ class ApplicationController < ActionController::Base
 
   def check_unconfirmed_email_notice(user)
     notice = "#{user.role} was successfully updated."
-    notice += ' Confirmation Email Sent.' if user.saved_changes.include?('unconfirmed_email')
+    notice += " Confirmation Email Sent." if user.saved_changes.include?("unconfirmed_email")
     notice
   end
 end
