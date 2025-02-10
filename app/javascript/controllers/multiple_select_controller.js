@@ -2,7 +2,7 @@ import { Controller } from '@hotwired/stimulus'
 import TomSelect from 'tom-select'
 
 export default class extends Controller {
-  static targets = ['select', 'option', 'item', 'hiddenItem', 'showAllOption'] // add 'selectAllBtn' if going with button
+  static targets = ['select', 'option', 'item', 'hiddenItem', 'showAllOption']
   static values = {
     options: Array,
     selectedItems: Array,
@@ -60,17 +60,9 @@ export default class extends Controller {
       ? [{ text: 'Select/Unseselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
       : this.optionsValue
 
-    // const selectAllBtn = this.selectAllBtnTarget
-    // assign TomSelect instance to this.selectEl if going with button implementation
-
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
-      onItemRemove: function (value, data) {
-        // for the select/unselect all button - add in short circuit in case showAllBtn doesn't exist
-        // if (this.items.length < orderedOptionVals.length) {
-        //   selectAllBtn.innerText = 'Select all'
-        // }
-
+      onItemRemove: function (value) {
         if (value === ' ') {
           this.clear()
         }
@@ -78,11 +70,6 @@ export default class extends Controller {
       onItemAdd: function (value) {
         this.setTextboxValue('')
         this.refreshOptions()
-
-        // for the select/unselect all button - add in short circuit in case showAllBtn doesn't exist
-        // if (this.items.length < orderedOptionVals.length) {
-        //   selectAllBtn.innerText = 'Select all'
-        // }
 
         if (value === ' ') {
           this.addItems(orderedOptionVals)
@@ -122,19 +109,4 @@ export default class extends Controller {
       }
     })
   }
-
-  // action for the select/unselect all button - add in short circuit in case showAllBtn or selectEl doesn't exist
-  // toggleSelectAll() {
-  //   if (!this.selectEl || !this.selectAllBtnTarget) return
-
-  //   const checkedStatus = this.selectEl.items.length === Object.keys(this.selectEl.options).length ? "all" : "not-all"
-
-  //   if (checkedStatus === "all") {
-  //     this.selectEl.clear()
-  //     this.selectAllBtnTarget.textContent = "Select all"
-  //   } else {
-  //     this.selectEl.addItems(this.optionsValue.map(opt => opt.value))
-  //     this.selectAllBtnTarget.textContent = "Unselect all"
-  //   }
-  // }
 }
