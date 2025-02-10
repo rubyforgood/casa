@@ -72,7 +72,7 @@
                   <strong> <%= current_user.email %></strong>
                 </span>
               </li>
-              <% @custom_links.each do |custom_link| %>
+              <% @custom_links&.each do |custom_link| %>
                 <li>
                   <%= link_to custom_link.url, target: "_blank" do %>
                    <i class="lni lni-link"></i> <%= custom_link.text %>

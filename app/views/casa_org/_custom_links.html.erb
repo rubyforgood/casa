@@ -26,7 +26,7 @@
             </tr>
           </thead>
           <tbody>
-            <% @custom_links.each do |custom_link| %>
+            <% @custom_links&.each do |custom_link| %>
               <% id = "custom_link-#{custom_link.id}" %>
               <tr>
                 <td scope="row" class="min-width">
