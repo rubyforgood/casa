@@ -50,8 +50,7 @@ export default class extends Controller {
       orderedOptionVals = [" "].concat(orderedOptionVals)
     }
 
-    // used to determine initial items selected by tom-select
-    const initItems = this.selectedItemsValue?.length ? this.selectedItemsValue : orderedOptionVals
+    const initItems = Array.isArray(this.selectedItemsValue) && this.selectedItemsValue.length ? showAllOptionCheck ? [" "].concat(this.selectedItemsValue) : this.selectedItemsValue : orderedOptionVals
 
     const dropdownOptions = showAllOptionCheck ? 
       [{ text: "Select/Unseselect all", subtext: "", value: " ", group: ""}].concat(this.optionsValue) 
