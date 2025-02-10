@@ -11,7 +11,7 @@ export default class extends Controller {
       type: String,
       default: 'contact(s)'
     },
-    showAllOption: Boolean,
+    showAllOption: Boolean
   }
 
   connect () {
@@ -41,33 +41,37 @@ export default class extends Controller {
     const showAllOptionCheck = this.showAllOptionValue
     const hiddenItemTemplate = showAllOptionCheck && this.hiddenItemTarget && this.hiddenItemTarget.innerHTML
     const showAllOptionTemplate = showAllOptionCheck && this.showAllOptionTarget && this.showAllOptionTarget.innerHTML
-    
+
     // orderedOptionVals is of type (" " | number)[] - the " " could appear
     // because using it as the value for the select/unselect all option
     let orderedOptionVals = this.optionsValue.map(opt => opt.value)
     if (showAllOptionCheck) {
       // using " " as value instead of "" bc tom-select doesn't init the "" in the item list
-      orderedOptionVals = [" "].concat(orderedOptionVals)
+      orderedOptionVals = [' '].concat(orderedOptionVals)
     }
 
-    const initItems = Array.isArray(this.selectedItemsValue) && this.selectedItemsValue.length ? showAllOptionCheck ? [" "].concat(this.selectedItemsValue) : this.selectedItemsValue : orderedOptionVals
+    const initItems = Array.isArray(this.selectedItemsValue) && this.selectedItemsValue.length
+      ? showAllOptionCheck
+        ? [' '].concat(this.selectedItemsValue)
+        : this.selectedItemsValue
+      : orderedOptionVals
 
-    const dropdownOptions = showAllOptionCheck ? 
-      [{ text: "Select/Unseselect all", subtext: "", value: " ", group: ""}].concat(this.optionsValue) 
-        : this.optionsValue
-    
+    const dropdownOptions = showAllOptionCheck
+      ? [{ text: 'Select/Unseselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
+      : this.optionsValue
+
     // const selectAllBtn = this.selectAllBtnTarget
     // assign TomSelect instance to this.selectEl if going with button implementation
 
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
-      onItemRemove: function(value, data) {
+      onItemRemove: function (value, data) {
         // for the select/unselect all button - add in short circuit in case showAllBtn doesn't exist
         // if (this.items.length < orderedOptionVals.length) {
         //   selectAllBtn.innerText = 'Select all'
         // }
 
-        if (value === " ") {
+        if (value === ' ') {
           this.clear()
         }
       },
@@ -80,8 +84,8 @@ export default class extends Controller {
         //   selectAllBtn.innerText = 'Select all'
         // }
 
-        if (value === " ") {
-          this.addItems(orderedOptionVals);
+        if (value === ' ') {
+          this.addItems(orderedOptionVals)
         }
       },
       plugins: {
@@ -104,7 +108,7 @@ export default class extends Controller {
         option: function (data, escape) {
           let html
 
-          if (showAllOptionCheck && data && data.value === " ") {
+          if (showAllOptionCheck && data && data.value === ' ') {
             html = showAllOptionTemplate.replace(/DATA_LABEL/g, escape(data.text))
           } else {
             html = optionTemplate.replace(/DATA_LABEL/g, escape(data.text))
@@ -113,7 +117,7 @@ export default class extends Controller {
           return html
         },
         item: function (data, escape) {
-          return showAllOptionCheck && data.value === " " ? hiddenItemTemplate : itemTemplate.replace(/DATA_LABEL/g, escape(data.text))
+          return showAllOptionCheck && data.value === ' ' ? hiddenItemTemplate : itemTemplate.replace(/DATA_LABEL/g, escape(data.text))
         }
       }
     })
@@ -124,7 +128,7 @@ export default class extends Controller {
   //   if (!this.selectEl || !this.selectAllBtnTarget) return
 
   //   const checkedStatus = this.selectEl.items.length === Object.keys(this.selectEl.options).length ? "all" : "not-all"
-    
+
   //   if (checkedStatus === "all") {
   //     this.selectEl.clear()
   //     this.selectAllBtnTarget.textContent = "Select all"
