@@ -56,12 +56,18 @@ RSpec.describe "/contact_topics", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:attributes) { {casa_org_id: 0} }
+      let(:attributes) do
+        {
+          casa_org_id: casa_org.id,
+          question: "",
+          details: ""
+        }
+      end
 
       it "does not create a new ContactTopic" do
         expect do
           post contact_topics_url, params: {contact_topic: attributes}
-        end.to change(ContactTopic, :count).by(0)
+        end.not_to change(ContactTopic, :count)
       end
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
@@ -115,10 +121,11 @@ RSpec.describe "/contact_topics", type: :request do
 
   describe "DELETE /soft_delete" do
     let!(:contact_topic) { create(:contact_topic, casa_org: casa_org) }
+
     it "does not destroy the requested contact_topic" do
       expect do
         delete soft_delete_contact_topic_url(contact_topic)
-      end.to_not change(ContactTopic, :count)
+      end.not_to change(ContactTopic, :count)
     end
 
     it "set the requested contact_topic to soft_deleted" do

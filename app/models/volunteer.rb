@@ -97,7 +97,7 @@ class Volunteer < User
   end
 
   def case_assignments_with_cases
-    case_assignments.includes(:casa_case)
+    case_assignments.includes(casa_case: :assigned_volunteers)
   end
 
   def has_supervisor?

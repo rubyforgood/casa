@@ -2,8 +2,8 @@
 
 source "https://rubygems.org"
 
-ruby "3.2.2"
-gem "rails", "7.1.3.4"
+ruby "3.3.6"
+gem "rails", "~> 7.2"
 
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
@@ -11,7 +11,7 @@ gem "authtrail" # Track Devise login activity
 gem "azure-storage-blob", require: false
 gem "blueprinter" # for JSON serialization
 gem "bugsnag" # tracking errors in prod
-gem "caxlsx", "~> 4.1" # excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.2" # excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.4" # excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # compiles css
 gem "delayed_job_active_record"
@@ -32,11 +32,12 @@ gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/ne
 gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang reason
 gem "noticed" # Notifications
 gem "oj" # faster JSON parsing 🍊
+gem "pagy" # pagination
 gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.4.2" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "6.6.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "rack-cors" # for allowing cross-origin resource sharing
@@ -49,6 +50,7 @@ gem "scout_apm"
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails"
 gem "strong_migrations"
+gem "turbo-rails", "~> 2.0"
 gem "twilio-ruby" # twilio helper functions
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "view_component" # View components for reusability
@@ -58,12 +60,12 @@ gem "wicked"
 gem "flipper"
 gem "flipper-active_record"
 gem "flipper-ui"
-
+gem "pghero"
+gem "pg_query"
 group :development, :test do
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "dotenv-rails"
-  gem "erb_lint", require: false
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pry"
@@ -72,7 +74,15 @@ group :development, :test do
   gem "rspec-rails"
   gem "rswag-specs"
   gem "shoulda-matchers"
-  gem "standard", "~> 1.39.2"
+  # linters
+  gem "erb_lint", require: false
+  gem "rubocop-capybara", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "rubocop-performance", require: false
+  gem "rubocop-rspec", require: false
+  gem "rubocop-rspec_rails", require: false
+  gem "standard", require: false
+  gem "standard-rails", require: false
 end
 
 group :development do
@@ -95,8 +105,6 @@ group :test do
   gem "rails-controller-testing"
   gem "rake"
   gem "selenium-webdriver"
-  gem "simplecov"
+  gem "simplecov", require: false
   gem "webmock" # HTTP request stubber
 end
-
-# gem "pdf-reader", "~> 2.9"

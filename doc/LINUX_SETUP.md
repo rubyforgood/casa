@@ -52,9 +52,9 @@ sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
 ```
 # Install NVM and Node JS
 #   you can use curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 #   or wget
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
 
 #   Restart your terminal
 
@@ -68,8 +68,8 @@ npm i -g npm@latest
 ```
 
 ```
-# Install Yarn
-npm i -g yarn
+# add node and node tools to the path
+nvm alias default lts/jod
 ```
 
 ```
@@ -82,7 +82,7 @@ rbenv init
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install 3.2.2
+rbenv install 3.3.6
 ```
 
 If you would like RVM instead of rbenv
@@ -93,9 +93,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.2.2
-rvm alias create ruby 3.2.2
-rvm alias create default ruby-3.2.2
+rvm install 3.3.6
+rvm alias create ruby 3.3.6
+rvm alias create default ruby-3.3.6
 ```
 
 ```# Download the Chrome browser (for RSpec testing):
@@ -141,8 +141,8 @@ bundle exec rails db:setup                    # Create your local test database
 bundle exec rails db:migrate                  # Update the database if it's out of date
 bundle exec rake after_party:run              # Run post deployment tasks
 
-yarn                                          # install javascript dependencies
-yarn build                                    # compile javascript
-yarn build:css                                # compile css
+npm install                                   # install javascript dependencies
+npm run build                                 # compile javascript
+npm run build:css                             # compile css
 ```
 [Back to the main readme for steps to test your installation.](https://github.com/rubyforgood/casa#running-the-app--verifying-installation)

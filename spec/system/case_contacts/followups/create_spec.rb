@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "followups/create", type: :system, js: true do
+RSpec.describe "followups/create", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:case_contact) { create(:case_contact) }
   let(:note) { "Lorem ipsum dolor sit amet." }

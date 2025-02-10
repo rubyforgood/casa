@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CourtDatesHelper do
+RSpec.describe CourtDatesHelper, type: :helper do
   describe "#when_do_we_have_court_dates" do
     subject { helper.when_do_we_have_court_dates(casa_case) }
 

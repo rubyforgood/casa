@@ -26,6 +26,7 @@ RSpec.describe "/volunteers", type: :request do
 
     context "with admin from different organization" do
       let(:other_org_admin) { build(:casa_admin, casa_org: create(:casa_org)) }
+
       it "does not show" do
         sign_in other_org_admin
         get volunteer_path(volunteer.id)
@@ -38,7 +39,7 @@ RSpec.describe "/volunteers", type: :request do
     let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
 
     before do
-      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", as_json: data
+      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", to_json: data.to_json
     end
 
     it "is successful" do
@@ -75,7 +76,7 @@ RSpec.describe "/volunteers", type: :request do
       sign_in volunteer
 
       get new_volunteer_path
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
     end
   end
 
@@ -265,9 +266,9 @@ RSpec.describe "/volunteers", type: :request do
         expect(response).to have_http_status(:unprocessable_entity)
 
         volunteer.reload
-        expect(volunteer.display_name).to_not eq "New Name"
-        expect(volunteer.email).to_not eq other_volunteer.email
-        expect(volunteer.phone_number).to_not eq "+15463457898"
+        expect(volunteer.display_name).not_to eq "New Name"
+        expect(volunteer.email).not_to eq other_volunteer.email
+        expect(volunteer.phone_number).not_to eq "+15463457898"
       end
     end
 
@@ -352,12 +353,13 @@ RSpec.describe "/volunteers", type: :request do
     end
 
     it "doesn't send a deactivation email" do
-      expect { request }.to_not change { ActionMailer::Base.deliveries.count }
+      expect { request }.not_to change { ActionMailer::Base.deliveries.count }
     end
   end
 
   describe "PATCH /resend_invitation" do
     before { sign_in admin }
+
     it "resends an invitation email" do
       expect(volunteer.invitation_created_at.present?).to eq(false)
 

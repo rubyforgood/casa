@@ -196,7 +196,7 @@ RSpec.describe "users/edit", type: :system do
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: false)
     end
 
-    it "displays notification events selection as disabled if sms notification preference is not selected", js: true do
+    it "displays notification events selection as disabled if sms notification preference is not selected", :js do
       organization = create(:casa_org, twilio_enabled: true)
       volunteer = create(:volunteer, casa_org: organization)
 

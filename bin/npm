@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+APP_ROOT = File.expand_path('..', __dir__)
+Dir.chdir(APP_ROOT) do
+  npm = ENV["PATH"].split(File::PATH_SEPARATOR).
+    select { |dir| File.expand_path(dir) != __dir__ }.
+    product(["npm", "npm.cmd", "npm.ps1"]).
+    map { |dir, file| File.expand_path(file, dir) }.
+    find { |file| File.executable?(file) }
+
+  if npm
+    command = ARGV.empty? ? ["install"] : ARGV
+    exec npm, *command
+  else
+    $stderr.puts "npm executable was not detected in the system."
+    $stderr.puts "Download npm by installing Node.js from https://nodejs.org/"
+    exit 1
+  end
+end

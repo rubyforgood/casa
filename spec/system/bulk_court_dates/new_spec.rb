@@ -12,7 +12,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
   let!(:hearing_type) { create(:hearing_type) }
   let(:court_order_text) { Faker::Lorem.paragraph(sentence_count: 2) }
 
-  it "is successful", js: true do
+  it "is successful", :js do
     case_group = build(:case_group, casa_org: casa_org)
     case_group.case_group_memberships.first.casa_case = casa_case
     case_group.save!
@@ -40,5 +40,6 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     visit casa_case_path(casa_case)
     expect(page).to have_content(hearing_type.name)
     expect(page).to have_content(court_order_text)
+    travel_back
   end
 end

@@ -1,20 +1,17 @@
 require "rails_helper"
 
 RSpec.describe "/imports", type: :request do
-  let(:volunteer_file) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
-  let(:supervisor_file) { Rails.root.join("spec", "fixtures", "supervisors.csv") }
-  let(:case_file) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
-  let(:existing_case_file) { Rails.root.join("spec", "fixtures", "existing_casa_case.csv") }
-  let(:supervisor_volunteers_file) { Rails.root.join("spec", "fixtures", "supervisor_volunteers.csv") }
+  let(:volunteer_file) { fixture_file_upload "volunteers.csv", "text/csv" }
+  let(:supervisor_file) { fixture_file_upload "supervisors.csv", "text/csv" }
+  let(:case_file) { fixture_file_upload "casa_cases.csv", "text/csv" }
+  let(:existing_case_file) { fixture_file_upload "existing_casa_case.csv", "text/csv" }
+  let(:supervisor_volunteers_file) { fixture_file_upload "supervisor_volunteers.csv", "text/csv" }
   let(:casa_admin) { build(:casa_admin) }
+  let(:pre_transition_aged_youth_age) { Date.current - 14.years }
 
   before do
     # next_court_date in casa_cases.csv needs to be a future date
     travel_to Date.parse("Sept 15 2022")
-  end
-
-  after do
-    travel_back
   end
 
   describe "GET /index" do
@@ -23,7 +20,7 @@ RSpec.describe "/imports", type: :request do
 
       get imports_url
 
-      expect(response).to_not be_successful
+      expect(response).not_to be_successful
     end
 
     it "renders a successful response when the user is an admin" do
@@ -39,7 +36,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "volunteer",
-        file: upload_file(supervisor_file),
+        file: supervisor_file,
         sms_opt_in: "1"
       }
 
@@ -52,7 +49,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "supervisor",
-        file: upload_file(volunteer_file),
+        file: volunteer_file,
         sms_opt_in: "1"
       }
 
@@ -65,7 +62,7 @@ RSpec.describe "/imports", type: :request do
 
       post imports_url, params: {
         import_type: "casa_case",
-        file: upload_file(supervisor_file),
+        file: supervisor_file,
         sms_opt_in: "1"
       }
 
@@ -82,7 +79,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "volunteer",
-            file: upload_file(volunteer_file),
+            file: volunteer_file,
             sms_opt_in: "1"
           }
       }.to change(Volunteer, :count).by(3)
@@ -102,7 +99,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: upload_file(supervisor_file),
+            file: supervisor_file,
             sms_opt_in: "1"
           }
       }.to change(Supervisor, :count).by(3)
@@ -126,7 +123,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "supervisor",
-            file: upload_file(supervisor_volunteers_file),
+            file: supervisor_volunteers_file,
             sms_opt_in: "1"
           }
       }.to change(Supervisor, :count).by(2)
@@ -146,7 +143,7 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: upload_file(case_file),
+            file: case_file,
             sms_opt_in: "1"
           }
       }.to change(CasaCase, :count).by(3)
@@ -168,9 +165,9 @@ RSpec.describe "/imports", type: :request do
         post imports_url,
           params: {
             import_type: "casa_case",
-            file: upload_file(existing_case_file)
+            file: existing_case_file
           }
-      }.to change(CasaCase, :count).by(0)
+      }.not_to change(CasaCase, :count)
 
       expect(request.session[:import_error]).to include("Not all rows were imported.")
       expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")

@@ -15,14 +15,7 @@ end
 Capybara.disable_animation = true
 
 Capybara::Screenshot.autosave_on_failure = true
-
-module Capybara
-  module Screenshot
-    def self.capybara_tmp_path
-      Rails.root.join("tmp", "screenshots#{ENV["GROUPS_UNDERSCORE"]}")
-    end
-  end
-end
+Capybara.save_path = Rails.root.join("tmp", "screenshots#{ENV["GROUPS_UNDERSCORE"]}")
 
 options = Selenium::WebDriver::Chrome::Options.new
 options.add_argument("--disable-gpu")
@@ -59,7 +52,7 @@ RSpec.configure do |config|
     driven_by :rack_test
   end
 
-  config.before(:each, type: :system, js: true) do
+  config.before(:each, :js, type: :system) do
     config.include DownloadHelpers
     clear_downloads
     if ENV["DOCKER"]
@@ -72,7 +65,7 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each, type: :system, debug: true) do
+  config.before(:each, :debug, type: :system) do
     config.include DownloadHelpers
     clear_downloads
     if ENV["DOCKER"]

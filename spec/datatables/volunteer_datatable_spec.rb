@@ -39,6 +39,7 @@ RSpec.describe VolunteerDatatable do
       let(:casa_case) { build :casa_case, casa_org: org, birth_month_year_youth: youth_month_year }
       let(:supervisor) { create :supervisor, casa_org: org }
       let(:volunteer) { create :volunteer, casa_org: org, supervisor: supervisor }
+
       before do
         create :case_assignment, volunteer: volunteer, casa_case: casa_case, active: active_assignment
       end
@@ -46,7 +47,7 @@ RSpec.describe VolunteerDatatable do
       context "which has a non-transition aged case" do
         let(:youth_month_year) { non_transitional_birth }
 
-        it "should be 'false'" do
+        it "is 'false'" do
           expect(volunteer_has_transition_aged_youth).to eq "false"
         end
       end
@@ -55,7 +56,7 @@ RSpec.describe VolunteerDatatable do
         let(:youth_month_year) { transitional_birth }
         let(:active_assignment) { false }
 
-        it "should be 'false'" do
+        it "is 'false'" do
           expect(volunteer_has_transition_aged_youth).to eq "false"
         end
       end
@@ -63,7 +64,7 @@ RSpec.describe VolunteerDatatable do
       context "which has a transition aged case" do
         let(:youth_month_year) { transitional_birth }
 
-        it "should be 'true'" do
+        it "is 'true'" do
           expect(volunteer_has_transition_aged_youth).to eq "true"
         end
       end
@@ -295,7 +296,7 @@ RSpec.describe VolunteerDatatable do
             expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["3", "2", "", "", "", ""]
           end
 
-          it "should move blanks to the end" do
+          it "moves blanks to the end" do
             expect(values[0][:contacts_made_in_past_days]).not_to be_blank
           end
         end

@@ -37,29 +37,29 @@ RSpec.describe Volunteer, type: :model do
 
     it "sends one mailer" do
       expect(VolunteerMailer).to receive(:court_report_reminder).with(v1, Date.current + 7.days)
-      expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v2, anything)
-      expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v3, anything)
+      expect(VolunteerMailer).not_to receive(:court_report_reminder).with(v2, anything)
+      expect(VolunteerMailer).not_to receive(:court_report_reminder).with(v3, anything)
       described_class.send_court_report_reminder
     end
 
-    it "should not send reminders about unassigned cases" do
-      expect(VolunteerMailer).to_not receive(:court_report_reminder).with(v4, anything)
+    it "does not send reminders about unassigned cases" do
+      expect(VolunteerMailer).not_to receive(:court_report_reminder).with(v4, anything)
       described_class.send_court_report_reminder
     end
 
     it "sends one sms" do
       expect(CourtReportDueSmsReminderService).to receive(:court_report_reminder).with(v1, Date.current + 7.days)
-      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v2, anything)
-      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v3, anything)
+      expect(CourtReportDueSmsReminderService).not_to receive(:court_report_reminder).with(v2, anything)
+      expect(CourtReportDueSmsReminderService).not_to receive(:court_report_reminder).with(v3, anything)
       described_class.send_court_report_reminder
     end
 
-    it "should not send sms about unassigned cases" do
-      expect(CourtReportDueSmsReminderService).to_not receive(:court_report_reminder).with(v4, anything)
+    it "does not send sms about unassigned cases" do
+      expect(CourtReportDueSmsReminderService).not_to receive(:court_report_reminder).with(v4, anything)
       described_class.send_court_report_reminder
     end
 
-    it "should return nil when twilio is disabled" do
+    it "returns nil when twilio is disabled" do
       response = CourtReportDueSmsReminderService.court_report_reminder(v5, Date.current + 7.days)
       expect(response).to eq(nil)
     end
@@ -235,7 +235,7 @@ RSpec.describe Volunteer, type: :model do
       supervisor = build_stubbed :supervisor
       volunteer = build_stubbed :volunteer
 
-      expect(volunteer).to_not be_supervised_by(supervisor)
+      expect(volunteer).not_to be_supervised_by(supervisor)
     end
 
     it "is not supervised by supervisor that had the volunteer unassinged" do
@@ -245,7 +245,7 @@ RSpec.describe Volunteer, type: :model do
 
       volunteer.update supervisor: new_supervisor
 
-      expect(volunteer).to_not be_supervised_by(old_supervisor)
+      expect(volunteer).not_to be_supervised_by(old_supervisor)
       expect(volunteer).to be_supervised_by(new_supervisor)
     end
   end
@@ -315,12 +315,9 @@ RSpec.describe Volunteer, type: :model do
 
   describe ".birthday_next_month" do
     subject { Volunteer.birthday_next_month }
+
     before do
       travel_to Date.new(2022, 10, 1)
-    end
-
-    after do
-      travel_back
     end
 
     context "there are volunteers whose birthdays are not next month" do
@@ -345,10 +342,10 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#with_assigned_cases" do
+    subject { Volunteer.with_assigned_cases }
+
     let!(:volunteers) { create_list(:volunteer, 3) }
     let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
-
-    subject { Volunteer.with_assigned_cases }
 
     it "returns only volunteers assigned to active casa cases" do
       expect(subject).to match_array(volunteer_with_cases)
@@ -356,10 +353,10 @@ RSpec.describe Volunteer, type: :model do
   end
 
   describe "#with_no_assigned_cases" do
+    subject { Volunteer.with_no_assigned_cases }
+
     let!(:volunteers) { create_list(:volunteer, 3) }
     let!(:volunteer_with_cases) { create_list(:volunteer, 3, :with_casa_cases) }
-
-    subject { Volunteer.with_no_assigned_cases }
 
     it "returns only volunteers with no assigned active casa cases" do
       expect(subject).to match_array(volunteers)
@@ -387,11 +384,13 @@ RSpec.describe Volunteer, type: :model do
     let(:one_year) { I18n.l(1.year.from_now, format: :full, default: nil) }
 
     it { expect(expiration_date).to eq one_year }
+
     it "expires invitation token after one year" do
       travel_to 1.year.from_now
 
       user = User.accept_invitation!(invitation_token: volunteer.invitation_token)
       expect(user.errors.full_messages).to include("Invitation token is invalid")
+      travel_back
     end
   end
 

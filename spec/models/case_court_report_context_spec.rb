@@ -7,8 +7,8 @@ A_TIMEZONE = "America/New_York"
 
 RSpec.describe CaseCourtReportContext, type: :model do
   let(:volunteer) { create(:volunteer, :with_casa_cases) }
-  let(:path_to_template) { Rails.root.join("app", "documents", "templates", "default_report_template.docx").to_s }
-  let(:path_to_report) { Rails.root.join("tmp", "test_report.docx").to_s }
+  let(:path_to_template) { Rails.root.join("app/documents/templates/default_report_template.docx").to_s }
+  let(:path_to_report) { Rails.root.join("tmp/test_report.docx").to_s }
 
   before do
     travel_to Date.new(2021, 1, 1)
@@ -313,7 +313,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
-      expect(result).to match_array([])
+      expect(result).to be_empty
     end
   end
 

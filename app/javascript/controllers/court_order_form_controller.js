@@ -1,4 +1,4 @@
-import NestedForm from 'stimulus-rails-nested-form'
+import NestedForm from '@stimulus-components/rails-nested-form'
 import Swal from 'sweetalert2'
 
 export default class extends NestedForm {

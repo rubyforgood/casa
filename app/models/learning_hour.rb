@@ -2,6 +2,7 @@ class LearningHour < ApplicationRecord
   belongs_to :user
   belongs_to :learning_hour_type
   belongs_to :learning_hour_topic, optional: true
+  has_one :casa_org, through: :user
 
   validates :duration_minutes, presence: true
   validates :duration_minutes, numericality: {greater_than: 0, message: "and hours (total duration) must be greater than 0"}, if: :zero_duration_hours?

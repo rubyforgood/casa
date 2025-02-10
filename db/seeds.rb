@@ -31,12 +31,21 @@ class SeederMain
     db_populator.create_all_casa_admin("allcasaadmin@example.com")
     db_populator.create_all_casa_admin("all_casa_admin1@example.com")
     db_populator.create_all_casa_admin("admin1@example.com")
-    db_populator.create_org(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
-    db_populator.create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+
+    options1 = OpenStruct.new(CasaOrgPopulatorPresets.for_environment.merge({org_name: "Prince George CASA"}))
+    org1 = db_populator.create_org(options1)
+    create_org_related_data(db_populator, org1, options1)
+
+    options2 = OpenStruct.new(CasaOrgPopulatorPresets.minimal_dataset_options)
+    org2 = db_populator.create_org(options2)
+    create_org_related_data(db_populator, org2, options2)
+
     SmsNotificationEventPopulator.populate
     2.times do
-      DbPopulator.new(rng, case_fourteen_years_old: true)
-        .create_org(CasaOrgPopulatorPresets.minimal_dataset_options)
+      options3 = OpenStruct.new(CasaOrgPopulatorPresets.minimal_dataset_options)
+      org3 = DbPopulator.new(rng, case_fourteen_years_old: true)
+        .create_org(options3)
+      create_org_related_data(db_populator, org3, options3)
     end
 
     post_process_data
@@ -111,16 +120,30 @@ class SeederMain
   def log(message)
     return if Rails.env.test?
 
-    puts message
+    Rails.logger.debug { message }
+  end
+
+  def create_org_related_data(db_populator, casa_org, options)
+    db_populator.create_users(casa_org, options)
+    db_populator.create_cases(casa_org, options)
+    db_populator.create_hearing_types(casa_org)
+    db_populator.create_checklist_items
+    db_populator.create_judges(casa_org)
+    db_populator.create_languages(casa_org)
+    db_populator.create_mileage_rates(casa_org)
+    db_populator.create_learning_hour_types(casa_org)
+    db_populator.create_learning_hour_topics(casa_org)
+    db_populator.create_learning_hours(casa_org)
+    db_populator.create_other_duties
   end
 end
 
 SeederMain.new.seed
 
-load(Rails.root.join("db", "seeds", "emancipation_data.rb"))
+load(Rails.root.join("db/seeds/emancipation_data.rb"))
 begin
-  load(Rails.root.join("db", "seeds", "emancipation_options_prune.rb"))
+  load(Rails.root.join("db/seeds/emancipation_options_prune.rb"))
 rescue => e
-  puts "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}"
+  Rails.logger.error { "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}" }
 end
-load(Rails.root.join("db", "seeds", "placement_data.rb"))
+load(Rails.root.join("db/seeds/placement_data.rb"))

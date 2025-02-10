@@ -6,6 +6,7 @@ RSpec.describe "/casa_cases", type: :request do
   let(:group) { build(:contact_type_group) }
   let(:volunteer) { create(:volunteer) }
   let(:type1) { create(:contact_type, contact_type_group: group) }
+  let(:pre_transition_aged_youth_age) { Date.current - 14.years }
   let(:valid_attributes) do
     {
       case_number: "1234",
@@ -225,10 +226,10 @@ RSpec.describe "/casa_cases", type: :request do
       describe "invalid request" do
         context "with invalid parameters" do
           it "does not create a new CasaCase" do
-            expect { post casa_cases_url, params: {casa_case: invalid_attributes} }.to change(
+            expect { post casa_cases_url, params: {casa_case: invalid_attributes} }.not_to change(
               CasaCase,
               :count
-            ).by(0)
+            )
           end
 
           it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
@@ -243,8 +244,6 @@ RSpec.describe "/casa_cases", type: :request do
             expect(response).to have_http_status(:unprocessable_entity)
             expected_response_body = [
               "Birth month year youth can't be blank",
-              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be a future date.",
-              "Birth month year youth is not valid: Youth's Birth Month & Year cannot be prior to 1/1/1989.",
               "Case number can't be blank",
               "Casa case contact types : At least one contact type must be selected"
             ].to_json

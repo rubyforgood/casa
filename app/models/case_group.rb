@@ -4,7 +4,7 @@ class CaseGroup < ApplicationRecord
   has_many :casa_cases, through: :case_group_memberships
   before_validation :strip_name
 
-  validates_presence_of :case_group_memberships
+  validates :case_group_memberships, presence: true
 
   validates :name, presence: true, uniqueness: {scope: :casa_org, case_sensitive: false}
 

@@ -14,7 +14,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_email", readonly: true)
+    expect(rendered).not_to have_field("volunteer_email", readonly: true)
   end
 
   it "allows an administrator to edit a volunteers phone number" do
@@ -30,7 +30,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_email", readonly: true)
+    expect(rendered).not_to have_field("volunteer_email", readonly: true)
   end
 
   it "allows an administrator to edit a volunteers date of birth" do
@@ -46,7 +46,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_date_of_birth", readonly: true)
+    expect(rendered).not_to have_field("volunteer_date_of_birth", readonly: true)
     expect(rendered).to have_field("volunteer_date_of_birth", readonly: false)
   end
 
@@ -63,7 +63,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_email", readonly: true)
+    expect(rendered).not_to have_field("volunteer_email", readonly: true)
   end
 
   it "allows a supervisor in the same org to edit a volunteers phone number" do
@@ -95,7 +95,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_date_of_birth", readonly: true)
+    expect(rendered).not_to have_field("volunteer_date_of_birth", readonly: true)
     expect(rendered).to have_field("volunteer_date_of_birth", readonly: false)
   end
 
@@ -128,7 +128,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to_not have_field("volunteer_date_of_birth", readonly: false)
+    expect(rendered).not_to have_field("volunteer_date_of_birth", readonly: false)
   end
 
   it "shows invite and login info" do

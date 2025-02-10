@@ -14,7 +14,7 @@ RSpec.describe "/case_court_reports", type: :request do
       it "can view 'Generate Court Report' page", :aggregate_failures do
         get case_court_reports_path
         expect(response).to be_successful
-        expect(assigns(:assigned_cases)).to_not be_empty
+        expect(assigns(:assigned_cases)).not_to be_empty
       end
     end
 
@@ -28,7 +28,7 @@ RSpec.describe "/case_court_reports", type: :request do
       it "can view the 'Generate Court Report' page", :aggregate_failures do
         get case_court_reports_path
         expect(response).to be_successful
-        expect(assigns(:assigned_cases)).to_not be_empty
+        expect(assigns(:assigned_cases)).not_to be_empty
       end
 
       context "with no cases in the organization" do
@@ -46,6 +46,12 @@ RSpec.describe "/case_court_reports", type: :request do
   # case_court_reports#show
   describe "GET /case_court_reports/:id" do
     context "when a valid / existing case is sent" do
+      subject(:request) do
+        get case_court_report_path(casa_case.case_number, format: "docx")
+
+        response
+      end
+
       let(:casa_case) { volunteer.casa_cases.first }
 
       before do
@@ -54,12 +60,6 @@ RSpec.describe "/case_court_reports", type: :request do
             io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
           )
         end
-      end
-
-      subject(:request) do
-        get case_court_report_path(casa_case.case_number, format: "docx")
-
-        response
       end
 
       it "authorizes action" do
@@ -84,7 +84,7 @@ RSpec.describe "/case_court_reports", type: :request do
         get case_court_report_path(invalid_casa_case.case_number, format: "docx")
       end
 
-      it "redirects back to 'Generate Court Report' page", :aggregate_failures, js: true do
+      it "redirects back to 'Generate Court Report' page", :aggregate_failures, :js do
         expect(response).to redirect_to(case_court_reports_path)
         expect(response.content_type).to eq "text/html; charset=utf-8"
       end
@@ -98,6 +98,12 @@ RSpec.describe "/case_court_reports", type: :request do
 
   # case_court_reports#generate
   describe "POST /case_court_reports" do
+    subject(:request) do
+      post generate_case_court_reports_path, params: params, headers: {ACCEPT: "application/json"}
+
+      response
+    end
+
     let(:casa_case) { volunteer.casa_cases.first }
     let(:params) {
       {
@@ -108,12 +114,6 @@ RSpec.describe "/case_court_reports", type: :request do
         }
       }
     }
-
-    subject(:request) do
-      post generate_case_court_reports_path, params: params, headers: {ACCEPT: "application/json"}
-
-      response
-    end
 
     it "authorizes action" do
       expect_any_instance_of(CaseCourtReportsController).to receive(:authorize).with(CaseCourtReport).and_call_original
@@ -153,7 +153,7 @@ RSpec.describe "/case_court_reports", type: :request do
     context "when a custom template is set" do
       before do
         stub_twilio
-        volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app", "documents", "templates", "montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
+        volunteer.casa_org.court_report_template.attach(io: File.new(Rails.root.join("app/documents/templates/montgomery_report_template.docx")), filename: "montgomery_report_template.docx")
       end
 
       it "uses the custom template" do

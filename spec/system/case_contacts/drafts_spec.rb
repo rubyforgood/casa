@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/drafts", js: true, type: :system do
+RSpec.describe "case_contacts/drafts", :js, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
@@ -17,10 +17,10 @@ RSpec.describe "case_contacts/drafts", js: true, type: :system do
 
       visit case_contacts_drafts_path
 
-      expect(page).to_not have_content("NOTE_A")
-      expect(page).to_not have_content("NOTE_B")
+      expect(page).not_to have_content("NOTE_A")
+      expect(page).not_to have_content("NOTE_B")
       expect(page).to have_content("NOTE_C")
-      expect(page).to_not have_content("NOTE_D")
+      expect(page).not_to have_content("NOTE_D")
       expect(page).to have_content("NOTE_E")
     end
   end

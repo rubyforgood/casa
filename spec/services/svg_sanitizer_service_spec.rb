@@ -12,7 +12,7 @@ RSpec.describe SvgSanitizerService do
   end
 
   describe "when not receiving a svg file" do
-    let(:file) { fixture_file_upload("../company_logo.png", "image/png") }
+    let(:file) { fixture_file_upload("company_logo.png", "image/png") }
 
     it "returns the file without changes" do
       expect(result).to eq(file)

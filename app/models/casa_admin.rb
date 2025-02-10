@@ -1,4 +1,6 @@
 class CasaAdmin < User
+  prepend ActiveSupport::ToJsonWithActiveSupportEncoder
+
   devise :invitable, invite_for: 2.weeks
 
   default_scope { order(email: :asc) }

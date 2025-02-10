@@ -28,7 +28,7 @@ You will need the following local tools installed:
 
 Install a ruby version manager like [rbenv](https://github.com/rbenv/rbenv#installation)
 
-  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
+  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.3.6.**
 
 Instructions for rbenv:
 
@@ -48,13 +48,13 @@ Instructions for rbenv:
 
 5.  **[Install Ruby](https://github.com/rbenv/rbenv#installing-ruby-versions)**
 
-      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2.**
+      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.3.6.**
 
-      `rbenv install 3.2.2`
+      `rbenv install 3.3.6`
 
 6. **Set a Ruby version to finish installation and start**
 
-    `rbenv global 3.2.2` OR `rbenv local 3.2.2`
+    `rbenv global 3.3.6` OR `rbenv local 3.3.6`
 
 #### Troubleshooting
     If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
@@ -69,23 +69,11 @@ Instructions for rbenv:
 
 ### NodeJS
 
-The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
+The Casa package frontend leverages several javascript packages managed through `npm`, so if you are working on those elements you will want to have node, npm.
 
 1. **(Recommended) [Install nvm](https://github.com/nvm-sh/nvm#installing-and-updating)**
 
    NVM is a node version manager.
-
-2. **[Install yarn](https://classic.yarnpkg.com/en/docs/install)**
-
-   Expand 'Alternatives' and select 'Debian/Ubuntu' for detailed instructions.
-
-   `curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -`
-
-   `echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list`
-
-   `sudo apt update`
-
-   `sudo apt install yarn`
 
 ### Postgres
 
@@ -175,7 +163,7 @@ Casa's install will also install the correct version of Rails.
 
    `bundle install` -  install ruby dependencies.
 
-   `yarn` - install javascript dependencies.
+   `npm install` - install javascript dependencies.
 
 3. **Database Setup**
 
@@ -197,10 +185,10 @@ Casa's install will also install the correct version of Rails.
 
     `bin/rails db:seed:replant` - generates test data (can be rerun to regenerate test data)
 4. **Compile Assets**
--  `yarn build` compile javascript
-&ensp;&ensp;`yarn build:dev` to auto recompile for when you edit js files
--  `yarn build:css` compile css
-&ensp;&ensp;`yarn build:css:dev` to auto recompile for when you edit sass files
+-  `npm run build` compile javascript
+&ensp;&ensp;`npm run build:dev` to auto recompile for when you edit js files
+-  `npm run build:css` compile css
+&ensp;&ensp;`npm run build:css:dev` to auto recompile for when you edit sass files
 
 ### Getting Started
 

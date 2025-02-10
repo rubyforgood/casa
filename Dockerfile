@@ -1,4 +1,4 @@
-FROM ruby:3.2.2-alpine AS builder
+FROM ruby:3.3.6-alpine AS builder
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
@@ -14,24 +14,26 @@ RUN bundle install
 
 ### BUILD STEP DONE ###
 
-FROM ruby:3.2.2-alpine
+FROM ruby:3.3.6-alpine
 
 ARG RAILS_ROOT=/usr/src/app/
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   bash \
+  curl \
   imagemagick \
-  nodejs \
   postgresql-client \
   tzdata \
-  vim \
-  yarn && rm -rf /var/cache/apk/*
+  vim && rm -rf /var/cache/apk/*
+# The ruby alpine image's apk doesn't have the current version of node
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs npm
 
 WORKDIR $RAILS_ROOT
 
 COPY . .
-RUN yarn install
-RUN yarn build && yarn build:css
+RUN npm install --global npm
+RUN npm install
+RUN npm run build && npm run build:css
 
 COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
 

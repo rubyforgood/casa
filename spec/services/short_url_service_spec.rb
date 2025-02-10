@@ -7,7 +7,7 @@ RSpec.describe ShortUrlService do
   let!(:short_io_domain) { Rails.application.credentials[:SHORT_IO_DOMAIN] }
 
   describe "short.io API" do
-    before :each do
+    before do
       WebMockHelper.short_io_stub
     end
 

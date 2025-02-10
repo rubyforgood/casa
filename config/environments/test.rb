@@ -9,7 +9,6 @@ Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
   # While tests run files are not watched, reloading is not necessary.
-  config.enable_reloading = false
   # Turn false under Spring and add config.action_view.cache_template_loading = true.
   config.action_view.cache_template_loading = true
 
@@ -20,7 +19,6 @@ Rails.application.configure do
   config.eager_load = ENV["CI"].present?
   # cache classes on CI, but enable reloading for local work (bin/rspec)
   config.enable_reloading = ENV["CI"].blank?
-
   # Configure public file server for tests with Cache-Control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
@@ -81,4 +79,6 @@ Rails.application.configure do
 
   # https://github.com/rails/rails/issues/48468
   config.active_job.queue_adapter = :test
+
+  config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_test_secret_key"
 end

@@ -1,7 +1,6 @@
 blueprints/api/v1/session_blueprint.rb
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
-controllers/case_groups_controller.rb
 controllers/concerns/court_date_params.rb
 controllers/followup_reports_controller.rb
 controllers/learning_hour_topics_controller.rb

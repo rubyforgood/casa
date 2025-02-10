@@ -57,7 +57,7 @@ RSpec.describe CasaOrg, type: :model do
       casa_org.update(twilio_account_sid: "some bad value")
 
       aggregate_failures do
-        expect(casa_org).to_not be_valid
+        expect(casa_org).not_to be_valid
         expect(casa_org.errors[:base]).to eq ["Your Twilio credentials are incorrect, kindly check and try again."]
       end
     end
@@ -78,10 +78,10 @@ RSpec.describe CasaOrg, type: :model do
       aggregate_failures do
         subject = build(:casa_org, twilio_enabled: false)
 
-        expect(subject.org_logo).to eq(Pathname.new("#{Rails.root}/public/logo.jpeg"))
+        expect(subject.org_logo).to eq(Pathname.new("#{Rails.public_path.join("logo.jpeg")}"))
 
         subject.logo.attach(
-          io: File.open("#{Rails.root}/spec/fixtures/company_logo.png"),
+          io: File.open(file_fixture("company_logo.png")),
           filename: "company_logo.png", content_type: "image/png"
         )
 
@@ -95,6 +95,7 @@ RSpec.describe CasaOrg, type: :model do
 
   context "when creating an organization" do
     let(:org) { create(:casa_org, name: "Prince George CASA") }
+
     it "has a slug based on the name" do
       expect(org.slug).to eq "prince-george-casa"
     end

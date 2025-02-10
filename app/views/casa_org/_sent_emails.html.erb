@@ -25,7 +25,7 @@
                   <%= sent_email.user.display_name %> &lt;<%= sent_email.sent_address %>&gt;
                 </td>
                 <td>
-                  <%= sent_email.created_at.strftime("%l:%M%P %d %b %Y") %>
+                  <%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %>
                 </td>
               </tr>
             <% end %>

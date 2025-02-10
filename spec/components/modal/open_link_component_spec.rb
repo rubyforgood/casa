@@ -37,7 +37,7 @@ RSpec.describe Modal::OpenLinkComponent, type: :component do
     expect(page).to have_css("a[href='#'][role='button'][class='btn '][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).not_to have_css("a i")
     expect(page).to have_text("Example Text")
-    expect(page).to_not have_text("Override")
+    expect(page).not_to have_text("Override")
   end
 
   it "doesn't render anything if both text and content are absent" do

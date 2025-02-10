@@ -33,11 +33,13 @@ RSpec.describe CasaAdmin, type: :model do
     let(:two_weeks) { I18n.l(2.weeks.from_now, format: :full, default: nil) }
 
     it { expect(expiration_date).to eq two_weeks }
+
     it "expires invitation token after two weeks" do
       travel_to 2.weeks.from_now
 
       user = User.accept_invitation!(invitation_token: casa_admin.invitation_token)
       expect(user.errors.full_messages).to include("Invitation token is invalid")
+      travel_back
     end
   end
 

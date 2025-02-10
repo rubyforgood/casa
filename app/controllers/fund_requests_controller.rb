@@ -29,7 +29,7 @@ class FundRequestsController < ApplicationController
   end
 
   def parsed_params
-    params.permit(
+    params.require(:fund_request).permit(
       :submitter_email,
       :youth_name,
       :payment_amount,

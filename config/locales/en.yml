@@ -32,11 +32,35 @@
 en:
   activerecord:
     attributes:
+      additional_expense:
+        other_expenses_amount: Amount
+        other_expenses_describe: Description
       case_contact:
+        case_contact_contact_types:
+          one: Contact Type
+          other: Contact Types
+        contact_types:
+          one: Contact Type
+          other: Contact Types
+        contact_topic_answers:
+          one: Discussion Topic
+          other: Discussion Topics
+        draft_case_ids:
+          one: CASA Case
+          other: CASA Cases
         occurred_at: Date
+      case_contact/additional_expenses:
+        other_expense_amount: Other Expense Amount
+        other_expenses_describe: Other Expense Details
+      case_contact/contact_topic_answers:
+        contact_topic: Discussion Topic
+        value: Discussion Notes
     errors:
       messages:
         cant_be_future: can't be in the future
+        must_be_selected: must be selected
+        must_be_true_or_false: must be true or false
+        email_uniqueness: This email is already in use. If it does not appear on your roster, it may be associated with another CASA organization. Please use a different email address.
   time:
     formats:
       day_and_date: "%A, %b %d, %Y"

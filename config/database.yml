@@ -6,6 +6,7 @@ default: &default
   port: <%= ENV.fetch("POSTGRES_PORT", "5432") %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD") { 'password' } %>
 
+
 development:
   <<: *default
   database: casa_development

@@ -19,7 +19,8 @@ class CaseContactsController < ApplicationController
       }
     ) || return
 
-    case_contacts = CaseContact.case_hash_from_cases(@filterrific.find)
+    @pagy, @filtered_case_contacts = pagy(@filterrific.find)
+    case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
     case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
@@ -33,25 +34,24 @@ class CaseContactsController < ApplicationController
 
   def new
     store_referring_location
-    authorize CaseContact
 
     casa_cases = policy_scope(current_organization.casa_cases)
     draft_case_ids = build_draft_case_ids(params, casa_cases)
 
-    @case_contact = CaseContact.create_with_answers(current_organization,
-      creator: current_user, draft_case_ids: draft_case_ids)
+    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
+    authorize @case_contact
 
     if @case_contact.errors.any?
       flash[:alert] = @case_contact.errors.full_messages.join("\n")
       redirect_to request.referer
     else
-      redirect_to case_contact_form_path(@case_contact.form_steps.first, case_contact_id: @case_contact.id)
+      redirect_to case_contact_form_path(:details, case_contact_id: @case_contact.id)
     end
   end
 
   def edit
     authorize @case_contact
-    redirect_to case_contact_form_path(CaseContact::FORM_STEPS.first, case_contact_id: @case_contact.id)
+    redirect_to case_contact_form_path(:details, case_contact_id: @case_contact.id)
   end
 
   def destroy
@@ -104,11 +104,12 @@ class CaseContactsController < ApplicationController
   end
 
   def all_case_contacts
-    policy_scope(current_organization.case_contacts).includes(
+    policy_scope(current_organization.case_contacts).preload(
       :creator,
       :followups,
-      :contact_types,
-      contact_topic_answers: [:contact_topic]
+      contact_types: :contact_type_group,
+      contact_topic_answers: :contact_topic,
+      casa_case: :volunteers
     )
   end
 
@@ -117,25 +118,16 @@ class CaseContactsController < ApplicationController
   end
 
   def set_case_contact
-    if current_organization.case_contacts.exists?(params[:id])
-      @case_contact = authorize(current_organization.case_contacts.find(params[:id]))
-    else
-      redirect_to authenticated_user_root_path
-    end
+    @case_contact = authorize(current_organization.case_contacts.find_by(id: params[:id]))
+    redirect_to authenticated_user_root_path unless @case_contact
   end
 
   def build_draft_case_ids(params, casa_cases)
     # Use case(s) from params if present
-    if params[:draft_case_ids].present?
-      params[:draft_case_ids]
-    elsif params.dig(:case_contact, :casa_case_id).present?
-      casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id)
-    elsif casa_cases.count == 1
-      # If there is only one case for user, select that case
-      [casa_cases.first.id]
-    else
-      # Otherwise, let user select cases
-      []
-    end
+    return params[:draft_case_ids] if params[:draft_case_ids].present?
+    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
+    return [casa_cases.first.id] if casa_cases.count == 1
+
+    []
   end
 end

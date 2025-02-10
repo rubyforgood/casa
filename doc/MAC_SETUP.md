@@ -20,6 +20,16 @@ If you have an older version of postgres, `brew postgresql-upgrade-database`
 
 For a more GUI focused postgres experience, try [Postgres.app](https://postgresapp.com/) an alternative to the CLI focused default postgres
 
+If you are having trouble connecting to your local postgres database using pgAdmin or another local tool, try the following configuration:  
+
+```
+Host Name: localhost
+Port: 5432
+Maintenance Database: postgres
+Username: you_mac_login_username (Can be found by calling whoami in a terminal)
+Password: password
+```
+
 ## Ruby
 
 ### Rbenv
@@ -46,28 +56,24 @@ Next, install the version of Ruby that this project uses. This can be found by c
 To install the appropriate ruby version, run:
 
 ```bash
-rbenv install 3.2.2
+rbenv install 3.3.6
 ```
 
-(Do not forget to switch 3.2.2 to the appropriate version)
+(Do not forget to switch 3.3.6 to the appropriate version)
 
 Finally, run:
 
 ```bash
-rbenv local 3.2.2
+rbenv local 3.3.6
 ```
-(Do not forget to swtich 3.2.2 to the appropriate version)
+(Do not forget to swtich 3.3.6 to the appropriate version)
 
 ## Nodejs
 
-The Casa package frontend leverages several javascript packages managed through `yarn`, so if you are working on those elements you will want to have node, npm, and yarn installed.
+The Casa package frontend leverages several javascript packages managed through `npm`.
 
 ```bash
 brew install node
-```
-
-```
-brew install yarn
 ```
 
 ## Chrome
@@ -93,19 +99,19 @@ bin/rails db:setup
 
 Install javascript dependencies with:
 ```bash
-yarn install
+npm install
 ```
 
 Compile assets with:
 
 ```bash
-yarn build
+npm run build
 ```
 
 and then:
 
 ```bash
-yarn build:css
+npm run build:css
 ```
 
 And lastly, run the app with:

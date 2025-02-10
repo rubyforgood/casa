@@ -4,7 +4,7 @@
 [![erb lint](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/erb_lint.yml)
 [![standardrb lint](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/ruby_lint.yml)
 [![brakeman](https://github.com/rubyforgood/casa/workflows/brakeman/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/security.yml)
-[![yarn lint](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/yarn_lint_and_test.yml)
+[![npm lint](https://github.com/rubyforgood/casa/actions/workflows/npm_lint_and_test.yml/badge.svg)](https://github.com/rubyforgood/casa/actions/workflows/npm_lint_and_test.yml)
 
 [![Maintainability](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/maintainability)](https://codeclimate.com/github/rubyforgood/casa/trends/technical_debt)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/24f3bb10db6afac417e2/test_coverage)](https://codeclimate.com/github/rubyforgood/casa/trends/test_coverage_total)
@@ -102,14 +102,13 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.2.2
+1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 3.3.6
 1. `gem install bundler`
 
 **node.js**
 1. (Recommended) Install [nvm](https://github.com/nvm-sh/nvm#installing-and-updating), which is a **n**ode **v**ersion **m**anager.
-    - If you use asdf, the node version from `.tool-versions` will be used, but may be out of sync with the codename version (lts/iron) in `.nvmrc`. To use the version from `.nvmrc`, see one of these options: [legacy file codename support](https://github.com/asdf-vm/asdf-nodejs?tab=readme-ov-file#partial-and-codename-versions) or [installing via custom script](https://github.com/asdf-vm/asdf-nodejs/issues/382#issuecomment-2258647554).
+    - If you use asdf, the node version from `.tool-versions` will be used, but may be out of sync with the codename version in `.nvmrc`. To use the version from `.nvmrc`, see one of these options: [legacy file codename support](https://github.com/asdf-vm/asdf-nodejs?tab=readme-ov-file#partial-and-codename-versions) or [installing via custom script](https://github.com/asdf-vm/asdf-nodejs/issues/382#issuecomment-2258647554).
 1. Install a current LTS version of Node. Running `nvm install` from this directory will read the `.nvmrc` file to install the correct version.
-1. Install [yarn](https://classic.yarnpkg.com/en/docs/install). On Ubuntu, [make sure you install it from the official Yarn repo instead of cmdtest](https://classic.yarnpkg.com/en/docs/install/#debian-stable).
 
 **PostgreSQL ("postgres")**
 1. Make sure that postgres is installed.
@@ -180,7 +179,7 @@ To see local email previews, check out http://localhost:3000/rails/mailers
 
 **Running Tests**
  - run the ruby test suite `bin/rails spec`
- - run the javascript test suite `yarn test`
+ - run the javascript test suite `npm run test`
 
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
@@ -191,7 +190,7 @@ Run `bin/lint` to run all linters and fix issues. This will run:
 
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
 1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
-1. `yarn lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues
+1. `npm run lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
@@ -216,7 +215,7 @@ Alternatively, every time you pull the main branch, run:
 bin/update
 ```
 
-which will run any database migrations, update gems and yarn packages, and run
+which will run any database migrations, update gems and node packages, and run
 the after party post-deployment tasks.
 
 # Other Documentation

@@ -13,7 +13,7 @@
               <% if !contact.active? %>
                 <span class="badge badge-pill light-bg text-black">Draft</span>
               <% end %>
-              <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post,
+              <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, data: { turbo: false },
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>
             <h6 class="card-subtitle mb-2 text-muted">
@@ -38,14 +38,14 @@
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "text-danger" do %>
+            <%= link_to edit_case_contact_path(contact), class: "text-danger", data: { turbo: false } do %>
               <i class="lni lni-pencil-alt"></i> Edit
             <% end %>
           </div>
         <% end %>
         <div class="action">
         <% if policy(contact).destroy? && !contact.deleted? %>
-         <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete  do %>
+          <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete, data: { turbo: false }  do %>
           <i class="lni lni-trash-can mr-5"></i>Delete
         <% end %>
         <% end %>
@@ -59,11 +59,11 @@
           <%= contact.creator&.display_name %>
         <% else %>
           <% if contact.creator&.supervisor? %>
-            <%= link_to contact.creator&.display_name, edit_supervisor_path(contact.creator) %>
+            <%= link_to contact.creator&.display_name, edit_supervisor_path(contact.creator), data: { turbo: false } %>
           <% elsif contact.creator&.casa_admin? %>
-            <%= link_to contact.creator&.display_name, edit_users_path %>
+            <%= link_to contact.creator&.display_name, edit_users_path, data: { turbo: false } %>
           <% else %>
-            <%= link_to contact.creator&.display_name, edit_volunteer_path(contact.creator) %>
+            <%= link_to contact.creator&.display_name, edit_volunteer_path(contact.creator), data: { turbo: false } %>
           <% end %>
         <% end %>
       <% else %>

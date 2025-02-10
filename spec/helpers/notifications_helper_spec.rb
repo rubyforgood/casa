@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe NotificationsHelper do
+RSpec.describe NotificationsHelper, type: :helper do
   context "notifications with respect to deploy time" do
     let(:notification_created_after_deploy_a) { create(:notification) }
     let(:notification_created_after_deploy_b) { create(:notification, created_at: 1.day.ago) }
@@ -31,8 +31,8 @@ RSpec.describe NotificationsHelper do
       end
 
       it "does not contain notifications before the deploy time" do
-        expect(notifications_after_and_including_deploy).to_not include(notification_created_before_deploy_a)
-        expect(notifications_after_and_including_deploy).to_not include(notification_created_before_deploy_b)
+        expect(notifications_after_and_including_deploy).not_to include(notification_created_before_deploy_a)
+        expect(notifications_after_and_including_deploy).not_to include(notification_created_before_deploy_b)
       end
     end
 
@@ -45,9 +45,9 @@ RSpec.describe NotificationsHelper do
       end
 
       it "does not contain notifications after and including the deploy time" do
-        expect(notifications_before_deploy).to_not include(notification_created_after_deploy_a)
-        expect(notifications_before_deploy).to_not include(notification_created_after_deploy_b)
-        expect(notifications_before_deploy).to_not include(notification_created_at_deploy)
+        expect(notifications_before_deploy).not_to include(notification_created_after_deploy_a)
+        expect(notifications_before_deploy).not_to include(notification_created_after_deploy_b)
+        expect(notifications_before_deploy).not_to include(notification_created_at_deploy)
       end
     end
   end

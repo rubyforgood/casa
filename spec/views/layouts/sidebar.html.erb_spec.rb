@@ -1,10 +1,5 @@
 require "rails_helper"
 
-module PretenderContext
-  def true_user
-  end
-end
-
 RSpec.describe "layout/sidebar", type: :view do
   before do
     view.class.include PretenderContext
@@ -45,18 +40,18 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
-      expect(rendered).to_not have_link("Admins", href: "/casa_admins")
+      expect(rendered).not_to have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).not_to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
-      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
-      expect(rendered).to_not have_link("System Settings", href: "/settings")
+      expect(rendered).not_to have_link("Emancipation Checklist", href: "/emancipation_checklists/0")
+      expect(rendered).not_to have_link("System Settings", href: "/settings")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
-      expect(rendered).to_not have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
-      expect(rendered).to_not have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
-      expect(rendered).to_not have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
-      expect(rendered).to_not have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
-      expect(rendered).to_not have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
+      expect(rendered).not_to have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
+      expect(rendered).not_to have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
+      expect(rendered).not_to have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
+      expect(rendered).not_to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
+      expect(rendered).not_to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
 
     context "when casa_org other_duties_enabled is true" do
@@ -65,6 +60,7 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "renders Other Duties" do
         expect(rendered).to have_link("Other Duties", href: "/other_duties")
       end
@@ -77,8 +73,9 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "does not renders Other Duties" do
-        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+        expect(rendered).not_to have_link("Other Duties", href: "/other_duties")
       end
     end
   end
@@ -102,17 +99,17 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("All", href: "/casa_cases")
       expect(rendered).to have_link("All", href: "/case_contacts")
       expect(rendered).to have_link("Generate Court Report", href: "/case_court_reports")
-      expect(rendered).to_not have_link("Export Data", href: "/reports")
-      expect(rendered).to_not have_link("Volunteers", href: "/volunteers")
-      expect(rendered).to_not have_link("Supervisors", href: "/supervisors")
-      expect(rendered).to_not have_link("Admins", href: "/casa_admins")
-      expect(rendered).to_not have_link("System Settings", href: "/settings")
+      expect(rendered).not_to have_link("Export Data", href: "/reports")
+      expect(rendered).not_to have_link("Volunteers", href: "/volunteers")
+      expect(rendered).not_to have_link("Supervisors", href: "/supervisors")
+      expect(rendered).not_to have_link("Admins", href: "/casa_admins")
+      expect(rendered).not_to have_link("System Settings", href: "/settings")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
-      expect(rendered).to_not have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
-      expect(rendered).to_not have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
-      expect(rendered).to_not have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
-      expect(rendered).to_not have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
-      expect(rendered).to_not have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
+      expect(rendered).not_to have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
+      expect(rendered).not_to have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
+      expect(rendered).not_to have_link("Court Details", href: "/casa_org/#{user.casa_org.id}/edit#court-details")
+      expect(rendered).not_to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
+      expect(rendered).not_to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
 
     context "when casa_org other_duties_enabled is true" do
@@ -121,6 +118,7 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "renders Other Duties" do
         expect(rendered).to have_link("Other Duties", href: "/other_duties")
       end
@@ -133,8 +131,9 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "does not renders Other Duties" do
-        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+        expect(rendered).not_to have_link("Other Duties", href: "/other_duties")
       end
     end
 
@@ -144,14 +143,14 @@ RSpec.describe "layout/sidebar", type: :view do
 
         # 0 Cases
         render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+        expect(rendered).not_to have_link("Emancipation Checklist", href: "/emancipation_checklists")
 
         # 1 Non transitioning case
         casa_case = build_stubbed(:casa_case, :pre_transition, casa_org: organization)
         build_stubbed(:case_assignment, volunteer: user, casa_case: casa_case)
 
         render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+        expect(rendered).not_to have_link("Emancipation Checklist", href: "/emancipation_checklists")
       end
     end
 
@@ -166,7 +165,7 @@ RSpec.describe "layout/sidebar", type: :view do
         build_stubbed(:case_assignment, volunteer: user, casa_case: unassigned_case, active: false)
 
         render partial: "layouts/sidebar"
-        expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+        expect(rendered).not_to have_link("Emancipation Checklist", href: "/emancipation_checklists")
       end
     end
 
@@ -193,13 +192,13 @@ RSpec.describe "layout/sidebar", type: :view do
 
       expect(rendered).to have_link("Volunteers", href: "/volunteers")
       expect(rendered).to have_link("Cases", href: "/casa_cases")
-      expect(rendered).to_not have_link("Case Contacts", href: "/case_contacts")
+      expect(rendered).not_to have_link("Case Contacts", href: "/case_contacts")
       expect(rendered).to have_link("Supervisors", href: "/supervisors")
       expect(rendered).to have_link("Admins", href: "/casa_admins")
       expect(rendered).to have_link("System Imports", href: "/imports")
       expect(rendered).to have_link("Generate Court Reports", href: "/case_court_reports")
       expect(rendered).to have_link("Export Data", href: "/reports")
-      expect(rendered).to_not have_link("Emancipation Checklist", href: "/emancipation_checklists")
+      expect(rendered).not_to have_link("Emancipation Checklist", href: "/emancipation_checklists")
       expect(rendered).to have_link("Other Duties", href: "/other_duties")
       expect(rendered).to have_link("Organization Details", href: "/casa_org/#{user.casa_org.id}/edit#organization-details")
       expect(rendered).to have_link("Contact Types", href: "/casa_org/#{user.casa_org.id}/edit#contact-types")
@@ -214,6 +213,7 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "renders Other Duties" do
         expect(rendered).to have_link("Other Duties", href: "/other_duties")
       end
@@ -226,8 +226,9 @@ RSpec.describe "layout/sidebar", type: :view do
         sign_in user
         render partial: "layouts/sidebar"
       end
+
       it "does not renders Other Duties" do
-        expect(rendered).to_not have_link("Other Duties", href: "/other_duties")
+        expect(rendered).not_to have_link("Other Duties", href: "/other_duties")
       end
     end
   end

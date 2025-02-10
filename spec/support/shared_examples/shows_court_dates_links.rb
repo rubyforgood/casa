@@ -1,4 +1,4 @@
-shared_examples_for "shows court dates links" do
+RSpec.shared_examples_for "shows court dates links" do
   before do
     travel_to Date.new(2020, 1, 2)
     _newest_pcd = create(:court_date, date: DateTime.current - 5.days, casa_case: casa_case)

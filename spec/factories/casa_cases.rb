@@ -6,6 +6,16 @@ FactoryBot.define do
     court_report_status { :not_submitted }
     case_court_orders { [] }
 
+    transient do
+      volunteers { [] }
+    end
+
+    after(:create) do |casa_case, evaluator|
+      Array.wrap(evaluator.volunteers).each do |volunteer|
+        create(:case_assignment, casa_case:, volunteer:)
+      end
+    end
+
     trait :pre_transition do
       birth_month_year_youth { 13.years.ago }
     end

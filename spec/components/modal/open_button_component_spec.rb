@@ -39,7 +39,7 @@ RSpec.describe Modal::OpenButtonComponent, type: :component do
     expect(page).to have_css("button[type='button'][class=''][data-bs-toggle='modal'][data-bs-target='#myModal']")
     expect(page).not_to have_css("button i")
     expect(page).to have_text("Example Text")
-    expect(page).to_not have_text("Overwritten")
+    expect(page).not_to have_text("Overwritten")
   end
 
   it "doesn't render anything if both text and content are absent" do

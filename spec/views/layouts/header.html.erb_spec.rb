@@ -1,10 +1,5 @@
 require "rails_helper"
 
-module PretenderContext
-  def true_user
-  end
-end
-
 RSpec.describe "layout/header", type: :view do
   before do
     view.class.include PretenderContext
@@ -74,7 +69,7 @@ RSpec.describe "layout/header", type: :view do
 
       render partial: "layouts/header"
 
-      expect(rendered).to_not have_link("Edit Organization")
+      expect(rendered).not_to have_link("Edit Organization")
     end
 
     it "renders help issue link on the header" do

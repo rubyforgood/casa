@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "court_dates/show", type: :view do
-  shared_examples_for "a past court date with all court details" do
+  RSpec.shared_examples_for "a past court date with all court details" do
     let(:court_date) { create(:court_date, :with_court_details) }
     let(:case_court_order) { court_date.case_court_orders.first }
 
@@ -30,7 +30,7 @@ RSpec.describe "court_dates/show", type: :view do
     end
   end
 
-  shared_examples_for "a past court date with no court details" do
+  RSpec.shared_examples_for "a past court date with no court details" do
     let(:court_date) { create(:court_date) }
 
     it "displays all court details" do

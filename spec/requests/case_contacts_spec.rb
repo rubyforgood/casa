@@ -8,16 +8,16 @@ RSpec.describe "/case_contacts", type: :request do
   before { sign_in admin }
 
   describe "GET /index" do
-    let!(:casa_case) { create(:casa_case, casa_org: organization) }
-    let!(:past_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago) }
-    let!(:recent_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago) }
-    let(:filterrific) { {} }
-
     subject(:request) do
       get case_contacts_path(filterrific: filterrific)
 
       response
     end
+
+    let!(:casa_case) { create(:casa_case, casa_org: organization) }
+    let!(:past_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago) }
+    let!(:recent_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago) }
+    let(:filterrific) { {} }
 
     it { is_expected.to have_http_status(:success) }
 
@@ -46,44 +46,44 @@ RSpec.describe "/case_contacts", type: :request do
 
     it { is_expected.to have_http_status(:redirect) }
 
-    it "creates a new case contact" do
-      expect {
-        request
-      }.to change(CaseContact, :count).by(1)
+    it "creates a 'started' status case contact and redirects to the form" do
+      expect { request }.to change(CaseContact, :count).by(1)
+      new_case_contact = CaseContact.last
+      expect(new_case_contact.status).to eq "started"
+      expect(response).to redirect_to(case_contact_form_path(:details, case_contact_id: new_case_contact.id))
     end
 
     context "when current org has contact topics" do
-      let(:contact_topics) {
-        [
-          build(:contact_topic, active: true, soft_delete: false),
-          build(:contact_topic, active: false, soft_delete: false),
-          build(:contact_topic, active: true, soft_delete: true),
-          build(:contact_topic, active: false, soft_delete: true)
-        ]
-      }
+      let(:contact_topics) do
+        [build(:contact_topic, active: true, soft_delete: false)]
+      end
       let(:organization) { create(:casa_org, contact_topics:) }
 
-      it "should set empty contact topic answers for new case contact to active/non-softdelet org topics" do
-        expect { request }.to change(ContactTopicAnswer, :count).by(1)
+      it "does not create contact topic answers" do
+        expect { request }
+          .to change(CaseContact.started, :count).by(1)
+          .and not_change(ContactTopicAnswer, :count)
 
-        got = CaseContact.last.contact_topic_answers.first.contact_topic.question
-        expect(got).to eq(contact_topics[0].question)
-
-        expect(CaseContact.last.contact_topic_answers.first.value).to be_nil
+        expect(CaseContact.started.last.contact_topic_answers).to be_empty
       end
     end
   end
 
   describe "GET /edit" do
-    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: "Notes") }
-
     subject(:request) do
       get edit_case_contact_url(case_contact)
 
       response
     end
 
+    let(:case_contact) { create(:case_contact, casa_case: create(:casa_case, :with_case_assignments), notes: "Notes") }
+
     it { is_expected.to have_http_status(:redirect) }
+
+    it "redirects to case contact form" do
+      request
+      expect(response).to redirect_to(case_contact_form_path(:details, case_contact_id: case_contact.id))
+    end
   end
 
   describe "GET /drafts" do
@@ -103,13 +103,13 @@ RSpec.describe "/case_contacts", type: :request do
   end
 
   describe "DELETE /destroy" do
-    let(:case_contact) { create(:case_contact) }
-
     subject(:request) do
       delete case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
 
       response
     end
+
+    let(:case_contact) { create(:case_contact) }
 
     it { is_expected.to redirect_to(case_contacts_path) }
 
@@ -124,13 +124,13 @@ RSpec.describe "/case_contacts", type: :request do
   end
 
   describe "GET /restore" do
-    let(:case_contact) { create(:case_contact) }
-
     subject(:request) do
       post restore_case_contact_path(case_contact), headers: {HTTP_REFERER: case_contacts_path}
 
       response
     end
+
+    let(:case_contact) { create(:case_contact) }
 
     before { case_contact.destroy }
 
@@ -143,6 +143,21 @@ RSpec.describe "/case_contacts", type: :request do
 
     it "soft deletes the case_contact" do
       expect { request }.to change { case_contact.reload.deleted? }.from(true).to(false)
+    end
+  end
+
+  xdescribe "GET /leave" do
+    subject(:request) do
+      get leave_case_contact_path
+
+      response
+    end
+
+    it { is_expected.to redirect_to(case_contacts_path) }
+
+    it "redirects back to referer or fallback location" do
+      request
+      expect(response).to redirect_to(case_contacts_path)
     end
   end
 end

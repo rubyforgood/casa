@@ -1,9 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "case_contacts/case_contact", type: :view do
-  let(:admin) { build_stubbed(:casa_admin) }
-  let(:volunteer) { build_stubbed(:volunteer) }
-  let(:supervisor) { build_stubbed(:supervisor) }
+  let(:casa_org) { create(:casa_org) }
+  let(:admin) { build_stubbed(:casa_admin, casa_org:) }
+  let(:volunteer) { create(:volunteer, casa_org:) }
+  let(:supervisor) { build_stubbed(:supervisor, casa_org:) }
 
   describe "case contact notes" do
     before do
@@ -13,7 +14,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
     context "when case contact has contact topic responses" do
       let(:case_contact) do
-        build_stubbed(:case_contact, contact_topic_answers: [contact_topic_answer1, contact_topic_answer2])
+        build_stubbed(:case_contact, contact_topic_answers: [contact_topic_answer1, contact_topic_answer2], creator: volunteer)
       end
 
       let(:contact_topic1) { build_stubbed(:contact_topic, question: "Some question") }
@@ -35,7 +36,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         expect(rendered).to have_text("Some question:")
         expect(rendered).to have_text("Some answer")
-        expect(rendered).to_not have_text("Hidden question")
+        expect(rendered).not_to have_text("Hidden question")
       end
     end
 
@@ -74,8 +75,8 @@ RSpec.describe "case_contacts/case_contact", type: :view do
     end
 
     context "occurred_at is before the last day of the month in the quarter that the case contact was created" do
-      let(:case_contact) { build_stubbed(:case_contact) }
-      let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current) }
+      let(:case_contact) { build_stubbed(:case_contact, creator: volunteer) }
+      let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current, creator: volunteer) }
 
       it "shows edit button" do
         assign :case_contact, case_contact
@@ -96,8 +97,8 @@ RSpec.describe "case_contacts/case_contact", type: :view do
   end
 
   describe "delete and undelete buttons" do
-    let(:case_contact) { build_stubbed(:case_contact) }
-    let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current) }
+    let(:case_contact) { build_stubbed(:case_contact, creator: volunteer) }
+    let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current, creator: volunteer) }
 
     context "when logged in as admin" do
       before do
@@ -128,7 +129,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         allow(view).to receive(:current_user).and_return(volunteer)
       end
 
-      it "should not show delete button" do
+      it "does not show delete button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
@@ -136,7 +137,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).not_to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
       end
 
-      it "should not show undelete button" do
+      it "does not show undelete button" do
         assign :case_contact, case_contact2
         assign :casa_cases, [case_contact2.casa_case]
 
@@ -159,7 +160,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         expect(rendered).to have_link("Delete", href: "/case_contacts/#{case_contact.id}")
       end
 
-      it "should not show undelete button" do
+      it "does not show undelete button" do
         assign :case_contact, case_contact2
         assign :casa_cases, [case_contact2.casa_case]
 

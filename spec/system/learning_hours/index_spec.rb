@@ -6,7 +6,7 @@ RSpec.describe "Learning Hours Index", type: :system do
   let!(:learning_hours) { create_list(:learning_hour, 2, user: volunteer) }
 
   before do
-    login_as user, scope: :user
+    sign_in user
   end
 
   context "when the user is a volunteer" do
@@ -28,7 +28,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       visit learning_hours_path
     end
 
-    it "displays a list of volunteers and the learning hours they completed", js: true do
+    it "displays a list of volunteers and the learning hours they completed", :js do
       expect(page).to have_content("Learning Hours")
       expect(page).to have_content("Volunteer")
       expect(page).to have_content(volunteer.display_name)
@@ -41,7 +41,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       expect(page).to have_current_path(learning_hours_volunteer_path(volunteer.id))
     end
 
-    shared_examples_for "functioning sort buttons" do
+    RSpec.shared_examples_for "functioning sort buttons" do
       it "sorts table columns" do
         expect(page).to have_selector("tr:nth-child(1)", text: expected_first_ordered_value)
 
@@ -52,7 +52,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       end
     end
 
-    it "shows pagination", js: true do
+    it "shows pagination", :js do
       expect(page).to have_content("Previous")
       expect(page).to have_content("Next")
     end

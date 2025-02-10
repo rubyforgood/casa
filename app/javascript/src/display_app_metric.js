@@ -170,7 +170,7 @@ function createLineChartForCaseContacts (chartElement, dataset) {
 }
 
 function createLineChartForUniqueUsersMonthly (chartElement, dataset) {
-  const datasetLabels = ['Total Volunteers', 'Total Supervisors', 'Total Admins']
+  const datasetLabels = ['Total Volunteers', 'Total Supervisors', 'Total Admins', 'Total logged Volunteers']
   return createLineChart(chartElement, dataset, 'Monthly Active Users', datasetLabels)
 }
 
@@ -178,7 +178,7 @@ function createLineChart (chartElement, dataset, chartTitle, datasetLabels) {
   const ctx = chartElement.getContext('2d')
   const allMonths = extractChartData(dataset, 0)
   const datasets = []
-  const colors = ['#308af3', '#48ba16', '#FF0000']
+  const colors = ['#308af3', '#48ba16', '#FF0000', '#FFA500']
 
   for (let i = 1; i < dataset[0].length; i++) {
     const data = extractChartData(dataset, i)

@@ -15,7 +15,8 @@
   </div>
 </div>
 
-<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4"} do |f| %>
+<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4 filter-form"}, remote: true,
+  data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance } do |f| %>
   <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
 
   <div class="card-style">
@@ -37,19 +38,18 @@
           <div class="select-style-1 mb-0">
             <%= f.label :sorted_by %>
             <div class="select-position">
-              <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: ""}) %>
+              <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "filter-input"}) %>
             </div>
           </div>
           <div class="form-check checkbox-style">
-            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type" %>
+            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type filter-input" %>
             <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
           </div>
         </div>
         <div>
-          <%= button_tag( :class=> "btn-sm main-btn dark-btn") do %>
-            <i class="lni lni-funnel mr-10"></i> Filter
-          <% end %>
-          <%= link_to("Reset filters", reset_filterrific_url, class: "btn-sm main-btn dark-btn-outline btn-hove") %>
+          <%= link_to("Reset filters", reset_filterrific_url,
+            class: "btn-sm main-btn dark-btn-outline btn-hove",
+            data: { turbo: true, turbo_frame: :case_contacts, turbo_action: :advance }) %>
         </div>
       </div>
     </div>
@@ -62,11 +62,11 @@
         </div>
         <div class="col-sm-6 input-style-1">
           <%= f.label "Starting from", for: "filterrific_occurred_starting_at" %>
-          <%= f.date_field(:occurred_starting_at, class: "") %>
+          <%= f.date_field(:occurred_starting_at, class: "filter-input") %>
         </div>
         <div class="col-sm-6 input-style-1">
           <%= f.label "Ending at", for: "filterrific_occurred_ending_at" %>
-          <%= f.date_field(:occurred_ending_at, class: "") %>
+          <%= f.date_field(:occurred_ending_at, class: "filter-input") %>
         </div>
       </div>
       <div class="row mb-4">
@@ -81,7 +81,7 @@
                     <div class="form-check checkbox-style">
                       <%=
                       f.check_box :contact_type,
-                        {multiple: true, class: "form-check-input case-contact-contact-type"},
+                        {multiple: true, class: "form-check-input case-contact-contact-type filter-input"},
                         contact_type.id,
                         nil
                       %>
@@ -104,54 +104,58 @@
           <%= f.label :contact_medium %>
           <div class="select-position">
             <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
-                                        {include_blank: "Display all"}) %>
+                                        {include_blank: "Display all", class: "filter-input"}) %>
           </div>
         </div>
         <div class="col-md-3 select-style-1 pr-5">
           <%= f.label :want_driving_reimbursement %>
           <div class="select-position">
             <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
-                                                    {include_blank: "Display all"}) %>
+                                                    {include_blank: "Display all", class: "filter-input"}) %>
           </div>
         </div>
         <div class="col-md-3 select-style-1 pr-5">
           <%= f.label :contact_made %>
           <div class="select-position">
             <%= f.select(:contact_made, @presenter.boolean_select_options,
-                                      {include_blank: "Display all"}) %>
+                                      {include_blank: "Display all", class: "filter-input"}) %>
           </div>
         </div>
       </div>
     </div>
   </div>
 <% end %>
-<% @presenter.case_contacts.each do |casa_case_id, data| %>
-  <div class="card-style-1 mb-5">
-    <div class="card-content">
-      <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
-      <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
-    </div>
-  </div>
-<% end %>
-<% if @presenter.case_contacts.empty? %>
-  <% if params.key?(:casa_case_id) %>
+
+<%= turbo_frame_tag :case_contacts do %>
+  <% @presenter.case_contacts.each do |casa_case_id, data| %>
     <div class="card-style-1 mb-5">
       <div class="card-content">
-        <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
-        <%= params[:filterrific] ?
-            "No case contacts have been found." :
-            "You have no case contacts for this case. \
-      Please click New Case Contact button above to create a case contact for your youth!" %>
-      </div>
-    </div>
-  <% else %>
-    <div class="card-style-1">
-      <div class="card-content">
-        <%= params[:filterrific] ?
-            "No case contacts have been found." :
-            "You have no case contacts for this case. \
-      Please click New Case Contact button above to create a case contact for your youth!" %>
+        <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
+        <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
       </div>
     </div>
   <% end %>
+  <% if @presenter.case_contacts.empty? %>
+    <% if params.key?(:casa_case_id) %>
+      <div class="card-style-1 mb-5">
+        <div class="card-content">
+          <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
+          <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
+        Please click New Case Contact button above to create a case contact for your youth!" %>
+        </div>
+      </div>
+    <% else %>
+      <div class="card-style-1">
+        <div class="card-content">
+          <%= params[:filterrific] ?
+              "No case contacts have been found." :
+              "You have no case contacts for this case. \
+        Please click New Case Contact button above to create a case contact for your youth!" %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+  <%== pagy_bootstrap_nav(@pagy) %>
 <% end %>

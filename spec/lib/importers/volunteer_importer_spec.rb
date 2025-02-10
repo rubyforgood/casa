@@ -6,7 +6,7 @@ RSpec.describe VolunteerImporter do
 
   # Use of the static method VolunteerImporter.import_volunteers functions identically to VolunteerImporter.new(...).import_volunteers
   # but is preferred.
-  let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers.csv") }
+  let(:import_file_path) { file_fixture "volunteers.csv" }
   let(:volunteer_importer) { -> { VolunteerImporter.import_volunteers(import_file_path, casa_org_id) } }
 
   it "imports volunteers from a csv file" do
@@ -23,7 +23,7 @@ RSpec.describe VolunteerImporter do
     before { volunteer_importer.call }
 
     it "does not import duplicate volunteers from csv files" do
-      expect { volunteer_importer.call }.to change(User, :count).by(0)
+      expect { volunteer_importer.call }.not_to change(User, :count)
     end
 
     specify "static and instance methods have identical results" do
@@ -36,7 +36,7 @@ RSpec.describe VolunteerImporter do
       data_using_static = Volunteer.pluck(:email).sort
 
       expect(data_using_static).to eq(data_using_instance)
-      expect(data_using_static).to_not be_empty
+      expect(data_using_static).not_to be_empty
     end
   end
 
@@ -60,7 +60,7 @@ RSpec.describe VolunteerImporter do
   end
 
   context "when row doesn't have e-mail address" do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_email.csv") }
+    let(:import_file_path) { file_fixture "volunteers_without_email.csv" }
 
     it "returns an error message" do
       alert = volunteer_importer.call
@@ -72,7 +72,7 @@ RSpec.describe VolunteerImporter do
   end
 
   context "when row doesn't have phone number" do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_without_phone_numbers.csv") }
+    let(:import_file_path) { file_fixture "volunteers_without_phone_numbers.csv" }
 
     let!(:existing_volunteer_with_number) { create(:volunteer, display_name: "#", email: "volunteer2@example.net", phone_number: "+11111111111", receive_sms_notifications: true) }
 
@@ -86,7 +86,7 @@ RSpec.describe VolunteerImporter do
   end
 
   context "when phone number in row is invalid" do
-    let(:import_file_path) { Rails.root.join("spec", "fixtures", "volunteers_invalid_phone_numbers.csv") }
+    let(:import_file_path) { file_fixture "volunteers_invalid_phone_numbers.csv" }
 
     it "returns an error message" do
       alert = volunteer_importer.call

@@ -170,3 +170,24 @@ body.casa_cases-show {
     gap: .2rem;
   }
 }
+
+#case-selection:required, .select2.select2-container {
+  background: transparent;
+  border: 1px solid #e5e5e5;
+  border-radius: 10px;
+  padding: 8px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.select-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+span[role=combobox] {
+  padding-top: 2px;
+}
+

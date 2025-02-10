@@ -7,6 +7,7 @@ RSpec.describe CaseContactsContactDates do
 
   describe "#contact_dates_details" do
     subject { described_class.new(interviewees).contact_dates_details }
+
     context "without interviewees" do
       let(:interviewees) { [] }
 

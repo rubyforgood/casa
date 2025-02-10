@@ -3,9 +3,9 @@ require "rails_helper"
 RSpec.describe CaseImporter do
   subject(:case_importer) { CaseImporter.new(import_file_path, casa_org_id) }
 
-  let(:casa_org_id) { import_user.casa_org.id }
-  let!(:import_user) { build(:casa_admin) }
-  let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases.csv") }
+  let(:casa_org) { create :casa_org }
+  let(:casa_org_id) { casa_org.id }
+  let(:import_file_path) { file_fixture "casa_cases.csv" }
 
   before do
     allow(case_importer).to receive(:email_addresses_to_users) do |_clazz, comma_separated_emails|
@@ -14,10 +14,6 @@ RSpec.describe CaseImporter do
 
     # next_court_date in casa_cases.csv needs to be a future date
     travel_to Date.parse("Sept 15 2022")
-  end
-
-  after do
-    travel_back
   end
 
   describe "#import_cases" do
@@ -79,19 +75,19 @@ RSpec.describe CaseImporter do
       data_using_static = CasaCase.pluck(:case_number).sort
 
       expect(data_using_static).to eq(data_using_instance)
-      expect(data_using_static).to_not be_empty
+      expect(data_using_static).not_to be_empty
     end
 
     context "when the importer has already run once" do
       before { case_importer.import_cases }
 
       it "does not duplicate casa case files from csv files" do
-        expect { case_importer.import_cases }.to change(CasaCase, :count).by(0)
+        expect { case_importer.import_cases }.not_to change(CasaCase, :count)
       end
     end
 
     context "when there's no case number" do
-      let(:import_file_path) { Rails.root.join("spec", "fixtures", "casa_cases_without_case_number.csv") }
+      let(:import_file_path) { file_fixture "casa_cases_without_case_number.csv" }
 
       it "returns an error message if row does not contain a case number" do
         alert = case_importer.import_cases

@@ -6,7 +6,11 @@ export default class extends Controller {
   static values = {
     options: Array,
     selectedItems: Array,
-    withOptions: Boolean
+    withOptions: Boolean,
+    placeholderTerm: {
+      type: String,
+      default: 'contact(s)'
+    }
   }
 
   connect () {
@@ -31,6 +35,7 @@ export default class extends Controller {
   createMultiSelectWithOptionGroups () {
     const optionTemplate = this.optionTarget.innerHTML
     const itemTemplate = this.itemTarget.innerHTML
+    const placeholder = `Select or search ${this.placeholderTermValue}`
 
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
@@ -51,7 +56,7 @@ export default class extends Controller {
       },
       options: this.optionsValue,
       items: this.selectedItemsValue,
-      placeholder: 'Select or search for contacts',
+      placeholder,
       hidePlaceholder: true,
       searchField: ['text', 'group'],
       render: {

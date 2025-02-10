@@ -40,7 +40,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
     before do
       casa_org = court_date.casa_case.casa_org
-      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec", "fixtures", "files", "default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
+      casa_org.court_report_template.attach(io: File.new(Rails.root.join("spec/fixtures/files/default_past_court_date_template.docx")), filename: "test_past_date_template.docx")
       casa_org.court_report_template.save!
       show
     end
@@ -76,6 +76,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date, date: Date.yesterday, judge: judge)
         }
+
         it "includes the judge's name in the document" do
           show
 
@@ -89,6 +90,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date, date: Date.yesterday, judge: nil)
         }
+
         it "includes None for the judge's name in the document" do
           show
 
@@ -104,6 +106,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date, date: Date.yesterday, hearing_type: hearing_type)
         }
+
         it "includes the hearing type in the document" do
           show
 
@@ -117,6 +120,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date, date: Date.yesterday, hearing_type: nil)
         }
+
         it "includes None for the hearing type in the document" do
           show
 
@@ -132,6 +136,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date, :with_court_order)
         }
+
         it "includes court order info" do
           show
 
@@ -147,6 +152,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         let!(:court_date) {
           create(:court_date)
         }
+
         it "does not include court orders section" do
           show
 
@@ -257,16 +263,14 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
         it "does not create a new CourtDate" do
           expect do
             post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
-          end.to change(CourtDate, :count).by(0)
+          end.not_to change(CourtDate, :count)
         end
 
         it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
           post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
           expect(response).to have_http_status(:unprocessable_entity)
           expected_errors = [
-            "Date can't be blank",
-            "Date is not valid. Court date must be within one year from today.",
-            "Date is not valid. Court date cannot be prior to 1/1/1989."
+            "Date can't be blank"
           ].freeze
           expect(assigns[:court_date].errors.full_messages).to eq expected_errors
         end
@@ -310,9 +314,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
         expect(response).to have_http_status(:unprocessable_entity)
         expected_errors = [
-          "Date can't be blank",
-          "Date is not valid. Court date must be within one year from today.",
-          "Date is not valid. Court date cannot be prior to 1/1/1989."
+          "Date can't be blank"
         ].freeze
         expect(assigns[:court_date].errors.full_messages).to eq expected_errors
       end

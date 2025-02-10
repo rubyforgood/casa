@@ -31,7 +31,7 @@ class CaseCourtOrder < ApplicationRecord
 
   validates :text, presence: true
 
-  enum implementation_status: IMPLEMENTATION_STATUSES
+  enum :implementation_status, IMPLEMENTATION_STATUSES
 
   def self.court_order_options
     STANDARD_COURT_ORDERS.map { |o| [o, o] }

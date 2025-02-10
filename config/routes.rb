@@ -17,6 +17,12 @@ Rails.application.routes.draw do
 
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
   devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
+  authenticate :all_casa_admins do
+    mount PgHero::Engine, at: "pg_dashboard", constraints: lambda { |request|
+      admin = request.env["warden"].user(:all_casa_admin)
+      admin.present? && (admin.role == "All Casa Admin" || admin.casa_admin?)
+    }
+  end
 
   concern :with_datatable do
     post "datatable", on: :collection
@@ -65,7 +71,7 @@ Rails.application.routes.draw do
 
     resources :court_dates, only: %i[create edit new show update destroy]
 
-    resources :placements, only: %i[create edit new show update destroy]
+    resources :placements
 
     member do
       patch :deactivate
@@ -90,11 +96,13 @@ Rails.application.routes.draw do
     member do
       post :restore
     end
-    resources :form, controller: "case_contacts/form"
+    resources :form, controller: "case_contacts/form", only: %i[show update]
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do
       patch :resolve, on: :member
     end
   end
+
+  resources :contact_topic_answers, only: %i[create destroy]
 
   resources :reports, only: %i[index]
   get :export_emails, to: "reports#export_emails"
@@ -193,6 +201,8 @@ Rails.application.routes.draw do
     end
   end
   resources :case_court_orders, only: %i[destroy]
+
+  resources :additional_expenses, only: %i[create destroy]
 
   namespace :all_casa_admins do
     resources :casa_orgs, only: [:new, :create, :show] do

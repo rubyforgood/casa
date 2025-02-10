@@ -61,7 +61,7 @@ if test $erb_changed_count -gt 0; then
     log error "Command bundle could not be found"
     exit 1
   else
-    if ! bundle exec erblint --lint-all --autocorrect ; then
+    if ! bundle exec erb_lint --lint-all --autocorrect ; then
       log error "ERB Lint linting failed, could not fix 1 or more issues\n  See above output for more details"
       exit 1
     fi
@@ -89,12 +89,12 @@ if test $js_changed_count -gt 0; then
 
   cd $repo_root/app
 
-  if ! [ -x "$(command -v yarn)" ]; then
-    log error "Command yarn could not be found"
+  if ! [ -x "$(command -v npm)" ]; then
+    log error "Command npm could not be found"
     exit 1
   else
-    if ! yarn lint:fix ; then
-      log error "yarn linting failed, could not fix 1 or more issues\n  See above output for more details"
+    if ! npm run lint:fix ; then
+      log error "npm linting failed, could not fix 1 or more issues\n  See above output for more details"
       exit 1
     fi
   fi

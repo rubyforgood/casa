@@ -55,6 +55,13 @@ RSpec.describe User, type: :model do
       expect(user.errors[:base]).to eq([" Date of birth must be on or after 1/1/1920."])
     end
 
+    it "shows custom email uniqueness error message" do
+      create(:user, email: "volunteer1@example.com")
+      user = build(:user, email: "volunteer1@example.com")
+      expect(user.valid?).to be false
+      expect(user.errors[:base]).to eq([I18n.t("activerecord.errors.messages.email_uniqueness")])
+    end
+
     it "has an empty old_emails array when initialized" do
       user = build(:user)
       expect(user.old_emails).to eq([])
@@ -221,7 +228,7 @@ RSpec.describe User, type: :model do
     end
 
     it "only returns the user's active cases with active case assignments" do
-      expect(user.actively_assigned_and_active_cases).to match_array([active_case_assignment_with_active_case.casa_case])
+      expect(user.actively_assigned_and_active_cases).to contain_exactly(active_case_assignment_with_active_case.casa_case)
     end
   end
 
@@ -288,7 +295,7 @@ RSpec.describe User, type: :model do
     let!(:new_volunteer) { create(:user, email: "firstemail@example.com") }
 
     it "instantiates with an empty old_emails attribute" do
-      expect(new_volunteer.old_emails).to match_array([])
+      expect(new_volunteer.old_emails).to be_empty
     end
 
     it "saves the old email when a volunteer changes their email" do
@@ -297,7 +304,7 @@ RSpec.describe User, type: :model do
 
       expect(new_volunteer.email).to eq("secondemail@example.com")
 
-      expect(new_volunteer.old_emails).to match_array(["firstemail@example.com"])
+      expect(new_volunteer.old_emails).to contain_exactly("firstemail@example.com")
     end
   end
 
@@ -314,7 +321,7 @@ RSpec.describe User, type: :model do
       new_volunteer.filter_old_emails!(new_volunteer.email)
 
       expect(new_volunteer.email).to eq("firstemail@example.com")
-      expect(new_volunteer.old_emails).to match_array(["secondemail@example.com"])
+      expect(new_volunteer.old_emails).to contain_exactly("secondemail@example.com")
     end
   end
 end

@@ -14,7 +14,7 @@ RSpec.describe "notifications/index", type: :view do
   let(:patch_note_2) { create(:patch_note, note: "Patch Note B", patch_note_type: patch_note_type_b) }
 
   before do
-    assign(:notifications, Noticed::Notification.all)
+    assign(:notifications, Noticed::Notification.all.newest_first)
     assign(:patch_notes, PatchNote.all)
     assign(:deploy_time, deploy_time)
   end
@@ -28,12 +28,12 @@ RSpec.describe "notifications/index", type: :view do
 
     context "when there are notifications" do
       before do
-        notification_1_hour_ago.update_attribute(:created_at, 1.hour.ago)
-        notification_1_day_ago.update_attribute(:created_at, 1.day.ago)
-        notification_2_days_ago.update_attribute(:created_at, 2.days.ago)
-        notification_3_days_ago.update_attribute(:created_at, 3.days.ago)
+        notification_1_hour_ago.update!(created_at: 1.hour.ago)
+        notification_1_day_ago.update!(created_at: 1.day.ago)
+        notification_2_days_ago.update!(created_at: 2.days.ago)
+        notification_3_days_ago.update!(created_at: 3.days.ago)
 
-        patch_note_1.update_attribute(:patch_note_group, patch_note_group_all_users)
+        patch_note_1.update!(patch_note_group: patch_note_group_all_users)
       end
 
       it "has all notifications created after and including the deploy date above the patch note" do
@@ -42,10 +42,12 @@ RSpec.describe "notifications/index", type: :view do
         notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
-        expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
-        expect(notifications_html[1].text).to match(/Your case CINA-\d+ is a transition aged youth/)
-        expect(notifications_html[2].text).to match(/Your youth, case number: CINA-\d+ has a birthday next month/)
-        expect(patch_note_index).to eq(3)
+        aggregate_failures do
+          expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
+          expect(notifications_html[1].text).to match(/Your case CINA-\d+ is a transition aged youth/)
+          expect(notifications_html[2].text).to match(/Your youth, case number: CINA-\d+ has a birthday next month/)
+          expect(patch_note_index).to eq(3)
+        end
       end
 
       it "has all notifications created before the deploy date below the patch note" do

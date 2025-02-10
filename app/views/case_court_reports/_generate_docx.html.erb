@@ -27,14 +27,17 @@
 
         <% select_case_prompt = show_search ? "Search by volunteer name or case number" : "Select case number" %>
         <% select2_class = show_search ? " select2" : "" %>
-        <%= select_tag :case_number,
-          options_for_select(select_options),
-          prompt: select_case_prompt,
-          include_blank: false,
-          id: "case-selection",
-          class: "custom-select#{select2_class}",
-          data: { dropdown_parent: "##{id}" } %>
-
+        <div class="select-wrapper">
+          <%= select_tag :case_number,
+            options_for_select(select_options),
+            prompt: select_case_prompt,
+            include_blank: false,
+            id: "case-selection",
+            class: "custom-select#{select2_class}",
+            required: true,
+            data: { dropdown_parent: "##{id}", width: "100%" } %>
+          <p class="select-required-error text-danger d-none">Case selection is required.</p>
+        </div>
       <%= form.hidden_field :time_zone, id: "user-time-zone" %>
       </div>
       <div class="dates-container">

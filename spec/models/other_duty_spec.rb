@@ -5,7 +5,7 @@ RSpec.describe OtherDuty, type: :model do
 
   it "validates presence of notes" do
     duty = build(:other_duty, notes: nil)
-    expect(duty).to_not be_valid
+    expect(duty).not_to be_valid
     expect(duty.errors[:notes]).to eq(["can't be blank"])
   end
 

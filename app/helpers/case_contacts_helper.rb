@@ -8,10 +8,6 @@ module CaseContactsHelper
     case_contact.duration_minutes.to_i.remainder(60)
   end
 
-  def set_contact_made_false(case_contact)
-    case_contact.persisted? && case_contact.contact_made == false
-  end
-
   def contact_mediums
     CaseContact::CONTACT_MEDIUMS.map { |contact_medium|
       OpenStruct.new(value: contact_medium, label: contact_medium.titleize)
