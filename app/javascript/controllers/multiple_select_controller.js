@@ -57,7 +57,7 @@ export default class extends Controller {
       : orderedOptionVals
 
     const dropdownOptions = showAllOptionCheck
-      ? [{ text: 'Select/Unseselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
+      ? [{ text: 'Select/Unselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
       : this.optionsValue
 
     /* eslint-disable no-new */
