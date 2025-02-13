@@ -38,7 +38,8 @@ class VolunteersController < ApplicationController
         invitation_token: @volunteer.raw_invitation_token, host: request.base_url
       )
 
-      hash_of_short_urls = @volunteer.phone_number.blank? ? {0 => nil, 1 => nil} : handle_short_url([invitation_url, request.base_url + "/users/edit"])
+      hash_of_short_urls = {}
+      hash_of_short_urls = handle_short_url([invitation_url, "#{request.base_url}/users/edit"]) if @volunteer.phone_number.present?
 
       sms_status = deliver_sms_to @volunteer, account_activation_msg("volunteer", hash_of_short_urls)
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
