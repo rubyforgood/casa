@@ -34,8 +34,8 @@ RSpec.describe "casa_cases/new", type: :system do
 
           find(".ts-control").click
 
-          ts_checkboxes = page.all('.ts-dropdown-content input')
-          select_all_el = page.find('span[data-test=select-all-input]')
+          ts_checkboxes = page.all(".ts-dropdown-content input")
+          select_all_el = page.find("span[data-test=select-all-input]")
           # uncheck all contact type options
           select_all_el.click
           ts_checkboxes.each do |el|
