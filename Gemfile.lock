@@ -113,7 +113,7 @@ GEM
     bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
-    bullet (8.0.0)
+    bullet (8.0.1)
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11)
     bundler-audit (0.9.2)
@@ -328,7 +328,7 @@ GEM
     multipart-post (2.4.1)
     net-http-persistent (4.0.4)
       connection_pool (~> 2.2)
-    net-imap (0.5.5)
+    net-imap (0.5.6)
       date
       net-protocol
     net-pop (0.1.2)
