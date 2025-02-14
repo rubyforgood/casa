@@ -50,11 +50,13 @@ export default class extends Controller {
       orderedOptionVals = [' '].concat(orderedOptionVals)
     }
 
-    const initItems = Array.isArray(this.selectedItemsValue) && this.selectedItemsValue.length
-      ? showAllOptionCheck
-        ? [' '].concat(this.selectedItemsValue)
-        : this.selectedItemsValue
-      : orderedOptionVals
+    const hasInitialItems = Array.isArray(this.selectedItemsValue) && this.selectedItemsValue.length
+    // initItems: number[], possibly empty
+    let initItems = this.selectedItemsValue
+    if (showAllOptionCheck) {
+      const emptyItem = [' ']
+      initItems = hasInitialItems ? emptyItem.concat(this.selectedItemsValue) : orderedOptionVals
+    }
 
     const dropdownOptions = showAllOptionCheck
       ? [{ text: 'Select/Unselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
