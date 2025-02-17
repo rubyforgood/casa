@@ -23,7 +23,7 @@ gem "filterrific" # filtering and sorting of models
 gem "friendly_id", "~> 5.5.1" # allows us to use a slug instead of casa case ids in their URLs
 gem "groupdate" # Group Data
 gem "httparty" # for making HTTP network requests 🥳
-gem "image_processing", "~> 1.13" # Set of higher-level helper methods for image processing.
+gem "image_processing", "~> 1.14" # Set of higher-level helper methods for image processing.
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jsbundling-rails"
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
