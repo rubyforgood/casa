@@ -5,6 +5,7 @@
     name: :contact_type_ids,
     options: options.decorate.map { |ct| ct.hash_for_multi_select_with_cases(casa_cases&.pluck(:id)) },
     selected_items: selected_items,
-    render_option_subtext: true
+    render_option_subtext: true,
+    show_all_option: true,
   )) %>
 </div>
