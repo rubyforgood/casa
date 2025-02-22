@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "digest"
 
 class ApiCredential < ApplicationRecord
@@ -6,50 +8,36 @@ class ApiCredential < ApplicationRecord
   before_save :generate_api_token
   before_save :generate_refresh_token
 
-  # Securely confirm/deny that Hash in db is same as current users token Hash
-  def authenticate_api_token(api_token)
-    Digest::SHA256.hexdigest(api_token) == api_token_digest
-  end
+  %w[api_token refresh_token].each do |method_name|
+    # Securely confirm/deny that Hash in db is same as current users token Hash
+    define_method :"authenticate_#{method_name}" do |token|
+      Digest::SHA256.hexdigest(token) == send(:"#{method_name}_digest")
+    end
 
-  def authenticate_refresh_token(refresh_token)
-    Digest::SHA256.hexdigest(refresh_token) == refresh_token_digest
-  end
+    # Securely generate and then return new tokens
+    define_method :"return_new_#{method_name}!" do
+      new_token = send(:"generate_#{method_name}")
+      update_column(:"#{method_name}_digest", send(:"#{method_name}_digest"))
+      {"#{method_name}": new_token}
+    end
 
-  # Securely generate and then return new tokens
-  def return_new_api_token!
-    new_token = generate_api_token
-    update_column(:api_token_digest, api_token_digest)
-    {api_token: new_token}
-  end
-
-  def return_new_refresh_token!
-    new_token = generate_refresh_token
-    update_column(:refresh_token_digest, refresh_token_digest)
-    {refresh_token: new_token}
-  end
-
-  # Verifying token has or has not expired
-  def is_api_token_expired?
-    token_expires_at < Time.current
-  end
-
-  def is_refresh_token_expired?
-    refresh_token_expires_at < Time.current
+    # Verifying token has or has not expired
+    define_method :"is_#{method_name}_expired?" do
+      name = (method_name == "api_token") ? "token" : method_name
+      send(:"#{name}_expires_at").past?
+    end
   end
 
   private
 
-  # Generate unique tokens and hashes them for secure db storage
-  def generate_api_token
-    new_api_token = SecureRandom.hex(18)
-    self.api_token_digest = Digest::SHA256.hexdigest(new_api_token)
-    new_api_token
-  end
+  %w[api_token refresh_token].each do |method_name|
+    # Generate unique tokens and hashes them for secure db storage
 
-  def generate_refresh_token
-    new_refresh_token = SecureRandom.hex(18)
-    self.refresh_token_digest = Digest::SHA256.hexdigest(new_refresh_token)
-    new_refresh_token
+    define_method :"generate_#{method_name}" do
+      new_token = SecureRandom.hex(18)
+      self["#{method_name}_digest"] = Digest::SHA256.hexdigest(new_token)
+      new_token
+    end
   end
 end
 
