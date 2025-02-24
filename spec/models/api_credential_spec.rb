@@ -104,16 +104,20 @@ RSpec.describe ApiCredential, type: :model do
   describe "#revoke_token" do
     it "sets api token to nil" do
       api_token = api_credential.return_new_api_token![:api_token]
-      api_credential.revoke_token(api_token)
+      api_credential.revoke_token("api_token")
 
       expect(api_credential.api_token_digest).to be_nil
     end
 
     it "sets refresh token to nil" do
       refresh_token = api_credential.return_new_refresh_token![:refresh_token]
-      api_credential.revoke_token(refresh_token)
+      api_credential.revoke_token("refresh_token")
 
       expect(api_credential.refresh_token_digest).to be_nil
+    end
+
+    it "returns nil if token is not found" do
+      expect(api_credential.revoke_token("invalid_token")).to be_nil
     end
   end
 end
