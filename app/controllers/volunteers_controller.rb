@@ -31,8 +31,7 @@ class VolunteersController < ApplicationController
     @volunteer = current_organization.volunteers.new(create_volunteer_params)
     authorize @volunteer
 
-    if @volunteer.save && @volunteer.email.match?(URI::MailTo::EMAIL_REGEXP)
-
+    if @volunteer.save
       # invitation error handling
       begin
         @volunteer.invite!(current_user)
