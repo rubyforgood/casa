@@ -5,6 +5,7 @@ namespace :after_party do
 
     # Put your task implementation HERE.
     User.find_each do |user|
+      user.update(receive_sms_notifications: false) if user.phone_number.blank?
       user.api_credential || user.create_api_credential
     end
 
