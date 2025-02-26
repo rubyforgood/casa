@@ -37,17 +37,12 @@ class ApiCredential < ApplicationRecord
     refresh_token_expires_at < Time.current
   end
 
-  # clear tokens
-  # token argument takes in two strings: api_token and refresh_token
-  def revoke_token(token)
-    if (token == "api_token")
-      update_columns(api_token_digest: nil)
-    elsif (token == "refresh_token")
-      update_columns(refresh_token_digest: nil)
-    else
-      return nil
-    end
-    return token
+  def revoke_api_token
+    update_columns(api_token_digest: nil)
+  end
+
+  def revoke_refresh_token
+    update_columns(refresh_token_digest: nil)
   end
 
   private

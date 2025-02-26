@@ -15,8 +15,8 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
     api_credential = ApiCredential.find_by(refresh_token_digest: Digest::SHA256.hexdigest(refresh_token))
     # set api and refresh tokens to nil; otherwise render 401
     if api_credential
-      api_credential.revoke_token("api_token")
-      api_credential.revoke_token("refresh_token")
+      api_credential.revoke_api_token
+      api_credential.revoke_refresh_token
       render json: {message: "Signed out successfully."}, status: 200
     else
       render json: {message: "An error occured when signing out."}, status: 401
