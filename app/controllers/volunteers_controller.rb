@@ -32,7 +32,16 @@ class VolunteersController < ApplicationController
     authorize @volunteer
 
     if @volunteer.save && @volunteer.email.match?(URI::MailTo::EMAIL_REGEXP)
-      @volunteer.invite!(current_user)
+
+      # invitation error handling
+      begin
+        @volunteer.invite!(current_user)
+      rescue ActiveRecord::RecordInvalid, StandardError => e
+        logger.error "Volunteer invitation failed: #{e.message}"
+      else
+        logger.info "Volunteer invitation sent successfully"
+      end
+
       # call short io api here
       invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: @volunteer.raw_invitation_token, host: request.base_url)
 
