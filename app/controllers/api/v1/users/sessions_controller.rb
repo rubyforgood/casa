@@ -20,7 +20,7 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
       render json: {message: "Signed out successfully."}, status: 200
     else
       render json: {message: "An error occured when signing out."}, status: 401
-      return
+      nil
     end
   end
 

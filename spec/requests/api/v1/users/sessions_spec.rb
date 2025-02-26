@@ -1,6 +1,9 @@
 require "swagger_helper"
 
 RSpec.describe "sessions API", type: :request do
+  let(:casa_org) { create(:casa_org) }
+  let(:volunteer) { create(:volunteer, casa_org: casa_org) }
+
   path "/api/v1/users/sign_in" do
     post "Signs in a user" do
       tags "Sessions"
@@ -14,9 +17,6 @@ RSpec.describe "sessions API", type: :request do
         },
         required: %w[email password]
       }
-
-      let(:casa_org) { create(:casa_org) }
-      let(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
       response "201", "user signed in" do
         let(:user) { {email: volunteer.email, password: volunteer.password} }
@@ -46,15 +46,12 @@ RSpec.describe "sessions API", type: :request do
     delete "Signs out a user" do
       tags "Sessions"
       produces "application/json"
-      parameter name: :Authorization, in: :header, type: :string, required: true
+      parameter name: :authorization, in: :header, type: :string, required: true
 
-      let(:casa_org) { create(:casa_org) }
-      let(:volunteer) { create(:volunteer, casa_org: casa_org) }
-      let(:api_credential) { create(:api_credential, user: volunteer) }
-      let(:refresh_token) { api_credential.return_new_refresh_token![:refresh_token] }
+      let(:refresh_token) { create(:api_credential, user: volunteer).return_new_refresh_token![:refresh_token] }
 
       response "200", "user signed out" do
-        let(:Authorization) { "Bearer #{refresh_token}" }
+        let(:authorization) { "Bearer #{refresh_token}" }
         schema "$ref" => "#/components/schemas/sign_out"
         run_test! do |response|
           expect(response.content_type).to eq("application/json; charset=utf-8")
@@ -64,7 +61,7 @@ RSpec.describe "sessions API", type: :request do
       end
 
       response "401", "unauthorized" do
-        let(:Authorization) { "Bearer foo" }
+        let(:authorization) { "Bearer foo" }
         schema "$ref" => "#/components/schemas/sign_out"
         run_test! do |response|
           expect(response.content_type).to eq("application/json; charset=utf-8")
