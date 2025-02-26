@@ -12,6 +12,8 @@ RSpec.describe "Edit CASA Case", type: :system do
     let(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
     let(:other_org_contact_type_group) { create(:contact_type_group, casa_org: other_organization) }
     let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+    let!(:another_contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+    let!(:saved_case_contact_type) { create(:casa_case_contact_type, casa_case: casa_case, contact_type: contact_type) }
     let!(:other_org_contact_type) { create(:contact_type, contact_type_group: other_org_contact_type_group) }
     let!(:siblings_casa_cases) do
       create(:casa_case, :with_one_court_order, casa_org: organization)
@@ -41,6 +43,20 @@ RSpec.describe "Edit CASA Case", type: :system do
       select "Submitted", from: "casa_case_court_report_status"
 
       find(".ts-control").click
+
+      ts_checkboxes = page.all(".ts-dropdown-content input")
+
+      select_all_el = page.find("span[data-test=select-all-input]")
+      # uncheck all contact type options
+      select_all_el.click
+      ts_checkboxes.each do |el|
+        expect(el).not_to be_checked
+      end
+      # check all contact type options
+      select_all_el.click
+      expect(ts_checkboxes).to all(be_checked)
+
+      # unselect contact_type from dropdown
       find("span", text: contact_type.name).click
 
       page.find('button[data-action="court-order-form#add"]').click
@@ -57,7 +73,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Court Order Text One")
       expect(page).not_to have_text("Deactivate Case")
 
-      expect(casa_case.contact_types).to eq [contact_type]
+      expect(casa_case.contact_types).to eq [another_contact_type]
       has_checked_field? contact_type.name
     end
 
@@ -222,9 +238,19 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Set Implementation Status")
 
       find(".ts-control").click
-      find("span", text: "Youth").click
+      ts_checkboxes = page.all(".ts-dropdown-content input")
 
-      within ".actions-cc" do
+      select_all_el = page.find("span[data-test=select-all-input]")
+      # uncheck all contact type options
+      select_all_el.click
+      ts_checkboxes.each do |el|
+        expect(el).not_to be_checked
+      end
+      # check all contact type options
+      select_all_el.click
+      expect(ts_checkboxes).to all(be_checked)
+      # since all contact type options checked, don't need to select one
+      within ".top-page-actions" do
         click_on "Update CASA Case"
       end
       has_checked_field? "Youth"
