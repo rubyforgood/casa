@@ -1,5 +1,5 @@
 namespace :after_party do
-  desc 'Deployment task: populate_new_api_and_refresh_token'
+  desc "Deployment task: populate_new_api_and_refresh_token"
   task populate_new_api_and_refresh_token: :environment do
     puts "Running deploy task 'populate_new_api_and_refresh_token'"
 
