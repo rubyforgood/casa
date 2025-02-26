@@ -1,7 +1,7 @@
 namespace :after_party do
-  desc "Deployment task: populate_api_tokens"
-  task populate_api_tokens: :environment do
-    puts "Running deploy task 'populate_api_tokens'" unless Rails.env.test?
+  desc "Deployment task: populate_new_api_and_refresh_token"
+  task populate_new_api_and_refresh_token: :environment do
+    puts "Running deploy task 'populate_new_api_and_refresh_token'"
 
     # Put your task implementation HERE.
     User.find_each do |user|
