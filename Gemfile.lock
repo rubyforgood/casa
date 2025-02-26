@@ -358,7 +358,7 @@ GEM
     ostruct (0.6.1)
     pagy (9.3.3)
     parallel (1.26.3)
-    parallel_tests (4.9.0)
+    parallel_tests (4.9.1)
       parallel
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
