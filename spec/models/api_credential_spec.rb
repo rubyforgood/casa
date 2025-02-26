@@ -100,4 +100,22 @@ RSpec.describe ApiCredential, type: :model do
       expect(api_credential.refresh_token_digest).to eq(Digest::SHA256.hexdigest(refresh_token))
     end
   end
+
+  describe "#revoke_api_token" do
+    it "sets api token to nil" do
+      api_credential.return_new_api_token![:api_token]
+      api_credential.revoke_api_token
+
+      expect(api_credential.api_token_digest).to be_nil
+    end
+  end
+
+  describe "#revoke_refresh_token" do
+    it "sets refresh token to nil" do
+      api_credential.return_new_refresh_token![:refresh_token]
+      api_credential.revoke_refresh_token
+
+      expect(api_credential.refresh_token_digest).to be_nil
+    end
+  end
 end
