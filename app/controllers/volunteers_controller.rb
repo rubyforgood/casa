@@ -35,7 +35,7 @@ class VolunteersController < ApplicationController
       # invitation error handling
       begin
         @volunteer.invite!(current_user)
-      rescue StandardError => e
+      rescue => e
         flash[:alert] = "Volunteer invitation failed. Reason: #{e.message}"
       end
 
