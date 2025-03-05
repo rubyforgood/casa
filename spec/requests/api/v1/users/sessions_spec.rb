@@ -48,10 +48,10 @@ RSpec.describe "sessions API", type: :request do
       produces "application/json"
       parameter name: :authorization, in: :header, type: :string, required: true
 
-      let(:refresh_token) { create(:api_credential, user: volunteer).return_new_refresh_token![:refresh_token] }
+      let(:api_token) { create(:api_credential, user: volunteer).return_new_api_token![:api_token] }
 
       response "200", "user signed out" do
-        let(:authorization) { "Bearer #{refresh_token}" }
+        let(:authorization) { "Bearer #{api_token}" }
         schema "$ref" => "#/components/schemas/sign_out"
         run_test! do |response|
           expect(response.content_type).to eq("application/json; charset=utf-8")
