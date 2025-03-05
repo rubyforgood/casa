@@ -35,10 +35,8 @@ class VolunteersController < ApplicationController
       # invitation error handling
       begin
         @volunteer.invite!(current_user)
-      rescue ActiveRecord::RecordInvalid, StandardError => e
-        logger.error "Volunteer invitation failed: #{e.message}"
-      else
-        logger.info "Volunteer invitation sent successfully"
+      rescue StandardError => e
+        flash[:alert] = "Volunteer invitation failed. Reason: #{e.message}"
       end
 
       # call short io api here
