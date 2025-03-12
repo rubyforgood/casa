@@ -42,6 +42,12 @@ RSpec.configure do |config|
             properties: {
               message: {type: :string}
             }
+          },
+          sign_out: {
+            type: :object,
+            properties: {
+              message: {type: :string}
+            }
           }
         }
       },

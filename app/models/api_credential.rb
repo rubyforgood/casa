@@ -37,6 +37,14 @@ class ApiCredential < ApplicationRecord
     refresh_token_expires_at < Time.current
   end
 
+  def revoke_api_token
+    update_columns(api_token_digest: nil)
+  end
+
+  def revoke_refresh_token
+    update_columns(refresh_token_digest: nil)
+  end
+
   private
 
   # Generate unique tokens and hashes them for secure db storage
