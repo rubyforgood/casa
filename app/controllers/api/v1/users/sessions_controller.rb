@@ -2,7 +2,7 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
   def create
     load_resource
     if @user
-      render json: Api::V1::SessionBlueprint.render(@user), status: 201
+      render json: Api::V1::SessionBlueprint.render(@user, remember_me: user_params[:remember_me]), status: 201
     else
       render json: {message: "Incorrect email or password."}, status: 401
     end
@@ -27,7 +27,7 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
   private
 
   def user_params
-    params.permit(:email, :password)
+    params.permit(:email, :password, :remember_me)
   end
 
   def load_resource
