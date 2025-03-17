@@ -14,8 +14,12 @@ class Api::V1::SessionBlueprint < Blueprinter::Base
     token.return_new_api_token![:api_token]
   end
 
-  field :refresh_token do |user|
+  field :refresh_token do |user, options|
     token = user.api_credential
-    token.return_new_refresh_token![:refresh_token]
+    if options[:remember_me]
+      token.return_new_refresh_token!(true)[:refresh_token]
+    else
+      token.return_new_refresh_token!(false)[:refresh_token]
+    end
   end
 end
