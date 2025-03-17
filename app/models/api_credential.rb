@@ -22,8 +22,13 @@ class ApiCredential < ApplicationRecord
     {api_token: new_token}
   end
 
-  def return_new_refresh_token!
+  def return_new_refresh_token! (remember_me)
     new_token = generate_refresh_token
+    if remember_me
+      update_column(:refresh_token_expires_at, 1.year.from_now)
+    else
+      update_column(:refresh_token_expires_at, 30.days.from_now)
+    end
     update_column(:refresh_token_digest, refresh_token_digest)
     {refresh_token: new_token}
   end
