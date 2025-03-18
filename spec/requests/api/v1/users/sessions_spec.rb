@@ -51,25 +51,30 @@ RSpec.describe "sessions API", type: :request do
 
       response "200", "valid session" do
         let(:api_token) { create(:api_credential, user: volunteer).return_new_api_token![:api_token] }
+        let(:authorization) { "Bearer #{api_token}" }
+
+        schema "$ref" => "#/components/schemas/validate"
 
         run_test! do |response|
-          let(:authorization) { "Bearer #{api_token}" }
           parsed_response = JSON.parse(response.body)
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response.status).to eq(200)
           expect(parsed_response["message"]).to eq("Users session is valid.")
           expect(parsed_response["success"]).to be(true)
+          expect(response.status).to eq(200)
         end
       end
 
       response "401", "invalid API token" do
+        let(:authorization) { "Bearer invalid_api_token" }
+
+        schema "$ref" => "#/components/schemas/validate"
+
         run_test! do |response|
-          let(:authorization) { "Bearer #{api_token}" }
           parsed_response = JSON.parse(response.body)
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response.status).to eq(401)
           expect(parsed_response["message"]).to eq("Users session is NOT valid")
           expect(parsed_response["success"]).to be(false)
+          expect(response.status).to eq(401)
         end
       end
     end

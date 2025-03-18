@@ -66,6 +66,36 @@ paths:
               required:
               - email
               - password
+  "/api/v1/users/validate":
+    post:
+      summary: Validates a users session
+      tags:
+      - Sessions
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      - name: refresh_token
+        in: query
+        required: true
+        schema:
+          type: string 
+      responses:
+        '200':
+          description: users session is valid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/validate"
+        '401':
+          description: users session is NOT valid
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/validate"
+
   "/api/v1/users/sign_out":
     delete:
       summary: Signs out a user
