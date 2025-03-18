@@ -42,44 +42,6 @@ RSpec.describe "sessions API", type: :request do
     end
   end
 
-  path "/api/v1/users/validate" do
-    get "Validates a user session" do
-      tags "Sessions"
-      consumes "application/json"
-      produces "application/json"
-      parameter name: :authorization, in: :header, type: :string, required: true
-
-      response "200", "valid session" do
-        let(:api_token) { create(:api_credential, user: volunteer).return_new_api_token![:api_token] }
-        let(:authorization) { "Bearer #{api_token}" }
-
-        schema "$ref" => "#/components/schemas/validate"
-
-        run_test! do |response|
-          parsed_response = JSON.parse(response.body)
-          expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(parsed_response["message"]).to eq("Users session is valid.")
-          expect(parsed_response["success"]).to be(true)
-          expect(response.status).to eq(200)
-        end
-      end
-
-      response "401", "invalid API token" do
-        let(:authorization) { "Bearer invalid_api_token" }
-
-        schema "$ref" => "#/components/schemas/validate"
-
-        run_test! do |response|
-          parsed_response = JSON.parse(response.body)
-          expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(parsed_response["message"]).to eq("Users session is NOT valid")
-          expect(parsed_response["success"]).to be(false)
-          expect(response.status).to eq(401)
-        end
-      end
-    end
-  end
-
   path "/api/v1/users/sign_out" do
     delete "Signs out a user" do
       tags "Sessions"

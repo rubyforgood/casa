@@ -95,7 +95,6 @@ paths:
             application/json:
               schema:
                 "$ref": "#/components/schemas/validate"
-
   "/api/v1/users/sign_out":
     delete:
       summary: Signs out a user
