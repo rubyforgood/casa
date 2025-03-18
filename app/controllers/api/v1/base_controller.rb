@@ -1,6 +1,6 @@
 class Api::V1::BaseController < ActionController::API
   rescue_from ActiveRecord::RecordNotFound, with: :not_found
-  before_action :authenticate_user!, except: [:create, :destroy]
+  before_action :authenticate_user!, except: [:create, :destroy, :validate]
 
   def authenticate_user!
     api_token, options = ActionController::HttpAuthentication::Token.token_and_options(request)
