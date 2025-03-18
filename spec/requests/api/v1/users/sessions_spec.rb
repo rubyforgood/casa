@@ -4,6 +4,13 @@ RSpec.describe "sessions API", type: :request do
   let(:casa_org) { create(:casa_org) }
   let(:volunteer) { create(:volunteer, casa_org: casa_org) }
 
+  let(:valid_api_token) { create(:api_credential, user: volunteer).return_new_api_token![:api_token] }
+  let(:valid_refresh_token) { create(:api_credential, user: volunteer).return_new_api_token![:refresh_token] }
+  let(:invalid_api_token) { "invalid_api_token" }
+  let(:invalid_refresh_token) { "invalid_refresh_token" }
+
+
+
   path "/api/v1/users/sign_in" do
     post "Signs in a user" do
       tags "Sessions"
@@ -37,6 +44,61 @@ RSpec.describe "sessions API", type: :request do
           expect(response.content_type).to eq("application/json; charset=utf-8")
           expect(response.body).to eq({message: "Incorrect email or password."}.to_json)
           expect(response.status).to eq(401)
+        end
+      end
+    end
+  end
+
+  path "/api/v1/users/validate" do
+    get "Validates a user session" do
+      tags "Sessions"
+      consumes "application/json"
+      produces "application/json"
+
+      response "200", "valid session" do
+        let(:authorization) { "Bearer #{valid_api_token}" }
+        let(:refresh_token) { valid_refresh_token }
+
+        run_test! do |response|
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response.status).to eq(200)
+          expect(JSON.parse(response.body)["message"]).to eq("Users session is valid.")
+          expect(JSON.parse(response.body)["success"]).to eq(true)
+        end
+      end
+
+      response "401", "invalid API token" do
+        let(:authorization) { "Bearer #{invalid_api_token}" }
+        let(:refresh_token) { valid_refresh_token }
+
+        run_test! do |response|
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response.status).to eq(401)
+          expect(JSON.parse(response.body)["message"]).to eq("Users session is NOT valid")
+          expect(JSON.parse(response.body)["success"]).to eq(false)
+        end
+      end
+
+      response "401", "invalid refresh token" do
+        let(:authorization) { "Bearer #{valid_api_token}" }
+        let(:refresh_token) { invalid_refresh_token }
+
+        run_test! do |response|
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response.status).to eq(401)
+          expect(JSON.parse(response.body)["message"]).to eq("Users session is NOT valid")
+          expect(JSON.parse(response.body)["success"]).to eq(false)
+        end
+      end
+
+      response "400", "missing token" do
+        let(:authorization) { nil }
+        let(:refresh_token) { nil }
+
+        run_test! do |response|
+          expect(response.content_type).to eq("application/json; charset=utf-8")
+          expect(response.status).to eq(400)
+          expect(JSON.parse(response.body)["message"]).to eq("Token is missing.")
         end
       end
     end
