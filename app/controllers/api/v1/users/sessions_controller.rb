@@ -24,10 +24,31 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
     end
   end
 
+  def validate
+    api_token = request.headers["Authorization"]&.split(" ")&.last
+    refresh_token = extract_refresh_token
+
+    user_session_tokens = ApiCredential.find_by(
+      api_token_digest: Digest::SHA256.hexdigest(api_token),
+      refresh_token_digest: Digest::SHA256.hexdigest(refresh_token)
+    )
+
+    if user_session_tokens
+      render json: {message: "Users session is valid.", success: true}, status: 200
+    else
+      render json: {message: "Users session is NOT valid", success: false}, status: 401
+      nil
+    end
+  end
+
   private
 
   def user_params
     params.permit(:email, :password)
+  end
+
+  def extract_refresh_token
+    params[:refresh_token]
   end
 
   def load_resource
