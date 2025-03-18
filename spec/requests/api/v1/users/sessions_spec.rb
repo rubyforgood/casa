@@ -9,8 +9,6 @@ RSpec.describe "sessions API", type: :request do
   let(:invalid_api_token) { "invalid_api_token" }
   let(:invalid_refresh_token) { "invalid_refresh_token" }
 
-
-
   path "/api/v1/users/sign_in" do
     post "Signs in a user" do
       tags "Sessions"
