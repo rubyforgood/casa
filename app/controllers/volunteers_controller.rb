@@ -32,7 +32,7 @@ class VolunteersController < ApplicationController
     authorize @volunteer
 
     if @volunteer.save
-
+      # invitation error handling
       begin
         @volunteer.invite!(current_user)
       rescue => e
