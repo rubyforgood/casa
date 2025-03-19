@@ -11,7 +11,7 @@ class Api::V1::Users::SessionsController < Api::V1::BaseController
   def destroy
     # fetch access token from request header
     api_token = request.headers["Authorization"]&.split(" ")&.last
-    # find user's api credentials by access token 
+    # find user's api credentials by access token
     api_credential = ApiCredential.find_by(api_token_digest: Digest::SHA256.hexdigest(api_token))
     # set api and refresh tokens to nil; otherwise render 401 0000
     if api_credential
