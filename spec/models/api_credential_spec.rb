@@ -20,7 +20,7 @@ RSpec.describe ApiCredential, type: :model do
 
   describe "#authenticate_refresh_token" do
     it "returns true for a valid refresh_token" do
-      refresh_token = api_credential.return_new_refresh_token![:refresh_token]
+      refresh_token = api_credential.return_new_refresh_token!(false)[:refresh_token]
       expect(api_credential.authenticate_refresh_token(refresh_token)).to be true
     end
 
@@ -47,13 +47,13 @@ RSpec.describe ApiCredential, type: :model do
   describe "#return_new_refresh_token!" do
     it "updates the refresh_token digest" do
       old_digest = api_credential.refresh_token_digest
-      api_credential.return_new_refresh_token![:refresh_token]
+      api_credential.return_new_refresh_token!(false)[:refresh_token]
       api_credential.reload
       expect(api_credential.refresh_token_digest).not_to eq(old_digest)
     end
 
     it "sets a new refresh_token" do
-      new_token = api_credential.return_new_refresh_token![:refresh_token]
+      new_token = api_credential.return_new_refresh_token!(false)[:refresh_token]
 
       expect(new_token).not_to be_nil
     end
@@ -95,7 +95,7 @@ RSpec.describe ApiCredential, type: :model do
   describe "#generate_refresh_token" do
     it "creates a secure hashed refresh_token" do
       api_credential.refresh_token_digest
-      refresh_token = api_credential.return_new_refresh_token![:refresh_token]
+      refresh_token = api_credential.return_new_refresh_token!(false)[:refresh_token]
 
       expect(api_credential.refresh_token_digest).to eq(Digest::SHA256.hexdigest(refresh_token))
     end
@@ -112,10 +112,28 @@ RSpec.describe ApiCredential, type: :model do
 
   describe "#revoke_refresh_token" do
     it "sets refresh token to nil" do
-      api_credential.return_new_refresh_token![:refresh_token]
+      api_credential.return_new_refresh_token!(false)[:refresh_token]
       api_credential.revoke_refresh_token
 
       expect(api_credential.refresh_token_digest).to be_nil
+    end
+  end
+
+  describe "#generate_refresh_token_with_rememberme" do
+    it "updates token to be valid for 1 year" do
+      api_credential.refresh_token_digest
+      api_credential.return_new_refresh_token!(true)[:refresh_token]
+
+      expect(api_credential.refresh_token_expires_at).to be_within(1.minutes).of(1.year.from_now)
+    end
+  end
+
+  describe "#generate_refresh_token_without_rememberme" do
+    it "updates token to be valid for 30 days" do
+      api_credential.refresh_token_digest
+      api_credential.return_new_refresh_token!(false)[:refresh_token]
+
+      expect(api_credential.refresh_token_expires_at).to be_within(1.minutes).of(30.days.from_now)
     end
   end
 end
