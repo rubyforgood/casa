@@ -3,6 +3,7 @@
      data-multiple-select-options-value="<%= @options %>"
      data-multiple-select-selected-items-value="<%= @selected_items %>"
      data-multiple-select-placeholder-term-value="<%= @placeholder_term %>"
+     data-multiple-select-show-all-option-value="<%= @show_all_option %>"
      data-multiple-select-with-options-value="true">
 
   <template data-multiple-select-target="option">
@@ -17,6 +18,19 @@
   <template data-multiple-select-target="item">
     <div class="badge rounded-pill bg-primary active px-3">DATA_LABEL</div>
   </template>
+
+  <%# not needed, but want to be explicit when including this markup %>
+  <% if @show_all_option %>
+    <template data-multiple-select-target="hiddenItem">
+      <div class="d-none"></div>
+    </template>
+
+    <template data-multiple-select-target="selectAllOption">
+      <div class="d-flex align-items-baseline">
+        <span data-test="select-all-input" class='mr-5'>DATA_LABEL</span>
+      </div>
+    </template>
+  <% end %>
 
   <%= @form.select @name, {}, { multiple: true } , {
     data: { "multiple-select-target": "select",  } , class: "form-control-lg form-select form-select-lg input-group-lg"
