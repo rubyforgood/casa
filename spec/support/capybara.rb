@@ -3,6 +3,8 @@ require "capybara/rspec"
 require "capybara-screenshot/rspec"
 require "selenium/webdriver"
 
+Capybara.default_max_wait_time = ENV.fetch("CAPYBARA_WAIT_TIME", "5").to_i
+
 # not used unless you swap it out for selenium_chrome_headless_in_container to watch tests running in docker
 Capybara.register_driver :selenium_chrome_in_container do |app|
   Capybara::Selenium::Driver.new app,
