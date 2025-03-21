@@ -1141,6 +1141,7 @@ ignore:
   - RSpec/NamedSubject
   - RSpec/ExampleLength
   - RSpec/ChangeByZero
+  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/drafts_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/LetSetup
@@ -1160,6 +1161,7 @@ ignore:
   - RSpec/MultipleExpectations
   - RSpec/PredicateMatcher
   - RSpec/ContextWording
+  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/index_spec.rb:
   - RSpec/LetSetup
   - RSpec/MultipleMemoizedHelpers

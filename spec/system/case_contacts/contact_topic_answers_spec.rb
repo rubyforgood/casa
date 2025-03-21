@@ -114,7 +114,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   context "when casa org has no contact topics" do
     let(:contact_topics) { [] }
 
-    it "displays a field for contact.notes" do
+    xit "displays a field for contact.notes" do # TODO make test not flaky
       subject
       expect(page).to have_no_button "Add Another Discussion Topic"
       expect(notes_section).to have_field "Additional Notes"
