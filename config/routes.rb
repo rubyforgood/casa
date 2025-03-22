@@ -251,6 +251,7 @@ Rails.application.routes.draw do
       namespace :users do
         post "sign_in", to: "sessions#create"
         delete "sign_out", to: "sessions#destroy"
+        post "validate", to: "sessions#validate"
       end
     end
   end
