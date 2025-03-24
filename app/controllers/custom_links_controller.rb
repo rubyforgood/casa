@@ -3,9 +3,8 @@ class CustomLinksController < ApplicationController
 
   # GET /custom_links/new
   def new
-    authorize CustomLink
-    custom_link = CustomLink.new(casa_org_id: current_user.casa_org_id)
-    @custom_link = custom_link
+    @custom_link = CustomLink.new(casa_org_id: current_user.casa_org_id)
+    authorize @customLink
   end
 
   # GET /custom_links/1/edit
@@ -15,9 +14,8 @@ class CustomLinksController < ApplicationController
 
   # POST /custom_links
   def create
-    authorize CustomLink
-
     @custom_link = CustomLink.new(custom_link_params)
+    authorize @custom_link
 
     if @custom_link.save
       redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully created."
