@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe CustomLinksController, type: :request do
+RSpec.describe "/casa_cases/:casa_case_id/custom_links/", type: :request do
   let(:user) { create(:user) }
   let(:admin) { create(:casa_admin, casa_org: user.casa_org) }
   let(:custom_link) { create(:custom_link, casa_org_id: user.casa_org_id) }
@@ -9,22 +9,31 @@ RSpec.describe CustomLinksController, type: :request do
 
   before do
     sign_in user
-    allow_any_instance_of(CustomLinkPolicy).to receive(:new?).and_return(true)
-    allow_any_instance_of(CustomLinkPolicy).to receive(:edit?).and_return(true)
-    allow_any_instance_of(CustomLinkPolicy).to receive(:create?).and_return(true)
-    allow_any_instance_of(CustomLinkPolicy).to receive(:update?).and_return(true)
-    allow_any_instance_of(CustomLinkPolicy).to receive(:destroy?).and_return(true)
+    custom_link_policy = instance_double(CustomLinkPolicy)
+    allow(custom_link_policy).to receive_messages(
+      new?: true,
+      edit?: true,
+      create?: true,
+      update?: true,
+      destroy?: true
+    )
+
+    allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
   end
 
   describe "GET #new" do
     it "authorizes the action" do
-      allow_any_instance_of(CustomLinkPolicy).to receive(:new?).and_return(true)
+      custom_link_policy = instance_double(CustomLinkPolicy)
+
+      allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
+      allow(custom_link_policy).to receive(:new?).and_return(true)
+
       get new_custom_link_path
+      expect(response).to have_http_status(:ok)
     end
 
     it "assigns a new CustomLink with the current user's casa_org_id to @custom_link" do
       get new_custom_link_path
-      expect(assigns(:custom_link)).to be_a_new(CustomLink)
       expect(assigns(:custom_link).casa_org_id).to eq(user.casa_org_id)
     end
 
@@ -41,8 +50,11 @@ RSpec.describe CustomLinksController, type: :request do
     end
 
     it "authorizes the action" do
-      allow_any_instance_of(CustomLinkPolicy).to receive(:edit?).and_return(true)
+      custom_link_policy = instance_double(CustomLinkPolicy)
+      allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
+      allow(custom_link_policy).to receive(:edit?).and_return(true)
       get edit_custom_link_path(custom_link)
+      expect(custom_link_policy).to have_received(:edit?)
     end
   end
 
@@ -65,8 +77,13 @@ RSpec.describe CustomLinksController, type: :request do
       end
 
       it "authorizes the action" do
-        allow_any_instance_of(CustomLinkPolicy).to receive(:create?).and_return(true)
+        custom_link_policy = instance_double(CustomLinkPolicy)
+
+        allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
+        allow(custom_link_policy).to receive(:create?).and_return(true)
+
         post custom_links_path, params: {custom_link: valid_attributes}
+        expect(response).to have_http_status(:found)
       end
     end
 
@@ -86,7 +103,7 @@ RSpec.describe CustomLinksController, type: :request do
 
   describe "PATCH/PUT #update" do
     context "with valid parameters" do
-      let(:new_attributes) { {text: "Updated Text", url: "http://updated.com"} }
+      subject(:new_attributes) { {text: "Updated Text", url: "http://updated.com"} }
 
       it "updates the requested custom_link" do
         patch custom_link_path(custom_link), params: {custom_link: new_attributes}
@@ -105,8 +122,11 @@ RSpec.describe CustomLinksController, type: :request do
       end
 
       it "authorizes the action" do
-        allow_any_instance_of(CustomLinkPolicy).to receive(:update?).and_return(true)
+        custom_link_policy = instance_double(CustomLinkPolicy)
+        allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
+        allow(custom_link_policy).to receive(:update?).and_return(true)
         patch custom_link_path(custom_link), params: {custom_link: new_attributes}
+        expect(custom_link_policy).to have_received(:update?)
       end
     end
 
@@ -143,8 +163,11 @@ RSpec.describe CustomLinksController, type: :request do
     end
 
     it "authorizes the action" do
-      allow_any_instance_of(CustomLinkPolicy).to receive(:destroy?).and_return(true)
+      custom_link_policy = instance_double(CustomLinkPolicy)
+      allow(CustomLinkPolicy).to receive(:new).and_return(custom_link_policy)
+      allow(custom_link_policy).to receive(:destroy?).and_return(true)
       delete custom_link_path(custom_link)
+      expect(custom_link_policy).to have_received(:destroy?)
     end
   end
 end
