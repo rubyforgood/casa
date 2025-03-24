@@ -319,7 +319,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
     t.string "text"
     t.text "url"
     t.bigint "casa_org_id", null: false
-    t.boolean "soft_delete", default: false, null: false
     t.boolean "active", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
