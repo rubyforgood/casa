@@ -92,7 +92,7 @@ class CasaOrgController < ApplicationController
   end
 
   def set_custom_links
-    @custom_links = @casa_org.custom_links.where(soft_delete: false)
+    @custom_links = @casa_org.custom_links
   end
 
   def set_active_storage_url_options
