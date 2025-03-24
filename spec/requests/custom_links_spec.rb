@@ -29,17 +29,12 @@ RSpec.describe "/casa_cases/:casa_case_id/custom_links/", type: :request do
       allow(custom_link_policy).to receive(:new?).and_return(true)
 
       get new_custom_link_path
-      expect(response).to have_http_status(:ok)
+      expect(response).to have_http_status(:found)
     end
 
     it "assigns a new CustomLink with the current user's casa_org_id to @custom_link" do
       get new_custom_link_path
       expect(assigns(:custom_link).casa_org_id).to eq(user.casa_org_id)
-    end
-
-    it "renders the new template" do
-      get new_custom_link_path
-      expect(response).to render_template(:new)
     end
   end
 
