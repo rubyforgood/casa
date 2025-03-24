@@ -26,13 +26,24 @@ RSpec.configure do |config|
           login_success: {
             type: :object,
             properties: {
-              id: {type: :integer},
-              display_name: {type: :string},
-              email: {type: :string},
-              token: {type: :string}
+              api_token: {type: :string},
+              refresh_token: {type: :string},
+              user: {
+                id: {type: :integer},
+                display_name: {type: :string},
+                email: {type: :string},
+                token_expires_at: {type: :datetime},
+                refresh_token_expires_at: {type: :datetime}
+              }
             }
           },
           login_failure: {
+            type: :object,
+            properties: {
+              message: {type: :string}
+            }
+          },
+          sign_out: {
             type: :object,
             properties: {
               message: {type: :string}

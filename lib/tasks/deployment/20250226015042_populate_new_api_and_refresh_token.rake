@@ -1,12 +1,12 @@
 namespace :after_party do
-  desc "Deployment task: populate_api_tokens"
-  task populate_api_tokens: :environment do
-    puts "Running deploy task 'populate_api_tokens'" unless Rails.env.test?
+  desc "Deployment task: populate_new_api_and_refresh_token"
+  task populate_new_api_and_refresh_token: :environment do
+    puts "Running deploy task 'populate_new_api_and_refresh_token'"
 
     # Put your task implementation HERE.
-    User.where(token: nil).each do |user|
+    User.find_each do |user|
       user.update(receive_sms_notifications: false) if user.phone_number.blank?
-      user.regenerate_token
+      user.api_credential || user.create_api_credential
     end
 
     # Update task as completed.  If you remove the line below, the task will

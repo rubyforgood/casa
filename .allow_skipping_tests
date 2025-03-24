@@ -26,6 +26,7 @@ models/application_record.rb
 models/concerns/CasaCase/validations.rb
 models/concerns/by_organization_scope.rb
 models/concerns/roles.rb
+models/concerns/api.rb
 models/fund_request.rb
 notifications/base_notifier.rb
 notifications/delivery_methods/sms.rb

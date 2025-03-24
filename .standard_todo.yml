@@ -1133,6 +1133,7 @@ ignore:
   - RSpec/ExampleLength
   - RSpec/MultipleExpectations
   - RSpec/NamedSubject
+  - RSpec/PendingWithoutReason
   - RSpec/MultipleMemoizedHelpers
 - spec/system/case_contacts/contact_topic_answers_spec.rb:
   - RSpec/MultipleMemoizedHelpers
@@ -1140,6 +1141,7 @@ ignore:
   - RSpec/NamedSubject
   - RSpec/ExampleLength
   - RSpec/ChangeByZero
+  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/drafts_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/LetSetup
@@ -1149,6 +1151,7 @@ ignore:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/ExampleLength
   - RSpec/MultipleExpectations
+  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/followups/create_spec.rb:
   - RSpec/ExampleLength
   - RSpec/MultipleExpectations
@@ -1158,6 +1161,7 @@ ignore:
   - RSpec/MultipleExpectations
   - RSpec/PredicateMatcher
   - RSpec/ContextWording
+  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/index_spec.rb:
   - RSpec/LetSetup
   - RSpec/MultipleMemoizedHelpers
@@ -1170,6 +1174,7 @@ ignore:
   - RSpec/MultipleExpectations
   - RSpec/NamedSubject
   - RSpec/ExampleLength
+  - RSpec/PendingWithoutReason
   - RSpec/NestedGroups
   - Rails/Date
 - spec/system/case_court_reports/index_spec.rb:

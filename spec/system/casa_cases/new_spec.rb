@@ -33,8 +33,17 @@ RSpec.describe "casa_cases/new", type: :system do
           select "Submitted", from: "casa_case_court_report_status"
 
           find(".ts-control").click
-          find("span", text: contact_type.name).click
-          find(".ts-control").click
+
+          ts_checkboxes = page.all(".ts-dropdown-content input")
+          select_all_el = page.find("span[data-test=select-all-input]")
+          # uncheck all contact type options
+          select_all_el.click
+          ts_checkboxes.each do |el|
+            expect(el).not_to be_checked
+          end
+          # check all contact type options
+          select_all_el.click
+          expect(ts_checkboxes).to all(be_checked)
 
           select "Test User", from: "casa_case[case_assignments_attributes][0][volunteer_id]"
 
@@ -57,7 +66,7 @@ RSpec.describe "casa_cases/new", type: :system do
         casa_org = build(:casa_org)
         admin = create(:casa_admin, casa_org: casa_org)
         contact_type_group = create(:contact_type_group, casa_org: casa_org)
-        contact_type = create(:contact_type, contact_type_group: contact_type_group)
+        create(:contact_type, contact_type_group: contact_type_group)
         case_number = "12345"
 
         sign_in admin
@@ -68,9 +77,6 @@ RSpec.describe "casa_cases/new", type: :system do
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
-
-        find(".ts-control").click
-        find("span", text: contact_type.name).click
 
         within ".actions-cc" do
           click_on "Create CASA Case"
@@ -109,7 +115,7 @@ RSpec.describe "casa_cases/new", type: :system do
           casa_org = build(:casa_org)
           admin = create(:casa_admin, casa_org: casa_org)
           contact_type_group = create(:contact_type_group, casa_org: casa_org)
-          contact_type = create(:contact_type, contact_type_group: contact_type_group)
+          create(:contact_type, contact_type_group: contact_type_group)
           case_number = "12345"
 
           sign_in admin
@@ -120,9 +126,6 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
-
-          find(".ts-control").click
-          find("span", text: contact_type.name).click
 
           within ".actions-cc" do
             click_on "Create CASA Case"
@@ -152,8 +155,7 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-          find(".ts-control").click
-          find("span", text: contact_type.name).click
+          # 2/14/2025 - by default, all contact types are selected on page load so don't need to manually select
 
           within ".actions-cc" do
             click_on "Create CASA Case"

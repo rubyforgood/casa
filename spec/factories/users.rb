@@ -9,7 +9,10 @@ FactoryBot.define do
     case_assignments { [] }
     phone_number { "" }
     confirmed_at { Time.now }
-    token { "verysecuretoken" }
+
+    after(:create) do |user|
+      create(:api_credential, user: user)
+    end
 
     trait :inactive do
       type { "Volunteer" }

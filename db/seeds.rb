@@ -147,3 +147,4 @@ rescue => e
   Rails.logger.error { "Caught error during db seed emancipation_options_prune, continuing. Message: #{e}" }
 end
 load(Rails.root.join("db/seeds/placement_data.rb"))
+load(Rails.root.join("db/seeds/api_credential_data.rb"))

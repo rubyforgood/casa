@@ -8,15 +8,27 @@ components:
     login_success:
       type: object
       properties:
-        id:
-          type: integer
-        display_name:
+        api_token:
           type: string
-        email:
+        refresh_token:
           type: string
-        token:
-          type: string
+        user:
+          id:
+            type: integer
+          display_name:
+            type: string
+          email:
+            type: string
+          token_expires_at:
+            type: datetime
+          refresh_token_expires_at:
+            type: datetime
     login_failure:
+      type: object
+      properties:
+        message:
+          type: string
+    sign_out:
       type: object
       properties:
         message:
@@ -54,6 +66,30 @@ paths:
               required:
               - email
               - password
+  "/api/v1/users/sign_out":
+    delete:
+      summary: Signs out a user
+      tags:
+      - Sessions
+      parameters:
+      - name: Authorization
+        in: header
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: user signed out
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/sign_out"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/sign_out"
 servers:
 - url: https://{defaultHost}
   variables:
