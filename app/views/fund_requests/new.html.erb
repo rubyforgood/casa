@@ -11,9 +11,16 @@
 <!-- ========== card start ========== -->
 <div class="card-style mb-50">
   <%= form_with(model: @fund_request, local: true, url: casa_case_fund_request_path(@casa_case), method: :post) do |form| %>
+
+    <% if @fund_request.errors.any? %>
+      <% @fund_request.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    <% end %>
+
     <div class="input-style-1">
-      <%= form.label :submitter_email, "Your email" %>
-      <%= form.text_field :submitter_email, class: "form-control", required: true, value: current_user.email %>
+    <%= form.label :submitter_email, "Your email" %>
+      <%= form.email_field :submitter_email, class: "form-control", required: false, value: current_user.email %>
     </div>
 
     <div class="input-style-1">
