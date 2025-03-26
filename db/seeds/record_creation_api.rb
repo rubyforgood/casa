@@ -22,9 +22,11 @@ end
 #  - 2 functions per relevant model
 #   - one to create a single record of the model
 #    - if a record requires other records to exist they are passed in as an argument to the function
-#     - only one record max
+#     - accepts an active record object or a database id for each required object
+#     - error checking to make sure each of the required objects is present
 #   - one to create n records of the model
 #    - if a record requires other records to exist they are passed in as an argument to the function
+#    - the collection(s) are completely error checked so no partial record creation is possible
 #  - each function returns the activerecord collection of the created record(s)
 
 #
