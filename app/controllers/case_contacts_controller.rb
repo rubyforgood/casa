@@ -21,6 +21,7 @@ class CaseContactsController < ApplicationController
 
     @pagy, @filtered_case_contacts = pagy(@filterrific.find)
     case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
+    case_contacts = case_contacts.select { |k, _v| current_user.casa_cases.pluck(:id).include?(k) } if current_user.volunteer?
     case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
