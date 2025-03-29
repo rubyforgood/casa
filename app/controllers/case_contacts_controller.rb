@@ -21,7 +21,9 @@ class CaseContactsController < ApplicationController
 
     @pagy, @filtered_case_contacts = pagy(@filterrific.find)
     case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
-    case_contacts = case_contacts.select { |k, _v| current_user.casa_cases.pluck(:id).include?(k) } if current_user.volunteer?
+    if current_user.volunteer?
+      case_contacts = case_contacts.slice(*current_user.casa_cases.pluck(:id))
+    end
     case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
     @presenter = CaseContactPresenter.new(case_contacts)
@@ -83,7 +85,8 @@ class CaseContactsController < ApplicationController
       id = ae_params[:id]
       current = AdditionalExpense.find_by(id: id)
       if current
-        current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount], other_expenses_describe: ae_params[:other_expenses_describe])
+        current.assign_attributes(other_expense_amount: ae_params[:other_expense_amount],
+          other_expenses_describe: ae_params[:other_expenses_describe])
         save_or_add_error(current, cc)
       else
         create_new_exp = cc.additional_expenses.build(ae_params)
@@ -126,7 +129,8 @@ class CaseContactsController < ApplicationController
   def build_draft_case_ids(params, casa_cases)
     # Use case(s) from params if present
     return params[:draft_case_ids] if params[:draft_case_ids].present?
-    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
+    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact,
+      :casa_case_id).present?
     return [casa_cases.first.id] if casa_cases.count == 1
 
     []

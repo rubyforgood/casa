@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.describe "/case_contacts", type: :request do
@@ -41,7 +43,9 @@ RSpec.describe "/case_contacts", type: :request do
       let(:unassigned_case) { casa_case }
       let(:volunteer) { assigned_case.assigned_volunteers.first }
       let!(:assigned_case_contact) { create(:case_contact, casa_case: assigned_case, creator: volunteer) }
-      let!(:unassigned_case_contact) { create(:case_contact, casa_case: unassigned_case, creator: volunteer, duration_minutes: 180) }
+      let!(:unassigned_case_contact) do
+        create(:case_contact, casa_case: unassigned_case, creator: volunteer, duration_minutes: 180)
+      end
 
       before { sign_in volunteer }
 
@@ -50,7 +54,6 @@ RSpec.describe "/case_contacts", type: :request do
         expect(page).to include("60 minutes")
         expect(page).not_to include("3 hours")
       end
-
     end
   end
 
