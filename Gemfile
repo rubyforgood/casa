@@ -98,6 +98,7 @@ end
 group :test do
   gem "brakeman" # security inspection
   gem "capybara"
+  gem "rspec-retry" # for retrying flaky tests
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
   gem "docx"
