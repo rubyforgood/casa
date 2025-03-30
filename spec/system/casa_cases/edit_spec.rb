@@ -243,13 +243,13 @@ RSpec.describe "Edit CASA Case", type: :system do
       # uncheck all contact type options
       select_all_el.click
       within ".ts-dropdown-content" do
-        expect(page).to_not have_css(".form-check-input--checked")
+        expect(page).not_to have_css(".form-check-input--checked")
         expect(page).to have_css(".form-check-input--unchecked", count: 2)
       end
       # check all contact type options
       select_all_el.click
       within ".ts-dropdown-content" do
-        expect(page).to_not have_css("input.form-check-input--unchecked")
+        expect(page).not_to have_css("input.form-check-input--unchecked")
         expect(page).to have_css("input.form-check-input--checked", count: 2)
       end
       # since all contact type options checked, don't need to select one

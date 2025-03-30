@@ -14,7 +14,7 @@ export default class extends Controller {
     showAllOption: Boolean
   }
 
-  connect() {
+  connect () {
     if (this.withOptionsValue) {
       this.createMultiSelectWithOptionGroups()
     } else {
@@ -22,7 +22,7 @@ export default class extends Controller {
     }
   }
 
-  createBasicMultiSelect() {
+  createBasicMultiSelect () {
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
       plugins: {
@@ -33,7 +33,7 @@ export default class extends Controller {
     })
   }
 
-  createMultiSelectWithOptionGroups() {
+  createMultiSelectWithOptionGroups () {
     const optionTemplate = this.optionTarget.innerHTML
     const itemTemplate = this.itemTarget.innerHTML
     const placeholder = `Select or search ${this.placeholderTermValue}`
@@ -85,7 +85,7 @@ export default class extends Controller {
         },
         checkbox_options: {
           checkedClassNames: ['form-check-input', 'form-check-input--checked'],
-          uncheckedClassNames: ['form-check-input', 'form-check-input--unchecked'],
+          uncheckedClassNames: ['form-check-input', 'form-check-input--unchecked']
         }
       },
       options: dropdownOptions,
