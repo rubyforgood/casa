@@ -28,7 +28,6 @@ end
 #
 # Indexes
 #
-#  index_emancipation_options_on_emancipation_category_id           (emancipation_category_id)
 #  index_emancipation_options_on_emancipation_category_id_and_name  (emancipation_category_id,name) UNIQUE
 #
 # Foreign Keys

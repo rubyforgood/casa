@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
+ActiveRecord::Schema[7.2].define(version: 2025_03_31_033441) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_stat_statements"
   enable_extension "plpgsql"
@@ -344,7 +344,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["emancipation_category_id", "name"], name: "index_emancipation_options_on_emancipation_category_id_and_name", unique: true
-    t.index ["emancipation_category_id"], name: "index_emancipation_options_on_emancipation_category_id"
   end
 
   create_table "flipper_features", force: :cascade do |t|
@@ -641,7 +640,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["language_id", "user_id"], name: "index_user_languages_on_language_id_and_user_id", unique: true
-    t.index ["language_id"], name: "index_user_languages_on_language_id"
     t.index ["user_id"], name: "index_user_languages_on_user_id"
   end
 
@@ -740,14 +738,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_02_08_160513) do
   add_foreign_key "learning_hour_types", "casa_orgs"
   add_foreign_key "learning_hours", "learning_hour_types"
   add_foreign_key "learning_hours", "users"
-  add_foreign_key "mileage_rates", "casa_orgs", validate: false
+  add_foreign_key "mileage_rates", "casa_orgs"
   add_foreign_key "mileage_rates", "users"
-  add_foreign_key "notes", "users", column: "creator_id", validate: false
+  add_foreign_key "notes", "users", column: "creator_id"
   add_foreign_key "other_duties", "users", column: "creator_id"
   add_foreign_key "patch_notes", "patch_note_groups"
   add_foreign_key "patch_notes", "patch_note_types"
   add_foreign_key "placement_types", "casa_orgs"
-  add_foreign_key "placements", "casa_cases", validate: false
+  add_foreign_key "placements", "casa_cases"
   add_foreign_key "placements", "placement_types"
   add_foreign_key "placements", "users", column: "creator_id"
   add_foreign_key "preference_sets", "users"
