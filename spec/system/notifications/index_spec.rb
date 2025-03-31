@@ -17,6 +17,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
       visit case_contacts_path
       click_button "Resolve Reminder"
+      has_button?("Make Reminder")
     end
 
     it "lists my notifications" do
