@@ -44,17 +44,21 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       find(".ts-control").click
 
-      ts_checkboxes = page.all(".ts-dropdown-content input")
+      page.all(".ts-dropdown-content input")
 
       select_all_el = page.find("span[data-test=select-all-input]")
       # uncheck all contact type options
       select_all_el.click
-      ts_checkboxes.each do |el|
-        expect(el).not_to be_checked
+      within ".ts-dropdown-content" do
+        expect(page).not_to have_css(".form-check-input--checked")
+        expect(page).to have_css(".form-check-input--unchecked", count: 3)
       end
       # check all contact type options
       select_all_el.click
-      expect(ts_checkboxes).to all(be_checked)
+      within ".ts-dropdown-content" do
+        expect(page).not_to have_css("input.form-check-input--unchecked")
+        expect(page).to have_css("input.form-check-input--checked", count: 3)
+      end
 
       # unselect contact_type from dropdown
       find("span", text: contact_type.name).click

@@ -1,8 +1,6 @@
 require "rails_helper"
 
 RSpec.describe "followups/resolve", :js, type: :system do
-  include ActiveJob::TestHelper
-
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
   let(:supervisor) { build(:supervisor, casa_org: casa_org) }
@@ -13,11 +11,13 @@ RSpec.describe "followups/resolve", :js, type: :system do
   let(:case_contact) { build(:case_contact, casa_case: casa_case, creator: cc_creator) }
   let!(:followup) { create(:followup, case_contact: case_contact, creator: followup_creator) }
 
+  before { sign_in admin }
+
   it "changes status of followup to resolved" do
-    sign_in admin
     visit casa_case_path(case_contact.casa_case)
 
-    perform_enqueued_jobs { click_button "Resolve Reminder" }
+    click_button "Resolve Reminder"
+    expect(page).to have_button("Make Reminder")
 
     expect(case_contact.followups.count).to eq(1)
     expect(case_contact.followups.first.resolved?).to be_truthy
@@ -27,11 +27,13 @@ RSpec.describe "followups/resolve", :js, type: :system do
     let(:cc_creator) { volunteer }
     let(:followup_creator) { volunteer }
 
-    xit "changes status of followup to resolved" do # TODO make test not flaky
-      sign_in admin
+    before { sign_in admin }
+
+    it "changes status of followup to resolved" do # TODO make test not flaky
       visit casa_case_path(case_contact.casa_case)
 
       click_button "Resolve Reminder"
+      expect(page).to have_button("Make Reminder")
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
@@ -41,7 +43,8 @@ RSpec.describe "followups/resolve", :js, type: :system do
       sign_in admin
       visit casa_case_path(case_contact.casa_case)
 
-      perform_enqueued_jobs { click_button "Resolve Reminder" }
+      click_button "Resolve Reminder"
+      expect(page).to have_button("Make Reminder")
 
       expect(page).to have_button("Make Reminder")
     end
@@ -51,11 +54,13 @@ RSpec.describe "followups/resolve", :js, type: :system do
     let(:cc_creator) { supervisor }
     let(:followup_creator) { volunteer }
 
+    before { sign_in supervisor }
+
     it "changes status of followup to resolved" do
-      sign_in supervisor
       visit casa_case_path(case_contact.casa_case)
 
-      perform_enqueued_jobs { click_button "Resolve Reminder" }
+      click_button "Resolve Reminder"
+      expect(page).to have_button("Make Reminder")
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
@@ -68,13 +73,14 @@ RSpec.describe "followups/resolve", :js, type: :system do
 
     before do
       case_contact.casa_case.assigned_volunteers << volunteer
+      sign_in volunteer
     end
 
     it "changes status of followup to resolved" do
-      sign_in volunteer
       visit case_contacts_path
 
-      perform_enqueued_jobs { click_button "Resolve Reminder" }
+      click_button "Resolve Reminder"
+      expect(page).to have_button("Make Reminder")
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
