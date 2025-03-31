@@ -50,7 +50,6 @@ RSpec.describe "/case_contacts", type: :request do
         expect(page).to include("60 minutes")
         expect(page).not_to include("3 hours")
       end
-
     end
   end
 
