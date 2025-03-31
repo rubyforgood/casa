@@ -10,6 +10,7 @@ ignore:
   - Rails/TimeZone
 - app/controllers/case_contacts_controller.rb:
   - Rails/LexicallyScopedActionFilter
+  - Style/HashSlice
 - app/controllers/checklist_items_controller.rb:
   - Rails/TimeZone
 - app/controllers/court_dates_controller.rb:
@@ -806,6 +807,7 @@ ignore:
 - spec/requests/case_contacts_spec.rb:
   - RSpec/MultipleMemoizedHelpers
   - RSpec/MultipleExpectations
+  - RSpec/LetSetup
   - RSpec/PendingWithoutReason
 - spec/requests/case_court_reports_spec.rb:
   - RSpec/ContextWording
@@ -1161,7 +1163,6 @@ ignore:
   - RSpec/MultipleExpectations
   - RSpec/PredicateMatcher
   - RSpec/ContextWording
-  - RSpec/PendingWithoutReason
 - spec/system/case_contacts/index_spec.rb:
   - RSpec/LetSetup
   - RSpec/MultipleMemoizedHelpers
@@ -1174,7 +1175,6 @@ ignore:
   - RSpec/MultipleExpectations
   - RSpec/NamedSubject
   - RSpec/ExampleLength
-  - RSpec/PendingWithoutReason
   - RSpec/NestedGroups
   - Rails/Date
 - spec/system/case_court_reports/index_spec.rb:

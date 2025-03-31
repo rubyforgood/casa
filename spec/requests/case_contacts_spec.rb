@@ -35,6 +35,22 @@ RSpec.describe "/case_contacts", type: :request do
         expect(page).not_to include(past_contact.creator.display_name)
       end
     end
+
+    context "when logged in as a volunteer" do
+      let(:assigned_case) { create(:casa_case, :with_one_case_assignment, casa_org: organization) }
+      let(:unassigned_case) { casa_case }
+      let(:volunteer) { assigned_case.assigned_volunteers.first }
+      let!(:assigned_case_contact) { create(:case_contact, casa_case: assigned_case, creator: volunteer) }
+      let!(:unassigned_case_contact) { create(:case_contact, casa_case: unassigned_case, creator: volunteer, duration_minutes: 180) }
+
+      before { sign_in volunteer }
+
+      it "returns only currently assigned cases" do
+        page = request.parsed_body.to_html
+        expect(page).to include("60 minutes")
+        expect(page).not_to include("3 hours")
+      end
+    end
   end
 
   describe "GET /new" do
