@@ -1,5 +1,5 @@
 class ValidateConstraintPlacements < ActiveRecord::Migration[7.2]
-  def up   
+  def up
     ActiveRecord::Base.connection.execute(Arel.sql("ALTER TABLE placements VALIDATE CONSTRAINT fk_rails_65aeeb5669;"))
   end
 
