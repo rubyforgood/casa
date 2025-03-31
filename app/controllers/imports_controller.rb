@@ -4,6 +4,14 @@ class ImportsController < ApplicationController
   include ActionView::Helpers::UrlHelper
   after_action :verify_authorized
 
+  ERR_FAILED_IMPORT_NOTE = "Note: An additional 'error' column has been added to the file. " \
+    "Please note the failure reason and remove the column when resubmitting."
+  ERR_FILE_NOT_ATTACHED = "You must attach a CSV file in order to import information!"
+  ERR_FILE_NOT_FOUND = "CSV import file not found."
+  ERR_FILE_EMPTY = "File can not be empty."
+  ERR_INVALID_HEADER = "Looks like this CSV contains invalid formatting. " \
+    "Please download an example CSV for reference and try again."
+
   def index
     authorize :import
     @import_type = params.fetch(:import_type, "volunteer")
@@ -45,14 +53,6 @@ class ImportsController < ApplicationController
   end
 
   private
-
-  ERR_FAILED_IMPORT_NOTE = "Note: An additional 'error' column has been added to the file. " \
-    "Please note the failure reason and remove the column when resubmitting."
-  ERR_FILE_NOT_ATTACHED = "You must attach a CSV file in order to import information!"
-  ERR_FILE_NOT_FOUND = "CSV import file not found."
-  ERR_FILE_EMPTY = "File can not be empty."
-  ERR_INVALID_HEADER = "Looks like this CSV contains invalid formatting. " \
-    "Please download an example CSV for reference and try again."
 
   def header
     {

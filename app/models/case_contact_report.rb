@@ -1,6 +1,23 @@
 class CaseContactReport
-  attr_reader :case_contacts, :columns
+  COLUMNS = [
+    :internal_contact_number,
+    :duration_minutes,
+    :contact_types,
+    :contact_made,
+    :contact_medium,
+    :occurred_at,
+    :added_to_system_at,
+    :miles_driven,
+    :wants_driving_reimbursement,
+    :casa_case_number,
+    :creator_email,
+    :creator_name,
+    :supervisor_name,
+    :case_contact_notes,
+    :court_topics
+  ]
 
+  attr_reader :case_contacts, :columns
   def initialize(args = {})
     @columns = filtered_columns(args)
     @case_contacts = filtered_case_contacts(args)
@@ -34,22 +51,4 @@ class CaseContactReport
       COLUMNS
     end
   end
-
-  COLUMNS = [
-    :internal_contact_number,
-    :duration_minutes,
-    :contact_types,
-    :contact_made,
-    :contact_medium,
-    :occurred_at,
-    :added_to_system_at,
-    :miles_driven,
-    :wants_driving_reimbursement,
-    :casa_case_number,
-    :creator_email,
-    :creator_name,
-    :supervisor_name,
-    :case_contact_notes,
-    :court_topics
-  ]
 end
