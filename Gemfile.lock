@@ -356,7 +356,7 @@ GEM
       ostruct (>= 0.2)
     orm_adapter (0.5.0)
     ostruct (0.6.1)
-    pagy (9.3.3)
+    pagy (9.3.4)
     parallel (1.26.3)
     parallel_tests (4.9.1)
       parallel
