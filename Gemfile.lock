@@ -472,6 +472,8 @@ GEM
       rspec-expectations (~> 3.13)
       rspec-mocks (~> 3.13)
       rspec-support (~> 3.13)
+    rspec-retry (0.6.2)
+      rspec-core (> 3.3)
     rspec-support (3.13.2)
     rspec_junit_formatter (0.6.0)
       rspec-core (>= 2, < 4, != 2.12.0)
@@ -695,6 +697,7 @@ DEPENDENCIES
   request_store
   rexml
   rspec-rails
+  rspec-retry
   rspec_junit_formatter
   rswag-api
   rswag-specs

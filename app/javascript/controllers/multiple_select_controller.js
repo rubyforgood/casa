@@ -84,8 +84,8 @@ export default class extends Controller {
           label: '<i class="lni lni-cross-circle"></i>'
         },
         checkbox_options: {
-          checkedClassNames: ['form-check-input'],
-          uncheckedClassNames: ['form-check-input']
+          checkedClassNames: ['form-check-input', 'form-check-input--checked'],
+          uncheckedClassNames: ['form-check-input', 'form-check-input--unchecked']
         }
       },
       options: dropdownOptions,

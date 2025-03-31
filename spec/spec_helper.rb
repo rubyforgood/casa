@@ -12,30 +12,30 @@
 # the additional setup, and require it from the spec files that actually need
 # it.
 
-# if ENV["RUN_SIMPLECOV"]
-#   require "simplecov"
-#   SimpleCov.start do
-#     command_name "Job #{ENV["TEST_ENV_NUMBER"]}" if ENV["TEST_ENV_NUMBER"]
+if ENV["RUN_SIMPLECOV"]
+  require "simplecov"
+  SimpleCov.start do
+    command_name "Job #{ENV["TEST_ENV_NUMBER"]}" if ENV["TEST_ENV_NUMBER"]
 
-#     add_filter "/spec/"
-#     add_filter "/lib/tasks/auto_annotate_models.rake"
-#     add_group "Models", "/app/models"
-#     add_group "Controllers", "/app/controllers"
-#     add_group "Channels", "/app/channels"
-#     add_group "Decorators", "/app/decorators"
-#     add_group "Helpers", "/app/helpers"
-#     add_group "Jobs", "/app/jobs"
-#     add_group "Importers", "/app/lib/importers"
-#     add_group "Mailers", "/app/mailers"
-#     add_group "Policies", "/app/policies"
-#     add_group "Values", "/app/values"
-#     add_group "Tasks", "/lib/tasks"
-#     add_group "Config", "/config"
-#     add_group "Database", "/db"
-#   end
-#   # https://github.com/simplecov-ruby/simplecov?tab=readme-ov-file#want-to-use-spring-with-simplecov
-#   # Rails.application.eager_load!
-# end
+    add_filter "/spec/"
+    add_filter "/lib/tasks/auto_annotate_models.rake"
+    add_group "Models", "/app/models"
+    add_group "Controllers", "/app/controllers"
+    add_group "Channels", "/app/channels"
+    add_group "Decorators", "/app/decorators"
+    add_group "Helpers", "/app/helpers"
+    add_group "Jobs", "/app/jobs"
+    add_group "Importers", "/app/lib/importers"
+    add_group "Mailers", "/app/mailers"
+    add_group "Policies", "/app/policies"
+    add_group "Values", "/app/values"
+    add_group "Tasks", "/lib/tasks"
+    add_group "Config", "/config"
+    add_group "Database", "/db"
+  end
+  # https://github.com/simplecov-ruby/simplecov?tab=readme-ov-file#want-to-use-spring-with-simplecov
+  # Rails.application.eager_load!
+end
 
 # See https://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|

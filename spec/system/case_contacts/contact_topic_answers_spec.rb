@@ -48,8 +48,9 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       {question: topic_two.question, answer: "Second discussion topic answer."}
     ])
 
-    expect { click_on "Submit" }
-      .to change(CaseContact.active, :count).by(1)
+    click_on "Submit"
+    expect(page).to have_content("Case contact successfully created.")
+    expect(CaseContact.active.size).to eq 1
 
     case_contact = CaseContact.active.last
     expect(case_contact.reload.contact_topic_answers).to be_present
@@ -64,7 +65,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     subject
     fill_in_contact_details(contact_types: [contact_type.name])
 
-    expect {
+    expect do
       using_wait_time 6 do # autosave debounce may be longer than capybara's wait time
         answer_topic contact_topics.first.question, "First discussion topic answer."
         within notes_section do
@@ -76,8 +77,8 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       end
 
       click_on "Submit"
-    }
-      .to change(CaseContact.active, :count).by(1)
+      expect(page).to have_content("Case contact successfully created.")
+    end.to change(CaseContact.active, :count).by(1)
       .and change(ContactTopicAnswer, :count).by(0) # answer already exists on page load
 
     case_contact = CaseContact.active.last
@@ -122,7 +123,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       fill_in_contact_details
       fill_in "Additional Notes", with: "This is a note."
 
-      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
+      expect do
+        click_on "Submit"
+        expect(page).to have_content("Case contact successfully created.")
+      end.to change(CaseContact.active, :count).by(1)
 
       contact = CaseContact.active.last
       expect(contact.contact_topic_answers).to be_empty
@@ -188,6 +192,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
           expect(notes_section).to have_select(class: topic_select_class, count: 1, visible: :all)
 
           click_on "Submit"
+          expect(page).to have_content(/Case contact .* was successfully updated./)
         }
           .to change(ContactTopicAnswer, :count).by(-1)
 
