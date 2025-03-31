@@ -324,6 +324,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when a volunteer is assigned to a case" do
         it "marks the volunteer as assigned and shows the start date of the assignment", :js do
           sign_in_and_assign_volunteer
+          expect(page).to have_content("Volunteer assigned to case")
+
           expect(casa_case.case_assignments.count).to eq 1
 
           unassign_button = page.find("button.btn-outline-danger")

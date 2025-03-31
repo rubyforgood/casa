@@ -70,9 +70,10 @@ RSpec.describe "case_contacts/new", :js, type: :system do
         hours: 1, minutes: 45
       )
 
-      expect { click_on "Submit" }.not_to change(CaseContact, :count)
-
-      expect(page).to have_text("Medium type can't be blank")
+      expect do
+        click_on "Submit"
+        expect(page).to have_text("Medium type can't be blank")
+      end.not_to change(CaseContact, :count)
 
       expect(page).to have_field("case_contact_duration_hours", with: 1)
       expect(page).to have_field("case_contact_duration_minutes", with: 45)
@@ -83,15 +84,21 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
   describe "contact types" do
     # TODO: Fix this test
-    xit "requires a contact type" do
+    it "requires a contact type" do
       subject
 
       fill_in_contact_details(contact_types: nil)
 
-      expect { click_on "Submit" }.to not_change(CaseContact.active, :count)
-      expect(page).to have_text("Contact Type must be selected")
+      expect do
+        click_on "Submit"
+        expect(page).to have_text("Contact Type must be selected")
+      end.to not_change(CaseContact.active, :count)
+
       check contact_types.first.name
-      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
+      expect do
+        click_on "Submit"
+        expect(page).to have_text("Case contact successfully created.")
+      end.to change(CaseContact.active, :count).by(1)
     end
 
     it "does not display empty contact groups or hidden contact types" do
@@ -180,7 +187,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
     context "when org has no contact topics" do
       # TODO: Fix this test
-      xit "allows entering contact notes" do
+      it "allows entering contact notes" do
         expect(casa_org.contact_topics.size).to eq 0
         subject
 
@@ -190,6 +197,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
         expect {
           click_on "Submit"
+          expect(page).to have_text("Case contact successfully created.")
         }.to change(CaseContact.active, :count).by(1)
 
         case_contact = CaseContact.active.last
@@ -268,14 +276,17 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       fill_in volunteer_address_input, with: "123 Example St"
       uncheck reimbursement_checkbox
 
-      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
+      expect {
+        click_on "Submit"
+        expect(page).to have_text("Case contact successfully created.")
+      }.to change(CaseContact.active, :count).by(1)
       case_contact = CaseContact.active.last
 
       expect(case_contact.want_driving_reimbursement).to be false
       expect(case_contact.miles_driven).to be_zero
     end
 
-    xit "saves mileage and address information" do # TODO make test not flaky
+    it "saves mileage and address information" do # TODO make test not flaky
       subject
       fill_in_contact_details contact_types: %w[School]
 
@@ -284,7 +295,10 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       fill_in miles_driven_input, with: 50
       fill_in volunteer_address_input, with: "123 Example St"
 
-      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
+      expect {
+        click_on "Submit"
+        expect(page).to have_text("Case contact successfully created.")
+      }.to change(CaseContact.active, :count).by(1)
       case_contact = CaseContact.active.last
 
       expect(case_contact.want_driving_reimbursement).to be true
@@ -310,8 +324,10 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
       check reimbursement_checkbox
 
-      expect { click_on "Submit" }.not_to change(CaseContact.active, :count)
-      expect(page).to have_text("Must enter a valid mailing address for the reimbursement")
+      expect {
+        click_on "Submit"
+        expect(page).to have_text("Must enter a valid mailing address for the reimbursement")
+      }.not_to change(CaseContact.active, :count)
       expect(page).to have_text("Must enter miles driven to receive driving reimbursement")
     end
 
@@ -391,7 +407,10 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       )
 
       check "Create Another"
-      expect { click_on "Submit" }
+      expect {
+        click_on "Submit"
+        expect(page).to have_text "Case contact successfully created."
+      }
         .to change(CaseContact, :count).by(1)
       # .to change(CaseContact.active, :count).by(1)
       # .and change(CaseContact.started, :count).by(1)
@@ -441,6 +460,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
       it "redirects to the new CaseContact form with the same cases selected" do
         expect {
           visit new_case_contact_path(casa_case, {draft_case_ids:})
+          expect(page).to have_content("Record New Case Contact")
         }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
@@ -452,6 +472,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
         expect {
           click_on "Submit"
+          expect(page).to have_text "Case contacts successfully created."
         }.to change(CaseContact.active, :count).by(2)
 
         expect(page).to have_text "New Case Contact"
@@ -516,6 +537,7 @@ RSpec.describe "case_contacts/new", :js, type: :system do
 
       expect {
         click_on "Submit"
+        expect(page).to have_text "Case contact successfully created."
       }.to change(CaseContact.active, :count).by(1)
       contact = CaseContact.active.last
       expect(contact.casa_case_id).to eq casa_case.id
