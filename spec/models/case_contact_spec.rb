@@ -656,4 +656,32 @@ RSpec.describe CaseContact, type: :model do
       end
     end
   end
+
+  describe '.case_hash_from_cases' do
+    it 'returns a hash mapping casa case ids to their case contacts' do
+      # Create test data
+      casa_case1 = create(:casa_case)
+      casa_case2 = create(:casa_case)
+      
+      contact1 = create(:case_contact, casa_case: casa_case1)
+      contact2 = create(:case_contact, casa_case: casa_case1)
+      contact3 = create(:case_contact, casa_case: casa_case2)
+      
+      contacts = [contact1, contact2, contact3]
+
+      # Call the method
+      result = described_class.case_hash_from_cases(contacts)
+
+      # Verify the result
+      expect(result).to eq({
+        casa_case1.id => [contact1, contact2],
+        casa_case2.id => [contact3]
+      })
+    end
+
+    it 'returns empty hash for empty contacts' do
+      result = described_class.case_hash_from_cases([])
+      expect(result).to eq({})
+    end
+  end
 end
