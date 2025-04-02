@@ -380,7 +380,7 @@ GEM
       actionpack (>= 6.1)
     prettyprint (0.2.0)
     prism (1.4.0)
-    pry (0.14.2)
+    pry (0.15.2)
       coderay (~> 1.1)
       method_source (~> 1.0)
     pry-byebug (3.11.0)
