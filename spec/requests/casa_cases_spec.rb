@@ -1,5 +1,5 @@
 require "rails_helper"
-
+# hi
 RSpec.describe "/casa_cases", type: :request do
   let(:date_in_care) { Date.today }
   let(:organization) { build(:casa_org) }
@@ -611,9 +611,24 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "GET /index" do
-      it "shows only cases assigned to user" do
-        mine = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
-        other = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+      context "with casa_case_id" do
+        it "shows only cases assigned to user" do
+          mine = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+          other = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+
+        user.casa_cases << mine
+
+        get casa_cases_url(casa_case_id: mine.id)
+
+        expect(response).to be_successful
+        expect(response.body).to include(mine.case_number)
+        expect(response.body).not_to include(other.case_number)
+      end
+
+      context "without casa_case_id" do
+        it "shows only cases assigned to user" do
+          mine = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
+          other = build(:casa_case, casa_org: organization, case_number: SecureRandom.hex(32))
 
         user.casa_cases << mine
 
