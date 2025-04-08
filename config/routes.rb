@@ -235,6 +235,7 @@ Rails.application.routes.draw do
   resources :languages, only: %i[new create edit update] do
     delete :remove_from_volunteer
   end
+  resources :custom_org_links, only: %i[new create edit update destroy]
 
   direct :help_admins_supervisors do
     "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa"
