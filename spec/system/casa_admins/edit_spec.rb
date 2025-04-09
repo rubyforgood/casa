@@ -9,7 +9,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     it "can successfully edit user display name and phone number" do
       expected_display_name = "Root Admin"
       expected_phone_number = "+14398761234"
-      expected_date_of_birth = "1997/04/16"
+      expected_date_of_birth = "1997-04-16"
 
       visit edit_casa_admin_path(admin)
 
@@ -20,14 +20,11 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       click_on "Submit"
 
-      admin.reload
-
       expect(page).to have_text "Casa Admin was successfully updated."
-
-      expect(admin.display_name).to eq expected_display_name
-      expect(admin.phone_number).to eq expected_phone_number
-      expect(admin.date_of_birth.strftime("%Y/%m/%d")).to eq expected_date_of_birth
-      expect(admin.monthly_learning_hours_report).to be_truthy
+      expect(page).to have_field "Display name", with: expected_display_name
+      expect(page).to have_field "Phone number", with: expected_phone_number
+      expect(page).to have_field "Date of birth", with: expected_date_of_birth
+      expect(page).to have_checked_field("Receive Monthly Learning Hours Report")
     end
   end
 
@@ -49,15 +46,16 @@ RSpec.describe "casa_admins/edit", type: :system do
 
       expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
       expect(page).to have_field("Email", with: @old_email)
+      admin.reload
       expect(admin.unconfirmed_email).to eq("new_admin_email@example.com")
     end
 
     it "succesfully updates the user email once the user confirms the changes" do
       admin.confirm
-      admin.reload
       visit edit_casa_admin_path(admin)
 
       expect(page).to have_field("Email", with: "new_admin_email@example.com")
+      admin.reload
       expect(admin.old_emails).to eq([@old_email])
     end
   end
