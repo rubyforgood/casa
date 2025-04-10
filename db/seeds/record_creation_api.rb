@@ -15,6 +15,38 @@ def seed_additional_expense(case_contact: nil, case_contact_id: nil)
   end
 end
 
+def seed_additional_expenses(case_contacts: nil, case_contact_ids: nil, count: 0)
+  if case_contacts.nil? && case_contact_ids.nil?
+    raise ArgumentError.new("case_contacts: or case_contact_ids: is required")
+  elsif !case_contacts.nil? && !case_contact_ids.nil?
+    raise ArgumentError.new("cannot use case_contacts: and case_contact_ids:")
+  end
+
+  created_additional_expense_ids = []
+
+  if !case_contacts.nil?
+    unless case_contacts.is_a?(ActiveRecord::Relation)
+      raise TypeError.new("param case_contacts must be an ActiveRecord::Relation")
+    end
+
+    count.times {
+      created_additional_expense_ids.push(seed_additional_expense(case_contact: case_contacts.sample).id)
+    }
+  else
+    if !case_contact_ids.is_a?(Array)
+      raise TypeError.new("param case_contact_ids: must be an array")
+    elsif case_contact_ids.length === 0
+      raise RangeError.new("param case_contact_ids: must contain at least one element")
+    end
+
+    count.times {
+      created_additional_expense_ids.push(seed_additional_expense(case_contact_id: case_contact_ids.sample).id)
+    }
+  end
+
+  created_additional_expense_ids
+end
+
 # # Seeder API
 #
 #  A File containing functions that satisfy:
@@ -24,10 +56,11 @@ end
 #    - if a record requires other records to exist they are passed in as an argument to the function
 #     - accepts an active record object or a database id for each required object
 #     - error checking to make sure each of the required objects is present
+#     - returns the new activerecord object created
 #   - one to create n records of the model
 #    - if a record requires other records to exist they are passed in as an argument to the function
 #    - the collection(s) are completely error checked so no partial record creation is possible
-#  - each function returns the activerecord collection of the created record(s)
+#    - returns an array of the ids of the records created
 
 #
 # addresses
