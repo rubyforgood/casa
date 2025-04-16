@@ -592,7 +592,7 @@ GEM
     turbo-rails (2.0.11)
       actionpack (>= 6.0.0)
       railties (>= 6.0.0)
-    twilio-ruby (7.5.1)
+    twilio-ruby (7.5.2)
       benchmark
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
