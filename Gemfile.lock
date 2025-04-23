@@ -538,7 +538,7 @@ GEM
     sanitize (7.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.16.8)
-    scout_apm (5.6.2)
+    scout_apm (5.6.4)
       parser
     securerandom (0.4.1)
     selenium-webdriver (4.31.0)
