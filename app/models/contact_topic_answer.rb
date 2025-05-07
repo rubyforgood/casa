@@ -26,8 +26,7 @@ end
 #
 # Indexes
 #
-#  index_contact_topic_answers_on_case_contact_id   (case_contact_id)
-#  index_contact_topic_answers_on_contact_topic_id  (contact_topic_id)
+#  index_contact_topic_answers_on_case_contact_id  (case_contact_id)
 #
 # Foreign Keys
 #

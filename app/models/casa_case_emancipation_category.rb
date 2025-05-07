@@ -17,8 +17,7 @@ end
 #
 # Indexes
 #
-#  index_casa_case_emancipation_categories_on_casa_case_id         (casa_case_id)
-#  index_case_emancipation_categories_on_emancipation_category_id  (emancipation_category_id)
+#  index_casa_case_emancipation_categories_on_casa_case_id  (casa_case_id)
 #
 # Foreign Keys
 #

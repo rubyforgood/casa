@@ -41,9 +41,7 @@ end
 #
 # Indexes
 #
-#  index_followups_on_case_contact_id                        (case_contact_id)
-#  index_followups_on_creator_id                             (creator_id)
-#  index_followups_on_followupable_type_and_followupable_id  (followupable_type,followupable_id)
+#  index_followups_on_case_contact_id  (case_contact_id)
 #
 # Foreign Keys
 #

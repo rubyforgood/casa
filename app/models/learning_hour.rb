@@ -68,9 +68,7 @@ end
 #
 # Indexes
 #
-#  index_learning_hours_on_learning_hour_topic_id  (learning_hour_topic_id)
-#  index_learning_hours_on_learning_hour_type_id   (learning_hour_type_id)
-#  index_learning_hours_on_user_id                 (user_id)
+#  index_learning_hours_on_user_id  (user_id)
 #
 # Foreign Keys
 #

@@ -17,7 +17,3 @@ end
 #  updated_at      :datetime         not null
 #  hearing_type_id :integer
 #
-# Indexes
-#
-#  index_checklist_items_on_hearing_type_id  (hearing_type_id)
-#
