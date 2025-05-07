@@ -28,12 +28,6 @@ end
 #  creator_id           :bigint           not null
 #  placement_type_id    :bigint           not null
 #
-# Indexes
-#
-#  index_placements_on_casa_case_id       (casa_case_id)
-#  index_placements_on_creator_id         (creator_id)
-#  index_placements_on_placement_type_id  (placement_type_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (casa_case_id => casa_cases.id)

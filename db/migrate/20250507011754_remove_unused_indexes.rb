@@ -1,0 +1,52 @@
+class RemoveUnusedIndexes < ActiveRecord::Migration[7.2]
+  def change
+    remove_index :case_contacts, name: "index_case_contacts_on_deleted_at", if_exists: true
+    remove_index :noticed_notifications, name: "index_noticed_notifications_on_event_id", if_exists: true
+    remove_index :contact_topic_answers, name: "index_contact_topic_answers_on_contact_topic_id", if_exists: true
+    remove_index :login_activities, name: "index_login_activities_on_ip", if_exists: true
+    remove_index :login_activities, name: "index_login_activities_on_identity", if_exists: true
+    remove_index :delayed_jobs, name: "delayed_jobs_priority", if_exists: true
+    remove_index :login_activities, name: "index_login_activities_on_user", if_exists: true
+    remove_index :sent_emails, name: "index_sent_emails_on_user_id", if_exists: true
+    remove_index :sent_emails, name: "index_sent_emails_on_casa_org_id", if_exists: true
+    remove_index :noticed_events, name: "index_noticed_events_on_record", if_exists: true
+    remove_index :notifications, name: "index_notifications_on_read_at", if_exists: true
+    remove_index :notifications, name: "index_notifications_on_recipient", if_exists: true
+    remove_index :api_credentials, name: "index_api_credentials_on_user_id", if_exists: true
+    remove_index :court_dates, name: "index_court_dates_on_hearing_type_id", if_exists: true
+    remove_index :court_dates, name: "index_court_dates_on_judge_id", if_exists: true
+    remove_index :followups, name: "index_followups_on_followupable_type_and_followupable_id", if_exists: true
+    remove_index :banners, name: "index_banners_on_casa_org_id", if_exists: true
+    remove_index :banners, name: "index_banners_on_user_id", if_exists: true
+    remove_index :casa_case_emancipation_categories, name: "index_case_emancipation_categories_on_emancipation_category_id", if_exists: true
+    remove_index :case_group_memberships, name: "index_case_group_memberships_on_casa_case_id", if_exists: true
+    remove_index :case_group_memberships, name: "index_case_group_memberships_on_case_group_id", if_exists: true
+    remove_index :case_groups, name: "index_case_groups_on_casa_org_id", if_exists: true
+    remove_index :contact_topics, name: "index_contact_topics_on_casa_org_id", if_exists: true
+    remove_index :contact_type_groups, name: "index_contact_type_groups_on_casa_org_id", if_exists: true
+    remove_index :followups, name: "index_followups_on_creator_id", if_exists: true
+    remove_index :hearing_types, name: "index_hearing_types_on_casa_org_id", if_exists: true
+    remove_index :judges, name: "index_judges_on_casa_org_id", if_exists: true
+    remove_index :languages, name: "index_languages_on_casa_org_id", if_exists: true
+    remove_index :learning_hour_topics, name: "index_learning_hour_topics_on_casa_org_id", if_exists: true
+    remove_index :learning_hour_types, name: "index_learning_hour_types_on_casa_org_id", if_exists: true
+    remove_index :learning_hours, name: "index_learning_hours_on_learning_hour_topic_id", if_exists: true
+    remove_index :learning_hours, name: "index_learning_hours_on_learning_hour_type_id", if_exists: true
+    remove_index :mileage_rates, name: "index_mileage_rates_on_casa_org_id", if_exists: true
+    remove_index :mileage_rates, name: "index_mileage_rates_on_user_id", if_exists: true
+    remove_index :notes, name: "index_notes_on_notable", if_exists: true
+    remove_index :patch_notes, name: "index_patch_notes_on_patch_note_group_id", if_exists: true
+    remove_index :patch_notes, name: "index_patch_notes_on_patch_note_type_id", if_exists: true
+    remove_index :user_languages, name: "index_user_languages_on_user_id", if_exists: true
+    remove_index :user_sms_notification_events, name: "index_user_sms_notification_events_on_sms_notification_event_id", if_exists: true
+    remove_index :user_sms_notification_events, name: "index_user_sms_notification_events_on_user_id", if_exists: true
+    remove_index :users, name: "index_users_on_invitations_count", if_exists: true
+    remove_index :users, name: "index_users_on_invited_by_type_and_invited_by_id", if_exists: true
+    remove_index :checklist_items, name: "index_checklist_items_on_hearing_type_id", if_exists: true
+    remove_index :placement_types, name: "index_placement_types_on_casa_org_id", if_exists: true
+    remove_index :placements, name: "index_placements_on_casa_case_id", if_exists: true
+    remove_index :placements, name: "index_placements_on_creator_id", if_exists: true
+    remove_index :placements, name: "index_placements_on_placement_type_id", if_exists: true
+    remove_index :user_case_contact_types_reminders, name: "index_user_case_contact_types_reminders_on_user_id", if_exists: true
+  end
+end

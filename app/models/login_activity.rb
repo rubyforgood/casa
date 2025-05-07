@@ -25,9 +25,3 @@ end
 #  created_at     :datetime
 #  user_id        :bigint
 #
-# Indexes
-#
-#  index_login_activities_on_identity  (identity)
-#  index_login_activities_on_ip        (ip)
-#  index_login_activities_on_user      (user_type,user_id)
-#
