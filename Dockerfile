@@ -18,15 +18,20 @@ FROM ruby:3.3.8-alpine
 
 ARG RAILS_ROOT=/usr/src/app/
 
+# available: https://pkgs.alpinelinux.org/packages
 RUN apk update && apk upgrade && apk add --update --no-cache \
   bash \
+  build-base \
   curl \
   imagemagick \
+  libffi-dev \
+  perl-yaml-libyaml \
+  linux-headers \
+  nodejs \
+  npm \
   postgresql-client \
   tzdata \
   vim \
-  nodejs \
-  npm \
   && rm -rf /var/cache/apk/*
 
 RUN echo "NodeJS Version:" "$(node -v)"
