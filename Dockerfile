@@ -1,4 +1,4 @@
-FROM ruby:3.3.6-alpine AS builder
+FROM ruby:3.3.8-alpine AS builder
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
@@ -14,7 +14,7 @@ RUN bundle install
 
 ### BUILD STEP DONE ###
 
-FROM ruby:3.3.6-alpine
+FROM ruby:3.3.8-alpine
 
 ARG RAILS_ROOT=/usr/src/app/
 
