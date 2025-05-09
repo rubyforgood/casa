@@ -15,10 +15,6 @@ end
 #  creator_id   :bigint
 #  notable_id   :bigint
 #
-# Indexes
-#
-#  index_notes_on_notable  (notable_type,notable_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (creator_id => users.id)

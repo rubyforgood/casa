@@ -72,9 +72,7 @@ end
 #
 # Indexes
 #
-#  index_court_dates_on_casa_case_id     (casa_case_id)
-#  index_court_dates_on_hearing_type_id  (hearing_type_id)
-#  index_court_dates_on_judge_id         (judge_id)
+#  index_court_dates_on_casa_case_id  (casa_case_id)
 #
 # Foreign Keys
 #

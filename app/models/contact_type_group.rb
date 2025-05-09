@@ -51,7 +51,3 @@ end
 #  updated_at  :datetime         not null
 #  casa_org_id :bigint           not null
 #
-# Indexes
-#
-#  index_contact_type_groups_on_casa_org_id  (casa_org_id)
-#

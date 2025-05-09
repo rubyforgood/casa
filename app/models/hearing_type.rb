@@ -40,7 +40,3 @@ end
 #  name                   :string           not null
 #  casa_org_id            :bigint           not null
 #
-# Indexes
-#
-#  index_hearing_types_on_casa_org_id  (casa_org_id)
-#
