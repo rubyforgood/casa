@@ -20,11 +20,20 @@ class CaseContactsController < ApplicationController
     ) || return
 
     @pagy, @filtered_case_contacts = pagy(@filterrific.find)
-    case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
-    case_contacts = case_contacts.select { |k, _v| current_user.casa_cases.pluck(:id).include?(k) } if current_user.volunteer?
-    case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
+    
+    casa_case_id_to_case_contacts = CaseContact.case_hash_from_cases(@filtered_case_contacts)
+    binding.pry
+    if params[:casa_case_id].present?
+      binding.pry
+      casa_case_id_to_case_contacts = casa_case_id_to_case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } 
+    end
+    if current_user.volunteer?
+      binding.pry
+      current_user_casa_case_ids = current_user.casa_cases.pluck(:id)
+      casa_case_id_to_case_contacts = casa_case_id_to_case_contacts.select { |case_contact_id, _cases| current_user_casa_case_ids.include?(case_contact_id) }
+    end
 
-    @presenter = CaseContactPresenter.new(case_contacts)
+    @presenter = CaseContactPresenter.new(casa_case_id_to_case_contacts)
   end
 
   def drafts
