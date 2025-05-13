@@ -25,10 +25,6 @@ end
 #  updated_at  :datetime         not null
 #  casa_org_id :bigint           not null
 #
-# Indexes
-#
-#  index_case_groups_on_casa_org_id  (casa_org_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (casa_org_id => casa_orgs.id)

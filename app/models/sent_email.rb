@@ -22,11 +22,6 @@ end
 #  casa_org_id  :bigint           not null
 #  user_id      :bigint
 #
-# Indexes
-#
-#  index_sent_emails_on_casa_org_id  (casa_org_id)
-#  index_sent_emails_on_user_id      (user_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (casa_org_id => casa_orgs.id)

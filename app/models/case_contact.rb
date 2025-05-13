@@ -331,7 +331,6 @@ end
 #
 #  index_case_contacts_on_casa_case_id  (casa_case_id)
 #  index_case_contacts_on_creator_id    (creator_id)
-#  index_case_contacts_on_deleted_at    (deleted_at)
 #
 # Foreign Keys
 #

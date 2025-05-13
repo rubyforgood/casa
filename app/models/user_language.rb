@@ -18,5 +18,4 @@ end
 # Indexes
 #
 #  index_user_languages_on_language_id_and_user_id  (language_id,user_id) UNIQUE
-#  index_user_languages_on_user_id                  (user_id)
 #

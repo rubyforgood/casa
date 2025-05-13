@@ -22,11 +22,6 @@ end
 #  patch_note_group_id :bigint           not null
 #  patch_note_type_id  :bigint           not null
 #
-# Indexes
-#
-#  index_patch_notes_on_patch_note_group_id  (patch_note_group_id)
-#  index_patch_notes_on_patch_note_type_id   (patch_note_type_id)
-#
 # Foreign Keys
 #
 #  fk_rails_...  (patch_note_group_id => patch_note_groups.id)

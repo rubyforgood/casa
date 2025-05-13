@@ -83,7 +83,6 @@ end
 #
 #  index_api_credentials_on_api_token_digest      (api_token_digest) UNIQUE WHERE (api_token_digest IS NOT NULL)
 #  index_api_credentials_on_refresh_token_digest  (refresh_token_digest) UNIQUE WHERE (refresh_token_digest IS NOT NULL)
-#  index_api_credentials_on_user_id               (user_id)
 #
 # Foreign Keys
 #
