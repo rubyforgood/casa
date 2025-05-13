@@ -26,12 +26,12 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   tzdata \
   vim && rm -rf /var/cache/apk/*
 # The ruby alpine image's apk doesn't have the current version of node
-RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs npm
+# RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs npm
 
 WORKDIR $RAILS_ROOT
 
 COPY . .
-RUN npm install --global npm
+#RUN npm install --global npm
 RUN npm install
 RUN npm run build && npm run build:css
 
