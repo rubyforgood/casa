@@ -76,11 +76,12 @@ nvm alias default lts/jod
 
 ```
 # Install and configure rbenv
-sudo apt install rbenv
-rbenv init
+sudo apt install libyaml-dev
+git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 #   Restart your terminal
+eval "$(rbenv init -)"
 
-#   fetch extended list of ruby versions
+#   fetch list of ruby versions
 mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
