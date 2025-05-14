@@ -137,6 +137,7 @@ See [github's article](https://docs.github.com/en/authentication/connecting-to-g
 Run this series of commands to install the project.
 ```
 git clone git@github.com:rubyforgood/casa.git # Download a copy of the repository locally
+# The URI will be different when cloning a fork
 cd casa                                       # Go into the folder containing casa
 bundle install                                # Install ruby dependencies
 bundle exec rails db:setup                    # Create your local test database
