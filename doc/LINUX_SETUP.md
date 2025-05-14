@@ -27,6 +27,8 @@ sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)
 #     Add the repo key to your keyring:
 wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dearmor | sudo tee /usr/share/keyrings/postgres-archive-keyring.gpg
 
+# This next step is done to limit the key to only the postgres repo
+# Otherwise the signing key is considered valid for all your enabled Debian repositories (instead of only a specific one)
 #     Open /etc/apt/sources.list.d/pgdg.list with super user permissions so you are allowed to write to the file
 #       Example using vim:
 #         sudo vim /etc/apt/sources.list.d/pgdg.list
