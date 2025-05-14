@@ -31,7 +31,7 @@ wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | gpg --dea
 #       Example using vim:
 #         sudo vim /etc/apt/sources.list.d/pgdg.list
 #       Paste "[signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg]" between "deb" and "http://apt.postgresql..."
-#         Example: deb [signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt jammy-pgdg main
+#         Example: deb [signed-by=/usr/share/keyrings/postgres-archive-keyring.gpg] http://apt.postgresql.org/pub/repos/apt noble-pgdg main
 #       Save the file
 
 #     Update the package lists:
@@ -41,7 +41,7 @@ sudo apt update
 sudo apt install -y postgresql-12
 
 #   Turn the server on
-systemctl start postgresql
+sudo systemctl start postgresql@12-main
 
 #   Add user to Postgres:
 sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
@@ -101,8 +101,8 @@ rvm alias create default ruby-3.3.6
 ```# Download the Chrome browser (for RSpec testing):
 sudo curl -sS -o - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" | sudo tee /etc/apt/sources.list.d/google-chrome.list
-sudo apt-get -y update
-sudo apt-get -y install google-chrome-stable
+sudo apt -y update
+sudo apt -y install google-chrome-stable
 ```
 
 ## Connecting to Github via ssh
