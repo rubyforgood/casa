@@ -82,7 +82,6 @@ eval "$(rbenv init -)"
 #   Restart your terminal
 
 #   fetch list of ruby versions
-mkdir -p "$(rbenv root)"/plugins
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
 rbenv install 3.3.6
