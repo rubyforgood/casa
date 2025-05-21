@@ -4,7 +4,7 @@ RSpec.describe "static/index", type: :system do
   context "when visiting the CASA volunteer landing page", :js do
     describe "when all organizations have logos" do
       before do
-        3.times { create(:casa_org, :with_logo, display_name: "CASA of Awesome") }
+        create_list(:casa_org, 3, :with_logo, display_name: "CASA of Awesome")
         visit root_path
       end
 

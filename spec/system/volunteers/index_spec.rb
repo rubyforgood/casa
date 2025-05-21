@@ -175,13 +175,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
     # These tests are very flaky do to the use of datatables on this page.
     # If the page is switched over to Hotwire, should try to re-instate these tests.
     describe "Manage Volunteers button" do
-      let!(:volunteers) {
-        [
-          create(:volunteer, casa_org: organization),
-          create(:volunteer, casa_org: organization),
-          create(:volunteer, casa_org: organization)
-        ]
-      }
+      let!(:volunteers) { create_list(:volunteer, 3, casa_org: organization) }
 
       before do
         sign_in admin
@@ -229,13 +223,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     describe "Select All Checkbox" do
-      let!(:volunteers) {
-        [
-          create(:volunteer, casa_org: organization),
-          create(:volunteer, casa_org: organization),
-          create(:volunteer, casa_org: organization)
-        ]
-      }
+      let!(:volunteers) { create_list(:volunteer, 3, casa_org: organization) }
 
       before do
         sign_in admin

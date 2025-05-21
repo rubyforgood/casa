@@ -2,12 +2,7 @@ require "rails_helper"
 
 RSpec.describe "patch_notes/index", type: :view do
   let(:all_casa_admin) { build(:all_casa_admin) }
-  let!(:patch_notes) {
-    [
-      create(:patch_note),
-      create(:patch_note)
-    ]
-  }
+  let!(:patch_notes) { create_list(:patch_note, 2) }
 
   before do
     assign(:patch_notes, patch_notes)
