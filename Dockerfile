@@ -3,6 +3,9 @@ FROM ruby:3.3.8-alpine AS builder
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
   curl-dev \
+  libffi-dev \
+  yaml-dev \
+  linux-headers \
   postgresql-dev \
   tzdata
 
@@ -24,9 +27,6 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
   curl \
   imagemagick \
-  libffi-dev \
-  perl-yaml-libyaml \
-  linux-headers \
   nodejs \
   npm \
   postgresql-client \
@@ -34,14 +34,10 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   vim \
   && rm -rf /var/cache/apk/*
 
-RUN echo "NodeJS Version:" "$(node -v)"
-RUN echo "NPM Version:" "$(npm -v)"
-
 WORKDIR $RAILS_ROOT
 
 COPY . .
 RUN npm install --global npm
-RUN npm --version
 RUN npm install
 RUN npm run build && npm run build:css
 
