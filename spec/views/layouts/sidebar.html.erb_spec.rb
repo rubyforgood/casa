@@ -14,6 +14,36 @@ RSpec.describe "layout/sidebar", type: :view do
     assign :casa_org, user.casa_org
   end
 
+  shared_examples_for "properly rendering custom org links" do
+    let(:active_link_text) { "Example Link" }
+    let(:active_link_url) { "https://www.example.com" }
+    let(:inactive_link_text) { "Hidden Link" }
+    let(:inactive_link_url) { "https://www.nothing.com" }
+    let(:other_org_link_text) { "That Other Link" }
+    let(:other_org_link_url) { "https://www.elsewhere.com" }
+
+    before do
+      create :custom_org_link, casa_org: user.casa_org, text: active_link_text, url: active_link_url, active: true
+      create :custom_org_link, casa_org: user.casa_org, text: inactive_link_text, url: inactive_link_url, active: false
+      create :custom_org_link, text: other_org_link_text, url: other_org_link_url, active: true
+    end
+
+    it "renders active custom links for the user's org" do
+      render partial: "layouts/sidebar"
+      expect(rendered).to have_link(active_link_text, href: active_link_url)
+    end
+
+    it "does not render inactive custom links for the user's org" do
+      render partial: "layouts/sidebar"
+      expect(rendered).not_to have_link(inactive_link_text, href: inactive_link_url)
+    end
+
+    it "does not render custom links for other orgs" do
+      render partial: "layouts/sidebar"
+      expect(rendered).not_to have_link(other_org_link_text, href: other_org_link_url)
+    end
+  end
+
   context "when no organization logo is set" do
     let(:user) { build_stubbed :volunteer }
 
@@ -53,6 +83,8 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).not_to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
       expect(rendered).not_to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
+
+    it_behaves_like "properly rendering custom org links"
 
     context "when casa_org other_duties_enabled is true" do
       before do
@@ -111,6 +143,8 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).not_to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
       expect(rendered).not_to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
+
+    it_behaves_like "properly rendering custom org links"
 
     context "when casa_org other_duties_enabled is true" do
       before do
@@ -206,6 +240,8 @@ RSpec.describe "layout/sidebar", type: :view do
       expect(rendered).to have_link("Learning Hours", href: "/casa_org/#{user.casa_org.id}/edit#learning-hours")
       expect(rendered).to have_link("Case Contact Topics", href: "/casa_org/#{user.casa_org.id}/edit#case-contact-topics")
     end
+
+    it_behaves_like "properly rendering custom org links"
 
     context "when casa_org other_duties_enabled is true" do
       before do

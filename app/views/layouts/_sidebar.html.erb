@@ -60,6 +60,12 @@
               { title: "Case Contact Topics", icon: "comments", path: edit_casa_org_path(current_organization, anchor: 'case-contact-topics'), render_check: policy(:application).modify_organization? }
             ]) %>
           <% end %>
+          <% if current_organization.custom_org_links.any?(&:active) %>
+            <hr>
+            <% current_organization.custom_org_links.select(&:active).each do |custom_link| %>
+              <%= render(Sidebar::LinkComponent.new(title: custom_link.text, icon: "link", path: custom_link.url)) %>
+            <% end %>
+          <% end %>
         </ul>
       </nav>
     </nav>

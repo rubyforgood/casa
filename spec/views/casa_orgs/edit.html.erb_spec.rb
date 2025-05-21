@@ -10,6 +10,7 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:learning_hour_topics, [])
     assign(:sent_emails, [])
     assign(:contact_topics, [])
+    assign(:custom_org_links, [])
 
     sign_in build_stubbed(:casa_admin)
   end
@@ -167,6 +168,38 @@ RSpec.describe "casa_org/edit", type: :view do
         render template: "casa_org/edit"
 
         expect(rendered).not_to have_text("Volunteers can add Other Expenses")
+      end
+    end
+  end
+
+  describe "custom org links" do
+    let(:casa_org) { build_stubbed :casa_org }
+    before { allow(view).to receive(:current_organization).and_return(casa_org) }
+
+    it "has custom org link content" do
+      render template: "casa_org/edit"
+      expect(rendered).to have_text("Custom Links")
+    end
+
+    context "when the org has no custom links" do
+      before { assign(:custom_org_links, []) }
+
+      it "includes a helpful message" do
+        render template: "casa_org/edit"
+        expect(rendered).to have_text("No custom links have been added for this organization.")
+      end
+    end
+
+    context "when the org has custom links" do
+      let(:link_text) { "Example Link" }
+      let(:link_url) { "https://www.example.com" }
+      let(:custom_org_link) { build_stubbed :custom_org_link, text: link_text, url: link_url }
+      before { assign(:custom_org_links, [custom_org_link]) }
+
+      it "has custom link details" do
+        render template: "casa_org/edit"
+        expect(rendered).to have_text link_text
+        expect(rendered).to have_text link_url
       end
     end
   end
