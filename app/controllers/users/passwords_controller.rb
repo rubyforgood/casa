@@ -18,6 +18,20 @@ class Users::PasswordsController < Devise::PasswordsController
       notice: "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
   end
 
+  
+  def update
+    self.resource = resource_class.reset_password_by_token(resource_params)
+
+    yield resource if block_given?
+
+    if resource.errors.empty?
+      flash[:notice] = "Your password has been changed successfully."
+      redirect_to new_session_path(resource_name)
+    else
+      respond_with resource
+    end
+  end
+
   private
 
   def render_error
