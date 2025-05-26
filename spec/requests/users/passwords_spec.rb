@@ -123,4 +123,30 @@ RSpec.describe "Users::PasswordsController", type: :request do
       end
     end
   end
+
+  describe "PUT /update" do
+    let(:token) do
+      raw_token, enc_token = Devise.token_generator.generate(User, :reset_password_token)
+      user.update!(reset_password_token: enc_token, reset_password_sent_at: Time.current)
+      raw_token
+    end
+
+    let(:params) do
+      {
+        user: {
+          reset_password_token: token,
+          password: "newpassword123!",
+          password_confirmation: "newpassword123!"
+        }
+      }
+    end
+
+    subject(:submit_reset) { put user_password_path, params: params }
+
+    it "successfully resets the password" do
+      submit_reset
+      expect(response).to redirect_to(new_user_session_path)
+      expect(flash[:notice]).to eq("Your password has been changed successfully.")
+    end
+  end
 end
