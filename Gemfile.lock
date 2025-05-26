@@ -174,7 +174,7 @@ GEM
       devise (>= 4.6)
     diff-lcs (1.5.1)
     docile (1.4.1)
-    docx (0.8.0)
+    docx (0.9.1)
       nokogiri (~> 1.13, >= 1.13.0)
       rubyzip (~> 2.0)
     dotenv (3.1.8)
@@ -323,7 +323,7 @@ GEM
       benchmark
       logger
     mini_mime (1.1.5)
-    mini_portile2 (2.8.8)
+    mini_portile2 (2.8.9)
     minitest (5.25.5)
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
