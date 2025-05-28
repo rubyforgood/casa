@@ -3,7 +3,7 @@ class TrimWhitespaceFromCustomOrgLinks < ActiveRecord::Migration[7.2]
     CustomOrgLink.find_each do |link|
       trimmed_text = link.text.strip
       link.update_columns(text: trimmed_text) if trimmed_text.present?
-    rescue StandardError => e
+    rescue => e
       Rails.logger.error("Failed to update CustomOrgLink ##{link.id}: #{e.message}")
     end
   end
