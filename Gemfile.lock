@@ -350,7 +350,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.18.8-x86_64-linux-gnu)
       racc (~> 1.4)
-    noticed (2.6.1)
+    noticed (2.7.0)
       rails (>= 6.1.0)
     oj (3.16.10)
       bigdecimal (>= 3.0)
@@ -623,7 +623,7 @@ GEM
       crack (>= 0.3.2)
       hashdiff (>= 0.4.0, < 2.0.0)
     websocket (1.2.11)
-    websocket-driver (0.7.7)
+    websocket-driver (0.8.0)
       base64
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
