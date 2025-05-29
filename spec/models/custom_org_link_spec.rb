@@ -7,6 +7,18 @@ RSpec.describe CustomOrgLink, type: :model do
   it { is_expected.to validate_length_of(:text).is_at_most described_class::TEXT_MAX_LENGTH }
   it { is_expected.to validate_inclusion_of(:active).in_array [true, false] }
 
+  describe "#trim_name" do
+    let(:casa_org) { create(:casa_org) }
+
+    context "when text is present" do
+      it "trims leading and trailing whitespace from text" do
+        custom_link = build(:custom_org_link, casa_org: casa_org, text: "  Example Text  ")
+        custom_link.save
+        expect(custom_link.text).to eq("Example Text")
+      end
+    end
+  end
+
   describe "url validation - only allow http or https schemes" do
     it { is_expected.to allow_value("http://example.com").for(:url) }
     it { is_expected.to allow_value("https://example.com").for(:url) }
