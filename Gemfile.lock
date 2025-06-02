@@ -105,7 +105,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.1.9)
+    bigdecimal (3.2.1)
     bindex (0.8.1)
     blueprinter (1.1.2)
     brakeman (7.0.2)
@@ -352,7 +352,7 @@ GEM
       racc (~> 1.4)
     noticed (2.7.0)
       rails (>= 6.1.0)
-    oj (3.16.10)
+    oj (3.16.11)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     orm_adapter (0.5.0)
