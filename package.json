@@ -51,7 +51,7 @@
   "devDependencies": {
     "@babel/preset-env": "^7.27.2",
     "jest": "^30.0.0",
-    "jest-environment-jsdom": "^29.6.2",
+    "jest-environment-jsdom": "^30.0.0",
     "markdown-toc": "^1.2.0",
     "standard": "^17.1.2",
     "start-server-and-test": "^2.0.12"
