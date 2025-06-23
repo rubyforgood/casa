@@ -267,6 +267,8 @@ GEM
     google-protobuf (4.30.2-x86_64-linux)
       bigdecimal
       rake (>= 13)
+    googleapis-common-protos-types (1.20.0)
+      google-protobuf (>= 3.18, < 5.a)
     groupdate (6.7.0)
       activesupport (>= 7.1)
     hashdiff (1.1.2)
@@ -355,6 +357,37 @@ GEM
     oj (3.16.11)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
+    opentelemetry-api (1.5.0)
+    opentelemetry-common (0.22.0)
+      opentelemetry-api (~> 1.0)
+    opentelemetry-exporter-otlp-logs (0.2.0)
+      google-protobuf (>= 3.18)
+      googleapis-common-protos-types (~> 1.3)
+      opentelemetry-api (~> 1.1)
+      opentelemetry-common (~> 0.20)
+      opentelemetry-logs-api (~> 0.1)
+      opentelemetry-logs-sdk (~> 0.1)
+      opentelemetry-sdk
+      opentelemetry-semantic_conventions
+    opentelemetry-instrumentation-base (0.23.0)
+      opentelemetry-api (~> 1.0)
+      opentelemetry-common (~> 0.21)
+      opentelemetry-registry (~> 0.1)
+    opentelemetry-logs-api (0.2.0)
+      opentelemetry-api (~> 1.0)
+    opentelemetry-logs-sdk (0.2.0)
+      opentelemetry-api (~> 1.2)
+      opentelemetry-logs-api (~> 0.1)
+      opentelemetry-sdk (~> 1.3)
+    opentelemetry-registry (0.4.0)
+      opentelemetry-api (~> 1.1)
+    opentelemetry-sdk (1.8.0)
+      opentelemetry-api (~> 1.1)
+      opentelemetry-common (~> 0.20)
+      opentelemetry-registry (~> 0.2)
+      opentelemetry-semantic_conventions
+    opentelemetry-semantic_conventions (1.11.0)
+      opentelemetry-api (~> 1.0)
     orm_adapter (0.5.0)
     ostruct (0.6.1)
     pagy (9.3.4)
@@ -543,6 +576,16 @@ GEM
       nokogiri (>= 1.16.8)
     scout_apm (5.6.4)
       parser
+    scout_apm_logging (2.1.0)
+      google-protobuf (>= 3.18)
+      googleapis-common-protos-types
+      opentelemetry-api
+      opentelemetry-common
+      opentelemetry-exporter-otlp-logs (>= 0.2.0)
+      opentelemetry-instrumentation-base
+      opentelemetry-logs-sdk (>= 0.2.0)
+      opentelemetry-sdk (>= 1.2)
+      scout_apm
     securerandom (0.4.1)
     selenium-webdriver (4.32.0)
       base64 (~> 0.2)
@@ -718,6 +761,7 @@ DEPENDENCIES
   rubocop-rspec_rails
   sablon
   scout_apm
+  scout_apm_logging (~> 2.1)
   selenium-webdriver
   shoulda-matchers
   simplecov

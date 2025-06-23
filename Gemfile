@@ -109,3 +109,5 @@ group :test do
   gem "simplecov", require: false
   gem "webmock" # HTTP request stubber
 end
+
+gem "scout_apm_logging", "~> 2.1"
