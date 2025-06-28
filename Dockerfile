@@ -37,7 +37,7 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
 WORKDIR $RAILS_ROOT
 
 COPY . .
-RUN npm install --global npm@11.4.2
+RUN npm install --global npm@latest
 RUN npm install
 RUN npm run build && npm run build:css
 
