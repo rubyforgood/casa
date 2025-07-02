@@ -235,7 +235,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
             topic: "Question 1",
             details: "Details 1"
           },
-          "Question 2" => {
+          "Question 2 (Set 1)" => {
             answers: [
               {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
               {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
