@@ -56,6 +56,6 @@ class ContactTopicsController < ApplicationController
 
   # Only allow a list of trusted parameters through.
   def contact_topic_params
-    params.require(:contact_topic).permit(:casa_org_id, :question, :details, :active)
+    params.require(:contact_topic).permit(:casa_org_id, :question, :details, :active, :exclude_from_court_report)
   end
 end

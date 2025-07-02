@@ -42,14 +42,15 @@ end
 #
 # Table name: contact_topics
 #
-#  id          :bigint           not null, primary key
-#  active      :boolean          default(TRUE), not null
-#  details     :text
-#  question    :string
-#  soft_delete :boolean          default(FALSE), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
-#  casa_org_id :bigint           not null
+#  id                        :bigint           not null, primary key
+#  active                    :boolean          default(TRUE), not null
+#  details                   :text
+#  exclude_from_court_report :boolean          default(FALSE), not null
+#  question                  :string
+#  soft_delete               :boolean          default(FALSE), not null
+#  created_at                :datetime         not null
+#  updated_at                :datetime         not null
+#  casa_org_id               :bigint           not null
 #
 # Foreign Keys
 #
