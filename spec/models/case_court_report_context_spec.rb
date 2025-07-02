@@ -182,9 +182,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
     let(:org) { create(:casa_org) }
     let(:casa_case) { create(:casa_case, casa_org: org) }
     let(:topics) { [1, 2, 3].map { |i| create(:contact_topic, casa_org: org, question: "Question #{i}", details: "Details #{i}") } }
-    let(:hidden_topic) do
-      create(:contact_topic, casa_org: org, question: "Dont Show Me", details: "I Shall Not Appear On Court Reports")
-    end
     let(:contacts) do
       [1, 2, 3, 4].map do |i|
         create(:case_contact,
