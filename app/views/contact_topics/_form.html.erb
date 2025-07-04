@@ -29,6 +29,10 @@
       <%= form.check_box :active, class: 'form-check-input' %>
       <%= form.label :active, "Active?", class: 'form-check-label' %>
     </div>
+    <div class="form-check checkbox-style mb-20">
+      <%= form.check_box :exclude_from_court_report, class: 'form-check-input' %>
+      <%= form.label :exclude_from_court_report, "Exclude from Court Report?", class: 'form-check-label' %>
+    </div>
     <div class="actions mb-10">
       <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
         <i class="lni lni-checkmark-circle mr-5"></i> Submit

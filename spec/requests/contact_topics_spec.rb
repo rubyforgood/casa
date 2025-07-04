@@ -53,6 +53,17 @@ RSpec.describe "/contact_topics", type: :request do
         post contact_topics_url, params: {contact_topic: attributes}
         expect(response).to redirect_to(edit_casa_org_path(casa_org))
       end
+
+      it "can set exclude_from_court_report attribute" do
+        attributes[:exclude_from_court_report] = true
+
+        expect do
+          post contact_topics_url, params: {contact_topic: attributes}
+        end.to change(ContactTopic, :count).by(1)
+
+        topic = ContactTopic.last
+        expect(topic.exclude_from_court_report).to be true
+      end
     end
 
     context "with invalid parameters" do
@@ -106,6 +117,14 @@ RSpec.describe "/contact_topics", type: :request do
       it "redirects to the casa_org edit" do
         patch contact_topic_url(contact_topic), params: {contact_topic: new_attributes}
         expect(response).to redirect_to(edit_casa_org_path(casa_org))
+      end
+
+      it "can change exclude_from_court_report" do
+        new_attributes = {exclude_from_court_report: true}
+
+        expect {
+          patch contact_topic_url(contact_topic), params: {contact_topic: new_attributes}
+        }.to change { contact_topic.reload.exclude_from_court_report }.from(false).to(true)
       end
     end
 

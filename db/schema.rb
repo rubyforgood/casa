@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_05_28_092341) do
+ActiveRecord::Schema[7.2].define(version: 2025_07_02_142004) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -270,6 +270,7 @@ ActiveRecord::Schema[7.2].define(version: 2025_05_28_092341) do
     t.string "question"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "exclude_from_court_report", default: false, null: false
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
