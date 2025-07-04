@@ -220,37 +220,6 @@ RSpec.describe CaseCourtReportContext, type: :model do
         create_list(:contact_topic_answer, 2, case_contact: other_case_contact, contact_topic: topics[0], value: "Answer From Another Case")
       end
 
-      let(:related_topics_hash) do
-        {
-          "Question 1" => {
-            answers: [
-              {date: "01/01/20", medium: "Type 2, Type 2", value: "Answer From One Year Ago"},
-              {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
-              {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"},
-              {date: "12/31/20", medium: "Type 1, Type 1", value: "Answer From One Day Ago"}
-            ],
-            topic: "Question 1",
-            details: "Details 1"
-          },
-          "Question 2 (Set 1)" => {
-            answers: [
-              {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
-              {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
-            ],
-            topic: "Question 2",
-            details: "Details 2"
-          },
-          "Question 3" => {
-            answers: [
-              {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
-              {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
-            ],
-            topic: "Question 3",
-            details: "Details 3"
-          }
-        }
-      end
-
       it "returns a hash of topics with the correct shape" do
         court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
 

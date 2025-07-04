@@ -108,7 +108,7 @@ class CaseCourtReportContext
   def court_topics
     topics = ContactTopic
       .joins(contact_topic_answers: {case_contact: [:casa_case, :contact_types]}).distinct
-      .where(exclude_from_court_report: false)
+      .where(contact_topics: { exclude_from_court_report: false })
       .where("casa_cases.id": @casa_case.id)
       .where("case_contacts.occurred_at": @date_range)
       .order(:occurred_at, :value)
