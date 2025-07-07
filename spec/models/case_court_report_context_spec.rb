@@ -193,23 +193,9 @@ RSpec.describe CaseCourtReportContext, type: :model do
           ])
       end
     end
-    # let(:contacts) { create_list(:case_contact, 4, casa_case: casa_case, occurred_at: 1.month.ago)  }
 
     context "when given data" do
-      # Add some values that should get filtered out
       before do
-        contact_one = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 1.day.ago)
-        create_list(:contact_topic_answer, 2, case_contact: contact_one, contact_topic: topics[0], value: "Not included")
-
-        contact_two = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 50.day.ago)
-        create_list(:contact_topic_answer, 2, case_contact: contact_two, contact_topic: topics[0], value: "Not included")
-
-        other_case = create(:casa_case, casa_org: org)
-        contact_three = create(:case_contact, casa_case: other_case, medium_type: "in-person", occurred_at: 50.day.ago)
-        create_list(:contact_topic_answer, 2, case_contact: contact_three, contact_topic: topics[0], value: "Not included")
-      end
-
-      it "generates correctly shaped data" do
         # Contact 1 Answers
         create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[0], value: "Answer 1")
         create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[1], value: "Answer 2")
@@ -222,27 +208,64 @@ RSpec.describe CaseCourtReportContext, type: :model do
         create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[1], value: "Answer 5")
         create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[2], value: "")
 
-        # Contact 4 Answers
-        # No Answers
+        # Contacts that will be filtered
+        one_day_ago_contact = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 1.day.ago)
+        create_list(:contact_topic_answer, 2, case_contact: one_day_ago_contact, contact_topic: topics[0], value: "Answer From One Day Ago")
 
-        expected_topics = {
-          "Question 1" => {topic: "Question 1", details: "Details 1", answers: [
-            {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
-            {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"}
-          ]},
-          "Question 2" => {topic: "Question 2", details: "Details 2", answers: [
-            {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
-            {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
-          ]},
-          "Question 3" => {topic: "Question 3", details: "Details 3", answers: [
-            {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
-            {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
-          ]}
-        }
+        one_year_ago_contact = create(:case_contact, casa_case: casa_case, medium_type: "in-person", occurred_at: 1.year.ago)
+        create_list(:contact_topic_answer, 2, case_contact: one_year_ago_contact, contact_topic: topics[0], value: "Answer From One Year Ago")
 
-        court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)
+        other_case = create(:casa_case, casa_org: org)
+        other_case_contact = create(:case_contact, casa_case: other_case, medium_type: "in-person", occurred_at: 1.month.ago)
+        create_list(:contact_topic_answer, 2, case_contact: other_case_contact, contact_topic: topics[0], value: "Answer From Another Case")
+      end
 
-        expect(court_report_context.court_topics).to eq(expected_topics)
+      it "returns a hash of topics with the correct shape" do
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics).to be_a(Hash)
+
+        expect(court_topics.keys).to all(a_kind_of(String))
+        expect(court_topics.values).to all(
+          a_hash_including(
+            topic: a_kind_of(String),
+            details: a_kind_of(String),
+            answers: all(
+              a_hash_including(
+                date: a_string_matching(/\d{2}\/\d{2}\/\d{2}/),
+                medium: a_kind_of(String),
+                value: a_kind_of(String)
+              )
+            )
+          )
+        )
+      end
+
+      it "returns topics related to the case" do
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to match_array(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics["Question 1"][:answers].map { |a| a[:value] }).to match_array(
+          ["Answer From One Year Ago", "Answer 1", "Answer 3", "Answer From One Day Ago"]
+        )
+        expect(court_topics["Question 2"][:answers].map { |a| a[:value] }).to match_array(["Answer 2", "Answer 5"])
+        expect(court_topics["Question 3"][:answers].map { |a| a[:value] }).to match_array(["No Answer Provided", "No Answer Provided"])
+      end
+
+      it "filters by date range" do
+        court_topics = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to match_array(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics["Question 1"][:answers].map { |a| a[:value] }).to match_array(["Answer 1", "Answer 3"])
+      end
+
+      it "filters answers from topics set be excluded from court report" do
+        topics[0].update(exclude_from_court_report: true)
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).not_to include("Question 1")
+        expect(court_topics.keys).to include("Question 2", "Question 3")
       end
     end
 
