@@ -3,7 +3,6 @@ require "rails_helper"
 RSpec.describe "court_dates/edit", type: :system do
   let(:now) { Date.new(2021, 1, 1) }
   let(:organization_containing_court_date) { create(:casa_org) }
-  let(:organization_not_containing_court_date) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization_containing_court_date) }
   let(:volunteer) { create(:volunteer, casa_org: organization_containing_court_date) }
   let!(:casa_case) { create(:casa_case, casa_org: organization_containing_court_date) }
@@ -13,7 +12,7 @@ RSpec.describe "court_dates/edit", type: :system do
     travel_to now
   end
 
-  shared_examples "user can view court date" do |user_type, organization|
+  shared_examples "user able to view court date" do |user_type, organization|
     let(:user) { create(user_type, casa_org: organization) }
 
     before(:all) do
@@ -44,12 +43,27 @@ RSpec.describe "court_dates/edit", type: :system do
     end
   end
 
-  shared_examples "user cannot view court date" do |user_type, organization|
+  shared_examples "user unable to view court date" do |user_type, organization|
     let(:user) { create(user_type, casa_org: organization) }
 
     it "is not allowed to visit the court order page" do
+      sign_in user
+      visit casa_case_court_date_path(casa_case, court_date)
+
       expect(page).to have_content "Sorry, you are not authorized to perform this action."
     end
+  end
+
+  context "as a user from an organization not containing the court date" do
+    let(:organization_not_containing_court_date) { create(:casa_org) }
+
+    it_should_behave_like "user unable to view court date", :admin, organization_not_containing_court_date
+  end
+
+  context "as a volunteer not assigned to the case associated with the court case" do
+    let(:other_volunteer) { create(:volunteer, casa_org: organization_containing_court_date) }
+
+    it_should_behave_like "user unable to view court date", :volunteer, organization_containing_court_date
   end
 
   context "as a volunteer" do
