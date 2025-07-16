@@ -2,7 +2,7 @@ class ImportsController < ApplicationController
   require "csv"
 
   include ActionView::Helpers::UrlHelper
-  before_action :csv_service, only: [:create, :download_failed]
+  before_action :failed_csv_service, only: [:create, :download_failed]
   after_action :verify_authorized
 
   ERR_FAILED_IMPORT_NOTE = "Note: An additional 'error' column has been added to the file. " \
@@ -24,15 +24,15 @@ class ImportsController < ApplicationController
 
   def create
     authorize :import
-    @csv_service.cleanup
+    @failed_csv_service.cleanup
 
     import = import_from_csv(params[:import_type], params[:sms_opt_in], params[:file], current_user.casa_org_id)
     message = import[:message]
 
     # If there were failed imports
     if import[:exported_rows]
-      @csv_service.failed_rows = import[:exported_rows]
-      @csv_service.store
+      @failed_csv_service.failed_rows = import[:exported_rows]
+      @failed_csv_service.store
       message << "<p class='mt-4'>" + link_to("Click here to download failed rows.", download_failed_imports_path(import_type: params[:import_type])) +
         "</p>" + "<p>#{ERR_FAILED_IMPORT_NOTE}</p>"
     end
@@ -51,14 +51,15 @@ class ImportsController < ApplicationController
 
   def download_failed
     authorize :import
+    csv_contents = @failed_csv_service.read
 
-    send_data @csv_service.read, format: :csv, filename: "failed_rows.csv"
+    send_data csv_contents, format: :csv, filename: "failed_rows.csv"
   end
 
   private
 
-  def csv_service(failed_rows: "")
-    @csv_service = FailedImportCsv.new(failed_rows: failed_rows,
+  def failed_csv_service(failed_rows: "")
+    @failed_csv_service = FailedImportCsv.new(failed_rows: failed_rows,
       import_type: params[:import_type],
       user: current_user)
   end

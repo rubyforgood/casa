@@ -1,24 +1,16 @@
 class FailedImportCsv
   require "csv"
 
-  attr_reader :failed_rows, :import_type, :user
-  attr_writer :failed_rows
-  private :failed_rows, :import_type, :user
+  attr_accessor :failed_rows
+  attr_reader :import_type, :user
 
-  MAX_FILE_SIZE_BYTES = 1.megabyte
+  MAX_FILE_SIZE_BYTES = 250.kilobytes
   EXPIRATION_TIME = 24.hours
 
   def initialize(import_type:, user:, failed_rows: "")
     @failed_rows = failed_rows
     @import_type = import_type
     @user = user
-  end
-
-  def cleanup
-    return unless File.exist?(csv_filepath)
-
-    Rails.logger.info("Removing old failed CSV for user=#{user.id}, type=#{import_type}")
-    FileUtils.rm_f(csv_filepath)
   end
 
   def store
@@ -32,23 +24,43 @@ class FailedImportCsv
   end
 
   def read
-    cleanup_if_expired
-    return File.read(csv_filepath) if File.exist?(csv_filepath)
+    return upload_warning unless csv_exists?
 
-    Rails.logger.warn("Missing failed CSV file for user=#{user.id}, type=#{import_type}")
-    "Please upload a #{humanised_import_type} CSV"
+    if expired?
+      remove_csv
+      return upload_warning
+    end
+
+    File.read(csv_filepath)
+  end
+
+  def cleanup
+    return unless csv_exists?
+
+    log_info("Removing old failed rows CSV")
+    remove_csv
   end
 
   private
 
-  def cleanup_if_expired
-    return unless expired?
-
-    FileUtils.rm_f(csv_filepath)
+  def csv_exists?
+    File.exist?(csv_filepath)
   end
 
   def expired?
-    File.exist?(csv_filepath) && File.mtime(csv_filepath) < EXPIRATION_TIME.ago
+    csv_exists? && File.mtime(csv_filepath) < Time.current - EXPIRATION_TIME
+  end
+
+  def remove_csv
+    FileUtils.rm_f(csv_filepath)
+  end
+
+  def log_info(msg)
+    Rails.logger.info("User=#{user.id}, Type=#{import_type}: #{msg}")
+  end
+
+  def upload_warning
+    "Please upload a #{humanised_import_type} CSV"
   end
 
   def max_size_warning
@@ -56,7 +68,11 @@ class FailedImportCsv
   end
 
   def csv_filepath
-    Rails.root.join("tmp", import_type, "failed_rows_userid_#{user.id}.csv")
+    Rails.root.join("tmp", import_type.to_s, filename)
+  end
+
+  def filename
+    "failed_rows_userid_#{user.id}.csv"
   end
 
   def humanised_import_type

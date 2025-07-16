@@ -58,16 +58,15 @@ RSpec.describe FailedImportCsv do
       before { create_file(mtime: 2.days.ago.to_time) }
 
       it "deletes the file and returns fallback message" do
-        expect(Rails.logger).to receive(:warn).with(/Missing failed CSV file/)
-        expect(service.read).to include("Please upload a")
+        expect(File.exist?(csv_path)).to be true
+        expect(service.read).to include("Please upload a CASA Case CSV")
         expect(File.exist?(csv_path)).to be false
       end
     end
 
     context "when file never existed" do
       it "returns fallback message" do
-        expect(Rails.logger).to receive(:warn).with(/Missing failed CSV file/)
-        expect(service.read).to include("Please upload a")
+        expect(service.read).to include("Please upload a CASA Case CSV")
       end
     end
   end
@@ -80,7 +79,7 @@ RSpec.describe FailedImportCsv do
 
       it "removes the file" do
         expect(File.exist?(csv_path)).to be true
-        expect(Rails.logger).to receive(:info).with(/Removing old failed CSV/)
+        expect(Rails.logger).to receive(:info).with(/Removing old failed rows CSV/)
         service.cleanup
         expect(File.exist?(csv_path)).to be false
       end
