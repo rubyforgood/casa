@@ -2,17 +2,18 @@ require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
   let(:now) { Date.new(2021, 1, 1) }
-  let(:organization_containing_court_date) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization_containing_court_date) }
-  let(:volunteer) { create(:volunteer, casa_org: organization_containing_court_date) }
-  let!(:casa_case) { create(:casa_case, casa_org: organization_containing_court_date) }
+  let(:organization) { create(:casa_org) }
+  let(:admin) { create(:casa_admin, casa_org: organization) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
+  let(:volunteer) { create(:volunteer, casa_org: organization) }
+  let!(:casa_case) { create(:casa_case, casa_org: organization) }
   let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
 
   before do
     travel_to now
   end
 
-  shared_examples "user able to view court date" do |user_type, organization|
+  shared_examples "user able to view court date" do |user_type|
     let(:user) { create(user_type, casa_org: organization) }
 
     before(:all) do
@@ -43,7 +44,7 @@ RSpec.describe "court_dates/edit", type: :system do
     end
   end
 
-  shared_examples "user unable to view court date" do |user_type, organization|
+  shared_examples "user unable to view court date" do |user_type|
     let(:user) { create(user_type, casa_org: organization) }
 
     it "is not allowed to visit the court order page" do
@@ -55,15 +56,13 @@ RSpec.describe "court_dates/edit", type: :system do
   end
 
   context "as a user from an organization not containing the court date" do
-    let(:organization_not_containing_court_date) { create(:casa_org) }
+    let(:organization) { create(:casa_org) }
 
-    it_should_behave_like "user unable to view court date", :admin, organization_not_containing_court_date
+    it_should_behave_like "user unable to view court date", :admin
   end
 
   context "as a volunteer not assigned to the case associated with the court case" do
-    let(:other_volunteer) { create(:volunteer, casa_org: organization_containing_court_date) }
-
-    it_should_behave_like "user unable to view court date", :volunteer, organization_containing_court_date
+    it_should_behave_like "user unable to view court date", :volunteer
   end
 
   context "as a volunteer" do
