@@ -178,7 +178,7 @@ RSpec.describe "/imports", type: :request do
       file_contents = File.read(failed_csv_path)
       expect(file_contents).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")
 
-      FileUtils.rm_f(failed_csv_path) # Cleanup
+      FileUtils.rm_f(failed_csv_path)
     end
 
     it "calls FailedImportCsv#store when there are failed rows from the import" do
@@ -235,7 +235,7 @@ RSpec.describe "/imports", type: :request do
 
       expect(request.session[:import_error]).to include("Click here to download failed rows.")
 
-      FileUtils.rm_f(failed_csv_path) # Cleanup
+      FileUtils.rm_f(failed_csv_path)
     end
   end
 end
