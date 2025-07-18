@@ -79,3 +79,8 @@ en:
       long: "%B %d, %Y"
       short: "%b %d"
       year_first: "%Y-%m-%d"
+  imports:
+    labels:
+      casa_case: "CASA Case"
+      volunteer: "Volunteer"
+      supervisor: "Supervisor"
