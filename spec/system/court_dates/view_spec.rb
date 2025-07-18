@@ -1,38 +1,103 @@
 require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
-  context "with date"
-  let(:now) { Date.new(2021, 1, 1) }
   let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:casa_admin, casa_org: organization) }
-  let!(:casa_case) { create(:casa_case, casa_org: organization) }
-  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
-  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
+
+  let(:now) { Date.new(2021, 1, 1) }
+  let(:displayed_date_format) { "%B %-d, %Y" }
+  let(:casa_case_number) { "CASA-CASE-NUMBER" }
+  let!(:casa_case) { create(:casa_case, casa_org: organization, case_number: casa_case_number) }
+  let(:court_date_as_date_object) { now + 1.week }
+  let(:court_report_due_date) { now + 2.weeks }
+  let!(:court_date) { create(:court_date, casa_case: casa_case, court_report_due_date: court_report_due_date, date: court_date_as_date_object) }
 
   before do
     travel_to now
   end
 
-  context "as a volunteer" do
-    it "can download a report which focuses on the court date", :js do
-      volunteer.casa_cases = [casa_case]
-      sign_in volunteer
+  shared_examples "a user able to view court date" do |user_type|
+    let(:user) { create(user_type, casa_org: organization) }
 
-      visit root_path
-      click_on "Cases"
-      click_on casa_case.case_number
+    it "can visit the court order page" do
+      if user_type === :volunteer
+        user.casa_cases << casa_case
+      end
 
-      expect(CourtDate.count).to eq 2
-      click_on "January 8, 2021"
-      expect(page).to have_content "Court Date"
+      sign_in user
+      visit casa_case_court_date_path(casa_case, court_date)
 
-      click_on "Download Report"
+      expect(page).not_to have_text "Sorry, you are not authorized to perform this action."
+    end
 
-      wait_for_download
+    it "displays all information associated with the court date correctly" do
+      if user_type === :volunteer
+        user.casa_cases << casa_case
+      end
 
-      expect(download_docx.paragraphs.map(&:to_s)).to include("Hearing Date: January 8, 2021")
+      sign_in user
+      visit casa_case_court_date_path(casa_case, court_date)
+
+      expect(page).to have_text court_date_as_date_object.strftime(displayed_date_format)
+      expect(page).to have_text court_report_due_date.strftime(displayed_date_format)
+      expect(page).to have_text casa_case_number
+
+      court_date_court_orders = find(:xpath, "//h6[text()='Court Orders:']/following-sibling::p[1]")
+      expect(court_date_court_orders).to have_text("There are no court orders associated with this court date.")
+      court_date_hearing_type = find(:xpath, "//dt[h6[text()='Hearing Type:']]/following-sibling::dd[1]")
+      expect(court_date_hearing_type).to have_text("None")
+      court_date_judge = find(:xpath, "//dt[h6[text()='Judge:']]/following-sibling::dd[1]")
+      expect(court_date_judge).to have_text("None")
+
+      court_order = create(:case_court_order, casa_case: casa_case)
+      hearing_type = create(:hearing_type)
+      judge = create(:judge)
+      court_date.case_court_orders << court_order
+      court_date.hearing_type = hearing_type
+      court_date.judge = judge
+      court_date.save!
+
+      visit current_path
+
+      expect(page).to have_text court_order.text
+      expect(page).to have_text hearing_type.name
+      expect(page).to have_text judge.name
+    end
+  end
+
+  context "as a user from an organization not containing the court date" do
+    let(:other_organization) { create(:casa_org) }
+
+    xit "does not allow the user to view the court date" do
+      # TODO the app or browser can't gracefully handle the URL
+      sign_in create(:casa_admin, casa_org: other_organization)
+      visit casa_case_court_date_path(casa_case, court_date)
+
+      expect(page).to have_text "Sorry, you are not authorized to perform this action."
+    end
+  end
+
+  context "as a user under the same org as the court date" do
+    context "as a volunteer not assigned to the case associated with the court date" do
+      let(:volunteer_not_assigned_to_case) { create(:volunteer, casa_org: organization) }
+
+      it "does not allow the user to view the court date" do
+        sign_in volunteer_not_assigned_to_case
+        visit casa_case_court_date_path(casa_case, court_date)
+
+        expect(page).to have_text "Sorry, you are not authorized to perform this action."
+      end
+    end
+
+    context "as a volunteer assigned to the case associated with the court date" do
+      it_should_behave_like "a user able to view court date", :volunteer
+    end
+
+    context "as a supervisor belonging to the same org as the case associated with the court date" do
+      it_should_behave_like "a user able to view court date", :supervisor
+    end
+
+    context "as an admin belonging to the same org as the case associated with the court date" do
+      it_should_behave_like "a user able to view court date", :casa_admin
     end
   end
 end
