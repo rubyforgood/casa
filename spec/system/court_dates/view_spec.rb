@@ -9,7 +9,7 @@ RSpec.describe "court_dates/edit", type: :system do
   let!(:casa_case) { create(:casa_case, casa_org: organization, case_number: casa_case_number) }
   let(:court_date_as_date_object) { now + 1.week }
   let(:court_report_due_date) { now + 2.weeks }
-  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, court_report_due_date: court_report_due_date, date: court_date_as_date_object) }
+  let!(:court_date) { create(:court_date, casa_case: casa_case, court_report_due_date: court_report_due_date, date: court_date_as_date_object) }
 
   before do
     travel_to now
@@ -40,9 +40,27 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text court_date_as_date_object.strftime(displayed_date_format)
       expect(page).to have_text court_report_due_date.strftime(displayed_date_format)
       expect(page).to have_text casa_case_number
-      # Test judge none and set
-      # Test hearing type none and set
-      # Test court orders none and set
+
+      court_date_court_orders = find(:xpath, "//h6[text()='Court Orders:']/following-sibling::p[1]")
+      expect(court_date_court_orders).to have_text("There are no court orders associated with this court date.")
+      court_date_hearing_type = find(:xpath, "//dt[h6[text()='Hearing Type:']]/following-sibling::dd[1]")
+      expect(court_date_hearing_type).to have_text("None")
+      court_date_judge = find(:xpath, "//dt[h6[text()='Judge:']]/following-sibling::dd[1]")
+      expect(court_date_judge).to have_text("None")
+
+      court_order = create(:case_court_order, casa_case: casa_case)
+      hearing_type = create(:hearing_type)
+      judge = create(:judge)
+      court_date.case_court_orders << court_order
+      court_date.hearing_type = hearing_type
+      court_date.judge = judge
+      court_date.save!
+
+      visit current_path
+
+      expect(page).to have_text court_order.text
+      expect(page).to have_text hearing_type.name
+      expect(page).to have_text judge.name
     end
   end
 
@@ -50,7 +68,7 @@ RSpec.describe "court_dates/edit", type: :system do
     let(:other_organization) { create(:casa_org) }
 
     xit "does not allow the user to view the court date" do
-      # TODO the app can't gracefully handle the URL
+      # TODO the app or browser can't gracefully handle the URL
       sign_in create(:casa_admin, casa_org: other_organization)
       visit casa_case_court_date_path(casa_case, court_date)
 
