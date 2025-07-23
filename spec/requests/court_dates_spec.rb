@@ -182,7 +182,6 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       other_case = create(:casa_case, casa_org: other_org)
 
       get edit_casa_case_court_date_path(other_case, court_date)
-      get edit_casa_case_court_date_path(other_case, court_date)
       expect(response).to redirect_to(casa_cases_path)
       expect(response.status).to match 302
       expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
