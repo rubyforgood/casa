@@ -188,8 +188,6 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
     end
   end
-    end
-  end
 
   describe "POST /create" do
     let(:casa_case) { create(:casa_case) }
