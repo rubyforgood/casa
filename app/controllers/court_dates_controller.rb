@@ -68,7 +68,7 @@ class CourtDatesController < ApplicationController
   rescue ActiveRecord::RecordNotFound
     respond_to do |format|
       format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
-      format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :not_found }
+      format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :unauthorized }
     end
   end
 
