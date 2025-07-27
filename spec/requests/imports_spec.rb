@@ -15,8 +15,6 @@ RSpec.describe "/imports", type: :request do
   end
 
   describe "GET /index" do
-    let(:short_hash) { Digest::SHA256.hexdigest(casa_admin.id.to_s)[0..15] }
-
     it "renders an unsuccessful response when the user is not an admin" do
       sign_in create(:volunteer)
 

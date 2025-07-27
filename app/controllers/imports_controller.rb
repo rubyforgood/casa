@@ -62,7 +62,8 @@ class ImportsController < ApplicationController
     @failed_csv_service = FailedImportCsvService.new(
       failed_rows: failed_rows,
       import_type: params[:import_type],
-      user: current_user)
+      user: current_user
+    )
   end
 
   def header

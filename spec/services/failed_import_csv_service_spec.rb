@@ -45,7 +45,7 @@ RSpec.describe FailedImportCsvService do
   end
 
   describe "#read" do
-    let(:failed_rows) { '' }
+    let(:failed_rows) { "" }
 
     context "when file exists and has not expired" do
       before { create_file }
@@ -56,7 +56,7 @@ RSpec.describe FailedImportCsvService do
     end
 
     context "when file is expired" do
-      let(:failed_rows) { 'The failed import file has expired. Please upload a new  CSV.' }
+      let(:failed_rows) { "The failed import file has expired. Please upload a new CSV." }
       before { create_file(mtime: 2.days.ago.to_time) }
 
       it "deletes the file and returns fallback message" do
