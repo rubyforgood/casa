@@ -1,0 +1,4 @@
+email,display_name,supervisor_volunteers,phone_number
+supervisor1@example.net,,volunteer1@example.net,11111111111
+supervisor2@example.net,,"volunteer2@example.net, volunteer3@example.net",22222222222
+supervisor3@example.net,,,33333333333

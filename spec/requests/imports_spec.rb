@@ -170,8 +170,101 @@ RSpec.describe "/imports", type: :request do
       }.not_to change(CasaCase, :count)
 
       expect(request.session[:import_error]).to include("Not all rows were imported.")
-      expect(request.session[:exported_rows]).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")
       expect(response).to redirect_to(imports_url(import_type: "casa_case"))
+
+      failed_csv_path = FailedImportCsvService.new(import_type: :casa_case, user: casa_admin).csv_filepath
+      expect(File.exist?(failed_csv_path)).to be true
+
+      file_contents = File.read(failed_csv_path)
+      expect(file_contents).to include("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")
+
+      FileUtils.rm_f(failed_csv_path)
+    end
+
+    it "calls FailedImportCsvService#store when there are failed rows from the import" do
+      sign_in casa_admin
+
+      csv_service_double = instance_double(FailedImportCsvService)
+      allow(csv_service_double).to receive(:failed_rows=)
+      allow(csv_service_double).to receive(:store)
+      allow(csv_service_double).to receive(:cleanup)
+      allow(FailedImportCsvService).to receive(:new).and_return(csv_service_double)
+
+      allow(CaseImporter).to receive(:import_cases).and_return({
+        message: "Some cases were not imported.",
+        exported_rows: "Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.",
+        type: :error
+      })
+
+      expect(csv_service_double).to receive(:failed_rows=).with("Case CINA-00-0000 already exists, but is inactive. Reactivate the CASA case instead.")
+      expect(csv_service_double).to receive(:store)
+      expect(csv_service_double).to receive(:cleanup)
+
+      post imports_url,
+        params: {
+          import_type: "casa_case",
+          file: fixture_file_upload("existing_casa_case.csv", "text/csv")
+        }
+
+      expect(request.session[:import_error]).to include("Click here to download failed rows.")
+      expect(response).to redirect_to(imports_url(import_type: "casa_case"))
+    end
+
+    it "writes a fallback message when exported rows exceed max size" do
+      sign_in casa_admin
+
+      large_exported_content = "a" * (FailedImportCsvService::MAX_FILE_SIZE_BYTES + 1)
+
+      allow(CaseImporter).to receive(:import_cases).and_return({
+        message: "Some rows were too large.",
+        exported_rows: large_exported_content,
+        type: :error
+      })
+
+      post imports_url,
+        params: {
+          import_type: "casa_case",
+          file: case_file
+        }
+
+      failed_csv_path = FailedImportCsvService.new(import_type: :casa_case, user: casa_admin).csv_filepath
+      expect(File.exist?(failed_csv_path)).to be true
+
+      written_content = File.read(failed_csv_path)
+      expect(written_content).to include("The file was too large to save")
+
+      expect(request.session[:import_error]).to include("Click here to download failed rows.")
+
+      FileUtils.rm_f(failed_csv_path)
+    end
+
+    it "shows a fallback error message when the failed import CSV was never created" do
+      sign_in casa_admin
+
+      get download_failed_imports_path(import_type: "casa_case")
+
+      expect(response.body).to include("Please upload a CASA Case CSV")
+      expect(response.headers["Content-Disposition"]).to include("attachment; filename=\"failed_rows.csv\"")
+    end
+
+    it "shows a fallback error message when the failed import CSV expired" do
+      sign_in casa_admin
+
+      service = FailedImportCsvService.new(
+        import_type: :casa_case,
+        user: casa_admin,
+        failed_rows: "some content",
+        filepath: path
+      )
+      service.store
+
+      File.utime(2.days.ago.to_time, 2.days.ago.to_time, service.csv_filepath)
+
+      get download_failed_imports_path(import_type: "casa_case")
+
+      expect(response.body).to include("Please upload a CASA Case CSV")
+      expect(response.headers["Content-Disposition"]).to include("attachment; filename=\"failed_rows.csv\"")
+      expect(File.exist?(path)).to be_falsey
     end
   end
 end
