@@ -2,11 +2,12 @@ require "rails_helper"
 require "fileutils"
 require "csv"
 
-RSpec.describe FailedImportCsv do
+RSpec.describe FailedImportCsvService do
   let(:import_type) { "casa_case" }
   let(:user) { create(:casa_admin) }
   let(:csv_string) { "case_number,birth_month_year_youth\n12345,2001-04\n" }
-  let(:csv_path) { Rails.root.join("tmp", import_type, "failed_rows_userid_#{user.id}.csv") }
+  let(:user_id_hash) { Digest::SHA256.hexdigest(user.id.to_s)[0..15] }
+  let(:csv_path) { Rails.root.join("tmp", import_type, "failed_rows_userid_#{user_id_hash}.csv") }
 
   subject(:service) { described_class.new(failed_rows: failed_rows, import_type: import_type, user: user) }
 
@@ -34,19 +35,19 @@ RSpec.describe FailedImportCsv do
     context "when file exceeds size limit" do
       let(:failed_rows) { "a" * (described_class::MAX_FILE_SIZE_BYTES + 1) }
 
-      it "logs a warning and stores the warning instead" do
-        expect(Rails.logger).to receive(:warn).with(/CSV too large to save/)
+      it "logs a warning and stores a warning" do
+        expect(Rails.logger).to receive(:warn).with(/CSV too large to save for user/)
         service.store
 
-        expect(File.read(csv_path)).to match(/CSV too large to save/)
+        expect(File.read(csv_path)).to match(/The file was too large to save/)
       end
     end
   end
 
   describe "#read" do
-    let(:failed_rows) { "" }
+    let(:failed_rows) { '' }
 
-    context "when file exists and is fresh" do
+    context "when file exists and has not expired" do
       before { create_file }
 
       it "returns the contents" do
@@ -55,18 +56,19 @@ RSpec.describe FailedImportCsv do
     end
 
     context "when file is expired" do
+      let(:failed_rows) { 'The failed import file has expired. Please upload a new  CSV.' }
       before { create_file(mtime: 2.days.ago.to_time) }
 
       it "deletes the file and returns fallback message" do
         expect(File.exist?(csv_path)).to be true
-        expect(service.read).to include("Please upload a CASA Case CSV")
+        expect(service.read).to include("The failed import file has expired")
         expect(File.exist?(csv_path)).to be false
       end
     end
 
     context "when file never existed" do
       it "returns fallback message" do
-        expect(service.read).to include("Please upload a CASA Case CSV")
+        expect(service.read).to include("No failed import file found")
       end
     end
   end
