@@ -1,1 +1,34 @@
-Placeholder
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+      <div class="title mb-30">
+        <h1>Case Contacts</h1>
+      </div>
+  </div>
+</div>
+
+<div class="card-style mb-30">
+  <div class="table-wrapper">
+    <table
+      id="case_contacts"
+      class="table"
+      data-source="<%= datatable_supervisors_path format: :json %>">
+      <thead>
+      <tr>
+        <th><h6>Date</h6></th>
+        <th><h6>Case</h6></th>
+        <th><h6>Relationship</h6></th>
+        <th><h6>Medium</h6></th>
+        <th><h6>Created By</h6></th>
+        <th><h6>Contacted</h6></th>
+        <th><h6>Topics</h6></th>
+        <th><h6>Draft</h6></th>
+      </tr>
+      <!-- end table row-->
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+    <!-- end table -->
+  </div>
+</div>
+<!-- end card -->
