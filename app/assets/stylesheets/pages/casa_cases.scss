@@ -175,10 +175,15 @@ body.casa_cases-show {
   background: transparent;
   border: 1px solid #e5e5e5;
   border-radius: 10px;
-  padding: 8px;
+  padding: 4px;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
+}
+
+// removes select2 dropdown default border
+span.select2-selection.select2-selection--single {
+  border: none;
 }
 
 .select-wrapper {

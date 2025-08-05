@@ -159,6 +159,11 @@ function handleModalClose () {
   $('#case-selection').val(null).trigger('change')
 }
 
+// re-initialized for setting modal as dropdownParent
+function handleDropdownSelection () {
+  $('#case-selection').select2();
+}
+
 $(() => { // JQuery's callback for the DOM loading
   $('button.copy-court-button').on('click', copyOrdersFromCaseWithConfirmation)
 
@@ -178,6 +183,8 @@ $(() => { // JQuery's callback for the DOM loading
   // modal id is defined in _generate_docx.html.erb so would like to be able to implement modal close logic in that file
   // but not sure how to
   $('#generate-docx-report-modal').on('hidden.bs.modal', () => handleModalClose())
+  
+  $('#generate-docx-report-modal').on('shown.bs.modal', () => handleDropdownSelection())
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
 
