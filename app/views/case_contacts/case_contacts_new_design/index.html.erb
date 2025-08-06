@@ -37,6 +37,9 @@
               <td>
                 <%= I18n.l(contact[:occurred_at], format: :full) %>
               </td>
+              <td>
+                <%= @presenter.display_case_number(casa_case_id) %>
+              </td>
             </tr>
           <% end %>
         <% end %>
