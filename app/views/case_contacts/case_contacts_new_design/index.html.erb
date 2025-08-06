@@ -71,6 +71,9 @@
                 <% end %>
                 <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" %>
               </td>
+              <td>
+                <%= case_contact.contact_topics.map(&:question).join(" | ") %>
+              </td>
             </tr>
           <% end %>
         <% end %>
