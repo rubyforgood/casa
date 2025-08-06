@@ -63,6 +63,14 @@
                   <%= case_contact.creator&.display_name %>
                 <% end %>
               </td>
+              <td>
+                <% if case_contact.contact_made %>
+                  <i class="lni lni-checkmark-circle" style="color: green;"></i>
+                <% else %>
+                  <i class="lni lni-cross-circle" style="color: orange;"></i>
+                <% end %>
+                <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" %>
+              </td>
             </tr>
           <% end %>
         <% end %>
