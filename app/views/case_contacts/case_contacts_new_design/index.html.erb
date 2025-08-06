@@ -11,9 +11,10 @@
     <table
       id="case_contacts"
       class="table"
-      data-source="<%= datatable_supervisors_path format: :json %>">
+      data-source="<%= datatable_case_contacts_path format: :json %>">
       <thead>
       <tr>
+        <th></th>
         <th><h6>Date</h6></th>
         <th><h6>Case</h6></th>
         <th><h6>Relationship</h6></th>
@@ -26,9 +27,21 @@
       <!-- end table row-->
       </thead>
       <tbody>
+        <% @presenter.case_contacts.each do |casa_case_id, contacts| %>
+          <% contacts.each do |contact| %>
+            <tr>
+              <td>
+                <i class='fas fa-bell'></i>
+                <i class="fa-solid fa-chevron-down"></i>
+              </td>
+              <td>
+                <%= I18n.l(contact[:occurred_at], format: :full) %>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
       </tbody>
     </table>
     <!-- end table -->
   </div>
 </div>
-<!-- end card -->
