@@ -74,6 +74,11 @@
               <td>
                 <%= case_contact.contact_topics.map(&:question).join(" | ") %>
               </td>
+              <td>
+                <% if !case_contact.active? %>
+                  <span class="badge badge-pill light-bg text-black">Draft</span>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         <% end %>
