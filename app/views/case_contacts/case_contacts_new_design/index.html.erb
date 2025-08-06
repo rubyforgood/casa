@@ -40,6 +40,9 @@
               <td>
                 <%= @presenter.display_case_number(casa_case_id) %>
               </td>
+              <td>
+                <%= contact.decorate.contact_types_comma_separated %>
+              </td>
             </tr>
           <% end %>
         <% end %>
