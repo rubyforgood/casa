@@ -46,6 +46,23 @@
               <td>
                 <%= case_contact.medium_type.capitalize %>
               </td>
+              <td>
+                <% if policy(case_contact).edit? %>
+                  <% if current_user.volunteer? %>
+                    <%= case_contact.creator&.display_name %>
+                  <% else %>
+                    <% if case_contact.creator&.supervisor? %>
+                      <%= link_to case_contact.creator&.display_name, edit_supervisor_path(case_contact.creator), data: { turbo: false } %>
+                    <% elsif case_contact.creator&.casa_admin? %>
+                      <%= link_to case_contact.creator&.display_name, edit_users_path, data: { turbo: false } %>
+                    <% else %>
+                      <%= link_to case_contact.creator&.display_name, edit_volunteer_path(case_contact.creator), data: { turbo: false } %>
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <%= case_contact.creator&.display_name %>
+                <% end %>
+              </td>
             </tr>
           <% end %>
         <% end %>
