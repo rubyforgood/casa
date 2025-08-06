@@ -27,21 +27,24 @@
       <!-- end table row-->
       </thead>
       <tbody>
-        <% @presenter.case_contacts.each do |casa_case_id, contacts| %>
-          <% contacts.each do |contact| %>
+        <% @presenter.case_contacts.each do |casa_case_id, case_contacts| %>
+          <% case_contacts.each do |case_contact| %>
             <tr>
               <td>
                 <i class='fas fa-bell'></i>
                 <i class="fa-solid fa-chevron-down"></i>
               </td>
               <td>
-                <%= I18n.l(contact[:occurred_at], format: :full) %>
+                <%= I18n.l(case_contact[:occurred_at], format: :full) %>
               </td>
               <td>
                 <%= @presenter.display_case_number(casa_case_id) %>
               </td>
               <td>
-                <%= contact.decorate.contact_types_comma_separated %>
+                <%= case_contact.decorate.contact_types_comma_separated %>
+              </td>
+              <td>
+                <%= case_contact.medium_type.capitalize %>
               </td>
             </tr>
           <% end %>
