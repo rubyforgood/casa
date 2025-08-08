@@ -14,7 +14,8 @@
       data-source="<%= datatable_case_contacts_path format: :json %>">
       <thead>
       <tr>
-        <th></th>
+        <th data-orderable="false"></th>
+        <th data-orderable="false"></th>
         <th><h6>Date</h6></th>
         <th><h6>Case</h6></th>
         <th><h6>Relationship</h6></th>
@@ -23,6 +24,7 @@
         <th><h6>Contacted</h6></th>
         <th><h6>Topics</h6></th>
         <th><h6>Draft</h6></th>
+        <th data-orderable="false"></th>
       </tr>
       <!-- end table row-->
       </thead>
@@ -32,6 +34,8 @@
             <tr>
               <td>
                 <i class='fas fa-bell'></i>
+              </td>
+              <td>
                 <i class="fa-solid fa-chevron-down"></i>
               </td>
               <td>
@@ -78,6 +82,9 @@
                 <% if !case_contact.active? %>
                   <span class="badge badge-pill light-bg text-black">Draft</span>
                 <% end %>
+              </td>
+              <td>
+                <i class="fas fa-ellipsis-v"></i>
               </td>
             </tr>
           <% end %>
