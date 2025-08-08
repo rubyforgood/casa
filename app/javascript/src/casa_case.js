@@ -161,7 +161,9 @@ function handleModalClose () {
 
 // re-initialized for setting modal as dropdownParent
 function handleDropdownSelection () {
-  $('#case-selection').select2();
+  if ($('#case-selection').hasClass('select2')) {
+    $('#case-selection').select2();
+  }
 }
 
 $(() => { // JQuery's callback for the DOM loading
