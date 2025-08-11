@@ -10,8 +10,8 @@ const defineCaseContactsTable = function () {
       searching: false,
       order: [[2, 'desc']],
       columnDefs: [
-      { orderable: false, targets: [0, 1, -1] } // disable sort on bell, chevron, vertical elipses menu
-    ]
+        { orderable: false, targets: [0, 1, -1] } // disable sort on bell, chevron, vertical elipses menu
+      ]
     }
   )
 }
