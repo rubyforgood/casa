@@ -2,7 +2,7 @@
 
 class CaseContactsController < ApplicationController
   include LoadsCaseContacts
-  
+
   before_action :set_case_contact, only: %i[edit destroy]
   before_action :set_contact_types, only: %i[new edit create]
   before_action :require_organization!
