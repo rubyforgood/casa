@@ -52,3 +52,5 @@ values/casa_admin_parameters.rb
 values/supervisor_parameters.rb
 values/user_parameters.rb
 values/volunteer_parameters.rb
+controllers/case_contacts/case_contacts_new_design_controller.rb
+controllers/concerns/loads_case_contacts.rb
