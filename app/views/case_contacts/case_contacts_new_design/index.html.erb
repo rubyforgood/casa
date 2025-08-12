@@ -39,7 +39,7 @@
                 <i class="fa-solid fa-chevron-down"></i>
               </td>
               <td>
-                <%= I18n.l(case_contact[:occurred_at], format: :full) %>
+                <%= I18n.l(case_contact[:occurred_at], format: :full) if case_contact[:occurred_at].present? %>
               </td>
               <td>
                 <%= @presenter.display_case_number(casa_case_id) %>
@@ -48,7 +48,7 @@
                 <%= case_contact.decorate.contact_types_comma_separated %>
               </td>
               <td>
-                <%= case_contact.medium_type.capitalize %>
+                <%= case_contact.medium_type&.capitalize %>
               </td>
               <td>
                 <% if policy(case_contact).edit? %>
@@ -73,7 +73,7 @@
                 <% else %>
                   <i class="lni lni-cross-circle" style="color: orange;"></i>
                 <% end %>
-                <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" %>
+                <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" if case_contact.duration_minutes %>
               </td>
               <td>
                 <%= case_contact.contact_topics.map(&:question).join(" | ") %>
