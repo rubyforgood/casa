@@ -10,6 +10,7 @@ const defineCaseContactsTable = function () {
       searching: false,
       order: [[2, 'desc']],
       columnDefs: [
+        { type: 'date', targets: 2 },
         { orderable: false, targets: [0, 1, -1] } // disable sort on bell, chevron, vertical elipses menu
       ]
     }
