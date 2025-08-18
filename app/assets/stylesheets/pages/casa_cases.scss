@@ -181,6 +181,16 @@ body.casa_cases-show {
   -moz-appearance: none;
 }
 
+// removes select2 dropdown default border
+span.select2-selection.select2-selection--single {
+  border: none;
+}
+
+// removes select2 dropdown default arrow
+.select2-selection__arrow {
+  display: none;
+}
+
 .select-wrapper {
   display: flex;
   flex-direction: column;
