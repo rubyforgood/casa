@@ -61,6 +61,14 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  def contact_types_comma_separated
+    if object.contact_types.any?
+      object.contact_types&.map { |ct| ct.name }&.join(", ")
+    else
+      "No contact type specified"
+    end
+  end
+
   def report_contact_types
     object.contact_types&.map { |ct| ct.name }&.join("|")
   end
