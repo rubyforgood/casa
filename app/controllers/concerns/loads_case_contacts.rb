@@ -24,7 +24,6 @@ module LoadsCaseContacts
     @presenter = CaseContactPresenter.new(case_contacts)
   end
 
-  private
 
   def current_organization_groups
     current_organization.contact_type_groups
