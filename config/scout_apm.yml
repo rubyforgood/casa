@@ -22,6 +22,7 @@ common: &defaults
 
 production:
   <<: *defaults
+  errors_enabled: true
 
 development:
   <<: *defaults
