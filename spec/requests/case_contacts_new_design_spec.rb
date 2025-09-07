@@ -35,7 +35,7 @@ RSpec.describe "/case_contacts_new_design", type: :request do
       body = request.body
 
       recent_index = body.index(I18n.l(recent_contact.occurred_at, format: :full))
-      past_index   = body.index(I18n.l(past_contact.occurred_at, format: :full))
+      past_index = body.index(I18n.l(past_contact.occurred_at, format: :full))
 
       expect(recent_index).to be < past_index
     end
