@@ -31,7 +31,7 @@
       <tbody>
         <% @presenter.case_contacts.each do |casa_case_id, case_contacts| %>
           <% case_contacts.each do |case_contact| %>
-            <tr>
+            <tr data-testid="case_contact-row">
               <td>
                 <i class='fas fa-bell'></i>
               </td>
@@ -80,7 +80,9 @@
               </td>
               <td>
                 <% if !case_contact.active? %>
-                  <span class="badge badge-pill light-bg text-black">Draft</span>
+                  <span class="badge badge-pill light-bg text-black" data-testid="draft-badge">
+                    Draft
+                  </span>
                 <% end %>
               </td>
               <td>
