@@ -77,7 +77,7 @@ jobs:
           RUN_SIMPLECOV: true
           CC_TEST_REPORTER_ID: 31464536e34ab26588cb951d0fa6b5898abdf401dbe912fd47274df298e432ac
         run: |
-          curl -fsSL https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -o ./cc-test-reporter
+          curl -fsSL https://github.com/codeclimate/test-reporter/releases/latest/download/cc-test-reporter-linux-amd64 -o ./cc-test-reporter
           chmod +x ./cc-test-reporter
           ./cc-test-reporter before-build
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
