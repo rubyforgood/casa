@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/stale@v9
+    - uses: actions/stale@v10
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: "This issue has been open without changes for a long time! What's up?"
