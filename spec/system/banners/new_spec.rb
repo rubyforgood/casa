@@ -15,18 +15,16 @@ RSpec.describe "Banners", :js, type: :system do
     check "Active?"
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
-
-    visit banners_path
+    expect(page).to have_current_path(banners_path)
     expect(page).to have_text("Volunteer Survey Announcement")
 
-    visit banners_path
     within "#banners" do
       click_on "Edit", match: :first
     end
     fill_in "Name", with: "Better Volunteer Survey Announcement"
     click_on "Submit"
 
-    visit banners_path
+    expect(page).to have_current_path(banners_path)
     expect(page).to have_text("Better Volunteer Survey Announcement")
 
     visit root_path
@@ -44,17 +42,14 @@ RSpec.describe "Banners", :js, type: :system do
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
-    visit banners_path
+    expect(page).to have_current_path(banners_path)
     expect(page).to have_text("Expiring Announcement")
-
-    visit banners_path
     within "#banners" do
       click_on "Edit", match: :first
     end
     fill_in "banner_expires_at", with: 2.days.from_now.strftime("%m%d%Y\t%I%M%P")
     click_on "Submit"
-
-    visit banners_path
+    expect(page).to have_current_path(banners_path)
     expect(page).to have_text("Expiring Announcement")
 
     visit root_path
@@ -71,7 +66,7 @@ RSpec.describe "Banners", :js, type: :system do
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
-    visit banners_path
+    expect(page).to have_current_path(new_banner_path)
     expect(page).not_to have_text("Announcement not created")
   end
 
@@ -93,8 +88,8 @@ RSpec.describe "Banners", :js, type: :system do
         check "Active?"
         fill_in_rich_text_area "banner_content", with: "New active banner content."
         click_on "Submit"
+        expect(page).to have_current_path(banners_path)
 
-        visit banners_path
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
 
@@ -118,7 +113,7 @@ RSpec.describe "Banners", :js, type: :system do
         fill_in_rich_text_area "banner_content", with: "New active banner content."
         click_on "Submit"
 
-        visit banners_path
+        expect(page).to have_current_path(banners_path)
 
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
