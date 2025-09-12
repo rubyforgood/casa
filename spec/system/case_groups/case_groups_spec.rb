@@ -19,8 +19,8 @@ RSpec.describe "Case Groups", :js, type: :system do
     find("#case_group_name").click
 
     click_on "Submit"
-
-    visit case_groups_path
+    # Wait for capybara to follow the redirect before asserting anything else
+    expect(page).to have_current_path(case_groups_path)
     expect(page).to have_text("A family")
 
     within "#case-groups" do
@@ -28,9 +28,10 @@ RSpec.describe "Case Groups", :js, type: :system do
     end
     fill_in "Name", with: "Another family"
     click_on "Submit"
-
-    visit case_groups_path
+    # Wait for capybara to follow the redirect before asserting anything else
+    expect(page).to have_current_path(case_groups_path)
     expect(page).to have_text("Another family")
+
   end
 
   it "remove from a case group" do
@@ -49,7 +50,7 @@ RSpec.describe "Case Groups", :js, type: :system do
 
     click_on "Submit"
 
-    visit case_groups_path
+    expect(page).to have_current_path(case_groups_path)
     expect(page).to have_text(casa_case1.case_number)
     expect(page).to have_text(casa_case2.case_number)
 
@@ -62,7 +63,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     end
     click_on "Submit"
 
-    visit case_groups_path
+    expect(page).to have_current_path(case_groups_path)
     expect(page).to have_text(casa_case1.case_number)
     expect(page).not_to have_text(casa_case2.case_number)
   end
@@ -80,7 +81,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     find("#case_group_name").click
     click_on "Submit"
 
-    visit case_groups_path
+    expect(page).to have_current_path(case_groups_path)
     click_on "New Case Group"
     fill_in "Name", with: "A Family "
     find(".ts-control > input").click
