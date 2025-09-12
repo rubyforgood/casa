@@ -31,4 +31,5 @@ jobs:
           bundler-cache: true
 
       - name: lint
-        run: bundle exec standardrb
+        working-directory: /home/runner/work/casa/casa/
+        run: bin/standardrb
