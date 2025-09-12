@@ -360,9 +360,9 @@ RSpec.describe "supervisors/index", type: :system do
       no_active_contact_element = supervisor_stats.find("span.no-attempted-contact")
 
       expect(active_contact_element).to have_text(active_contacts_expected)
-      expect(active_contact_element.has_css?("pr-#{active_contacts_expected * 15}"))
+      expect(active_contact_element).to match_css(".pr-#{active_contacts_expected * 15}")
       expect(no_active_contact_element).to have_text(no_active_contacts_expected)
-      expect(no_active_contact_element.has_css?("pl-#{no_active_contacts_expected * 15}"))
+      expect(no_active_contact_element).to match_css(".pl-#{no_active_contacts_expected * 15}")
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
@@ -378,9 +378,9 @@ RSpec.describe "supervisors/index", type: :system do
       no_active_contact_element = supervisor_stats.find("span.no-attempted-contact")
 
       expect(active_contact_element).to have_text(active_contacts_expected)
-      expect(active_contact_element.has_css?("pr-#{active_contacts_expected * 15}"))
+      expect(active_contact_element).to match_css(".pr-#{active_contacts_expected * 15}")
       expect(no_active_contact_element).to have_text(no_active_contacts_expected)
-      expect(no_active_contact_element.has_css?("pl-#{no_active_contacts_expected * 15}"))
+      expect(no_active_contact_element).to match_css(".pl-#{no_active_contacts_expected * 15}")
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
     end
 
@@ -393,10 +393,10 @@ RSpec.describe "supervisors/index", type: :system do
       transition_aged_youth_expected = 3
       active_contact_element = supervisor_stats.find("span.attempted-contact")
 
-      expect { supervisor_stats.find("span.no-attempted-contact") }.to raise_error(Capybara::ElementNotFound)
       expect(active_contact_element).to have_text(active_contacts_expected)
-      expect(active_contact_element.has_css?("pl-#{active_contacts_expected * 15}"))
+      expect(active_contact_element).to match_css(".pl-#{active_contacts_expected * 15}")
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
+      expect(supervisor_stats).not_to have_css("span.no-attempted-contact")
     end
 
     it "shows the correct element for a supervisor with only no contact volunteers", :js do
@@ -408,11 +408,11 @@ RSpec.describe "supervisors/index", type: :system do
       transition_aged_youth_expected = 2
       no_contact_element = supervisor_stats.find("span.no-attempted-contact")
 
-      expect { supervisor_stats.find("span.attempted-contact") }.to raise_error(Capybara::ElementNotFound)
-      expect { supervisor_stats.find("span.attmepted-contact-end") }.to raise_error(Capybara::ElementNotFound)
       expect(no_contact_element).to have_text(no_contacts_expected)
-      expect(no_contact_element.has_css?("pl-#{no_contacts_expected * 15}"))
+      expect(no_contact_element).to match_css(".pl-#{no_contacts_expected * 15}")
       expect(supervisor_stats.find(".status-btn.deactive-bg")).to have_text(transition_aged_youth_expected)
+      expect(supervisor_stats).not_to have_css("span.attempted-contact")
+      expect(supervisor_stats).not_to have_css("span.attempted-contact-end")
     end
 
     it "shows the correct text with a supervisor with no assigned volunteers", :js do
