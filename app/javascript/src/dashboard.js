@@ -72,7 +72,7 @@ $(() => { // JQuery's callback for the DOM loading
       return statusArray.includes(status) &&
         assignedToVolunteerArray.includes(assignedToVolunteer) &&
         assignedToMoreThanOneVolunteerArray.includes(assignedToMoreThanOneVolunteer) &&
-        assignedToTransitionYouthArray.some(filterValue => 
+        assignedToTransitionYouthArray.some(filterValue =>
           assignedToTransitionYouth.toLowerCase().includes(filterValue.toLowerCase().replace(/[^a-zA-Z]/g, ''))
         ) &&
         caseNumberPrefixArray.includes(caseNumberPrefix)
