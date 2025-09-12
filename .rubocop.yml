@@ -1,4 +1,5 @@
 require:
+  - standard
   - rubocop-factory_bot
 
 plugins:
@@ -7,4 +8,5 @@ plugins:
   - rubocop-rspec_rails
 
 inherit_gem:
+  standard: config/base.yml
   pundit: config/rubocop-rspec.yml
