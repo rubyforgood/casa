@@ -1,9 +1,7 @@
-<% if casa_case.in_transition_age? %>
-  <%= link_to(casa_case_emancipation_path(casa_case),
-              class: "main-btn primary-btn btn-sm") do %>
-    Emancipation
-    <%= render BadgeComponent.new(text: casa_case.decorate.emancipation_checklist_count,
-                                  type: :light,
-                                  margin: false) %>
-  <% end %>
+<%= link_to(casa_case_emancipation_path(casa_case.id),
+            class: "main-btn primary-btn btn-sm emancipation-btn") do %>
+  Emancipation
+  <%= render BadgeComponent.new(text: casa_case.decorate.emancipation_checklist_count,
+                                type: :light,
+                                margin: false) %>
 <% end %>
