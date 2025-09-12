@@ -8,5 +8,4 @@ plugins:
   - rubocop-rspec_rails
 
 inherit_gem:
-  standard: config/base.yml
   pundit: config/rubocop-rspec.yml

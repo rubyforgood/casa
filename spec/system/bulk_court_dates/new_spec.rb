@@ -36,6 +36,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     within ".top-page-actions" do
       click_on "Create"
     end
+    expect(page).to have_current_path(new_bulk_court_date_path)
 
     visit casa_case_path(casa_case)
     expect(page).to have_content(hearing_type.name)

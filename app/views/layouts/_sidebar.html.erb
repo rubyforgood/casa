@@ -57,7 +57,8 @@
               { title: "Contact Types", icon: "user", path: edit_casa_org_path(current_organization, anchor: 'contact-types'), render_check: policy(:application).modify_organization? },
               { title: "Court Details", icon: "library", path: edit_casa_org_path(current_organization, anchor: 'court-details'), render_check: policy(:application).modify_organization? },
               { title: "Learning Hours", icon: "timer", path: edit_casa_org_path(current_organization, anchor: 'learning-hours'), render_check: policy(:application).modify_organization? },
-              { title: "Case Contact Topics", icon: "comments", path: edit_casa_org_path(current_organization, anchor: 'case-contact-topics'), render_check: policy(:application).modify_organization? }
+              { title: "Case Contact Topics", icon: "comments", path: edit_casa_org_path(current_organization, anchor: 'case-contact-topics'), render_check: policy(:application).modify_organization? },
+              { title: "Placement Types", icon: "comments", path: edit_casa_org_path(current_organization, anchor: 'placement-types'), render_check: policy(:application).modify_organization? }
             ]) %>
           <% end %>
           <% if current_organization.custom_org_links.any?(&:active) %>
