@@ -140,9 +140,9 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       fill_in "Additional Notes", with: "This is a fake a topic answer."
 
       expect do
-        click_on "Submit";
+        click_on "Submit"
         # Force wait for capybara round trip before asserting the database was updated
-        expect(page).to have_text 'successfully created'
+        expect(page).to have_text "successfully created"
       end.to change(CaseContact.active, :count).by(1)
 
       contact = CaseContact.active.last

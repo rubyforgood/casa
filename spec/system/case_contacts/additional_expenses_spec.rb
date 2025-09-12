@@ -83,7 +83,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
       expect(page).to have_field(class: "expense-amount-input", count: 2)
 
       click_on "Submit"
-      expect(page).to have_text('Case contact successfully created.')
+      expect(page).to have_text("Case contact successfully created.")
     }
       .to change(CaseContact.active, :count).by(1)
       .and change(AdditionalExpense, :count).by(2)

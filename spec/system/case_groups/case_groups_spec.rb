@@ -31,7 +31,6 @@ RSpec.describe "Case Groups", :js, type: :system do
     # Wait for capybara to follow the redirect before asserting anything else
     expect(page).to have_current_path(case_groups_path)
     expect(page).to have_text("Another family")
-
   end
 
   it "remove from a case group" do
