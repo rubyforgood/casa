@@ -15,6 +15,7 @@
 if ENV["RUN_SIMPLECOV"]
   require "simplecov"
   SimpleCov.start do
+    enable_coverage :branch
     command_name "Job #{ENV["TEST_ENV_NUMBER"]}" if ENV["TEST_ENV_NUMBER"]
 
     add_filter "/spec/"
