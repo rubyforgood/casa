@@ -24,8 +24,7 @@ RSpec.describe "Banners", :js, type: :system do
     fill_in "Name", with: "Better Volunteer Survey Announcement"
     click_on "Submit"
 
-    expect(page).to have_current_path(banners_path)
-    expect(page).to have_text("Better Volunteer Survey Announcement")
+    expect(find('#banners')).to have_text("Better Volunteer Survey Announcement")
 
     visit root_path
     expect(page).to have_text("Please fill out this survey.")
@@ -42,15 +41,15 @@ RSpec.describe "Banners", :js, type: :system do
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
-    expect(page).to have_current_path(banners_path)
-    expect(page).to have_text("Expiring Announcement")
+    expect(page).to have_text("Expiring Announcement Yes in 7 days")
+
     within "#banners" do
       click_on "Edit", match: :first
     end
-    fill_in "banner_expires_at", with: 2.days.from_now.strftime("%m%d%Y\t%I%M%P")
+    fill_in "banner_expires_at", with: 3.days.from_now.strftime("%m%d%Y\t%I%M%P")
     click_on "Submit"
-    expect(page).to have_current_path(banners_path)
-    expect(page).to have_text("Expiring Announcement")
+
+    expect(page).to have_text("Expiring Announcement Yes in 3 days")
 
     visit root_path
     expect(page).to have_text("Please fill out this survey.")
@@ -88,6 +87,9 @@ RSpec.describe "Banners", :js, type: :system do
         check "Active?"
         fill_in_rich_text_area "banner_content", with: "New active banner content."
         click_on "Submit"
+        expect(page).to have_current_path(banners_path)
+
+        # We're still on the banners page
         expect(page).to have_current_path(banners_path)
 
         within("table#banners") do

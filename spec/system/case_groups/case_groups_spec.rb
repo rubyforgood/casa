@@ -21,9 +21,9 @@ RSpec.describe "Case Groups", :js, type: :system do
     click_on "Submit"
     # Wait for capybara to follow the redirect before asserting anything else
     expect(page).to have_current_path(case_groups_path)
-    expect(page).to have_text("A family")
 
     within "#case-groups" do
+      expect(page).to have_text("A family")
       click_on "Edit", match: :first
     end
     fill_in "Name", with: "Another family"
@@ -50,8 +50,9 @@ RSpec.describe "Case Groups", :js, type: :system do
     click_on "Submit"
 
     expect(page).to have_current_path(case_groups_path)
-    expect(page).to have_text(casa_case1.case_number)
-    expect(page).to have_text(casa_case2.case_number)
+    expect(list_item_text.count).to be 2
+    expect(list_item_text[0]).to match casa_case1.case_number
+    expect(list_item_text[1]).to match casa_case2.case_number
 
     within "#case-groups" do
       click_on "Edit", match: :first

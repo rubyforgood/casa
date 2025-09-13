@@ -115,7 +115,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   context "when casa org has no contact topics" do
     let(:contact_topics) { [] }
 
-    xit "displays a field for contact.notes" do # TODO make test not flaky
+    it "displays a field for contact.notes" do
       subject
       expect(page).to have_no_button "Add Another Discussion Topic"
       expect(notes_section).to have_field "Additional Notes"
@@ -141,8 +141,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
       expect do
         click_on "Submit"
-        # Force wait for capybara round trip before asserting the database was updated
-        expect(page).to have_text "successfully created"
+        expect(page).to have_text("Case contact successfully created")
       end.to change(CaseContact.active, :count).by(1)
 
       contact = CaseContact.active.last
