@@ -1,4 +1,3 @@
-blueprints/api/v1/session_blueprint.rb
 channels/application_cable/channel.rb
 channels/application_cable/connection.rb
 controllers/concerns/court_date_params.rb
