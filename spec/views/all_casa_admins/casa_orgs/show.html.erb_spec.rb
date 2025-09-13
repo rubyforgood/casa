@@ -12,7 +12,6 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
     }
 
     before do
-      allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:selected_organization).and_return(organization)
       assign :casa_org_metrics, metrics
       render

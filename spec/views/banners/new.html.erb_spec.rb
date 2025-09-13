@@ -7,7 +7,6 @@ RSpec.describe "banners/new", type: :view do
       current_organization = user.casa_org
       current_organization_banner = build(:banner, active: true, casa_org: current_organization)
 
-      allow(view).to receive(:current_user).and_return(user)
       allow(view).to receive(:current_organization).and_return(current_organization)
       without_partial_double_verification do
         allow(view).to receive(:browser_time_zone).and_return("America/New_York")
@@ -31,7 +30,6 @@ RSpec.describe "banners/new", type: :view do
         current_organization = user.casa_org
         current_organization_banner = build(:banner, active: true, casa_org: current_organization)
 
-        allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
         without_partial_double_verification do
           allow(view).to receive(:browser_time_zone).and_return("America/New_York")
@@ -55,7 +53,6 @@ RSpec.describe "banners/new", type: :view do
         user = build_stubbed(:casa_admin)
         current_organization = user.casa_org
 
-        allow(view).to receive(:current_user).and_return(user)
         allow(view).to receive(:current_organization).and_return(current_organization)
         without_partial_double_verification do
           allow(view).to receive(:browser_time_zone).and_return("America/New_York")

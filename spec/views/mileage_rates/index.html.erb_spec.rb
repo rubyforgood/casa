@@ -6,7 +6,6 @@ RSpec.describe "Index Mileage Rates", type: :view do
 
   before do
     enable_pundit(view, admin)
-    allow(view).to receive(:current_user).and_return(admin)
     sign_in admin
   end
 

@@ -52,9 +52,6 @@ RSpec.describe "court_dates/show", type: :view do
 
     assign :casa_case, court_date.casa_case
     assign :court_date, court_date
-
-    allow(view).to receive(:current_user).and_return(user)
-    allow(view).to receive(:current_organization).and_return(user.casa_org)
   end
 
   context "with court details" do
