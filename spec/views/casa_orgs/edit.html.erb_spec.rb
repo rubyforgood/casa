@@ -1,6 +1,8 @@
 require "rails_helper"
 
 RSpec.describe "casa_org/edit", type: :view do
+  let(:organization) { build_stubbed(:casa_org) }
+
   before do
     assign(:contact_type_groups, [])
     assign(:contact_types, [])
@@ -13,13 +15,12 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:custom_org_links, [])
     assign(:placement_types, [])
 
+    allow(view).to receive(:current_organization).and_return(organization)
+
     sign_in build_stubbed(:casa_admin)
   end
 
   it "has casa org edit page text" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
-
     render template: "casa_org/edit"
 
     expect(rendered).to have_text "Editing CASA Organization"
@@ -28,8 +29,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has contact topic content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     contact_topic = build_stubbed(:contact_topic, question: "Test Question", details: "Test details")
     assign(:contact_topics, [contact_topic])
 
@@ -45,8 +44,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has contact types content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     contact_type = build_stubbed(:contact_type, name: "Contact type 1")
     assign(:contact_types, [contact_type])
 
@@ -62,8 +59,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has contact type groups content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     contact_type_group = build_stubbed(:contact_type_group, casa_org: organization, name: "Contact type group 1")
     assign(:contact_type_groups, [contact_type_group])
 
@@ -78,8 +73,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has hearing types content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     hearing_type = build_stubbed(:hearing_type, casa_org: organization, name: "Hearing type 1")
     assign(:hearing_types, [hearing_type])
 
@@ -94,8 +87,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has judge content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     judge = build_stubbed(:judge, casa_org: organization, name: "Joey Tom")
     assign(:judges, [judge])
 
@@ -105,8 +96,6 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "has placement types content" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
     placement_type = build_stubbed(:placement_type, name: "Placement type 1")
     placement_type_2 = build_stubbed(:placement_type, name: "Placement type 2")
     assign(:placement_types, [placement_type, placement_type_2])
@@ -123,18 +112,13 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   it "does not show download prompt with no custom template" do
-    organization = build_stubbed(:casa_org)
-    allow(view).to receive(:current_organization).and_return(organization)
-
     render template: "casa_org/edit"
 
     expect(rendered).not_to have_text("Download Current Template")
   end
 
   it "has sent emails content" do
-    organization = build_stubbed(:casa_org)
     admin = build_stubbed(:casa_admin, casa_org: organization)
-    allow(view).to receive(:current_organization).and_return(organization)
     without_partial_double_verification do
       allow(view).to receive(:to_user_timezone).and_return(Time.zone.local(2021, 1, 2, 12, 30, 0))
     end
@@ -152,10 +136,11 @@ RSpec.describe "casa_org/edit", type: :view do
   end
 
   context "with a template uploaded" do
-    it "renders a prompt to download current template" do
-      organization = create(:casa_org)
-      allow(view).to receive(:current_organization).and_return(organization)
+    # NOTE(@abachman): Use create instead of build_stubbed because ActiveStorage
+    # needs to save to the DB
+    let(:organization) { create(:casa_org) }
 
+    it "renders a prompt to download current template" do
       organization.court_report_template.attach(io: File.open("#{Rails.root.join("app/documents/templates/default_report_template.docx")}"), filename: 'default_report_template
 .docx', content_type: "application/docx")
 
@@ -169,8 +154,6 @@ RSpec.describe "casa_org/edit", type: :view do
     context "enabled" do
       it "has option to enable additional expenses" do
         allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
-        organization = build_stubbed(:casa_org)
-        allow(view).to receive(:current_organization).and_return(organization)
 
         render template: "casa_org/edit"
 
@@ -181,8 +164,6 @@ RSpec.describe "casa_org/edit", type: :view do
     context "disabled" do
       it "has option to enable additional expenses" do
         allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(false)
-        organization = build_stubbed(:casa_org)
-        allow(view).to receive(:current_organization).and_return(organization)
 
         render template: "casa_org/edit"
 

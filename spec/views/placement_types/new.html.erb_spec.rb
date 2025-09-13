@@ -7,8 +7,6 @@ RSpec.describe "placement_types/new.html.erb", type: :view do
 
   before do
     enable_pundit(view, admin)
-    allow(view).to receive(:current_user).and_return(admin)
-    allow(view).to receive(:current_organization).and_return(organization)
     sign_in admin
   end
 
