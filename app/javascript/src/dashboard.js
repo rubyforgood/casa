@@ -212,9 +212,14 @@ $(() => { // JQuery's callback for the DOM loading
             `
           })
           const caseNumbers = `
-            <span class="mobile-label">Case Number(s)</span>
-            ${links.join(', ')}
+            <span class="mobile-label">Case Total</span>
+            ${links.length}
           `
+
+          // const caseNumbers = `
+          //   <span class="mobile-label">Case Number(s)</span>
+          //   ${links.join(', ')}
+          // `
           return caseNumbers
         },
         orderable: false
