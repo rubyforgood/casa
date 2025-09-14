@@ -134,8 +134,14 @@ $(() => { // JQuery's callback for the DOM loading
         }
       })
     },
-    order: [[7, 'desc']],
+    order: [[8, 'desc']],
     columns: [
+      {
+        className: 'dt-control',
+        orderable: false,
+        data: null,
+        defaultContent: ''
+      },
       {
         data: 'id',
         targets: 0,
@@ -303,6 +309,19 @@ $(() => { // JQuery's callback for the DOM loading
       $('[data-toggle=tooltip]').tooltip()
     }
   })
+
+  volunteersTable.on('click', 'tbody td.dt-control', function (e) {
+    let tr = e.target.closest('tr');
+    let row = volunteersTable.row(tr);
+
+    if (row.child.isShown()) {
+        row.child.hide();
+    }
+    else {
+        const vdomId = `#volunteer-details-${row.data().id}`
+        row.child($(vdomId).html()).show();
+    }
+  });
 
   // Because the table saves state, we have to check/uncheck modal inputs based on what
   // columns are visible
