@@ -86,6 +86,7 @@
                 <% unless current_user.volunteer? %>
                   <td class="min-width">
                     <% if casa_case.active? %>
+                      <%# NB: this is a N+1 but we have chosen to leave it as because we are using assigned volunteer information %>
                       <%= safe_join(casa_case.assigned_volunteers.map { |vol|
                     link_to(vol.display_name, edit_volunteer_path(vol)) },
                                 ", ") %>
