@@ -11,6 +11,7 @@ RSpec.describe "casa_org/edit", type: :view do
     assign(:sent_emails, [])
     assign(:contact_topics, [])
     assign(:custom_org_links, [])
+    assign(:placement_types, [])
 
     sign_in build_stubbed(:casa_admin)
   end
@@ -101,6 +102,24 @@ RSpec.describe "casa_org/edit", type: :view do
     render template: "casa_org/edit"
 
     expect(rendered).to have_text(judge.name)
+  end
+
+  it "has placement types content" do
+    organization = build_stubbed(:casa_org)
+    allow(view).to receive(:current_organization).and_return(organization)
+    placement_type = build_stubbed(:placement_type, name: "Placement type 1")
+    placement_type_2 = build_stubbed(:placement_type, name: "Placement type 2")
+    assign(:placement_types, [placement_type, placement_type_2])
+
+    render template: "casa_org/edit"
+
+    expect(rendered).to have_text("Manage Case Placement Types")
+    expect(rendered).to have_table("placement-types-table",
+      with_rows:
+      [
+        ["Placement type 1", "Edit"],
+        ["Placement type 2", "Edit"]
+      ])
   end
 
   it "does not show download prompt with no custom template" do
