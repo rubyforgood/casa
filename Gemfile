@@ -37,7 +37,7 @@ gem "paranoia" # For soft-deleting database objects
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "pg" # Use postgresql as the database for Active Record
 gem "pretender"
-gem "puma", "6.6.0" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "puma", "7.0.4" # 6.2.2 fails to install on m1 # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "rack-cors" # for allowing cross-origin resource sharing
