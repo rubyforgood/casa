@@ -1,0 +1,98 @@
+<div class="title-wrapper pt-30">
+  <div class="row align-items-center">
+      <div class="title mb-30">
+        <h1>Case Contacts</h1>
+      </div>
+  </div>
+</div>
+
+<div class="card-style mb-30">
+  <div class="table-wrapper">
+    <table
+      id="case_contacts"
+      class="table"
+      data-source="<%= datatable_case_contacts_path format: :json %>">
+      <thead>
+      <tr>
+        <th data-orderable="false"></th>
+        <th data-orderable="false"></th>
+        <th><h6>Date</h6></th>
+        <th><h6>Case</h6></th>
+        <th><h6>Relationship</h6></th>
+        <th><h6>Medium</h6></th>
+        <th><h6>Created By</h6></th>
+        <th><h6>Contacted</h6></th>
+        <th><h6>Topics</h6></th>
+        <th><h6>Draft</h6></th>
+        <th data-orderable="false"></th>
+      </tr>
+      <!-- end table row-->
+      </thead>
+      <tbody>
+        <% @presenter.case_contacts.each do |casa_case_id, case_contacts| %>
+          <% case_contacts.each do |case_contact| %>
+            <tr data-testid="case_contact-row">
+              <td>
+                <i class='fas fa-bell'></i>
+              </td>
+              <td>
+                <i class="fa-solid fa-chevron-down"></i>
+              </td>
+              <td>
+                <%= I18n.l(case_contact[:occurred_at], format: :full) if case_contact[:occurred_at].present? %>
+              </td>
+              <td>
+                <%= @presenter.display_case_number(casa_case_id) %>
+              </td>
+              <td>
+                <%= case_contact.decorate.contact_types_comma_separated %>
+              </td>
+              <td>
+                <%= case_contact.medium_type&.capitalize %>
+              </td>
+              <td>
+                <% if policy(case_contact).edit? %>
+                  <% if current_user.volunteer? %>
+                    <%= case_contact.creator&.display_name %>
+                  <% else %>
+                    <% if case_contact.creator&.supervisor? %>
+                      <%= link_to case_contact.creator&.display_name, edit_supervisor_path(case_contact.creator), data: { turbo: false } %>
+                    <% elsif case_contact.creator&.casa_admin? %>
+                      <%= link_to case_contact.creator&.display_name, edit_users_path, data: { turbo: false } %>
+                    <% else %>
+                      <%= link_to case_contact.creator&.display_name, edit_volunteer_path(case_contact.creator), data: { turbo: false } %>
+                    <% end %>
+                  <% end %>
+                <% else %>
+                  <%= case_contact.creator&.display_name %>
+                <% end %>
+              </td>
+              <td>
+                <% if case_contact.contact_made %>
+                  <i class="lni lni-checkmark-circle" style="color: green;"></i>
+                <% else %>
+                  <i class="lni lni-cross-circle" style="color: orange;"></i>
+                <% end %>
+                <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" if case_contact.duration_minutes %>
+              </td>
+              <td>
+                <%= case_contact.contact_topics.map(&:question).join(" | ") %>
+              </td>
+              <td>
+                <% if !case_contact.active? %>
+                  <span class="badge badge-pill light-bg text-black" data-testid="draft-badge">
+                    Draft
+                  </span>
+                <% end %>
+              </td>
+              <td>
+                <i class="fas fa-ellipsis-v"></i>
+              </td>
+            </tr>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
+    <!-- end table -->
+  </div>
+</div>
