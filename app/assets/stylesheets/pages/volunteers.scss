@@ -33,3 +33,11 @@ table#volunteers.dataTable.hover > tbody > tr.selected:hover > * {
   border: 1px solid #757575;
 }
 
+table#volunteers.dataTable {
+  .emancipation-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    line-height: 16px;
+    vertical-align: middle;
+  }
+}

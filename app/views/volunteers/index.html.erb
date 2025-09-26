@@ -178,6 +178,7 @@
                 <th>
                   <input id="checkbox-toggle-all" type="checkbox" class="form-check-input" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
                 </th>
+                <th></th>
                 <th>Name</th>
                 <th>Email</th>
                 <th>Supervisor</th>
@@ -246,4 +247,29 @@
   </div>
 
 </div>
+</div>
+
+<div style='display:none'>
+  <% current_organization.volunteers.each do |volunteer| %>
+    <div id="volunteer-details-<%= volunteer.id %>">
+      <% if volunteer.casa_cases.any? %>
+        <table>
+          <tr>
+            <th> Case Number </th>
+            <th> Transition Aged Youth </th>
+            <th> Last Attempted Contact </th>
+            <th> Contacts Made in Past 60 Days </th>
+          </tr>
+          <% volunteer.casa_cases.each do |casa_case| %>
+            <tr>
+              <td> <%= casa_case.case_number %> </td>
+              <td> <%= casa_case.decorate.transition_aged_youth %> </td>
+              <td> <%= casa_case.decorate.last_attempted_contact_formatted(volunteer.id) %></td>
+              <td> <%= casa_case.decorate.case_contacts_made %>
+            </tr>
+          <% end %>
+        </table>
+      <% end %>
+    </div>
+  <% end %> 
 </div>
