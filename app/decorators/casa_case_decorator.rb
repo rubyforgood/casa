@@ -90,7 +90,13 @@ class CasaCaseDecorator < Draper::Decorator
   end
 
   def transition_aged_youth
-    object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+    text = object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+    if object.in_transition_age?
+      badge_html = h.render(partial: "shared/emancipation_link", locals: {casa_case: object})
+      h.safe_join([text, " ", badge_html])
+    else
+      text
+    end
   end
 
   def transition_aged_youth_icon

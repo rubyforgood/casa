@@ -84,6 +84,14 @@ body.casa_cases {
   select {
     padding: 5px;
   }
+
+  .emancipation-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+    line-height: 16px;
+    vertical-align: middle;
+  }
+  
 }
 
 @media only screen and (max-width: screen-sizes.$small) {
@@ -200,4 +208,3 @@ span.select2-selection.select2-selection--single {
 span[role=combobox] {
   padding-top: 2px;
 }
-
