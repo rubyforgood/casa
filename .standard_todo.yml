@@ -3,11 +3,15 @@
 ---
 ignore:
 - app/controllers/all_casa_admins/sessions_controller.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/casa_cases_controller.rb:
   - Rails/TimeZone
+  - Style/EmptyStringInsideInterpolation
+- app/controllers/case_contacts/followups_controller.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/controllers/case_contacts_controller.rb:
   - Rails/LexicallyScopedActionFilter
   - Style/HashSlice
@@ -15,22 +19,38 @@ ignore:
   - Rails/TimeZone
 - app/controllers/court_dates_controller.rb:
   - Rails/TimeZone
+- app/controllers/emancipation_checklists_controller.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- app/controllers/imports_controller.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- app/controllers/other_duties_controller.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/controllers/placements_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/reimbursements_controller.rb:
   - Rails/TimeZone
 - app/controllers/users/sessions_controller.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
 - app/datatables/volunteer_datatable.rb:
   - Rails/CompactBlank
+  - Style/EmptyStringInsideInterpolation
 - app/decorators/casa_case_decorator.rb:
+  - Layout/EmptyLineAfterGuardClause
   - Rails/Date
 - app/decorators/case_assignment_decorator.rb:
   - Rails/Date
+- app/decorators/contact_type_decorator.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
 - app/helpers/banner_helper.rb:
   - Rails/TimeZone
+- app/helpers/followup_helper.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/helpers/phone_number_helper.rb:
   - Rails/Blank
+  - Style/RedundantRegexpEscape
+- app/helpers/sidebar_helper.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/mailers/fund_request_mailer.rb:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:
@@ -46,11 +66,13 @@ ignore:
 - app/models/casa_case_emancipation_category.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/casa_org.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
   - Rails/UniqueValidationWithoutIndex
 - app/models/case_assignment.rb:
   - Rails/UniqueValidationWithoutIndex
   - Rails/RedundantPresenceValidationOnBelongsTo
 - app/models/case_contact.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
   - Rails/FindEach
 - app/models/case_contact_contact_type.rb:
   - Rails/UniqueValidationWithoutIndex
@@ -58,6 +80,8 @@ ignore:
   - Rails/UniqueValidationWithoutIndex
 - app/models/concerns/CasaCase/validations.rb:
   - Rails/TimeZone
+- app/models/concerns/api.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
 - app/models/contact_type.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/contact_type_group.rb:
@@ -82,11 +106,24 @@ ignore:
   - Rails/Date
 - app/models/volunteer.rb:
   - Rails/WhereEquals
+  - Layout/EmptyLineAfterGuardClause
+- app/notifications/delivery_methods/sms.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- app/policies/user_policy.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/services/casa_case_change_service.rb:
   - Rails/Pluck
+  - Layout/EmptyLineAfterGuardClause
+- app/services/case_contacts_export_csv_service.rb:
+  - Layout/EmptyLineAfterGuardClause
 - app/services/fdf_inputs_service.rb:
+  - Layout/EmptyLineAfterGuardClause
   - Rails/Blank
   - Rails/RootPathnameMethods
+- app/services/learning_hours_export_csv_service.rb:
+  - Layout/EmptyLineAfterGuardClause
+- app/services/short_url_service.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
 - app/validators/user_validator.rb:
   - Rails/Blank
 - config/application.rb:
@@ -96,6 +133,7 @@ ignore:
 - db/migrate/20250507011754_remove_unused_indexes.rb:
   - Rails/ReversibleMigration
 - db/seeds/db_populator.rb:
+  - Layout/EmptyLineAfterGuardClause
   - Rails/TimeZone
   - Rails/FindEach
   - Rails/Date
@@ -108,6 +146,7 @@ ignore:
 - lib/mailers/previews/volunteer_mailer_preview.rb:
   - Rails/Date
 - lib/tasks/case_contact_types_reminder.rb:
+  - Layout/EmptyLineAfterGuardClause
   - Rails/ActiveRecordAliases
 - lib/tasks/data_post_processors/contact_topic_populator.rb:
   - Rails/FindEach
@@ -117,10 +156,20 @@ ignore:
   - Rails/ApplicationRecord
 - lib/tasks/deployment/99991023145114_store_deploy_time.rake:
   - Rails/TimeZone
+- lib/tasks/example_recurring_task.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- lib/tasks/lint_factory_bot.rake:
+  - Layout/EmptyLineAfterGuardClause
 - lib/tasks/no_contact_made_reminder.rb:
   - Rails/ActiveRecordAliases
 - lib/tasks/supervisor_weekly_digest.rb:
   - Rails/TimeZone
+- lib/tasks/test_checker.rake:
+  - Layout/EmptyLineAfterGuardClause
+- scripts/import_casa_case_date_of_birth.rb:
+  - Layout/EmptyLineAfterGuardClause
+- spec/controllers/concerns/accessible_spec.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
 - spec/datatables/reimbursement_datatable_spec.rb:
   - Rails/TimeZone
 - spec/decorators/casa_case_decorator_spec.rb:
@@ -150,6 +199,10 @@ ignore:
   - Performance/Count
 - spec/models/case_contact_spec.rb:
   - Rails/TimeZone
+- spec/models/case_court_report_spec.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- spec/models/learning_hours_report_spec.rb:
+  - Layout/EmptyLineAfterGuardClause
 - spec/requests/bulk_court_dates_spec.rb:
   - Rails/Date
 - spec/requests/casa_cases_spec.rb:
@@ -157,6 +210,10 @@ ignore:
   - Rails/TimeZone
 - spec/requests/case_contact_reports_spec.rb:
   - Rails/Date
+- spec/requests/case_court_reports_spec.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
+- spec/requests/court_dates_spec.rb:
+  - Layout/EmptyLinesAfterModuleInclusion
 - spec/requests/notifications_spec.rb:
   - Rails/Date
 - spec/system/casa_cases/edit_spec.rb:

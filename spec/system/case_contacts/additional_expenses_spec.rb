@@ -58,8 +58,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
     expect(case_contact.want_driving_reimbursement).to be false
   end
 
-  # TODO: Fix this test
-  xit "can remove an expense" do
+  it "can remove an expense" do
     subject
     fill_in_contact_details
     check "Request travel or other reimbursement"
@@ -81,6 +80,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, :js, type: :syst
       expect(page).to have_field(class: "expense-amount-input", count: 2)
 
       click_on "Submit"
+      expect(page).to have_text("Case contact successfully created")
     }
       .to change(CaseContact.active, :count).by(1)
       .and change(AdditionalExpense, :count).by(2)

@@ -171,7 +171,10 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
 
       check "Create Another"
 
-      expect { click_on "Submit" }.to change(CaseContact.started, :count).by(1)
+      expect do
+        click_on "Submit"
+        expect(page).to have_text("successfully updated")
+      end.to change(CaseContact.started, :count).by(1)
       new_case_contact = CaseContact.last
       expect(new_case_contact.draft_case_ids).to match_array(case_contact_draft_ids)
       expect(page).to have_text "New Case Contact"

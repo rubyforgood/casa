@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - main
+      - rfg-event-2025
     paths-ignore:
       - "doc/**"
       - "**/*.md"
