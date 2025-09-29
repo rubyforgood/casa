@@ -15,7 +15,7 @@
     "@babel/core": "^7.28.0",
     "@fortawesome/fontawesome-free": "^7.0.1",
     "@hotwired/stimulus": "^3.2.2",
-    "@hotwired/turbo-rails": "^8.0.16",
+    "@hotwired/turbo-rails": "^8.0.18",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^8.0.100",
     "@rails/actiontext": "^8.0.300",
