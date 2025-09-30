@@ -6,38 +6,62 @@ RSpec.describe "/case_contacts_new_design", type: :request do
 
   before { sign_in admin }
 
-  describe "GET /index" do
-    subject(:request) do
-      get case_contacts_new_design_path
-
-      response
+  context "when new_case_contact_table flag is disabled" do
+    before do
+      allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(false)
     end
 
-    let!(:casa_case) { create(:casa_case, casa_org: organization) }
-    let!(:past_contact) { create(:case_contact, :active, casa_case: casa_case, occurred_at: 3.weeks.ago) }
-    let!(:recent_contact) { create(:case_contact, :active, casa_case: casa_case, occurred_at: 3.days.ago) }
-    let!(:draft_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 5.days.ago, status: "started") }
+    describe "GET /index" do
+      it "redirects to case_contacts_path" do
+        get case_contacts_new_design_path
+        expect(response).to redirect_to(case_contacts_path)
+      end
 
-    it { is_expected.to have_http_status(:success) }
+      it "sets an alert message" do
+        get case_contacts_new_design_path
+        expect(flash[:alert]).to eq("This feature is not available.")
+      end
+    end
+  end
 
-    it "lists exactly two active contacts and one draft" do
-      doc = Nokogiri::HTML(request.body)
-      case_contact_rows = doc.css('[data-testid="case_contact-row"]')
-      expect(case_contact_rows.size).to eq(3)
+  context "when new_case_contact_table flag is enabled" do
+    before do
+      allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
     end
 
-    it "shows the draft badge exactly once" do
-      doc = Nokogiri::HTML(request.body)
-      expect(doc.css('[data-testid="draft-badge"]').count).to eq(1)
-    end
+    describe "GET /index" do
+      subject(:request) do
+        get case_contacts_new_design_path
 
-    it "orders contacts by occurred_at desc" do
-      body = request.body
+        response
+      end
 
-      recent_index = body.index(I18n.l(recent_contact.occurred_at, format: :full))
-      past_index = body.index(I18n.l(past_contact.occurred_at, format: :full))
+      let!(:casa_case) { create(:casa_case, casa_org: organization) }
+      let!(:past_contact) { create(:case_contact, :active, casa_case: casa_case, occurred_at: 3.weeks.ago) }
+      let!(:recent_contact) { create(:case_contact, :active, casa_case: casa_case, occurred_at: 3.days.ago) }
+      let!(:draft_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 5.days.ago, status: "started") }
 
-      expect(recent_index).to be < past_index
+      it { is_expected.to have_http_status(:success) }
+
+      it "lists exactly two active contacts and one draft" do
+        doc = Nokogiri::HTML(request.body)
+        case_contact_rows = doc.css('[data-testid="case_contact-row"]')
+        expect(case_contact_rows.size).to eq(3)
+      end
+
+      it "shows the draft badge exactly once" do
+        doc = Nokogiri::HTML(request.body)
+        expect(doc.css('[data-testid="draft-badge"]').count).to eq(1)
+      end
+
+      it "orders contacts by occurred_at desc" do
+        body = request.body
+
+        recent_index = body.index(I18n.l(recent_contact.occurred_at, format: :full))
+        past_index = body.index(I18n.l(past_contact.occurred_at, format: :full))
+
+        expect(recent_index).to be < past_index
+      end
     end
   end
 end

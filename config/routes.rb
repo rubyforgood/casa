@@ -92,7 +92,11 @@ Rails.application.routes.draw do
 
   get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
   get "case_contacts/drafts", to: "case_contacts#drafts"
-  get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index"
+  
+  # Feature flag for new case contact table design
+  get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index", constraints: lambda { |request|
+    Flipper.enabled?(:new_case_contact_table)
+  }
   resources :case_contacts, except: %i[create update show], concerns: %i[with_datatable] do
     member do
       post :restore
