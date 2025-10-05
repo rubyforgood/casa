@@ -5,7 +5,7 @@
 </div>
 <div class="card-style">
   <div class="card-body">
-    <%= form_for @supervisor, as: :supervisor, url: supervisor_path(@supervisor) do |form| %>
+    <%= form_with(model: @supervisor, as: :supervisor, url: supervisor_path(@supervisor), method: :patch) do |form| %>
       <%= render "/shared/error_messages", resource: @supervisor %>
       <%= render "/shared/edit_form", resource: @supervisor, f: form %>
       <p>
