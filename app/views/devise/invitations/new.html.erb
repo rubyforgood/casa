@@ -1,7 +1,7 @@
 <div class="row p-3">
   <h2 class="mb-2">Send invitation</h2>
 
-  <%= form_for(resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
+  <%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
     <%= render "/shared/error_messages", resource: resource %>
 
     <% resource.class.invite_key_fields.each do |field| -%>
