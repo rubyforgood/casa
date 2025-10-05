@@ -6,7 +6,7 @@
 
 <div class="card-style">
   <div class="card-body">
-    <%= form_for @user, as: :all_casa_admin, url: all_casa_admins_path do |form| %>
+    <%= form_with(model: @user, scope: :all_casa_admin, url: all_casa_admins_path, method: :patch) do |form| %>
 
         <%= render "/shared/error_messages", resource: @user %>
 
@@ -26,7 +26,7 @@
     <% end %>
     <br>
     <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <%= form_for(@user, as: :all_casa_admin, url: {action: "update_password"}) do |f| %>
+      <%= form_with(model: @user, scope: :all_casa_admin, url: {action: "update_password"}, method: :patch) do |f| %>
         <div class="input-style-1">
           <%= f.label :password, "Password" %><br>
           <%= f.password_field :password, autocomplete: "off", class: "form-control", minlength: 6 %>
