@@ -5,10 +5,10 @@
         <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8 pb-4">
           <h2 class="my-4">Forgot your password?</h2>
 
-          <%= form_for(resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f| %>
+          <%= form_with(model: resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f| %>
             <%= render "/shared/error_messages", resource: resource %>
 
-            <h4 class="mb-3">Please enter email or phone number to recieve reset instructions.</h4>
+            <h4 class="mb-3">Please enter email or phone number to receive reset instructions.</h4>
 
             <div class="input-style-1">
               <%= f.label :email %>
