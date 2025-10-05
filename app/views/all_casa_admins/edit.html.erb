@@ -19,13 +19,13 @@
 
       <div class="actions">
         <%= form.button "Update Profile", type: "submit", class: "main-btn primary-btn btn-hover" %>
-        <button class="main-btn primary-btn btn-hover" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="main-btn primary-btn btn-hover" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           Change Password
         </button>
       </div>
     <% end %>
     <br>
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
       <%= form_with(model: @user, scope: :all_casa_admin, url: {action: "update_password"}, method: :patch) do |f| %>
         <div class="input-style-1">
           <%= f.label :password, "Password" %><br>
