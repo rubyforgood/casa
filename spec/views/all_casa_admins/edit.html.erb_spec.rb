@@ -38,4 +38,26 @@ RSpec.describe 'all_casa_admins/edit', type: :view do
       expect(rendered).to have_text('Profile updated')
     end
   end
+
+  context 'when submitting the password change form' do
+    before do
+      sign_in user
+      assign(:user, user)
+      render
+    end
+
+    it 'shows error when password fields are blank', :aggregate_failures do
+      user.errors.add(:password, "can't be blank")
+      render
+      expect(rendered).to have_selector('#error_explanation.alert')
+      expect(rendered).to have_text("can't be blank")
+    end
+
+    it 'shows error when password confirmation does not match', :aggregate_failures do
+      user.errors.add(:password_confirmation, "doesn't match Password")
+      render
+      expect(rendered).to have_selector('#error_explanation.alert')
+      expect(rendered).to have_text("doesn't match Password")
+    end
+  end
 end
