@@ -59,7 +59,7 @@
         <br/>
         <h3 class="mb-3">Assign a New Case</h3>
 
-        <%= form_for CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
+        <%= form_with(model: CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id)) do |form| %>
 
           <div class="select-style-1">
             <label for='case_assignment_casa_case_id'>Select a Case</label>

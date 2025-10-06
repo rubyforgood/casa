@@ -6,7 +6,7 @@
       <a class='text-blue-500' href="mailto:casa@rubyforgood.org?Subject=Application%20Interest" target="_top">casa@rubyforgood.org</a>
     </p>
     <div class="row">
-      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+      <%= form_with(model: resource, as: resource_name, url: session_path(resource_name)) do |f| %>
       <div class="alert-box">
         <% if resource.errors.any? %>
           <%= render "/shared/error_messages", resource: resource %>
