@@ -32,7 +32,7 @@
     <br>
     <h3 class="title">Assign a Volunteer to Case</h3>
     <fieldset class="border-0" <%= 'disabled' unless available_volunteers.any? %>>
-      <%= form_for assignable_obj.new, url: assign_action do |form| %>
+      <%= form_with(model: assignable_obj.new, url: assign_action) do |form| %>
         <div class='form-group select-style-1'>
           <label for="<%= select_id %>" class="mt-2">Select a Volunteer</label>
           <div class="select-position">

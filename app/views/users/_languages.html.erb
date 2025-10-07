@@ -33,7 +33,7 @@
           </table>
         </div>
 
-        <%= form_for volunteer, url: add_language_users_path do |form| %>
+        <%= form_with(model: volunteer, url: add_language_users_path) do |form| %>
           <div class="row select-style-1 mt-3">
             <div class="col-lg-12">
               <h5><%= form.label :languages, "Add Language" %></h5>

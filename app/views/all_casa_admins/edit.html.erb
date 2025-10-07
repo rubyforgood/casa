@@ -6,7 +6,7 @@
 
 <div class="card-style">
   <div class="card-body">
-    <%= form_for @user, as: :all_casa_admin, url: all_casa_admins_path do |form| %>
+    <%= form_with(model: @user, scope: :all_casa_admin, url: all_casa_admins_path, method: :patch) do |form| %>
 
         <%= render "/shared/error_messages", resource: @user %>
 
@@ -19,14 +19,14 @@
 
       <div class="actions">
         <%= form.button "Update Profile", type: "submit", class: "main-btn primary-btn btn-hover" %>
-        <button class="main-btn primary-btn btn-hover" id="accordionExample" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+        <button class="main-btn primary-btn btn-hover" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
           Change Password
         </button>
       </div>
     <% end %>
     <br>
-    <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
-      <%= form_for(@user, as: :all_casa_admin, url: {action: "update_password"}) do |f| %>
+    <div id="collapseOne" class="collapse" aria-labelledby="headingOne">
+      <%= form_with(model: @user, scope: :all_casa_admin, url: {action: "update_password"}, method: :patch) do |f| %>
         <div class="input-style-1">
           <%= f.label :password, "Password" %><br>
           <%= f.password_field :password, autocomplete: "off", class: "form-control", minlength: 6 %>

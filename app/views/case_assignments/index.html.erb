@@ -40,8 +40,7 @@
   <div class="col-sm-6">
     <h3>Assign a New Volunteer</h3>
 
-    <%= form_for CaseAssignment.new, url: volunteer_case_assignments_path do |form| %>
-
+    <%= form_with(model: CaseAssignment.new, url: volunteer_case_assignments_path) do |form| %>
       <div class='form-group'>
         <label for="case_assignment_casa_case_id">Select a Case</label>
         <select id="is-this-used-anywhere" class='form-control select2'>
@@ -50,7 +49,6 @@
           <% end %>
         </select>
       </div>
-
       <%= form.submit "Assign Case", class: 'btn btn-primary' %>
     <% end %>
   </div>

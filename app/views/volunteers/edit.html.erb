@@ -14,7 +14,7 @@
 </div>
 <div class="card card-container">
   <div class="card-body">
-    <%= form_for @volunteer, url: volunteer_path(@volunteer) do |form| %>
+    <%= form_with(model: @volunteer, url: volunteer_path(@volunteer), method: :patch) do |form| %>
       <%= render "/shared/error_messages", resource: @volunteer %>
 
       <%= render "/shared/edit_form", resource: @volunteer, f: form %>
