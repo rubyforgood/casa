@@ -1,7 +1,5 @@
 require "rails_helper"
 
 RSpec.describe FundRequest, type: :model do
-  # TODO: Add tests for FundRequest
-
-  pending "add some tests for FundRequest"
+  it { is_expected.to validate_presence_of(:submitter_email) }
 end
