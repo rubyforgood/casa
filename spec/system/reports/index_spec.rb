@@ -108,5 +108,17 @@ RSpec.describe "reports", :js, type: :system do
       click_on "Download Report"
       expect(page).to have_text("Downloading Report")
     end
+  def select_report_filter_option(select_id, option)
+    expect(page).to have_select(select_id, with_options: [option])
+    find("##{select_id}").select(option)
+  end
+
+  def set_report_date_range(start_date:, end_date:)
+    fill_in "report_start_date", with: start_date
+    fill_in "report_end_date", with: end_date
+  end
+
+  def choose_report_radio_option(field_name, value)
+    find("input[name=\"report[#{field_name}]\"][value=\"#{value}\"]", visible: :all).click
   end
 end
