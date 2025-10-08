@@ -1,8 +1,11 @@
 require "rails_helper"
 
+VOLUNTEER_SELECT_ID = "multiple-select-field2"
+SUPERVISOR_SELECT_ID = "multiple-select-field1"
+CONTACT_TYPE_SELECT_ID = "multiple-select-field3"
+CONTACT_TYPE_GROUP_SELECT_ID = "multiple-select-field4"
+
 RSpec.describe "reports", :js, type: :system do
-  context "volunteer user" do
-    it "redirects to root" do
   shared_examples "downloads report button" do |button_name, feedback|
     it "downloads #{button_name.downcase}", :aggregate_failures do
       expect(page).to have_button(button_name)
@@ -28,6 +31,9 @@ RSpec.describe "reports", :js, type: :system do
       expect(page).to have_text("Downloading Report")
     end
   end
+
+  context "with a volunteer user" do
+    before do
       user = create(:volunteer)
 
       sign_in user
