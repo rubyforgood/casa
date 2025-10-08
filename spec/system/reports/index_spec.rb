@@ -3,6 +3,31 @@ require "rails_helper"
 RSpec.describe "reports", :js, type: :system do
   context "volunteer user" do
     it "redirects to root" do
+  shared_examples "downloads report button" do |button_name, feedback|
+    it "downloads #{button_name.downcase}", :aggregate_failures do
+      expect(page).to have_button(button_name)
+      click_on button_name
+      expect(page).to have_text(feedback)
+    end
+  end
+
+  shared_examples "downloads case contacts report with filter" do |filter_name, setup_action, filter_action|
+    it "downloads case contacts report with #{filter_name}" do
+      instance_exec(&setup_action) if setup_action
+      visit reports_path
+      instance_exec(&filter_action)
+      click_on "Download Report"
+      expect(page).to have_text("Downloading Report")
+    end
+  end
+
+  shared_examples "empty select downloads report" do |select_id, description|
+    it "renders the #{description} select with no options and downloads the report" do
+      expect(page).to have_select(select_id, options: [])
+      click_on "Download Report"
+      expect(page).to have_text("Downloading Report")
+    end
+  end
       user = create(:volunteer)
 
       sign_in user
