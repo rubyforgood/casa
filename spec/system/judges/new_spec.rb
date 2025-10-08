@@ -62,6 +62,21 @@ RSpec.describe "judges/new", type: :system do
   end
   # rubocop:enable RSpec/ExampleLength
 
+  context "when validations fail" do
+    it "shows validation error when name is blank" do
+      submit_judge_form(name: "")
+      expect(page).to have_text("Name can't be blank")
+    end
+
+    it "does not allow duplicate judge names in the same organization", :aggregate_failures do
+      duplicate_name = Faker::Name.unique.name
+      create(:judge, name: duplicate_name, casa_org: organization)
+      submit_judge_form(name: duplicate_name)
+      expect(page).to have_text("Name has already been taken")
+      expect(Judge.where(name: duplicate_name, casa_org: organization).count).to eq 1
+    end
+  end
+
   private
 
   def submit_judge_form(name:, active: true)
