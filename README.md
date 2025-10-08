@@ -38,7 +38,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
-Find issues to work on [here](https://github.com/rubyforgood/casa/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee) on the issue board. Issues on the [project's](https://github.com/rubyforgood/casa/projects/1) TODO column are another way to browse issues. Check to see that no one is assigned to the issue. Then comment on it to claim the issue. Commenting on an issue doesn't automatically get the issue assigned so double check the comments on an issue to see that no one is requesting assignment.  
+Find issues to work on [here](https://github.com/rubyforgood/casa/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee) on the issue board. Issues on the [project's](https://github.com/rubyforgood/casa/projects/1) TODO column are another way to browse issues. Check to see that no one is assigned to the issue. Then comment on it to claim the issue. Commenting on an issue doesn't automatically get the issue assigned so double check the comments on an issue to see that no one is requesting assignment.
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
 
@@ -46,7 +46,7 @@ Pull requests which are not for an issue but which improve the codebase are also
 
 We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-34b5p4vk3-NWIw6hKs2ma~wm7mYSe0_A) in the #casa channel so you can get fast help for any questions you may have.
 
-Check out [our google calendar](https://bit.ly/casacal) to see when office hours and stakeholder meetings are.  
+Check out [our google calendar](https://bit.ly/casacal) to see when office hours and stakeholder meetings are.
 
 You can also open an issue or comment on an issue on GitHub and a maintainer will reply to you.
 
@@ -189,7 +189,7 @@ Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 Run `bin/lint` to run all linters and fix issues. This will run:
 
 1. `bundle exec standardrb --fix` auto-fix Ruby linting issues [more linter info](https://github.com/testdouble/standard)
-1. `bundle exec erblint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
+1. `bundle exec erb_lint --lint-all --autocorrect` [ERB linter](https://github.com/Shopify/erb-lint)
 1. `npm run lint:fix` to run the [JS linter](https://standardjs.com/index.html) and fix issues
 1. `rake factory_bot:lint` if you have been editing factories and want to find factories and traits which produce invalid objects
 

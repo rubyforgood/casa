@@ -1,4 +1,5 @@
 require:
+  - standard
   - rubocop-factory_bot
 
 plugins:

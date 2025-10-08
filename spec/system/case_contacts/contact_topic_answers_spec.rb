@@ -115,7 +115,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   context "when casa org has no contact topics" do
     let(:contact_topics) { [] }
 
-    xit "displays a field for contact.notes" do # TODO make test not flaky
+    it "displays a field for contact.notes" do
       subject
       expect(page).to have_no_button "Add Another Discussion Topic"
       expect(notes_section).to have_field "Additional Notes"
@@ -139,7 +139,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
 
       fill_in "Additional Notes", with: "This is a fake a topic answer."
 
-      expect { click_on "Submit" }.to change(CaseContact.active, :count).by(1)
+      expect do
+        click_on "Submit"
+        expect(page).to have_text("Case contact successfully created")
+      end.to change(CaseContact.active, :count).by(1)
 
       contact = CaseContact.active.last
       expect(contact.contact_topic_answers).to be_empty

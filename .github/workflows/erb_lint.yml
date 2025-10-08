@@ -10,6 +10,7 @@ on:
   pull_request:
     branches:
       - main
+      - rfg-event-2025
     paths:
       - '**/*.erb'
       - '**/*.html'
@@ -28,4 +29,4 @@ jobs:
           bundler-cache: true
 
       - name: ERB lint
-        run: bundle exec erblint --lint-all
+        run: bundle exec erb_lint --lint-all

@@ -22,6 +22,7 @@ on:
     # The branches below must be a subset of the branches above
     branches:
       - main
+      - rfg-event-2025
     paths-ignore:
       - 'doc/**'
       - '**/*.md'

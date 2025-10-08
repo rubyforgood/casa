@@ -145,6 +145,7 @@ Rails.application.routes.draw do
   resources :learning_hours_reports, only: %i[index]
   resources :learning_hour_types, only: %i[new create edit update]
   resources :learning_hour_topics, only: %i[new create edit update]
+  resources :placement_types, only: %i[new create edit update]
 
   resources :contact_topics, except: %i[index show delete] do
     delete "soft_delete", on: :member
