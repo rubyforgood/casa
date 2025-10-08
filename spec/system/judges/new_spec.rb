@@ -21,7 +21,11 @@ RSpec.describe "judges/new", type: :system do
 
     expect(page).to have_text("Name can't be blank")
 
-    fill_in "Name", with: "Joey Shmoey"
+  private
+
+  def submit_judge_form(name:, active: true)
+    fill_in "Name", with: name
+    active ? check("Active?") : uncheck("Active?")
     click_on "Submit"
 
     expect(page).to have_text("Judge was successfully created.")
