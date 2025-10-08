@@ -39,6 +39,18 @@ RSpec.describe "judges/new", type: :system do
   # rubocop:enable RSpec/ExampleLength
 
     expect(page).to have_text("Name can't be blank")
+  # rubocop:disable RSpec/ExampleLength
+  it "creates a judge with a very long name", :aggregate_failures do
+    long_name = Faker::Lorem.characters(number: 255)
+    submit_judge_form(name: long_name)
+    expect(page).to have_text("Judge was successfully created.")
+    expect(page).to have_text(long_name)
+
+    judge = Judge.find_by(name: long_name)
+    expect(judge).not_to be_nil
+  end
+  # rubocop:enable RSpec/ExampleLength
+
 
   private
 
