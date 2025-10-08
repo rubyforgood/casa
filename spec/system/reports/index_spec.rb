@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 VOLUNTEER_SELECT_ID = "multiple-select-field2"
