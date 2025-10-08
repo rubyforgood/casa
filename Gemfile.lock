@@ -108,7 +108,7 @@ GEM
     bigdecimal (3.2.2)
     bindex (0.8.1)
     blueprinter (1.1.2)
-    brakeman (7.0.2)
+    brakeman (7.1.0)
       racc
     bugsnag (6.28.0)
       concurrent-ruby (~> 1.0)
