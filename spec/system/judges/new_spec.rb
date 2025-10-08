@@ -11,13 +11,24 @@ RSpec.describe "judges/new", type: :system do
 
   before do
     sign_in admin
-
     visit new_judge_path
   end
 
   it "adds new judge" do
     fill_in "Name", with: ""
     click_on "Submit"
+  # rubocop:disable RSpec/ExampleLength
+  it "creates an active judge with valid name", :aggregate_failures do
+    submit_judge_form(name: active_name, active: true)
+    expect(page).to have_text("Judge was successfully created.")
+    expect(page).to have_text(active_name)
+
+    judge = Judge.find_by(name: active_name)
+    expect(judge).not_to be_nil
+    expect(judge.active).to be true
+  end
+  # rubocop:enable RSpec/ExampleLength
+
 
     expect(page).to have_text("Name can't be blank")
 
