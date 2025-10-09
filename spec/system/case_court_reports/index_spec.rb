@@ -17,7 +17,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when first arriving to 'Generate Court Report' page", :js do
-    it "generation modal hidden" do
+    it "generation modal hidden", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
       expect(page).to have_selector "#case-selection", visible: false
       expect(page).not_to have_selector ".select2"
@@ -30,7 +30,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     # putting all this in the same system test shaves 3 seconds off the test suite
-    it "modal has correct contents" do
+    it "modal has correct contents", :aggregate_failures do
       start_date = page.find("#start_date").value
       expect(start_date).to eq(formatted_date)
 
@@ -207,7 +207,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:casa_case) { volunteer.casa_cases.first }
       let(:search_term) { casa_case.case_number[-3..] }
 
-      it "selects the correct case", :js do
+      it "selects the correct case", :aggregate_failures, :js do
         find(modal_selector).click
 
         find("#case_select_body .selection").click
