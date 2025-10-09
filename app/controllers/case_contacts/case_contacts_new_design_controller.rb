@@ -1,5 +1,6 @@
 class CaseContacts::CaseContactsNewDesignController < ApplicationController
   include LoadsCaseContacts
+
   before_action :check_feature_flag
 
   def index
