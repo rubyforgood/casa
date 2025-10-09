@@ -131,22 +131,17 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "does not allow supervisors to download already generated report from case details page" do
-        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
-
+        supervisor = create(:supervisor, casa_org: volunteer.casa_org)
         sign_out volunteer
         sign_in supervisor
-
         visit casa_case_path(casa_case.id)
-
         expect(page).not_to have_link("Click to download")
       end
 
       it "does not allow admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
-
+        casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
         sign_out volunteer
         sign_in casa_admin
-
         visit casa_case_path(casa_case.id)
 
         expect(page).not_to have_link("Click to download")
