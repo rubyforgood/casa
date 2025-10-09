@@ -333,7 +333,7 @@ GEM
     multipart-post (2.4.1)
     net-http-persistent (4.0.4)
       connection_pool (~> 2.2)
-    net-imap (0.5.9)
+    net-imap (0.5.12)
       date
       net-protocol
     net-pop (0.1.2)
