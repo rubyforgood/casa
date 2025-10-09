@@ -180,12 +180,28 @@ RSpec.describe "case_court_reports/index", type: :system do
         expect(page).to have_link("Click to download")
       end
 
-      it "allows admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
+      it "allows admins to download already generated report from case details page", :aggregate_failures do
+        casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
+
+        # Simulate report generation before status change
+        visit case_court_reports_path
+        page.find(modal_selector).click
+        page.select option_text, from: "case-selection"
+        expect(page).to have_button("Generate Report", disabled: false)
+        click_button "Generate Report"
+
+        # Now set status to submitted
+        casa_case.reload
+        Timeout.timeout(10) do
+          until casa_case.court_reports.attached?
+            sleep 0.5
+            casa_case.reload
+          end
+        end
+        casa_case.update!(court_report_status: :submitted)
 
         sign_out volunteer
         sign_in casa_admin
-
         visit casa_case_path(casa_case.id)
 
         expect(page).to have_link("Click to download")
