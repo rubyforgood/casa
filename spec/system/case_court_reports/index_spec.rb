@@ -11,12 +11,12 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:date) { Date.current }
   let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
 
-  before do
-    sign_in volunteer
-    visit case_court_reports_path
-  end
-
   context "when first arriving to 'Generate Court Report' page", :js do
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+    end
+
     it "generation modal hidden", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
       expect(page).to have_selector "#case-selection", visible: false
@@ -26,6 +26,8 @@ RSpec.describe "case_court_reports/index", type: :system do
 
   context "after opening 'Download Court Report' modal", :js do
     before do
+      sign_in volunteer
+      visit case_court_reports_path
       page.find(modal_selector).click
     end
 
@@ -97,6 +99,11 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "'Case Number' dropdown list", :js do
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+    end
+
     let(:transitioned_case_number) { casa_cases.find(&:in_transition_age?).case_number.to_s }
     let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
@@ -122,6 +129,11 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", :js do
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+    end
+
     let(:casa_case) { casa_cases.find(&:in_transition_age?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
@@ -165,7 +177,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
         # Now set status to submitted
         casa_case.reload
-        Timeout.timeout(10) do
+        Timeout.timeout(5) do
           until casa_case.court_reports.attached?
             sleep 0.5
             casa_case.reload
@@ -192,7 +204,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
         # Now set status to submitted
         casa_case.reload
-        Timeout.timeout(10) do
+        Timeout.timeout(5) do
           until casa_case.court_reports.attached?
             sleep 0.5
             casa_case.reload
