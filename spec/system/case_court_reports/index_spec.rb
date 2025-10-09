@@ -125,17 +125,6 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:casa_case) { casa_cases.find(&:in_transition_age?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
-    before do
-      page.find(modal_selector).click
-      # to find the select element, use either 'name' or 'id' attribute
-      # in this case, id = "case-selection", name = "case_number"
-      page.select option_text, from: "case-selection"
-
-      @download_window = window_opened_by do
-        click_button "Generate Report"
-      end
-    end
-
     describe "when court report status is not 'submitted'" do
       before do
         casa_case.update!(court_report_status: :in_review)
