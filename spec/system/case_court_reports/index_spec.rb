@@ -1,3 +1,12 @@
+# TODO (from ticket):
+# - Ensure each test in this file checks for database updates after the page has finished loading after a submit.
+# - Add tests to spec/requests/case_court_reports_spec.rb for date filtering.
+# - Add tests for correct cases appearing in the autocomplete:
+#     - For volunteers: all cases assigned to the volunteer.
+#     - For supervisors/admins: all cases belonging to their parent organization.
+#     - The dropdown for supervisor/admin uses a JS widget; consider consolidating admin and supervisor tests to reuse code (optional).
+# - Ensure tests are not flaky. See spec/system/reports/index_spec.rb for a dry, comprehensive example.
+
 require "rails_helper"
 
 RSpec.describe "case_court_reports/index", type: :system do
