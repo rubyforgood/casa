@@ -209,12 +209,18 @@ RSpec.describe "case_court_reports/index", type: :system do
 
       it "selects the correct case", :aggregate_failures, :js do
         find(modal_selector).click
-
+        # Wait for Select2 input to be visible
+        expect(page).to have_css("#case_select_body .selection", visible: true)
         find("#case_select_body .selection").click
+        # Wait for Select2 dropdown to be present
+        expect(page).to have_css(".select2-dropdown", visible: true)
         send_keys(search_term)
-        send_keys :enter
-
-        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number)
+        # Wait for the search result to appear in the dropdown
+        expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: true)
+        # Click the result instead of sending enter
+        find(".select2-results__option", text: casa_case.case_number).click
+        # Wait for selection to update
+        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: true)
       end
     end
   end
