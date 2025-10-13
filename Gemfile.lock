@@ -575,7 +575,7 @@ GEM
     sanitize (7.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.16.8)
-    scout_apm (5.6.4)
+    scout_apm (5.7.1)
       parser
     scout_apm_logging (2.1.0)
       google-protobuf (>= 3.18)
