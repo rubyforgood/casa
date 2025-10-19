@@ -9,8 +9,6 @@ RSpec.describe "casa_cases/new", type: :view do
   context "while signed in as admin" do
     it "has youth birth month and year" do
       enable_pundit(view, user)
-      allow(view).to receive(:current_user).and_return(user)
-      allow(view).to receive(:current_organization).and_return(casa_org)
 
       assign :casa_case, build(:casa_case, casa_org: casa_org)
       assign :contact_types, casa_org.contact_types
@@ -24,8 +22,6 @@ RSpec.describe "casa_cases/new", type: :view do
   context "when trying to assign a volunteer to a case" do
     it "is able to assign volunteers" do
       enable_pundit(view, user)
-      allow(view).to receive(:current_user).and_return(user)
-      allow(view).to receive(:current_organization).and_return(user.casa_org)
 
       assign :casa_case, build(:casa_case, casa_org: user.casa_org)
       assign :contact_types, casa_org.contact_types
