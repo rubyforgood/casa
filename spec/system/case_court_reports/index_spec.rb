@@ -14,7 +14,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:supervisor) { volunteer.supervisor }
   let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
   let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.find(&:in_transition_age?) }
+  let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
   let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
 
   let(:date) { Date.current }
@@ -88,7 +88,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       # when 'Generate Report' button is clicked without a selection, should display an error saying to make a selection
       expect(page).to have_selector(".select-required-error", visible: :visible)
 
-      test_case_number = casa_cases.find(&:in_transition_age?).case_number.to_s
+      test_case_number = casa_cases.detect(&:in_transition_age?).case_number.to_s
 
       # when we make a selection, the error is no longer visible
       page.select test_case_number, from: "case-selection"
@@ -113,7 +113,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       visit case_court_reports_path
     end
 
-    let(:transitioned_case_number) { casa_cases.find(&:in_transition_age?).case_number.to_s }
+    let(:transitioned_case_number) { casa_cases.detect(&:in_transition_age?).case_number.to_s }
     let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
     let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
@@ -143,7 +143,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       visit case_court_reports_path
     end
 
-    let(:casa_case) { casa_cases.find(&:in_transition_age?) }
+    let(:casa_case) { casa_cases.detect(&:in_transition_age?) }
     let(:option_text) { "#{casa_case.case_number} - transition" }
 
     describe "when court report status is not 'submitted'" do
