@@ -33,7 +33,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  context "after opening 'Download Court Report' modal", :js do
+  context "when opening 'Download Court Report' modal", :js do
     before do
       sign_in volunteer
       visit case_court_reports_path
@@ -76,7 +76,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
       expect(page).to have_select "case-selection", selected: expected_text
 
-      # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen"
+      # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen
       # should have disabled generate button, download icon and no spinner
       page.select "Select case number", from: "case-selection"
       click_button "Generate Report"
