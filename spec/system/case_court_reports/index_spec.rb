@@ -1,5 +1,4 @@
 # TODO (from ticket):
-# - Ensure each test in this file checks for database updates after the page has finished loading after a submit.
 # - Add tests to spec/requests/case_court_reports_spec.rb for date filtering.
 # - Add tests for correct cases appearing in the autocomplete:
 #     - For volunteers: all cases assigned to the volunteer.
@@ -152,6 +151,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     describe "when court report status is not 'submitted'" do
       before do
         casa_case.update!(court_report_status: :in_review)
+        casa_case.reload
       end
 
       it "does not allow supervisors to download already generated report from case details page" do
