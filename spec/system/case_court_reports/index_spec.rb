@@ -9,6 +9,9 @@
 
 require "rails_helper"
 
+# rubocop:disable RSpec/MultipleMemoizedHelpers
+# rubocop:disable RSpec/ExampleLength
+
 RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
   let(:supervisor) { volunteer.supervisor }
@@ -27,8 +30,8 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "generation modal hidden", :aggregate_failures do
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
-      expect(page).to have_selector "#case-selection", visible: false
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :hidden
+      expect(page).to have_selector "#case-selection", visible: :hidden
       expect(page).not_to have_selector ".select2"
     end
   end
@@ -48,7 +51,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end_date = page.find("#end_date").value
       expect(end_date).to eq(formatted_date)
 
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :visible
       expect(page).not_to have_selector ".select2"
 
       # shows n+1 options in total, e.g 3 options <- 2 assigned cases + 1 prompt text
@@ -81,7 +84,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       page.select "Select case number", from: "case-selection"
       click_button "Generate Report"
 
-      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
+      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :visible)
       expect(page).not_to have_selector("#btnGenerateReport[disabled]")
       expect(page).to have_selector("#spinner", visible: :hidden)
 
@@ -247,18 +250,21 @@ RSpec.describe "case_court_reports/index", type: :system do
       it "selects the correct case", :aggregate_failures, :js do
         find(modal_selector).click
         # Wait for Select2 input to be visible
-        expect(page).to have_css("#case_select_body .selection", visible: true)
+        expect(page).to have_css("#case_select_body .selection", visible: :visible)
         find("#case_select_body .selection").click
         # Wait for Select2 dropdown to be present
-        expect(page).to have_css(".select2-dropdown", visible: true)
+        expect(page).to have_css(".select2-dropdown", visible: :visible)
         send_keys(search_term)
         # Wait for the search result to appear in the dropdown
-        expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: true)
+        expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: :visible)
         # Click the result instead of sending enter
         find(".select2-results__option", text: casa_case.case_number).click
         # Wait for selection to update
-        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: true)
+        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: :visible)
       end
     end
   end
 end
+
+# rubocop:enable RSpec/MultipleMemoizedHelpers
+# rubocop:enable RSpec/ExampleLength
