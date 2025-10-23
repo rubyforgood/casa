@@ -233,7 +233,6 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  # TODO: make this a request spec
   describe "as a supervisor" do
     before do
       sign_in supervisor
