@@ -166,6 +166,45 @@ RSpec.describe "/case_court_reports", type: :request do
       end
     end
 
+    context "with date filtering" do
+      let(:casa_case) { volunteer.casa_cases.first }
+      let!(:contact_in_range) do
+        create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2025, 10, 10))
+      end
+      let!(:contact_out_of_range) do
+        create(:case_contact, casa_case: casa_case, occurred_at: Date.new(2024, 10, 30))
+      end
+      let(:params) {
+        {
+          case_court_report: {
+            case_number: casa_case.case_number.to_s,
+            start_date: "2025-10-01",
+            end_date: "2025-10-23"
+          }
+        }
+      }
+
+      it "includes contacts within the date range in the generated report" do
+        post generate_case_court_reports_path, params: params, headers: {ACCEPT: "application/json"}
+        get response.parsed_body["link"]
+        docx_response = Docx::Document.open(StringIO.new(response.body))
+        # The contact dates are in table cells, so we need to extract them specifically.
+        table_texts = docx_response.tables.flat_map { |table| table.rows.flat_map { |row| row.cells.map(&:text) } }
+
+        expect(table_texts.join(" ")).to include(contact_in_range.occurred_at.strftime("%-m/%-d"))
+      end
+
+      it "does not include contacts outside the date range in the generated report" do
+        post generate_case_court_reports_path, params: params, headers: {ACCEPT: "application/json"}
+        get response.parsed_body["link"]
+        docx_response = Docx::Document.open(StringIO.new(response.body))
+        table_texts = docx_response.tables.flat_map { |table| table.rows.flat_map { |row| row.cells.map(&:text) } }
+
+        expect(table_texts.join(" ")).not_to include(contact_out_of_range.occurred_at.strftime("%-m/%-d"))
+      end
+
+    end
+
     context "when user timezone" do
       let(:server_time) { Time.zone.parse("2020-12-31 23:00:00") }
       let(:user_different_timezone) do
