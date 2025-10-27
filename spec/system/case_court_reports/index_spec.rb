@@ -1,12 +1,8 @@
-# TODO (from ticket):
-# - Add tests to spec/requests/case_court_reports_spec.rb for date filtering.
-# - Add tests for correct cases appearing in the autocomplete:
-#     - For volunteers: all cases assigned to the volunteer.
-#     - For supervisors/admins: all cases belonging to their parent organization.
-#     - The dropdown for supervisor/admin uses a JS widget; consider consolidating admin and supervisor tests to reuse code (optional).
-# - Ensure tests are not flaky. See spec/system/reports/index_spec.rb for a dry, comprehensive example.
-
 require "rails_helper"
+
+RSpec.configure do |config|
+  config.include CaseCourtReportHelpers, type: :system
+end
 
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 # rubocop:disable RSpec/ExampleLength
@@ -260,6 +256,60 @@ RSpec.describe "case_court_reports/index", type: :system do
         find(".select2-results__option", text: casa_case.case_number).click
         # Wait for selection to update
         expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: :visible)
+      end
+    end
+  end
+
+  describe "autocomplete case visibility", :js do
+    context "when logged in as a volunteer" do
+      it "shows only cases assigned to the volunteer in the native select" do
+        unassigned_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1")
+
+        sign_in volunteer
+        visit case_court_reports_path
+        page.find(modal_selector).click
+
+        expect(page).not_to have_selector("#case-selection option", text: unassigned_case.case_number)
+
+        volunteer.casa_cases.each do |c|
+          expect(page).to have_selector("#case-selection option", text: c.case_number)
+        end
+      end
+    end
+
+    context "when logged in as a supervisor" do
+      it "shows all cases belonging to the organization in the Select2 dropdown" do
+        org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-SUP-1")
+
+        sign_out volunteer
+        sign_in supervisor
+        visit case_court_reports_path
+        page.find(modal_selector).click
+
+        expect(page).to have_css("#case_select_body .selection", visible: :visible)
+        find("#case_select_body .selection").click
+        expect(page).to have_css(".select2-dropdown", visible: :visible)
+
+        expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
+        expect(page).to have_css(".select2-results__option", text: volunteer.casa_cases.first.case_number, visible: :visible)
+      end
+    end
+
+    context "as an admin" do
+      it "shows all cases belonging to the organization in the Select2 dropdown" do
+        casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
+        org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-ADMIN-1")
+
+        sign_out volunteer
+        sign_in casa_admin
+        visit case_court_reports_path
+        page.find(modal_selector).click
+
+        expect(page).to have_css("#case_select_body .selection", visible: :visible)
+        find("#case_select_body .selection").click
+        expect(page).to have_css(".select2-dropdown", visible: :visible)
+
+        expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
       end
     end
   end
