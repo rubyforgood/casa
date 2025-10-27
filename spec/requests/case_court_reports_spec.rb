@@ -202,7 +202,6 @@ RSpec.describe "/case_court_reports", type: :request do
 
         expect(table_texts.join(" ")).not_to include(contact_out_of_range.occurred_at.strftime("%-m/%-d"))
       end
-
     end
 
     context "when user timezone" do

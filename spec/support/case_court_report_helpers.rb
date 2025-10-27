@@ -22,4 +22,3 @@ end
 RSpec.configure do |config|
   config.include CaseCourtReportHelpers, type: :system
 end
-

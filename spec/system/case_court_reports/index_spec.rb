@@ -262,7 +262,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
   describe "autocomplete case visibility", :js do
     context "when logged in as a volunteer" do
-      it "shows only cases assigned to the volunteer in the native select" do
+      it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
         unassigned_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1")
 
         sign_in volunteer
@@ -278,7 +278,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     context "when logged in as a supervisor" do
-      it "shows all cases belonging to the organization in the Select2 dropdown" do
+      it "shows all cases belonging to the organization in the Select2 dropdown", :aggregate_failures do
         org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-SUP-1")
 
         sign_out volunteer
@@ -295,8 +295,8 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
     end
 
-    context "as an admin" do
-      it "shows all cases belonging to the organization in the Select2 dropdown" do
+    context "when logged in as an admin" do
+      it "shows all cases belonging to the organization in the Select2 dropdown", :aggregate_failures do
         casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
         org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-ADMIN-1")
 
