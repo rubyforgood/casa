@@ -8,13 +8,10 @@ end
 # rubocop:disable RSpec/ExampleLength
 
 RSpec.describe "case_court_reports/index", type: :system do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
-  let(:supervisor) { volunteer.supervisor }
-  let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
-  let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
+  let(:volunteer) { create(:volunteer) }
+  let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
 
+  let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
   let(:date) { Date.current }
   let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
 
@@ -32,6 +29,12 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when opening 'Download Court Report' modal", :js do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
     before do
       sign_in volunteer
       visit case_court_reports_path
@@ -106,15 +109,20 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "'Case Number' dropdown list", :js do
-    before do
-      sign_in volunteer
-      visit case_court_reports_path
-    end
-
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
     let(:transitioned_case_number) { casa_cases.detect(&:in_transition_age?).case_number.to_s }
     let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
     let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
     let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+    end
 
     it "has transition case option selected" do
       page.find(modal_selector).click
@@ -136,13 +144,18 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when selecting a case, volunteer can generate and download a report", :js do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:casa_case) { casa_cases.detect(&:in_transition_age?) }
+    let(:option_text) { "#{casa_case.case_number} - transition" }
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
     before do
       sign_in volunteer
       visit case_court_reports_path
     end
-
-    let(:casa_case) { casa_cases.detect(&:in_transition_age?) }
-    let(:option_text) { "#{casa_case.case_number} - transition" }
 
     describe "when court report status is not 'submitted'" do
       before do
@@ -230,6 +243,12 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "as a supervisor" do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
     before do
       sign_in supervisor
       visit case_court_reports_path
@@ -261,6 +280,12 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "autocomplete case visibility", :js do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
     context "when logged in as a volunteer" do
       it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
         unassigned_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1")
