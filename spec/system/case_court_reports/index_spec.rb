@@ -20,7 +20,6 @@ RSpec.shared_examples "a user with organization-level case visibility in autocom
   let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99") }
 
   before do
-    include_context "when on the court reports page", user_role
     open_court_report_modal
     open_case_select2_dropdown
   end
@@ -65,8 +64,9 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
+    include_context "when on the court reports page", :volunteer
+
     before do
-      include_context "when on the court reports page", :volunteer
       open_court_report_modal
     end
 
@@ -252,19 +252,15 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "case selection visibility by user role", :js do
-    let!(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
-    let(:supervisor) { volunteer.supervisor }
-    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
-
     context "when logged in as a volunteer" do
+      let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer") }
       let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
       let!(:other_volunteer_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer]) }
       let!(:unassigned_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1") }
 
+      include_context "when on the court reports page", :volunteer
+
       it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
-        include_context "when on the court reports page", :volunteer
         open_court_report_modal
 
         # Assert: Does NOT see cases assigned to other volunteers
@@ -283,11 +279,15 @@ RSpec.describe "case_court_reports/index", type: :system do
     context "when logged in as a supervisor" do
       let(:user_role) { :supervisor }
 
+      include_context "when on the court reports page", user_role
+
       it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
 
     context "when logged in as an admin" do
       let(:user_role) { :casa_admin }
+
+      include_context "when on the court reports page", user_role
 
       it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
