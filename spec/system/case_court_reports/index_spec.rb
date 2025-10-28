@@ -4,6 +4,16 @@ RSpec.configure do |config|
   config.include CaseCourtReportHelpers, type: :system
 end
 
+RSpec.shared_context "when on the court reports page" do |user_role|
+  # This assumes your 'let' blocks define :volunteer, :supervisor, etc.
+  let(:current_user) { send(user_role) }
+
+  before do
+    sign_in current_user
+    visit case_court_reports_path
+  end
+end
+
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 # rubocop:disable RSpec/ExampleLength
 
@@ -11,15 +21,11 @@ RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
 
-  let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
   let(:date) { Date.current }
   let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
 
   context "when first arriving to 'Generate Court Report' page", :js do
-    before do
-      sign_in volunteer
-      visit case_court_reports_path
-    end
+    include_context "when on the court reports page", :volunteer
 
     it "generation modal hidden", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :hidden
@@ -36,9 +42,8 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
     before do
-      sign_in volunteer
-      visit case_court_reports_path
-      page.find(modal_selector).click
+      include_context "when on the court reports page", :volunteer
+      open_court_report_modal
     end
 
     # putting all this in the same system test shaves 3 seconds off the test suite
@@ -97,13 +102,13 @@ RSpec.describe "case_court_reports/index", type: :system do
 
       # test the flow for clearing case selection error message by closing modal
       click_button "Close"
-      page.find(modal_selector).click
+      open_court_report_modal
       click_button "Generate Report"
       # expect the error message to be visible because we tried to generate the doc without making a selection
       expect(page).to have_selector(".select-required-error", visible: :visible)
       # expect error message to be gone after we close and re-open the modal
       click_button "Close"
-      page.find(modal_selector).click
+      open_court_report_modal
       expect(page).not_to have_selector(".select-required-error", visible: :visible)
     end
   end
@@ -119,13 +124,10 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
-    before do
-      sign_in volunteer
-      visit case_court_reports_path
-    end
+    include_context "when on the court reports page", :volunteer
 
     it "has transition case option selected" do
-      page.find(modal_selector).click
+      open_court_report_modal
       page.select transitioned_option_text, from: "case-selection"
 
       click_button "Generate Report"
@@ -134,7 +136,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "has non-transitioned case option selected" do
-      page.find(modal_selector).click
+      open_court_report_modal
       page.select non_transitioned_option_text, from: "case-selection"
 
       click_button "Generate Report"
@@ -152,10 +154,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
-    before do
-      sign_in volunteer
-      visit case_court_reports_path
-    end
+    include_context "when on the court reports page", :volunteer
 
     describe "when court report status is not 'submitted'" do
       before do
@@ -190,20 +189,14 @@ RSpec.describe "case_court_reports/index", type: :system do
         supervisor = create(:supervisor, casa_org: volunteer.casa_org)
 
         # Simulate report generation before status change
-        visit case_court_reports_path
-        page.find(modal_selector).click
+        open_court_report_modal
         page.select option_text, from: "case-selection"
         expect(page).to have_button("Generate Report", disabled: false)
         click_button "Generate Report"
 
         # Now set status to submitted
         casa_case.reload
-        Timeout.timeout(5) do
-          until casa_case.court_reports.attached?
-            sleep 0.5
-            casa_case.reload
-          end
-        end
+        wait_for_report_attachment(casa_case)
         casa_case.update!(court_report_status: :submitted)
 
         sign_out volunteer
@@ -217,20 +210,14 @@ RSpec.describe "case_court_reports/index", type: :system do
         casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
 
         # Simulate report generation before status change
-        visit case_court_reports_path
-        page.find(modal_selector).click
+        open_court_report_modal
         page.select option_text, from: "case-selection"
         expect(page).to have_button("Generate Report", disabled: false)
         click_button "Generate Report"
 
         # Now set status to submitted
         casa_case.reload
-        Timeout.timeout(5) do
-          until casa_case.court_reports.attached?
-            sleep 0.5
-            casa_case.reload
-          end
-        end
+        wait_for_report_attachment(casa_case)
         casa_case.update!(court_report_status: :submitted)
 
         sign_out volunteer
@@ -242,17 +229,14 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  describe "as a supervisor" do
+  context "when logged in as a supervisor" do
     let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
     let(:supervisor) { volunteer.supervisor }
     let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
-    before do
-      sign_in supervisor
-      visit case_court_reports_path
-    end
+    include_context "when on the court reports page", :supervisor
 
     it { expect(page).to have_selector ".select2" }
     it { expect(page).to have_text "Search by volunteer name or case number" }
@@ -262,12 +246,8 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:search_term) { casa_case.case_number[-3..] }
 
       it "selects the correct case", :aggregate_failures, :js do
-        find(modal_selector).click
-        # Wait for Select2 input to be visible
-        expect(page).to have_css("#case_select_body .selection", visible: :visible)
-        find("#case_select_body .selection").click
-        # Wait for Select2 dropdown to be present
-        expect(page).to have_css(".select2-dropdown", visible: :visible)
+        open_court_report_modal
+        open_case_select2_dropdown
         send_keys(search_term)
         # Wait for the search result to appear in the dropdown
         expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: :visible)
@@ -290,9 +270,8 @@ RSpec.describe "case_court_reports/index", type: :system do
       it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
         unassigned_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1")
 
-        sign_in volunteer
-        visit case_court_reports_path
-        page.find(modal_selector).click
+        include_context "when on the court reports page", :volunteer
+        open_court_report_modal
 
         expect(page).not_to have_selector("#case-selection option", text: unassigned_case.case_number)
 
@@ -306,14 +285,9 @@ RSpec.describe "case_court_reports/index", type: :system do
       it "shows all cases belonging to the organization in the Select2 dropdown", :aggregate_failures do
         org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-SUP-1")
 
-        sign_out volunteer
-        sign_in supervisor
-        visit case_court_reports_path
-        page.find(modal_selector).click
-
-        expect(page).to have_css("#case_select_body .selection", visible: :visible)
-        find("#case_select_body .selection").click
-        expect(page).to have_css(".select2-dropdown", visible: :visible)
+        include_context "when on the court reports page", :supervisor
+        open_court_report_modal
+        open_case_select2_dropdown
 
         expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
         expect(page).to have_css(".select2-results__option", text: volunteer.casa_cases.first.case_number, visible: :visible)
@@ -328,11 +302,8 @@ RSpec.describe "case_court_reports/index", type: :system do
         sign_out volunteer
         sign_in casa_admin
         visit case_court_reports_path
-        page.find(modal_selector).click
-
-        expect(page).to have_css("#case_select_body .selection", visible: :visible)
-        find("#case_select_body .selection").click
-        expect(page).to have_css(".select2-dropdown", visible: :visible)
+        open_court_report_modal
+        open_case_select2_dropdown
 
         expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
       end
