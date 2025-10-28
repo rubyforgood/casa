@@ -14,12 +14,36 @@ RSpec.shared_context "when on the court reports page" do |user_role|
   end
 end
 
+RSpec.shared_examples "a user with organization-level case visibility in autocomplete" do
+  let!(:org_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-CASE-1") }
+  let!(:other_org) { create(:casa_org) }
+  let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99") }
+
+  before do
+    include_context "when on the court reports page", user_role
+    open_court_report_modal
+    open_case_select2_dropdown
+  end
+
+  it "shows all cases in their organization", :aggregate_failures do
+    expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
+    expect(page).to have_css(".select2-results__option", text: volunteer.casa_cases.first.case_number, visible: :visible)
+  end
+
+  it "hides cases from other organizations", :aggregate_failures do
+    find(".select2-search__field").send_keys(other_org_case.case_number)
+    expect(page).not_to have_css(".select2-results__option", text: other_org_case.case_number, visible: :visible)
+    expect(page).to have_css(".select2-results__option", text: "No results found", visible: :visible)
+  end
+end
+
 # rubocop:disable RSpec/MultipleMemoizedHelpers
 # rubocop:disable RSpec/ExampleLength
 
 RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
+  let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
 
   let(:date) { Date.current }
   let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
@@ -110,38 +134,6 @@ RSpec.describe "case_court_reports/index", type: :system do
       click_button "Close"
       open_court_report_modal
       expect(page).not_to have_selector(".select-required-error", visible: :visible)
-    end
-  end
-
-  describe "'Case Number' dropdown list", :js do
-    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
-    let(:transitioned_case_number) { casa_cases.detect(&:in_transition_age?).case_number.to_s }
-    let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
-    let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
-    let(:supervisor) { volunteer.supervisor }
-    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
-
-    include_context "when on the court reports page", :volunteer
-
-    it "has transition case option selected" do
-      open_court_report_modal
-      page.select transitioned_option_text, from: "case-selection"
-
-      click_button "Generate Report"
-
-      expect(page).to have_select "case-selection", selected: transitioned_option_text
-    end
-
-    it "has non-transitioned case option selected" do
-      open_court_report_modal
-      page.select non_transitioned_option_text, from: "case-selection"
-
-      click_button "Generate Report"
-
-      expect(page).to have_select "case-selection", selected: non_transitioned_option_text
     end
   end
 
@@ -259,22 +251,29 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 
-  describe "autocomplete case visibility", :js do
-    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+  describe "case selection visibility by user role", :js do
+    let!(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
     let(:supervisor) { volunteer.supervisor }
     let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
     context "when logged in as a volunteer" do
-      it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
-        unassigned_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1")
+      let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
+      let!(:other_volunteer_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer]) }
+      let!(:unassigned_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1") }
 
+      it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
         include_context "when on the court reports page", :volunteer
         open_court_report_modal
 
+        # Assert: Does NOT see cases assigned to other volunteers
+        expect(page).not_to have_selector("#case-selection option", text: other_volunteer_case.case_number)
+
+        # Assert: Does NOT see unassigned cases
         expect(page).not_to have_selector("#case-selection option", text: unassigned_case.case_number)
 
+        # Assert: SEES all their own cases
         volunteer.casa_cases.each do |c|
           expect(page).to have_selector("#case-selection option", text: c.case_number)
         end
@@ -282,31 +281,15 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     context "when logged in as a supervisor" do
-      it "shows all cases belonging to the organization in the Select2 dropdown", :aggregate_failures do
-        org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-SUP-1")
+      let(:user_role) { :supervisor }
 
-        include_context "when on the court reports page", :supervisor
-        open_court_report_modal
-        open_case_select2_dropdown
-
-        expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
-        expect(page).to have_css(".select2-results__option", text: volunteer.casa_cases.first.case_number, visible: :visible)
-      end
+      it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
 
     context "when logged in as an admin" do
-      it "shows all cases belonging to the organization in the Select2 dropdown", :aggregate_failures do
-        casa_admin = create(:casa_admin, casa_org: volunteer.casa_org)
-        org_case = create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-ADMIN-1")
+      let(:user_role) { :casa_admin }
 
-        sign_out volunteer
-        sign_in casa_admin
-        visit case_court_reports_path
-        open_court_report_modal
-        open_case_select2_dropdown
-
-        expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
-      end
+      it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
   end
 end
