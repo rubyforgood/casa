@@ -10,9 +10,7 @@ Prosopite.allow_stack_paths = [
   "shoulda/matchers/active_model/validate_inclusion_of_matcher.rb",
 ]
 
-PROSOPITE_PATHS = [
-  "./spec/models/*"
-].freeze
+PROSOPITE_IGNORE = File.read(".prosopite_ignore").lines.map(&:chomp)
 
 # Monkey-patch FactoryBot to pause Prosopite during factory creation
 # This prevents N+1 detection in factory callbacks, focusing on actual test code
@@ -36,21 +34,19 @@ end
 
 RSpec.configure do |config|
   config.around do |example|
-    should_enable = PROSOPITE_PATHS.any? { |pattern|
-      File.fnmatch?(pattern, example.metadata[:rerun_file_path]
-      )
+    should_ignore = PROSOPITE_IGNORE.any? { |path|
+      File.fnmatch?("./#{path}/*", example.metadata[:rerun_file_path])
     }
-
-    if should_enable && !example.metadata[:disable_prosopite]
-      Prosopite.scan do
-        example.run
-      end
-    else
+    if should_ignore || example.metadata[:disable_prosopite]
       # Disable prosopite globally for this test (works across threads)
       original_enabled = Prosopite.enabled?
       Prosopite.enabled = false
       example.run
       Prosopite.enabled = original_enabled
+    else
+      Prosopite.scan do
+        example.run
+      end
     end
   end
 end
