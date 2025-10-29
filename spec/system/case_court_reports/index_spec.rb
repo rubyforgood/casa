@@ -66,8 +66,6 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer") }
     let(:supervisor) { volunteer.supervisor }
     let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
     include_context "when on the court reports page", :volunteer
 
@@ -89,6 +87,9 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "lists all assigned cases with transition status and data-lookup", :aggregate_failures do
+      younger_than_transition_age = volunteer.casa_cases.reject(&:in_transition_age?).first
+      at_least_transition_age = volunteer.casa_cases.detect(&:in_transition_age?)
+
       expected_number_of_options = casa_cases.size + 1
       expect(page).to have_selector "#case-selection option", count: expected_number_of_options
 
