@@ -81,70 +81,69 @@ RSpec.describe "case_court_reports/index", type: :system do
       open_court_report_modal
     end
 
-    # putting all this in the same system test shaves 3 seconds off the test suite
-    it "modal has correct contents", :aggregate_failures do
-      start_date = page.find("#start_date").value
-      expect(start_date).to eq(formatted_date)
-
-      end_date = page.find("#end_date").value
-      expect(end_date).to eq(formatted_date)
-
+    it "shows the Generate button", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :visible
       expect(page).not_to have_selector ".select2"
+    end
 
-      # shows n+1 options in total, e.g 3 options <- 2 assigned cases + 1 prompt text
+    it "shows correct default dates", :aggregate_failures do
+      expect(page.find("#start_date").value).to eq(formatted_date)
+      expect(page.find("#end_date").value).to eq(formatted_date)
+    end
+
+    it "lists all assigned cases with transition status and data-lookup", :aggregate_failures do
       expected_number_of_options = casa_cases.size + 1
       expect(page).to have_selector "#case-selection option", count: expected_number_of_options
 
       # shows transition stamp for transitioned case
-      expected_text = "#{at_least_transition_age.case_number} - transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text
+      expected_text_transition = "#{at_least_transition_age.case_number} - transition"
+      expect(page).to have_selector "#case-selection option", text: expected_text_transition
+
+      # shows non-transition stamp for non-transitioned case
+      expected_text_non_transition = "#{younger_than_transition_age.case_number} - non-transition"
+      expect(page).to have_selector "#case-selection option", text: expected_text_non_transition
 
       # adds data-lookup attribute for searching by volunteer name
       casa_cases.each do |casa_case|
         lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
         expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
       end
+    end
 
-      # shows non-transition stamp for non-transitioned case
-      expected_text = "#{younger_than_transition_age.case_number} - non-transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text
+    it "defaults to 'Select case number' prompt", :aggregate_failures do
+      expect(page).to have_select "case-selection", selected: "Select case number"
+      # Extra check for the first option specifically
+      expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number"
+    end
 
-      # shows a select element with default selection 'Select case number'
-      expected_text = "Select case number"
-      find("#case-selection").click.first("option", text: expected_text).select_option
-
-      expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
-      expect(page).to have_select "case-selection", selected: expected_text
-
-      # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen
-      # should have disabled generate button, download icon and no spinner
+    it "shows an error when generating without a selection", :aggregate_failures do
+      # Ensure default is selected
       page.select "Select case number", from: "case-selection"
       click_button "Generate Report"
 
+      expect(page).to have_selector(".select-required-error", visible: :visible)
+      # Check button state remains unchanged (not disabled, spinner hidden)
       expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :visible)
       expect(page).not_to have_selector("#btnGenerateReport[disabled]")
       expect(page).to have_selector("#spinner", visible: :hidden)
+    end
 
-      # when 'Generate Report' button is clicked without a selection, should display an error saying to make a selection
+    it "hides the error when a valid case is selected", :aggregate_failures do
+      click_button "Generate Report" # First, make the error appear
       expect(page).to have_selector(".select-required-error", visible: :visible)
 
       test_case_number = casa_cases.detect(&:in_transition_age?).case_number.to_s
-
-      # when we make a selection, the error is no longer visible
       page.select test_case_number, from: "case-selection"
       expect(page).not_to have_selector(".select-required-error", visible: :visible)
+    end
 
-      # test the flow for clearing case selection error message by closing modal
-      click_button "Close"
-      open_court_report_modal
-      click_button "Generate Report"
-      # expect the error message to be visible because we tried to generate the doc without making a selection
+    it "clears the error message when the modal is reopened", :aggregate_failures do
+      click_button "Generate Report" # Make error appear
       expect(page).to have_selector(".select-required-error", visible: :visible)
-      # expect error message to be gone after we close and re-open the modal
+
       click_button "Close"
-      open_court_report_modal
-      expect(page).not_to have_selector(".select-required-error", visible: :visible)
+      open_court_report_modal # Reopen using the helper
+      expect(page).not_to have_selector(".select-required-error", visible: :visible) # Error should be gone
     end
   end
 
