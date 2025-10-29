@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
 RSpec.configure do |config|
@@ -63,7 +65,9 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when opening 'Download Court Report' modal", :js do
-    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer") }
+    let(:volunteer) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer")
+    end
     let(:supervisor) { volunteer.supervisor }
     let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
 
@@ -146,7 +150,9 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when logged in as a supervisor" do
-    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:volunteer) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last")
+    end
     let(:supervisor) { volunteer.supervisor }
 
     include_context "when on the court reports page", :supervisor
@@ -173,7 +179,9 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "case selection visibility by user role", :js do
-    let!(:volunteer_assigned_to_case) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer") }
+    let!(:volunteer_assigned_to_case) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer")
+    end
     let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
     let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
     let!(:other_org) { create(:casa_org) }
@@ -182,7 +190,10 @@ RSpec.describe "case_court_reports/index", type: :system do
     context "when logged in as a volunteer" do
       let(:volunteer) { volunteer_assigned_to_case }
       let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
-      let!(:other_volunteer_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer], active: true) }
+      let!(:other_volunteer_case) do
+        create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer],
+          active: true)
+      end
 
       include_context "when on the court reports page", :volunteer
 
@@ -191,17 +202,19 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "shows all assigned cases in autocomplete search", :aggregate_failures do
-        volunteer.casa_cases.select(&:active?).each do |c| # rubocop:disable Lint/UnusedBlockArgument
+        volunteer.casa_cases.select(&:active?).each do |c|
           expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i)
         end
       end
 
       it "does not show unassigned cases in autocomplete search" do
-        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+        expect(page).not_to have_selector("#case-selection option",
+          text: /#{Regexp.escape(unassigned_case.case_number)}/i)
       end
 
       it "does not show cases assigned to other volunteers in autocomplete search" do
-        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(other_volunteer_case.case_number)}/i)
+        expect(page).not_to have_selector("#case-selection option",
+          text: /#{Regexp.escape(other_volunteer_case.case_number)}/i)
       end
     end
 
