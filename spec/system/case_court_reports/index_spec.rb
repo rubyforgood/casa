@@ -95,7 +95,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector "#case-selection option", count: expected_number_of_options
     end
 
-    it "shows correct transition status labels", :aggregate_failures do
+    it "shows correct transition status labels", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
       younger_than_transition_age = volunteer.casa_cases.reject(&:in_transition_age?).first
       at_least_transition_age = volunteer.casa_cases.detect(&:in_transition_age?)
 
@@ -119,7 +119,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number"
     end
 
-    it "shows an error when generating without a selection", :aggregate_failures do
+    it "shows an error when generating without a selection", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
       # Ensure default is selected
       page.select "Select case number", from: "case-selection"
       click_button "Generate Report"
@@ -165,7 +165,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:casa_case) { volunteer.casa_cases.first }
       let(:search_term) { casa_case.case_number[-3..] }
 
-      it "selects the correct case", :aggregate_failures, :js do
+      it "selects the correct case", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
         open_court_report_modal
         open_case_select2_dropdown
         send_keys(search_term)
