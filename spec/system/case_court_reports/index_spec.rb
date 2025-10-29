@@ -146,6 +146,44 @@ RSpec.describe "case_court_reports/index", type: :system do
       open_court_report_modal # Reopen using the helper
       expect(page).not_to have_selector(".select-required-error", visible: :visible) # Error should be gone
     end
+
+    # NOTE: select by option VALUE (stable), stub `window.open` to capture the download URL,
+    # wait for the ActiveStorage attachment, and assert button state + opened URL.
+    it "generates and attaches a report on success", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+      transition_case = casa_cases.detect(&:in_transition_age?)
+
+      # Precondition: no report attached
+      expect(transition_case.court_reports.attached?).to be false
+
+      # Stub window.open so we can capture the download URL in the browser
+      page.execute_script(<<~JS)
+        window.__last_opened_url = null;
+        window.open = function(url) { window.__last_opened_url = url; };
+      JS
+
+      # Ensure the option exists, then select it by VALUE (case number)
+      expect(page).to have_selector("#case-selection option[value='#{transition_case.case_number}']", visible: :all)
+      find("#case-selection").find("option[value='#{transition_case.case_number}']").select_option
+
+      # Trigger generation
+      click_button "Generate Report"
+
+      # Button should be disabled while processing
+      expect(page).to have_selector("#btnGenerateReport[disabled]")
+
+      # Wait for the controller to attach the file (allow longer timeout on CI)
+      wait_for_report_attachment(transition_case, timeout: 10)
+      transition_case.reload
+
+      # Postcondition: report attached and button re-enabled
+      expect(transition_case.court_reports.attached?).to be true
+      expect(page).not_to have_selector("#btnGenerateReport[disabled]", visible: :all)
+
+      # Verify the browser attempted to open the generated .docx link
+      opened_url = page.evaluate_script("window.__last_opened_url")
+      expect(opened_url).to be_present
+      expect(opened_url).to match(/#{Regexp.escape(transition_case.case_number)}.*\.docx$/i)
+    end
   end
 
   context "when logged in as a supervisor" do
