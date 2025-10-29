@@ -50,11 +50,9 @@ RSpec.shared_examples "a user with organization-level case visibility in autocom
 end
 
 RSpec.describe "case_court_reports/index", type: :system do
-  let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
-  let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
-
   context "when first arriving to 'Generate Court Report' page", :js do
+    let(:volunteer) { create(:volunteer) }
+
     include_context "when on the court reports page", :volunteer
 
     it "generation modal hidden", :aggregate_failures do
@@ -222,6 +220,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     context "when logged in as a supervisor" do
       let(:volunteer) { volunteer_assigned_to_case }
+      let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
 
       include_context "when on the court reports page", :supervisor
       it_behaves_like "a user with organization-level case visibility in autocomplete"
@@ -229,6 +228,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     context "when logged in as an admin" do
       let(:volunteer) { volunteer_assigned_to_case }
+      let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
 
       include_context "when on the court reports page", :casa_admin
       it_behaves_like "a user with organization-level case visibility in autocomplete"
