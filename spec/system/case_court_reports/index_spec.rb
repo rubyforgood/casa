@@ -90,22 +90,23 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page.find("#end_date").value).to eq(formatted_date)
     end
 
-    it "lists all assigned cases with transition status and data-lookup", :aggregate_failures do
+    it "lists all assigned cases" do
+      expected_number_of_options = casa_cases.size + 1 # +1 for "Select case"
+      expect(page).to have_selector "#case-selection option", count: expected_number_of_options
+    end
+
+    it "shows correct transition status labels", :aggregate_failures do
       younger_than_transition_age = volunteer.casa_cases.reject(&:in_transition_age?).first
       at_least_transition_age = volunteer.casa_cases.detect(&:in_transition_age?)
 
-      expected_number_of_options = casa_cases.size + 1
-      expect(page).to have_selector "#case-selection option", count: expected_number_of_options
-
-      # shows transition stamp for transitioned case
       expected_text_transition = "#{at_least_transition_age.case_number} - transition"
       expect(page).to have_selector "#case-selection option", text: expected_text_transition
 
-      # shows non-transition stamp for non-transitioned case
       expected_text_non_transition = "#{younger_than_transition_age.case_number} - non-transition"
       expect(page).to have_selector "#case-selection option", text: expected_text_non_transition
+    end
 
-      # adds data-lookup attribute for searching by volunteer name
+    it "adds data-lookup attribute for volunteer searching" do
       casa_cases.each do |casa_case|
         lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
         expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
