@@ -5,7 +5,6 @@ RSpec.configure do |config|
 end
 
 RSpec.shared_context "when on the court reports page" do |user_role|
-  # This assumes your 'let' blocks define :volunteer, :supervisor, etc.
   let(:current_user) { send(user_role) }
 
   before do
