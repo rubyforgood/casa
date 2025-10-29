@@ -179,6 +179,7 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "case selection visibility by user role", :js do
+    # rubocop:disable RSpec/MultipleMemoizedHelpers
     let!(:volunteer_assigned_to_case) do
       create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer")
     end
@@ -186,6 +187,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
     let!(:other_org) { create(:casa_org) }
     let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) }
+    # rubocop:enable RSpec/MultipleMemoizedHelpers
 
     context "when logged in as a volunteer" do
       let(:volunteer) { volunteer_assigned_to_case }
