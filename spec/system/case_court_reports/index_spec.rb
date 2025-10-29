@@ -47,16 +47,10 @@ RSpec.shared_examples "a user with organization-level case visibility in autocom
   end
 end
 
-# rubocop:disable RSpec/MultipleMemoizedHelpers
-# rubocop:disable RSpec/ExampleLength
-
 RSpec.describe "case_court_reports/index", type: :system do
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
   let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
-
-  let(:date) { Date.current }
-  let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
 
   context "when first arriving to 'Generate Court Report' page", :js do
     include_context "when on the court reports page", :volunteer
@@ -87,6 +81,9 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows correct default dates", :aggregate_failures do
+      date = Date.current
+      formatted_date = date.strftime("%B %d, %Y") # January 01, 2021
+
       expect(page.find("#start_date").value).to eq(formatted_date)
       expect(page.find("#end_date").value).to eq(formatted_date)
     end
@@ -226,6 +223,3 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
   end
 end
-
-# rubocop:enable RSpec/MultipleMemoizedHelpers
-# rubocop:enable RSpec/ExampleLength
