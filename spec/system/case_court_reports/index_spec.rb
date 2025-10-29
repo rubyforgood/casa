@@ -75,7 +75,6 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
     let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
 
-
     include_context "when on the court reports page", :volunteer
 
     before do
