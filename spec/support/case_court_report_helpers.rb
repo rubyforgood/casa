@@ -29,7 +29,7 @@ module CaseCourtReportHelpers
 
     Timeout.timeout(timeout) do
       until casa_case.court_reports.attached?
-        sleep 0.5
+        sleep 0.2
         casa_case.reload
       end
     end
