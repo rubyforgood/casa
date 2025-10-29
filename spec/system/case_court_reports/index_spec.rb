@@ -178,7 +178,6 @@ RSpec.describe "case_court_reports/index", type: :system do
   describe "case selection visibility by user role", :js do
     let!(:volunteer_assigned_to_case) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer") }
     let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
-
     let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
     let!(:other_org) { create(:casa_org) }
     let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) }
@@ -195,7 +194,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
 
       it "shows all assigned cases in autocomplete search", :aggregate_failures do
-        volunteer.casa_cases.select(&:active?).each do |c|
+        volunteer.casa_cases.select(&:active?).each do |c| # rubocop:disable Lint/UnusedBlockArgument
           expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i)
         end
       end
