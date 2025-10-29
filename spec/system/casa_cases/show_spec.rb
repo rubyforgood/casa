@@ -245,7 +245,6 @@ RSpec.describe "casa_cases/show", type: :system do
       end
     end
 
-
     context "when old case contacts are hidden" do
       it "displays all case contacts to supervisor", :js do
         casa_case = create(:casa_case, casa_org: organization)
