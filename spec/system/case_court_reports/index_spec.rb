@@ -15,24 +15,36 @@ RSpec.shared_context "when on the court reports page" do |user_role|
 end
 
 RSpec.shared_examples "a user with organization-level case visibility in autocomplete" do
-  let!(:org_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "ORG-CASE-1") }
-  let!(:other_org) { create(:casa_org) }
-  let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99") }
-
   before do
     open_court_report_modal
     open_case_select2_dropdown
   end
 
   it "shows all cases in their organization", :aggregate_failures do
-    expect(page).to have_css(".select2-results__option", text: org_case.case_number, visible: :visible)
-    expect(page).to have_css(".select2-results__option", text: volunteer.casa_cases.first.case_number, visible: :visible)
+    # Ensure the dropdown results area is ready
+    expect(page).to have_css("ul.select2-results__options")
+
+    # Check for the unassigned case created in the calling context
+    expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+
+    # Check for each case assigned to the volunteer (created in the calling context)
+    volunteer.casa_cases.each do |casa_case|
+      # Use regex to flexibly match text format (e.g., "CASE-NUM - status(assigned...)")
+      expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(casa_case.case_number)}/i)
+    end
   end
 
   it "hides cases from other organizations", :aggregate_failures do
-    find(".select2-search__field").send_keys(other_org_case.case_number)
+    # Find and interact with the search field
+    input_field = find("input.select2-search__field", visible: :all)
+    input_field.click # Ensure focus before typing
+    input_field.send_keys(other_org_case.case_number)
+
+    # Assert that "No results found" IS visible (Capybara waits)
+    expect(page).to have_css(".select2-results__option", text: "No results found", visible: :visible, wait: 5)
+
+    # Assert that the specific other org case number is NOT visible
     expect(page).not_to have_css(".select2-results__option", text: other_org_case.case_number, visible: :visible)
-    expect(page).to have_css(".select2-results__option", text: "No results found", visible: :visible)
   end
 end
 
@@ -58,9 +70,12 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   context "when opening 'Download Court Report' modal", :js do
-    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer") }
     let(:supervisor) { volunteer.supervisor }
     let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+    let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
+    let(:at_least_transition_age) { volunteer.casa_cases.detect(&:in_transition_age?) }
+
 
     include_context "when on the court reports page", :volunteer
 
@@ -250,43 +265,50 @@ RSpec.describe "case_court_reports/index", type: :system do
   end
 
   describe "case selection visibility by user role", :js do
+    let!(:volunteer_assigned_to_case) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer") }
+    let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
+
+    let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
+    let!(:other_org) { create(:casa_org) }
+    let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) }
+
     context "when logged in as a volunteer" do
-      let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer") }
+      let(:volunteer) { volunteer_assigned_to_case }
       let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
-      let!(:other_volunteer_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer]) }
-      let!(:unassigned_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "UNASSIGNED-VOL-1") }
+      let!(:other_volunteer_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer], active: true) }
 
       include_context "when on the court reports page", :volunteer
 
-      it "shows only cases assigned to the volunteer in the native select", :aggregate_failures do
+      before do
         open_court_report_modal
+      end
 
-        # Assert: Does NOT see cases assigned to other volunteers
-        expect(page).not_to have_selector("#case-selection option", text: other_volunteer_case.case_number)
-
-        # Assert: Does NOT see unassigned cases
-        expect(page).not_to have_selector("#case-selection option", text: unassigned_case.case_number)
-
-        # Assert: SEES all their own cases
-        volunteer.casa_cases.each do |c|
-          expect(page).to have_selector("#case-selection option", text: c.case_number)
+      it "shows all assigned cases in autocomplete search", :aggregate_failures do
+        volunteer.casa_cases.select(&:active?).each do |c|
+          expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i)
         end
+      end
+
+      it "does not show unassigned cases in autocomplete search" do
+        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+      end
+
+      it "does not show cases assigned to other volunteers in autocomplete search" do
+        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(other_volunteer_case.case_number)}/i)
       end
     end
 
     context "when logged in as a supervisor" do
-      let(:user_role) { :supervisor }
+      let(:volunteer) { volunteer_assigned_to_case }
 
-      include_context "when on the court reports page", user_role
-
+      include_context "when on the court reports page", :supervisor
       it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
 
     context "when logged in as an admin" do
-      let(:user_role) { :casa_admin }
+      let(:volunteer) { volunteer_assigned_to_case }
 
-      include_context "when on the court reports page", user_role
-
+      include_context "when on the court reports page", :casa_admin
       it_behaves_like "a user with organization-level case visibility in autocomplete"
     end
   end
