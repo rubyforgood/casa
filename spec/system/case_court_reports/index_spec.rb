@@ -187,7 +187,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
     let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
     let!(:other_org) { create(:casa_org) }
-    let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) }
+    let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) } # rubocop:disable RSpec/LetSetup
 
     context "when logged in as a volunteer" do
       let(:volunteer) { volunteer_assigned_to_case }
