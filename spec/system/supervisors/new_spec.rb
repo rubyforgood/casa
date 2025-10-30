@@ -77,7 +77,19 @@ RSpec.describe "supervisors/new", type: :system do
     end
   end
 
-  context "volunteer user" do
+  context "when logged in as supervisor" do
+    let(:supervisor) { create(:supervisor) }
+
+    before { sign_in supervisor }
+
+    it "redirects the user with an error message" do
+      visit new_supervisor_path
+
+      expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
+    end
+  end
+
+  context "when logged in as a volunteer" do
     let(:volunteer) { create(:volunteer) }
 
     before { sign_in volunteer }
