@@ -7,7 +7,7 @@ RSpec.describe "supervisors/new", type: :system do
     let(:admin) { create(:casa_admin) }
     let(:new_supervisor_name) { Faker::Name.name }
     let(:new_supervisor_email) { Faker::Internet.email }
-    let(:new_supervisor_phone_number) { Faker::PhoneNumber.phone_number }
+    let(:new_supervisor_phone_number) { "1234567890" }
 
     before do
       # Stub the request to the URL shortener service (needed if phone is provided)
