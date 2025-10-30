@@ -79,7 +79,7 @@ RSpec.describe "supervisors/new", type: :system do
     end
   end
 
-  context "when logged in as supervisor" do
+  context "when logged in as a supervisor" do
     let(:supervisor) { create(:supervisor) }
 
     before { sign_in supervisor }
