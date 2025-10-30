@@ -5,17 +5,39 @@ require "rails_helper"
 RSpec.describe "supervisors/new", type: :system do
   context "when admin" do
     let(:admin) { create(:casa_admin) }
+    let(:new_supervisor_name) { Faker::Name.name }
+    let(:new_supervisor_email) { Faker::Internet.email }
+    let(:new_supervisor_phone_number) { Faker::PhoneNumber.phone_number }
+
+    before do
+      # Stub the request to the URL shortener service (needed if phone is provided)
+      stub_request(:post, "https://api.short.io/links")
+        .to_return(
+          status: 200,
+          body: {shortURL: "https://short.url/example"}.to_json,
+          headers: {"Content-Type" => "application/json"}
+        )
+    end
 
     it "allows admin to create a new supervisors" do
       sign_in admin
       visit new_supervisor_path
 
-      fill_in "Email", with: "new_supervisor_email@example.com"
-      fill_in "Display name", with: "New Supervisor Display Name"
+      fill_in "Email", with: new_supervisor_email
+      fill_in "Display name", with: new_supervisor_name
+      fill_in "Phone number", with: new_supervisor_phone_number
 
-      expect {
-        click_on "Create Supervisor"
-      }.to change(User, :count).by(1)
+      click_on "Create Supervisor"
+
+      expect(page).to have_text("New supervisor created successfully.")
+      expect(User.count).to eq(2) # admin + new supervisor
+      
+      new_supervisor = User.find_by(email: new_supervisor_email)
+      expect(new_supervisor).to be_present
+      expect(new_supervisor.display_name).to eq(new_supervisor_name)
+      expect(new_supervisor.phone_number).to eq(new_supervisor_phone_number)
+      expect(new_supervisor.supervisor?).to eq(true)
+      expect(new_supervisor.active?).to eq(true)
     end
 
     it "sends invitation email to the new supervisor" do
