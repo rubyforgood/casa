@@ -56,6 +56,25 @@ RSpec.describe "supervisors/new", type: :system do
         expect(last_email.html_part.body.encoded).to have_text "your new Supervisor account."
       end
     end
+
+    context "with invalid form submission" do
+      before do
+        # Don't fill in any fields
+        click_on "Create Supervisor"
+      end
+
+      it "does not create a new user" do
+        expect(User.count).to eq(1) # Only the admin user exists
+      end
+
+      it "shows validation error messages" do
+        expect(page).to have_text "errors prohibited this Supervisor from being saved:"
+      end
+
+      it "stays on the new supervisor page" do
+        expect(page).to have_current_path(supervisors_path)
+      end
+    end
   end
 
   context "volunteer user" do
