@@ -31,8 +31,11 @@ RSpec.describe "supervisors/new", type: :system do
 
       expect(page).to have_text("New supervisor created successfully.")
       expect(User.count).to eq(2) # admin + new supervisor
-      
+
       new_supervisor = User.find_by(email: new_supervisor_email)
+
+      expect(page).to have_current_path(edit_supervisor_path(new_supervisor))
+
       expect(new_supervisor).to be_present
       expect(new_supervisor.display_name).to eq(new_supervisor_name)
       expect(new_supervisor.phone_number).to eq(new_supervisor_phone_number)
@@ -40,17 +43,20 @@ RSpec.describe "supervisors/new", type: :system do
       expect(new_supervisor.active?).to eq(true)
     end
 
-    it "sends invitation email to the new supervisor" do
+    it "sends invitation email to the new supervisor", :aggregate_failures do
       sign_in admin
       visit new_supervisor_path
 
-      fill_in "Email", with: "new_supervisor_email2@example.com"
-      fill_in "Display name", with: "New Supervisor Display Name 2"
+      fill_in "Email", with: new_supervisor_email
+      fill_in "Display name", with: new_supervisor_name
+      fill_in "Phone number", with: new_supervisor_phone_number
 
       click_on "Create Supervisor"
 
+      expect(page).to have_text("New supervisor created successfully.")
+
       last_email = ActionMailer::Base.deliveries.last
-      expect(last_email.to).to eq ["new_supervisor_email2@example.com"]
+      expect(last_email.to).to eq [new_supervisor_email]
       expect(last_email.subject).to have_text "CASA Console invitation instructions"
       expect(last_email.html_part.body.encoded).to have_text "your new Supervisor account."
     end
