@@ -37,7 +37,8 @@ RSpec.describe "supervisors/new", type: :system do
         expect(page).to have_text("New supervisor created successfully.")
       end
 
-      it "redirects to the edit supervisor page" do
+      it "redirects to the edit supervisor page", :aggregate_failures do
+        expect(page).to have_text("New supervisor created successfully.") # Guard to ensure redirection happened
         expect(page).to have_current_path(edit_supervisor_path(new_supervisor))
       end
 
@@ -71,7 +72,8 @@ RSpec.describe "supervisors/new", type: :system do
         expect(page).to have_text "errors prohibited this Supervisor from being saved:"
       end
 
-      it "stays on the new supervisor page" do
+      it "stays on the new supervisor page", :aggregate_failures do
+        expect(page).to have_text "errors prohibited this Supervisor from being saved:" # Guard to ensure no redirection happened
         expect(page).to have_current_path(supervisors_path)
       end
     end
