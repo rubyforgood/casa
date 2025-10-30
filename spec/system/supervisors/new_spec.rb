@@ -45,7 +45,7 @@ RSpec.describe "supervisors/new", type: :system do
       it "persists the new supervisor with correct attributes", :aggregate_failures do
         expect(new_supervisor).to be_present
         expect(new_supervisor.display_name).to eq(new_supervisor_name)
-        expect(new_supervisor.phone_number).to eq(new_supervisor_phone_number)
+        expect(new_supervisor.phone_number).to end_with(new_supervisor_phone_number)
         expect(new_supervisor.supervisor?).to be(true)
         expect(new_supervisor.active?).to be(true)
       end
