@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "supervisors/new", type: :system do
-  context "when admin" do
+  context "when logged in as an admin" do
     let(:admin) { create(:casa_admin) }
     let(:new_supervisor_name) { Faker::Name.name }
     let(:new_supervisor_email) { Faker::Internet.email }
