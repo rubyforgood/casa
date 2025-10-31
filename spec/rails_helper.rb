@@ -62,6 +62,7 @@ RSpec.configure do |config|
   config.include TwilioHelper, type: :request
   config.include TwilioHelper, type: :system
   config.include Support::RequestHelpers, type: :request
+  config.include CaseCourtReportHelpers, type: :system
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_paths = [
