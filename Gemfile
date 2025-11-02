@@ -47,6 +47,7 @@ gem "rswag-api"
 gem "rswag-ui"
 gem "sablon" # Word document templating tool for Case Court Reports
 gem "scout_apm"
+gem "scout_apm_logging" # production metrics around speed 
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails"
 gem "strong_migrations"
@@ -63,13 +64,13 @@ gem "flipper-ui"
 gem "pghero"
 gem "pg_query"
 group :development, :test do
-  gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "dotenv-rails"
   gem "factory_bot_rails"
   gem "parallel_tests"
   gem "pry"
   gem "pry-byebug"
+  gem "prosopite" # check for performance issues like N+1 queries
   gem "rspec_junit_formatter"
   gem "rspec-rails"
   gem "rswag-specs"
@@ -110,5 +111,3 @@ group :test do
   gem "simplecov", require: false
   gem "webmock" # HTTP request stubber
 end
-
-gem "scout_apm_logging", "~> 2.1"
