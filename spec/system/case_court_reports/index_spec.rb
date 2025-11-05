@@ -1,204 +1,198 @@
+# frozen_string_literal: true
+
 require "rails_helper"
 
-RSpec.describe "case_court_reports/index", type: :system do
-  let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last") }
-  let(:supervisor) { volunteer.supervisor }
-  let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
-  let(:younger_than_transition_age) { volunteer.casa_cases.reject(&:in_transition_age?).first }
-  let(:at_least_transition_age) { volunteer.casa_cases.find(&:in_transition_age?) }
-  let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
+RSpec.configure do |config|
+  config.include CaseCourtReportHelpers, type: :system
+end
 
-  let(:date) { Date.current }
-  let(:formatted_date) { date.strftime("%B %d, %Y") } # January 01, 2021
+RSpec.shared_context "when on the court reports page" do |user_role|
+  let(:current_user) { send(user_role) }
 
   before do
-    sign_in volunteer
+    sign_in current_user
     visit case_court_reports_path
   end
+end
 
+RSpec.shared_examples "a user with organization-level case visibility in autocomplete" do
+  before do
+    open_court_report_modal
+    open_case_select2_dropdown
+  end
+
+  it "shows all cases in their organization", :aggregate_failures do
+    # Ensure the dropdown results area is ready
+    expect(page).to have_css("ul.select2-results__options")
+
+    # Check for the unassigned case created in the calling context
+    expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+
+    # Check for each case assigned to the volunteer (created in the calling context)
+    volunteer.casa_cases.each do |casa_case|
+      # Use regex to flexibly match text format (e.g., "CASE-NUM - status(assigned...)")
+      expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(casa_case.case_number)}/i)
+    end
+  end
+
+  it "hides cases from other organizations", :aggregate_failures do
+    # Find and interact with the search field
+    input_field = find("input.select2-search__field", visible: :all)
+    input_field.click # Ensure focus before typing
+    input_field.send_keys(other_org_case.case_number)
+
+    # Assert that "No results found" IS visible (Capybara waits)
+    expect(page).to have_css(".select2-results__option", text: "No results found", visible: :visible, wait: 5)
+
+    # Assert that the specific other org case number is NOT visible
+    expect(page).not_to have_css(".select2-results__option", text: other_org_case.case_number, visible: :visible)
+  end
+end
+
+RSpec.describe "case_court_reports/index", type: :system do
   context "when first arriving to 'Generate Court Report' page", :js do
-    it "generation modal hidden" do
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
-      expect(page).to have_selector "#case-selection", visible: false
+    let(:volunteer) { create(:volunteer) }
+
+    include_context "when on the court reports page", :volunteer
+
+    it "generation modal hidden", :aggregate_failures do
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :hidden
+      expect(page).to have_selector "#case-selection", visible: :hidden
       expect(page).not_to have_selector ".select2"
     end
   end
 
-  context "after opening 'Download Court Report' modal", :js do
+  context "when opening 'Download Court Report' modal", :js do
+    let(:volunteer) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Volunteer")
+    end
+    let(:supervisor) { volunteer.supervisor }
+    let(:casa_cases) { CasaCase.actively_assigned_to(volunteer) }
+
+    include_context "when on the court reports page", :volunteer
+
     before do
-      page.find(modal_selector).click
+      open_court_report_modal
     end
 
-    # putting all this in the same system test shaves 3 seconds off the test suite
-    it "modal has correct contents" do
-      start_date = page.find("#start_date").value
-      expect(start_date).to eq(formatted_date)
-
-      end_date = page.find("#end_date").value
-      expect(end_date).to eq(formatted_date)
-
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
+    it "shows the Generate button", :aggregate_failures do
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :visible
       expect(page).not_to have_selector ".select2"
+    end
 
-      # shows n+1 options in total, e.g 3 options <- 2 assigned cases + 1 prompt text
-      expected_number_of_options = casa_cases.size + 1
+    it "shows correct default dates", :aggregate_failures do
+      date = Date.current
+      formatted_date = date.strftime("%B %d, %Y") # January 01, 2021
+
+      expect(page.find("#start_date").value).to eq(formatted_date)
+      expect(page.find("#end_date").value).to eq(formatted_date)
+    end
+
+    it "lists all assigned cases" do
+      expected_number_of_options = casa_cases.size + 1 # +1 for "Select case"
       expect(page).to have_selector "#case-selection option", count: expected_number_of_options
+    end
 
-      # shows transition stamp for transitioned case
-      expected_text = "#{at_least_transition_age.case_number} - transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text
+    it "shows correct transition status labels", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+      younger_than_transition_age = volunteer.casa_cases.reject(&:in_transition_age?).first
+      at_least_transition_age = volunteer.casa_cases.detect(&:in_transition_age?)
 
-      # adds data-lookup attribute for searching by volunteer name
+      expected_text_transition = "#{at_least_transition_age.case_number} - transition"
+      expect(page).to have_selector "#case-selection option", text: expected_text_transition
+
+      expected_text_non_transition = "#{younger_than_transition_age.case_number} - non-transition"
+      expect(page).to have_selector "#case-selection option", text: expected_text_non_transition
+    end
+
+    it "adds data-lookup attribute for volunteer searching" do
       casa_cases.each do |casa_case|
         lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
         expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
       end
+    end
 
-      # shows non-transition stamp for non-transitioned case
-      expected_text = "#{younger_than_transition_age.case_number} - non-transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text
+    it "defaults to 'Select case number' prompt", :aggregate_failures do
+      expect(page).to have_select "case-selection", selected: "Select case number"
+      # Extra check for the first option specifically
+      expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number"
+    end
 
-      # shows a select element with default selection 'Select case number'
-      expected_text = "Select case number"
-      find("#case-selection").click.first("option", text: expected_text).select_option
-
-      expect(page).to have_selector "#case-selection option:first-of-type", text: expected_text
-      expect(page).to have_select "case-selection", selected: expected_text
-
-      # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen"
-      # should have disabled generate button, download icon and no spinner
+    it "shows an error when generating without a selection", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+      # Ensure default is selected
       page.select "Select case number", from: "case-selection"
       click_button "Generate Report"
 
-      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
+      expect(page).to have_selector(".select-required-error", visible: :visible)
+      # Check button state remains unchanged (not disabled, spinner hidden)
+      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :visible)
       expect(page).not_to have_selector("#btnGenerateReport[disabled]")
       expect(page).to have_selector("#spinner", visible: :hidden)
+    end
 
-      # when 'Generate Report' button is clicked without a selection, should display an error saying to make a selection
+    it "hides the error when a valid case is selected", :aggregate_failures do
+      click_button "Generate Report" # First, make the error appear
       expect(page).to have_selector(".select-required-error", visible: :visible)
 
-      test_case_number = casa_cases.find(&:in_transition_age?).case_number.to_s
-
-      # when we make a selection, the error is no longer visible
+      test_case_number = casa_cases.detect(&:in_transition_age?).case_number.to_s
       page.select test_case_number, from: "case-selection"
       expect(page).not_to have_selector(".select-required-error", visible: :visible)
+    end
 
-      # test the flow for clearing case selection error message by closing modal
-      click_button "Close"
-      page.find(modal_selector).click
-      click_button "Generate Report"
-      # expect the error message to be visible because we tried to generate the doc without making a selection
+    it "clears the error message when the modal is reopened", :aggregate_failures do
+      click_button "Generate Report" # Make error appear
       expect(page).to have_selector(".select-required-error", visible: :visible)
-      # expect error message to be gone after we close and re-open the modal
+
       click_button "Close"
-      page.find(modal_selector).click
-      expect(page).not_to have_selector(".select-required-error", visible: :visible)
+      open_court_report_modal # Reopen using the helper
+      expect(page).not_to have_selector(".select-required-error", visible: :visible) # Error should be gone
     end
-  end
 
-  describe "'Case Number' dropdown list", :js do
-    let(:transitioned_case_number) { casa_cases.find(&:in_transition_age?).case_number.to_s }
-    let(:transitioned_option_text) { "#{transitioned_case_number} - transition(assigned to Name Last)" }
-    let(:non_transitioned_case_number) { casa_cases.reject(&:in_transition_age?).first.case_number.to_s }
-    let(:non_transitioned_option_text) { "#{non_transitioned_case_number} - non-transition(assigned to Name Last)" }
+    # NOTE: select by option VALUE (stable), stub `window.open` to capture the download URL,
+    # wait for the ActiveStorage attachment, and assert button state + opened URL.
+    it "generates and attaches a report on success", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+      transition_case = casa_cases.detect(&:in_transition_age?)
 
-    it "has transition case option selected" do
-      page.find(modal_selector).click
-      page.select transitioned_option_text, from: "case-selection"
+      # Precondition: no report attached
+      expect(transition_case.court_reports.attached?).to be false
 
+      # Stub window.open so we can capture the download URL in the browser
+      page.execute_script(<<~JS)
+        window.__last_opened_url = null;
+        window.open = function(url) { window.__last_opened_url = url; };
+      JS
+
+      # Ensure the option exists, then select it by VALUE (case number)
+      expect(page).to have_selector("#case-selection option[value='#{transition_case.case_number}']", visible: :all)
+      find("#case-selection").find("option[value='#{transition_case.case_number}']").select_option
+
+      # Trigger generation
       click_button "Generate Report"
 
-      expect(page).to have_select "case-selection", selected: transitioned_option_text
-    end
+      # Button should be disabled while processing
+      expect(page).to have_selector("#btnGenerateReport[disabled]")
 
-    it "has non-transitioned case option selected" do
-      page.find(modal_selector).click
-      page.select non_transitioned_option_text, from: "case-selection"
+      # Wait for the controller to attach the file (allow longer timeout on CI)
+      wait_for_report_attachment(transition_case, timeout: 10)
+      transition_case.reload
 
-      click_button "Generate Report"
+      # Postcondition: report attached and button re-enabled
+      expect(transition_case.court_reports.attached?).to be true
+      expect(page).not_to have_selector("#btnGenerateReport[disabled]", visible: :all)
 
-      expect(page).to have_select "case-selection", selected: non_transitioned_option_text
-    end
-  end
-
-  context "when selecting a case, volunteer can generate and download a report", :js do
-    let(:casa_case) { casa_cases.find(&:in_transition_age?) }
-    let(:option_text) { "#{casa_case.case_number} - transition" }
-
-    before do
-      page.find(modal_selector).click
-      # to find the select element, use either 'name' or 'id' attribute
-      # in this case, id = "case-selection", name = "case_number"
-      page.select option_text, from: "case-selection"
-
-      @download_window = window_opened_by do
-        click_button "Generate Report"
-      end
-    end
-
-    describe "when court report status is not 'submitted'" do
-      before do
-        casa_case.update!(court_report_status: :in_review)
-      end
-
-      it "does not allow supervisors to download already generated report from case details page" do
-        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
-
-        sign_out volunteer
-        sign_in supervisor
-
-        visit casa_case_path(casa_case.id)
-
-        expect(page).not_to have_link("Click to download")
-      end
-
-      it "does not allow admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
-
-        sign_out volunteer
-        sign_in casa_admin
-
-        visit casa_case_path(casa_case.id)
-
-        expect(page).not_to have_link("Click to download")
-      end
-    end
-
-    describe "when court report status is 'submitted'" do
-      before do
-        casa_case.update!(court_report_status: :submitted)
-      end
-
-      it "allows supervisors to download already generated report from case details page" do
-        supervisor = build(:supervisor, casa_org: volunteer.casa_org)
-
-        sign_out volunteer
-        sign_in supervisor
-
-        visit casa_case_path(casa_case.id)
-
-        expect(page).to have_link("Click to download")
-      end
-
-      it "allows admins to download already generated report from case details page" do
-        casa_admin = build(:casa_admin)
-
-        sign_out volunteer
-        sign_in casa_admin
-
-        visit casa_case_path(casa_case.id)
-
-        expect(page).to have_link("Click to download")
-      end
+      # Verify the browser attempted to open the generated .docx link
+      opened_url = page.evaluate_script("window.__last_opened_url")
+      expect(opened_url).to be_present
+      expect(opened_url).to match(/#{Regexp.escape(transition_case.case_number)}.*\.docx$/i)
     end
   end
 
-  # TODO: make this a request spec
-  describe "as a supervisor" do
-    before do
-      sign_in supervisor
-      visit case_court_reports_path
+  context "when logged in as a supervisor" do
+    let(:volunteer) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last")
     end
+    let(:supervisor) { volunteer.supervisor }
+
+    include_context "when on the court reports page", :supervisor
 
     it { expect(page).to have_selector ".select2" }
     it { expect(page).to have_text "Search by volunteer name or case number" }
@@ -207,15 +201,76 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:casa_case) { volunteer.casa_cases.first }
       let(:search_term) { casa_case.case_number[-3..] }
 
-      it "selects the correct case", :js do
-        find(modal_selector).click
-
-        find("#case_select_body .selection").click
+      it "selects the correct case", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+        open_court_report_modal
+        open_case_select2_dropdown
         send_keys(search_term)
-        send_keys :enter
-
-        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number)
+        # Wait for the search result to appear in the dropdown
+        expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: :visible)
+        # Click the result instead of sending enter
+        find(".select2-results__option", text: casa_case.case_number).click
+        # Wait for selection to update
+        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: :visible)
       end
     end
   end
+
+  # rubocop:disable RSpec/MultipleMemoizedHelpers
+  describe "case selection visibility by user role", :js do
+    let!(:volunteer_assigned_to_case) do
+      create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer")
+    end
+    let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
+    let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
+    let!(:other_org) { create(:casa_org) }
+    let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) } # rubocop:disable RSpec/LetSetup
+
+    context "when logged in as a volunteer" do
+      let(:volunteer) { volunteer_assigned_to_case }
+      let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
+      let!(:other_volunteer_case) do
+        create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer],
+          active: true)
+      end
+
+      include_context "when on the court reports page", :volunteer
+
+      before do
+        open_court_report_modal
+      end
+
+      it "shows all assigned cases in autocomplete search", :aggregate_failures do
+        volunteer.casa_cases.select(&:active?).each do |c|
+          expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i)
+        end
+      end
+
+      it "does not show unassigned cases in autocomplete search" do
+        expect(page).not_to have_selector("#case-selection option",
+          text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+      end
+
+      it "does not show cases assigned to other volunteers in autocomplete search" do
+        expect(page).not_to have_selector("#case-selection option",
+          text: /#{Regexp.escape(other_volunteer_case.case_number)}/i)
+      end
+    end
+
+    context "when logged in as a supervisor" do
+      let(:volunteer) { volunteer_assigned_to_case }
+      let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
+
+      include_context "when on the court reports page", :supervisor
+      it_behaves_like "a user with organization-level case visibility in autocomplete"
+    end
+
+    context "when logged in as an admin" do
+      let(:volunteer) { volunteer_assigned_to_case }
+      let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
+
+      include_context "when on the court reports page", :casa_admin
+      it_behaves_like "a user with organization-level case visibility in autocomplete"
+    end
+  end
+  # rubocop:enable RSpec/MultipleMemoizedHelpers
 end

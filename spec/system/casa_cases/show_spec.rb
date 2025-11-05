@@ -136,6 +136,34 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("Add to Calendar")
     end
 
+    context "court report download link visibility" do
+      it "does not show download link to admin when report status is not submitted" do
+        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+        casa_case.court_reports.attach(
+          io: File.open(fixture),
+          filename: "sample_report.docx",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        casa_case.update!(court_report_status: :in_review)
+
+        visit casa_case_path(casa_case.id)
+        expect(page).not_to have_link("Click to download")
+      end
+
+      it "shows download link to admin when report status is submitted" do
+        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+        casa_case.court_reports.attach(
+          io: File.open(fixture),
+          filename: "sample_report.docx",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        casa_case.update!(court_report_status: :submitted)
+
+        visit casa_case_path(casa_case.id)
+        expect(page).to have_link("Click to download")
+      end
+    end
+
     context "when there is no future court date or court report due date" do
       before do
         casa_case = create(:casa_case, casa_org: organization)
@@ -187,6 +215,34 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("Court Orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+    end
+
+    context "court report download link visibility" do
+      it "does not show download link to supervisor when report status is not submitted" do
+        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+        casa_case.court_reports.attach(
+          io: File.open(fixture),
+          filename: "sample_report.docx",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        casa_case.update!(court_report_status: :in_review)
+
+        visit casa_case_path(casa_case.id)
+        expect(page).not_to have_link("Click to download")
+      end
+
+      it "shows download link to supervisor when report status is submitted" do
+        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+        casa_case.court_reports.attach(
+          io: File.open(fixture),
+          filename: "sample_report.docx",
+          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        )
+        casa_case.update!(court_report_status: :submitted)
+
+        visit casa_case_path(casa_case.id)
+        expect(page).to have_link("Click to download")
+      end
     end
 
     context "when old case contacts are hidden" do
