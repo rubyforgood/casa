@@ -30,6 +30,31 @@ body.casa_cases {
     display: inline-block;
   }
 
+  .court-date-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+    .court-date-link {
+      flex: 1;
+    }
+    
+    .cal-btn {
+      flex-shrink: 0;
+      
+      .a2cldr {
+        width: 120px !important;
+        
+        .a2cldr-btn {
+          width: 120px !important;
+          font-size: 12px;
+          padding: 4px 8px;
+          text-align: center;
+        }
+      }
+    }
+  }
+
   #cc-check {
     p {
       display: flex;
