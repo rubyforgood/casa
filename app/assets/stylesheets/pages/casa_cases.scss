@@ -19,7 +19,7 @@ body.casa_cases {
 
   .a2cldr .a2cldr-btn {
     width: 190px;
-    text-align: center
+    text-align: center;
   }
 
   .a2cldr-list {
@@ -34,17 +34,17 @@ body.casa_cases {
     display: flex;
     align-items: center;
     gap: 10px;
-    
+
     .court-date-link {
       flex: 1;
     }
-    
+
     .cal-btn {
       flex-shrink: 0;
-      
+
       .a2cldr {
         width: 120px !important;
-        
+
         .a2cldr-btn {
           width: 120px !important;
           font-size: 12px;
@@ -155,7 +155,6 @@ body.casa_cases-show {
     display: flex;
     flex-direction: column;
     row-gap: 1rem;
-
   }
 
   .modal-footer {
@@ -187,10 +186,8 @@ body.casa_cases-show {
     text-align: left;
     h3 {
       margin-block-end: .25rem;
-
     }
     p {
-
     }
   }
 }
