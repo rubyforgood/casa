@@ -1,5 +1,7 @@
 /* eslint-env jest */
-require('jest')
+/**
+ * @jest-environment jsdom
+ */
 
 const { Notifier } = require('../src/notifier.js')
 const { NonDrivingContactMediumWarning } = require('../src/validated_form.js')
@@ -77,24 +79,16 @@ describe('NonDrivingContactMediumWarning', () => {
   })
 
   describe('constructor', () => {
-    test('Throws appropriate errors when initialized with values other than a valid jQuery object', (done) => {
-      $(() => {
-        try {
-          expect(() => {
-            // eslint-disable-next-line no-new
-            new NonDrivingContactMediumWarning(3, notifier)
-          }).toThrow(TypeError)
+    test('Throws appropriate errors when initialized with values other than a valid jQuery object', () => {
+      expect(() => {
+        // eslint-disable-next-line no-new
+        new NonDrivingContactMediumWarning(3, notifier)
+      }).toThrow(TypeError)
 
-          expect(() => {
-            // eslint-disable-next-line no-new
-            new NonDrivingContactMediumWarning($('#non-existant'), notifier)
-          }).toThrow(ReferenceError)
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(() => {
+        // eslint-disable-next-line no-new
+        new NonDrivingContactMediumWarning($('#non-existant'), notifier)
+      }).toThrow(ReferenceError)
     })
   })
 
@@ -102,7 +96,9 @@ describe('NonDrivingContactMediumWarning', () => {
     let component
 
     beforeEach(() => {
-      component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      $(() => {
+        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      })
     })
 
     test('returns the warning message if a non driving contact medium is selected and the miles driven count is > 0', (done) => {

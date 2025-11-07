@@ -1,7 +1,9 @@
 /* eslint-env jest */
-import { checkPasswordsAndDisplayPopup } from '../src/password_confirmation'
+/**
+ * @jest-environment jsdom
+ */
 
-require('jest')
+import { checkPasswordsAndDisplayPopup } from '../src/password_confirmation'
 
 let submitButton, passwordField, confirmationField
 

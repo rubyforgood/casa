@@ -1,4 +1,7 @@
 /* eslint-env jest */
+/**
+ * @jest-environment jsdom
+ */
 
 import {
   showBtn,
@@ -6,8 +9,6 @@ import {
   disableBtn,
   enableBtn
 } from '../src/casa_case'
-
-require('jest')
 
 let button
 
