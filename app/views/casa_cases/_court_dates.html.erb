@@ -1,12 +1,21 @@
 <% court_dates = casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
-<label>Court dates:</label>
+<label>Court dates: </label>
 <% if court_dates.empty? %>
   No Court Dates
 <% else %>
   <ul>
     <% court_dates.each do |pcd| %>
       <p>
+        
         <%= link_to(pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd)) %>
+        <%= render 'calendar_button', 
+            id: "court-date-#{pcd.id}",
+            title: "Court Date #{pcd.casa_case.case_number}",
+            date: {
+              start: pcd.date.strftime("%Y-%m-%d"),
+              end: pcd.date.strftime("%Y-%m-%d")
+            },
+            tooltip: "Add court date to calendar" %>
         <% if report = pcd.latest_associated_report %>
           <%= link_to(rails_blob_path(report, disposition: 'attachment')) do %>
             (Attached Report)
