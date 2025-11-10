@@ -1,7 +1,9 @@
 /* eslint-env jest */
-import { showAlert } from '../src/casa_case'
+/**
+ * @jest-environment jsdom
+ */
 
-require('jest')
+import { showAlert } from '../src/casa_case'
 
 describe('showAlert', () => {
   const defaultErrorMessageHtml = '<div>Error Message</div>'

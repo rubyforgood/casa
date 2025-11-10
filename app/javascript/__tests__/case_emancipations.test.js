@@ -1,7 +1,9 @@
 /* eslint-env jest */
-import { Toggler } from '../src/case_emancipation'
+/**
+ * @jest-environment jsdom
+ */
 
-require('jest')
+import { Toggler } from '../src/case_emancipation'
 
 let category
 let categoryOptions

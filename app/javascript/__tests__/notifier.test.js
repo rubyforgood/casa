@@ -1,7 +1,10 @@
 /* eslint-env jest */
+/**
+ * @jest-environment jsdom
+ */
+
 import { escape } from 'lodash'
 
-require('jest')
 const { Notifier, Notification } = require('../src/notifier.js')
 
 let notificationsElement
@@ -129,6 +132,9 @@ describe('Notifier', () => {
 
       $(() => {
         try {
+          // Clear any existing notifications from previous tests
+          notificationsElement.find('.messages').empty()
+
           notifier.notify(notificationMessage, 'info')
 
           const successMessages = notificationsElement.children('.messages').find('.success-notification')
@@ -443,7 +449,7 @@ describe('Notifier', () => {
       })
     })
 
-    test('throws an error and display it in a red notification when trying to stop an async operation when it\'s sexpecting to resolve none', (done) => {
+    test('throws an error and display it in a red notification when trying to stop an async operation when it\'s expecting to resolve none', (done) => {
       $(() => {
         try {
           expect(() => {
@@ -459,7 +465,7 @@ describe('Notifier', () => {
   })
 
   describe('totalNotificationCount', () => {
-    it('returns the number of notifications the notifier currently has displayed', (done) => {
+    test('returns the number of notifications the notifier currently has displayed', (done) => {
       $(() => {
         try {
           expect(notifier.totalNotificationCount()).toBe(0)
