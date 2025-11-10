@@ -400,7 +400,7 @@ GEM
       parallel
     paranoia (3.0.1)
       activerecord (>= 6, < 8.1)
-    parser (3.3.9.0)
+    parser (3.3.10.0)
       ast (~> 2.4.1)
       racc
     pdf-forms (1.5.2)
@@ -579,7 +579,7 @@ GEM
     sanitize (7.0.0)
       crass (~> 1.0.2)
       nokogiri (>= 1.16.8)
-    scout_apm (5.7.1)
+    scout_apm (5.8.0)
       parser
     scout_apm_logging (2.1.0)
       google-protobuf (>= 3.18)
