@@ -59,7 +59,7 @@ beforeEach(() => {
 })
 
 describe('Function that changes the text of the Toggler based on the state of the parent', () => {
-  test('Changes the toggler text to -', () => {
+  test('Changes the toggler text to + when category is closed', () => {
     category.attr('data-is-open', 'false')
 
     toggler.manageTogglerText()

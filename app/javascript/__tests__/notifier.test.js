@@ -29,162 +29,120 @@ beforeEach(() => {
   </button>
 </div>`
 
-  $(() => { // JQuery's callback for the DOM loading
-    notificationsElement = $('#notifications')
-    notifier = new Notifier(notificationsElement)
-  })
+  notificationsElement = $('#notifications')
+  notifier = new Notifier(notificationsElement)
 })
 
 describe('Notifier', () => {
   describe('clicking the minify button', () => {
     let minimizeButton
 
-    beforeEach(() => { // Create a notification so the minify button displays
-      $(() => {
-        notifier.notify('a notification', 'info')
-        minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
-      })
+    beforeEach(() => {
+      notifier.notify('a notification', 'info')
+      minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
     })
 
-    test('should toggle the notifier between the minified and expanded state', (done) => {
-      $(() => {
-        try {
-          const messageNotificationsContainer = notificationsElement.find('.messages')
-          const minimizeButtonIcon = minimizeButton.children('i')
-          const minimizeButtonText = minimizeButton.children('span').first()
+    test('should toggle the notifier between the minified and expanded state', () => {
+      const messageNotificationsContainer = notificationsElement.find('.messages')
+      const minimizeButtonIcon = minimizeButton.children('i')
+      const minimizeButtonText = minimizeButton.children('span').first()
 
-          expect(minimizeButton.css('display')).not.toBe('none')
-          expect(messageNotificationsContainer.css('display')).not.toBe('none')
-          expect(minimizeButtonIcon.hasClass('fa-minus')).toBeTruthy()
-          expect(minimizeButtonIcon.hasClass('fa-plus')).not.toBeTruthy()
-          expect(minimizeButtonText.css('display')).not.toBe('none')
+      expect(minimizeButton.css('display')).not.toBe('none')
+      expect(messageNotificationsContainer.css('display')).not.toBe('none')
+      expect(minimizeButtonIcon.hasClass('fa-minus')).toBe(true)
+      expect(minimizeButtonIcon.hasClass('fa-plus')).toBe(false)
+      expect(minimizeButtonText.css('display')).not.toBe('none')
 
-          minimizeButton.click()
+      minimizeButton.click()
 
-          expect(messageNotificationsContainer.css('display')).toBe('none')
-          expect(minimizeButtonIcon.hasClass('fa-minus')).not.toBeTruthy()
-          expect(minimizeButtonIcon.hasClass('fa-plus')).toBeTruthy()
-          expect(minimizeButtonText.css('display')).toBe('none')
+      expect(messageNotificationsContainer.css('display')).toBe('none')
+      expect(minimizeButtonIcon.hasClass('fa-minus')).toBe(false)
+      expect(minimizeButtonIcon.hasClass('fa-plus')).toBe(true)
+      expect(minimizeButtonText.css('display')).toBe('none')
 
-          minimizeButton.click()
+      minimizeButton.click()
 
-          expect(messageNotificationsContainer.css('display')).not.toBe('none')
-          expect(minimizeButtonIcon.hasClass('fa-minus')).toBeTruthy()
-          expect(minimizeButtonIcon.hasClass('fa-plus')).not.toBeTruthy()
-          expect(minimizeButtonText.css('display')).not.toBe('none')
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(messageNotificationsContainer.css('display')).not.toBe('none')
+      expect(minimizeButtonIcon.hasClass('fa-minus')).toBe(true)
+      expect(minimizeButtonIcon.hasClass('fa-plus')).toBe(false)
+      expect(minimizeButtonText.css('display')).not.toBe('none')
     })
 
-    test('should show only badges where there exists at least one notification matching the badge level when minimized', (done) => {
-      $(() => {
-        try {
-          const minimizeButtonBadgeError = minimizeButton.children('.bg-danger')
-          const minimizeButtonBadgeInfo = minimizeButton.children('.bg-success')
-          const minimizeButtonBadgeWarning = minimizeButton.children('.bg-warning')
+    test('should show only badges where there exists at least one notification matching the badge level when minimized', () => {
+      const minimizeButtonBadgeError = minimizeButton.children('.bg-danger')
+      const minimizeButtonBadgeInfo = minimizeButton.children('.bg-success')
+      const minimizeButtonBadgeWarning = minimizeButton.children('.bg-warning')
 
-          expect(minimizeButton.css('display')).not.toBe('none')
+      expect(minimizeButton.css('display')).not.toBe('none')
 
-          minimizeButton.click()
+      minimizeButton.click()
 
-          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeInfo.text()).toBe('1')
-          expect(minimizeButtonBadgeError.css('display')).toContain('none')
-          expect(minimizeButtonBadgeWarning.css('display')).toContain('none')
+      expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeInfo.text()).toBe('1')
+      expect(minimizeButtonBadgeError.css('display')).toContain('none')
+      expect(minimizeButtonBadgeWarning.css('display')).toContain('none')
 
-          minimizeButton.click()
-          const notification2 = notifier.notify('msg', 'error')
-          notifier.notify('msg', 'warn')
+      minimizeButton.click()
+      const notification2 = notifier.notify('msg', 'error')
+      notifier.notify('msg', 'warn')
 
-          minimizeButton.click()
-          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeInfo.text()).toBe('1')
-          expect(minimizeButtonBadgeError.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeError.text()).toBe('1')
-          expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeWarning.text()).toBe('1')
+      minimizeButton.click()
+      expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeInfo.text()).toBe('1')
+      expect(minimizeButtonBadgeError.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeError.text()).toBe('1')
+      expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeWarning.text()).toBe('1')
 
-          minimizeButton.click()
-          notification2.dismiss()
+      minimizeButton.click()
+      notification2.dismiss()
 
-          minimizeButton.click()
-          expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeInfo.text()).toBe('1')
-          expect(minimizeButtonBadgeError.css('display')).toContain('none')
-          expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
-          expect(minimizeButtonBadgeWarning.text()).toBe('1')
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      minimizeButton.click()
+      expect(minimizeButtonBadgeInfo.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeInfo.text()).toBe('1')
+      expect(minimizeButtonBadgeError.css('display')).toContain('none')
+      expect(minimizeButtonBadgeWarning.css('display')).not.toContain('none')
+      expect(minimizeButtonBadgeWarning.text()).toBe('1')
     })
   })
 
   describe('notify', () => {
-    test("displays a green notification when passed a message and level='info'", (done) => {
+    test("displays a green notification when passed a message and level='info'", () => {
       const notificationMessage = "'Y$deH[|%ROii]jy"
 
-      $(() => {
-        try {
-          // Clear any existing notifications from previous tests
-          notificationsElement.find('.messages').empty()
+      // Clear any existing notifications from previous tests
+      notificationsElement.find('.messages').empty()
 
-          notifier.notify(notificationMessage, 'info')
+      notifier.notify(notificationMessage, 'info')
 
-          const successMessages = notificationsElement.children('.messages').find('.success-notification')
+      const successMessages = notificationsElement.children('.messages').find('.success-notification')
 
-          expect(successMessages.length).toBe(1)
-          expect(successMessages[0].innerHTML).toContain(notificationMessage)
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(successMessages.length).toBe(1)
+      expect(successMessages[0].innerHTML).toContain(notificationMessage)
     })
 
-    test("displays a red notification when passed a message and level='error'", (done) => {
+    test("displays a red notification when passed a message and level='error'", () => {
       const notificationMessage = '\\+!h0bbH"yN7dx9.'
 
-      $(() => {
-        try {
-          notifier.notify(notificationMessage, 'error')
+      notifier.notify(notificationMessage, 'error')
 
-          const failureMessages = notificationsElement.find('.danger-notification')
+      const failureMessages = notificationsElement.find('.danger-notification')
 
-          expect(failureMessages.length).toBe(1)
-          expect(failureMessages[0].innerHTML).toContain(notificationMessage)
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(failureMessages.length).toBe(1)
+      expect(failureMessages[0].innerHTML).toContain(notificationMessage)
     })
 
-    test('displays the minimize button after no notifications were present before', (done) => {
-      $(() => {
-        try {
-          const messageNotificationsContainer = notificationsElement.find('.messages')
-          const minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
+    test('displays the minimize button after no notifications were present before', () => {
+      const messageNotificationsContainer = notificationsElement.find('.messages')
+      const minimizeButton = notificationsElement.find('#toggle-minimize-notifications')
 
-          expect(minimizeButton.css('display')).toBe('none')
-          expect(messageNotificationsContainer.children().length).toBe(0)
+      expect(minimizeButton.css('display')).toBe('none')
+      expect(messageNotificationsContainer.children().length).toBe(0)
 
-          notifier.notify('msg', 'info')
+      notifier.notify('msg', 'info')
 
-          expect(minimizeButton.css('display')).not.toBe('none')
-          expect(messageNotificationsContainer.children().length).toBeGreaterThan(0)
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(minimizeButton.css('display')).not.toBe('none')
+      expect(messageNotificationsContainer.children().length).toBeGreaterThan(0)
     })
 
     describe('when the notifier is minimized', () => {

@@ -45,14 +45,4 @@ describe('session_timeout_poller', () => {
 
     setIntervalSpy.mockRestore()
   })
-
-  test('demonstrates timeout logic is testable', () => {
-    // This test demonstrates the module loads and can be tested
-    // A full integration test would require complex timer manipulation
-    // due to how the module uses Date.getTime() and setInterval together
-    expect(() => {
-      jest.resetModules()
-      require('../src/session_timeout_poller')
-    }).not.toThrow()
-  })
 })
