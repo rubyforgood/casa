@@ -122,6 +122,27 @@ RSpec.describe "Users::PasswordsController", type: :request do
         )
       end
     end
+
+    context "when email sending times out" do
+      let(:params) { {user: {email: user.email, phone_number: ""}} }
+
+      before do
+        allow_any_instance_of(User).to receive(:send_reset_password_instructions).and_raise(Net::ReadTimeout)
+      end
+
+      it "handles the timeout gracefully and still shows success message" do
+        expect(Rails.logger).to receive(:error).with(/Password reset email failed to send/)
+        request
+        expect(flash[:notice]).to(
+          eq("If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes.")
+        )
+      end
+
+      it "does not crash the request" do
+        expect { request }.not_to raise_error
+        expect(response).to redirect_to(user_session_url)
+      end
+    end
   end
 
   describe "PUT /update" do
