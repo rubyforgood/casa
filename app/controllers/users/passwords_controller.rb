@@ -47,7 +47,7 @@ class Users::PasswordsController < Devise::PasswordsController
 
   def send_password_reset_mail
     @reset_token = @resource.send_reset_password_instructions # generate a reset token and call devise mailer
-  rescue Net::ReadTimeout, Net::OpenTimeout, Timeout::Error => e
+  rescue Net::ReadTimeout, Net::OpenTimeout => e
     # Log the error but don't expose it to the user for security reasons
     Rails.logger.error("Password reset email failed to send: #{e.class} - #{e.message}")
     Bugsnag.notify(e) if defined?(Bugsnag)
