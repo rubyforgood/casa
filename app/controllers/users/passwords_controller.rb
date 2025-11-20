@@ -95,6 +95,7 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def invalid_phone_number_error(error_message)
+    @resource ||= resource
     @resource.errors.add(:phone_number, error_message)
 
     false
