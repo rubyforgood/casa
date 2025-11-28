@@ -234,6 +234,19 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         case_contact.reload
         expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
       end
+
+      it "allows re-assigning the same contact type without uniqueness validation error" do
+        # This test prevents regression of Bugsnag error:
+        # "Validation failed: Case contact has already been taken"
+        case_contact.update!(contact_type_ids: [contact_types.first.id])
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+
+        # Re-submit form with same contact type (simulates user editing and saving)
+        request
+
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+      end
     end
 
     context "when contact topic answers in params" do
