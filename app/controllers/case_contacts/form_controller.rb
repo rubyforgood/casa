@@ -165,7 +165,7 @@ class CaseContacts::FormController < ApplicationController
   # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
   # the contact_type ids.
   def remove_unwanted_contact_types
-    @case_contact.contact_types.clear if params.dig(:case_contact, :contact_type_ids)
+    @case_contact.case_contact_contact_types.destroy_all if params.dig(:case_contact, :contact_type_ids)
   end
 
   def remove_nil_draft_ids
