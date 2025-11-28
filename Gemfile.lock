@@ -615,7 +615,7 @@ GEM
       simplecov (>= 0.21, < 1.0)
     simplecov_json_formatter (0.1.4)
     smart_properties (1.17.0)
-    spring (4.3.0)
+    spring (4.4.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
     sprockets (4.2.1)
