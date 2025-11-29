@@ -69,13 +69,11 @@ describe('NonDrivingContactMediumWarning', () => {
     <i class="fa-solid fa-minus"></i>
   </button>
 </div>`
-    $(() => { // JQuery's callback for the DOM loading
-      checkboxes = $('.contact-medium.form-group input:not([type=hidden])')
-      drivingOption = checkboxes.filter('#case_contact_medium_type_in-person')
-      milesDrivenInput = $('#case_contact_miles_driven')
-      nonDrivingOptions = checkboxes.not(drivingOption)
-      notifier = new Notifier($('#notifications'))
-    })
+    checkboxes = $('.contact-medium.form-group input:not([type=hidden])')
+    drivingOption = checkboxes.filter('#case_contact_medium_type_in-person')
+    milesDrivenInput = $('#case_contact_miles_driven')
+    nonDrivingOptions = checkboxes.not(drivingOption)
+    notifier = new Notifier($('#notifications'))
   })
 
   describe('constructor', () => {
@@ -96,58 +94,40 @@ describe('NonDrivingContactMediumWarning', () => {
     let component
 
     beforeEach(() => {
-      $(() => {
-        component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+      component = new NonDrivingContactMediumWarning($('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), notifier)
+    })
+
+    test('returns the warning message if a non driving contact medium is selected and the miles driven count is > 0', () => {
+      expect(nonDrivingOptions.length).toBeGreaterThan(0)
+
+      milesDrivenInput.val(1)
+
+      nonDrivingOptions.each(function () {
+        const option = $(this)
+
+        option.trigger('click')
+
+        expect(component.getWarningState()).toBe('You requested driving reimbursement for a contact medium that typically does not involve driving. Are you sure that\'s right?')
       })
     })
 
-    test('returns the warning message if a non driving contact medium is selected and the miles driven count is > 0', (done) => {
-      $(() => {
-        try {
-          expect(nonDrivingOptions.length).toBeGreaterThan(0)
+    test('returns a falsy value if the driving contact medium is selected or the miles driven count is 0', () => {
+      expect(nonDrivingOptions.length).toBeGreaterThan(0)
 
-          milesDrivenInput.val(1)
+      milesDrivenInput.val(0)
 
-          nonDrivingOptions.each(function () {
-            const option = $(this)
+      nonDrivingOptions.each(function () {
+        const option = $(this)
 
-            option.trigger('click')
+        option.trigger('click')
 
-            expect(component.getWarningState()).toBe('You requested driving reimbursement for a contact medium that typically does not involve driving. Are you sure that\'s right?')
-          })
-
-          done()
-        } catch (error) {
-          done(error)
-        }
+        expect(component.getWarningState()).toBeFalsy()
       })
-    })
 
-    test('returns a falsy value if the driving contact medium is selected or the miles driven count is 0', (done) => {
-      $(() => {
-        try {
-          expect(nonDrivingOptions.length).toBeGreaterThan(0)
+      milesDrivenInput.val(1)
+      drivingOption.trigger('click')
 
-          milesDrivenInput.val(0)
-
-          nonDrivingOptions.each(function () {
-            const option = $(this)
-
-            option.trigger('click')
-
-            expect(component.getWarningState()).toBeFalsy()
-          })
-
-          milesDrivenInput.val(1)
-          drivingOption.trigger('click')
-
-          expect(component.getWarningState()).toBeFalsy()
-
-          done()
-        } catch (error) {
-          done(error)
-        }
-      })
+      expect(component.getWarningState()).toBeFalsy()
     })
   })
 
