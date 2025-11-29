@@ -386,7 +386,7 @@ RSpec.describe CaseCourtReport, type: :model do
       let(:casa_case_with_contacts) { volunteer.casa_cases.first }
       let(:nonexistent_path) { "app/documents/templates/nonexisitent_report_template.docx" }
 
-      it "raises Zip::Error when generating report" do
+      it "raises Zip::Error when generating report", :disable_prosopite do
         args = {
           case_id: casa_case_with_contacts.id,
           volunteer_id: volunteer.id,

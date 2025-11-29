@@ -121,12 +121,9 @@ RSpec.configure do |config|
     raise StandardError.new "\"#{example.full_description}\" in #{example.location} timed out."
   end
 
-  # NOTE: not applicable currently, left to show how to skip bullet errrors
-  # config.around :each, :disable_bullet do |example|
-  #   Bullet.raise = false
-  #   example.run
-  #   Bullet.raise = true
-  # end
+  # NOTE: not applicable currently, left to show how to skip prosopite errors
+  # You can use the :disable_prosopite metadata tag on specific examples
+  # See spec/support/prosopite.rb for configuration
 
   config.around do |example|
     Capybara.server_port = 7654 + ENV["TEST_ENV_NUMBER"].to_i

@@ -1,0 +1,3 @@
+# This file contains paths to ignore for Prosopite N+1 query detection
+# Add spec file paths (one per line) that should be excluded from N+1 detection
+# Example: spec/system/some_feature

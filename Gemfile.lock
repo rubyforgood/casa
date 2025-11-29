@@ -115,12 +115,6 @@ GEM
     bugsnag (6.28.0)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
-<<<<<<< HEAD
-    bullet (8.1.0)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
-=======
->>>>>>> c9fda4adf (WIP replace bullet with prosopite for finding performance issues like db n+1 queries)
     bundler-audit (0.9.2)
       bundler (>= 1.2.0, < 3)
       thor (~> 1.0)
@@ -666,10 +660,6 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.1.0)
-<<<<<<< HEAD
-    uniform_notifier (1.18.0)
-=======
->>>>>>> c9fda4adf (WIP replace bullet with prosopite for finding performance issues like db n+1 queries)
     useragent (0.16.11)
     view_component (3.22.0)
       activesupport (>= 5.2.0, < 8.1)
