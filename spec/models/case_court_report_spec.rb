@@ -393,8 +393,9 @@ RSpec.describe CaseCourtReport, type: :model do
           path_to_template: nonexistent_path
         }
         context = CaseCourtReportContext.new(args).context
-        bad_report = CaseCourtReport.new(path_to_template: nonexistent_path, context: context)
-        expect { bad_report.generate_to_string }.to raise_error(Zip::Error)
+        expect {
+          CaseCourtReport.new(path_to_template: nonexistent_path, context: context)
+        }.to raise_error(Zip::Error, /Template file not found/)
       end
     end
 
