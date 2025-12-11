@@ -15,9 +15,7 @@ Rails.application.configure do
     user_name: ENV["SENDINBLUE_EMAIL"],
     password: ENV["SENDINBLUE_PASSWORD"],
     authentication: "login",
-    enable_starttls_auto: true,
-    open_timeout: 5,  # Timeout for opening connection (seconds)
-    read_timeout: 5   # Timeout for reading response (seconds)
+    enable_starttls_auto: true
   }
   # Code is not reloaded between requests.
   config.enable_reloading = false
