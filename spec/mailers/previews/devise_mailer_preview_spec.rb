@@ -55,4 +55,50 @@ RSpec.describe DeviseMailerPreview do
 
     it { expect(message.to).to eq [volunteer.email] }
   end
+
+  describe "#email_changed" do
+    context "When no ID is passed" do
+      let(:preview) { described_class.new }
+      let(:email) { preview.email_changed }
+
+      it { expect(email.to).to eq [user.email] }
+    end
+
+    context "When passed ID is valid" do
+      let(:preview) { described_class.new(id: user.id) }
+      let(:email) { preview.email_changed }
+
+      it { expect(email.to).to eq [user.email] }
+    end
+
+    context "When passed ID is invalid" do
+      let(:preview) { described_class.new(id: -1) }
+      let(:email) { preview.email_changed }
+
+      it { expect(email.to).to eq ["missing_user@example.com"] }
+    end
+  end
+
+  describe "#password_change" do
+    context "When no ID is passed" do
+      let(:preview) { described_class.new }
+      let(:email) { preview.password_change }
+
+      it { expect(email.to).to eq [user.email] }
+    end
+
+    context "When passed ID is valid" do
+      let(:preview) { described_class.new(id: user.id) }
+      let(:email) { preview.password_change }
+
+      it { expect(email.to).to eq [user.email] }
+    end
+
+    context "When passed ID is invalid" do
+      let(:preview) { described_class.new(id: -1) }
+      let(:email) { preview.password_change }
+
+      it { expect(email.to).to eq ["missing_user@example.com"] }
+    end
+  end
 end

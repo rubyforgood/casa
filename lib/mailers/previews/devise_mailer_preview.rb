@@ -35,9 +35,25 @@ class DeviseMailerPreview < ActionMailer::Preview
     preview(volunteer)
   end
 
-  private
+  def email_changed
+    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
+    if user.nil?
+      DebugPreviewMailer.invalid_user("user")
+    else
+      Devise::Mailer.email_changed(user)
+    end
+  end
 
-  # Unused email types
+  def password_change
+    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
+    if user.nil?
+      DebugPreviewMailer.invalid_user("user")
+    else
+      Devise::Mailer.password_change(user)
+    end
+  end
+
+  private
 
   def update_invitation_sent_at(model)
     # Set :invitation_sent_at to guarantee the preview works
@@ -46,16 +62,6 @@ class DeviseMailerPreview < ActionMailer::Preview
 
   def preview(model)
     Devise::Mailer.invitation_instructions(model, "faketoken")
-  end
-
-  def email_changed
-    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.email_changed(user)
-  end
-
-  def password_change
-    user = params.has_key?(:id) ? User.find_by(id: params[:id]) : User.last
-    Devise::Mailer.password_change(user)
   end
 end
 # :nocov:
