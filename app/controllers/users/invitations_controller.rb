@@ -7,17 +7,15 @@ class Users::InvitationsController < Devise::InvitationsController
     # Ensure the invitation_token is set on the resource from the URL parameter
     resource.invitation_token = params[:invitation_token]
 
-    Rails.logger.info "Invitation Edit: Token from params: #{params[:invitation_token]}"
-    Rails.logger.info "Invitation Edit: Token set on resource: #{resource.invitation_token}"
+    # Removed logging of invitation tokens for security reasons
+
 
     render :edit
   end
 
   # PUT /users/invitation
   def update
-    Rails.logger.info "Invitation Update: Params received: #{update_resource_params.inspect}"
-    Rails.logger.info "Invitation Update: invitation_token in params: #{update_resource_params[:invitation_token]}"
-
+    # Removed logging of invitation tokens for security reasons
     super
   end
 
