@@ -71,7 +71,7 @@ const defineCaseContactsTable = function () {
           if (data.role === 'Supervisor') {
             editPath = `/supervisors/${data.id}/edit`
           } else if (data.role === 'Casa Admin') {
-            editPath = `/users/edit`
+            editPath = '/users/edit'
           } else {
             editPath = `/volunteers/${data.id}/edit`
           }
