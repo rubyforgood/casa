@@ -21,6 +21,7 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
+  alias_method :datatable?, :admin_or_supervisor_or_volunteer?
   alias_method :drafts?, :admin_or_supervisor?
   alias_method :edit?, :update?
   alias_method :restore?, :is_admin_same_org?
