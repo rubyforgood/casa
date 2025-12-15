@@ -68,7 +68,7 @@ class CaseContactDatatable < ApplicationDatatable
 
   def contact_type_search_subquery
     @contact_type_search_subquery ||= lambda {
-      return "" if search_term.blank?
+      return "SELECT NULL WHERE FALSE" if search_term.blank?
 
       CaseContact
         .select("DISTINCT case_contacts.id")
