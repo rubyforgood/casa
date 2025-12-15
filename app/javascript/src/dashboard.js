@@ -86,7 +86,7 @@ const defineCaseContactsTable = function () {
         data: 'contact_made',
         orderable: false,
         render: (data, type, row) => {
-          const icon = data
+          const icon = data === "true"
             ? '<i class="lni lni-checkmark-circle" style="color: green;"></i>'
             : '<i class="lni lni-cross-circle" style="color: orange;"></i>'
 
