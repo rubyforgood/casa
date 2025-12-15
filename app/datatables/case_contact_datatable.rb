@@ -44,7 +44,7 @@ class CaseContactDatatable < ApplicationDatatable
     base_relation
       .joins("INNER JOIN users creators ON creators.id = case_contacts.creator_id")
       .left_joins(:casa_case)
-      .includes(:contact_types, :contact_topics, :followups)
+      .includes(:contact_types, :contact_topics, :followups, :creator)
       .order(order_clause)
       .order(:id)
   end
