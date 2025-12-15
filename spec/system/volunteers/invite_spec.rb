@@ -55,10 +55,6 @@ RSpec.describe "Inviting volunteers", type: :system do
     end
   end
 
-  # Note: The acceptance tests below are currently failing due to issues with
-  # the invitation token not being properly preserved in the Devise form.
-  # This appears to be a limitation of the current Devise invitable setup
-  # and would require further investigation into the form submission flow.
   describe "accepting invitation" do
     let(:volunteer) { create(:volunteer, casa_org: organization, phone_number: nil) }
     let!(:invitation_token) do
@@ -79,8 +75,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       expect(page).to have_button("Set my password")
     end
 
-    # These tests are skipped due to form submission issues with the invitation token
-    xit "allows volunteer to set password and accept invitation" do
+    it "allows volunteer to set password and accept invitation" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       expect(page).to have_text "Set my password"
@@ -93,11 +88,11 @@ RSpec.describe "Inviting volunteers", type: :system do
       volunteer.reload
       expect(volunteer.invitation_accepted_at).not_to be_nil
 
-      # Should be redirected to the home page or dashboard after accepting
-      expect(page).to have_current_path(root_path, ignore_query: true)
+      # Should be redirected to dashboard after accepting invitation
+      expect(page).to have_text("My Cases")
     end
 
-    xit "shows error when passwords don't match" do
+    it "shows error when passwords don't match" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: "SecurePassword123!"
@@ -111,7 +106,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       expect(volunteer.invitation_accepted_at).to be_nil
     end
 
-    xit "shows error when password is too short" do
+    it "shows error when password is too short" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: "short"
@@ -125,7 +120,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       expect(volunteer.invitation_accepted_at).to be_nil
     end
 
-    xit "shows error when password is blank" do
+    it "shows error when password is blank" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: ""
