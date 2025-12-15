@@ -20,7 +20,7 @@ class CaseContactDatatable < ApplicationDatatable
           case_number: case_contact.casa_case&.case_number
         },
         contact_types: case_contact.contact_types.map(&:name).join(", "),
-        medium_type: case_contact.medium_type&.capitalize,
+        medium_type: case_contact.medium_type&.titleize,
         creator: {
           id: case_contact.creator_id,
           display_name: case_contact.creator&.display_name,
