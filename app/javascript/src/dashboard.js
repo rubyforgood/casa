@@ -27,7 +27,7 @@ const defineCaseContactsTable = function () {
         orderable: false,
         searchable: false,
         render: (data, type, row) => {
-          return data
+          return data === "true"
             ? '<i class="fas fa-bell"></i>'
             : '<i class="fas fa-bell" style="opacity: 0.3;"></i>'
         }
