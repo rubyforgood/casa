@@ -48,7 +48,10 @@ const defineCaseContactsTable = function () {
         orderable: false,
         render: (data) => {
           if (!data || !data.id) return ''
-          return `<a href="/casa_cases/${data.id}">${data.case_number}</a>`
+          const a = document.createElement('a');
+          a.href = `/casa_cases/${data.id}`;
+          a.textContent = data.case_number;
+          return a.outerHTML;
         }
       },
       { // Relationship (Contact Types) column (index 4)
