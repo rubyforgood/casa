@@ -27,7 +27,7 @@ const defineCaseContactsTable = function () {
         orderable: false,
         searchable: false,
         render: (data, type, row) => {
-          return data === "true"
+          return data === 'true'
             ? '<i class="fas fa-bell"></i>'
             : '<i class="fas fa-bell" style="opacity: 0.3;"></i>'
         }
@@ -48,10 +48,10 @@ const defineCaseContactsTable = function () {
         orderable: false,
         render: (data) => {
           if (!data || !data.id) return ''
-          const a = document.createElement('a');
-          a.href = `/casa_cases/${data.id}`;
-          a.textContent = data.case_number;
-          return a.outerHTML;
+          const a = document.createElement('a')
+          a.href = `/casa_cases/${data.id}`
+          a.textContent = data.case_number
+          return a.outerHTML
         }
       },
       { // Relationship (Contact Types) column (index 4)
@@ -90,7 +90,7 @@ const defineCaseContactsTable = function () {
         data: 'contact_made',
         orderable: false,
         render: (data, type, row) => {
-          const icon = data === "true"
+          const icon = data === 'true'
             ? '<i class="lni lni-checkmark-circle" style="color: green;"></i>'
             : '<i class="lni lni-cross-circle" style="color: orange;"></i>'
 
@@ -112,7 +112,7 @@ const defineCaseContactsTable = function () {
         data: 'is_draft',
         orderable: false,
         render: (data) => {
-          return (data === true || data === "true")
+          return (data === true || data === 'true')
             ? '<span class="badge badge-pill light-bg text-black" data-testid="draft-badge">Draft</span>'
             : ''
         }
