@@ -132,14 +132,14 @@ describe('defineCaseContactsTable', () => {
         expect(columns[0].searchable).toBe(false)
       })
 
-      it('renders filled bell icon when has_followup is true', () => {
-        const rendered = columns[0].render(true, 'display', {})
+      it('renders filled bell icon when has_followup is "true"', () => {
+        const rendered = columns[0].render("true", 'display', {})
 
         expect(rendered).toBe('<i class="fas fa-bell"></i>')
       })
 
-      it('renders faded bell icon when has_followup is false', () => {
-        const rendered = columns[0].render(false, 'display', {})
+      it('renders faded bell icon when has_followup is "false"', () => {
+        const rendered = columns[0].render("false", 'display', {})
 
         expect(rendered).toBe('<i class="fas fa-bell" style="opacity: 0.3;"></i>')
       })
@@ -262,43 +262,43 @@ describe('defineCaseContactsTable', () => {
       })
 
       it('renders checkmark icon when contact was made', () => {
-        const row = { contact_made: true, duration_minutes: null }
-        const rendered = columns[7].render(true, 'display', row)
+        const row = { contact_made: "true", duration_minutes: null }
+        const rendered = columns[7].render("true", 'display', row)
 
         expect(rendered).toContain('<i class="lni lni-checkmark-circle" style="color: green;"></i>')
       })
 
       it('renders cross icon when contact was not made', () => {
-        const row = { contact_made: false, duration_minutes: null }
-        const rendered = columns[7].render(false, 'display', row)
+        const row = { contact_made: "false", duration_minutes: null }
+        const rendered = columns[7].render("false", 'display', row)
 
         expect(rendered).toContain('<i class="lni lni-cross-circle" style="color: orange;"></i>')
       })
 
       it('includes formatted duration when present', () => {
-        const row = { contact_made: true, duration_minutes: 90 }
-        const rendered = columns[7].render(true, 'display', row)
+        const row = { contact_made: "true", duration_minutes: 90 }
+        const rendered = columns[7].render("true", 'display', row)
 
         expect(rendered).toContain('(01:30)')
       })
 
       it('formats duration with leading zeros', () => {
-        const row = { contact_made: true, duration_minutes: 5 }
-        const rendered = columns[7].render(true, 'display', row)
+        const row = { contact_made: "true", duration_minutes: 5 }
+        const rendered = columns[7].render("true", 'display', row)
 
         expect(rendered).toContain('(00:05)')
       })
 
       it('handles hours and minutes correctly', () => {
-        const row = { contact_made: true, duration_minutes: 125 }
-        const rendered = columns[7].render(true, 'display', row)
+        const row = { contact_made: "true", duration_minutes: 125 }
+        const rendered = columns[7].render("true", 'display', row)
 
         expect(rendered).toContain('(02:05)')
       })
 
       it('does not include duration when not present', () => {
-        const row = { contact_made: true, duration_minutes: null }
-        const rendered = columns[7].render(true, 'display', row)
+        const row = { contact_made: "true", duration_minutes: null }
+        const rendered = columns[7].render("true", 'display', row)
 
         expect(rendered).not.toContain('(')
       })
@@ -338,11 +338,11 @@ describe('defineCaseContactsTable', () => {
         expect(rendered).toBe('<span class="badge badge-pill light-bg text-black" data-testid="draft-badge">Draft</span>')
       })
 
-      it('handles string "false" as truthy (because it is a non-empty string)', () => {
+      it('handles string "false" as falsy (explicit check for "true")', () => {
         const rendered = columns[9].render('false', 'display', {})
 
-        // In JavaScript, the string "false" is truthy, so this will render the badge
-        expect(rendered).toBe('<span class="badge badge-pill light-bg text-black" data-testid="draft-badge">Draft</span>')
+        // With explicit check for === true || === "true", string "false" should not render badge
+        expect(rendered).toBe('')
       })
 
       it('handles empty string as falsy', () => {

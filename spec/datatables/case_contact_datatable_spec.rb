@@ -60,7 +60,7 @@ RSpec.describe CaseContactDatatable do
 
       expect(contact_data[:id]).to eq(case_contact.id.to_s)
       expect(contact_data[:contact_made]).to eq("true")
-      expect(contact_data[:medium_type]).to eq("In-person")
+      expect(contact_data[:medium_type]).to eq("In Person")
       expect(contact_data[:duration_minutes]).to eq("60")
     end
 

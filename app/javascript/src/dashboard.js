@@ -79,7 +79,11 @@ const defineCaseContactsTable = function () {
             editPath = `/volunteers/${data.id}/edit`
           }
 
-          return `<a href="${editPath}" data-turbo="false">${data.display_name}</a>`
+          return $('<a>')
+            .attr('href', editPath)
+            .attr('data-turbo', 'false')
+            .text(data.display_name)
+            .prop('outerHTML')
         }
       },
       { // Contacted column (index 7)
@@ -108,7 +112,7 @@ const defineCaseContactsTable = function () {
         data: 'is_draft',
         orderable: false,
         render: (data) => {
-          return data
+          return (data === true || data === "true")
             ? '<span class="badge badge-pill light-bg text-black" data-testid="draft-badge">Draft</span>'
             : ''
         }
