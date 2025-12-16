@@ -118,6 +118,20 @@ RSpec.describe CaseContactPolicy, :aggregate_failures do
     end
   end
 
+  permissions :datatable? do
+    it "allows casa_admins" do
+      expect(subject).to permit(casa_admin)
+    end
+
+    it "allows supervisors" do
+      expect(subject).to permit(supervisor)
+    end
+
+    it "allows volunteers" do
+      expect(subject).to permit(volunteer)
+    end
+  end
+
   permissions :drafts? do
     it "allows casa_admins" do
       expect(subject).to permit(casa_admin)

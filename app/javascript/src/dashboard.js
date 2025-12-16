@@ -4,17 +4,127 @@ const { Notifier } = require('./notifier')
 let pageNotifier
 
 const defineCaseContactsTable = function () {
-  $('table#case_contacts').DataTable(
-    {
-      scrollX: true,
-      searching: false,
-      order: [[2, 'desc']],
-      columnDefs: [
-        { type: 'date', targets: 2 },
-        { orderable: false, targets: [0, 1, -1] } // disable sort on bell, chevron, vertical elipses menu
-      ]
-    }
-  )
+  $('table#case_contacts').DataTable({
+    scrollX: true,
+    searching: true,
+    processing: true,
+    serverSide: true,
+    order: [[2, 'desc']], // Sort by Date column (index 2, after bell and chevron)
+    ajax: {
+      url: $('table#case_contacts').data('source'),
+      type: 'POST',
+      error: function (xhr, error, code) {
+        console.error('DataTable error:', error, code)
+      },
+      dataType: 'json'
+    },
+    columnDefs: [
+      { orderable: false, targets: [0, 1, 10] } // Bell, Chevron, and Ellipsis columns not orderable
+    ],
+    columns: [
+      { // Bell icon column (index 0)
+        data: 'has_followup',
+        orderable: false,
+        searchable: false,
+        render: (data, type, row) => {
+          return data === 'true'
+            ? '<i class="fas fa-bell"></i>'
+            : '<i class="fas fa-bell" style="opacity: 0.3;"></i>'
+        }
+      },
+      { // Chevron icon column (index 1)
+        data: null,
+        orderable: false,
+        searchable: false,
+        render: () => '<i class="fa-solid fa-chevron-down"></i>'
+      },
+      { // Date column (index 2)
+        data: 'occurred_at',
+        name: 'occurred_at',
+        render: (data) => data || ''
+      },
+      { // Case column (index 3)
+        data: 'casa_case',
+        orderable: false,
+        render: (data) => {
+          if (!data || !data.id) return ''
+          const a = document.createElement('a')
+          a.href = `/casa_cases/${data.id}`
+          a.textContent = data.case_number
+          return a.outerHTML
+        }
+      },
+      { // Relationship (Contact Types) column (index 4)
+        data: 'contact_types',
+        orderable: false,
+        render: (data) => data || ''
+      },
+      { // Medium column (index 5)
+        data: 'medium_type',
+        render: (data) => data || ''
+      },
+      { // Created By column (index 6)
+        data: 'creator',
+        orderable: false,
+        render: (data) => {
+          if (!data) return ''
+
+          // Build edit link based on role
+          let editPath = ''
+          if (data.role === 'Supervisor') {
+            editPath = `/supervisors/${data.id}/edit`
+          } else if (data.role === 'Casa Admin') {
+            editPath = '/users/edit'
+          } else {
+            editPath = `/volunteers/${data.id}/edit`
+          }
+
+          return $('<a>')
+            .attr('href', editPath)
+            .attr('data-turbo', 'false')
+            .text(data.display_name)
+            .prop('outerHTML')
+        }
+      },
+      { // Contacted column (index 7)
+        data: 'contact_made',
+        orderable: false,
+        render: (data, type, row) => {
+          const icon = data === 'true'
+            ? '<i class="lni lni-checkmark-circle" style="color: green;"></i>'
+            : '<i class="lni lni-cross-circle" style="color: orange;"></i>'
+
+          let duration = ''
+          if (row.duration_minutes) {
+            const hours = Math.floor(row.duration_minutes / 60)
+            const minutes = row.duration_minutes % 60
+            duration = ` (${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')})`
+          }
+          return icon + duration
+        }
+      },
+      { // Topics column (index 8)
+        data: 'contact_topics',
+        orderable: false,
+        render: (data) => data || ''
+      },
+      { // Draft column (index 9)
+        data: 'is_draft',
+        orderable: false,
+        render: (data) => {
+          return (data === true || data === 'true')
+            ? '<span class="badge badge-pill light-bg text-black" data-testid="draft-badge">Draft</span>'
+            : ''
+        }
+      },
+      { // Ellipsis menu column (index 10)
+        data: null,
+        orderable: false,
+        searchable: false,
+        render: () => '<i class="fas fa-ellipsis-v"></i>'
+      }
+    ]
+  })
 }
 
 $(() => { // JQuery's callback for the DOM loading
