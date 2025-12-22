@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   mount Rswag::Api::Engine => "/api-docs"
 
   devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
-  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords"}
+  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords", invitations: "users/invitations"}
   authenticate :all_casa_admins do
     mount PgHero::Engine, at: "pg_dashboard", constraints: lambda { |request|
       admin = request.env["warden"].user(:all_casa_admin)
@@ -84,6 +84,7 @@ Rails.application.routes.draw do
 
   # Feature flag for new case contact table design
   get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index"
+  post "case_contacts/new_design/datatable", to: "case_contacts/case_contacts_new_design#datatable", as: "datatable_case_contacts_new_design"
   resources :case_contacts, except: %i[create update show], concerns: %i[with_datatable] do
     member do
       post :restore
