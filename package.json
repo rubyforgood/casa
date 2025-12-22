@@ -22,7 +22,7 @@
     "@rails/activestorage": "^8.1.100",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
-    "add-to-calendar-button": "^2.13.3",
+    "add-to-calendar-button": "^2.13.4",
     "bootstrap": "5.3.6",
     "bootstrap-datepicker": "^1.10.1",
     "bootstrap-scss": "^5.3.8",
