@@ -253,7 +253,6 @@ RSpec.describe "/volunteers", type: :request do
         expect(volunteer.email).to eq(new_email)
         expect(volunteer.old_emails).to eq([old_email])
         expect(volunteer.unconfirmed_email).to eq(nil)
-
       end
     end
 
