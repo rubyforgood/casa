@@ -21,7 +21,7 @@ class ContactTopicsController < ApplicationController
     if @contact_topic.save
       redirect_to edit_casa_org_path(current_organization), notice: "Contact topic was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -32,7 +32,7 @@ class ContactTopicsController < ApplicationController
     if @contact_topic.update(contact_topic_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Contact topic was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -43,7 +43,7 @@ class ContactTopicsController < ApplicationController
     if @contact_topic.update(soft_delete: true)
       redirect_to edit_casa_org_path(current_organization), notice: "Contact topic was successfully removed."
     else
-      render :show, status: :unprocessable_entity
+      render :show, status: :unprocessable_content
     end
   end
 

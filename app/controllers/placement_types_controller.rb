@@ -15,7 +15,7 @@ class PlacementTypesController < ApplicationController
     if @placement_type.save
       redirect_to edit_casa_org_path(current_organization), notice: "Placement Type was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -29,7 +29,7 @@ class PlacementTypesController < ApplicationController
     if @placement_type.update(placement_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Placement Type was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

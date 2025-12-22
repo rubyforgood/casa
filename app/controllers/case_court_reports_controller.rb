@@ -49,7 +49,7 @@ class CaseCourtReportsController < ApplicationController
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   rescue => e
     error_messages = generate_error(e.to_s)
-    render json: {status: :unprocessable_entity, error_messages: error_messages}, status: :unprocessable_entity
+    render json: {status: :unprocessable_content, error_messages: error_messages}, status: :unprocessable_content
   end
 
   private

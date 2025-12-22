@@ -23,7 +23,7 @@ class CaseGroupsController < ApplicationController
     if @case_group.save
       redirect_to case_groups_path, notice: "Case group created!"
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -33,7 +33,7 @@ class CaseGroupsController < ApplicationController
     if @case_group.update(case_group_params)
       redirect_to case_groups_path, notice: "Case group updated!"
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

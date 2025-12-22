@@ -27,7 +27,7 @@ class PlacementsController < ApplicationController
     if @placement.save
       redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -37,7 +37,7 @@ class PlacementsController < ApplicationController
     if @placement.update(placement_params)
       redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 
@@ -47,7 +47,7 @@ class PlacementsController < ApplicationController
     if @placement.destroy
       redirect_to casa_case_placements_path(@casa_case), notice: "Placement was successfully deleted."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

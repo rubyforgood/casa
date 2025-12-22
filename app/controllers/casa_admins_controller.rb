@@ -26,8 +26,8 @@ class CasaAdminsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_content }
       end
     end
   end
@@ -59,8 +59,8 @@ class CasaAdminsController < ApplicationController
       end
     rescue ActiveRecord::RecordInvalid
       respond_to do |format|
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: service.casa_admin.errors.full_messages, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
+        format.json { render json: service.casa_admin.errors.full_messages, status: :unprocessable_content }
       end
     end
   end
@@ -81,8 +81,8 @@ class CasaAdminsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_content }
       end
     end
   rescue Errno::ECONNREFUSED => error
@@ -100,8 +100,8 @@ class CasaAdminsController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_entity }
-        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
+        format.json { render json: @casa_admin.errors.full_messages, status: :unprocessable_content }
       end
     end
   rescue Errno::ECONNREFUSED => error

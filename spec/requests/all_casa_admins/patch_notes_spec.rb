@@ -73,7 +73,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         post all_casa_admins_patch_notes_path, params: invalid_attributes
         expect(response.header["Content-Type"]).to match(/application\/json/)
         expect(response.body).not_to be_nil
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(JSON.parse(response.body)).to have_key("errors")
       end
 
@@ -123,7 +123,7 @@ RSpec.describe "/all_casa_admins/patch_notes", type: :request do
         patch_note = PatchNote.create! valid_attributes
         patch all_casa_admins_patch_note_path(patch_note), params: invalid_attributes
         expect(response.body).not_to be_nil
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(JSON.parse(response.body)).to have_key("errors")
       end
     end

@@ -91,7 +91,7 @@ RSpec.describe "/all_casa_admins", type: :request do
             email: ""
           }
         }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template "all_casa_admins/new"
       end
 
@@ -102,7 +102,7 @@ RSpec.describe "/all_casa_admins", type: :request do
           }
         }
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response.body).to match("Email can't be blank".to_json)
       end
@@ -132,7 +132,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       it "does not update the all_casa_admin" do
         other_admin = create(:all_casa_admin)
         patch all_casa_admins_path, params: {all_casa_admin: {email: other_admin.email}}
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
 
         expect(admin.email).not_to eq "newemail@example.com"
       end
@@ -142,7 +142,7 @@ RSpec.describe "/all_casa_admins", type: :request do
         patch all_casa_admins_path(format: :json),
           params: {all_casa_admin: {email: other_admin.email}}
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response.body).to match("Email has already been taken".to_json)
       end
@@ -201,7 +201,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       it "does not update the all_casa_admin password" do
         subject
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(admin.reload.valid_password?("newpassword")).to be false
       end
 
@@ -216,7 +216,7 @@ RSpec.describe "/all_casa_admins", type: :request do
       it "also responds as json", :aggregate_failures do
         patch update_password_all_casa_admins_path(format: :json), params: params
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.content_type).to eq("application/json; charset=utf-8")
         expect(response.body).to match("Password confirmation doesn't match Password".to_json)
       end

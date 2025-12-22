@@ -8,7 +8,7 @@ class AdditionalExpensesController < ApplicationController
     if @additional_expense.save
       render json: @additional_expense.as_json, status: :created
     else
-      render json: @additional_expense.errors.as_json, status: :unprocessable_entity
+      render json: @additional_expense.errors.as_json, status: :unprocessable_content
     end
   end
 

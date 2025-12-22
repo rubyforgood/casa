@@ -479,10 +479,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
           expect { request }.not_to change(case_contact.reload, :attributes)
         end
 
-        it "responds :unprocessable_entity and returns the errors" do
+        it "responds :unprocessable_content and returns the errors" do
           request
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

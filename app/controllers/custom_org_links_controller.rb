@@ -15,7 +15,7 @@ class CustomOrgLinksController < ApplicationController
     if @custom_org_link.save
       redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -28,7 +28,7 @@ class CustomOrgLinksController < ApplicationController
     if @custom_org_link.update(custom_org_link_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Custom link was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

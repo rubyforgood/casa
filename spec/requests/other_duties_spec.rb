@@ -60,7 +60,7 @@ RSpec.describe "/other_duties", type: :request do
           expect {
             post other_duties_path, params: {other_duty: attributes_for(:other_duty, notes: "")}
           }.not_to change(OtherDuty, :count)
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe "/other_duties", type: :request do
           patch other_duty_path(other_duty), params: {other_duty: {notes: ""}}
 
           expect(other_duty.reload.notes).to eq "Test 1"
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

@@ -14,7 +14,7 @@ class JudgesController < ApplicationController
     if @judge.save
       redirect_to edit_casa_org_path(current_organization), notice: "Judge was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -27,7 +27,7 @@ class JudgesController < ApplicationController
     if @judge.update(judge_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Judge was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

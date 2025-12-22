@@ -14,7 +14,7 @@ class HearingTypesController < ApplicationController
     if @hearing_type.save
       redirect_to edit_casa_org_path(current_organization), notice: "Hearing Type was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -27,7 +27,7 @@ class HearingTypesController < ApplicationController
     if @hearing_type.update(hearing_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Hearing Type was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

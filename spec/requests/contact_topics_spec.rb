@@ -83,7 +83,7 @@ RSpec.describe "/contact_topics", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'new' template)" do
         post contact_topics_url, params: {contact_topic: attributes}
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end
@@ -133,7 +133,7 @@ RSpec.describe "/contact_topics", type: :request do
 
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         patch contact_topic_url(contact_topic), params: {contact_topic: attributes}
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
     end
   end

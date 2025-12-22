@@ -169,7 +169,7 @@ RSpec.describe FundRequestsController, type: :request do
               post casa_case_fund_request_path(casa_case), params: params
             }.not_to change(FundRequest, :count)
 
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
         end
       end
