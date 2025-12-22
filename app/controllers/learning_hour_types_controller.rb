@@ -18,7 +18,7 @@ class LearningHourTypesController < ApplicationController
     if @learning_hour_type.save
       redirect_to edit_casa_org_path(current_organization), notice: "Learning Type was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -28,7 +28,7 @@ class LearningHourTypesController < ApplicationController
     if @learning_hour_type.update(learning_hour_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Learning Type was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

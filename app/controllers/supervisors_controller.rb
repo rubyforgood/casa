@@ -35,7 +35,7 @@ class SupervisorsController < ApplicationController
       sms_status = deliver_sms_to @supervisor, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
-      render new_supervisor_path, status: :unprocessable_entity
+      render new_supervisor_path, status: :unprocessable_content
     end
   end
 
@@ -55,7 +55,7 @@ class SupervisorsController < ApplicationController
       @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: notice
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

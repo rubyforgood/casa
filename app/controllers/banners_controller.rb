@@ -35,7 +35,7 @@ class BannersController < ApplicationController
 
     redirect_to banners_path
   rescue
-    render :new, status: :unprocessable_entity
+    render :new, status: :unprocessable_content
   end
 
   def update
@@ -48,7 +48,7 @@ class BannersController < ApplicationController
 
     redirect_to banners_path
   rescue
-    render :edit, status: :unprocessable_entity
+    render :edit, status: :unprocessable_content
   end
 
   def destroy

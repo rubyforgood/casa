@@ -177,7 +177,7 @@ RSpec.describe "/supervisors", type: :request do
         it "gracefully fails" do
           patch supervisor_path(supervisor), params: {supervisor: {email: other_supervisor.email}}
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end

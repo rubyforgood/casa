@@ -113,7 +113,7 @@ RSpec.describe "CasaOrg", type: :request do
       end
 
       context "and html format" do
-        it { is_expected.to have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_content) }
 
         it "renders the edit template" do
           expect(request.body).to match(/error_explanation/)
@@ -127,7 +127,7 @@ RSpec.describe "CasaOrg", type: :request do
           response
         end
 
-        it { is_expected.to have_http_status(:unprocessable_entity) }
+        it { is_expected.to have_http_status(:unprocessable_content) }
 
         it "returns correct payload" do
           response_data = request.body

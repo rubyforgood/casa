@@ -38,7 +38,7 @@ RSpec.describe "/additional_expenses", type: :request do
 
       it "fails and responds unprocessable_entity" do
         expect { subject }.not_to change(ContactTopicAnswer, :count)
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
       end
 
       it "returns errors as json" do

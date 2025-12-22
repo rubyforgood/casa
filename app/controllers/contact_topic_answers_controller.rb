@@ -8,7 +8,7 @@ class ContactTopicAnswersController < ApplicationController
     if @contact_topic_answer.save
       render json: @contact_topic_answer.as_json, status: :created
     else
-      render json: @contact_topic_answer.errors.as_json, status: :unprocessable_entity
+      render json: @contact_topic_answer.errors.as_json, status: :unprocessable_content
     end
   end
 

@@ -13,7 +13,7 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     if @patch_note.save
       render json: {status: :created, id: @patch_note.id}, status: :created
     else
-      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_content
     end
   end
 
@@ -23,7 +23,7 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     if @patch_note.update(patch_note_params)
       render json: {status: :ok}
     else
-      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_content
     end
   end
 
@@ -34,7 +34,7 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     if @patch_note.destroy
       render json: {status: :ok}
     else
-      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_entity
+      render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_content
     end
   end
 

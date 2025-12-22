@@ -234,14 +234,14 @@ RSpec.describe "/casa_cases", type: :request do
 
           it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_attributes}
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
 
           it "also respond to json", :aggregate_failures do
             post casa_cases_url(format: :json), params: {casa_case: invalid_attributes}
 
             expect(response.content_type).to eq("application/json; charset=utf-8")
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
             expected_response_body = [
               "Birth month year youth can't be blank",
               "Case number can't be blank",
@@ -272,7 +272,7 @@ RSpec.describe "/casa_cases", type: :request do
 
           it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
             post casa_cases_url, params: {casa_case: invalid_params}
-            expect(response).to have_http_status(:unprocessable_entity)
+            expect(response).to have_http_status(:unprocessable_content)
           end
         end
       end
@@ -330,14 +330,14 @@ RSpec.describe "/casa_cases", type: :request do
       context "with invalid parameters" do
         it "renders an unprocessable entity response displaying the edit template" do
           patch casa_case_url(casa_case), params: {casa_case: invalid_attributes}
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
 
         it "also responds as json", :aggregate_failures do
           patch casa_case_url(casa_case, format: :json), params: {casa_case: invalid_attributes}
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match(["Case number can't be blank"].to_json)
         end
       end
@@ -443,7 +443,7 @@ RSpec.describe "/casa_cases", type: :request do
           patch deactivate_casa_case_path(casa_case, format: :json), params: params
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match([].to_json)
         end
       end
@@ -502,7 +502,7 @@ RSpec.describe "/casa_cases", type: :request do
           patch reactivate_casa_case_path(casa_case, format: :json), params: params
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match([].to_json)
         end
       end

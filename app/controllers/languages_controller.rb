@@ -18,7 +18,7 @@ class LanguagesController < ApplicationController
       if @language.save
         format.html { redirect_to edit_casa_org_path(current_organization.id), notice: "Language was successfully created." }
       else
-        format.html { render :new, status: :unprocessable_entity }
+        format.html { render :new, status: :unprocessable_content }
       end
     end
   end
@@ -29,7 +29,7 @@ class LanguagesController < ApplicationController
       if @language.update(language_params)
         format.html { redirect_to edit_casa_org_path(current_organization.id), notice: "Language was successfully updated." }
       else
-        format.html { render :edit, status: :unprocessable_entity }
+        format.html { render :edit, status: :unprocessable_content }
       end
     end
   end
