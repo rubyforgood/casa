@@ -130,7 +130,7 @@ RSpec.describe "volunteers/edit", type: :system do
   describe "updating a volunteer's email" do
     context "with a valid email" do
       it "updates volunteer email without sending a confirmaiton email" do
-        organization =create(:casa_org)
+        organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 
@@ -150,7 +150,6 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(volunteer.email).to eq(new_email)
         expect(volunteer.old_emails).to eq([old_email])
         expect(volunteer.unconfirmed_email).to eq(nil)
-
       end
     end
   end
