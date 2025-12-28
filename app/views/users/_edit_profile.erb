@@ -7,6 +7,10 @@
   <%= resource&.decorate(context: {format: :edit_profile})&.formatted_created_at %>
 </div>
 <div class="mb-1">
+  <strong class="text-dark">Email</strong>
+  <%= resource&.email %>
+</div>
+<div class="mb-1">
   <strong class="text-dark">Invitation email sent </strong>
   <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %>
 </div>

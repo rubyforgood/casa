@@ -9,21 +9,25 @@ RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
-        sign_in create(:volunteer)
+        volunteer = create(:volunteer)
+        sign_in volunteer
 
         get edit_users_path
 
         expect(response).to be_successful
+        expect(response.body).to include(volunteer.email)
       end
     end
 
     context "with an admin signed in" do
       it "renders a successful response" do
-        sign_in build(:casa_admin)
+        admin = build(:casa_admin)
+        sign_in admin
 
         get edit_users_path
 
         expect(response).to be_successful
+        expect(response.body).to include(admin.email)
       end
     end
   end
