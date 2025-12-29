@@ -61,6 +61,9 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
+
+    @volunteer.skip_reconfirmation!
+
     if @volunteer.update(update_volunteer_params)
       notice = check_unconfirmed_email_notice(@volunteer)
 
