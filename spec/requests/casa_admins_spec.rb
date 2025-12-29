@@ -151,7 +151,7 @@ RSpec.describe "/casa_admins", type: :request do
         }
 
         expect(response.content_type).to eq("application/json; charset=utf-8")
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match("Email can't be blank".to_json)
       end
     end
@@ -259,7 +259,7 @@ RSpec.describe "/casa_admins", type: :request do
         patch activate_casa_admin_path(casa_admin_inactive, format: :json)
 
         expect(response.content_type).to eq("application/json; charset=utf-8")
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match("Error message test".to_json)
       end
     end
@@ -339,7 +339,7 @@ RSpec.describe "/casa_admins", type: :request do
           patch deactivate_casa_admin_path(casa_admin_active, format: :json)
 
           expect(response.content_type).to eq("application/json; charset=utf-8")
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expect(response.body).to match("Error message test".to_json)
         end
       end
@@ -518,7 +518,7 @@ RSpec.describe "/casa_admins", type: :request do
         post casa_admins_path(format: :json), params: {casa_admin: params}
 
         expect(response.content_type).to eq("application/json; charset=utf-8")
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to match("Some error message".to_json)
       end
     end

@@ -102,7 +102,7 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         post all_casa_admins_casa_orgs_path(format: :json), params: params
 
         expect(response.content_type).to eq "application/json; charset=utf-8"
-        expect(response).to have_http_status :unprocessable_entity
+        expect(response).to have_http_status :unprocessable_content
         expect(response.body).to match "Name can't be blank"
       end
     end

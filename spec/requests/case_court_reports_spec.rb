@@ -274,7 +274,7 @@ RSpec.describe "/case_court_reports", type: :request do
         expect_any_instance_of(CaseCourtReportsController).to receive(:save_report).and_raise StandardError.new("Unexpected Error")
       end
 
-      it { is_expected.to have_http_status(:unprocessable_entity) }
+      it { is_expected.to have_http_status(:unprocessable_content) }
 
       it "shows the correct error message" do
         expect(request.parsed_body["error_messages"]).to include("Unexpected Error")

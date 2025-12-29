@@ -26,7 +26,7 @@ class OtherDutiesController < ApplicationController
     if @other_duty.save
       redirect_to other_duties_path, notice: "Duty was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -40,7 +40,7 @@ class OtherDutiesController < ApplicationController
     if @other_duty.update(other_duty_params)
       redirect_to other_duties_path, notice: "Duty was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

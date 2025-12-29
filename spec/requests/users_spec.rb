@@ -433,7 +433,7 @@ RSpec.describe "/users", type: :request do
         patch add_language_users_path(volunteer), params: {
           language_id: ""
         }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include("Please select a language before adding.")
       end
     end
@@ -457,7 +457,7 @@ RSpec.describe "/users", type: :request do
       end
 
       it "notifies the user that the language is already in their list" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include("#{language.name} is already in your languages list.")
       end
     end
