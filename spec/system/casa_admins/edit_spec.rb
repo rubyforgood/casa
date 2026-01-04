@@ -42,7 +42,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("You can confirm your account email through the link below:")
+        .to match("Click here to confirm your email")
 
       expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
       expect(page).to have_field("Email", with: @old_email)
