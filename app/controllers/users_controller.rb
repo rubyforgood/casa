@@ -81,6 +81,7 @@ class UsersController < ApplicationController
 
     bypass_sign_in(@user) if @user == true_user
 
+    flash[:success] = "Click the link in your new email to finalize the email transfer"
     redirect_to edit_users_path
   end
 
