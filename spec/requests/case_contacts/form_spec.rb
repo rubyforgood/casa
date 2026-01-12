@@ -247,6 +247,80 @@ RSpec.describe "CaseContacts::Forms", type: :request do
         case_contact.reload
         expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
       end
+
+      it "handles overlapping contact types (mix of existing and new)" do
+        # Prevent regression: Rails should update associations without destroy_all race condition
+        case_contact.update!(contact_type_ids: [contact_types.first.id])
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+
+        # Update to include both contact types (one existing, one new)
+        updated_attributes = valid_attributes.merge(contact_type_ids: contact_types.map(&:id).map(&:to_s))
+        patch "/case_contacts/#{case_contact.id}/form/details", params: {case_contact: updated_attributes}
+
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id, contact_types.second.id)
+      end
+
+      it "handles multiple consecutive updates without uniqueness errors" do
+        # Simulate rapid updates that could trigger race conditions in production
+        case_contact.update!(contact_type_ids: [contact_types.first.id])
+
+        # First update: change to second contact type
+        updated_attributes = valid_attributes.merge(contact_type_ids: [contact_types.second.id.to_s])
+        patch "/case_contacts/#{case_contact.id}/form/details", params: {case_contact: updated_attributes}
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.second.id)
+
+        # Second update: change back to first contact type
+        updated_attributes = valid_attributes.merge(contact_type_ids: [contact_types.first.id.to_s])
+        patch "/case_contacts/#{case_contact.id}/form/details", params: {case_contact: updated_attributes}
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+
+        # Third update: use both contact types
+        updated_attributes = valid_attributes.merge(contact_type_ids: contact_types.map(&:id).map(&:to_s))
+        patch "/case_contacts/#{case_contact.id}/form/details", params: {case_contact: updated_attributes}
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id, contact_types.second.id)
+      end
+
+      it "reduces contact types from multiple to single without errors" do
+        # Start with multiple contact types
+        case_contact.update!(contact_type_ids: contact_types.map(&:id))
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id, contact_types.second.id)
+
+        # Update to single contact type
+        request
+
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+      end
+
+      it "expands contact types from single to multiple without errors" do
+        # Start with single contact type
+        case_contact.update!(contact_type_ids: [contact_types.first.id])
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+
+        # Update to multiple contact types
+        updated_attributes = valid_attributes.merge(contact_type_ids: contact_types.map(&:id).map(&:to_s))
+        patch "/case_contacts/#{case_contact.id}/form/details", params: {case_contact: updated_attributes}
+
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id, contact_types.second.id)
+      end
+
+      it "replaces all contact types with completely different ones" do
+        # Start with second contact type
+        case_contact.update!(contact_type_ids: [contact_types.second.id])
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.second.id)
+
+        # Replace with first contact type (no overlap)
+        request
+
+        case_contact.reload
+        expect(case_contact.contact_type_ids).to contain_exactly(contact_types.first.id)
+        expect(case_contact.contact_type_ids).not_to include(contact_types.second.id)
+      end
     end
 
     context "when contact topic answers in params" do
