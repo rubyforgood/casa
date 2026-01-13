@@ -36,7 +36,7 @@ RSpec.describe "/additional_expenses", type: :request do
     context "with invalid parameters" do
       let(:params) { {additional_expense: invalid_attributes} }
 
-      it "fails and responds unprocessable_entity" do
+      it "fails and responds unprocessable_content" do
         expect { subject }.not_to change(ContactTopicAnswer, :count)
         expect(response).to have_http_status(:unprocessable_content)
       end
