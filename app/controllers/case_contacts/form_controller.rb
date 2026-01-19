@@ -18,7 +18,6 @@ class CaseContacts::FormController < ApplicationController
   def update
     authorize @case_contact
 
-    remove_unwanted_contact_types
     remove_nil_draft_ids
 
     respond_to do |format|
@@ -160,12 +159,6 @@ class CaseContacts::FormController < ApplicationController
 
   def case_contact_params
     CaseContactParameters.new(params)
-  end
-
-  # Deletes the current associations (from the join table) only if the submitted form body has the parameters for
-  # the contact_type ids.
-  def remove_unwanted_contact_types
-    @case_contact.case_contact_contact_types.destroy_all if params.dig(:case_contact, :contact_type_ids)
   end
 
   def remove_nil_draft_ids
