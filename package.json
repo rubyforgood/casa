@@ -19,7 +19,7 @@
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^8.1.100",
     "@rails/actiontext": "^8.1.200",
-    "@rails/activestorage": "^8.1.100",
+    "@rails/activestorage": "^8.1.200",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
     "add-to-calendar-button": "^2.13.5",
