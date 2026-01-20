@@ -12,7 +12,14 @@ Rails.application.configure do
   config.eager_load = false
 
   # Show full error reports.
-  config.consider_all_requests_local = true
+ config.action_mailer.perform_deliveries = true
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.delivery_method = :letter_opener
+
+config.action_mailer.default_url_options = {
+  host: 'localhost',
+  port: 3000
+}
 
   # Enable server timing
   config.server_timing = true

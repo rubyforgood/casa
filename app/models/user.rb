@@ -7,10 +7,12 @@ class User < ApplicationRecord
   include ByOrganizationScope
   include DateHelper
 
+
   before_save :normalize_phone_number
   after_create :skip_email_confirmation_upon_creation
   after_create :create_preference_set
   before_update :record_previous_email
+  
 
   validates_with UserValidator
 

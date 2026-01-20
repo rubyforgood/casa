@@ -4,6 +4,15 @@
       <div class="title mb-30">
         <h1>Edit Profile</h1>
       </div>
+      <div>
+        <p><strong><%= @user.email%>: confirmed</strong> </p>
+      </div>
+      <div>
+        <h5> Old emails: </h5>
+        <% @user.old_emails.each do | user | %> 
+              <p> <%=user%> </p >
+        <% end %>
+      </div>
     </div>
     <div class="col-lg-12">
       <div class="card-style mb-30">
@@ -96,22 +105,30 @@
                   <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
                 </div>
               <% end %>
-            </div>
+            </div>  
+            
+            
+            
             <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
               <br>
-              <%= form_with(model: @user, scope: :user, url: {action: "update_email"}, method: :patch) do |f| %>
-                <div class="input-style-1">
-                  <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email", required: true %>
+                <%= turbo_frame_tag "form" do %>
+                  <%= form_with(model: @user, scope: :user, url: {action: "update_email"}, method: :patch, data: {turbo_frame: true}) do |f| %>
+                    <div class="input-style-1">
+                      <%= f.label :current_password, "Current Password" %><br>
+                      <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email", required: true %>
+                    </div>
+                    <div class="input-style-1">
+                      <%= f.label :email, "New Email" %><br>
+                      <%= f.text_field :email, type: "email", class: "form-control email-new", autocomplete: "off", value: nil, required: true %>
+                    </div>
+                    <div class="actions mb-10">
+                      <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
+                    </div>
+                  <% end %>
+                <% end %>
+                <div id="email-confirmed-message">
                 </div>
-                <div class="input-style-1">
-                  <%= f.label :email, "New Email" %><br>
-                  <%= f.text_field :email, type: "email", class: "form-control email-new", autocomplete: "off", value: nil, required: true %>
-                </div>
-                <div class="actions mb-10">
-                  <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
-                </div>
-              <% end %>
+                  
               </div>
             </div>
           </div>

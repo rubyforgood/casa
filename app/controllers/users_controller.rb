@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  before_action :load_users_not_confirmed , only: :edit
   before_action :get_user
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins
@@ -51,6 +52,8 @@ class UsersController < ApplicationController
     end
   end
 
+  
+
   def update_password
     unless valid_user_password
       @user.errors.add(:base, "Current password is incorrect")
@@ -69,22 +72,46 @@ class UsersController < ApplicationController
     redirect_to edit_users_path
   end
 
+  
+
   def update_email
+    
     unless valid_user_password
       @user.errors.add(:base, "Current password is incorrect")
       return render "edit", status: :unprocessable_entity
     end
-
+ 
     unless update_user_email
       return render "edit", status: :unprocessable_entity
-    end
+    end 
 
     bypass_sign_in(@user) if @user == true_user
 
-    redirect_to edit_users_path
+    flash.now[:success] = "Your email address has been updated. Click the link sent to your new email to complete the update."
+  
+    respond_to do |format|
+      format.turbo_stream do
+      render turbo_stream: turbo_stream.replace("email-confirmed-message", html: flash.now[:success])
+    end
+      format.html
+    end
+
+
+    
+    
+    UserMailer.email_changed_notification(@user).deliver
+
+
+
   end
 
   private
+
+
+  def load_users_not_confirmed 
+    @users = User.all.where.not(unconfirmed_email:[nil, ""]).pluck(:unconfirmed_email)
+  end
+
 
   def set_language
     @language = Language.find_by(id: params[:id] || params[:language_id])
@@ -119,8 +146,11 @@ class UsersController < ApplicationController
   end
 
   def update_user_email
-    @user.update({email: email_params[:email]})
-    @user.filter_old_emails!(@user.email)
+    sucess = @user.update({email: email_params[:email]})
+    @user.filter_old_emails!(@user.email) if sucess 
+
+    sucess
+    puts 
   end
 
   def user_params

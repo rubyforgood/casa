@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 source "https://rubygems.org"
-
+group :development do
+  gem 'letter_opener'
+end
 ruby "3.3.8"
 gem "rails", "~> 7.2"
-
+gem "paper_trail"
 gem "after_party" # post-deployment tasks
 gem "amazing_print" # easier console reading
 gem "authtrail" # Track Devise login activity
