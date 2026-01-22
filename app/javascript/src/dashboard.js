@@ -455,7 +455,7 @@ $(() => { // JQuery's callback for the DOM loading
           const activeContactElement = activeContactVolunteers
             ? (
             `
-            <span class="attempted-contact status-btn success-bg text-white pl-${activeContactVolunteers * 15} pr-${activeContactVolunteers * 15}">
+            <span class="attempted-contact supervisor-stat success-bg text-white pl-${activeContactVolunteers * 15} pr-${activeContactVolunteers * 15}" title="Number of Volunteers attempting contact (within 2 weeks)">
               ${activeContactVolunteers}
             </span>
             `
@@ -465,7 +465,7 @@ $(() => { // JQuery's callback for the DOM loading
           const noContactElement = noContactVolunteers > 0
             ? (
             `
-            <span class="no-attempted-contact status-btn danger-bg text-white pl-${noContactVolunteers * 15} pr-${noContactVolunteers * 15}">
+            <span class="no-attempted-contact supervisor-stat danger-bg text-white pl-${noContactVolunteers * 15} pr-${noContactVolunteers * 15}" title="Number of Volunteers not attempting contact (within 2 weeks)">
               ${noContactVolunteers}
             </span>
             `
@@ -476,7 +476,7 @@ $(() => { // JQuery's callback for the DOM loading
           if (activeContactVolunteers <= 0 && noContactVolunteers <= 0) {
             volunteersCounterElement = '<span class="no-volunteers" style="flex-grow: 1">No assigned volunteers</span>'
           } else {
-            volunteersCounterElement = `<span class="status-btn deactive-bg text-black pl-${transitionAgedCaseVolunteers * 15} pr-${transitionAgedCaseVolunteers * 15}">${transitionAgedCaseVolunteers}</span>`
+            volunteersCounterElement = `<span class="supervisor-stat deactive-bg text-black pl-${transitionAgedCaseVolunteers * 15} pr-${transitionAgedCaseVolunteers * 15}" title="Count of Transition Aged Youth">${transitionAgedCaseVolunteers}</span>`
           }
 
           return `

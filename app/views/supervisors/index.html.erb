@@ -48,9 +48,9 @@
       <div class="card-style mb-30">
         <h6 class="mb-10">Legend for Supervisor List</h6>
         <p class="text-sm mb-20">
-          <span class="status-btn success-bg text-white mb-10">Number of Volunteers attempting contact (within 2 weeks)</span><br>
-          <span class="status-btn danger-bg text-white mb-10">Number of Volunteers not attempting contact (within 2 weeks)</span><br>
-          <span class="status-btn deactive-bg text-black">Count of Transition Aged Youth</span>
+          <span class="supervisor-stat success-bg text-white mb-10">Number of Volunteers attempting contact (within 2 weeks)</span><br>
+          <span class="supervisor-stat danger-bg text-white mb-10">Number of Volunteers not attempting contact (within 2 weeks)</span><br>
+          <span class="supervisor-stat deactive-bg text-black">Count of Transition Aged Youth</span>
         </p>
         <div class="table-wrapper table-responsive">
           <table
@@ -78,10 +78,10 @@
 
                     <div class="d-flex flex-row w-100">
                       <% if active_volunteers %>
-                        <div class="status-btn success-bg text-white flex-grow-1" style="max-width: <%= (active_volunteers * 15) %>%; text-align: center"><%= active_volunteers %></div>
+                        <div class="supervisor-stat success-bg text-white flex-grow-1" style="max-width: <%= (active_volunteers * 15) %>%; text-align: center"><%= active_volunteers %></div>
                       <% end %>
                       <% if no_attempt_volunteers.nonzero? %>
-                        <div class="status-btn danger-bg text-white flex-grow-1" style="max-width: <%= (no_attempt_volunteers * 15) %>%; text-align: center"><%= no_attempt_volunteers %></div>
+                        <div class="supervisor-stat danger-bg text-white flex-grow-1" style="max-width: <%= (no_attempt_volunteers * 15) %>%; text-align: center"><%= no_attempt_volunteers %></div>
                       <% else %>
                         <div class="flex-grow-1"></div>
                       <% end %>
@@ -89,9 +89,9 @@
 
                     <div class="d-flex flex-row py-2" style="max-width: 50%;">
                       <% if !(active_volunteers || no_attempt_volunteers.nonzero?) %>
-                        <div class="status-btn bg-secondary text-white">No assigned volunteers</div>
+                        <div class="supervisor-stat bg-secondary text-white">No assigned volunteers</div>
                       <% else %>
-                        <div class="status-btn deactive-bg text-black" style="width:<%= (transition_volunteers * 15) %>; % text-align: center">
+                        <div class="supervisor-stat deactive-bg text-black" style="width:<%= (transition_volunteers * 15) %>; % text-align: center">
                           <%= transition_volunteers %>
                         </div>
                       <% end %>
