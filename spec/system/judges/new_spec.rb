@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require "rails_helper"
-require "faker"
 
 RSpec.describe "judges/new", type: :system do
   let(:organization) { create(:casa_org) }
