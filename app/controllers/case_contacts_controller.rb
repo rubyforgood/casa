@@ -7,7 +7,7 @@ class CaseContactsController < ApplicationController
   before_action :set_contact_types, only: %i[new edit create]
   before_action :require_organization!
   before_action :set_volunteer, only: %i[impersonate_and_edit]
-  after_action :verify_authorized, except: %i[leave, impersonate_and_edit]
+  after_action :verify_authorized, except: %i[leave impersonate_and_edit]
 
   def index
     load_case_contacts
@@ -62,9 +62,9 @@ class CaseContactsController < ApplicationController
     redirect_back_to_referer(fallback_location: case_contacts_path)
   end
 
-
   def impersonate_and_edit
     impersonate_user(@volunteer)
+
     redirect_to casa_case_path(params[:casa_case_id])
   end
 
