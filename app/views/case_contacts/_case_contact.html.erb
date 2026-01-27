@@ -38,7 +38,7 @@
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <% if current_user.casa_admin? || current_user.supervisor? %>
+            <% if (current_user.casa_admin? || current_user.supervisor?) && contact.creator != current_user %>
               <%= link_to case_contacts_impersonate_and_edit_path(creator_id: contact.creator.id, casa_case_id: @casa_case), class: "text-danger", data: { turbo: false } do %>
                 <i class="lni lni-pencil-alt"></i> View/Edit
               <% end %>
