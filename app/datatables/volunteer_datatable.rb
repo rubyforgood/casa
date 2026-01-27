@@ -49,6 +49,7 @@ class VolunteerDatatable < ApplicationDatatable
       .select(
         <<-SQL
           users.*,
+          COALESCE(users.display_name, users.email) AS default_sort_order,
           COALESCE(supervisors.display_name, supervisors.email) AS supervisor_name,
           supervisors.id AS supervisor_id,
           transition_aged_youth_cases.volunteer_id IS NOT NULL AS has_transition_aged_youth_cases,
@@ -133,7 +134,7 @@ class VolunteerDatatable < ApplicationDatatable
   end
 
   def order_clause
-    @order_clause ||= build_order_clause || Arel.sql("COALESCE(users.display_name, users.email) ASC")
+    @order_clause ||= build_order_clause || Arel.sql("default_sort_order ASC")
   end
 
   def supervisor_filter

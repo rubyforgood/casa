@@ -112,7 +112,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "all_casa_admin_email", with: "newemail@example.com"
     click_on "Update Profile"
     expect(page).to have_text "successfully updated"
-    expect(ActionMailer::Base.deliveries.last.body.encoded).to match(">We're contacting you to notify you that your email has been changed to newemail@example.com")
+    expect(ActionMailer::Base.deliveries.last.body.encoded).to match(">Your CASA account's email has been updated to newemail@example.com")
 
     # change password
     click_on "Change Password"

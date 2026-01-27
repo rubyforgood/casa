@@ -9,21 +9,25 @@ RSpec.describe "/users", type: :request do
   describe "GET /edit" do
     context "with a volunteer signed in" do
       it "renders a successful response" do
-        sign_in create(:volunteer)
+        volunteer = create(:volunteer)
+        sign_in volunteer
 
         get edit_users_path
 
         expect(response).to be_successful
+        expect(response.body).to include(volunteer.email)
       end
     end
 
     context "with an admin signed in" do
       it "renders a successful response" do
-        sign_in build(:casa_admin)
+        admin = build(:casa_admin)
+        sign_in admin
 
         get edit_users_path
 
         expect(response).to be_successful
+        expect(response.body).to include(admin.email)
       end
     end
   end
@@ -252,7 +256,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("You can confirm your account email through the link below:")
+            .to match("Click here to confirm your email")
         end
       end
 
@@ -300,7 +304,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("You can confirm your account email through the link below:")
+            .to match("Click here to confirm your email")
         end
 
         it "bypasses sign in if the current user is the true user" do
@@ -359,7 +363,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("You can confirm your account email through the link below:")
+            .to match("Click here to confirm your email")
         end
 
         it "bypasses sign in if the current user is the true user" do
@@ -429,7 +433,7 @@ RSpec.describe "/users", type: :request do
         patch add_language_users_path(volunteer), params: {
           language_id: ""
         }
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include("Please select a language before adding.")
       end
     end
@@ -453,7 +457,7 @@ RSpec.describe "/users", type: :request do
       end
 
       it "notifies the user that the language is already in their list" do
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response.body).to include("#{language.name} is already in your languages list.")
       end
     end

@@ -18,7 +18,7 @@ class LearningHourTopicsController < ApplicationController
     if @learning_hour_topic.save
       redirect_to edit_casa_org_path(current_organization), notice: "Learning Topic was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -28,7 +28,7 @@ class LearningHourTopicsController < ApplicationController
     if @learning_hour_topic.update(learning_hour_topic_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Learning Topic was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

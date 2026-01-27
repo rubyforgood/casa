@@ -41,7 +41,7 @@ RSpec.describe "All-Casa Admin", type: :request do
       it "renders new page" do
         expect { subject }.not_to change(CasaAdmin, :count)
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template "casa_admins/new"
       end
     end
@@ -74,7 +74,7 @@ RSpec.describe "All-Casa Admin", type: :request do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("You can confirm your account email through the link below:")
+          .to match("Click here to confirm your email")
       end
 
       it { is_expected.to redirect_to edit_all_casa_admins_casa_org_casa_admin_path(casa_org, casa_admin) }
@@ -94,7 +94,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
       it "renders new page" do
         subject
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template "casa_admins/edit"
       end
     end
@@ -132,7 +132,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
       it "renders edit page" do
         subject
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template "casa_admins/edit"
       end
     end
@@ -170,7 +170,7 @@ RSpec.describe "All-Casa Admin", type: :request do
 
       it "renders edit page" do
         subject
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expect(response).to render_template "casa_admins/edit"
       end
     end

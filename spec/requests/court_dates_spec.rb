@@ -270,7 +270,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
 
         it "renders an unprocessable entity response (i.e. to display the 'new' template)" do
           post casa_case_court_dates_path(casa_case), params: {court_date: invalid_attributes}
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
           expected_errors = [
             "Date can't be blank"
           ].freeze
@@ -314,7 +314,7 @@ RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
       it "renders an unprocessable entity response displaying the edit template" do
         patch casa_case_court_date_path(casa_case, court_date), params: {court_date: invalid_attributes}
 
-        expect(response).to have_http_status(:unprocessable_entity)
+        expect(response).to have_http_status(:unprocessable_content)
         expected_errors = [
           "Date can't be blank"
         ].freeze

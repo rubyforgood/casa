@@ -12,17 +12,17 @@
     "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
   },
   "dependencies": {
-    "@babel/core": "^7.28.5",
+    "@babel/core": "^7.28.6",
     "@fortawesome/fontawesome-free": "^7.1.0",
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.20",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^8.1.100",
-    "@rails/actiontext": "^8.1.100",
-    "@rails/activestorage": "^8.1.100",
+    "@rails/actiontext": "^8.1.200",
+    "@rails/activestorage": "^8.1.200",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
-    "add-to-calendar-button": "^2.13.3",
+    "add-to-calendar-button": "^2.13.5",
     "bootstrap": "5.3.6",
     "bootstrap-datepicker": "^1.10.1",
     "bootstrap-scss": "^5.3.8",
@@ -30,7 +30,7 @@
     "chart.js": "^4.5.1",
     "chartjs-adapter-luxon": "^1.3.1",
     "datatables.net-dt": "^1.13.11",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.27.2",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "jstz": "^2.1.1",
@@ -43,7 +43,7 @@
     "strftime": "^0.10.3",
     "sweetalert2": "^11.3.5",
     "tom-select": "^2.4.3",
-    "trix": "^2.1.15"
+    "trix": "^2.1.16"
   },
   "version": "0.1.0",
   "devDependencies": {

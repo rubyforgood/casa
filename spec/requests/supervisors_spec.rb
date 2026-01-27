@@ -160,7 +160,7 @@ RSpec.describe "/supervisors", type: :request do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("You can confirm your account email through the link below:")
+          .to match("Click here to confirm your email")
       end
 
       it "can set the supervisor to be inactive" do
@@ -177,7 +177,7 @@ RSpec.describe "/supervisors", type: :request do
         it "gracefully fails" do
           patch supervisor_path(supervisor), params: {supervisor: {email: other_supervisor.email}}
 
-          expect(response).to have_http_status(:unprocessable_entity)
+          expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
@@ -206,7 +206,7 @@ RSpec.describe "/supervisors", type: :request do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("You can confirm your account email through the link below:")
+          .to match("Click here to confirm your email")
       end
 
       it "cannot change its own type" do

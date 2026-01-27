@@ -15,7 +15,7 @@ class BulkCourtDatesController < ApplicationController
     case_group_id = params[:court_date][:case_group_id]
     if case_group_id.empty?
       @court_date = build_court_date_with_error_message
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
       return
     end
 
@@ -26,7 +26,7 @@ class BulkCourtDatesController < ApplicationController
 
     if court_date_with_error
       @court_date = court_date_with_error
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     else
       redirect_to new_bulk_court_date_path, notice: "#{court_dates.size} #{"court date".pluralize(court_dates.size)} created!"
     end

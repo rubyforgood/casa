@@ -14,7 +14,7 @@ class ContactTypesController < ApplicationController
     if @contact_type.save
       redirect_to edit_casa_org_path(current_organization), notice: "Contact Type was successfully created."
     else
-      render :new, status: :unprocessable_entity
+      render :new, status: :unprocessable_content
     end
   end
 
@@ -27,7 +27,7 @@ class ContactTypesController < ApplicationController
     if @contact_type.update(contact_type_params)
       redirect_to edit_casa_org_path(current_organization), notice: "Contact Type was successfully updated."
     else
-      render :edit, status: :unprocessable_entity
+      render :edit, status: :unprocessable_content
     end
   end
 

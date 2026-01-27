@@ -506,4 +506,74 @@ RSpec.describe VolunteerDatatable do
       end
     end
   end
+
+  describe "extra_languages filter" do
+    let(:org) { build :casa_org }
+    let(:supervisor) { create :supervisor, casa_org: org }
+    let(:volunteer_with_language) { create :volunteer, casa_org: org, supervisor: supervisor }
+    let(:volunteer_without_language) { create :volunteer, casa_org: org, supervisor: supervisor }
+    let(:language) { create :language, casa_org: org }
+
+    before do
+      create :user_language, user: volunteer_with_language, language: language
+    end
+
+    context "when filtering for volunteers with extra languages with default ordering" do
+      # Use an invalid order_by to trigger the default COALESCE ordering
+      # which causes PG::InvalidColumnReference when combined with DISTINCT
+      let(:order_by) { "invalid_column" }
+      let(:additional_filters) do
+        {
+          active: %w[false true],
+          supervisor: [supervisor.id],
+          transition_aged_youth: %w[false true],
+          extra_languages: %w[true]
+        }
+      end
+
+      it "does not raise PG::InvalidColumnReference error" do
+        # Bug: PG::InvalidColumnReference: ERROR: for SELECT DISTINCT, ORDER BY
+        # expressions must appear in select list
+        # This occurs because extra_languages filter adds .distinct but the default
+        # ORDER BY COALESCE(users.display_name, users.email) is not in the SELECT list
+        expect { subject }.not_to raise_error
+      end
+
+      it "returns only volunteers with languages" do
+        expect(subject[:data].map { |d| d[:id].to_i }).to contain_exactly(volunteer_with_language.id)
+      end
+    end
+
+    context "when filtering for volunteers without extra languages with default ordering" do
+      let(:order_by) { "invalid_column" }
+      let(:additional_filters) do
+        {
+          active: %w[false true],
+          supervisor: [supervisor.id],
+          transition_aged_youth: %w[false true],
+          extra_languages: %w[false]
+        }
+      end
+
+      it "does not raise PG::InvalidColumnReference error" do
+        expect { subject }.not_to raise_error
+      end
+    end
+
+    context "when filtering with multiple extra_languages options with default ordering" do
+      let(:order_by) { "invalid_column" }
+      let(:additional_filters) do
+        {
+          active: %w[false true],
+          supervisor: [supervisor.id],
+          transition_aged_youth: %w[false true],
+          extra_languages: %w[true false]
+        }
+      end
+
+      it "does not raise PG::InvalidColumnReference error" do
+        expect { subject }.not_to raise_error
+      end
+    end
+  end
 end
