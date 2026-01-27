@@ -38,8 +38,16 @@
         <% if Pundit.policy(current_user, contact).update? %>
           <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
           <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "text-danger", data: { turbo: false } do %>
-              <i class="lni lni-pencil-alt"></i> Edit
+            <%# debugger %>
+            <%# this is the place where i have to make UI change - utkarsh %>
+            <% if current_user.casa_admin? || current_user.supervisor? %>
+              <%= link_to case_contacts_impersonate_and_edit_path(creator_id: contact.creator.id, casa_case_id: @casa_case), class: "text-danger", data: { turbo: false } do %>
+                <i class="lni lni-pencil-alt"></i> View/Edit
+              <% end %>
+            <% else %>
+              <%= link_to edit_case_contact_path(contact), class: "text-danger", data: { turbo: false } do %>
+                <i class="lni lni-pencil-alt"></i> Edit
+              <% end %>
             <% end %>
           </div>
         <% end %>
