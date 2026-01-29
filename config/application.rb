@@ -33,6 +33,6 @@ module Casa
     config.serve_static_assets = true
 
     # to use ViewComponent previews
-    config.view_component.preview_paths << "#{Rails.root.join("spec/components/previews")}"
+    config.view_component.previews.paths << "#{Rails.root.join("spec/components/previews")}"
   end
 end
