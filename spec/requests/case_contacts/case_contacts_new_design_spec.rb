@@ -111,7 +111,7 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           post datatable_case_contacts_new_design_path, params: search_params, as: :json
 
           json = JSON.parse(response.body, symbolize_names: true)
-          ids = json[:data].map { |d| d[:id] }
+          ids = json[:data].pluck(:id)
           expect(ids).to include(searchable_contact.id.to_s)
         end
       end
@@ -135,7 +135,7 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
 
           json = JSON.parse(response.body, symbolize_names: true)
-          ids = json[:data].map { |d| d[:id] }
+          ids = json[:data].pluck(:id)
 
           expect(ids).to include(volunteer_contact.id.to_s)
           expect(ids).not_to include(other_volunteer_contact.id.to_s)
@@ -162,7 +162,7 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
 
           json = JSON.parse(response.body, symbolize_names: true)
-          ids = json[:data].map { |d| d[:id] }
+          ids = json[:data].pluck(:id)
 
           expect(ids).to include(contact1.id.to_s, contact2.id.to_s)
         end

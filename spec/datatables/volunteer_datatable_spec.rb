@@ -280,7 +280,7 @@ RSpec.describe VolunteerDatatable do
 
         context "when ascending" do
           it "is successful" do
-            expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["2", "3", "", "", "", ""]
+            expect(values.pluck(:contacts_made_in_past_days)).to eq ["2", "3", "", "", "", ""]
           end
         end
 
@@ -293,7 +293,7 @@ RSpec.describe VolunteerDatatable do
           end
 
           it "is successful" do
-            expect(values.map { |h| h[:contacts_made_in_past_days] }).to eq ["3", "2", "", "", "", ""]
+            expect(values.pluck(:contacts_made_in_past_days)).to eq ["3", "2", "", "", "", ""]
           end
 
           it "moves blanks to the end" do
@@ -342,7 +342,7 @@ RSpec.describe VolunteerDatatable do
 
         it "is successful" do
           expect(subject[:data].length).to eq volunteers.count
-          expect(subject[:data].map { |d| d[:id] }.sort).to eq volunteers.map { |v| v.id.to_s }.sort
+          expect(subject[:data].pluck(:id).sort).to eq volunteers.map { |v| v.id.to_s }.sort
         end
       end
 
