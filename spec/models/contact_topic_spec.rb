@@ -50,8 +50,8 @@ RSpec.describe ContactTopic, type: :model do
 
         questions = org.contact_topics.map(&:question)
         details = org.contact_topics.map(&:details)
-        expect(questions).to match_array(topics.pluck("question"))
-        expect(details).to match_array(topics.pluck("details"))
+        expect(questions).to match_array(topics.map { |t| t["question"] })
+        expect(details).to match_array(topics.map { |t| t["details"] })
       end
 
       it "fails if not all required attrs are present" do
