@@ -173,8 +173,8 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "John" }
 
       it "returns matching case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(john_contact.id.to_s)
-        expect(datatable.as_json[:data].map { |d| d[:id] }).not_to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).not_to include(jane_contact.id.to_s)
       end
     end
 
@@ -182,8 +182,8 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "jane@example.com" }
 
       it "returns matching case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(jane_contact.id.to_s)
-        expect(datatable.as_json[:data].map { |d| d[:id] }).not_to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).not_to include(john_contact.id.to_s)
       end
     end
 
@@ -191,8 +191,8 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "2024-001" }
 
       it "returns matching case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(jane_contact.id.to_s)
-        expect(datatable.as_json[:data].map { |d| d[:id] }).not_to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).not_to include(john_contact.id.to_s)
       end
     end
 
@@ -200,8 +200,8 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "Meeting" }
 
       it "returns matching case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(john_contact.id.to_s)
-        expect(datatable.as_json[:data].map { |d| d[:id] }).not_to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).not_to include(jane_contact.id.to_s)
       end
     end
 
@@ -209,8 +209,8 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "Family" }
 
       it "returns matching case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(john_contact.id.to_s)
-        expect(datatable.as_json[:data].map { |d| d[:id] }).not_to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).not_to include(jane_contact.id.to_s)
       end
     end
 
@@ -218,7 +218,7 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "JOHN" }
 
       it "returns matching case contacts regardless of case" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(john_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(john_contact.id.to_s)
       end
     end
 
@@ -226,7 +226,7 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "Smi" }
 
       it "returns matching case contacts with partial match" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(jane_contact.id.to_s)
       end
     end
 
@@ -234,7 +234,7 @@ RSpec.describe CaseContactDatatable do
       let(:search_term) { "" }
 
       it "returns all case contacts" do
-        expect(datatable.as_json[:data].map { |d| d[:id] }).to include(john_contact.id.to_s, jane_contact.id.to_s)
+        expect(datatable.as_json[:data].pluck(:id)).to include(john_contact.id.to_s, jane_contact.id.to_s)
       end
     end
 
@@ -275,7 +275,7 @@ RSpec.describe CaseContactDatatable do
         let(:order_direction) { "desc" }
 
         it "orders contacts by occurred_at descending" do
-          ids = datatable.as_json[:data].map { |d| d[:id] }
+          ids = datatable.as_json[:data].pluck(:id)
           expect(ids).to eq([recent_contact.id.to_s, old_contact.id.to_s])
         end
       end
@@ -284,7 +284,7 @@ RSpec.describe CaseContactDatatable do
         let(:order_direction) { "asc" }
 
         it "orders contacts by occurred_at ascending" do
-          ids = datatable.as_json[:data].map { |d| d[:id] }
+          ids = datatable.as_json[:data].pluck(:id)
           expect(ids).to eq([old_contact.id.to_s, recent_contact.id.to_s])
         end
       end
@@ -295,7 +295,7 @@ RSpec.describe CaseContactDatatable do
       let(:order_direction) { "desc" }
 
       it "orders contacts by contact_made" do
-        ids = datatable.as_json[:data].map { |d| d[:id] }
+        ids = datatable.as_json[:data].pluck(:id)
         expect(ids.first).to eq(recent_contact.id.to_s)
       end
     end
@@ -305,7 +305,7 @@ RSpec.describe CaseContactDatatable do
       let(:order_direction) { "asc" }
 
       it "orders contacts by medium_type" do
-        ids = datatable.as_json[:data].map { |d| d[:id] }
+        ids = datatable.as_json[:data].pluck(:id)
         expect(ids.first).to eq(recent_contact.id.to_s)
       end
     end
@@ -315,7 +315,7 @@ RSpec.describe CaseContactDatatable do
       let(:order_direction) { "desc" }
 
       it "orders contacts by duration_minutes" do
-        ids = datatable.as_json[:data].map { |d| d[:id] }
+        ids = datatable.as_json[:data].pluck(:id)
         expect(ids).to eq([recent_contact.id.to_s, old_contact.id.to_s])
       end
     end
