@@ -245,18 +245,18 @@ RSpec.describe CaseCourtReportContext, type: :model do
         court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
 
         expect(court_topics.keys).to match_array(["Question 1", "Question 2", "Question 3"])
-        expect(court_topics["Question 1"][:answers].map { |a| a[:value] }).to match_array(
+        expect(court_topics["Question 1"][:answers].pluck(:value)).to match_array(
           ["Answer From One Year Ago", "Answer 1", "Answer 3", "Answer From One Day Ago"]
         )
-        expect(court_topics["Question 2"][:answers].map { |a| a[:value] }).to match_array(["Answer 2", "Answer 5"])
-        expect(court_topics["Question 3"][:answers].map { |a| a[:value] }).to match_array(["No Answer Provided", "No Answer Provided"])
+        expect(court_topics["Question 2"][:answers].pluck(:value)).to match_array(["Answer 2", "Answer 5"])
+        expect(court_topics["Question 3"][:answers].pluck(:value)).to match_array(["No Answer Provided", "No Answer Provided"])
       end
 
       it "filters by date range" do
         court_topics = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case).court_topics
 
         expect(court_topics.keys).to match_array(["Question 1", "Question 2", "Question 3"])
-        expect(court_topics["Question 1"][:answers].map { |a| a[:value] }).to match_array(["Answer 1", "Answer 3"])
+        expect(court_topics["Question 1"][:answers].pluck(:value)).to match_array(["Answer 1", "Answer 3"])
       end
 
       it "filters answers from topics set be excluded from court report" do

@@ -19,8 +19,8 @@ RSpec.describe SupervisorDatatable do
         it "brings only active supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(1)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(active_supervisor.display_name))
-          expect(subject[:data].map { |d| d[:display_name] }).not_to include(CGI.escapeHTML(inactive_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).to include(CGI.escapeHTML(active_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).not_to include(CGI.escapeHTML(inactive_supervisor.display_name))
         end
       end
 
@@ -30,8 +30,8 @@ RSpec.describe SupervisorDatatable do
         it "brings only inactive supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(1)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(inactive_supervisor.display_name))
-          expect(subject[:data].map { |d| d[:display_name] }).not_to include(CGI.escapeHTML(active_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).to include(CGI.escapeHTML(inactive_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).not_to include(CGI.escapeHTML(active_supervisor.display_name))
         end
       end
 
@@ -42,8 +42,8 @@ RSpec.describe SupervisorDatatable do
         it "brings only all supervisors", :aggregate_failures do
           expect(subject[:recordsTotal]).to eq(2)
           expect(subject[:recordsFiltered]).to eq(2)
-          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(active_supervisor.display_name))
-          expect(subject[:data].map { |d| d[:display_name] }).to include(CGI.escapeHTML(inactive_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).to include(CGI.escapeHTML(active_supervisor.display_name))
+          expect(subject[:data].pluck(:display_name)).to include(CGI.escapeHTML(inactive_supervisor.display_name))
         end
       end
 
