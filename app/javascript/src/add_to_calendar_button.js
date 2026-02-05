@@ -1,5 +1,3 @@
-/* global $ */
-
 import 'add-to-calendar-button'
 
 function createCalendarEvents () {

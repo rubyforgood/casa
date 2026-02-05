@@ -1,4 +1,3 @@
-/* global $ */
 import { escape } from 'lodash'
 
 const TypeChecker = require('./type_checker.js')

@@ -1,5 +1,3 @@
-/* global $ */
-
 $(() => { // JQuery's callback for the DOM loading
   const { groupBy, map, mapValues } = require('lodash')
 

@@ -1,5 +1,3 @@
-/* global $ */
-
 import { initializeDataTable } from '../../datatable'
 
 $(() => {

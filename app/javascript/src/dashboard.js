@@ -1,5 +1,4 @@
 /* global alert */
-/* global $ */
 const { Notifier } = require('./notifier')
 let pageNotifier
 

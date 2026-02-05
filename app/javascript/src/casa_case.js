@@ -2,7 +2,6 @@
 /* global FormData */
 /* global DOMParser */
 /* global spinner */
-/* global $ */
 
 import Swal from 'sweetalert2'
 
