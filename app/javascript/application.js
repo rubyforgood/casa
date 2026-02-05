@@ -1,6 +1,5 @@
 import "@hotwired/turbo-rails";
 import "./jquery";
-require("./src/tooltip");
 import "bootstrap";
 import "./sweet-alert-confirm.js";
 import "./controllers";
@@ -11,7 +10,6 @@ import "./datatable.js";
 Turbo.session.drive = false;
 
 require("datatables.net-dt")(null, window.jQuery); // First parameter is the global object. Defaults to window if null
-require("select2")(window.jQuery);
 require("@rails/ujs").start();
 require("@rails/activestorage").start();
 require("bootstrap-datepicker");
@@ -28,7 +26,6 @@ require("./src/read_more");
 require("./src/reimbursements");
 require("./src/reports");
 require("./src/require_communication_preference");
-require("./src/select");
 require("./src/time_zone");
 require("./src/session_timeout_poller.js");
 require("./src/display_app_metric.js");

@@ -1,5 +1,4 @@
 import Swal from "sweetalert2";
-import 'select2'
 
 function convertDateToSystemTimeZone(date) {
   return new Date(typeof date === "string" ? new Date(date) : date);
