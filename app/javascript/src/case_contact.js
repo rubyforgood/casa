@@ -1,50 +1,52 @@
-import Swal from 'sweetalert2'
-function convertDateToSystemTimeZone (date) {
-  return new Date((typeof date === 'string' ? new Date(date) : date))
+import Swal from "sweetalert2";
+import 'select2'
+
+function convertDateToSystemTimeZone(date) {
+  return new Date(typeof date === "string" ? new Date(date) : date);
 }
 
-async function displayFollowupAlert () {
-  const { value: text, isConfirmed } = await fireSwalFollowupAlert()
+async function displayFollowupAlert() {
+  const { value: text, isConfirmed } = await fireSwalFollowupAlert();
 
-  if (!isConfirmed) return
+  if (!isConfirmed) return;
 
-  const params = text ? { note: text } : {}
-  const caseContactId = this.id.replace('followup-button-', '')
+  const params = text ? { note: text } : {};
+  const caseContactId = this.id.replace("followup-button-", "");
 
-  $.post(
-    `/case_contacts/${caseContactId}/followups`,
-    params,
-    () => window.location.reload()
-  )
+  $.post(`/case_contacts/${caseContactId}/followups`, params, () => window.location.reload());
 }
 
-async function fireSwalFollowupAlert () {
-  const inputLabel = 'Optional: Add a note about what followup is needed.'
+async function fireSwalFollowupAlert() {
+  const inputLabel = "Optional: Add a note about what followup is needed.";
 
   return await Swal.fire({
-    input: 'textarea',
+    input: "textarea",
     title: inputLabel,
-    inputPlaceholder: 'Type your note here...',
-    inputAttributes: { 'aria-label': 'Type your note here' },
+    inputPlaceholder: "Type your note here...",
+    inputAttributes: { "aria-label": "Type your note here" },
 
     showCancelButton: true,
     showCloseButton: true,
 
-    confirmButtonText: 'Confirm',
-    confirmButtonColor: '#dc3545',
+    confirmButtonText: "Confirm",
+    confirmButtonColor: "#dc3545",
 
     customClass: {
-      inputLabel: 'mx-5'
-    }
-  })
+      inputLabel: "mx-5",
+    },
+  });
 }
 
-$(document).on('turbo:load', function () {
-  $('.filter-form').on('change', '.filter-input', function () {
-    $(this).closest('form').submit()
-  })
-})
+$(document).on("turbo:load", function () {
+  $(".filter-form").on("change", ".filter-input", function () {
+    $(this).closest("form").submit();
+  });
+});
 
-export {
-  convertDateToSystemTimeZone
-}
+$(() => {
+  // JQuery's callback for the DOM loading
+  $('[data-toggle="tooltip"]').tooltip();
+  $(".followup-button").on("click", displayFollowupAlert);
+});
+
+export { convertDateToSystemTimeZone };
