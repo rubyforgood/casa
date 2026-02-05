@@ -5,11 +5,12 @@ import './controllers'
 import 'trix'
 import '@rails/actiontext'
 import './datatable.js'
-Turbo.session.drive = false
 
-import jquery from "jquery";
+import jquery from 'jquery'
 window.jQuery = jquery;
 window.$ = jquery;
+
+Turbo.session.drive = false
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('select2')(window.jQuery)
