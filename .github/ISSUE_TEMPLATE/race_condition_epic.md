@@ -28,3 +28,14 @@ Examples:
 ```
 
 The bad `expect`s don't get their data from the browser. If they don't get the data from the browser, it doesn't make them automatically invalid. If the test waits for the page to load before checking data from the backend, that's valid. However for a system test, we should try to write them so all the steps of the test would have meaning to a user. A user would be able to see elements on a webpage but they wouldn't be able to check the database.
+
+## Things to do
+
+ - Check these files:
+    - [ ] 
+
+ - Check all `expect`s and make sure each one checks something on the webpage.
+
+ - If an `expect` checks anything other than the webpage or resources accessible from the webpage(like downloads), rewrite the expect to check the webpage.
+
+ - If there are no expects to replace, comment with some proof.
