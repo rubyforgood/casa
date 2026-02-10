@@ -253,7 +253,6 @@ $(() => { // JQuery's callback for the DOM loading
   if ($('#case_contact_miles_driven').length) {
     safeInstantiateComponent('non driving contact medium warning', () => {
       const contactMediumWithMilesDrivenWarning = new NonDrivingContactMediumWarning(validatedFormCollection.find('.contact-medium.form-group input:not([type=hidden]), #case_contact_miles_driven'), pageNotifier)
-      console.log(contactMediumWithMilesDrivenWarning)
       validatableFormSectionComponents.push(contactMediumWithMilesDrivenWarning)
     })
   }
