@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :casa_cases_emancipation_option do
+  factory :casa_case_emancipation_option do
     casa_case do
       create(:casa_case)
     end
