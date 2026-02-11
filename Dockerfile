@@ -21,14 +21,14 @@ FROM ruby:3.3.8-alpine
 
 ARG RAILS_ROOT=/usr/src/app/
 
+RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs=24.13.0-r2 npm
+
 # available: https://pkgs.alpinelinux.org/packages
 RUN apk update && apk upgrade && apk add --update --no-cache \
   bash \
   build-base \
   curl \
   imagemagick \
-  nodejs \
-  npm \
   postgresql-client \
   tzdata \
   vim \
