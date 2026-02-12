@@ -1,4 +1,9 @@
+ARG ROOT=/usr/src/app/
+
 FROM ruby:3.3.8-alpine AS builder
+
+ARG ROOT
+WORKDIR $ROOT
 
 RUN apk update && apk upgrade && apk add --update --no-cache \
   build-base \
@@ -9,17 +14,14 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   postgresql-dev \
   tzdata
 
-ARG RAILS_ROOT=/usr/src/app/
-WORKDIR $RAILS_ROOT
 
-COPY Gemfile* $RAILS_ROOT
+COPY Gemfile* $ROOT
 RUN bundle install
-
-### BUILD STEP DONE ###
 
 FROM ruby:3.3.8-alpine
 
-ARG RAILS_ROOT=/usr/src/app/
+ARG ROOT
+WORKDIR $ROOT
 
 RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs=24.13.0-r2 npm
 
@@ -33,8 +35,6 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   tzdata \
   vim \
   && rm -rf /var/cache/apk/*
-
-WORKDIR $RAILS_ROOT
 
 COPY . .
 RUN npm install --global npm@latest
