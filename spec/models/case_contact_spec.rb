@@ -38,7 +38,7 @@ RSpec.describe CaseContact, type: :model do
     end
 
     it "verifies occurred at is not in the future" do
-      case_contact = build_stubbed(:case_contact, occurred_at: Time.current + 1.week)
+      case_contact = build_stubbed(:case_contact, occurred_at: 1.week.from_now)
       expect(case_contact).not_to be_valid
       expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
     end
