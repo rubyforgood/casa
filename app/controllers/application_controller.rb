@@ -104,7 +104,12 @@ class ApplicationController < ActionController::Base
 
   def store_referring_location
     if request.referer && !request.referer.end_with?("users/sign_in") && params[:ignore_referer].blank?
-      session[:return_to] = request.referer
+      begin
+        referer_host = URI.parse(request.referer).host
+        session[:return_to] = request.referer if referer_host == request.host
+      rescue URI::InvalidURIError
+        # Ignore invalid URIs
+      end
     end
   end
 

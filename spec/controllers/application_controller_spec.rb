@@ -118,20 +118,32 @@ RSpec.describe ApplicationController, type: :controller do
   end
 
   describe "#store_referring_location" do
-    it "stores referring location in session if referer is present and not sign in page" do
-      request.env["HTTP_REFERER"] = "http://example.com"
+    it "stores referring location in session if referer is present, not sign in page, and same host" do
+      request.env["HTTP_REFERER"] = "http://test.host/some/path"
       controller.store_referring_location
-      expect(session[:return_to]).to eq("http://example.com")
+      expect(session[:return_to]).to eq("http://test.host/some/path")
     end
 
     it "does not store referring location if referer is sign in page" do
-      request.env["HTTP_REFERER"] = "http://example.com/users/sign_in"
+      request.env["HTTP_REFERER"] = "http://test.host/users/sign_in"
       controller.store_referring_location
       expect(session[:return_to]).to be_nil
     end
 
     it "does not store referring location if referer is not present" do
       request.env["HTTP_REFERER"] = nil
+      controller.store_referring_location
+      expect(session[:return_to]).to be_nil
+    end
+
+    it "does not store referring location if referer is from a different host" do
+      request.env["HTTP_REFERER"] = "https://github.com/"
+      controller.store_referring_location
+      expect(session[:return_to]).to be_nil
+    end
+
+    it "does not store referring location if referer is an invalid URI" do
+      request.env["HTTP_REFERER"] = "not a valid uri %%"
       controller.store_referring_location
       expect(session[:return_to]).to be_nil
     end
