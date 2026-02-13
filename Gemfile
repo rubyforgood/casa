@@ -56,12 +56,11 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not
 gem "view_component" # View components for reusability
 gem "wicked" # Multi-step form wizard for Rails
 
-# flipper for feature flag management
-gem "flipper"
-gem "flipper-active_record"
-gem "flipper-ui"
-gem "pghero"
-gem "pg_query"
+gem "flipper" # Feature flag management
+gem "flipper-active_record" # Active Record adapter for Flipper
+gem "flipper-ui" # Web UI for managing feature flags
+gem "pghero" # PostgreSQL performance monitoring and query insights
+gem "pg_query" # PostgreSQL query parser
 group :development, :test do
   gem "brakeman" # security inspection
   gem "bullet" # Detect and fix N+1 queries
