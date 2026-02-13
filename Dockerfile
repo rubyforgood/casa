@@ -1,6 +1,10 @@
 ARG ROOT=/usr/src/app/
 
-FROM ruby:3.3.8-alpine AS builder
+# available alpine packages: https://pkgs.alpinelinux.org/packages
+
+FROM node:24-alpine AS node-source
+
+FROM ruby:3.3.8-alpine AS build
   ARG ROOT
   WORKDIR $ROOT
 
@@ -13,7 +17,6 @@ FROM ruby:3.3.8-alpine AS builder
     postgresql-dev \
     tzdata
 
-
   COPY Gemfile* $ROOT
   RUN bundle install
 
@@ -21,9 +24,6 @@ FROM ruby:3.3.8-alpine
   ARG ROOT
   WORKDIR $ROOT
 
-  RUN apk add  --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/main/ nodejs=24.13.0-r2 npm
-
-  # available: https://pkgs.alpinelinux.org/packages
   RUN apk update && apk upgrade && apk add --update --no-cache \
     bash \
     build-base \
@@ -35,11 +35,12 @@ FROM ruby:3.3.8-alpine
     && rm -rf /var/cache/apk/*
 
   COPY . .
-  RUN npm install --global npm@latest
-  RUN npm install
-  RUN npm run build && npm run build:css
+  COPY --from=node-source /usr/local/bin/node /usr/local/bin/node
+  COPY --from=node-source /usr/local/lib/node_modules /usr/local/lib/node_modules
+  RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+  RUN npm ci
 
-  COPY --from=builder /usr/local/bundle/ /usr/local/bundle/
+  COPY --from=build /usr/local/bundle/ /usr/local/bundle/
 
   EXPOSE 3000
 
