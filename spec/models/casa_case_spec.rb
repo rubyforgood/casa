@@ -38,7 +38,7 @@ RSpec.describe CasaCase, type: :model do
       end
 
       it "is valid today" do
-        casa_case = CasaCase.new(date_in_care: Time.now)
+        casa_case = CasaCase.new(date_in_care: Time.current)
         casa_case.valid?
         expect(casa_case.errors[:date_in_care]).to eq([])
       end
@@ -66,7 +66,7 @@ RSpec.describe CasaCase, type: :model do
       end
 
       it "is valid today" do
-        casa_case = CasaCase.new(birth_month_year_youth: Time.now)
+        casa_case = CasaCase.new(birth_month_year_youth: Time.current)
         casa_case.valid?
         expect(casa_case.errors[:birth_month_year_youth]).to eq([])
       end
@@ -195,18 +195,18 @@ RSpec.describe CasaCase, type: :model do
 
   describe ".should_transition" do
     it "returns only youth who should have transitioned but have not" do
-      not_transitioned_13_yo = build(:casa_case,
+      not_transitioned_13_yo = create(:casa_case,
         birth_month_year_youth: Date.current - 13.years)
-      transitioned_14_yo = build(:casa_case,
-        birth_month_year_youth: Date.current - 14.years)
-      not_transitioned_14_yo = create(:casa_case,
+      already_transitioned_15_yo = create(:casa_case,
+        birth_month_year_youth: Date.current - 15.years)
+      should_transition_14_yo = create(:casa_case,
         birth_month_year_youth: Date.current - 14.years)
       cases = CasaCase.should_transition
       aggregate_failures do
-        expect(cases.length).to eq 1
-        expect(cases.include?(not_transitioned_14_yo)).to eq true
+        expect(cases.length).to eq 2
+        expect(cases.include?(should_transition_14_yo)).to eq true
+        expect(cases.include?(already_transitioned_15_yo)).to eq true
         expect(cases.include?(not_transitioned_13_yo)).to eq false
-        expect(cases.include?(transitioned_14_yo)).to eq false
       end
     end
   end
@@ -228,7 +228,7 @@ RSpec.describe CasaCase, type: :model do
     let(:casa_case) { create(:casa_case) }
     let(:emancipation_category) { create(:emancipation_category) }
 
-    it "associates an emacipation category with the case when passed the id of the category" do
+    it "associates an emancipation category with the case when passed the id of the category" do
       expect {
         casa_case.add_emancipation_category(emancipation_category.id)
       }.to change { casa_case.emancipation_categories.count }.from(0).to(1)
@@ -241,7 +241,7 @@ RSpec.describe CasaCase, type: :model do
     let(:emancipation_option_a) { create(:emancipation_option, emancipation_category: emancipation_category) }
     let(:emancipation_option_b) { create(:emancipation_option, emancipation_category: emancipation_category, name: "Not the same name as option A to satisfy unique contraints") }
 
-    it "associates an emacipation option with the case when passed the id of the option" do
+    it "associates an emancipation option with the case when passed the id of the option" do
       expect {
         casa_case.add_emancipation_option(emancipation_option_a.id)
       }.to change { casa_case.emancipation_options.count }.from(0).to(1)
