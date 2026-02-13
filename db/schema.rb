@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2025_07_02_142004) do
+ActiveRecord::Schema[7.2].define(version: 2026_02_11_001655) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -127,6 +127,14 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_142004) do
     t.index ["casa_case_id"], name: "index_casa_case_emancipation_categories_on_casa_case_id"
   end
 
+  create_table "casa_case_emancipation_options", force: :cascade do |t|
+    t.bigint "casa_case_id", null: false
+    t.bigint "emancipation_option_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["casa_case_id", "emancipation_option_id"], name: "index_case_options_on_case_id_and_option_id", unique: true
+  end
+
   create_table "casa_cases", force: :cascade do |t|
     t.string "case_number", null: false
     t.boolean "transition_aged_youth", default: false
@@ -143,14 +151,6 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_142004) do
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["slug"], name: "index_casa_cases_on_slug"
-  end
-
-  create_table "casa_cases_emancipation_options", force: :cascade do |t|
-    t.bigint "casa_case_id", null: false
-    t.bigint "emancipation_option_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["casa_case_id", "emancipation_option_id"], name: "index_cases_options_on_case_id_and_option_id", unique: true
   end
 
   create_table "casa_orgs", force: :cascade do |t|
@@ -678,9 +678,9 @@ ActiveRecord::Schema[7.2].define(version: 2025_07_02_142004) do
   add_foreign_key "banners", "users"
   add_foreign_key "casa_case_emancipation_categories", "casa_cases"
   add_foreign_key "casa_case_emancipation_categories", "emancipation_categories"
+  add_foreign_key "casa_case_emancipation_options", "casa_cases"
+  add_foreign_key "casa_case_emancipation_options", "emancipation_options"
   add_foreign_key "casa_cases", "casa_orgs"
-  add_foreign_key "casa_cases_emancipation_options", "casa_cases"
-  add_foreign_key "casa_cases_emancipation_options", "emancipation_options"
   add_foreign_key "case_assignments", "casa_cases"
   add_foreign_key "case_assignments", "users", column: "volunteer_id"
   add_foreign_key "case_contacts", "casa_cases"

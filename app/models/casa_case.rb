@@ -32,8 +32,8 @@ class CasaCase < ApplicationRecord
   has_many :case_contacts, dependent: :destroy
   has_many :casa_case_emancipation_categories, dependent: :destroy
   has_many :emancipation_categories, through: :casa_case_emancipation_categories
-  has_many :casa_cases_emancipation_options, dependent: :destroy
-  has_many :emancipation_options, through: :casa_cases_emancipation_options
+  has_many :casa_case_emancipation_options, dependent: :destroy
+  has_many :emancipation_options, through: :casa_case_emancipation_options
   has_many :court_dates, dependent: :destroy
   has_many :placements, dependent: :destroy
   has_many :case_group_memberships
