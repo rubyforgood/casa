@@ -18,7 +18,6 @@ gem "delayed_job_active_record"
 gem "devise" # for authentication
 gem "devise_invitable"
 gem "draper" # adds decorators for cleaner presentation logic
-gem "faker" # creates realistic seed data, valuable for staging and demos
 gem "filterrific" # filtering and sorting of models
 gem "friendly_id", "~> 5.5.1" # allows us to use a slug instead of casa case ids in their URLs
 gem "groupdate" # Group Data
@@ -27,26 +26,27 @@ gem "image_processing", "~> 1.14" # Set of higher-level helper methods for image
 gem "jbuilder" # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem "jsbundling-rails"
 gem "lograge" # log less so heroku papertrail quits rate limiting our logs
-gem "net-imap" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
-gem "net-pop" # needed for ruby upgrade to 3.1.0 https://www.ruby-lang.org/en/news/2021/12/25/ruby-3-1-0-released/
-gem "net-smtp", require: false # needed for ruby upgrade to 3.1.0 for some dang reason
+gem "net-imap" # Ruby 3.1+ requires explicit inclusion of standard library gems
+gem "net-pop" # Ruby 3.1+ requires explicit inclusion of standard library gems
+gem "net-smtp", require: false # Ruby 3.1+ requires explicit inclusion of standard library gems
 gem "noticed" # Notifications
 gem "oj" # faster JSON parsing 🍊
-gem "pagy" # pagination
-gem "paranoia" # For soft-deleting database objects
+gem "pagy" # Fast and lightweight pagination
+gem "paranoia" # Soft-delete support for Active Record models
 gem "pdf-forms" # filling in fund request PDFs with user input
 gem "pg" # Use postgresql as the database for Active Record
-gem "pretender"
-gem "puma", "7.0.4" # 6.2.2 fails to install on m1 # Use Puma as the app server
+gem "pretender" # Allows admins to impersonate users
+gem "puma", "~> 7.0" # Use Puma as the app server
 gem "pundit" # for authorization management - based on user.role field
 gem "rack-attack" # for blocking & throttling abusive requests
 gem "rack-cors" # for allowing cross-origin resource sharing
-gem "request_store"
+gem "request_store" # Per-request global storage for thread-safe data
 gem "rexml" # pdf-forms needs this to deploy to heroku apparently
 gem "rswag-api"
 gem "rswag-ui"
 gem "sablon" # Word document templating tool for Case Court Reports
-gem "scout_apm"
+gem "scout_apm" # Application performance monitoring
+gem "scout_apm_logging", "~> 2.1" # Scout APM logging integration
 gem "sprockets-rails" # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem "stimulus-rails"
 gem "strong_migrations"
@@ -54,7 +54,7 @@ gem "turbo-rails", "~> 2.0"
 gem "twilio-ruby" # twilio helper functions
 gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "view_component" # View components for reusability
-gem "wicked"
+gem "wicked" # Multi-step form wizard for Rails
 
 # flipper for feature flag management
 gem "flipper"
@@ -63,10 +63,12 @@ gem "flipper-ui"
 gem "pghero"
 gem "pg_query"
 group :development, :test do
+  gem "brakeman" # security inspection
   gem "bullet" # Detect and fix N+1 queries
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem "dotenv-rails"
   gem "factory_bot_rails"
+  gem "faker" # creates realistic seed data, valuable for staging and demos
   gem "parallel_tests"
   gem "pry"
   gem "pry-byebug"
@@ -97,18 +99,15 @@ group :development do
 end
 
 group :test do
-  gem "brakeman" # security inspection
   gem "capybara"
-  gem "rspec-retry" # for retrying flaky tests
   gem "capybara-screenshot"
   gem "database_cleaner-active_record"
-  gem "docx"
+  gem "docx" # for testing Word document generation
   gem "email_spec"
   gem "rails-controller-testing"
   gem "rake"
+  gem "rspec-retry" # for retrying flaky tests
   gem "selenium-webdriver"
   gem "simplecov", require: false
   gem "webmock" # HTTP request stubber
 end
-
-gem "scout_apm_logging", "~> 2.1"

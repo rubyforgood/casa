@@ -755,7 +755,7 @@ DEPENDENCIES
   pretender
   pry
   pry-byebug
-  puma (= 7.0.4)
+  puma (~> 7.0)
   pundit
   rack-attack
   rack-cors
