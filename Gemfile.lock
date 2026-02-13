@@ -761,7 +761,6 @@ DEPENDENCIES
   rack-cors
   rails (~> 7.2)
   rails-controller-testing
-  rake
   request_store
   rexml
   rspec-rails
@@ -794,7 +793,7 @@ DEPENDENCIES
   twilio-ruby
   tzinfo-data
   view_component
-  web-console (>= 3.3.0)
+  web-console (~> 4.0)
   webmock
   wicked
 
