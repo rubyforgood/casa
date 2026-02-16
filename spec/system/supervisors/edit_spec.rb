@@ -175,6 +175,7 @@ RSpec.describe "supervisors/edit", type: :system do
         fill_in "supervisor_date_of_birth", with: "2003/05/06"
 
         click_on "Submit"
+        expect(page).to have_text "Supervisor was successfully updated."
         @supervisor.reload
       end
 

@@ -49,11 +49,15 @@ RSpec.describe "followups/create", :js, type: :system do
 
         click_button "Cancel"
 
+        expect(page).not_to have_selector(".swal2-container")
+
         expect(case_contact.followups.reload.count).to be_zero
       end
 
       it "does nothing when there is no text in the note textarea" do
         click_button "Cancel"
+
+        expect(page).not_to have_selector(".swal2-container")
 
         expect(case_contact.followups.reload.count).to be_zero
       end
@@ -65,11 +69,15 @@ RSpec.describe "followups/create", :js, type: :system do
 
         find(".swal2-close").click
 
+        expect(page).not_to have_selector(".swal2-container")
+
         expect(case_contact.followups.reload.count).to be_zero
       end
 
       it "does nothing when there is no text in the note textarea" do
         find(".swal2-close").click
+
+        expect(page).not_to have_selector(".swal2-container")
 
         expect(case_contact.followups.reload.count).to be_zero
       end
