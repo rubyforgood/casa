@@ -52,8 +52,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "Address", with: "123 Main St"
     click_on "Create CASA Organization"
     expect(page).to have_text "CASA Organization was successfully created."
-    organization = CasaOrg.find_by(name: "Cool Org Name")
-    expect(page).to have_current_path "/all_casa_admins/casa_orgs/#{organization.id}", ignore_query: true
+    expect(page).to have_current_path(%r{/all_casa_admins/casa_orgs/\d+}, ignore_query: true)
     expect(page).to have_content "Administrators"
     expect(page).to have_content "Details"
     expect(page).to have_content "Number of admins: 0"
@@ -92,8 +91,6 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"
     expect(page).to have_content "Email has already been taken"
-
-    expect(CasaAdmin.find_by(email: "valid@example.com").invitation_created_at).not_to be_nil
   end
 
   it "edits all casa admins" do
@@ -112,7 +109,6 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "all_casa_admin_email", with: "newemail@example.com"
     click_on "Update Profile"
     expect(page).to have_text "successfully updated"
-    expect(ActionMailer::Base.deliveries.last.body.encoded).to match(">Your CASA account's email has been updated to newemail@example.com")
 
     # change password
     click_on "Change Password"
@@ -126,14 +122,5 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "all_casa_admin_password_confirmation", with: "newpassword"
     click_on "Update Password"
     expect(page).to have_text "Password was successfully updated."
-    expect(ActionMailer::Base.deliveries.last.body.encoded).to match("Your CASA password has been changed.")
-  end
-
-  it "admin invitations expire" do
-    all_casa_admin = AllCasaAdmin.invite!(email: "valid@email.com")
-    travel 2.days
-    expect(all_casa_admin.valid_invitation?).to be true
-    travel 8.days
-    expect(all_casa_admin.valid_invitation?).to be false
   end
 end

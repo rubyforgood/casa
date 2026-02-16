@@ -57,7 +57,12 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
     end
 
     it "denies access to flipper" do
-      expect { visit "/flipper" }.to raise_error(ActionController::RoutingError)
+      original = Rails.application.env_config["action_dispatch.show_exceptions"]
+      Rails.application.env_config["action_dispatch.show_exceptions"] = :rescuable
+      visit "/flipper"
+      expect(page).to have_text "No route matches [GET] \"/flipper\""
+    ensure
+      Rails.application.env_config["action_dispatch.show_exceptions"] = original
     end
   end
 end
