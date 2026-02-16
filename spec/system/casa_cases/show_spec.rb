@@ -1,15 +1,15 @@
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "casa_cases/show", type: :system do
+RSpec.describe 'casa_cases/show', type: :system do
   include ActionView::Helpers::DateHelper
 
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
-  let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:casa_case) {
+  let(:volunteer) { build(:volunteer, display_name: 'Bob Loblaw', casa_org: organization) }
+  let(:casa_case) do
     create(:casa_case, :with_one_court_order, casa_org: organization,
-      case_number: "CINA-1", date_in_care: date_in_care)
-  }
+                                              case_number: 'CINA-1', date_in_care: date_in_care)
+  end
   let!(:court_date) { create(:court_date, court_report_due_date: 1.month.from_now) }
   let(:date_in_care) { 6.years.ago }
   let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
@@ -22,26 +22,26 @@ RSpec.describe "casa_cases/show", type: :system do
     visit casa_case_path(casa_case.id)
   end
 
-  shared_examples "shows emancipation checklist link" do
-    context "when youth is in transition age" do
-      it "sees link to emancipation" do
+  shared_examples 'shows emancipation checklist link' do
+    context 'when youth is in transition age' do
+      it 'sees link to emancipation' do
         expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
       end
     end
 
-    context "when youth is not in transition age" do
+    context 'when youth is not in transition age' do
       before do
         casa_case.update!(birth_month_year_youth: DateTime.current)
         visit casa_case_path(casa_case)
       end
 
-      it "does not see a link to emancipation checklist" do
+      it 'does not see a link to emancipation checklist' do
         expect(page).not_to have_link("Emancipation 0 / #{emancipation_categories.size}")
       end
     end
   end
 
-  describe "Report Generation", :js do
+  describe 'Report Generation', :js do
     let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
     let(:user) { volunteer }
 
@@ -52,9 +52,9 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     context "when first arriving to 'Generate Court Report' page" do
-      it "generation modal hidden" do
-        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
-        expect(page).not_to have_selector ".select2"
+      it 'generation modal hidden' do
+        expect(page).to have_selector '#btnGenerateReport', text: 'Generate Report', visible: false
+        expect(page).not_to have_selector '.select2'
       end
     end
 
@@ -64,26 +64,26 @@ RSpec.describe "casa_cases/show", type: :system do
       end
 
       # putting all this in the same system test shaves 3 seconds off the test suite
-      it "modal has correct contents" do
-        start_date = page.find("#start_date").value
-        expect(start_date).to eq("January 01, 2021") # default date
+      it 'modal has correct contents' do
+        start_date = page.find('#start_date').value
+        expect(start_date).to eq('January 01, 2021') # default date
 
-        end_date = page.find("#end_date").value
-        expect(end_date).to eq("January 01, 2021") # default date
+        end_date = page.find('#end_date').value
+        expect(end_date).to eq('January 01, 2021') # default date
 
-        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
-        expect(page).not_to have_selector ".select2"
+        expect(page).to have_selector '#btnGenerateReport', text: 'Generate Report', visible: true
+        expect(page).not_to have_selector '.select2'
 
-        expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
-        expect(page).not_to have_selector("#btnGenerateReport[disabled]")
-        expect(page).to have_selector("#spinner", visible: :hidden)
+        expect(page).to have_selector('#btnGenerateReport .lni-download', visible: true)
+        expect(page).not_to have_selector('#btnGenerateReport[disabled]')
+        expect(page).to have_selector('#spinner', visible: :hidden)
 
-        within("#generate-docx-report-modal") do
+        within('#generate-docx-report-modal') do
           expect(page).to have_content(casa_case.case_number)
 
           # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen"
           # should have disabled generate button, download icon and no spinner
-          click_button "Generate Report"
+          click_button 'Generate Report'
         end
 
         wait_for_download
@@ -92,31 +92,31 @@ RSpec.describe "casa_cases/show", type: :system do
     end
   end
 
-  context "admin user" do
+  context 'admin user' do
     let(:user) { admin }
 
-    it_behaves_like "shows court dates links"
-    it_behaves_like "shows emancipation checklist link"
+    it_behaves_like 'shows court dates links'
+    it_behaves_like 'shows emancipation checklist link'
 
-    it "can see case creator in table" do
-      expect(page).to have_text("Bob Loblaw")
+    it 'can see case creator in table' do
+      expect(page).to have_text('Bob Loblaw')
     end
 
-    it "can navigate to edit volunteer page" do
-      expect(page).to have_link("Bob Loblaw", href: "/volunteers/#{volunteer.id}/edit")
+    it 'can navigate to edit volunteer page' do
+      expect(page).to have_link('Bob Loblaw', href: "/volunteers/#{volunteer.id}/edit")
     end
 
-    it "sees link to profile page" do
-      expect(page).to have_link(href: "/users/edit")
+    it 'sees link to profile page' do
+      expect(page).to have_link(href: '/users/edit')
     end
 
-    it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+    it 'can see court orders' do
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    it "can see next court date", :js do
+    it 'can see next court date', :js do
       expect(page).to have_content(
         "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
       )
@@ -132,215 +132,221 @@ RSpec.describe "casa_cases/show", type: :system do
       expect(page).to have_content("#{time_ago_in_words(date_in_care)} ago")
     end
 
-    it "can see Add to Calendar buttons", :js do
-      expect(page).to have_content("Add to Calendar")
+    it 'can see Add to Calendar buttons', :js do
+      expect(page).to have_content('Add to Calendar')
     end
 
-    context "court report download link visibility" do
-      it "does not show download link to admin when report status is not submitted" do
-        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+    context 'court report download link visibility' do
+      it 'does not show download link to admin when report status is not submitted' do
+        fixture = Rails.root.join('spec/fixtures/files/sample_report.docx')
         casa_case.court_reports.attach(
           io: File.open(fixture),
-          filename: "sample_report.docx",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          filename: 'sample_report.docx',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
         casa_case.update!(court_report_status: :in_review)
 
         visit casa_case_path(casa_case.id)
-        expect(page).not_to have_link("Click to download")
+        expect(page).not_to have_link('Click to download')
       end
 
-      it "shows download link to admin when report status is submitted" do
-        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+      it 'shows download link to admin when report status is submitted' do
+        fixture = Rails.root.join('spec/fixtures/files/sample_report.docx')
         casa_case.court_reports.attach(
           io: File.open(fixture),
-          filename: "sample_report.docx",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          filename: 'sample_report.docx',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
         casa_case.update!(court_report_status: :submitted)
 
         visit casa_case_path(casa_case.id)
-        expect(page).to have_link("Click to download")
+        expect(page).to have_link('Click to download')
       end
     end
 
-    context "when there is no future court date or court report due date" do
+    context 'when there is no future court date or court report due date' do
       before do
         casa_case = create(:casa_case, casa_org: organization)
         visit casa_case_path(casa_case.id)
       end
 
-      it "can not see Add to Calendar buttons", :js do
-        expect(page).not_to have_content("Add to Calendar")
+      it 'can not see Add to Calendar buttons', :js do
+        expect(page).not_to have_content('Add to Calendar')
       end
     end
 
-    context "when old case contacts are hidden" do
-      it "displays all case contacts to admin", :js do
+    context 'when old case contacts are hidden' do
+      it 'displays all case contacts to admin', :js do
         casa_case = create(:casa_case, casa_org: organization)
-        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
-        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        volunteer_1 = create(:volunteer, display_name: 'Volunteer 1', casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: 'Volunteer 2', casa_org: casa_case.casa_org)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1,
+                              occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2,
+                              occurred_at: DateTime.now - 1)
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css('#case_contacts_list .card-content', count: 2)
       end
     end
   end
 
-  context "supervisor user" do
+  context 'supervisor user' do
     let(:user) { create(:supervisor, casa_org: organization) }
     let!(:case_contact) { create(:case_contact, creator: user, casa_case: casa_case) }
 
-    it_behaves_like "shows emancipation checklist link"
+    it_behaves_like 'shows emancipation checklist link'
 
-    it "sees link to own edit page" do
+    it 'sees link to own edit page' do
       expect(page).to have_link(href: "/supervisors/#{user.id}/edit")
     end
 
-    context "case contact by another supervisor" do
+    context 'case contact by another supervisor' do
       let(:other_supervisor) { create(:supervisor, casa_org: organization) }
       let!(:case_contact) { create(:case_contact, creator: other_supervisor, casa_case: casa_case) }
 
-      it "sees link to other supervisor" do
+      it 'sees link to other supervisor' do
         expect(page).to have_link(href: "/supervisors/#{other_supervisor.id}/edit")
       end
     end
 
-    it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+    it 'can see court orders' do
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    context "court report download link visibility" do
-      it "does not show download link to supervisor when report status is not submitted" do
-        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+    context 'court report download link visibility' do
+      it 'does not show download link to supervisor when report status is not submitted' do
+        fixture = Rails.root.join('spec/fixtures/files/sample_report.docx')
         casa_case.court_reports.attach(
           io: File.open(fixture),
-          filename: "sample_report.docx",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          filename: 'sample_report.docx',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
         casa_case.update!(court_report_status: :in_review)
 
         visit casa_case_path(casa_case.id)
-        expect(page).not_to have_link("Click to download")
+        expect(page).not_to have_link('Click to download')
       end
 
-      it "shows download link to supervisor when report status is submitted" do
-        fixture = Rails.root.join("spec/fixtures/files/sample_report.docx")
+      it 'shows download link to supervisor when report status is submitted' do
+        fixture = Rails.root.join('spec/fixtures/files/sample_report.docx')
         casa_case.court_reports.attach(
           io: File.open(fixture),
-          filename: "sample_report.docx",
-          content_type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+          filename: 'sample_report.docx',
+          content_type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
         )
         casa_case.update!(court_report_status: :submitted)
 
         visit casa_case_path(casa_case.id)
-        expect(page).to have_link("Click to download")
+        expect(page).to have_link('Click to download')
       end
     end
 
-    context "when old case contacts are hidden" do
-      it "displays all case contacts to supervisor", :js do
+    context 'when old case contacts are hidden' do
+      it 'displays all case contacts to supervisor', :js do
         casa_case = create(:casa_case, casa_org: organization)
-        volunteer_1 = create(:volunteer, display_name: "Volunteer 1", casa_org: casa_case.casa_org)
-        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        volunteer_1 = create(:volunteer, display_name: 'Volunteer 1', casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: 'Volunteer 2', casa_org: casa_case.casa_org)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_1)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1, occurred_at: DateTime.now - 1)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_1,
+                              occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2,
+                              occurred_at: DateTime.now - 1)
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css('#case_contacts_list .card-content', count: 2)
       end
     end
   end
 
-  context "volunteer user" do
+  context 'volunteer user' do
     let(:user) { volunteer }
 
-    it_behaves_like "shows emancipation checklist link"
+    it_behaves_like 'shows emancipation checklist link'
 
-    it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+    it 'can see court orders' do
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
 
-    context "when old case contacts are hidden" do
+    context 'when old case contacts are hidden' do
       before do
-        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: 'Volunteer 2', casa_org: casa_case.casa_org)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: true)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2,
+                              occurred_at: DateTime.now - 1)
       end
 
-      it "displays only visible cases to volunteer", :js do
+      it 'displays only visible cases to volunteer', :js do
         visit casa_case_path(casa_case.id)
-        expect(page).to have_css("#case_contacts_list .card-content", count: 1)
+        expect(page).to have_css('#case_contacts_list .card-content', count: 1)
       end
     end
 
-    context "when old case contacts are displayed" do
+    context 'when old case contacts are displayed' do
       before do
-        volunteer_2 = create(:volunteer, display_name: "Volunteer 2", casa_org: casa_case.casa_org)
+        volunteer_2 = create(:volunteer, display_name: 'Volunteer 2', casa_org: casa_case.casa_org)
         create(:case_assignment, casa_case: casa_case, volunteer: volunteer_2, active: false, hide_old_contacts: false)
-        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2, occurred_at: DateTime.now - 1)
+        create(:case_contact, contact_made: true, casa_case: casa_case, creator: volunteer_2,
+                              occurred_at: DateTime.now - 1)
       end
 
-      it "displays all cases to the volunteer" do
+      it 'displays all cases to the volunteer' do
         visit casa_case_path(casa_case.id)
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css('#case_contacts_list .card-content', count: 2)
       end
     end
   end
 
-  context "court order - implementation status symbol" do
+  context 'court order - implementation status symbol' do
     let(:user) { admin }
 
-    it "when implemented" do
+    it 'when implemented' do
       casa_case.case_court_orders[0].update(implementation_status: :implemented)
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("✅")
+      expect(page).to have_content('✅')
     end
 
-    it "when not implemented" do
+    it 'when not implemented' do
       casa_case.case_court_orders[0].update(implementation_status: :unimplemented)
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content('❌')
     end
 
-    it "when partial implemented" do
+    it 'when partial implemented' do
       casa_case.case_court_orders[0].update(implementation_status: :partially_implemented)
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("🕗")
+      expect(page).to have_content('🕗')
     end
 
-    it "when not specified" do
+    it 'when not specified' do
       casa_case.case_court_orders[0].update(implementation_status: nil)
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content('Court Orders')
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content('❌')
     end
   end
 end

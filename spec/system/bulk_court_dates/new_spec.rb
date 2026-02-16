@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "bulk_court_dates/new", type: :system do
+RSpec.describe 'bulk_court_dates/new', type: :system do
   let(:now) { Date.new(2021, 1, 1) }
   let(:casa_org) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: casa_org) }
@@ -12,34 +12,35 @@ RSpec.describe "bulk_court_dates/new", type: :system do
   let!(:hearing_type) { create(:hearing_type) }
   let(:court_order_text) { Faker::Lorem.paragraph(sentence_count: 2) }
 
-  it "is successful", :js do
+  it 'is successful', :js do
     case_group = build(:case_group, casa_org: casa_org)
     case_group.case_group_memberships.first.casa_case = casa_case
     case_group.save!
 
-    travel_to now
-    sign_in admin
-    visit casa_cases_path
-    click_on "New Bulk Court Date"
+    travel_to now do
+      sign_in admin
+      visit casa_cases_path
+      click_on 'New Bulk Court Date'
 
-    select case_group.name, from: "Case Group"
-    fill_in "court_date_date", with: :now
-    fill_in "court_date_court_report_due_date", with: :now
-    select judge.name, from: "Judge"
-    select hearing_type.name, from: "Hearing type"
+      select case_group.name, from: 'Case Group'
+      fill_in 'court_date_date', with: now
+      fill_in 'court_date_court_report_due_date', with: now
+      select judge.name, from: 'Judge'
+      select hearing_type.name, from: 'Hearing type'
 
-    click_on "Add a court order"
-    text_area = first(:css, "textarea").native
-    text_area.send_keys(court_order_text)
-    page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
+      click_on 'Add a court order'
+      find('.court-order-text-entry').set(court_order_text)
+      page.find('select.implementation-status').find(:option, text: 'Partially implemented').select_option
 
-    within ".top-page-actions" do
-      click_on "Create"
+      within '.top-page-actions' do
+        click_on 'Create'
+      end
+
+      expect(page).to have_content('1 court date created!')
+      visit casa_case_path(casa_case)
+      expect(page).to have_text('CASA Case Details')
+      expect(page).to have_content(hearing_type.name)
+      expect(page).to have_content(court_order_text)
     end
-
-    visit casa_case_path(casa_case)
-    expect(page).to have_content(hearing_type.name)
-    expect(page).to have_content(court_order_text)
-    travel_back
   end
 end
