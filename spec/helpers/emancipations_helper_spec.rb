@@ -56,7 +56,7 @@ RSpec.describe EmancipationsHelper, type: :helper do
     let(:emancipation_option) { create(:emancipation_option) }
 
     it "returns \"checked\" when passed an associated casa case and emancipation option" do
-      create(:casa_cases_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
+      create(:casa_case_emancipation_option, casa_case_id: casa_case.id, emancipation_option_id: emancipation_option.id)
       expect(helper.emancipation_option_checkbox_checked(casa_case, emancipation_option)).to eq("checked")
     end
 

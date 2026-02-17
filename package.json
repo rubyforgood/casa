@@ -17,7 +17,7 @@
     "@hotwired/stimulus": "^3.2.2",
     "@hotwired/turbo-rails": "^8.0.20",
     "@popperjs/core": "^2.11.8",
-    "@rails/actioncable": "^8.1.100",
+    "@rails/actioncable": "^8.1.200",
     "@rails/actiontext": "^8.1.200",
     "@rails/activestorage": "^8.1.200",
     "@rails/ujs": "^7.1.600",
@@ -34,7 +34,7 @@
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "jstz": "^2.1.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.23",
     "luxon": "^3.6.1",
     "popper.js": "^1.16.1",
     "sass": "1.77.6",
@@ -47,7 +47,7 @@
   },
   "version": "0.1.0",
   "devDependencies": {
-    "@babel/preset-env": "^7.28.5",
+    "@babel/preset-env": "^7.28.6",
     "faker": "^5.5.3",
     "jest": "^30.2.0",
     "jest-environment-jsdom": "^29.6.2",
@@ -66,6 +66,6 @@
     ]
   },
   "engines": {
-    "node": "22.x"
+    "node": "24.x"
   }
 }

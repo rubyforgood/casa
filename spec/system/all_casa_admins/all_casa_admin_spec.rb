@@ -52,8 +52,8 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "Address", with: "123 Main St"
     click_on "Create CASA Organization"
     expect(page).to have_text "CASA Organization was successfully created."
-    organization = CasaOrg.find_by(name: "Cool Org Name")
-    expect(page).to have_current_path "/all_casa_admins/casa_orgs/#{organization.id}", ignore_query: true
+    expect(page).to have_text "Cool Org Name"
+    expect(page).to have_current_path(%r{/all_casa_admins/casa_orgs/\d+}, ignore_query: true)
     expect(page).to have_content "Administrators"
     expect(page).to have_content "Details"
     expect(page).to have_content "Number of admins: 0"
@@ -131,9 +131,16 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
 
   it "admin invitations expire" do
     all_casa_admin = AllCasaAdmin.invite!(email: "valid@email.com")
+    raw_token = all_casa_admin.raw_invitation_token
+
+    # Invitation is valid within 1 week
     travel 2.days
-    expect(all_casa_admin.valid_invitation?).to be true
+    visit accept_all_casa_admin_invitation_path(invitation_token: raw_token)
+    expect(page).to have_text "Set my password"
+
+    # Invitation expires after 1 week
     travel 8.days
-    expect(all_casa_admin.valid_invitation?).to be false
+    visit accept_all_casa_admin_invitation_path(invitation_token: raw_token)
+    expect(page).to have_text "The invitation token provided is not valid!"
   end
 end
