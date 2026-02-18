@@ -1,2 +1,2 @@
-FROM mcr.microsoft.com/devcontainers/ruby:dev-3.2-buster
-RUN apt -y update && apt install -y vim curl gpg postgresql postgresql-contrib tzdata imagemagick
+FROM mcr.microsoft.com/devcontainers/ruby:dev-3.3-bookworm
+RUN apt-get update && apt-get install -y vim curl gpg postgresql postgresql-contrib tzdata imagemagick
