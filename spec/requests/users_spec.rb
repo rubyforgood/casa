@@ -258,6 +258,18 @@ RSpec.describe "/users", type: :request do
           expect(ActionMailer::Base.deliveries.last.body.encoded)
             .to match("Click here to confirm your email")
         end
+
+        it "strips whitespace from email" do
+          patch update_email_users_path(user),
+            params: {
+              user: {
+                current_password: "12345678",
+                email: "  newemail@example.com  "
+              }
+            }
+          user.confirm
+          expect(user.email).to eq("newemail@example.com")
+        end
       end
 
       context "when failure" do
