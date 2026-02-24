@@ -8,7 +8,7 @@ RSpec.describe "court_dates/edit", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  let!(:casa_case) { create(:casa_case, case_number: 'CINA-08-1001', casa_org: organization) }
+  let!(:casa_case) { create(:casa_case, case_number: "CINA-08-1001", casa_org: organization) }
   let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.new(2020, 12, 25)) }
   let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.new(2021, 1, 8)) }
 
@@ -49,7 +49,7 @@ RSpec.describe "court_dates/edit", type: :system do
     it "edits past court date", :js do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
-      expect(page).to have_text('CINA-08-1001')
+      expect(page).to have_text("CINA-08-1001")
       expect(page).to have_text("Add Court Date")
       expect(page).to have_field("court_date_date", with: "2020-12-25")
       expect(page).to have_text("Add Court Report Due Date")
@@ -72,7 +72,7 @@ RSpec.describe "court_dates/edit", type: :system do
     it "allows deleting a future court date", :js do
       visit root_path
       click_on "Cases"
-      click_on 'CINA-08-1001'
+      click_on "CINA-08-1001"
 
       expect(page).to have_content("December 25, 2020")
       expect(page).to have_content("January 8, 2021")
@@ -94,7 +94,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
       visit root_path
       click_on "Cases"
-      click_on 'CINA-08-1001'
+      click_on "CINA-08-1001"
 
       expect(page).to have_content("December 25, 2020")
       expect(page).to have_content("January 8, 2021")
@@ -117,7 +117,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
       visit root_path
       click_on "Cases"
-      click_on 'CINA-08-1001'
+      click_on "CINA-08-1001"
 
       expect(page).to have_content("December 25, 2020")
       expect(page).to have_content("January 8, 2021")
