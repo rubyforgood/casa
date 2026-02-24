@@ -34,6 +34,6 @@ module PhoneNumberHelper
   end
 
   def strip_unnecessary_characters(number)
-    number.gsub(/[()\+\s\-\.]/, "")
+    number.gsub(/[()+\s\-.]/, "")
   end
 end

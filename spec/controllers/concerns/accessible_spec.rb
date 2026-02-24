@@ -3,6 +3,7 @@ require "rails_helper"
 class MockController < ApplicationController
   before_action :reset_session, only: :no_session_action
   include Accessible
+
   def action
     render plain: "controller action test..."
   end
