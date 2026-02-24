@@ -184,7 +184,7 @@ class CasaCasesController < ApplicationController
     casa_case_number = case_contacts&.first&.casa_case&.case_number
     current_date = Time.now.strftime("%Y-%m-%d")
 
-    "#{casa_case_number.nil? ? "" : casa_case_number + "-"}case-contacts-#{current_date}.csv"
+    "#{casa_case_number + "-" unless casa_case_number.nil?}case-contacts-#{current_date}.csv"
   end
 
   def court_date_unknown?
