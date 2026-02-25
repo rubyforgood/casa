@@ -6,7 +6,6 @@
 # If you specify the string 'random' (e.g. `export DB_SEEDS_RANDOM_SEED=random`), a random seed will be assigned for you.
 # If you don't specify anything, 0 will be used as the seed, ensuring consistent data across hosts and runs.
 
-require "faker"
 require_relative "seeds/casa_org_populator_presets"
 require_relative "seeds/db_populator"
 require_relative "../lib/tasks/data_post_processors/case_contact_populator"

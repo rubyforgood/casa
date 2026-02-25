@@ -98,8 +98,8 @@ RSpec.describe User, type: :model do
     end
 
     it "does not return case_contacts neither unassigned cases or inactive cases" do
-      inactive_case_assignment = build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: volunteer.casa_org), active: false, volunteer: volunteer)
-      case_assignment_to_inactve_case = build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, active: false, casa_org: volunteer.casa_org), volunteer: volunteer)
+      inactive_case_assignment = create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), active: false, volunteer: volunteer)
+      case_assignment_to_inactve_case = create(:case_assignment, casa_case: create(:casa_case, active: false, casa_org: volunteer.casa_org), volunteer: volunteer)
 
       expect {
         volunteer.case_contacts_for(inactive_case_assignment.casa_case.id)
@@ -133,8 +133,8 @@ RSpec.describe User, type: :model do
 
       it "ignores volunteers' inactive and unassgined cases" do
         volunteer = create(:volunteer, supervisor: supervisor, casa_org: casa_org)
-        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org, active: false), volunteer: volunteer)
-        build_stubbed(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: casa_org), active: false, volunteer: volunteer)
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org, active: false), volunteer: volunteer)
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: casa_org), active: false, volunteer: volunteer)
 
         expect(supervisor.volunteers_serving_transition_aged_youth).to eq(0)
       end
@@ -168,7 +168,7 @@ RSpec.describe User, type: :model do
       end
 
       it "returns zero for a volunteer that is not assigned to any casa cases" do
-        build_stubbed(:volunteer, supervisor: supervisor)
+        create(:volunteer, supervisor: supervisor)
         expect(supervisor.no_attempt_for_two_weeks).to eq(0)
       end
 
@@ -177,7 +177,7 @@ RSpec.describe User, type: :model do
 
         case_of_interest_1 = volunteer_1.casa_cases.first
 
-        build_stubbed(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 3.weeks.ago)
+        create(:case_contact, creator: volunteer_1, casa_case: case_of_interest_1, contact_made: true, created_at: 3.weeks.ago)
         expect(supervisor.no_attempt_for_two_weeks).to eq(1)
       end
 
@@ -198,16 +198,16 @@ RSpec.describe User, type: :model do
 
   describe "#active_for_authentication?" do
     it "is false when the user is inactive" do
-      user = build_stubbed(:volunteer, :inactive)
+      user = build(:volunteer, :inactive)
       expect(user).not_to be_active_for_authentication
       expect(user.inactive_message).to eq(:inactive)
     end
 
     it "is true otherwise" do
-      user = build_stubbed(:volunteer)
+      user = build(:volunteer)
       expect(user).to be_active_for_authentication
 
-      user = build_stubbed(:supervisor)
+      user = build(:supervisor)
       expect(user).to be_active_for_authentication
     end
   end
@@ -235,12 +235,12 @@ RSpec.describe User, type: :model do
   describe "#serving_transition_aged_youth?" do
     let(:user) { build(:volunteer) }
     let!(:case_assignment_without_transition_aged_youth) do
-      build(:case_assignment, casa_case: build_stubbed(:casa_case, :pre_transition, casa_org: user.casa_org), volunteer: user)
+      create(:case_assignment, casa_case: create(:casa_case, :pre_transition, casa_org: user.casa_org), volunteer: user)
     end
 
     context "when the user has a transition-aged-youth case" do
       it "is true" do
-        create(:case_assignment, casa_case: build(:casa_case, casa_org: user.casa_org), volunteer: user)
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org), volunteer: user)
         expect(user).to be_serving_transition_aged_youth
       end
     end
@@ -253,7 +253,7 @@ RSpec.describe User, type: :model do
 
     context "when the user's only transition-aged-youth case is inactive" do
       it "is false" do
-        build(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: user.casa_org, active: false), volunteer: user)
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org, active: false), volunteer: user)
 
         expect(user).not_to be_serving_transition_aged_youth
       end
@@ -261,7 +261,7 @@ RSpec.describe User, type: :model do
 
     context "when the user is unassigned from a transition-aged-youth case" do
       it "is false" do
-        build(:case_assignment, casa_case: build_stubbed(:casa_case, casa_org: user.casa_org), volunteer: user, active: false)
+        create(:case_assignment, casa_case: create(:casa_case, casa_org: user.casa_org), volunteer: user, active: false)
 
         expect(user).not_to be_serving_transition_aged_youth
       end

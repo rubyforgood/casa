@@ -152,7 +152,7 @@ RSpec.describe CasaOrg, type: :model do
       let(:contact_topics) { ContactTopic.where(casa_org: org).map(&:question) }
 
       it "matches default contact topics" do
-        expected = fake_topics.map { |topic| topic["question"] }
+        expected = fake_topics.pluck("question")
         expect(contact_topics).to include(*expected)
       end
     end

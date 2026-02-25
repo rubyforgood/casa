@@ -54,9 +54,9 @@ sudo -u postgres psql -c "CREATE USER $USER WITH CREATEDB"
 ```
 # Install NVM and Node JS
 #   you can use curl
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 #   or wget
-wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
+wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.4/install.sh | bash
 
 #   Restart your terminal
 
@@ -71,7 +71,7 @@ npm i -g npm@latest
 
 ```
 # add node and node tools to the path
-nvm alias default lts/jod
+nvm alias default lts/krypton
 ```
 
 ```
@@ -84,7 +84,7 @@ git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 #   fetch list of ruby versions
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install 3.3.6
+rbenv install 3.3.10
 ```
 
 If you would like RVM instead of rbenv
@@ -95,9 +95,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.3.6
-rvm alias create ruby 3.3.6
-rvm alias create default ruby-3.3.6
+rvm install 3.3.10
+rvm alias create ruby 3.3.10
+rvm alias create default ruby-3.3.10
 ```
 
 ```# Download the Chrome browser (for RSpec testing):

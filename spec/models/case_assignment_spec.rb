@@ -1,14 +1,14 @@
 require "rails_helper"
 
 RSpec.describe CaseAssignment, type: :model do
-  let(:casa_org_1) { build(:casa_org) }
+  let(:casa_org_1) { create(:casa_org) }
   let(:casa_case_1) { create(:casa_case, casa_org: casa_org_1) }
   let(:volunteer_1) { create(:volunteer, casa_org: casa_org_1) }
-  let(:inactive) { build(:volunteer, :inactive, casa_org: casa_org_1) }
-  let(:supervisor) { build(:supervisor, casa_org: casa_org_1) }
-  let(:casa_case_2) { build(:casa_case, casa_org: casa_org_1) }
-  let(:volunteer_2) { build(:volunteer, casa_org: casa_org_1) }
-  let(:casa_org_2) { build(:casa_org) }
+  let(:inactive) { create(:volunteer, :inactive, casa_org: casa_org_1) }
+  let(:supervisor) { create(:supervisor, casa_org: casa_org_1) }
+  let(:casa_case_2) { create(:casa_case, casa_org: casa_org_1) }
+  let(:volunteer_2) { create(:volunteer, casa_org: casa_org_1) }
+  let(:casa_org_2) { create(:casa_org) }
 
   it "only allow active volunteers to be assigned" do
     expect(casa_case_1.case_assignments.new(volunteer: volunteer_1)).to be_valid
@@ -52,8 +52,8 @@ RSpec.describe CaseAssignment, type: :model do
 
   describe ".active" do
     it "only includes active case assignments" do
-      casa_case = build(:casa_case)
-      case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: build(:volunteer, casa_org: casa_case.casa_org)) }
+      casa_case = create(:casa_case)
+      case_assignments = 2.times.map { create(:case_assignment, casa_case: casa_case, volunteer: create(:volunteer, casa_org: casa_case.casa_org)) }
       expect(CaseAssignment.active).to match_array(case_assignments)
 
       case_assignments.first.update(active: false)

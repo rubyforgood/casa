@@ -1,4 +1,4 @@
-class CasaCasesEmancipationOption < ApplicationRecord
+class CasaCaseEmancipationOption < ApplicationRecord
   belongs_to :casa_case
   belongs_to :emancipation_option
 
@@ -7,7 +7,7 @@ end
 
 # == Schema Information
 #
-# Table name: casa_cases_emancipation_options
+# Table name: casa_case_emancipation_options
 #
 #  id                     :bigint           not null, primary key
 #  created_at             :datetime         not null
@@ -17,7 +17,7 @@ end
 #
 # Indexes
 #
-#  index_cases_options_on_case_id_and_option_id  (casa_case_id,emancipation_option_id) UNIQUE
+#  index_case_options_on_case_id_and_option_id  (casa_case_id,emancipation_option_id) UNIQUE
 #
 # Foreign Keys
 #

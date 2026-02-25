@@ -56,17 +56,17 @@ Next, install the version of Ruby that this project uses. This can be found by c
 To install the appropriate ruby version, run:
 
 ```bash
-rbenv install 3.3.6
+rbenv install 3.3.10
 ```
 
-(Do not forget to switch 3.3.6 to the appropriate version)
+(Do not forget to switch 3.3.10 to the appropriate version)
 
 Finally, run:
 
 ```bash
-rbenv local 3.3.6
+rbenv local 3.3.10
 ```
-(Do not forget to swtich 3.3.6 to the appropriate version)
+(Do not forget to swtich 3.3.10 to the appropriate version)
 
 ## Nodejs
 
