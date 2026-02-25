@@ -8,9 +8,9 @@ RSpec.describe "court_dates/edit", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
-  let!(:casa_case) { create(:casa_case, case_number: "CINA-08-1001", casa_org: organization) }
-  let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: (now - 1.week)) }
-  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: (now + 1.week)) }
+  let!(:casa_case) { create(:casa_case, casa_org: organization) }
+  let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
+  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
 
   before do
     travel_to now
