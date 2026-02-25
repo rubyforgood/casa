@@ -4,23 +4,24 @@ require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
   context "with date"
+  let(:now) { Date.new(2021, 1, 1) }
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer) }
   let(:supervisor) { create(:supervisor, casa_org: organization) }
   let!(:casa_case) { create(:casa_case, case_number: "CINA-08-1001", casa_org: organization) }
-  let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.new(2020, 12, 25)) }
-  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: Date.new(2021, 1, 8)) }
+  let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: (now - 1.week)) }
+  let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: (now + 1.week)) }
 
   before do
-    travel_to(Date.new(2021, 1, 1))
+    travel_to now
   end
 
   context "as an admin" do
     before do
       sign_in admin
       visit casa_case_path(casa_case)
-      click_on "December 25, 2020"
+      click_on past_court_date.date.strftime("%B %-d, %Y")
       click_on "Edit"
     end
 
@@ -49,7 +50,7 @@ RSpec.describe "court_dates/edit", type: :system do
     it "edits past court date", :js do
       expect(page).to have_text("Editing Court Date")
       expect(page).to have_text("Case Number:")
-      expect(page).to have_text("CINA-08-1001")
+      expect(page).to have_text(casa_case.case_number)
       expect(page).to have_text("Add Court Date")
       expect(page).to have_field("court_date_date", with: "2020-12-25")
       expect(page).to have_text("Add Court Report Due Date")
@@ -72,19 +73,18 @@ RSpec.describe "court_dates/edit", type: :system do
     it "allows deleting a future court date", :js do
       visit root_path
       click_on "Cases"
-      click_on "CINA-08-1001"
+      click_on casa_case.case_number
 
-      expect(page).to have_content("December 25, 2020")
-      expect(page).to have_content("January 8, 2021")
-
-      page.find("a", text: "January 8, 2021").click
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+      page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
         page.find("a", text: "Delete Future Court Date").click
       end
       expect(page).to have_content "Court date was successfully deleted"
 
-      expect(page).not_to have_content("January 8, 2021")
-      expect(page).to have_content("December 25, 2020")
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
 
@@ -94,35 +94,33 @@ RSpec.describe "court_dates/edit", type: :system do
 
       visit root_path
       click_on "Cases"
-      click_on "CINA-08-1001"
+      click_on casa_case.case_number
 
-      expect(page).to have_content("December 25, 2020")
-      expect(page).to have_content("January 8, 2021")
-
-      page.find("a", text: "January 8, 2021").click
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+      page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
         page.find("a", text: "Delete Future Court Date").click
       end
 
       expect(page).to have_content "Court date was successfully deleted."
-      expect(page).not_to have_content("January 8, 2021")
-      expect(page).to have_content("December 25, 2020")
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
 
   context "as a volunteer" do
-    it "can't delete a future court date as volunteer", :js do
+    it "does not allow deleting a future court date", :js do
       volunteer.casa_cases = [casa_case]
       sign_in volunteer
 
       visit root_path
       click_on "Cases"
-      click_on "CINA-08-1001"
+      click_on casa_case.case_number
 
-      expect(page).to have_content("December 25, 2020")
-      expect(page).to have_content("January 8, 2021")
-
-      page.find("a", text: "January 8, 2021").click
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+      page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
 
       expect(page).not_to have_content "Delete Future Court Date"
     end
