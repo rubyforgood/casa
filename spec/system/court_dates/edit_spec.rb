@@ -3,7 +3,6 @@
 require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
-  context "with date"
   let(:now) { Date.new(2021, 1, 1) }
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
