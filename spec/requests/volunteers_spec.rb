@@ -239,18 +239,20 @@ RSpec.describe "/volunteers", type: :request do
         expect(volunteer.phone_number).to eq "15463457898"
       end
 
-      it "sends the volunteer a confirmation email upon email change" do
+      it "updates the volunteer email without sending a confirmation email" do
+        old_email = volunteer.email
+        new_email = "newemail@example.com"
+
         patch volunteer_path(volunteer), params: {
-          volunteer: {email: "newemail@gmail.com"}
+          volunteer: {email: new_email}
         }
         expect(response).to have_http_status(:redirect)
 
         volunteer.reload
-        expect(volunteer.unconfirmed_email).to eq("newemail@gmail.com")
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+
+        expect(volunteer.email).to eq(new_email)
+        expect(volunteer.old_emails).to eq([old_email])
+        expect(volunteer.unconfirmed_email).to eq(nil)
       end
     end
 

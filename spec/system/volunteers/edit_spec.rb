@@ -14,7 +14,7 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_phone_number", with: "+14163248967"
         fill_in "volunteer_date_of_birth", with: Date.new(1998, 7, 1)
-        click_on "Submit"
+        click_on "Update"
 
         expect(page).to have_text "Volunteer was successfully updated."
       end
@@ -31,7 +31,7 @@ RSpec.describe "volunteers/edit", type: :system do
           visit edit_volunteer_path(volunteer)
 
           fill_in "volunteer_phone_number", with: "+141632489"
-          click_on "Submit"
+          click_on "Update"
           expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
         end
 
@@ -44,7 +44,7 @@ RSpec.describe "volunteers/edit", type: :system do
           visit edit_volunteer_path(volunteer)
 
           fill_in "volunteer_phone_number", with: "+141632180923"
-          click_on "Submit"
+          click_on "Update"
 
           expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
         end
@@ -58,7 +58,7 @@ RSpec.describe "volunteers/edit", type: :system do
           visit edit_volunteer_path(volunteer)
 
           fill_in "volunteer_phone_number", with: "+141632u809o"
-          click_on "Submit"
+          click_on "Update"
 
           expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
         end
@@ -72,7 +72,7 @@ RSpec.describe "volunteers/edit", type: :system do
           visit edit_volunteer_path(volunteer)
 
           fill_in "volunteer_phone_number", with: "+24163218092"
-          click_on "Submit"
+          click_on "Update"
 
           expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
         end
@@ -86,7 +86,7 @@ RSpec.describe "volunteers/edit", type: :system do
           visit edit_volunteer_path(volunteer)
 
           fill_in "volunteer_date_of_birth", with: 5.days.from_now
-          click_on "Submit"
+          click_on "Update"
 
           expect(page).to have_text "Date of birth must be in the past."
         end
@@ -104,7 +104,7 @@ RSpec.describe "volunteers/edit", type: :system do
         fill_in "volunteer_display_name", with: "Kamisato Ayato"
         fill_in "volunteer_email", with: admin.email
         fill_in "volunteer_display_name", with: "Mickey Mouse"
-        click_on "Submit"
+        click_on "Update"
 
         expect(page).to have_text "already been taken"
       end
@@ -120,7 +120,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
         fill_in "volunteer_email", with: ""
         fill_in "volunteer_display_name", with: ""
-        click_on "Submit"
+        click_on "Update"
 
         expect(page).to have_text "can't be blank"
       end
@@ -129,48 +129,27 @@ RSpec.describe "volunteers/edit", type: :system do
 
   describe "updating a volunteer's email" do
     context "with a valid email" do
-      it "sends volunteer a confirmation email and does not change the displayed email" do
+      it "updates volunteer email without sending a confirmation email" do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
         old_email = volunteer.email
+        new_email = "newemail@example.com"
 
         sign_in admin
         visit edit_volunteer_path(volunteer)
 
-        fill_in "Email", with: "newemail@example.com"
-        click_on "Submit"
+        fill_in "Email", with: new_email
+        click_on "Update"
+
         volunteer.reload
 
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
-
-        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: old_email)
-        expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
-      end
-
-      it "succesfully displays the new email once the user confirms" do
-        organization = create(:casa_org)
-        admin = create(:casa_admin, casa_org: organization)
-        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-        old_email = volunteer.email
-
-        sign_in admin
-        visit edit_volunteer_path(volunteer)
-
-        fill_in "Email", with: "newemail@example.com"
-        click_on "Submit"
-        volunteer.reload
-        volunteer.confirm
-
-        visit edit_volunteer_path(volunteer)
-
-        expect(page).to have_field("Email", with: "newemail@example.com")
-        expect(page).not_to have_field("Email", with: old_email)
+        expect(page).to have_text "Volunteer was successfully updated."
+        expect(page).to have_field("Email", with: new_email)
+        expect(volunteer.email).to eq(new_email)
         expect(volunteer.old_emails).to eq([old_email])
+        expect(volunteer.unconfirmed_email).to eq(nil)
       end
     end
   end
@@ -734,7 +713,7 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer)
 
         fill_in "volunteer_address_attributes_content", with: "123 Main St"
-        click_on "Submit"
+        click_on "Update"
         expect(page).to have_text "Volunteer was successfully updated."
         expect(page).to have_selector("input[value='123 Main St']")
       end
