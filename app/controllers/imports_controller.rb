@@ -2,6 +2,7 @@ class ImportsController < ApplicationController
   require "csv"
 
   include ActionView::Helpers::UrlHelper
+
   before_action :failed_csv_service, only: [:create, :download_failed]
   after_action :verify_authorized
 

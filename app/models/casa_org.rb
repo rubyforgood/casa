@@ -1,5 +1,6 @@
 class CasaOrg < ApplicationRecord
   prepend ActiveSupport::ToJsonWithActiveSupportEncoder
+
   # NOTE: location of the default report template
   CASA_DEFAULT_COURT_REPORT = File.new(Rails.root.join("app/documents/templates/default_report_template.docx"), "r")
   CASA_DEFAULT_LOGO = Rails.public_path.join("logo.jpeg")
