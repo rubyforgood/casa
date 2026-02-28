@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :casa_case do
     sequence(:case_number) { |n| "CINA-#{n}" }
-    birth_month_year_youth { 16.years.ago }
+    birth_month_year_youth { 5.years.ago }
     casa_org { CasaOrg.first || create(:casa_org) }
     court_report_status { :not_submitted }
     case_court_orders { [] }
