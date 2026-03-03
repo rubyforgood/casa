@@ -14,12 +14,11 @@ class HealthController < ApplicationController
   end
 
   def gc
-    verify_token_for_gc_stats
-
-    render json: JSON.pretty_generate([
+    render body: JSON.pretty_generate([
       Time.now.in_time_zone("Central Time (US & Canada)").strftime("%H"),
       GC.stat
-    ])
+    ]),
+      content_type: "application/json"
   end
 
   def case_contacts_creation_times_in_last_week
@@ -81,6 +80,8 @@ class HealthController < ApplicationController
   private
 
   def verify_token_for_gc_stats
-    head :forbidden unless params[:token] == ENV.fetch("GC_ACCESS_TOKEN")
+    gc_access_token = ENV["GC_ACCESS_TOKEN"]
+
+    head :forbidden unless params[:token] == gc_access_token && !gc_access_token.nil?
   end
 end
