@@ -75,6 +75,10 @@ Rails.application.configure do
     Bullet.bullet_logger = true
   end
 
+  # Prosopite N+1 query detection
+  config.prosopite_enabled = true
+  config.prosopite_min_n_queries = 5  # More lenient for development
+
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true
 
