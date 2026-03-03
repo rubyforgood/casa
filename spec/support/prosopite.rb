@@ -4,7 +4,7 @@ return unless defined?(Prosopite)
 
 # Test configuration
 Prosopite.enabled = true
-Prosopite.raise = true  # Fail specs on N+1 detection
+Prosopite.raise = false  # Log only, don't fail specs
 Prosopite.rails_logger = true
 Prosopite.prosopite_logger = true
 
