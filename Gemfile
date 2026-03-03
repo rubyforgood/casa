@@ -64,6 +64,7 @@ gem "wicked" # Multi-step form wizard for Rails
 group :development, :test do
   gem "brakeman" # Security inspection
   gem "bullet" # Detect and fix N+1 queries
+  gem "prosopite" # N+1 query detection via SQL pattern analysis
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Debugger console
   gem "dotenv-rails" # Environment variable management
   gem "erb_lint", require: false # ERB linter

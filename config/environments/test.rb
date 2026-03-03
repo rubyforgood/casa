@@ -71,6 +71,10 @@ Rails.application.configure do
     # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/2441
   end
 
+  # Prosopite N+1 query detection
+  config.prosopite_enabled = true
+  config.prosopite_min_n_queries = 2  # Stricter for tests
+
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 

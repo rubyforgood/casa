@@ -1,0 +1,7 @@
+# Directories to exclude from Prosopite N+1 scanning
+# Remove paths as you fix N+1s in each area
+#
+# Example entries:
+# spec/features
+# spec/system
+# spec/requests/legacy
