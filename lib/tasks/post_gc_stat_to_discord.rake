@@ -1,13 +1,21 @@
 desc "Post gc stats to discord channel"
 
 task post_gc_stat_to_discord: :environment do
-  stats = GC.stat
+  require "net/http"
+
+  url = URI("https://casavolunteertracking.org/health/gc?token=#{ENV["GC_ACCESS_TOKEN"]}")
+  response = Net::HTTP.get_response(url)
+
+  unless response.is_a?(Net::HTTPSuccess)
+    raise "Failed to fetch GC stats. HTTP status code:#{response.code}"
+  end
+
+  stats = response.body
 
   unless ENV["DISCORD_WEBHOOK_URL"].nil?
-    formatted_stats = JSON.pretty_generate(stats)
     discord_message = <<~MULTILINE
       ```json
-      #{formatted_stats}
+      #{stats}
       ```
     MULTILINE
 
