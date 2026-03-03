@@ -1,6 +1,7 @@
 class HealthController < ApplicationController
   skip_before_action :authenticate_user!
   skip_after_action :verify_authorized
+  before_action :verify_token_for_gc_stats, only: [:gc]
 
   def index
     respond_to do |format|
@@ -10,6 +11,15 @@ class HealthController < ApplicationController
 
       format.json { render json: {latest_deploy_time: Health.instance.latest_deploy_time} }
     end
+  end
+
+  def gc
+    verify_token_for_gc_stats
+
+    render json: JSON.pretty_generate([
+      Time.now.in_time_zone("Central Time (US & Canada)").strftime("%H"),
+      GC.stat
+    ])
   end
 
   def case_contacts_creation_times_in_last_week
@@ -66,5 +76,11 @@ class HealthController < ApplicationController
     end
 
     render json: monthly_line_graph_combined_data
+  end
+
+  private
+
+  def verify_token_for_gc_stats
+    head :forbidden unless params[:token] == ENV.fetch("GC_ACCESS_TOKEN")
   end
 end
