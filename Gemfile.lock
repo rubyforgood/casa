@@ -116,9 +116,6 @@ GEM
     bugsnag (6.28.0)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
-    bullet (8.1.0)
-      activesupport (>= 3.0.0)
-      uniform_notifier (~> 1.11)
     bundler-audit (0.9.3)
       bundler (>= 1.2.0)
       thor (~> 1.0)
@@ -670,7 +667,6 @@ GEM
     unicode-display_width (3.2.0)
       unicode-emoji (~> 4.1)
     unicode-emoji (4.2.0)
-    uniform_notifier (1.18.0)
     useragent (0.16.11)
     view_component (4.2.0)
       actionview (>= 7.1.0)
@@ -715,7 +711,6 @@ DEPENDENCIES
   blueprinter
   brakeman
   bugsnag
-  bullet
   bundler-audit
   byebug
   capybara
