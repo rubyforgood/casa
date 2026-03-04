@@ -25,7 +25,7 @@ RSpec.describe "volunteers/new", type: :system do
   context "when supervisor" do
     let(:supervisor) { create(:supervisor) }
 
-    it "lets Supervisor create new volunteer" do
+    it "creates a new volunteer", :js do
       sign_in supervisor
       visit new_volunteer_path
 
@@ -33,9 +33,12 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Display name", with: "New Volunteer Display Name 2"
       fill_in "Date of birth", with: Date.new(2000, 1, 2)
 
-      expect do
-        click_on "Create Volunteer"
-      end.to change(User, :count).by(1)
+      click_on "Create Volunteer"
+
+      visit volunteers_path
+      expect(page).to have_text("New Volunteer Display Name 2")
+      expect(page).to have_text("new_volunteer2@example.com")
+      expect(page).to have_text("Active")
     end
   end
 
