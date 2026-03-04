@@ -43,32 +43,31 @@ RSpec.describe "volunteers/new", type: :system do
   end
 
   context "volunteer user" do
-    let(:volunteer) { create(:volunteer) }
-
-    before { sign_in volunteer }
-
     it "redirects the user with an error message" do
+      volunteer = create(:volunteer)
+      sign_in volunteer
+
       visit new_volunteer_path
 
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
     end
-  end
 
-  it "displays learning hour topic for volunteers when enabled", :js do
-    organization = create(:casa_org, learning_topic_active: true)
-    volunteer = create(:volunteer, casa_org: organization)
+    it "displays learning hour topic when enabled", :js do
+      organization = create(:casa_org, learning_topic_active: true)
+      volunteer = create(:volunteer, casa_org: organization)
+  
+      sign_in volunteer
+      visit new_learning_hour_path
+      expect(page).to have_text("Learning Topic")
+    end
 
-    sign_in volunteer
-    visit new_learning_hour_path
-    expect(page).to have_text("Learning Topic")
-  end
-
-  it "learning hour topic hidden when disabled", :js do
-    organization = create(:casa_org)
-    volunteer = create(:volunteer, casa_org: organization)
-
-    sign_in volunteer
-    visit new_learning_hour_path
-    expect(page).not_to have_text("Learning Topic")
+    it "does not display learning hour topic when disabled", :js do
+      organization = create(:casa_org)
+      volunteer = create(:volunteer, casa_org: organization)
+  
+      sign_in volunteer
+      visit new_learning_hour_path
+      expect(page).not_to have_text("Learning Topic")
+    end
   end
 end
