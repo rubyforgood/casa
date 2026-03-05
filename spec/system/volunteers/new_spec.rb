@@ -34,7 +34,7 @@ RSpec.describe "volunteers/new", type: :system do
     it "displays learning hour topic when enabled", :js do
       organization = build(:casa_org, learning_topic_active: true)
       volunteer = create(:volunteer, casa_org: organization)
-  
+
       sign_in volunteer
       visit new_learning_hour_path
       expect(page).to have_text("Learning Topic")
@@ -43,7 +43,7 @@ RSpec.describe "volunteers/new", type: :system do
     it "does not display learning hour topic when disabled", :js do
       organization = build(:casa_org)
       volunteer = create(:volunteer, casa_org: organization)
-  
+
       sign_in volunteer
       visit new_learning_hour_path
       expect(page).not_to have_text("Learning Topic")
