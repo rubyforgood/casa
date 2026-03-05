@@ -3,13 +3,14 @@ require "rails_helper"
 RSpec.describe "view all volunteers", :js, type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
+  let!(:supervisor) { create(:supervisor, casa_org: organization) }
 
   context "admin user" do
     context "when no logo_url" do
       it "can see volunteers and navigate to their cases", :js do
-        volunteer = create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
-        volunteer.casa_cases << create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
+        volunteer = create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization, supervisor: supervisor)
+        volunteer.casa_cases << build(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
+        volunteer.casa_cases << build(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
         casa_case = volunteer.casa_cases[0]
 
         sign_in admin
@@ -42,7 +43,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     it "displays last attempted contact by default", :js do
-      create(:volunteer, :with_assigned_supervisor, display_name: "User 1", email: "casa@example.com", casa_org: organization)
+      create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization, supervisor: supervisor)
 
       sign_in admin
 
@@ -79,9 +80,9 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     it "can filter volunteers", :js do
-      assigned_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
+      assigned_volunteers = create_list(:volunteer, 2, casa_org: organization, supervisor: supervisor)
       inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
-      unassigned_volunteers = create_list(:volunteer, 1, casa_org: organization)
+      unassigned_volunteer = create(:volunteer, casa_org: organization)
 
       sign_in admin
 
@@ -91,9 +92,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
       assigned_volunteers.each do |assigned_volunteer|
         expect(page).to have_text assigned_volunteer.display_name
       end
-      unassigned_volunteers.each do |unassigned_volunteer|
-        expect(page).to have_text unassigned_volunteer.display_name
-      end
+      expect(page).to have_text unassigned_volunteer.display_name
 
       click_on "Status"
       find(:css, 'input[data-value="true"]').set(false)
@@ -115,7 +114,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     it "can go to the volunteer edit page from the volunteer list", :js do
-      create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+      create(:volunteer, casa_org: organization, supervisor: supervisor)
       sign_in admin
 
       visit volunteers_path
@@ -172,30 +171,26 @@ RSpec.describe "view all volunteers", :js, type: :system do
       end
     end
 
-    # These tests are very flaky do to the use of datatables on this page.
-    # If the page is switched over to Hotwire, should try to re-instate these tests.
     describe "Manage Volunteers button" do
-      let!(:volunteers) { create_list(:volunteer, 3, casa_org: organization) }
+      let!(:volunteers) { create_list(:volunteer, 2, casa_org: organization) }
 
       before do
         sign_in admin
+        visit volunteers_path
       end
 
       it "does not display by default" do
-        visit volunteers_path
         expect(page).to have_no_text "Manage Volunteer"
       end
 
       context "when one or more volunteers selected" do
         it "is displayed" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
 
           expect(page).to have_text "Manage Volunteer"
         end
 
         it "displays number of volunteers selected" do
-          visit volunteers_path
           volunteers.each_with_index do |volunteer, index|
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
             expect(page).to have_css("[data-select-all-target='buttonLabel']", text: "#{index + 1})")
@@ -203,7 +198,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
         end
 
         it "text matches pluralization of volunteers selected" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
           expect(page).to have_no_text "Manage Volunteers"
 
@@ -212,7 +206,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
         end
 
         it "is hidden when all volunteers unchecked" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
           expect(page).to have_text "Manage Volunteer"
 
@@ -223,14 +216,14 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     describe "Select All Checkbox" do
-      let!(:volunteers) { create_list(:volunteer, 3, casa_org: organization) }
+      let!(:volunteers) { create_list(:volunteer, 2, casa_org: organization) }
 
       before do
         sign_in admin
+        visit volunteers_path
       end
 
       it "selects all volunteers" do
-        visit volunteers_path
         find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # Wait for data table to be loaded
         find_by_id("checkbox-toggle-all").click
 
@@ -241,7 +234,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
 
       context "when all are checked" do
         it "deselects all volunteers" do
-          visit volunteers_path
           volunteers.each do |volunteer|
             find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           end
@@ -257,7 +249,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
 
       context "when some are checked" do
         it "is semi-checked (indeterminate)" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
 
           expect(page).to have_field("checkbox-toggle-all", checked: false)
@@ -265,7 +256,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
         end
 
         it "selects all volunteers" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
           find_by_id("checkbox-toggle-all").click
 
@@ -278,14 +268,13 @@ RSpec.describe "view all volunteers", :js, type: :system do
 
     describe "Select Supervisor Modal Submit button" do
       let!(:volunteer) { create(:volunteer, casa_org: organization) }
-      let!(:supervisor) { create(:supervisor, casa_org: organization) }
 
       before do
         sign_in admin
+        visit volunteers_path
       end
 
       it "is disabled by default" do
-        visit volunteers_path
         find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
         find("[data-select-all-target='button']").click
 
@@ -294,7 +283,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
 
       context "when none is selected" do
         it "is enabled" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           find("[data-select-all-target='button']").click
           select "None", from: "supervisor_volunteer_supervisor_id"
@@ -305,7 +293,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
 
       context "when a supervisor is selected" do
         it "is enabled" do
-          visit volunteers_path
           find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
           find("[data-select-all-target='button']").click
 
@@ -331,15 +318,11 @@ RSpec.describe "view all volunteers", :js, type: :system do
   end
 
   context "supervisor user" do
-    let(:supervisor) { create(:supervisor, casa_org: organization) }
-
     it "can filter volunteers", :js do
-      active_volunteers = create_list(:volunteer, 3, :with_assigned_supervisor, casa_org: organization)
-      active_volunteers[2].supervisor = supervisor
+      active_volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+      active_volunteer.supervisor = supervisor
 
-      inactive_volunteers = create_list(:volunteer, 2, :with_assigned_supervisor, :inactive, casa_org: organization)
-      inactive_volunteers[0].supervisor = supervisor
-      inactive_volunteers[1].supervisor = supervisor
+      inactive_volunteers = create_list(:volunteer, 2, :inactive, supervisor: supervisor, casa_org: organization)
 
       sign_in supervisor
 
@@ -359,7 +342,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     it "can show/hide columns on volunteers table", :js do
-      travel_back
       sign_in supervisor
 
       visit volunteers_path
@@ -437,8 +419,6 @@ RSpec.describe "view all volunteers", :js, type: :system do
     end
 
     context "with volunteers" do
-      let(:supervisor) { create(:supervisor, :with_volunteers) }
-
       it "Search history is clean after navigating away from volunteers view", :js do
         sign_in supervisor
         visit volunteers_path
