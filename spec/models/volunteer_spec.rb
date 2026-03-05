@@ -394,8 +394,8 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
-  describe 'invitation' do
-    it 'delivers an email invite' do
+  describe "invitation" do
+    it "delivers an email invite" do
       volunteer = build(:volunteer, email: "new_volunteer@example.com")
       volunteer.invite!
 
