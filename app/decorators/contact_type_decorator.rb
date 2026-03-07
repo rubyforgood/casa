@@ -1,5 +1,6 @@
 class ContactTypeDecorator < Draper::Decorator
   include ActionView::Helpers::DateHelper
+
   delegate_all
 
   def hash_for_multi_select_with_cases(casa_case_ids)
