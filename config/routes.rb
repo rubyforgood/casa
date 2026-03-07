@@ -241,6 +241,7 @@ Rails.application.routes.draw do
   end
 
   get "/error", to: "error#index"
+  post "/error", to: "error#create"
 
   namespace :api do
     namespace :v1 do
