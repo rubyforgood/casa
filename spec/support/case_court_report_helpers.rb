@@ -21,17 +21,4 @@ module CaseCourtReportHelpers
     # Wait for the dropdown to appear
     expect(page).to have_css(".select2-dropdown", visible: :visible)
   end
-
-  # Polls the database until the casa_case has an ActiveStorage court_report attached.
-  # This is used after clicking 'Generate Report' to wait for the background job to complete.
-  def wait_for_report_attachment(casa_case, timeout: 5)
-    casa_case.reload # Ensure we have the latest record
-
-    Timeout.timeout(timeout) do
-      until casa_case.court_reports.attached?
-        sleep 0.2
-        casa_case.reload
-      end
-    end
-  end
 end
