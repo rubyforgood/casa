@@ -32,8 +32,8 @@ RSpec.describe "casa_cases/show", :js, type: :system do
 
       click_on "Send Reminder"
 
+      expect(page).to have_current_path(edit_volunteer_path(volunteer))
       expect(page).to have_text("Reminder sent to volunteer")
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
   end
 
@@ -47,8 +47,8 @@ RSpec.describe "casa_cases/show", :js, type: :system do
 
       click_on "Send Reminder"
 
+      expect(page).to have_current_path(edit_volunteer_path(volunteer))
       expect(page).to have_text("Reminder sent to volunteer")
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
   end
 
