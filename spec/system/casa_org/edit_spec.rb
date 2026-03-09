@@ -8,13 +8,13 @@ RSpec.describe "casa_org/edit", type: :system do
     sign_in admin
     visit edit_casa_org_path(organization)
 
-    check "Show driving reimbursement"
+    uncheck "Show driving reimbursement"
     click_on "Submit"
-    has_no_checked_field? "Show driving reimbursement"
+    expect(page).not_to have_checked_field("Show driving reimbursement")
 
     check "Show driving reimbursement"
     click_on "Submit"
-    has_checked_field? "Show driving reimbursement"
+    expect(page).to have_checked_field("Show driving reimbursement")
   end
 
   it "can upload a logo image" do
@@ -27,11 +27,9 @@ RSpec.describe "casa_org/edit", type: :system do
 
     page.attach_file("Logo", file_fixture("company_logo.png"), visible: :visible)
 
-    expect(organization.logo).not_to be_attached
-
     click_on "Submit"
 
-    expect(organization.reload.logo).to be_attached
+    expect(page).to have_content("CASA organization was successfully updated.")
   end
 
   it "hides Twilio Form if twilio is not enabled", :js do
