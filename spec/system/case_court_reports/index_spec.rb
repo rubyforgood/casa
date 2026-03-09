@@ -149,7 +149,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     # NOTE: select by option VALUE (stable), stub `window.open` to capture the download URL,
     # wait for the button to re-enable (page-level signal), and assert UI state + opened URL.
-    it "generates and attaches a report on success", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+    it "generates a report and opens the download link on success", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
       transition_case = casa_cases.detect(&:in_transition_age?)
 
       # Stub window.open so we can capture the download URL in the browser
