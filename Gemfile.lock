@@ -80,7 +80,7 @@ GEM
       tzinfo (~> 2.0, >= 2.0.5)
     addressable (2.8.8)
       public_suffix (>= 2.0.2, < 8.0)
-    after_party (2.0.0)
+    after_party (2.1.0)
     amazing_print (1.8.1)
     annotate (3.2.0)
       activerecord (>= 3.2, < 8.0)
