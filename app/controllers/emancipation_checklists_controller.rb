@@ -1,5 +1,6 @@
 class EmancipationChecklistsController < ApplicationController
   include DateHelper
+
   before_action :require_organization!
   after_action :verify_authorized
 

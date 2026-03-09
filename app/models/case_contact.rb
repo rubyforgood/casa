@@ -1,5 +1,6 @@
 class CaseContact < ApplicationRecord
   include ByOrganizationScope
+
   acts_as_paranoid
 
   attr_accessor :duration_hours
