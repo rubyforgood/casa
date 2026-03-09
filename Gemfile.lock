@@ -255,7 +255,7 @@ GEM
       rack-protection (>= 1.5.3, < 5.0.0)
       rack-session (>= 1.0.2, < 3.0.0)
       sanitize (< 8)
-    friendly_id (5.5.1)
+    friendly_id (5.6.0)
       activerecord (>= 4.0.0)
     globalid (1.3.0)
       activesupport (>= 6.1)
@@ -736,7 +736,7 @@ DEPENDENCIES
   flipper
   flipper-active_record
   flipper-ui
-  friendly_id (~> 5.5.1)
+  friendly_id (~> 5.6.0)
   groupdate
   httparty
   image_processing (~> 1.14)
