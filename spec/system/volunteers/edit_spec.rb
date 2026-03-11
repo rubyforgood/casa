@@ -659,7 +659,6 @@ RSpec.describe "volunteers/edit", type: :system do
   context "logged in as a supervisor" do
     it "can save notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = volunteer.supervisor
 
