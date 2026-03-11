@@ -233,7 +233,7 @@ RSpec.describe "volunteers/edit", type: :system do
   it "shows the admin the option to assign an unassigned volunteer to a different active supervisor" do
     organization = create(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
-    deactivated_supervisor = create(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
+    deactivated_supervisor = build(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
     active_supervisor = create(:supervisor, active: true, casa_org: organization, display_name: "Active Supervisor")
     admin = create(:casa_admin, casa_org: organization)
 
@@ -295,8 +295,8 @@ RSpec.describe "volunteers/edit", type: :system do
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
       casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
-      case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
-      case_assignment_2 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
+      case_assignment_1 = build(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
+      case_assignment_2 = build(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 
       case_assignment_1.active = false
       case_assignment_2.active = false
