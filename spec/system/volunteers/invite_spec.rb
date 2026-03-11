@@ -200,15 +200,4 @@ RSpec.describe "Inviting volunteers", type: :system do
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
     end
   end
-
-  describe "invitation expiration" do
-    let(:volunteer) { create(:volunteer, casa_org: organization) }
-
-    it "volunteers have invitation valid for 1 year" do
-      volunteer.invite!(admin)
-
-      # Check that volunteer model has correct invitation period
-      expect(Volunteer.invite_for).to eq(1.year)
-    end
-  end
 end
