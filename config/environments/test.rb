@@ -63,13 +63,9 @@ Rails.application.configure do
   # Raises error for missing translations.
   config.i18n.raise_on_missing_translations = true
 
-  config.after_initialize do
-    Bullet.enable = true
-    Bullet.console = true
-    Bullet.bullet_logger = true
-    Bullet.rails_logger = true
-    # Bullet.raise = true # TODO https://github.com/rubyforgood/casa/issues/2441
-  end
+  # Prosopite N+1 query detection
+  config.prosopite_enabled = true
+  config.prosopite_min_n_queries = 2  # Stricter for tests
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
