@@ -5,14 +5,6 @@ RSpec.describe "Inviting volunteers", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
   before do
-    # Stub the request to the URL shortener service (needed if phone is provided)
-    stub_request(:post, "https://api.short.io/links")
-      .to_return(
-        status: 200,
-        body: {shortURL: "https://short.url/example"}.to_json,
-        headers: {"Content-Type" => "application/json"}
-      )
-
     sign_in admin
   end
 
