@@ -358,9 +358,9 @@ RSpec.describe "/volunteers", type: :request do
   end
 
   describe "PATCH /resend_invitation" do
-    before { sign_in admin }
+    it "resends an invitation email as an admin" do
+      sign_in admin
 
-    it "resends an invitation email" do
       expect(volunteer.invitation_created_at.present?).to eq(false)
 
       get resend_invitation_volunteer_path(volunteer)
@@ -370,6 +370,112 @@ RSpec.describe "/volunteers", type: :request do
       expect(Devise.mailer.deliveries.count).to eq(1)
       expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
       expect(response).to redirect_to(edit_volunteer_path(volunteer))
+    end
+
+    it "resends an invitation email as a supervisor" do
+      sign_in supervisor
+
+      expect(volunteer.invitation_created_at.present?).to eq(false)
+
+      get resend_invitation_volunteer_path(volunteer)
+      volunteer.reload
+
+      expect(volunteer.invitation_created_at.present?).to eq(true)
+      expect(Devise.mailer.deliveries.count).to eq(1)
+      expect(Devise.mailer.deliveries.first.subject).to eq(I18n.t("devise.mailer.invitation_instructions.subject"))
+      expect(response).to redirect_to(edit_volunteer_path(volunteer))
+    end
+  end
+
+  describe "PATCH /reminder" do
+    describe "as admin" do
+      it "emails the volunteer" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        supervisor = build(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, supervisor: supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+
+        patch reminder_volunteer_path(volunteer)
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email).not_to be_nil
+        expect(email.to).to eq [volunteer.email]
+        expect(email.subject).to eq("Reminder to input case contacts")
+      end
+
+      it "cc's their supervisor and admin when the 'with_cc` param is present" do
+        admin = create(:casa_admin, casa_org_id: organization.id)
+        supervisor = build(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, supervisor: supervisor, casa_org_id: organization.id)
+
+        sign_in admin
+
+        patch reminder_volunteer_path(volunteer), params: {
+          with_cc: true
+        }
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email).not_to be_nil
+        expect(email.to).to eq [volunteer.email]
+        expect(email.subject).to eq("Reminder to input case contacts")
+        expect(email.cc).to include(volunteer.supervisor.email)
+        expect(email.cc).to include(admin.email)
+      end
+    end
+
+    describe "as supervisor" do
+      it "emails the volunteer" do
+        organization = create(:casa_org)
+        supervisor = build(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, supervisor: supervisor, casa_org_id: organization.id)
+
+        sign_in supervisor
+
+        patch reminder_volunteer_path(volunteer)
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email).not_to be_nil
+        expect(email.to).to eq [volunteer.email]
+        expect(email.subject).to eq("Reminder to input case contacts")
+      end
+
+      it "cc's their supervisor when the 'with_cc` param is present" do
+        organization = create(:casa_org)
+        supervisor = build(:supervisor, casa_org: organization)
+        volunteer = create(:volunteer, supervisor: supervisor, casa_org_id: organization.id)
+
+        sign_in supervisor
+
+        patch reminder_volunteer_path(volunteer), params: {
+          with_cc: true
+        }
+
+        email = ActionMailer::Base.deliveries.last
+        expect(email).not_to be_nil
+        expect(email.to).to eq [volunteer.email]
+        expect(email.subject).to eq("Reminder to input case contacts")
+        expect(email.cc).to eq([supervisor.email])
+      end
+    end
+
+    it "emails the volunteer without a supervisor" do
+      organization = create(:casa_org)
+      volunteer_without_supervisor = create(:volunteer)
+      supervisor = build(:supervisor, casa_org: organization)
+
+      sign_in supervisor
+
+      patch reminder_volunteer_path(volunteer_without_supervisor), params: {
+        with_cc: true
+      }
+
+      email = ActionMailer::Base.deliveries.last
+      expect(email).not_to be_nil
+      expect(email.to).to eq [volunteer_without_supervisor.email]
+      expect(email.subject).to eq("Reminder to input case contacts")
+      expect(email.cc).to be_empty
     end
   end
 
