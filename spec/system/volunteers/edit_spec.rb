@@ -617,9 +617,6 @@ RSpec.describe "volunteers/edit", type: :system do
       organization = create(:casa_org)
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -665,9 +662,6 @@ RSpec.describe "volunteers/edit", type: :system do
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = volunteer.supervisor
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer)
