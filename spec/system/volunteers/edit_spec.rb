@@ -140,16 +140,15 @@ RSpec.describe "volunteers/edit", type: :system do
 
         fill_in "Email", with: "newemail@example.com"
         click_on "Submit"
-        volunteer.reload
+
+        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
+        expect(page).to have_field("Email", with: old_email)
+        expect(volunteer.reload.unconfirmed_email).to eq("newemail@example.com")
 
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("Click here to confirm your email")
-
-        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: old_email)
-        expect(volunteer.unconfirmed_email).to eq("newemail@example.com")
       end
 
       it "succesfully displays the new email once the user confirms" do
@@ -481,6 +480,8 @@ RSpec.describe "volunteers/edit", type: :system do
       uncheck "with_cc"
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to be_empty
     end
@@ -496,6 +497,8 @@ RSpec.describe "volunteers/edit", type: :system do
       check "with_cc"
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
     end
@@ -510,6 +513,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       check "with_cc"
       click_on "Send Reminder"
+
+      expect(page).to have_content("Reminder sent to volunteer")
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to be_empty
@@ -530,6 +535,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
 
@@ -542,6 +549,8 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
       check "with_cc"
       click_on "Send Reminder"
+
+      expect(page).to have_content("Reminder sent to volunteer")
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
