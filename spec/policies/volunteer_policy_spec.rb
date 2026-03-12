@@ -3,13 +3,15 @@ require "rails_helper"
 RSpec.describe VolunteerPolicy do
   subject { described_class }
 
-  let(:admin) { build_stubbed(:casa_admin) }
-  let(:supervisor) { build_stubbed(:supervisor) }
-  let(:volunteer) { build_stubbed(:volunteer) }
+  let(:casa_org) { build_stubbed(:casa_org) }
+  let(:other_org) { build_stubbed(:casa_org) }
+  let(:admin) { build_stubbed(:casa_admin, casa_org: casa_org) }
+  let(:supervisor) { build_stubbed(:supervisor, casa_org: casa_org) }
+  let(:volunteer) { build_stubbed(:volunteer, casa_org: casa_org) }
 
   permissions :edit? do
     context "same org" do
-      let(:record) { build_stubbed(:volunteer, casa_org: admin.casa_org) }
+      let(:record) { build_stubbed(:volunteer, casa_org: casa_org) }
 
       context "when user is a casa admin" do
         it "allows for same org" do
@@ -31,7 +33,7 @@ RSpec.describe VolunteerPolicy do
     end
 
     context "different org" do
-      let(:record) { build_stubbed(:volunteer, casa_org: build_stubbed(:casa_org)) }
+      let(:record) { build_stubbed(:volunteer, casa_org: other_org) }
 
       context "when user is a casa admin" do
         it "does not allow for different org" do
@@ -55,7 +57,7 @@ RSpec.describe VolunteerPolicy do
 
   permissions :index?, :activate?, :create?, :datatable?, :deactivate?, :new?, :show?, :update? do
     context "when user is a casa admin" do
-      let(:record) { build_stubbed(:volunteer, casa_org: admin.casa_org) }
+      let(:record) { build_stubbed(:volunteer, casa_org: casa_org) }
 
       it "allows" do
         expect(subject).to permit(admin, record)
@@ -63,7 +65,7 @@ RSpec.describe VolunteerPolicy do
     end
 
     context "when user is a supervisor" do
-      let(:record) { build_stubbed(:volunteer, casa_org: supervisor.casa_org) }
+      let(:record) { build_stubbed(:volunteer, casa_org: casa_org) }
 
       it "allows" do
         expect(subject).to permit(supervisor, record)
