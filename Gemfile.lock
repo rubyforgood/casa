@@ -656,7 +656,7 @@ GEM
     traceroute (0.8.1)
       rails (>= 3.0.0)
     tsort (0.2.0)
-    turbo-rails (2.0.20)
+    turbo-rails (2.0.23)
       actionpack (>= 7.1.0)
       railties (>= 7.1.0)
     twilio-ruby (7.10.1)
