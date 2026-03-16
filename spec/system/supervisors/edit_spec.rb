@@ -84,11 +84,11 @@ RSpec.describe "supervisors/edit", type: :system do
       visit edit_supervisor_path(supervisor)
 
       dismiss_confirm do
-        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
+        click_link "Deactivate Supervisor"
       end
 
       accept_confirm do
-        find("a[href='#{deactivate_supervisor_path(supervisor)}']").click
+        click_link "Deactivate Supervisor"
       end
       expect(page).to have_text("Supervisor was deactivated on")
 
@@ -179,14 +179,14 @@ RSpec.describe "supervisors/edit", type: :system do
       end
 
       it "sends a confirmation email to the supervisor and displays current email" do
+        expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
+        expect(page).to have_field("Email", with: @old_email)
+        expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
+
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
           .to match("Click here to confirm your email")
-
-        expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: @old_email)
-        expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
       end
 
       it "correctly updates the supervisor email once confirmed" do
