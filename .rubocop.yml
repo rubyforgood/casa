@@ -1,9 +1,9 @@
 require:
   - standard
-  - rubocop-factory_bot
 
 plugins:
   - rubocop-capybara
+  - rubocop-factory_bot
   - rubocop-rspec
   - rubocop-rspec_rails
 
