@@ -78,7 +78,7 @@ GEM
       minitest (>= 5.1)
       securerandom (>= 0.3)
       tzinfo (~> 2.0, >= 2.0.5)
-    addressable (2.8.8)
+    addressable (2.8.9)
       public_suffix (>= 2.0.2, < 8.0)
     after_party (2.1.0)
     amazing_print (1.8.1)
@@ -89,6 +89,7 @@ GEM
     authtrail (0.7.0)
       railties (>= 7.1)
       warden
+    awesome_print (1.9.2)
     azure-storage-blob (2.0.3)
       azure-storage-common (~> 2.0)
       nokogiri (~> 1, >= 1.10.8)
@@ -107,7 +108,7 @@ GEM
       erubi (~> 1.4)
       parser (>= 2.4)
       smart_properties
-    bigdecimal (3.3.1)
+    bigdecimal (4.0.1)
     bindex (0.8.1)
     blueprinter (1.2.1)
     brakeman (7.1.1)
@@ -298,10 +299,9 @@ GEM
     jsbundling-rails (1.3.1)
       railties (>= 6.0.0)
     json (2.18.1)
-    json-schema (6.0.0)
+    json-schema (6.2.0)
       addressable (~> 2.8)
-      bigdecimal (~> 3.1)
-    json_rpc_handler (0.1.1)
+      bigdecimal (>= 3.1, < 5)
     jwt (3.1.2)
       base64
     language_server-protocol (3.17.0.5)
@@ -327,9 +327,8 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.2)
-    mcp (0.4.0)
+    mcp (0.8.0)
       json-schema (>= 4.1)
-      json_rpc_handler (~> 0.1)
     method_source (1.1.0)
     mini_magick (5.2.0)
       benchmark
@@ -435,7 +434,7 @@ GEM
     psych (5.3.1)
       date
       stringio
-    public_suffix (7.0.0)
+    public_suffix (7.0.5)
     puma (7.0.4)
       nio4r (~> 2.0)
     pundit (2.5.2)
@@ -615,8 +614,9 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-html (0.13.1)
-    simplecov-mcp (1.0.1)
+    simplecov-html (0.13.2)
+    simplecov-mcp (2.0.1)
+      awesome_print (~> 1.9)
       mcp (~> 0.3)
       simplecov (>= 0.21, < 1.0)
     simplecov_json_formatter (0.1.4)
