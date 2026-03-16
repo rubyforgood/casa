@@ -7,10 +7,10 @@ RSpec.describe "users/passwords/new", type: :system do
   end
 
   describe "reset password page" do
-    let!(:user) { create(:user, email: "glados@aperture.labs", phone_number: "+16578900012") }
-
     it "displays error messages for non-existent user" do
-      fill_in "Email", with: "tangerine@forward.com"
+      user = build(:user, email: "glados@example.com", phone_number: "+16578900012")
+
+      fill_in "Email", with: "tangerine@example.com"
       fill_in "Phone number", with: user.phone_number
 
       click_on "Send me reset password instructions"
@@ -18,6 +18,8 @@ RSpec.describe "users/passwords/new", type: :system do
     end
 
     it "displays phone number error messages for incorrect formatting" do
+      user = create(:user, email: "glados@example.com", phone_number: "+16578900012")
+
       fill_in "Email", with: user.email
       fill_in "Phone number", with: "2134567eee"
 
@@ -26,12 +28,16 @@ RSpec.describe "users/passwords/new", type: :system do
       expect(page).to have_text("Phone number must be 10 digits or 12 digits including country code (+1)")
     end
 
-    it "displays error if user tries to submit empty form" do
+    it "displays error if user tries to submit an empty form" do
+      user = build(:user, email: "glados@example.com", phone_number: "+16578900012")
+
       click_on "Send me reset password instructions"
       expect(page).to have_text("Please enter at least one field.")
     end
 
     it "redirects to sign up page for email" do
+      user = build(:user, email: "glados@example.com", phone_number: "+16578900012")
+
       fill_in "Email", with: user.email
 
       click_on "Send me reset password instructions"
@@ -69,7 +75,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
       token = reset_password_link(user.email).gsub("http://localhost:3000/users/password/edit?reset_password_token=", "")
       encrypted_token = Devise.token_generator.digest(User, :reset_password_token, token)
-      expect(User.find_by(reset_password_token: encrypted_token)).not_to be_nil
+      expect(User.find_by(reset_password_token: encrypted_token)).to be_present
     end
 
     it "user can update password" do
