@@ -29,8 +29,6 @@ RSpec.describe "users/passwords/new", type: :system do
     end
 
     it "displays error if user tries to submit an empty form" do
-      user = build(:user, email: "glados@example.com", phone_number: "+16578900012")
-
       click_on "Send me reset password instructions"
       expect(page).to have_text("Please enter at least one field.")
     end
