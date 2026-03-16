@@ -45,20 +45,27 @@ RSpec.describe "users/passwords/new", type: :system do
     it "sends user email" do
       fill_in "Email", with: user.email
 
-      expect { click_on "Send me reset password instructions" }.to change { ActionMailer::Base.deliveries.count }.by(1)
-      expect(ActionMailer::Base.deliveries.last.to_addresses.map(&:address)).to include user.email
+      click_on "Send me reset password instructions"
+
+      expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
+
+      expect(ActionMailer::Base.deliveries.count).to eq(1)
+      expect(ActionMailer::Base.deliveries.last.to).to eq([user.email])
     end
 
     it "has reset password url with token" do
       fill_in "Email", with: user.email
       click_on "Send me reset password instructions"
 
+      expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
       expect(reset_password_link(user.email)).to match(/http:\/\/localhost:3000\/users\/password\/edit\?reset_password_token=.*/)
     end
 
     it "url token matches user's encrypted token" do
       fill_in "Email", with: user.email
       click_on "Send me reset password instructions"
+
+      expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
 
       token = reset_password_link(user.email).gsub("http://localhost:3000/users/password/edit?reset_password_token=", "")
       encrypted_token = Devise.token_generator.digest(User, :reset_password_token, token)
@@ -80,6 +87,7 @@ RSpec.describe "users/passwords/new", type: :system do
       click_on "Log In"
 
       expect(page).to have_text(user.display_name)
+      expect(page).to have_text("My Cases")
       expect(page).not_to have_text("Sign in")
     end
   end
