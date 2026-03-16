@@ -6,7 +6,7 @@ RSpec.describe "supervisors/edit", type: :system do
   context "logged in as an admin" do
     let(:user) { create(:casa_admin, casa_org: organization) }
 
-    it "can edit supervisor by clicking on the edit link from the supervisors list page", :js do
+    it "can edit supervisor by clicking on the edit link from the supervisors list page" do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -22,7 +22,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(page).to have_text("Editing Supervisor")
     end
 
-    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page", :js do
+    it "can edit supervisor by clicking on the supervisor's name from the supervisors list page" do
       supervisor_name = "Leslie Knope"
       create(:supervisor, display_name: supervisor_name, casa_org: organization)
       sign_in user
@@ -110,7 +110,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(inactive_supervisor.reload).to be_active
     end
 
-    it "can resend invitation to a supervisor", :js do
+    it "can resend invitation to a supervisor" do
       supervisor = create :supervisor, casa_org: organization
 
       sign_in user
@@ -126,7 +126,7 @@ RSpec.describe "supervisors/edit", type: :system do
       expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
     end
 
-    it "can convert the supervisor to an admin", :js do
+    it "can convert the supervisor to an admin" do
       supervisor = create(:supervisor, casa_org_id: organization.id)
 
       sign_in user
@@ -143,7 +143,7 @@ RSpec.describe "supervisors/edit", type: :system do
     context "logged in as a supervisor" do
       let(:supervisor) { create(:supervisor) }
 
-      it "can't deactivate a supervisor", :js do
+      it "can't deactivate a supervisor" do
         supervisor2 = create :supervisor, casa_org: organization
 
         sign_in supervisor
