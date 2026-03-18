@@ -23,7 +23,7 @@ RSpec.describe "User Login", type: :system do
         find("#log-in").click
       end
 
-      expect(page).to have_content("Invalid Email or password.")
+      expect(page).to have_content(/invalid email or password/i)
     end
   end
 end
