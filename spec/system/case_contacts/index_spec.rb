@@ -1,10 +1,10 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/index", :js, type: :system do
+RSpec.describe "case_contacts/index", type: :system do
   subject { visit case_contacts_path }
 
   let(:volunteer) { build(:volunteer, display_name: "Bob Loblaw", casa_org: organization) }
-  let(:organization) { create(:casa_org) }
+  let(:organization) { build(:casa_org) }
 
   before { sign_in volunteer }
 
@@ -14,19 +14,9 @@ RSpec.describe "case_contacts/index", :js, type: :system do
     let!(:case_assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case) }
 
     context "without filter" do
-      let(:case_contacts) do
-        [
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 1.days.ago),
-          create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.now,
-            contact_types: [create(:contact_type, name: "Most Recent Case Contact")]),
-          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,
-            contact_types: [create(:contact_type, name: "DRAFT Case Contact")])
-        ]
-      end
-
       it "can see case creator in card" do
-        case_contacts
+        create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago)
+
         subject
 
         within(".full-card", match: :first) do
@@ -35,14 +25,16 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
 
       it "can navigate to edit volunteer page" do
-        case_contacts
         subject
 
         expect(page).to have_no_link("Bob Loblaw")
       end
 
       it "allows the volunteer to delete a draft they created" do
-        case_contacts
+        create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago)
+        create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,
+          contact_types: [build(:contact_type, name: "DRAFT Case Contact")])
+
         subject
 
         card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
@@ -57,7 +49,11 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
 
       it "displays the contact type groups" do
-        case_contacts
+        create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: Time.zone.now,
+          contact_types: [build(:contact_type, name: "Most Recent Case Contact")])
+        create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case, occurred_at: 3.days.ago,
+          contact_types: [build(:contact_type, name: "DRAFT Case Contact")])
+
         subject
 
         expect(page).to have_text("Most Recent Case Contact")
@@ -67,7 +63,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
 
     describe "automated filtering case contacts" do
       describe "by date of contact" do
-        it "only shows the contacts with the correct date" do
+        it "only shows the contacts with the correct date", :js do
           yesterday = Time.zone.yesterday
           day_before_yesterday = yesterday - 1.day
           today = Time.zone.today
@@ -97,10 +93,11 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       describe "by casa_case_id" do
         subject { visit case_contacts_path(casa_case_id: casa_case.id) }
 
-        let!(:case_contact) { create(:case_contact, :details_status, creator: volunteer, draft_case_ids: [casa_case.id]) }
-        let!(:other_casa_case) { create(:casa_case, casa_org: organization, case_number: "CINA-2") }
+        let!(:other_casa_case) { build(:casa_case, casa_org: organization, case_number: "CINA-2") }
 
         it "displays the draft" do
+          create(:case_contact, :details_status, creator: volunteer, draft_case_ids: [casa_case.id])
+
           subject
 
           expect(page).to have_no_content "You have no case contacts for this case."
@@ -116,9 +113,9 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
 
       describe "by hide drafts" do
-        it "does not show draft contacts" do
-          create(:case_contact, creator: volunteer, casa_case: casa_case)
-          create(:case_contact, :started_status, creator: volunteer, casa_case: casa_case)
+        it "does not show draft contacts", :js do
+          build(:case_contact, creator: volunteer, casa_case: casa_case)
+          build(:case_contact, :started_status, creator: volunteer, casa_case: casa_case)
           subject
 
           check "Hide drafts"
@@ -136,7 +133,7 @@ RSpec.describe "case_contacts/index", :js, type: :system do
           expect(page).to have_field "Hide drafts", type: :checkbox
         end
 
-        it "does not expand menu when filtering only by sticky filter" do
+        it "does not expand menu when filtering only by sticky filter", :js do
           check "Hide drafts"
 
           expect(page).to have_field "Hide drafts", type: :checkbox
@@ -175,14 +172,14 @@ RSpec.describe "case_contacts/index", :js, type: :system do
       end
     end
 
-    it "can show only case contacts for one case" do
+    it "can show only case contacts for one case", :js do
       yesterday = Time.zone.yesterday
       day_before_yesterday = yesterday - 1.day
       today = Time.zone.today
       create(:case_contact, creator: volunteer, casa_case: casa_case, notes: "Case 1 Notes", occurred_at: day_before_yesterday)
 
       another_case_number = "CINA-2"
-      another_case = create(:casa_case, casa_org: organization, case_number: another_case_number)
+      another_case = build(:casa_case, casa_org: organization, case_number: another_case_number)
       create(:case_assignment, volunteer: volunteer, casa_case: another_case)
       create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: today)
 
@@ -236,17 +233,18 @@ RSpec.describe "case_contacts/index", :js, type: :system do
     end
 
     describe "contact notes" do
-      let(:contact_topics) { create_list(:contact_topic, 2, casa_org: organization) }
+      let(:contact_topics) { build_list(:contact_topic, 2, casa_org: organization) }
       let(:contact_topic) { contact_topics.first }
-      let(:case_contact) { create(:case_contact, casa_case:, creator: volunteer) }
+      let(:case_contact) { build(:case_contact, casa_case:, creator: volunteer) }
       let!(:contact_topic_answer) do
         create(:contact_topic_answer, case_contact:, contact_topic:)
       end
+
       let(:user) { volunteer }
 
       before { sign_in user }
 
-      it "show topic answers and allows expanding to show full answer" do
+      it "show topic answers and allows expanding to show full answer", :js do
         subject
 
         expect(page).to have_text contact_topics.first.question

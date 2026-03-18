@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/edit", :js, type: :system do
+RSpec.describe "case_contacts/edit", type: :system do
   let(:organization) { build(:casa_org, :all_reimbursements_enabled) }
   let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
   let(:casa_case) { volunteer.casa_cases.first }
@@ -18,7 +18,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
 
     let(:user) { admin }
 
-    it "admin successfully edits case contact" do
+    it "successfully edits case contact", :js do
       visit edit_case_contact_path(case_contact)
 
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Letter")
@@ -35,10 +35,10 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
       expect(case_contact.contact_made).to be true
     end
 
-    it "admin successfully edits case contact with mileage reimbursement" do
+    it "successfully edits case contact with mileage reimbursement", :js do
       visit edit_case_contact_path(case_contact)
 
-      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
       complete_notes_page
       fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
@@ -55,7 +55,7 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     end
 
     it "does not allow volunteer address edit for case contact with ambiguous volunteer" do
-      create(:case_assignment, casa_case:, volunteer: create(:volunteer, casa_org: organization))
+      create(:case_assignment, casa_case:, volunteer: build(:volunteer, casa_org: organization))
       case_contact.update!(creator: admin)
       expect(casa_case.volunteers).not_to include case_contact.creator
       expect(casa_case.volunteers.size).to be > 1
@@ -73,14 +73,14 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
       let(:other_organization) { build(:casa_org) }
       let(:admin) { create(:casa_admin, casa_org: other_organization) }
 
-      it "fails across organizations", js: false do
+      it "fails across organizations" do
         visit edit_case_contact_path(case_contact)
         expect(page).to have_current_path supervisors_path, ignore_query: true
       end
     end
   end
 
-  it "can update case contact attributes" do
+  it "can update case contact attributes", :js do
     expect(case_contact.active?).to be true
     expect(case_contact.contact_types).to contain_exactly(contact_types.first)
     expect(case_contact.contact_made).to be false
@@ -125,10 +125,10 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     expect(case_contact.volunteer_address).to eq "123 Form St"
   end
 
-  it "is successful with mileage reimbursement on" do
+  it "is successful with mileage reimbursement on", :js do
     visit edit_case_contact_path(case_contact)
 
-    complete_details_page(contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+    complete_details_page(contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
     complete_notes_page
     fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
@@ -144,11 +144,10 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     expect(case_contact.contact_made).to be true
   end
 
-  it "autosaves notes" do
+  it "autosaves notes", :js do
     autosave_alert_div = "#contact-form-notes"
     autosave_alert_css = 'small[role="alert"]'
     autosave_alert_text = "Saved!"
-    autosave_wait_time = 4
 
     case_contact = create(:case_contact, duration_minutes: 105, casa_case: casa_case, creator: volunteer, notes: "Hello from the other side")
     visit edit_case_contact_path(case_contact)
@@ -159,26 +158,27 @@ RSpec.describe "case_contacts/edit", :js, type: :system do
     fill_in "Additional Notes", with: "Hello world"
 
     within autosave_alert_div do
-      find(autosave_alert_css, text: autosave_alert_text, wait: autosave_wait_time)
+      find(autosave_alert_css, text: autosave_alert_text)
     end
     expect(case_contact.reload.notes).to eq "Hello world"
   end
 
   context "when 'Create Another' option is checked" do
-    it "creates a duplicate case contact for the second contact" do
+    it "creates a duplicate case contact for the second contact", :js do
       case_contact_draft_ids = case_contact.draft_case_ids
       visit edit_case_contact_path(case_contact)
 
       check "Create Another"
 
-      expect do
-        click_on "Submit"
-        expect(page).to have_text("successfully updated")
-      end.to change(CaseContact.started, :count).by(1)
-      new_case_contact = CaseContact.last
-      expect(new_case_contact.draft_case_ids).to match_array(case_contact_draft_ids)
+      click_on "Submit"
+
+      expect(page).to have_text("successfully updated")
       expect(page).to have_text "New Case Contact"
       expect(page).to have_text casa_case.case_number
+
+      expect(CaseContact.started.count).to eq(1)
+      new_case_contact = CaseContact.last
+      expect(new_case_contact.draft_case_ids).to match_array(case_contact_draft_ids)
     end
   end
 end
