@@ -62,7 +62,7 @@ RSpec.describe "sessions/new", type: :system do
         find("#log-in").click
       end
 
-      expect(page).to have_text "Invalid Email or password"
+      expect(page).to have_text(/invalid email or password/i)
     end
   end
 

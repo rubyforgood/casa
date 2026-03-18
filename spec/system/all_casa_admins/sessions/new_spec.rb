@@ -53,7 +53,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
         click_on "Log in"
       end
 
-      expect(page).to have_text "Invalid Email or password"
+      expect(page).to have_text(/invalid email or password/i)
     end
 
     it "denies access to flipper" do
