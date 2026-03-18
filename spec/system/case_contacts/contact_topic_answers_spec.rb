@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :system do
+RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system do
   subject do
     sign_in user
     visit new_case_contact_path(casa_case)
@@ -12,8 +12,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   let(:user) { volunteer }
 
   let!(:contact_type) { create :contact_type, casa_org: }
-  let(:topic_count) { 2 }
-  let!(:contact_topics) { create_list :contact_topic, topic_count, casa_org: }
+  let!(:contact_topics) { create_list :contact_topic, 2, casa_org: }
   let(:contact_topic_questions) { contact_topics.map(&:question) }
   let(:select_options) { contact_topic_questions + ["Select a discussion topic"] }
 
@@ -36,7 +35,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     expect(notes_section).to have_select(class: topic_select_class, with_options: contact_topic_questions)
   end
 
-  it "adds contact answers for the topics" do
+  it "adds contact answers for the topics", :js do
     subject
     fill_in_contact_details(contact_types: [contact_type.name])
 
@@ -65,22 +64,19 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     subject
     fill_in_contact_details(contact_types: [contact_type.name])
 
-    expect do
-      using_wait_time 6 do # autosave debounce may be longer than capybara's wait time
-        answer_topic contact_topics.first.question, "First discussion topic answer."
-        within notes_section do
-          expect(page).to have_text "Saved"  # autosave success alert
-          expect(page).to have_no_text "Saved" # wait for clearing of alert
-        end
-        answer_topic contact_topics.first.question, "Changing the first topic answer."
-        within notes_section { expect(page).to have_text "Saved" }
-      end
+    answer_topic contact_topics.first.question, "First discussion topic answer."
+    within notes_section do
+      expect(page).to have_text "Saved"  # autosave success alert
+      expect(page).to have_no_text "Saved" # wait for clearing of alert
+    end
+    answer_topic contact_topics.first.question, "Changing the first topic answer."
+    within notes_section { expect(page).to have_text "Saved" }
 
-      click_on "Submit"
-      expect(page).to have_content("Case contact successfully created.")
-    end.to change(CaseContact.active, :count).by(1)
-      .and change(ContactTopicAnswer, :count).by(0) # answer already exists on page load
+    click_on "Submit"
+    expect(page).to have_content("Case contact successfully created.")
 
+    expect(CaseContact.active.count).to eq(1)
+    expect(ContactTopicAnswer.count).to eq(1)
     case_contact = CaseContact.active.last
     created_answer = ContactTopicAnswer.last
     expect(created_answer.contact_topic).to eq(contact_topics.first)
@@ -89,7 +85,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     expect(case_contact.contact_topic_answers).to include created_answer
   end
 
-  it "prevents adding more answers than topics" do
+  it "prevents adding more answers than topics", :js do
     subject
 
     (contact_topics.size - 1).times do
@@ -99,7 +95,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
     expect(notes_section).to have_button("Add Another Discussion Topic", disabled: true)
   end
 
-  it "disables contact topics that are already selected" do
+  it "disables contact topics that are already selected", :js do
     subject
 
     topic_one_question = contact_topics.first.question
@@ -115,7 +111,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
   context "when casa org has no contact topics" do
     let(:contact_topics) { [] }
 
-    it "displays a field for contact.notes" do
+    it "displays a field for contact.notes", :js do
       subject
       expect(page).to have_no_button "Add Another Discussion Topic"
       expect(notes_section).to have_field "Additional Notes"
@@ -123,34 +119,32 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
       fill_in_contact_details
       fill_in "Additional Notes", with: "This is a note."
 
-      expect do
-        click_on "Submit"
-        expect(page).to have_content("Case contact successfully created.")
-      end.to change(CaseContact.active, :count).by(1)
+      click_on "Submit"
+      expect(page).to have_content("Case contact successfully created.")
 
       contact = CaseContact.active.last
+      expect(CaseContact.active.count).to eq(1)
       expect(contact.contact_topic_answers).to be_empty
       expect(contact.notes).to eq "This is a note."
     end
 
-    it "saves 'Additional Notes' answer as contact.notes" do
+    it "saves 'Additional Notes' answer as contact.notes", :js do
       subject
       fill_in_contact_details(contact_types: [contact_type.name])
 
       fill_in "Additional Notes", with: "This is a fake a topic answer."
 
-      expect do
-        click_on "Submit"
-        expect(page).to have_text("Case contact successfully created")
-      end.to change(CaseContact.active, :count).by(1)
+      click_on "Submit"
+      expect(page).to have_text("Case contact successfully created")
 
       contact = CaseContact.active.last
+      expect(CaseContact.active.count).to eq(1)
       expect(contact.contact_topic_answers).to be_empty
       expect(contact.notes).to eq "This is a fake a topic answer."
     end
   end
 
-  context "when editing existing an case contact" do
+  context "when editing an existing case contact" do
     subject do
       sign_in user
       visit edit_case_contact_path(case_contact)
@@ -181,46 +175,46 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", :js, type: :sys
         )
       end
 
-      it "can remove an existing answer" do
+      it "can remove an existing answer", :js do
         subject
         fill_in_contact_details
 
         expect(notes_section).to have_select(class: topic_select_class, count: 2)
 
-        expect {
-          accept_confirm do
-            notes_section.find_button(text: "Delete", match: :first).click
-          end
+        accept_confirm do
+          notes_section.find_button(text: "Delete", match: :first).click
+        end
 
-          expect(notes_section).to have_select(class: topic_select_class, count: 1, visible: :all)
+        expect(notes_section).to have_select(class: topic_select_class, count: 1, visible: :all)
 
-          click_on "Submit"
-          expect(page).to have_content(/Case contact .* was successfully updated./)
-        }
-          .to change(ContactTopicAnswer, :count).by(-1)
+        click_on "Submit"
+        expect(page).to have_content(/Case contact .* was successfully updated./)
 
         case_contact.reload
+        expect(ContactTopicAnswer.count).to eq(1)
         expect(case_contact.contact_topic_answers.size).to eq(1)
       end
     end
 
-    it "autosaves form with answer inputs" do
-      expect { subject }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(case_contact.casa_case).to eq casa_case
+    it "autosaves form with answer inputs", :js do
+      subject
+
       fill_in_contact_details(
         contact_made: false, medium: "In Person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
       )
 
-      expect {
-        click_on "Add Another Discussion Topic"
-        answer_topic contact_topics.first.question, "Topic One answer."
-        within autosave_alert_div do
-          find(autosave_alert_css, text: autosave_alert_text, wait: 3)
-        end
-      }
-        .to change(ContactTopicAnswer, :count).by(1)
-      case_contact.reload
+      click_on "Add Another Discussion Topic"
+      answer_topic contact_topics.first.question, "Topic One answer."
+      within autosave_alert_div do
+        find(autosave_alert_css, text: autosave_alert_text, wait: 3)
+      end
+
+      expect(page).to have_content("Editing Existing Case Contact")
+
+      expect(CaseContact.count).to eq(1)
+      case_contact = CaseContact.last
+      expect(case_contact.casa_case).to eq casa_case
+      expect(ContactTopicAnswer.count).to eq(1)
       expect(case_contact.contact_topic_answers.size).to eq(1)
       expect(case_contact.contact_topic_answers.last.value).to eq "Topic One answer."
 

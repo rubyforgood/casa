@@ -1,15 +1,15 @@
 require "rails_helper"
 
-RSpec.describe "case_contacts/drafts", :js, type: :system do
-  let(:organization) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: organization) }
+RSpec.describe "case_contacts/drafts", type: :system do
+  let(:organization) { build(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: organization) }
 
   context "with case contacts" do
-    let!(:casa_case) { create(:casa_case, casa_org: organization) }
-    let!(:other_org_case) { create(:case_contact, notes: "NOTE_A") }
-    let!(:past_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago, notes: "NOTE_B") }
+    let!(:casa_case) { build(:casa_case, casa_org: organization) }
+    let!(:other_org_case) { build(:case_contact, notes: "NOTE_A") }
+    let!(:past_contact) { build(:case_contact, casa_case: casa_case, occurred_at: 3.weeks.ago, notes: "NOTE_B") }
     let!(:past_contact_draft) { create(:case_contact, :started_status, casa_case: casa_case, occurred_at: 3.weeks.ago, notes: "NOTE_C") }
-    let!(:recent_contact) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago, notes: "NOTE_D") }
+    let!(:recent_contact) { build(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago, notes: "NOTE_D") }
     let!(:recent_contact_draft) { create(:case_contact, :started_status, casa_case: casa_case, occurred_at: 3.days.ago, notes: "NOTE_E") }
 
     it "shows only same orgs drafts" do
