@@ -1,31 +1,10 @@
 require "rails_helper"
 
 RSpec.describe "volunteers/new", type: :system do
-  context "when admin" do
-    let(:admin) { create(:casa_admin) }
-
-    it "creates a new volunteer and sends invitation" do
-      sign_in admin
-      visit new_volunteer_path
-
-      fill_in "Email", with: "new_volunteer@example.com"
-      fill_in "Display name", with: "New Volunteer Display Name"
-      fill_in "Date of birth", with: Date.new(2001, 8, 8)
-
-      click_on "Create Volunteer"
-
-      last_email = ActionMailer::Base.deliveries.last
-      expect(last_email.to).to eq ["new_volunteer@example.com"]
-      expect(last_email.subject).to have_text "CASA Console invitation instructions"
-      expect(last_email.html_part.body.encoded).to have_text "your new Volunteer account."
-      expect(Volunteer.find_by(email: "new_volunteer@example.com").invitation_created_at).not_to be_nil
-    end
-  end
-
   context "when supervisor" do
     let(:supervisor) { create(:supervisor) }
 
-    it "lets Supervisor create new volunteer" do
+    it "creates a new volunteer", :js do
       sign_in supervisor
       visit new_volunteer_path
 
@@ -33,39 +12,41 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Display name", with: "New Volunteer Display Name 2"
       fill_in "Date of birth", with: Date.new(2000, 1, 2)
 
-      expect do
-        click_on "Create Volunteer"
-      end.to change(User, :count).by(1)
+      click_on "Create Volunteer"
+
+      visit volunteers_path
+      expect(page).to have_text("New Volunteer Display Name 2")
+      expect(page).to have_text("new_volunteer2@example.com")
+      expect(page).to have_text("Active")
     end
   end
 
   context "volunteer user" do
-    let(:volunteer) { create(:volunteer) }
-
-    before { sign_in volunteer }
-
     it "redirects the user with an error message" do
+      volunteer = create(:volunteer)
+      sign_in volunteer
+
       visit new_volunteer_path
 
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
     end
-  end
 
-  it "displays learning hour topic for volunteers when enabled", :js do
-    organization = create(:casa_org, learning_topic_active: true)
-    volunteer = create(:volunteer, casa_org: organization)
+    it "displays learning hour topic when enabled", :js do
+      organization = build(:casa_org, learning_topic_active: true)
+      volunteer = create(:volunteer, casa_org: organization)
 
-    sign_in volunteer
-    visit new_learning_hour_path
-    expect(page).to have_text("Learning Topic")
-  end
+      sign_in volunteer
+      visit new_learning_hour_path
+      expect(page).to have_text("Learning Topic")
+    end
 
-  it "learning hour topic hidden when disabled", :js do
-    organization = create(:casa_org)
-    volunteer = create(:volunteer, casa_org: organization)
+    it "does not display learning hour topic when disabled", :js do
+      organization = build(:casa_org)
+      volunteer = create(:volunteer, casa_org: organization)
 
-    sign_in volunteer
-    visit new_learning_hour_path
-    expect(page).not_to have_text("Learning Topic")
+      sign_in volunteer
+      visit new_learning_hour_path
+      expect(page).not_to have_text("Learning Topic")
+    end
   end
 end

@@ -3,14 +3,13 @@
 require "rails_helper"
 
 RSpec.describe "court_dates/edit", type: :system do
-  context "with date"
   let(:now) { Date.new(2021, 1, 1) }
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:volunteer) { create(:volunteer) }
-  let(:supervisor) { create(:casa_admin, casa_org: organization) }
+  let(:supervisor) { create(:supervisor, casa_org: organization) }
   let!(:casa_case) { create(:casa_case, casa_org: organization) }
-  let!(:court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
+  let!(:past_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now - 1.week) }
   let!(:future_court_date) { create(:court_date, :with_court_details, casa_case: casa_case, date: now + 1.week) }
 
   before do
@@ -21,12 +20,12 @@ RSpec.describe "court_dates/edit", type: :system do
     before do
       sign_in admin
       visit casa_case_path(casa_case)
-      click_on court_date.date.strftime("%B %-d, %Y")
+      click_on past_court_date.date.strftime("%B %-d, %Y")
       click_on "Edit"
     end
 
     it "shows court orders" do
-      court_order = court_date.case_court_orders.first
+      court_order = past_court_date.case_court_orders.first
 
       expect(page).to have_text(court_order.text)
       expect(page).to have_text(court_order.implementation_status.humanize)
@@ -66,46 +65,51 @@ RSpec.describe "court_dates/edit", type: :system do
       within ".top-page-actions" do
         click_on "Update"
       end
+
       expect(page).to have_text("Court Order Text One")
     end
 
-    it "can delete a future court date", :js do
+    it "allows deleting a future court date", :js do
       visit root_path
       click_on "Cases"
       click_on casa_case.case_number
 
-      expect(CourtDate.count).to eq 2
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
         page.find("a", text: "Delete Future Court Date").click
       end
       expect(page).to have_content "Court date was successfully deleted"
-      expect(CourtDate.count).to eq 1
+
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
 
   context "as a supervisor" do
-    it "can delete a future court date", :js do
+    it "allows deleting a future court date", :js do
       sign_in supervisor
 
       visit root_path
       click_on "Cases"
       click_on casa_case.case_number
 
-      expect(CourtDate.count).to eq 2
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
-      page.find("a", text: "Delete Future Court Date").click
-      page.driver.browser.switch_to.alert.accept
+      accept_alert "Are you sure?" do
+        page.find("a", text: "Delete Future Court Date").click
+      end
 
       expect(page).to have_content "Court date was successfully deleted."
-      expect(CourtDate.count).to eq 1
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+      expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
 
   context "as a volunteer" do
-    it "can't delete a future court date as volunteer", :js do
+    it "does not allow deleting a future court date", :js do
       volunteer.casa_cases = [casa_case]
       sign_in volunteer
 
@@ -113,9 +117,10 @@ RSpec.describe "court_dates/edit", type: :system do
       click_on "Cases"
       click_on casa_case.case_number
 
-      expect(CourtDate.count).to eq 2
+      expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
+
       expect(page).not_to have_content "Delete Future Court Date"
     end
   end

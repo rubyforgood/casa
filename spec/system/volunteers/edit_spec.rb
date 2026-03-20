@@ -133,6 +133,23 @@ RSpec.describe "volunteers/edit", type: :system do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+        old_email = volunteer.email
+
+        sign_in admin
+        visit edit_volunteer_path(volunteer)
+
+        fill_in "Email", with: "newemail@example.com"
+        click_on "Submit"
+
+        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
+        expect(page).to have_field("Email", with: old_email)
+        expect(volunteer.reload.unconfirmed_email).to eq("newemail@example.com")
+
+        expect(ActionMailer::Base.deliveries.count).to eq(1)
+        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
+        expect(ActionMailer::Base.deliveries.first.body.encoded)
+          .to match("Click here to confirm your email")
+      end
 
         old_email = volunteer.email
         new_email = "newemail@example.com"
@@ -212,7 +229,7 @@ RSpec.describe "volunteers/edit", type: :system do
   it "shows the admin the option to assign an unassigned volunteer to a different active supervisor" do
     organization = create(:casa_org)
     volunteer = create(:volunteer, casa_org: organization)
-    deactivated_supervisor = create(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
+    deactivated_supervisor = build(:supervisor, active: false, casa_org: organization, display_name: "Inactive Supervisor")
     active_supervisor = create(:supervisor, active: true, casa_org: organization, display_name: "Active Supervisor")
     admin = create(:casa_admin, casa_org: organization)
 
@@ -274,8 +291,8 @@ RSpec.describe "volunteers/edit", type: :system do
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       casa_case_1 = create(:casa_case, casa_org: organization, case_number: "CINA1")
       casa_case_2 = create(:casa_case, casa_org: organization, case_number: "CINA2")
-      case_assignment_1 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
-      case_assignment_2 = create(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
+      case_assignment_1 = build(:case_assignment, volunteer: volunteer, casa_case: casa_case_1)
+      case_assignment_2 = build(:case_assignment, volunteer: volunteer, casa_case: casa_case_2)
 
       case_assignment_1.active = false
       case_assignment_2.active = false
@@ -460,6 +477,8 @@ RSpec.describe "volunteers/edit", type: :system do
       uncheck "with_cc"
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to be_empty
     end
@@ -475,6 +494,8 @@ RSpec.describe "volunteers/edit", type: :system do
       check "with_cc"
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
     end
@@ -489,6 +510,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       check "with_cc"
       click_on "Send Reminder"
+
+      expect(page).to have_content("Reminder sent to volunteer")
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to be_empty
@@ -509,6 +532,8 @@ RSpec.describe "volunteers/edit", type: :system do
 
       click_on "Send Reminder"
 
+      expect(page).to have_content("Reminder sent to volunteer")
+
       expect(ActionMailer::Base.deliveries.count).to eq(1)
     end
 
@@ -521,6 +546,8 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
       check "with_cc"
       click_on "Send Reminder"
+
+      expect(page).to have_content("Reminder sent to volunteer")
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
@@ -587,9 +614,6 @@ RSpec.describe "volunteers/edit", type: :system do
       organization = create(:casa_org)
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
 
       sign_in admin
       visit edit_volunteer_path(volunteer)
@@ -632,12 +656,8 @@ RSpec.describe "volunteers/edit", type: :system do
   context "logged in as a supervisor" do
     it "can save notes about a volunteer" do
       organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = volunteer.supervisor
-      volunteer.notes.create(creator: admin, content: "Note_1")
-      volunteer.notes.create(creator: admin, content: "Note_2")
-      volunteer.notes.create(creator: admin, content: "Note_3")
 
       sign_in supervisor
       visit edit_volunteer_path(volunteer)

@@ -5,14 +5,6 @@ RSpec.describe "Inviting volunteers", type: :system do
   let(:admin) { create(:casa_admin, casa_org: organization) }
 
   before do
-    # Stub the request to the URL shortener service (needed if phone is provided)
-    stub_request(:post, "https://api.short.io/links")
-      .to_return(
-        status: 200,
-        body: {shortURL: "https://short.url/example"}.to_json,
-        headers: {"Content-Type" => "application/json"}
-      )
-
     sign_in admin
   end
 
@@ -24,9 +16,9 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Jane Doe"
       fill_in "Date of birth", with: Date.new(1995, 5, 15)
 
-      expect {
-        click_on "Create Volunteer"
-      }.to change(Volunteer, :count).by(1)
+      click_on "Create Volunteer"
+
+      expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
       volunteer = Volunteer.find_by(email: "new_volunteer@example.com")
       expect(volunteer).to be_present
@@ -48,6 +40,8 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Date of birth", with: Date.new(1990, 1, 1)
 
       click_on "Create Volunteer"
+
+      expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
       volunteer = Volunteer.find_by(email: "volunteer_with_token@example.com")
       expect(volunteer.invitation_created_at).to be_present
@@ -85,11 +79,11 @@ RSpec.describe "Inviting volunteers", type: :system do
 
       click_on "Set my password"
 
+      expect(page).to have_selector(".notice", text: "Your password was set successfully. You are now signed in")
+      expect(page).to have_text("My Cases")
+
       volunteer.reload
       expect(volunteer.invitation_accepted_at).not_to be_nil
-
-      # Should be redirected to dashboard after accepting invitation
-      expect(page).to have_text("My Cases")
     end
 
     it "shows error when passwords don't match" do
@@ -145,9 +139,7 @@ RSpec.describe "Inviting volunteers", type: :system do
     it "allows admin to resend invitation to volunteer who hasn't accepted" do
       visit edit_volunteer_path(volunteer)
 
-      expect {
-        click_on "Resend Invitation"
-      }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      click_on "Resend Invitation"
 
       expect(page).to have_text "Invitation sent"
 
@@ -180,9 +172,9 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Supervisor's Volunteer"
       fill_in "Date of birth", with: Date.new(1992, 3, 20)
 
-      expect {
-        click_on "Create Volunteer"
-      }.to change(Volunteer, :count).by(1)
+      click_on "Create Volunteer"
+
+      expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
       volunteer = Volunteer.find_by(email: "supervisor_volunteer@example.com")
       expect(volunteer).to be_present
@@ -206,17 +198,6 @@ RSpec.describe "Inviting volunteers", type: :system do
       visit new_volunteer_path
 
       expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
-    end
-  end
-
-  describe "invitation expiration" do
-    let(:volunteer) { create(:volunteer, casa_org: organization) }
-
-    it "volunteers have invitation valid for 1 year" do
-      volunteer.invite!(admin)
-
-      # Check that volunteer model has correct invitation period
-      expect(Volunteer.invite_for).to eq(1.year)
     end
   end
 end

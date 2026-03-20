@@ -22,7 +22,7 @@ gem "filterrific" # Filtering and sorting of models
 gem "flipper" # Feature flag management
 gem "flipper-active_record" # Active Record adapter for Flipper
 gem "flipper-ui" # Web UI for managing feature flags
-gem "friendly_id", "~> 5.5.1" # Allows us to use a slug instead of CASA case IDs in their URLs
+gem "friendly_id", "~> 5.6.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
 gem "httparty" # HTTP network requests
 gem "image_processing", "~> 1.14" # Image processing helpers

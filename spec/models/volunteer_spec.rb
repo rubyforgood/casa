@@ -394,6 +394,21 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
+  describe "invitation" do
+    it "delivers an email invite" do
+      volunteer = build(:volunteer, email: "new_volunteer@example.com")
+      volunteer.invite!
+
+      email = ActionMailer::Base.deliveries.last
+
+      expect(email).not_to be_nil
+      expect(email.to).to eq ["new_volunteer@example.com"]
+      expect(email.subject).to eq("CASA Console invitation instructions")
+      expect(email.html_part.body.encoded).to match(/your new Volunteer account/i)
+      expect(volunteer.reload.invitation_created_at).to be_present
+    end
+  end
+
   describe "#learning_hours_spent_in_one_year" do
     let(:volunteer) { create :volunteer }
     let(:learning_hour_type) { create :learning_hour_type }

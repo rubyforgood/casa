@@ -1,5 +1,5 @@
 <div class="password-box px-4 pb-3">
-  <h2 class="my-3">Send invitation</h2>
+  <h2 class="my-3">Set password</h2>
 
   <%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), local: true, html: {method: :put}) do |f| %>
     <%= render "/shared/error_messages", resource: resource %>

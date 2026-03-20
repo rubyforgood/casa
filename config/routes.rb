@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   resources :health, only: %i[index] do
     collection do
       get :case_contacts_creation_times_in_last_week
+      get :gc
       get :monthly_line_graph_data
       get :monthly_unique_users_graph_data
     end
@@ -240,6 +241,7 @@ Rails.application.routes.draw do
   end
 
   get "/error", to: "error#index"
+  post "/error", to: "error#create"
 
   namespace :api do
     namespace :v1 do

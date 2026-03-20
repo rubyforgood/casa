@@ -1,8 +1,8 @@
 require "rails_helper"
 
-RSpec.describe "followups/resolve", :js, type: :system do
-  let(:casa_org) { create(:casa_org) }
-  let(:admin) { create(:casa_admin, casa_org: casa_org) }
+RSpec.describe "followups/resolve", type: :system do
+  let(:casa_org) { build(:casa_org) }
+  let(:admin) { build(:casa_admin, casa_org: casa_org) }
   let(:supervisor) { build(:supervisor, casa_org: casa_org) }
   let(:volunteer) { build(:volunteer, casa_org: casa_org) }
   let(:casa_case) { create(:casa_case, casa_org: casa_org) }
@@ -29,7 +29,7 @@ RSpec.describe "followups/resolve", :js, type: :system do
 
     before { sign_in admin }
 
-    it "changes status of followup to resolved" do # TODO make test not flaky
+    it "changes status of followup to resolved" do
       visit casa_case_path(case_contact.casa_case)
 
       click_button "Resolve Reminder"
@@ -40,12 +40,9 @@ RSpec.describe "followups/resolve", :js, type: :system do
     end
 
     it "removes followup icon and button changes back to 'Make Reminder'" do
-      sign_in admin
       visit casa_case_path(case_contact.casa_case)
 
       click_button "Resolve Reminder"
-      expect(page).to have_button("Make Reminder")
-
       expect(page).to have_button("Make Reminder")
     end
   end
