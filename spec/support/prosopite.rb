@@ -2,9 +2,9 @@
 
 return unless defined?(Prosopite)
 
-# Test configuration
+# Test configuration — this file owns all Prosopite settings for the test env
 Prosopite.enabled = true
-Prosopite.raise = false  # Log only, don't fail specs
+Prosopite.raise = true
 Prosopite.rails_logger = true
 Prosopite.prosopite_logger = true
 
@@ -16,35 +16,36 @@ Prosopite.allow_stack_paths = [
   "shoulda/matchers/active_model/allow_value_matcher.rb"
 ]
 
-# Optional: Load ignore list from file for gradual rollout
+# Load ignore list from file for gradual rollout — directories listed in
+# .prosopite_ignore are scanned but won't raise, only log.
 PROSOPITE_IGNORE = if File.exist?("spec/.prosopite_ignore")
-  File.read("spec/.prosopite_ignore").lines.map(&:chomp).reject(&:empty?)
+  File.read("spec/.prosopite_ignore")
+    .lines
+    .map(&:chomp)
+    .reject { |line| line.empty? || line.start_with?("#") }
 else
   []
 end
 
-# Monkey-patch FactoryBot to pause during factory creation
-# Prevents false positives from factory callbacks
-if defined?(FactoryBot)
-  module FactoryBot
-    module Strategy
-      class Create
-        alias_method :original_result, :result
+RSpec.configure do |config|
+  # Pause Prosopite during factory creation to prevent false positives
+  # from factory callbacks and associations
+  config.before(:suite) do
+    if defined?(FactoryBot)
+      FactoryBot::SyntaxRunner.class_eval do
+        alias_method :original_create, :create
 
-        def result(evaluation)
+        def create(*args, **kwargs, &block)
           if defined?(Prosopite) && Prosopite.enabled?
-            Prosopite.pause { original_result(evaluation) }
+            Prosopite.pause { original_create(*args, **kwargs, &block) }
           else
-            original_result(evaluation)
+            original_create(*args, **kwargs, &block)
           end
         end
       end
     end
   end
-end
 
-# RSpec integration
-RSpec.configure do |config|
   config.around do |example|
     if use_prosopite?(example)
       Prosopite.scan { example.run }
