@@ -1,0 +1,15 @@
+# Directories excluded from Prosopite N+1 raise (will still log).
+# Remove paths as you fix the underlying N+1s.
+#
+# See PROSOPITE_TODO.md for the full list of known issues.
+spec/models
+spec/services
+spec/lib
+spec/system
+spec/requests
+spec/controllers
+spec/views
+spec/decorators
+spec/policies
+spec/datatables
+spec/helpers
