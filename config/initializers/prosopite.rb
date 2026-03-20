@@ -9,7 +9,7 @@ end
 Rails.application.config.after_initialize do
   # Core settings
   Prosopite.enabled = Rails.configuration.respond_to?(:prosopite_enabled) &&
-                      Rails.configuration.prosopite_enabled
+    Rails.configuration.prosopite_enabled
 
   # Minimum repeated queries to trigger detection (default: 2)
   Prosopite.min_n_queries = Rails.configuration.respond_to?(:prosopite_min_n_queries) ?
