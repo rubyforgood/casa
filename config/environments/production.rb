@@ -108,8 +108,4 @@ Rails.application.configure do
   # ]
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
-
-  # Prosopite N+1 query detection (disabled by default in production)
-  config.prosopite_enabled = ENV.fetch("PROSOPITE_ENABLED", "false") == "true"
-  config.prosopite_min_n_queries = ENV.fetch("PROSOPITE_MIN_N_QUERIES", "10").to_i
 end

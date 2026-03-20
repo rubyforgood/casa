@@ -1,21 +1,23 @@
 # frozen_string_literal: true
 
-# Only enable Rack middleware if Prosopite is configured on
-if Rails.configuration.respond_to?(:prosopite_enabled) && Rails.configuration.prosopite_enabled
+# Rack middleware for development only — in test, scanning is handled by RSpec hooks
+if Rails.env.development? &&
+    Rails.configuration.respond_to?(:prosopite_enabled) &&
+    Rails.configuration.prosopite_enabled
   require "prosopite/middleware/rack"
   Rails.configuration.middleware.use(Prosopite::Middleware::Rack)
 end
 
+# Development configuration — test config lives in spec/support/prosopite.rb
 Rails.application.config.after_initialize do
-  # Core settings
+  next unless Rails.env.development?
+
   Prosopite.enabled = Rails.configuration.respond_to?(:prosopite_enabled) &&
     Rails.configuration.prosopite_enabled
 
-  # Minimum repeated queries to trigger detection (default: 2)
   Prosopite.min_n_queries = Rails.configuration.respond_to?(:prosopite_min_n_queries) ?
                             Rails.configuration.prosopite_min_n_queries : 2
 
-  # Logging options
-  Prosopite.rails_logger = true                    # Log to Rails.logger
-  Prosopite.prosopite_logger = Rails.env.development?  # Log to log/prosopite.log
+  Prosopite.rails_logger = true
+  Prosopite.prosopite_logger = true
 end
