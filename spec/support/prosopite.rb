@@ -52,8 +52,11 @@ RSpec.configure do |config|
     else
       original_enabled = Prosopite.enabled?
       Prosopite.enabled = false
-      example.run
-      Prosopite.enabled = original_enabled
+      begin
+        example.run
+      ensure
+        Prosopite.enabled = original_enabled
+      end
     end
   end
 end
