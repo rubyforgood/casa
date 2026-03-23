@@ -61,7 +61,7 @@ gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not
 gem "view_component" # View components for reusability
 gem "wicked" # Multi-step form wizard for Rails
 
-group :development, :test do
+group :development, :test, :production do
   gem "brakeman" # Security inspection
   gem "prosopite" # N+1 query detection via SQL pattern analysis
   gem "byebug", platforms: %i[mri mingw x64_mingw] # Debugger console
