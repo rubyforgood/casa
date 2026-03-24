@@ -17,6 +17,8 @@ FROM ruby:3.3.10-alpine AS build
     postgresql-dev \
     tzdata
 
+  RUN bundle config set force_ruby_platform true
+
   COPY Gemfile* $ROOT
   RUN bundle install
 
