@@ -233,7 +233,7 @@ GEM
     faraday-net_http_persistent (1.2.0)
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
-    faraday-retry (1.0.3)
+    faraday-retry (1.0.4)
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
     ffi (1.17.2)
@@ -800,7 +800,7 @@ DEPENDENCIES
   wicked
 
 RUBY VERSION
-   ruby 3.3.10p183
+   ruby 4.0.1p0
 
 BUNDLED WITH
-   2.6.6
+   4.0.9
