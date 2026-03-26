@@ -84,7 +84,7 @@ git clone https://github.com/rbenv/rbenv.git ~/.rbenv
 #   fetch list of ruby versions
 git clone https://github.com/rbenv/ruby-build.git "$(rbenv root)"/plugins/ruby-build
 
-rbenv install 3.3.10
+rbenv install 4.0.1
 ```
 
 If you would like RVM instead of rbenv
@@ -95,9 +95,9 @@ gpg --keyserver hkp://pool.sks-keyservers.net --recv-keys 409B6B1796C275462A1703
 \curl -sSL https://get.rvm.io | bash
 . ./.bashrc
 rvm get head
-rvm install 3.3.10
-rvm alias create ruby 3.3.10
-rvm alias create default ruby-3.3.10
+rvm install 4.0.1
+rvm alias create ruby 4.0.1
+rvm alias create default ruby-4.0.1
 ```
 
 ```# Download the Chrome browser (for RSpec testing):

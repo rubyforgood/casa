@@ -2,7 +2,7 @@
 
 source "https://rubygems.org"
 
-ruby "3.3.10"
+ruby "4.0.1"
 gem "rails", "~> 7.2"
 
 gem "after_party" # Post-deployment tasks
