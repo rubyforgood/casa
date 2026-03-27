@@ -5,7 +5,7 @@
 <% else %>
   <ul>
     <% court_dates.each do |pcd| %>
-      <p>
+      <li>
         <div class="court-date-row">
           <%= link_to(pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd), class: "court-date-link") %>
           <%= render 'calendar_button',
@@ -22,7 +22,7 @@
             (Attached Report)
           <% end %>
         <% end %>
-      </p>
+      </li>
     <% end %>
   </ul>
 <% end %>

@@ -37,6 +37,7 @@
                     </thead>
                     <tbody>
                     <% volunteer[:other_duties].decorate.each do |duty| %>
+                      <tr>
                       <td><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
                       <td><%= I18n.l(duty.created_at, format: :full, default: nil) %></td>
                       <td><%= duty.duration_in_minutes %></td>
