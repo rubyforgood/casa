@@ -22,7 +22,7 @@
           type: "checkbox",
           class: "emancipation-category-check-box form-check-input",
           value: category.id,
-          disabled: emancipation_category_checkbox_checked(@current_case, category)) %>
+          checked: emancipation_category_checkbox_checked(@current_case, category)) %>
 
         <div class="pt-10"><%= category.name %></div>
       </div>
@@ -40,14 +40,14 @@
               class: "emancipation-radio-button",
               name: "C#{category.id}",
               value: option.id,
-              disabled: emancipation_category_checkbox_checked(@current_case, option)) %>
+              checked: emancipation_option_checkbox_checked(@current_case, option)) %>
           <% else %>
             <%= tag.input(
               type: "checkbox",
               id: "O#{option.id}",
               class: "emancipation-option-check-box",
               value: option.id,
-              disabled: emancipation_option_checkbox_checked(@current_case, option)) %>
+              checked: emancipation_option_checkbox_checked(@current_case, option)) %>
           <% end %>
           <label><%= option.name %></label>
         </div>
