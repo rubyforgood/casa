@@ -151,6 +151,10 @@ RSpec.describe "volunteers/edit", type: :system do
           .to match("Click here to confirm your email")
       end
 
+      it "updates volunteer email and tracks old emails" do
+        organization = create(:casa_org)
+        admin = create(:casa_admin, casa_org: organization)
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
         old_email = volunteer.email
         new_email = "newemail@example.com"
 
