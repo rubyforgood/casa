@@ -5,7 +5,7 @@
       <label for="patch-note-<%= patch_note.id %>-type">Patch Note Type:</label>
       <select id="patch-note-<%= patch_note.id %>-type" disabled="true">
         <% @patch_note_types&.each do |patch_note_type| %>
-          <option value="<%= patch_note_type.id %>" <% if patch_note_type.id === patch_note.patch_note_type_id %> selected <% end %>>
+          <option value="<%= patch_note_type.id %>" <% if patch_note_type.id === patch_note.patch_note_type_id %> selected="selected" <% end %>>
             <%= patch_note_type.name %>
           </option>
         <% end %>
