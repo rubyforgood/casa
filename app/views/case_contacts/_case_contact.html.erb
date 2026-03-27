@@ -4,7 +4,7 @@
       <div>
         <div class="mt-0">
           <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
-          <div class="">
+          <div>
             <h5 class="pt-0 mb-10 card-title d-flex align-items-center gap-2">
               <strong class="<%= "text-primary" %>">
                 <%= "[DELETE] " if policy(contact).restore? && contact.deleted? %>
