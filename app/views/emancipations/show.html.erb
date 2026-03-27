@@ -18,11 +18,12 @@
   <% @emancipation_form_data.each do |category| %>
     <h6 class="emancipation-category no-select" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
       <div class="checkbox-style emacipation-category-input-label-pair">
-        <input
-          type="checkbox"
-          class="emancipation-category-check-box form-check-input"
-          value="<%= category.id %>"
-          <%= emancipation_category_checkbox_checked(@current_case, category) %>>
+        <%= input_tag(
+          type: "checkbox",
+          class: "emancipation-category-check-box form-check-input",
+          value: category.id,
+          disabled: emancipation_category_checkbox_checked(@current_case, category)) %>
+
         <div class="pt-10"><%= category.name %></div>
       </div>
       <% if category.emancipation_options.count > 0 %>
@@ -33,20 +34,20 @@
       <% category.emancipation_options.each do |option| %>
         <div class="check-item">
           <% if category.mutually_exclusive %>
-            <input
-              type="radio"
-              id="O<%= option.id %>"
-              class="emancipation-radio-button"
-              name="C<%= category.id %>"
-              value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
+            <%= input_tag(
+              type: "radio",
+              id: "O#{option.id}",
+              class: "emancipation-radio-button",
+              name: "C#{category.id}",
+              value: option.id,
+              disabled: emancipation_category_checkbox_checked(@current_case, option)) %>
           <% else %>
-            <input
-              type="checkbox"
-              id="O<%= option.id %>"
-              class="emancipation-option-check-box"
-              value="<%= option.id %>"
-              <%= emancipation_option_checkbox_checked(@current_case, option) %>>
+            <%= input_tag(
+              type: "checkbox",
+              id: "O#{option.id}",
+              class: "emancipation-option-check-box",
+              value: option.id,
+              disabled: emancipation_option_checkbox_checked(@current_case, option)) %>
           <% end %>
           <label><%= option.name %></label>
         </div>
