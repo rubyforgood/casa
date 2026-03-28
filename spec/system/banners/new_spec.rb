@@ -38,7 +38,7 @@ RSpec.describe "Banners", :js, type: :system do
     click_on "New Banner"
     fill_in "Name", with: "Expiring Announcement"
     check "Active?"
-    fill_in "banner_expires_at", with: 7.days.from_now.strftime("%m%d%Y\t%I%M%P")
+    fill_in "banner_expires_at", with: 7.days.from_now.strftime("%Y\t%m%d%I%M%P")
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
@@ -47,7 +47,7 @@ RSpec.describe "Banners", :js, type: :system do
     within "#banners" do
       click_on "Edit", match: :first
     end
-    fill_in "banner_expires_at", with: 3.days.from_now.strftime("%m%d%Y\t%I%M%P")
+    fill_in "banner_expires_at", with: 3.days.from_now.strftime("%Y\t%m%d%I%M%P")
     click_on "Submit"
 
     expect(page).to have_text("Expiring Announcement Yes in 3 days")
@@ -62,7 +62,7 @@ RSpec.describe "Banners", :js, type: :system do
     visit banners_path
     click_on "New Banner"
     fill_in "Name", with: "Announcement not created"
-    fill_in "banner_expires_at", with: 1.week.ago.strftime("%m%d%Y\t%I%M%P")
+    fill_in "banner_expires_at", with: 1.week.ago.strftime("%Y\t%m%d%I%M%P")
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
