@@ -39,7 +39,7 @@
 
         gemConfig = { };
         # See available versions here: https://github.com/bobvanderlinden/nixpkgs-ruby/blob/master/ruby/versions.json
-        ruby = pkgs."ruby-4.0.1";
+        ruby = pkgs."ruby-4.0.2";
 
         bundixcli = bundix.packages.${system}.default;
       in rec {
