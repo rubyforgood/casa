@@ -43,7 +43,7 @@
     "strftime": "^0.10.3",
     "sweetalert2": "^11.3.5",
     "tom-select": "^2.5.2",
-    "trix": "^2.1.17"
+    "trix": "^2.1.18"
   },
   "version": "0.1.0",
   "devDependencies": {
