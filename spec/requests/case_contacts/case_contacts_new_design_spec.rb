@@ -177,6 +177,68 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           expect(response).to have_http_status(:unauthorized)
         end
       end
+
+      context "expanded content fields" do
+        let(:contact_topic) { create(:contact_topic, casa_org: organization) }
+        let(:case_contact_with_details) do
+          create(:case_contact, :active, casa_case: casa_case, notes: "Important follow-up")
+        end
+
+        before do
+          create(:contact_topic_answer,
+            case_contact: case_contact_with_details,
+            contact_topic: contact_topic,
+            value: "Youth is doing well")
+        end
+
+        it "includes contact_topic_answers in the response" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers]).to be_an(Array)
+          expect(record[:contact_topic_answers].first[:value]).to eq("Youth is doing well")
+        end
+
+        it "includes the topic question in contact_topic_answers" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers].first[:question]).to eq(contact_topic.question)
+        end
+
+        it "includes notes in the response" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:notes]).to eq("Important follow-up")
+        end
+
+        it "omits blank topic answer values" do
+          create(:contact_topic_answer,
+            case_contact: case_contact_with_details,
+            contact_topic: contact_topic,
+            value: "")
+
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers].map { |a| a[:value] }).to all(be_present)
+        end
+
+        it "returns a blank value for notes when notes are empty" do
+          case_contact_without_notes = create(:case_contact, :active, casa_case: casa_case, notes: "")
+
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_without_notes.id.to_s }
+          expect(record[:notes]).to be_blank
+        end
+      end
     end
   end
 end
