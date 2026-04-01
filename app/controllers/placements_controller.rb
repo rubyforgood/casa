@@ -1,6 +1,6 @@
 class PlacementsController < ApplicationController
   before_action :set_casa_case
-  before_action :set_placement, only: %i[edit show generate update destroy]
+  before_action :set_placement, only: %i[edit show update destroy]
   before_action :require_organization!
 
   def index
