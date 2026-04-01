@@ -5,16 +5,16 @@ let pageNotifier
 
 function buildExpandedContent (data) {
   const answers = (data.contact_topic_answers || [])
-    .map(answer => `<li><strong>${answer.question}:</strong> ${answer.value}</li>`)
+    .map(answer => `<div class="expanded-topic"><strong>${answer.question}</strong><p>${answer.value}</p></div>`)
     .join('')
 
   const notes = data.notes && data.notes.trim()
-    ? `<li><strong>Additional Notes:</strong> ${data.notes}</li>`
+    ? `<div class="expanded-topic"><strong>Additional Notes</strong><p>${data.notes}</p></div>`
     : ''
 
-  if (!answers && !notes) return '<p>No additional details.</p>'
+  if (!answers && !notes) return '<p class="expanded-empty">No additional details.</p>'
 
-  return `<ul>${answers}${notes}</ul>`
+  return `<div class="expanded-content">${answers}${notes}</div>`
 }
 
 const defineCaseContactsTable = function () {
