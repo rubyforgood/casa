@@ -154,7 +154,7 @@ describe('defineCaseContactsTable', () => {
       it('renders chevron-down icon', () => {
         const rendered = columns[1].render(null, 'display', {})
 
-        expect(rendered).toBe('<i class="fa-solid fa-chevron-down"></i>')
+        expect(rendered).toBe('<i class="fa-solid fa-chevron-down expand-toggle" style="cursor: pointer;"></i>')
       })
     })
 

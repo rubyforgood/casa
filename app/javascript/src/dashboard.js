@@ -3,8 +3,22 @@
 const { Notifier } = require('./notifier')
 let pageNotifier
 
+function buildExpandedContent (data) {
+  const answers = (data.contact_topic_answers || [])
+    .map(answer => `<li><strong>${answer.question}:</strong> ${answer.value}</li>`)
+    .join('')
+
+  const notes = data.notes && data.notes.trim()
+    ? `<li><strong>Additional Notes:</strong> ${data.notes}</li>`
+    : ''
+
+  if (!answers && !notes) return '<p>No additional details.</p>'
+
+  return `<ul>${answers}${notes}</ul>`
+}
+
 const defineCaseContactsTable = function () {
-  $('table#case_contacts').DataTable({
+  const table = $('table#case_contacts').DataTable({
     scrollX: true,
     searching: true,
     processing: true,
@@ -36,7 +50,7 @@ const defineCaseContactsTable = function () {
         data: null,
         orderable: false,
         searchable: false,
-        render: () => '<i class="fa-solid fa-chevron-down"></i>'
+        render: () => '<i class="fa-solid fa-chevron-down expand-toggle" style="cursor: pointer;"></i>'
       },
       { // Date column (index 2)
         data: 'occurred_at',
@@ -124,6 +138,19 @@ const defineCaseContactsTable = function () {
         render: () => '<i class="fas fa-ellipsis-v"></i>'
       }
     ]
+  })
+
+  $('table#case_contacts tbody').on('click', '.expand-toggle', function () {
+    const tr = $(this).closest('tr')
+    const row = table.row(tr)
+
+    if (row.child.isShown()) {
+      row.child.hide()
+      $(this).removeClass('expanded')
+    } else {
+      row.child(buildExpandedContent(row.data())).show()
+      $(this).addClass('expanded')
+    }
   })
 }
 
