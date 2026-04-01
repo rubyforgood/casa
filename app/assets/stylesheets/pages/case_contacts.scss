@@ -145,3 +145,12 @@
 .cc-italic {
     font-style: italic;
 }
+
+.expand-toggle {
+  display: inline-block;
+  transition: transform 0.3s;
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
+}
