@@ -239,6 +239,31 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           expect(record[:notes]).to be_blank
         end
       end
+
+      context "contact_topics field" do
+        let(:contact_topic) { create(:contact_topic, casa_org: organization) }
+        let(:case_contact_with_topics) { create(:case_contact, :active, casa_case: casa_case) }
+
+        before do
+          case_contact_with_topics.contact_topics << contact_topic
+        end
+
+        it "returns contact_topics as an array of strings" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_topics.id.to_s }
+          expect(record[:contact_topics]).to be_an(Array)
+        end
+
+        it "includes the topic question in the array" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_topics.id.to_s }
+          expect(record[:contact_topics]).to include(contact_topic.question)
+        end
+      end
     end
   end
 end

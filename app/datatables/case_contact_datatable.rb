@@ -29,7 +29,7 @@ class CaseContactDatatable < ApplicationDatatable
         },
         contact_made: case_contact.contact_made,
         duration_minutes: case_contact.duration_minutes,
-        contact_topics: case_contact.contact_topics.map(&:question).join(" | "),
+        contact_topics: case_contact.contact_topics.map(&:question),
         contact_topic_answers: case_contact.contact_topic_answers
                                .reject { |a| a.value.blank? }
                                .map { |a| { question: a.contact_topic&.question, value: a.value } },
