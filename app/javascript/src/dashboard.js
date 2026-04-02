@@ -3,6 +3,21 @@
 const { Notifier } = require('./notifier')
 let pageNotifier
 
+const MAX_VISIBLE_TOPIC_PILLS = 2
+
+function buildTopicPills (topics) {
+  if (!topics || topics.length === 0) return ''
+  const visible = topics.slice(0, MAX_VISIBLE_TOPIC_PILLS)
+  const overflowCount = topics.length - visible.length
+  const pills = visible
+    .map(topic => `<span class="badge badge-pill light-bg text-black">${topic}</span>`)
+    .join(' ')
+  const overflowPill = overflowCount > 0
+    ? ` <span class="badge badge-pill light-bg text-black">+${overflowCount} More</span>`
+    : ''
+  return pills + overflowPill
+}
+
 function buildExpandedContent (data) {
   const answers = (data.contact_topic_answers || [])
     .map(answer => `<div class="expanded-topic"><strong>${answer.question}</strong><p>${answer.value}</p></div>`)
@@ -120,7 +135,7 @@ const defineCaseContactsTable = function () {
       { // Topics column (index 8)
         data: 'contact_topics',
         orderable: false,
-        render: (data) => data || ''
+        render: (data) => buildTopicPills(data)
       },
       { // Draft column (index 9)
         data: 'is_draft',
