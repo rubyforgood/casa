@@ -226,7 +226,7 @@ RSpec.describe "/case_contacts_new_design", type: :request do
 
           json = JSON.parse(response.body, symbolize_names: true)
           record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
-          expect(record[:contact_topic_answers].map { |a| a[:value] }).to all(be_present)
+          expect(record[:contact_topic_answers].pluck(:value)).to all(be_present)
         end
 
         it "returns a blank value for notes when notes are empty" do
