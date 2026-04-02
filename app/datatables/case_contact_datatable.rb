@@ -31,8 +31,8 @@ class CaseContactDatatable < ApplicationDatatable
         duration_minutes: case_contact.duration_minutes,
         contact_topics: case_contact.contact_topics.map(&:question),
         contact_topic_answers: case_contact.contact_topic_answers
-                               .reject { |a| a.value.blank? }
-                               .map { |a| { question: a.contact_topic&.question, value: a.value } },
+          .reject { |a| a.value.blank? }
+          .map { |a| {question: a.contact_topic&.question, value: a.value} },
         notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
         has_followup: case_contact.followups.requested.exists?
