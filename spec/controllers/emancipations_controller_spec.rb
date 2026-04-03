@@ -14,17 +14,17 @@ RSpec.describe EmancipationsController, type: :controller do
   describe "GET #show" do
     context "when authenticated and authorized" do
       it "returns http success" do
-        get :show, params: { casa_case_id: casa_case.friendly_id }
+        get :show, params: {casa_case_id: casa_case.friendly_id}
         expect(response).to have_http_status(:success)
       end
 
       it "assigns @current_case" do
-        get :show, params: { casa_case_id: casa_case.friendly_id }
+        get :show, params: {casa_case_id: casa_case.friendly_id}
         expect(assigns(:current_case)).to eq(casa_case)
       end
 
       it "assigns @emancipation_form_data with all categories" do
-        get :show, params: { casa_case_id: casa_case.friendly_id }
+        get :show, params: {casa_case_id: casa_case.friendly_id}
         expect(assigns(:emancipation_form_data)).to match_array(EmancipationCategory.all)
       end
     end
@@ -32,7 +32,7 @@ RSpec.describe EmancipationsController, type: :controller do
     context "when case does not exist" do
       it "raises a record not found error" do
         expect {
-          get :show, params: { casa_case_id: "nonexistent-case" }
+          get :show, params: {casa_case_id: "nonexistent-case"}
         }.to raise_error(ActiveRecord::RecordNotFound)
       end
     end
@@ -41,7 +41,7 @@ RSpec.describe EmancipationsController, type: :controller do
       let(:user) { create(:supervisor, casa_org: other_org) }
 
       it "redirects to root with an authorization notice" do
-        get :show, params: { casa_case_id: casa_case.friendly_id }
+        get :show, params: {casa_case_id: casa_case.friendly_id}
         expect(response).to redirect_to(root_url)
         expect(flash[:notice]).to match(/not authorized/)
       end
@@ -49,7 +49,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
     context "docx format" do
       it "sends a docx file with the correct filename" do
-        get :show, params: { casa_case_id: casa_case.friendly_id }, format: :docx
+        get :show, params: {casa_case_id: casa_case.friendly_id}, format: :docx
         expect(response.headers["Content-Disposition"]).to include(
           "#{casa_case.case_number} Emancipation Checklist.docx"
         )
