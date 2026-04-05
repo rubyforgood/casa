@@ -146,12 +146,12 @@ describe('NonDrivingContactMediumWarning', () => {
       $(() => {
         try {
           expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
-          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid rgb(255, 193, 7)')
 
           component.warningHighlightUI('A warning message')
 
           expect(checkboxContainer.css('background-color')).toBe('rgb(255, 248, 225)')
-          expect(milesDrivenInput.css('border')).toBe('2px solid #ffc107')
+          expect(milesDrivenInput.css('border')).toBe('2px solid rgb(255, 193, 7)')
           done()
         } catch (error) {
           done(error)
@@ -163,17 +163,17 @@ describe('NonDrivingContactMediumWarning', () => {
       $(() => {
         try {
           expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
-          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid rgb(255, 193, 7)')
 
           component.warningHighlightUI('A warning message')
 
           expect(checkboxContainer.css('background-color')).toBe('rgb(255, 248, 225)')
-          expect(milesDrivenInput.css('border')).toBe('2px solid #ffc107')
+          expect(milesDrivenInput.css('border')).toBe('2px solid rgb(255, 193, 7)')
 
           component.warningHighlightUI()
 
           expect(checkboxContainer.css('background-color')).not.toBe('rgb(255, 248, 225)')
-          expect(milesDrivenInput.css('border')).not.toBe('2px solid #ffc107')
+          expect(milesDrivenInput.css('border')).not.toBe('2px solid rgb(255, 193, 7)')
 
           done()
         } catch (error) {
