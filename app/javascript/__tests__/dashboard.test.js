@@ -151,10 +151,10 @@ describe('defineCaseContactsTable', () => {
         expect(columns[1].searchable).toBe(false)
       })
 
-      it('renders chevron-down icon', () => {
+      it('renders chevron-down icon as an accessible button', () => {
         const rendered = columns[1].render(null, 'display', {})
 
-        expect(rendered).toBe('<i class="fa-solid fa-chevron-down"></i>')
+        expect(rendered).toBe('<button type="button" class="expand-toggle" aria-expanded="false" aria-label="Expand row details"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>')
       })
     })
 
@@ -309,9 +309,33 @@ describe('defineCaseContactsTable', () => {
         expect(columns[8].orderable).toBe(false)
       })
 
-      it('renders contact topics string', () => {
-        expect(columns[8].render('Topic 1 | Topic 2')).toBe('Topic 1 | Topic 2')
+      it('renders each topic as a pill badge', () => {
+        const rendered = columns[8].render(['Topic 1', 'Topic 2'])
+        expect(rendered).toContain('<span class="badge badge-pill light-bg text-black">Topic 1</span>')
+        expect(rendered).toContain('<span class="badge badge-pill light-bg text-black">Topic 2</span>')
+      })
+
+      it('renders empty string when there are no topics', () => {
         expect(columns[8].render(null)).toBe('')
+        expect(columns[8].render([])).toBe('')
+      })
+
+      it('shows only the first two topics when there are more than two', () => {
+        const rendered = columns[8].render(['A', 'B', 'C', 'D'])
+        expect(rendered).toContain('>A<')
+        expect(rendered).toContain('>B<')
+        expect(rendered).not.toContain('>C<')
+        expect(rendered).not.toContain('>D<')
+      })
+
+      it('shows a +N More badge for overflow topics', () => {
+        const rendered = columns[8].render(['A', 'B', 'C', 'D'])
+        expect(rendered).toContain('+2 More')
+      })
+
+      it('does not show an overflow badge when there are two or fewer topics', () => {
+        expect(columns[8].render(['A', 'B'])).not.toContain('More')
+        expect(columns[8].render(['A'])).not.toContain('More')
       })
     })
 
