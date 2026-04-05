@@ -148,6 +148,10 @@
 
 .expand-toggle {
   display: inline-block;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
   transition: transform 0.3s;
 
   &.expanded {

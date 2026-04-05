@@ -65,7 +65,7 @@ const defineCaseContactsTable = function () {
         data: null,
         orderable: false,
         searchable: false,
-        render: () => '<i class="fa-solid fa-chevron-down expand-toggle" style="cursor: pointer;"></i>'
+        render: () => '<button type="button" class="expand-toggle" aria-expanded="false" aria-label="Expand row details"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>'
       },
       { // Date column (index 2)
         data: 'occurred_at',
@@ -161,10 +161,10 @@ const defineCaseContactsTable = function () {
 
     if (row.child.isShown()) {
       row.child.hide()
-      $(this).removeClass('expanded')
+      $(this).removeClass('expanded').attr('aria-expanded', 'false')
     } else {
       row.child(buildExpandedContent(row.data())).show()
-      $(this).addClass('expanded')
+      $(this).addClass('expanded').attr('aria-expanded', 'true')
     }
   })
 }
