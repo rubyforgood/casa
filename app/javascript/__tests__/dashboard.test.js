@@ -151,10 +151,10 @@ describe('defineCaseContactsTable', () => {
         expect(columns[1].searchable).toBe(false)
       })
 
-      it('renders chevron-down icon', () => {
+      it('renders chevron-down icon as an accessible button', () => {
         const rendered = columns[1].render(null, 'display', {})
 
-        expect(rendered).toBe('<i class="fa-solid fa-chevron-down expand-toggle" style="cursor: pointer;"></i>')
+        expect(rendered).toBe('<button type="button" class="expand-toggle" aria-expanded="false" aria-label="Expand row details"><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>')
       })
     })
 
