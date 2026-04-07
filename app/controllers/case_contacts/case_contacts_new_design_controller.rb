@@ -10,7 +10,7 @@ class CaseContacts::CaseContactsNewDesignController < ApplicationController
   def datatable
     authorize CaseContact
     case_contacts = policy_scope(current_organization.case_contacts)
-    datatable = CaseContactDatatable.new case_contacts, params
+    datatable = CaseContactDatatable.new(case_contacts, params, current_user)
 
     render json: datatable
   end

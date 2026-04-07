@@ -30,7 +30,9 @@ RSpec.describe CaseContactDatatable do
   let(:order_direction) { "desc" }
   let(:base_relation) { organization.case_contacts }
 
-  subject(:datatable) { described_class.new(base_relation, params) }
+  let(:current_user) { create(:casa_admin, casa_org: organization) }
+
+  subject(:datatable) { described_class.new(base_relation, params, current_user) }
 
   describe "#data" do
     let!(:case_contact) do
@@ -103,6 +105,66 @@ RSpec.describe CaseContactDatatable do
       contact_data = datatable.as_json[:data].first
 
       expect(contact_data[:is_draft]).to eq((!case_contact.active?).to_s)
+    end
+
+    context "with action metadata" do
+      it "includes edit_path for the contact" do
+        contact_data = datatable.as_json[:data].first
+        expected_path = Rails.application.routes.url_helpers.edit_case_contact_path(case_contact)
+        expect(contact_data[:edit_path]).to eq(expected_path)
+      end
+
+      it "includes followup_id as empty string when no requested followup exists" do
+        contact_data = datatable.as_json[:data].first
+        expect(contact_data[:followup_id]).to eq("")
+      end
+
+      it "includes followup_id when a requested followup exists" do
+        followup = create(:followup, case_contact: case_contact, status: "requested")
+        contact_data = datatable.as_json[:data].first
+        expect(contact_data[:followup_id]).to eq(followup.id.to_s)
+      end
+
+      it "does not include followup_id for a resolved followup" do
+        create(:followup, case_contact: case_contact, status: "resolved")
+        contact_data = datatable.as_json[:data].first
+        expect(contact_data[:followup_id]).to eq("")
+      end
+    end
+
+    context "with permission flags" do
+      context "when current_user is an admin" do
+        it "sets can_edit to true" do
+          expect(datatable.as_json[:data].first[:can_edit]).to eq("true")
+        end
+
+        it "sets can_destroy to true" do
+          expect(datatable.as_json[:data].first[:can_destroy]).to eq("true")
+        end
+      end
+
+      context "when current_user is the volunteer who created the contact" do
+        let(:current_user) { volunteer }
+
+        it "sets can_edit to true" do
+          expect(datatable.as_json[:data].first[:can_edit]).to eq("true")
+        end
+
+        it "sets can_destroy to false for an active contact" do
+          expect(datatable.as_json[:data].first[:can_destroy]).to eq("false")
+        end
+      end
+
+      context "when current_user is the volunteer who created a draft contact" do
+        let(:current_user) { volunteer }
+        let!(:case_contact) do
+          create(:case_contact, casa_case: casa_case, creator: volunteer, status: "started")
+        end
+
+        it "sets can_destroy to true for their own draft" do
+          expect(datatable.as_json[:data].first[:can_destroy]).to eq("true")
+        end
+      end
     end
 
     context "when case_contact has no casa_case (draft)" do
