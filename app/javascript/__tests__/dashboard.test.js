@@ -3,7 +3,13 @@
  * @jest-environment jsdom
  */
 
+import Swal from 'sweetalert2'
 import { defineCaseContactsTable } from '../src/dashboard'
+
+jest.mock('sweetalert2', () => ({
+  __esModule: true,
+  default: { fire: jest.fn() }
+}))
 
 // Mock DataTable
 const mockDataTable = jest.fn()
@@ -382,10 +388,218 @@ describe('defineCaseContactsTable', () => {
         expect(columns[10].searchable).toBe(false)
       })
 
-      it('renders ellipsis icon', () => {
-        const rendered = columns[10].render(null, 'display', {})
+      it('renders a button toggle with aria-label containing the contact date', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'true', can_destroy: 'true', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
 
-        expect(rendered).toBe('<i class="fas fa-ellipsis-v"></i>')
+        expect(rendered).toContain('class="fas fa-ellipsis-v"')
+        expect(rendered).toContain('aria-label="Actions for case contact on July 01, 2024"')
+        expect(rendered).toContain('type="button"')
+      })
+
+      it('renders the ellipsis icon as aria-hidden', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'true', can_destroy: 'true', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toContain('aria-hidden="true"')
+      })
+
+      it('renders Edit item when can_edit is "true"', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'true', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toContain('href="/case_contacts/1/edit"')
+        expect(rendered).toContain('Edit')
+      })
+
+      it('does not render Edit item when can_edit is "false"', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).not.toContain('href="/case_contacts/1/edit"')
+        expect(rendered).not.toContain('>Edit<')
+      })
+
+      it('renders Delete item when can_destroy is "true"', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'true', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toContain('cc-delete-action')
+        expect(rendered).toContain('data-id="1"')
+        expect(rendered).toContain('Delete')
+      })
+
+      it('does not render Delete item when can_destroy is "false"', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).not.toContain('cc-delete-action')
+        expect(rendered).not.toContain('>Delete<')
+      })
+
+      it('renders Set Reminder when followup_id is empty', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toContain('cc-set-reminder-action')
+        expect(rendered).toContain('Set Reminder')
+        expect(rendered).not.toContain('Resolve Reminder')
+      })
+
+      it('renders Resolve Reminder when followup_id is present', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '42' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toContain('cc-resolve-reminder-action')
+        expect(rendered).toContain('data-followup-id="42"')
+        expect(rendered).toContain('Resolve Reminder')
+        expect(rendered).not.toContain('Set Reminder')
+      })
+
+      it('always renders the reminder menu item', () => {
+        const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
+        const rendered = columns[10].render(null, 'display', row)
+
+        expect(rendered).toMatch(/Set Reminder|Resolve Reminder/)
+      })
+    })
+  })
+
+  describe('click handlers', () => {
+    let mockAjaxReload
+    let mockTableInstance
+
+    beforeEach(() => {
+      mockAjaxReload = jest.fn()
+      mockTableInstance = { ajax: { reload: mockAjaxReload } }
+      mockDataTable.mockReturnValue(mockTableInstance)
+
+      // Add CSRF meta tag
+      document.head.innerHTML = '<meta name="csrf-token" content="test-csrf-token">'
+
+      defineCaseContactsTable()
+    })
+
+    afterEach(() => {
+      Swal.fire.mockReset()
+    })
+
+    describe('Delete action', () => {
+      it('sends DELETE request when cc-delete-action is clicked', () => {
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
+        $('.cc-delete-action').trigger('click')
+
+        expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
+          url: '/case_contacts/42',
+          type: 'DELETE',
+          dataType: 'json',
+          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+        }))
+
+        ajaxSpy.mockRestore()
+      })
+
+      it('reloads the DataTable after successful delete', () => {
+        jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
+        $('.cc-delete-action').trigger('click')
+
+        expect(mockAjaxReload).toHaveBeenCalled()
+      })
+    })
+
+    describe('Set Reminder action', () => {
+      it('fires SweetAlert when cc-set-reminder-action is clicked', () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: false })
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
+        $('.cc-set-reminder-action').trigger('click')
+
+        expect(Swal.fire).toHaveBeenCalled()
+      })
+
+      it('posts to the followups endpoint when confirmed without a note', async () => {
+        Swal.fire.mockResolvedValue({ value: '', isConfirmed: true })
+        const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
+        $('.cc-set-reminder-action').trigger('click')
+
+        await Promise.resolve()
+
+        expect(postSpy).toHaveBeenCalledWith('/case_contacts/5/followups', {}, expect.any(Function))
+
+        postSpy.mockRestore()
+      })
+
+      it('posts with note when confirmed with a note', async () => {
+        Swal.fire.mockResolvedValue({ value: 'My note', isConfirmed: true })
+        const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
+        $('.cc-set-reminder-action').trigger('click')
+
+        await Promise.resolve()
+
+        expect(postSpy).toHaveBeenCalledWith('/case_contacts/5/followups', { note: 'My note' }, expect.any(Function))
+
+        postSpy.mockRestore()
+      })
+
+      it('does not post when cancelled', async () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: false })
+        const postSpy = jest.spyOn($, 'post').mockImplementation()
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
+        $('.cc-set-reminder-action').trigger('click')
+
+        await Promise.resolve()
+
+        expect(postSpy).not.toHaveBeenCalled()
+
+        postSpy.mockRestore()
+      })
+
+      it('reloads the DataTable after creating a reminder', async () => {
+        Swal.fire.mockResolvedValue({ value: '', isConfirmed: true })
+        jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
+        $('.cc-set-reminder-action').trigger('click')
+
+        await Promise.resolve()
+
+        expect(mockAjaxReload).toHaveBeenCalled()
+      })
+    })
+
+    describe('Resolve Reminder action', () => {
+      it('sends PATCH request when cc-resolve-reminder-action is clicked', () => {
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-resolve-reminder-action" data-id="5" data-followup-id="42">Resolve Reminder</button></td></tr>')
+        $('.cc-resolve-reminder-action').trigger('click')
+
+        expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
+          url: '/followups/42/resolve',
+          type: 'PATCH',
+          dataType: 'json',
+          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+        }))
+
+        ajaxSpy.mockRestore()
+      })
+
+      it('reloads the DataTable after resolving a reminder', () => {
+        jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-resolve-reminder-action" data-id="5" data-followup-id="42">Resolve Reminder</button></td></tr>')
+        $('.cc-resolve-reminder-action').trigger('click')
+
+        expect(mockAjaxReload).toHaveBeenCalled()
       })
     })
   })

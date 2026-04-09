@@ -17,7 +17,10 @@ class CaseContacts::FollowupsController < ApplicationController
     @followup.resolved!
     create_notification
 
-    redirect_to casa_case_path(@followup.case_contact.casa_case)
+    respond_to do |format|
+      format.html { redirect_to casa_case_path(@followup.case_contact.casa_case) }
+      format.json { head :no_content }
+    end
   end
 
   private
