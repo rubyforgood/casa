@@ -170,4 +170,32 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(followup.reload.status).to eq("resolved")
     end
   end
+
+  describe "permission states" do
+    let(:volunteer) { create(:volunteer, casa_org: organization) }
+    let(:casa_case_for_volunteer) { create(:casa_case, casa_org: organization) }
+    let!(:active_contact) { create(:case_contact, :active, casa_case: casa_case_for_volunteer, creator: volunteer) }
+    let!(:draft_contact) { create(:case_contact, casa_case: casa_case_for_volunteer, creator: volunteer, status: "started", occurred_at: 3.days.ago) }
+
+    before do
+      sign_in volunteer
+      visit case_contacts_new_design_path
+    end
+
+    it "shows Delete as disabled for an active contact" do
+      within("tbody tr", text: I18n.l(active_contact.occurred_at, format: :full), match: :first) do
+        find(".cc-ellipsis-toggle").click
+      end
+
+      expect(page).to have_css("button.dropdown-item.disabled", text: "Delete")
+    end
+
+    it "shows Delete as enabled for a draft contact" do
+      within("tbody tr", text: I18n.l(draft_contact.occurred_at, format: :full), match: :first) do
+        find(".cc-ellipsis-toggle").click
+      end
+
+      expect(page).to have_css("button.cc-delete-action", text: "Delete")
+    end
+  end
 end
