@@ -157,11 +157,11 @@ const defineCaseContactsTable = function () {
 
           const editItem = row.can_edit === 'true'
             ? `<li role="none"><a class="dropdown-item" role="menuitem" href="${row.edit_path}" data-turbo="false">Edit</a></li>`
-            : ''
+            : `<li role="none"><span class="dropdown-item disabled" role="menuitem" aria-disabled="true">Edit</span></li>`
 
           const deleteItem = row.can_destroy === 'true'
             ? `<li role="none"><button class="dropdown-item cc-delete-action" role="menuitem" type="button" data-id="${row.id}">Delete</button></li>`
-            : ''
+            : `<li role="none"><button class="dropdown-item disabled" role="menuitem" type="button" disabled aria-disabled="true">Delete</button></li>`
 
           const reminderItem = row.followup_id
             ? `<li role="none"><button class="dropdown-item cc-resolve-reminder-action" role="menuitem" type="button" data-id="${row.id}" data-followup-id="${row.followup_id}">Resolve Reminder</button></li>`

@@ -412,12 +412,14 @@ describe('defineCaseContactsTable', () => {
         expect(rendered).toContain('Edit')
       })
 
-      it('does not render Edit item when can_edit is "false"', () => {
+      it('renders Edit as disabled when can_edit is "false"', () => {
         const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
         const rendered = columns[10].render(null, 'display', row)
 
+        expect(rendered).toContain('Edit')
+        expect(rendered).toContain('disabled')
+        expect(rendered).toContain('aria-disabled="true"')
         expect(rendered).not.toContain('href="/case_contacts/1/edit"')
-        expect(rendered).not.toContain('>Edit<')
       })
 
       it('renders Delete item when can_destroy is "true"', () => {
@@ -429,12 +431,14 @@ describe('defineCaseContactsTable', () => {
         expect(rendered).toContain('Delete')
       })
 
-      it('does not render Delete item when can_destroy is "false"', () => {
+      it('renders Delete as disabled when can_destroy is "false"', () => {
         const row = { id: '1', occurred_at: 'July 01, 2024', can_edit: 'false', can_destroy: 'false', edit_path: '/case_contacts/1/edit', followup_id: '' }
         const rendered = columns[10].render(null, 'display', row)
 
+        expect(rendered).toContain('Delete')
+        expect(rendered).toContain('disabled')
+        expect(rendered).toContain('aria-disabled="true"')
         expect(rendered).not.toContain('cc-delete-action')
-        expect(rendered).not.toContain('>Delete<')
       })
 
       it('renders Set Reminder when followup_id is empty', () => {
