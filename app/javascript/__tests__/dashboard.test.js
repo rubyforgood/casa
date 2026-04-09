@@ -485,11 +485,23 @@ describe('defineCaseContactsTable', () => {
     })
 
     describe('Delete action', () => {
-      it('sends DELETE request when cc-delete-action is clicked', () => {
+      it('shows a SweetAlert confirmation dialog when cc-delete-action is clicked', () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: false })
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
+        $('.cc-delete-action').trigger('click')
+
+        expect(Swal.fire).toHaveBeenCalled()
+      })
+
+      it('sends DELETE request when confirmed', async () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: true })
         const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
         $('.cc-delete-action').trigger('click')
+
+        await Promise.resolve()
 
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/case_contacts/42',
@@ -501,11 +513,28 @@ describe('defineCaseContactsTable', () => {
         ajaxSpy.mockRestore()
       })
 
-      it('reloads the DataTable after successful delete', () => {
+      it('does not send DELETE request when cancelled', async () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: false })
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation()
+
+        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
+        $('.cc-delete-action').trigger('click')
+
+        await Promise.resolve()
+
+        expect(ajaxSpy).not.toHaveBeenCalled()
+
+        ajaxSpy.mockRestore()
+      })
+
+      it('reloads the DataTable after successful delete', async () => {
+        Swal.fire.mockResolvedValue({ isConfirmed: true })
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
         $('.cc-delete-action').trigger('click')
+
+        await Promise.resolve()
 
         expect(mockAjaxReload).toHaveBeenCalled()
       })

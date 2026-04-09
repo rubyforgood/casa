@@ -207,8 +207,15 @@ const defineCaseContactsTable = function () {
 
   const csrfToken = () => $('meta[name="csrf-token"]').attr('content')
 
-  $('table#case_contacts').on('click', '.cc-delete-action', function () {
+  $('table#case_contacts').on('click', '.cc-delete-action', async function () {
     const id = $(this).data('id')
+    const { isConfirmed } = await Swal.fire({
+      title: 'Delete this contact?',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      confirmButtonColor: '#dc3545'
+    })
+    if (!isConfirmed) return
     $.ajax({
       url: `/case_contacts/${id}`,
       type: 'DELETE',
