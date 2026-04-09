@@ -97,4 +97,28 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(page).to have_current_path(/case_contacts\/#{case_contact.id}\/form/)
     end
   end
+
+  describe "Delete action" do
+    let(:occurred_at_text) { I18n.l(case_contact.occurred_at, format: :full) }
+
+    it "removes the row after confirming the delete dialog" do
+      expect(page).to have_text(occurred_at_text)
+
+      find(".cc-ellipsis-toggle").click
+      find(".cc-delete-action").click
+      click_button "Delete"
+
+      expect(page).to have_no_text(occurred_at_text)
+    end
+
+    it "leaves the row in place when the delete dialog is cancelled" do
+      expect(page).to have_text(occurred_at_text)
+
+      find(".cc-ellipsis-toggle").click
+      find(".cc-delete-action").click
+      click_button "Cancel"
+
+      expect(page).to have_text(occurred_at_text)
+    end
+  end
 end
