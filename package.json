@@ -18,7 +18,7 @@
     "@hotwired/turbo-rails": "^8.0.23",
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^8.1.200",
-    "@rails/actiontext": "^8.1.200",
+    "@rails/actiontext": "^8.1.300",
     "@rails/activestorage": "^8.1.300",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
@@ -34,7 +34,7 @@
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.5",
     "jstz": "^2.1.1",
-    "lodash": "^4.17.23",
+    "lodash": "^4.18.1",
     "luxon": "^3.6.1",
     "popper.js": "^1.16.1",
     "sass": "1.77.6",
@@ -43,7 +43,7 @@
     "strftime": "^0.10.3",
     "sweetalert2": "^11.3.5",
     "tom-select": "^2.5.2",
-    "trix": "^2.1.17"
+    "trix": "^2.1.18"
   },
   "version": "0.1.0",
   "devDependencies": {
