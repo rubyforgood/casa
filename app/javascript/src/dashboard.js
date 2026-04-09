@@ -1,6 +1,7 @@
 /* global alert */
 /* global $ */
 import Swal from 'sweetalert2'
+import { fireSwalFollowupAlert } from './case_contact'
 const { Notifier } = require('./notifier')
 let pageNotifier
 
@@ -227,17 +228,7 @@ const defineCaseContactsTable = function () {
 
   $('table#case_contacts').on('click', '.cc-set-reminder-action', async function () {
     const id = $(this).data('id')
-    const { value: text, isConfirmed } = await Swal.fire({
-      input: 'textarea',
-      title: 'Optional: Add a note about what followup is needed.',
-      inputPlaceholder: 'Type your note here...',
-      inputAttributes: { 'aria-label': 'Type your note here' },
-      showCancelButton: true,
-      showCloseButton: true,
-      confirmButtonText: 'Confirm',
-      confirmButtonColor: '#dc3545',
-      customClass: { inputLabel: 'mx-5' }
-    })
+    const { value: text, isConfirmed } = await fireSwalFollowupAlert()
     if (!isConfirmed) return
     const params = text ? { note: text } : {}
     $.post(`/case_contacts/${id}/followups`, params, () => table.ajax.reload())

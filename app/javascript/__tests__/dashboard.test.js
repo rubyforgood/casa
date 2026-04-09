@@ -5,10 +5,14 @@
 
 import Swal from 'sweetalert2'
 import { defineCaseContactsTable } from '../src/dashboard'
-
+import { fireSwalFollowupAlert } from '../src/case_contact'
 jest.mock('sweetalert2', () => ({
   __esModule: true,
   default: { fire: jest.fn() }
+}))
+
+jest.mock('../src/case_contact', () => ({
+  fireSwalFollowupAlert: jest.fn()
 }))
 
 // Mock DataTable
@@ -486,6 +490,7 @@ describe('defineCaseContactsTable', () => {
 
     afterEach(() => {
       Swal.fire.mockReset()
+      fireSwalFollowupAlert.mockReset()
     })
 
     describe('Delete action', () => {
@@ -545,17 +550,17 @@ describe('defineCaseContactsTable', () => {
     })
 
     describe('Set Reminder action', () => {
-      it('fires SweetAlert when cc-set-reminder-action is clicked', () => {
-        Swal.fire.mockResolvedValue({ isConfirmed: false })
+      it('calls fireSwalFollowupAlert when cc-set-reminder-action is clicked', () => {
+        fireSwalFollowupAlert.mockResolvedValue({ isConfirmed: false })
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
         $('.cc-set-reminder-action').trigger('click')
 
-        expect(Swal.fire).toHaveBeenCalled()
+        expect(fireSwalFollowupAlert).toHaveBeenCalled()
       })
 
       it('posts to the followups endpoint when confirmed without a note', async () => {
-        Swal.fire.mockResolvedValue({ value: '', isConfirmed: true })
+        fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
         const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
@@ -569,7 +574,7 @@ describe('defineCaseContactsTable', () => {
       })
 
       it('posts with note when confirmed with a note', async () => {
-        Swal.fire.mockResolvedValue({ value: 'My note', isConfirmed: true })
+        fireSwalFollowupAlert.mockResolvedValue({ value: 'My note', isConfirmed: true })
         const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
@@ -583,7 +588,7 @@ describe('defineCaseContactsTable', () => {
       })
 
       it('does not post when cancelled', async () => {
-        Swal.fire.mockResolvedValue({ isConfirmed: false })
+        fireSwalFollowupAlert.mockResolvedValue({ isConfirmed: false })
         const postSpy = jest.spyOn($, 'post').mockImplementation()
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
@@ -597,7 +602,7 @@ describe('defineCaseContactsTable', () => {
       })
 
       it('reloads the DataTable after creating a reminder', async () => {
-        Swal.fire.mockResolvedValue({ value: '', isConfirmed: true })
+        fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
         jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
         $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
