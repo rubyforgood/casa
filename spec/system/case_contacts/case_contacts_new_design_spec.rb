@@ -14,6 +14,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       case_contact: case_contact,
       contact_topic: contact_topic,
       value: "Youth is doing well in school")
+    allow(Flipper).to receive(:enabled?).and_call_original
     allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
     sign_in admin
     visit case_contacts_new_design_path
@@ -85,6 +86,15 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
 
       find("h1").click
       expect(page).to have_no_css(".dropdown-menu.show")
+    end
+  end
+
+  describe "Edit action" do
+    it "navigates to the edit form when Edit is clicked" do
+      find(".cc-ellipsis-toggle").click
+      click_link "Edit"
+
+      expect(page).to have_current_path(/case_contacts\/#{case_contact.id}\/form/)
     end
   end
 end
