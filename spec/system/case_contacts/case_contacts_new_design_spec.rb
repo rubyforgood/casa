@@ -121,4 +121,53 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(page).to have_text(occurred_at_text)
     end
   end
+
+  describe "Set Reminder action" do
+    it "creates a followup and shows Resolve Reminder in the menu after confirming" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-set-reminder-action").click
+      click_button "Confirm"
+
+      expect(page).to have_css("i.fas.fa-bell:not([style])")
+
+      find(".cc-ellipsis-toggle").click
+      expect(page).to have_text("Resolve Reminder")
+      expect(page).to have_no_text("Set Reminder")
+    end
+
+    it "does not create a followup when cancelled" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-set-reminder-action").click
+      click_button "Cancel"
+
+      expect(case_contact.followups.reload).to be_empty
+    end
+  end
+
+  describe "Resolve Reminder action" do
+    let!(:followup) { create(:followup, case_contact: case_contact, status: :requested, creator: admin) }
+
+    before { visit case_contacts_new_design_path }
+
+    it "resolves the followup and shows Set Reminder in the menu afterwards" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-resolve-reminder-action").click
+
+      expect(page).to have_css("i.fas.fa-bell[style*='opacity']")
+
+      find(".cc-ellipsis-toggle").click
+      expect(page).to have_text("Set Reminder")
+      expect(page).to have_no_text("Resolve Reminder")
+    end
+
+    it "marks the followup as resolved" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-resolve-reminder-action").click
+
+      # Wait for reload to confirm the AJAX completed before checking DB
+      expect(page).to have_css("i.fas.fa-bell[style*='opacity']")
+
+      expect(followup.reload.status).to eq("resolved")
+    end
+  end
 end
