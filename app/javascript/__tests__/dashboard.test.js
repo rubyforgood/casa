@@ -477,6 +477,14 @@ describe('defineCaseContactsTable', () => {
     let mockAjaxReload
     let mockTableInstance
 
+    const clickActionButton = (action, attrs = {}) => {
+      const dataAttrs = Object.entries(attrs).map(([k, v]) => `data-${k}="${v}"`).join(' ')
+      $('table#case_contacts tbody').append(
+        `<tr><td><button class="cc-${action}-action" ${dataAttrs}>${action}</button></td></tr>`
+      )
+      $(`.cc-${action}-action`).trigger('click')
+    }
+
     beforeEach(() => {
       mockAjaxReload = jest.fn()
       mockTableInstance = { ajax: { reload: mockAjaxReload } }
@@ -497,8 +505,7 @@ describe('defineCaseContactsTable', () => {
       it('shows a SweetAlert confirmation dialog when cc-delete-action is clicked', () => {
         Swal.fire.mockResolvedValue({ isConfirmed: false })
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
-        $('.cc-delete-action').trigger('click')
+        clickActionButton('delete', { id: '42' })
 
         expect(Swal.fire).toHaveBeenCalled()
       })
@@ -507,8 +514,7 @@ describe('defineCaseContactsTable', () => {
         Swal.fire.mockResolvedValue({ isConfirmed: true })
         const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
-        $('.cc-delete-action').trigger('click')
+        clickActionButton('delete', { id: '42' })
 
         await Promise.resolve()
 
@@ -526,8 +532,7 @@ describe('defineCaseContactsTable', () => {
         Swal.fire.mockResolvedValue({ isConfirmed: false })
         const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation()
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
-        $('.cc-delete-action').trigger('click')
+        clickActionButton('delete', { id: '42' })
 
         await Promise.resolve()
 
@@ -540,8 +545,7 @@ describe('defineCaseContactsTable', () => {
         Swal.fire.mockResolvedValue({ isConfirmed: true })
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-delete-action" data-id="42">Delete</button></td></tr>')
-        $('.cc-delete-action').trigger('click')
+        clickActionButton('delete', { id: '42' })
 
         await Promise.resolve()
 
@@ -553,8 +557,7 @@ describe('defineCaseContactsTable', () => {
       it('calls fireSwalFollowupAlert when cc-set-reminder-action is clicked', () => {
         fireSwalFollowupAlert.mockResolvedValue({ isConfirmed: false })
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
-        $('.cc-set-reminder-action').trigger('click')
+        clickActionButton('set-reminder', { id: '5' })
 
         expect(fireSwalFollowupAlert).toHaveBeenCalled()
       })
@@ -563,8 +566,7 @@ describe('defineCaseContactsTable', () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
         const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
-        $('.cc-set-reminder-action').trigger('click')
+        clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
@@ -577,8 +579,7 @@ describe('defineCaseContactsTable', () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: 'My note', isConfirmed: true })
         const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
-        $('.cc-set-reminder-action').trigger('click')
+        clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
@@ -591,8 +592,7 @@ describe('defineCaseContactsTable', () => {
         fireSwalFollowupAlert.mockResolvedValue({ isConfirmed: false })
         const postSpy = jest.spyOn($, 'post').mockImplementation()
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
-        $('.cc-set-reminder-action').trigger('click')
+        clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
@@ -605,8 +605,7 @@ describe('defineCaseContactsTable', () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
         jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-set-reminder-action" data-id="5">Set Reminder</button></td></tr>')
-        $('.cc-set-reminder-action').trigger('click')
+        clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
@@ -618,8 +617,7 @@ describe('defineCaseContactsTable', () => {
       it('sends PATCH request when cc-resolve-reminder-action is clicked', () => {
         const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-resolve-reminder-action" data-id="5" data-followup-id="42">Resolve Reminder</button></td></tr>')
-        $('.cc-resolve-reminder-action').trigger('click')
+        clickActionButton('resolve-reminder', { id: '5', 'followup-id': '42' })
 
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/followups/42/resolve',
@@ -634,8 +632,7 @@ describe('defineCaseContactsTable', () => {
       it('reloads the DataTable after resolving a reminder', () => {
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
-        $('table#case_contacts tbody').append('<tr><td><button class="cc-resolve-reminder-action" data-id="5" data-followup-id="42">Resolve Reminder</button></td></tr>')
-        $('.cc-resolve-reminder-action').trigger('click')
+        clickActionButton('resolve-reminder', { id: '5', 'followup-id': '42' })
 
         expect(mockAjaxReload).toHaveBeenCalled()
       })
