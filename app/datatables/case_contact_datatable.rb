@@ -35,7 +35,7 @@ class CaseContactDatatable < ApplicationDatatable
           .map { |a| {question: a.contact_topic&.question, value: a.value} },
         notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
-        has_followup: case_contact.followups.requested.exists?
+        has_followup: case_contact.followups.any?(&:requested?)
       }
     end
   end
