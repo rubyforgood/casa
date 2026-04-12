@@ -4,7 +4,7 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   def show?
-    creator_or_admin?
+    creator_or_supervisor_or_admin?
   end
 
   def update?
@@ -40,10 +40,6 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   private
-
-  def creator_or_admin?
-    is_creator? || is_admin_same_org?
-  end
 
   def creator_or_supervisor_or_admin?
     is_creator? || admin_or_supervisor_same_org?
