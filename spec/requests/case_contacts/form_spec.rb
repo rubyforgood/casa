@@ -73,13 +73,14 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     context "when user is supervisor" do
       let(:user) { supervisor }
 
-      it "does not permit volunteer's supervisor to view the form" do
+      it "allows volunteer's supervisor to view the form" do
         expect(supervisor.volunteers).to include(volunteer)
         expect(casa_case.volunteers).to include(volunteer)
         expect(case_contact.creator).to eq volunteer
         request
 
-        expect(response).to redirect_to(root_path)
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:details)
       end
     end
 
