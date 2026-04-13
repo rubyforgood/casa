@@ -41,7 +41,7 @@ gem "pg" # Use PostgreSQL as the database for Active Record
 gem "pghero" # PostgreSQL performance monitoring and query insights
 gem "pg_query" # PostgreSQL query parser
 gem "pretender" # Allows admins to impersonate users
-gem "puma", "~> 7.0" # Use Puma as the app server
+gem "puma", "~> 8.0" # Use Puma as the app server
 gem "pundit" # Authorization management based on user.role field
 gem "rack-attack" # Blocking & throttling abusive requests
 gem "rack-cors" # Cross-origin resource sharing
