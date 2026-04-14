@@ -45,7 +45,7 @@ class CaseContactDatatable < ApplicationDatatable
           .map { |a| {question: a.contact_topic&.question, value: a.value} },
         notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
-        has_followup: case_contact.followups.any?(&:requested?)
+        has_followup: requested_followup.present?,
         can_edit: policy.update?,
         can_destroy: policy.destroy?,
         edit_path: Rails.application.routes.url_helpers.edit_case_contact_path(case_contact),

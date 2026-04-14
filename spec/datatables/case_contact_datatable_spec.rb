@@ -108,6 +108,11 @@ RSpec.describe CaseContactDatatable do
     end
 
     context "with action metadata" do
+      it "includes all expected action metadata keys" do
+        contact_data = datatable.as_json[:data].first
+        expect(contact_data).to include(:can_edit, :can_destroy, :edit_path, :followup_id, :has_followup)
+      end
+
       it "includes edit_path for the contact" do
         contact_data = datatable.as_json[:data].first
         expected_path = Rails.application.routes.url_helpers.edit_case_contact_path(case_contact)
