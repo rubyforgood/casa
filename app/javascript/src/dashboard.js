@@ -230,7 +230,13 @@ const defineCaseContactsTable = function () {
     const { value: text, isConfirmed } = await fireSwalFollowupAlert()
     if (!isConfirmed) return
     const params = text ? { note: text } : {}
-    $.post(`/case_contacts/${id}/followups`, params, () => table.ajax.reload())
+    $.ajax({
+      url: `/case_contacts/${id}/followups`,
+      type: 'POST',
+      data: params,
+      headers: { 'X-CSRF-Token': csrfToken() },
+      success: () => table.ajax.reload()
+    })
   })
 
   $('table#case_contacts').on('click', '.cc-resolve-reminder-action', function () {

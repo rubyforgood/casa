@@ -562,48 +562,58 @@ describe('defineCaseContactsTable', () => {
         expect(fireSwalFollowupAlert).toHaveBeenCalled()
       })
 
-      it('posts to the followups endpoint when confirmed without a note', async () => {
+      it('posts to the followups endpoint with CSRF header when confirmed without a note', async () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
-        const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
-        expect(postSpy).toHaveBeenCalledWith('/case_contacts/5/followups', {}, expect.any(Function))
+        expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
+          url: '/case_contacts/5/followups',
+          type: 'POST',
+          data: {},
+          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+        }))
 
-        postSpy.mockRestore()
+        ajaxSpy.mockRestore()
       })
 
       it('posts with note when confirmed with a note', async () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: 'My note', isConfirmed: true })
-        const postSpy = jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
-        expect(postSpy).toHaveBeenCalledWith('/case_contacts/5/followups', { note: 'My note' }, expect.any(Function))
+        expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
+          url: '/case_contacts/5/followups',
+          type: 'POST',
+          data: { note: 'My note' },
+          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+        }))
 
-        postSpy.mockRestore()
+        ajaxSpy.mockRestore()
       })
 
       it('does not post when cancelled', async () => {
         fireSwalFollowupAlert.mockResolvedValue({ isConfirmed: false })
-        const postSpy = jest.spyOn($, 'post').mockImplementation()
+        const ajaxSpy = jest.spyOn($, 'ajax').mockImplementation()
 
         clickActionButton('set-reminder', { id: '5' })
 
         await Promise.resolve()
 
-        expect(postSpy).not.toHaveBeenCalled()
+        expect(ajaxSpy).not.toHaveBeenCalled()
 
-        postSpy.mockRestore()
+        ajaxSpy.mockRestore()
       })
 
       it('reloads the DataTable after creating a reminder', async () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
-        jest.spyOn($, 'post').mockImplementation((_url, _params, cb) => cb && cb())
+        jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         clickActionButton('set-reminder', { id: '5' })
 
