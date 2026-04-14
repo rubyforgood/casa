@@ -221,7 +221,7 @@ const defineCaseContactsTable = function () {
       url: `/case_contacts/${id}`,
       type: 'DELETE',
       headers: { 'X-CSRF-Token': csrfToken() },
-      success: () => table.ajax.reload()
+      success: () => table.ajax.reload(null, false)
     })
   })
 
@@ -235,7 +235,7 @@ const defineCaseContactsTable = function () {
       type: 'POST',
       data: params,
       headers: { 'X-CSRF-Token': csrfToken() },
-      success: () => table.ajax.reload()
+      success: () => table.ajax.reload(null, false)
     })
   })
 
@@ -245,7 +245,7 @@ const defineCaseContactsTable = function () {
       url: `/followups/${followupId}/resolve`,
       type: 'PATCH',
       headers: { 'X-CSRF-Token': csrfToken() },
-      success: () => table.ajax.reload()
+      success: () => table.ajax.reload(null, false)
     })
   })
 }

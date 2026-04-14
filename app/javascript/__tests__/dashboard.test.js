@@ -541,7 +541,7 @@ describe('defineCaseContactsTable', () => {
         ajaxSpy.mockRestore()
       })
 
-      it('reloads the DataTable after successful delete', async () => {
+      it('reloads the DataTable without resetting pagination after successful delete', async () => {
         Swal.fire.mockResolvedValue({ isConfirmed: true })
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
@@ -549,7 +549,7 @@ describe('defineCaseContactsTable', () => {
 
         await Promise.resolve()
 
-        expect(mockAjaxReload).toHaveBeenCalled()
+        expect(mockAjaxReload).toHaveBeenCalledWith(null, false)
       })
     })
 
@@ -611,7 +611,7 @@ describe('defineCaseContactsTable', () => {
         ajaxSpy.mockRestore()
       })
 
-      it('reloads the DataTable after creating a reminder', async () => {
+      it('reloads the DataTable without resetting pagination after creating a reminder', async () => {
         fireSwalFollowupAlert.mockResolvedValue({ value: '', isConfirmed: true })
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
@@ -619,7 +619,7 @@ describe('defineCaseContactsTable', () => {
 
         await Promise.resolve()
 
-        expect(mockAjaxReload).toHaveBeenCalled()
+        expect(mockAjaxReload).toHaveBeenCalledWith(null, false)
       })
     })
 
@@ -639,12 +639,12 @@ describe('defineCaseContactsTable', () => {
         ajaxSpy.mockRestore()
       })
 
-      it('reloads the DataTable after resolving a reminder', () => {
+      it('reloads the DataTable without resetting pagination after resolving a reminder', () => {
         jest.spyOn($, 'ajax').mockImplementation(({ success }) => success && success())
 
         clickActionButton('resolve-reminder', { id: '5', 'followup-id': '42' })
 
-        expect(mockAjaxReload).toHaveBeenCalled()
+        expect(mockAjaxReload).toHaveBeenCalledWith(null, false)
       })
     })
   })
