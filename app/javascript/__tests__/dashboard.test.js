@@ -521,9 +521,9 @@ describe('defineCaseContactsTable', () => {
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/case_contacts/42',
           type: 'DELETE',
-          dataType: 'json',
           headers: { 'X-CSRF-Token': 'test-csrf-token' }
         }))
+        expect(ajaxSpy.mock.calls[0][0]).not.toHaveProperty('dataType')
 
         ajaxSpy.mockRestore()
       })
@@ -622,9 +622,9 @@ describe('defineCaseContactsTable', () => {
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/followups/42/resolve',
           type: 'PATCH',
-          dataType: 'json',
           headers: { 'X-CSRF-Token': 'test-csrf-token' }
         }))
+        expect(ajaxSpy.mock.calls[0][0]).not.toHaveProperty('dataType')
 
         ajaxSpy.mockRestore()
       })

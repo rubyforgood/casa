@@ -220,7 +220,6 @@ const defineCaseContactsTable = function () {
     $.ajax({
       url: `/case_contacts/${id}`,
       type: 'DELETE',
-      dataType: 'json',
       headers: { 'X-CSRF-Token': csrfToken() },
       success: () => table.ajax.reload()
     })
@@ -239,7 +238,6 @@ const defineCaseContactsTable = function () {
     $.ajax({
       url: `/followups/${followupId}/resolve`,
       type: 'PATCH',
-      dataType: 'json',
       headers: { 'X-CSRF-Token': csrfToken() },
       success: () => table.ajax.reload()
     })
