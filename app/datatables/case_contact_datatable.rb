@@ -45,7 +45,7 @@ class CaseContactDatatable < ApplicationDatatable
           .map { |a| {question: a.contact_topic&.question, value: a.value} },
         notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
-        has_followup: requested_followup.present?,
+        has_followup: case_contact.followups.any?(&:requested?)
         can_edit: policy.update?,
         can_destroy: policy.destroy?,
         edit_path: Rails.application.routes.url_helpers.edit_case_contact_path(case_contact),
@@ -62,7 +62,7 @@ class CaseContactDatatable < ApplicationDatatable
     base_relation
       .joins("INNER JOIN users creators ON creators.id = case_contacts.creator_id")
       .left_joins(:casa_case)
-      .includes(:contact_types, :contact_topics, :followups, :creator, contact_topic_answers: :contact_topic)
+      .includes(:casa_case, :contact_types, :contact_topics, :followups, :creator, contact_topic_answers: :contact_topic)
       .order(order_clause)
       .order(:id)
   end

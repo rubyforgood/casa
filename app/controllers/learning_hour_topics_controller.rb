@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LearningHourTopicsController < ApplicationController
   before_action :set_learning_hour_topic, only: %i[edit update]
   after_action :verify_authorized
@@ -39,7 +41,7 @@ class LearningHourTopicsController < ApplicationController
   end
 
   def learning_hour_topic_params
-    params.require(:learning_hour_topic).permit(:name, :active).merge(
+    params.require(:learning_hour_topic).permit(:name).merge(
       casa_org: current_organization
     )
   end
