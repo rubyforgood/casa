@@ -521,7 +521,7 @@ describe('defineCaseContactsTable', () => {
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/case_contacts/42',
           type: 'DELETE',
-          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+          headers: { 'X-CSRF-Token': 'test-csrf-token', Accept: 'application/json' }
         }))
         expect(ajaxSpy.mock.calls[0][0]).not.toHaveProperty('dataType')
 
@@ -574,7 +574,7 @@ describe('defineCaseContactsTable', () => {
           url: '/case_contacts/5/followups',
           type: 'POST',
           data: {},
-          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+          headers: { 'X-CSRF-Token': 'test-csrf-token', Accept: 'application/json' }
         }))
 
         ajaxSpy.mockRestore()
@@ -592,7 +592,7 @@ describe('defineCaseContactsTable', () => {
           url: '/case_contacts/5/followups',
           type: 'POST',
           data: { note: 'My note' },
-          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+          headers: { 'X-CSRF-Token': 'test-csrf-token', Accept: 'application/json' }
         }))
 
         ajaxSpy.mockRestore()
@@ -632,7 +632,7 @@ describe('defineCaseContactsTable', () => {
         expect(ajaxSpy).toHaveBeenCalledWith(expect.objectContaining({
           url: '/followups/42/resolve',
           type: 'PATCH',
-          headers: { 'X-CSRF-Token': 'test-csrf-token' }
+          headers: { 'X-CSRF-Token': 'test-csrf-token', Accept: 'application/json' }
         }))
         expect(ajaxSpy.mock.calls[0][0]).not.toHaveProperty('dataType')
 
