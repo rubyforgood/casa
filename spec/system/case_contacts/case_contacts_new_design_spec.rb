@@ -16,11 +16,17 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       value: "Youth is doing well in school")
     allow(Flipper).to receive(:enabled?).and_call_original
     allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
-    sign_in admin
-    visit case_contacts_new_design_path
+  end
+
+  shared_context "signed in as admin" do
+    before do
+      sign_in admin
+      visit case_contacts_new_design_path
+    end
   end
 
   describe "row expansion" do
+    include_context "signed in as admin"
     it "shows the expanded content after clicking the chevron" do
       find(".expand-toggle").click
 
@@ -45,6 +51,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
   end
 
   describe "action menu" do
+    include_context "signed in as admin"
     it "opens the dropdown when the ellipsis button is clicked" do
       find(".cc-ellipsis-toggle").click
 
@@ -90,6 +97,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
   end
 
   describe "Edit action" do
+    include_context "signed in as admin"
     it "navigates to the edit form when Edit is clicked" do
       find(".cc-ellipsis-toggle").click
       click_link "Edit"
@@ -99,6 +107,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
   end
 
   describe "Delete action" do
+    include_context "signed in as admin"
     let(:occurred_at_text) { I18n.l(case_contact.occurred_at, format: :full) }
 
     it "removes the row after confirming the delete dialog" do
@@ -123,6 +132,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
   end
 
   describe "Set Reminder action" do
+    include_context "signed in as admin"
     it "creates a followup and shows Resolve Reminder in the menu after confirming" do
       find(".cc-ellipsis-toggle").click
       find(".cc-set-reminder-action").click
@@ -145,6 +155,8 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
   end
 
   describe "Resolve Reminder action" do
+    include_context "signed in as admin"
+
     let!(:followup) { create(:followup, case_contact: case_contact, status: :requested, creator: admin) }
 
     before { visit case_contacts_new_design_path }
@@ -178,7 +190,6 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     let!(:draft_contact) { create(:case_contact, casa_case: casa_case_for_volunteer, creator: volunteer, status: "started", occurred_at: 10.days.ago) }
 
     before do
-      Capybara.reset_sessions!
       sign_in volunteer
       visit case_contacts_new_design_path
     end
