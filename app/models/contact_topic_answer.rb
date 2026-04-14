@@ -1,6 +1,7 @@
 class ContactTopicAnswer < ApplicationRecord
   belongs_to :case_contact
   belongs_to :contact_topic, optional: true
+  acts_as_paranoid
 
   has_one :casa_case, through: :case_contact
   has_one :casa_org, through: :case_contact
@@ -17,6 +18,7 @@ end
 # Table name: contact_topic_answers
 #
 #  id               :bigint           not null, primary key
+#  deleted_at       :datetime
 #  selected         :boolean          default(FALSE), not null
 #  value            :text
 #  created_at       :datetime         not null
