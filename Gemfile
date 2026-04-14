@@ -11,7 +11,7 @@ gem "authtrail" # Track Devise login activity
 gem "azure-storage-blob", require: false
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
-gem "caxlsx", "~> 4.2" # Excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.4" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.6.4" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
@@ -41,7 +41,7 @@ gem "pg" # Use PostgreSQL as the database for Active Record
 gem "pghero" # PostgreSQL performance monitoring and query insights
 gem "pg_query" # PostgreSQL query parser
 gem "pretender" # Allows admins to impersonate users
-gem "puma", "~> 7.0" # Use Puma as the app server
+gem "puma", "~> 8.0" # Use Puma as the app server
 gem "pundit" # Authorization management based on user.role field
 gem "rack-attack" # Blocking & throttling abusive requests
 gem "rack-cors" # Cross-origin resource sharing
