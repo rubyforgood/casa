@@ -481,6 +481,32 @@ RSpec.describe CaseContactDatatable do
     end
   end
 
+  describe "N+1 queries" do
+    let!(:contacts) do
+      3.times.map do
+        create(:case_contact,
+          casa_case: create(:casa_case, casa_org: organization),
+          creator: create(:volunteer, casa_org: organization))
+      end
+    end
+
+    it "does not trigger N+1 queries for casa_org when computing per-row policy permissions" do
+      casa_org_queries = []
+      subscription = ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        casa_org_queries << payload[:sql] if payload[:sql].match?(/SELECT.*casa_orgs/)
+      end
+
+      datatable.as_json
+
+      ActiveSupport::Notifications.unsubscribe(subscription)
+
+      # With proper eager loading, casa_orgs is fetched in at most 2 batch queries
+      # (one for :casa_org through casa_case, one for :creator_casa_org through creator).
+      # An N+1 would fire 1 query per record (3+ here).
+      expect(casa_org_queries.length).to be <= 2
+    end
+  end
+
   describe "associations loading" do
     let!(:contacts) do
       10.times.map do |i|
