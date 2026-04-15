@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case Contact Table Row Expansion", type: :system, js: true do
+RSpec.describe "Case contacts new design", type: :system, js: true do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
@@ -14,30 +14,71 @@ RSpec.describe "Case Contact Table Row Expansion", type: :system, js: true do
       case_contact: case_contact,
       contact_topic: contact_topic,
       value: "Youth is doing well in school")
+    allow(Flipper).to receive(:enabled?).and_call_original
     allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
-    sign_in admin
-    visit case_contacts_new_design_path
   end
 
-  it "shows the expanded content after clicking the chevron" do
-    find(".expand-toggle").click
-
-    expect(page).to have_content("What was discussed?")
-    expect(page).to have_content("Youth is doing well in school")
+  shared_context "signed in as admin" do
+    before do
+      sign_in admin
+      visit case_contacts_new_design_path
+    end
   end
 
-  it "shows notes in the expanded content" do
-    find(".expand-toggle").click
+  describe "New Case Contact button" do
+    include_context "signed in as admin"
 
-    expect(page).to have_content("Additional Notes")
-    expect(page).to have_content("Important follow-up needed")
+    it "is visible to an admin" do
+      expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+    end
+
+    it "navigates to the new case contact form when clicked as an admin" do
+      click_link "New Case Contact"
+      expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+    end
+
+    context "when signed in as a volunteer" do
+      let(:volunteer) { create(:volunteer, casa_org: organization) }
+
+      before do
+        sign_in volunteer
+        visit case_contacts_new_design_path
+      end
+
+      it "is visible to a volunteer" do
+        expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+      end
+
+      it "navigates to the new case contact form when clicked as a volunteer" do
+        click_link "New Case Contact"
+        expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+      end
+    end
   end
 
-  it "hides the expanded content after clicking the chevron again" do
-    find(".expand-toggle").click
-    expect(page).to have_content("Youth is doing well in school")
+  describe "row expansion" do
+    include_context "signed in as admin"
 
-    find(".expand-toggle").click
-    expect(page).to have_no_content("Youth is doing well in school")
+    it "shows the expanded content after clicking the chevron" do
+      find(".expand-toggle").click
+
+      expect(page).to have_content("What was discussed?")
+      expect(page).to have_content("Youth is doing well in school")
+    end
+
+    it "shows notes in the expanded content" do
+      find(".expand-toggle").click
+
+      expect(page).to have_content("Additional Notes")
+      expect(page).to have_content("Important follow-up needed")
+    end
+
+    it "hides the expanded content after clicking the chevron again" do
+      find(".expand-toggle").click
+      expect(page).to have_content("Youth is doing well in school")
+
+      find(".expand-toggle").click
+      expect(page).to have_no_content("Youth is doing well in school")
+    end
   end
 end
