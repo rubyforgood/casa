@@ -1,19 +1,15 @@
 # frozen_string_literal: true
 
 class CourtReportFormatContactDate
-  CONTACT_SUCCESSFUL_SUFFIX = ''
-  CONTACT_UNSUCCESSFUL_SUFFIX = '*'
+  CONTACT_SUCCESSFUL_SUFFIX = ""
+  CONTACT_UNSUCCESSFUL_SUFFIX = "*"
 
   def initialize(case_contact)
     @case_contact = case_contact
   end
 
   def format
-    I18n.l(
-      @case_contact.occurred_at,
-      format: :short_date,
-      default: nil
-    ).concat(contact_made_suffix)
+    I18n.l(@case_contact.occurred_at, format: :short_date, default: nil).concat(contact_made_suffix)
   end
 
   def format_long
