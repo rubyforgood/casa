@@ -3,7 +3,7 @@ desc "Post gc stats to discord channel"
 task post_gc_stat_to_discord: :environment do
   require "net/http"
 
-  url = URI("https://casavolunteertracking.org/health/gc?token=#{ENV["GC_ACCESS_TOKEN"]}")
+  url = URI("https://casavolunteertracking.org/health/old_objects?token=#{ENV["GC_ACCESS_TOKEN"]}")
   response = Net::HTTP.get_response(url)
 
   unless response.is_a?(Net::HTTPSuccess)
