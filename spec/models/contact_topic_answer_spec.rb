@@ -11,4 +11,19 @@ RSpec.describe ContactTopicAnswer, type: :model do
       create(:contact_topic_answer, value: Faker::Lorem.characters(number: 300))
     }.not_to raise_error
   end
+
+  it "soft deletes record instead of removing it from database" do
+    answer = create(:contact_topic_answer)
+
+    answer.destroy
+
+    expect(answer.deleted_at).not_to be_nil
+    expect(ContactTopicAnswer.with_deleted).to include(answer)
+    expect(ContactTopicAnswer.all).not_to include(answer)
+
+    answer.restore
+
+    expect(answer.deleted_at).to be_nil
+    expect(ContactTopicAnswer.all).to include(answer)
+  end
 end
