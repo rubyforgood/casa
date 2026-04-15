@@ -1,5 +1,7 @@
 /* global alert */
 /* global $ */
+import Swal from 'sweetalert2'
+import { fireSwalFollowupAlert } from './case_contact'
 const { Notifier } = require('./notifier')
 let pageNotifier
 
@@ -150,7 +152,43 @@ const defineCaseContactsTable = function () {
         data: null,
         orderable: false,
         searchable: false,
-        render: () => '<i class="fas fa-ellipsis-v"></i>'
+        render: (_data, _type, row) => {
+          const buttonId = `cc-actions-btn-${row.id}`
+          const label = `Actions for case contact${row.occurred_at ? ' on ' + row.occurred_at : ''}`
+
+          const editItem = row.can_edit === 'true'
+            ? `<li role="none"><a class="dropdown-item" role="menuitem" href="${row.edit_path}" data-turbo="false">Edit</a></li>`
+            : '<li role="none"><span class="dropdown-item disabled" role="menuitem" aria-disabled="true">Edit</span></li>'
+
+          const deleteItem = row.can_destroy === 'true'
+            ? `<li role="none"><button class="dropdown-item cc-delete-action" role="menuitem" type="button" data-id="${row.id}">Delete</button></li>`
+            : '<li role="none"><button class="dropdown-item disabled" role="menuitem" type="button" disabled aria-disabled="true">Delete</button></li>'
+
+          const reminderItem = row.followup_id
+            ? `<li role="none"><button class="dropdown-item cc-resolve-reminder-action" role="menuitem" type="button" data-id="${row.id}" data-followup-id="${row.followup_id}">Resolve Reminder</button></li>`
+            : `<li role="none"><button class="dropdown-item cc-set-reminder-action" role="menuitem" type="button" data-id="${row.id}">Set Reminder</button></li>`
+
+          return `
+            <div class="dropdown">
+              <button type="button"
+                      id="${buttonId}"
+                      class="btn btn-link cc-ellipsis-toggle p-0"
+                      data-bs-toggle="dropdown"
+                      aria-haspopup="true"
+                      aria-expanded="false"
+                      aria-label="${label}">
+                <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end"
+                  role="menu"
+                  aria-labelledby="${buttonId}">
+                ${editItem}
+                ${deleteItem}
+                ${reminderItem}
+              </ul>
+            </div>
+          `
+        }
       }
     ]
   })
@@ -166,6 +204,49 @@ const defineCaseContactsTable = function () {
       row.child(buildExpandedContent(row.data())).show()
       $(this).addClass('expanded').attr('aria-expanded', 'true')
     }
+  })
+
+  const csrfToken = () => $('meta[name="csrf-token"]').attr('content')
+
+  $('table#case_contacts').on('click', '.cc-delete-action', async function () {
+    const id = $(this).data('id')
+    const { isConfirmed } = await Swal.fire({
+      title: 'Delete this contact?',
+      showCancelButton: true,
+      confirmButtonText: 'Delete',
+      confirmButtonColor: '#dc3545'
+    })
+    if (!isConfirmed) return
+    $.ajax({
+      url: `/case_contacts/${id}`,
+      type: 'DELETE',
+      headers: { 'X-CSRF-Token': csrfToken(), Accept: 'application/json' },
+      success: () => table.ajax.reload(null, false)
+    })
+  })
+
+  $('table#case_contacts').on('click', '.cc-set-reminder-action', async function () {
+    const id = $(this).data('id')
+    const { value: text, isConfirmed } = await fireSwalFollowupAlert()
+    if (!isConfirmed) return
+    const params = text ? { note: text } : {}
+    $.ajax({
+      url: `/case_contacts/${id}/followups`,
+      type: 'POST',
+      data: params,
+      headers: { 'X-CSRF-Token': csrfToken(), Accept: 'application/json' },
+      success: () => table.ajax.reload(null, false)
+    })
+  })
+
+  $('table#case_contacts').on('click', '.cc-resolve-reminder-action', function () {
+    const followupId = $(this).data('followup-id')
+    $.ajax({
+      url: `/followups/${followupId}/resolve`,
+      type: 'PATCH',
+      headers: { 'X-CSRF-Token': csrfToken(), Accept: 'application/json' },
+      success: () => table.ajax.reload(null, false)
+    })
   })
 }
 
