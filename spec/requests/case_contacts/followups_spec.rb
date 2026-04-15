@@ -27,6 +27,21 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
       expect(followup.note).to eq "Hello, world!"
     end
 
+    context "when requested as JSON" do
+      subject(:request) do
+        post case_contact_followups_path(case_contact),
+          params: params,
+          headers: {"Accept" => "application/json"}
+
+        response
+      end
+
+      it "returns 204 No Content" do
+        request
+        expect(response).to have_http_status(:no_content)
+      end
+    end
+
     it "sends a Followup Notifier to case contact creator" do
       request
       followup = Followup.last
@@ -64,6 +79,21 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
       it "marks it as :resolved" do
         followup
         expect { request }.to change { followup.reload.resolved? }.from(false).to(true)
+      end
+
+      context "when requested as JSON" do
+        subject(:request) do
+          patch resolve_followup_path(followup),
+            headers: {"Accept" => "application/json"}
+
+          response
+        end
+
+        it "returns 204 No Content" do
+          followup
+          request
+          expect(response).to have_http_status(:no_content)
+        end
       end
 
       it "does not send Followup Notifier" do
