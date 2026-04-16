@@ -1,8 +1,10 @@
 <div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-      <div class="title mb-30">
-        <h1>Case Contacts</h1>
-      </div>
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-30">
+    <h1>Case Contacts</h1>
+    <%= link_to new_case_contact_path, class: "main-btn primary-btn btn-sm btn-hover" do %>
+      <i class="lni lni-plus mr-10" aria-hidden="true"></i>
+      New Case Contact
+    <% end %>
   </div>
 </div>
 
