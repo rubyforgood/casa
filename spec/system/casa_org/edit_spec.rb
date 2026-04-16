@@ -70,7 +70,6 @@ RSpec.describe "casa_org/edit", type: :system do
     fill_in "Twilio Phone Number", with: ""
     click_on "Submit"
 
-    message = find("#casa_org_twilio_phone_number").native.attribute("validationMessage")
-    expect(message).to eq "Please fill out this field."
+    expect(page).to have_css("#casa_org_twilio_phone_number:invalid")
   end
 end
