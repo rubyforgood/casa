@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case Contact Table Row Expansion", type: :system, js: true do
+RSpec.describe "Case contacts new design", type: :system, js: true do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
   let(:casa_case) { create(:casa_case, casa_org: organization) }
@@ -14,30 +14,227 @@ RSpec.describe "Case Contact Table Row Expansion", type: :system, js: true do
       case_contact: case_contact,
       contact_topic: contact_topic,
       value: "Youth is doing well in school")
+    allow(Flipper).to receive(:enabled?).and_call_original
     allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
-    sign_in admin
-    visit case_contacts_new_design_path
   end
 
-  it "shows the expanded content after clicking the chevron" do
-    find(".expand-toggle").click
-
-    expect(page).to have_content("What was discussed?")
-    expect(page).to have_content("Youth is doing well in school")
+  shared_context "signed in as admin" do
+    before do
+      sign_in admin
+      visit case_contacts_new_design_path
+    end
   end
 
-  it "shows notes in the expanded content" do
-    find(".expand-toggle").click
+  describe "New Case Contact button" do
+    include_context "signed in as admin"
 
-    expect(page).to have_content("Additional Notes")
-    expect(page).to have_content("Important follow-up needed")
+    it "is visible to an admin" do
+      expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+    end
+
+    it "navigates to the new case contact form when clicked as an admin" do
+      click_link "New Case Contact"
+      expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+    end
+
+    context "when signed in as a volunteer" do
+      let(:volunteer) { create(:volunteer, casa_org: organization) }
+
+      before do
+        sign_in volunteer
+        visit case_contacts_new_design_path
+      end
+
+      it "is visible to a volunteer" do
+        expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+      end
+
+      it "navigates to the new case contact form when clicked as a volunteer" do
+        click_link "New Case Contact"
+        expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+      end
+    end
   end
 
-  it "hides the expanded content after clicking the chevron again" do
-    find(".expand-toggle").click
-    expect(page).to have_content("Youth is doing well in school")
+  describe "row expansion" do
+    include_context "signed in as admin"
+    it "shows the expanded content after clicking the chevron" do
+      find(".expand-toggle").click
 
-    find(".expand-toggle").click
-    expect(page).to have_no_content("Youth is doing well in school")
+      expect(page).to have_content("What was discussed?")
+      expect(page).to have_content("Youth is doing well in school")
+    end
+
+    it "shows notes in the expanded content" do
+      find(".expand-toggle").click
+
+      expect(page).to have_content("Additional Notes")
+      expect(page).to have_content("Important follow-up needed")
+    end
+
+    it "hides the expanded content after clicking the chevron again" do
+      find(".expand-toggle").click
+      expect(page).to have_content("Youth is doing well in school")
+
+      find(".expand-toggle").click
+      expect(page).to have_no_content("Youth is doing well in school")
+    end
+  end
+
+  describe "action menu" do
+    include_context "signed in as admin"
+    it "opens the dropdown when the ellipsis button is clicked" do
+      find(".cc-ellipsis-toggle").click
+
+      expect(page).to have_css(".dropdown-menu.show")
+    end
+
+    it "shows Edit in the menu" do
+      find(".cc-ellipsis-toggle").click
+
+      expect(page).to have_text("Edit")
+    end
+
+    it "shows Delete in the menu" do
+      find(".cc-ellipsis-toggle").click
+
+      expect(page).to have_text("Delete")
+    end
+
+    it "shows Set Reminder when no followup exists" do
+      find(".cc-ellipsis-toggle").click
+
+      expect(page).to have_text("Set Reminder")
+      expect(page).to have_no_text("Resolve Reminder")
+    end
+
+    it "shows Resolve Reminder when a requested followup exists" do
+      create(:followup, case_contact: case_contact, status: :requested, creator: admin)
+      visit case_contacts_new_design_path
+
+      find(".cc-ellipsis-toggle").click
+
+      expect(page).to have_text("Resolve Reminder")
+      expect(page).to have_no_text("Set Reminder")
+    end
+
+    it "closes the dropdown when clicking outside" do
+      find(".cc-ellipsis-toggle").click
+      expect(page).to have_css(".dropdown-menu.show")
+
+      find("h1").click
+      expect(page).to have_no_css(".dropdown-menu.show")
+    end
+  end
+
+  describe "Edit action" do
+    include_context "signed in as admin"
+    it "navigates to the edit form when Edit is clicked" do
+      find(".cc-ellipsis-toggle").click
+      click_link "Edit"
+
+      expect(page).to have_current_path(/case_contacts\/#{case_contact.id}\/form/)
+    end
+  end
+
+  describe "Delete action" do
+    include_context "signed in as admin"
+    let(:occurred_at_text) { I18n.l(case_contact.occurred_at, format: :full) }
+
+    it "removes the row after confirming the delete dialog" do
+      expect(page).to have_text(occurred_at_text)
+
+      find(".cc-ellipsis-toggle").click
+      find(".cc-delete-action").click
+      click_button "Delete"
+
+      expect(page).to have_no_text(occurred_at_text)
+    end
+
+    it "leaves the row in place when the delete dialog is cancelled" do
+      expect(page).to have_text(occurred_at_text)
+
+      find(".cc-ellipsis-toggle").click
+      find(".cc-delete-action").click
+      click_button "Cancel"
+
+      expect(page).to have_text(occurred_at_text)
+    end
+  end
+
+  describe "Set Reminder action" do
+    include_context "signed in as admin"
+    it "creates a followup and shows Resolve Reminder in the menu after confirming" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-set-reminder-action").click
+      click_button "Confirm"
+
+      expect(page).to have_css("i.fas.fa-bell:not([style])")
+
+      find(".cc-ellipsis-toggle").click
+      expect(page).to have_text("Resolve Reminder")
+      expect(page).to have_no_text("Set Reminder")
+    end
+
+    it "does not create a followup when cancelled" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-set-reminder-action").click
+      click_button "Cancel"
+
+      expect(case_contact.followups.reload).to be_empty
+    end
+  end
+
+  describe "Resolve Reminder action" do
+    include_context "signed in as admin"
+
+    let!(:followup) { create(:followup, case_contact: case_contact, status: :requested, creator: admin) }
+
+    before { visit case_contacts_new_design_path }
+
+    it "resolves the followup and shows Set Reminder in the menu afterwards" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-resolve-reminder-action").click
+
+      expect(page).to have_css("i.fas.fa-bell[style*='opacity']")
+
+      find(".cc-ellipsis-toggle").click
+      expect(page).to have_text("Set Reminder")
+      expect(page).to have_no_text("Resolve Reminder")
+    end
+
+    it "marks the followup as resolved" do
+      find(".cc-ellipsis-toggle").click
+      find(".cc-resolve-reminder-action").click
+
+      # Wait for reload to confirm the AJAX completed before checking DB
+      expect(page).to have_css("i.fas.fa-bell[style*='opacity']")
+
+      expect(followup.reload.status).to eq("resolved")
+    end
+  end
+
+  describe "permission states" do
+    let(:volunteer) { create(:volunteer, casa_org: organization) }
+    let(:casa_case_for_volunteer) { create(:casa_case, casa_org: organization) }
+    let!(:active_contact) { create(:case_contact, :active, casa_case: casa_case_for_volunteer, creator: volunteer, occurred_at: 5.days.ago) }
+    let!(:draft_contact) { create(:case_contact, casa_case: casa_case_for_volunteer, creator: volunteer, status: "started", occurred_at: 10.days.ago) }
+
+    before do
+      sign_in volunteer
+      visit case_contacts_new_design_path
+    end
+
+    it "shows Delete as disabled for an active contact" do
+      find("#cc-actions-btn-#{active_contact.id}").click
+      expect(page).to have_css(".dropdown-menu[aria-labelledby='cc-actions-btn-#{active_contact.id}'].show")
+      expect(page).to have_css(".dropdown-menu[aria-labelledby='cc-actions-btn-#{active_contact.id}'] button.dropdown-item.disabled", text: "Delete")
+    end
+
+    it "shows Delete as enabled for a draft contact" do
+      find("#cc-actions-btn-#{draft_contact.id}").click
+      expect(page).to have_css(".dropdown-menu[aria-labelledby='cc-actions-btn-#{draft_contact.id}'].show")
+      expect(page).to have_css(".dropdown-menu[aria-labelledby='cc-actions-btn-#{draft_contact.id}'] button.cc-delete-action", text: "Delete")
+    end
   end
 end

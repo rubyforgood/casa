@@ -8,10 +8,20 @@ class CaseContactDatatable < ApplicationDatatable
     duration_minutes
   ].freeze
 
+  def initialize(base_relation, params, current_user)
+    super(base_relation, params)
+    @current_user = current_user
+  end
+
   private
+
+  attr_reader :current_user
 
   def data
     records.map do |case_contact|
+      policy = CaseContactPolicy.new(current_user, case_contact)
+      requested_followup = case_contact.followups.find(&:requested?)
+
       {
         id: case_contact.id,
         occurred_at: I18n.l(case_contact.occurred_at, format: :full, default: nil),
@@ -35,7 +45,11 @@ class CaseContactDatatable < ApplicationDatatable
           .map { |a| {question: a.contact_topic&.question, value: a.value} },
         notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
-        has_followup: case_contact.followups.any?(&:requested?)
+        has_followup: requested_followup.present?,
+        can_edit: policy.update?,
+        can_destroy: policy.destroy?,
+        edit_path: Rails.application.routes.url_helpers.edit_case_contact_path(case_contact),
+        followup_id: requested_followup&.id
       }
     end
   end
@@ -49,6 +63,7 @@ class CaseContactDatatable < ApplicationDatatable
       .joins("INNER JOIN users creators ON creators.id = case_contacts.creator_id")
       .left_joins(:casa_case)
       .includes(:casa_case, :contact_types, :contact_topics, :followups, :creator, contact_topic_answers: :contact_topic)
+      .preload(:casa_org, :creator_casa_org)
       .order(order_clause)
       .order(:id)
   end

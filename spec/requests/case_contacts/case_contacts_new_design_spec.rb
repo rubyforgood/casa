@@ -264,6 +264,68 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           expect(record[:contact_topics]).to include(contact_topic.question)
         end
       end
+
+      context "with permission flags and action metadata" do
+        let(:volunteer) { create(:volunteer, casa_org: organization) }
+        let!(:active_contact) { create(:case_contact, :active, casa_case: casa_case, creator: volunteer) }
+        let!(:draft_contact) { create(:case_contact, casa_case: casa_case, creator: volunteer, status: "started") }
+
+        def post_datatable
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+        end
+
+        def row_for(contact_id)
+          json = JSON.parse(response.body, symbolize_names: true)
+          json[:data].find { |row| row[:id] == contact_id.to_s }
+        end
+
+        context "when signed in as admin" do
+          it "includes can_edit as true" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_edit]).to eq("true")
+          end
+
+          it "includes can_destroy as true" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_destroy]).to eq("true")
+          end
+
+          it "includes edit_path for the contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:edit_path]).to eq(edit_case_contact_path(active_contact))
+          end
+
+          it "includes followup_id as empty when no followup exists" do
+            post_datatable
+            expect(row_for(active_contact.id)[:followup_id]).to eq("")
+          end
+
+          it "includes followup_id when a requested followup exists" do
+            followup = create(:followup, case_contact: active_contact, status: :requested, creator: admin)
+            post_datatable
+            expect(row_for(active_contact.id)[:followup_id]).to eq(followup.id.to_s)
+          end
+        end
+
+        context "when signed in as volunteer" do
+          before { sign_in volunteer }
+
+          it "includes can_edit as true for their own contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_edit]).to eq("true")
+          end
+
+          it "includes can_destroy as false for their own active contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_destroy]).to eq("false")
+          end
+
+          it "includes can_destroy as true for their own draft contact" do
+            post_datatable
+            expect(row_for(draft_contact.id)[:can_destroy]).to eq("true")
+          end
+        end
+      end
     end
   end
 end
