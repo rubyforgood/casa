@@ -25,9 +25,9 @@ RSpec.describe "soft-deleted model shared example coverage" do
       source_file = Object.const_source_location(clazz.name)&.first
       next unless source_file
 
-      spec_file = source_file.
-        sub(%r{/app/models/}, "/spec/models/").
-        sub(/\.rb$/, "_spec.rb")
+      spec_file = source_file
+        .sub(%r{/app/models/}, "/spec/models/")
+        .sub(/\.rb$/, "_spec.rb")
 
       unless File.exist?(spec_file)
         missing << "#{clazz.name}: spec file not found (expected #{spec_file})"

@@ -1,5 +1,4 @@
-RSpec.shared_examples_for "a soft-deleted model" do |skip_ignores_deleted_records_in_validations_check: false,
-  skip_deleted_at_index_check: false|
+RSpec.shared_examples_for "a soft-deleted model" do |skip_ignores_deleted_records_in_validations_check: false, skip_deleted_at_index_check: false|
   # for usage with acts_as_paranoid models
 
   it { is_expected.to have_db_column(:deleted_at) }
