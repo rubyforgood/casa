@@ -1,8 +1,11 @@
+# frozen_string_literal: true
+
 class FdfInputsService
   FDF_ERB_TEMPLATE_PATH = ["data", "inputs_fdf.erb"].freeze
 
   def self.clean(str)
     return unless str.present?
+
     str
       .to_s
       .gsub(/[)(\\]/, '\\\\\0')
