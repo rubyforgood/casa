@@ -1,5 +1,5 @@
 require "rails_helper"
-require "#{Rails.root.join("lib/tasks/data_post_processors/contact_topic_populator")}"
+require Rails.root.join("lib/tasks/data_post_processors/contact_topic_populator").to_s
 
 RSpec.describe "populates each existing organization with contact groups and types" do
   let(:fake_topics) { [1, 2, 3].map { |i| {"question" => "Question #{i}", "details" => "Details #{i}"} } }

@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "Health", type: :request do
   before do
-    Health.instance.update_attribute(:latest_deploy_time, Time.now)
+    Health.instance.update_attribute(:latest_deploy_time, Time.current)
   end
 
   describe "GET /health" do

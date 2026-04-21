@@ -1,5 +1,5 @@
 require "rails_helper"
-require "#{Rails.root.join("lib/tasks/data_post_processors/case_contact_populator")}"
+require Rails.root.join("lib/tasks/data_post_processors/case_contact_populator").to_s
 
 RSpec.describe CaseContactPopulator do
   it "does nothing on an empty database" do
