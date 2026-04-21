@@ -1,10 +1,7 @@
 require "rails_helper"
+require "#{Rails.root}/lib/tasks/data_post_processors/contact_type_populator"
 
 RSpec.describe "populates each existing organization with contact groups and types" do
-  before do
-    Rake::Task.clear
-    Casa::Application.load_tasks
-  end
 
   it "creates the expected contact groups and contact types for each existing organization" do
     ContactTypePopulator.populate
