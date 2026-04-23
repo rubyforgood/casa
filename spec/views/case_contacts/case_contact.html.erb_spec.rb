@@ -73,17 +73,16 @@ RSpec.describe "case_contacts/case_contact", type: :view do
       enable_pundit(view, admin)
       allow(view).to receive(:current_user).and_return(admin)
     end
-
     context "occurred_at is before the last day of the month in the quarter that the case contact was created" do
       let(:case_contact) { build_stubbed(:case_contact, creator: volunteer) }
       let(:case_contact2) { build_stubbed(:case_contact, deleted_at: Time.current, creator: volunteer) }
 
-      it "shows edit button" do
+      it "shows view/edit button" do
         assign :case_contact, case_contact
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to have_link(nil, href: "/case_contacts/#{case_contact.id}/edit")
+        expect(rendered).to have_link(nil, href: "/case_contacts/impersonate_and_edit?creator_id=#{case_contact.creator.id}")
       end
 
       it "shows make reminder button" do
