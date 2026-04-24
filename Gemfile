@@ -12,7 +12,7 @@ gem "azure-storage-blob", require: false
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
 gem "caxlsx", "~> 4.4" # Excel spreadsheets - TODO can we remove this version restriction?
-gem "caxlsx_rails", "~> 0.6.4" # Excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.7.1" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
 gem "devise" # Authentication
