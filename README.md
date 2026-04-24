@@ -25,7 +25,7 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 - [Developing!](#developing)
   - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
-    - [Getting Started (Codespaces) 🛠️](#getting-started-codespaces-️)
+    - [Getting Started (Codespaces) 🛠️](#getting-started-codespaces-)
     - [Local Setup Instructions](#local-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
     - [Common issues](#common-issues)
