@@ -8,7 +8,7 @@ on:
       - '**/*.js'
       - '**/*.json'
       - '**/*.jsx'
-      - 'package.lock.json'
+      - 'package-lock.json'
       - '.github/workflows/*.yml'
   pull_request:
     branches:
@@ -18,12 +18,13 @@ on:
       - '**/*.js'
       - '**/*.json'
       - '**/*.jsx'
-      - 'package.lock.json'
+      - 'package-lock.json'
       - '.github/workflows/*.yml'
 
 jobs:
   npm_lint:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v6
