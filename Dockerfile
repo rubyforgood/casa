@@ -1,11 +1,9 @@
-ARG ROOT=/usr/src/app/
-
 # available alpine packages: https://pkgs.alpinelinux.org/packages
 
 FROM node:24-alpine AS node-source
 
 FROM ruby:4.0.2-alpine AS build
-  ARG ROOT
+  ARG ROOT=/usr/src/app/
   WORKDIR $ROOT
 
   RUN apk update && apk upgrade && apk add --update --no-cache \
@@ -15,7 +13,8 @@ FROM ruby:4.0.2-alpine AS build
     yaml-dev \
     linux-headers \
     postgresql-dev \
-    tzdata
+    tzdata \
+    && rm -rf /var/cache/apk/*
 
   RUN bundle config set force_ruby_platform true
 
@@ -23,7 +22,7 @@ FROM ruby:4.0.2-alpine AS build
   RUN bundle install
 
 FROM ruby:4.0.2-alpine
-  ARG ROOT
+  ARG ROOT=/usr/src/app/
   WORKDIR $ROOT
 
   RUN apk update && apk upgrade && apk add --update --no-cache \
@@ -33,15 +32,20 @@ FROM ruby:4.0.2-alpine
     imagemagick \
     postgresql-client \
     tzdata \
-    vim \
     && rm -rf /var/cache/apk/*
 
-  COPY . .
+  RUN addgroup -S app && adduser -S app -G app && chown app:app $ROOT
+
   COPY --from=node-source /usr/local/bin/node /usr/local/bin/node
   COPY --from=node-source /usr/local/lib/node_modules /usr/local/lib/node_modules
-  RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
+  COPY --from=node-source /usr/local/bin/npm /usr/local/bin/npm
+
+  USER app
+
+  COPY --chown=app:app package*.json ./
   RUN npm ci
 
+  COPY --chown=app:app . .
   COPY --from=build /usr/local/bundle/ /usr/local/bundle/
 
   EXPOSE 3000
