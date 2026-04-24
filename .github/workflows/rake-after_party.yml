@@ -20,10 +20,11 @@ on:
 jobs:
   rake-after_party:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     services:
       db:
-        image: postgres:12.3
+        image: postgres:14.8
         env:
           POSTGRES_PASSWORD: password
         ports:
