@@ -38,7 +38,7 @@ FROM ruby:4.0.2-alpine
 
   COPY --from=node-source /usr/local/bin/node /usr/local/bin/node
   COPY --from=node-source /usr/local/lib/node_modules /usr/local/lib/node_modules
-  COPY --from=node-source /usr/local/bin/npm /usr/local/bin/npm
+  RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
   USER app
 
