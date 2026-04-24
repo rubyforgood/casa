@@ -4,7 +4,7 @@ ARG ROOT=/usr/src/app/
 
 FROM node:24-alpine AS node-source
 
-FROM ruby:4.0.2-alpine AS build
+FROM ruby:4.0.3-alpine AS build
   ARG ROOT
   WORKDIR $ROOT
 
@@ -22,7 +22,7 @@ FROM ruby:4.0.2-alpine AS build
   COPY Gemfile* $ROOT
   RUN bundle install
 
-FROM ruby:4.0.2-alpine
+FROM ruby:4.0.3-alpine
   ARG ROOT
   WORKDIR $ROOT
 
