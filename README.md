@@ -11,7 +11,7 @@
 [![Snyk Vulnerabilities](https://snyk.io/test/github/rubyforgood/casa/badge.svg)](https://snyk.io/test/github/rubyforgood/casa)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/rubyforgood/casa.svg)](http://isitmaintained.com/project/rubyforgood/casa "Average time to resolve an issue")
 
-A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates on behalf of a youth in their county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
+A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates on behalf of a youth in their county's foster care system. CASA is also the namesake role of the national organization, CASA, which exists to cultivate and supervise volunteers carrying out this work – with county level chapters (operating relatively independently of each other) across the country.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -20,14 +20,24 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
   - [Welcome contributors!](#welcome-contributors)
     - [Communication and Collaboration](#communication-and-collaboration)
     - [About this project](#about-this-project)
-- [Developing! ✨🛠✨](#developing-)
+  - [Tech Stack](#tech-stack)
+  - [Resources](#resources)
+- [Developing!](#developing)
   - [How to Contribute](#how-to-contribute)
   - [Installation](#installation)
-    - [Getting Started (Codespaces - EXPERIMENTAL) 🛠️](#getting-started-codespaces---experimental-)
+    - [Getting Started (Codespaces) 🛠️](#getting-started-codespaces-️)
     - [Local Setup Instructions](#local-setup-instructions)
     - [Platform Specific Installation Instructions](#platform-specific-installation-instructions)
     - [Common issues](#common-issues)
   - [Running the App / Verifying Installation](#running-the-app--verifying-installation)
+    - [QA Environment](#qa-environment)
+    - [Logging in with seed users](#logging-in-with-seed-users)
+    - [Local email](#local-email)
+    - [Running Tests](#running-tests)
+    - [Cleaning up before you pull request](#cleaning-up-before-you-pull-request)
+    - [Frontend Architecture](#frontend-architecture)
+  - [Keeping Your Local Environment Up to Date](#keeping-your-local-environment-up-to-date)
+- [Contributors](#contributors)
 - [Other Documentation](#other-documentation)
 - [Acknowledgements](#acknowledgements)
 - [Feedback](#feedback)
@@ -79,19 +89,38 @@ Read about the [product sense](doc/productsense.md) that guides our approach to 
 
 The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer-description/) in Prince George's County.
 
-# Developing! ✨🛠✨
+## Tech Stack
+
+| Technology | Version |
+|---|---|
+| Ruby | 4.0.2 (see `.ruby-version`) |
+| Rails | 7.2 |
+| PostgreSQL | 14+ |
+| Node.js | LTS/Krypton (see `.nvmrc`) |
+
+Key libraries: [Hotwire Turbo](https://turbo.hotwired.dev/), [Stimulus](https://stimulus.hotwired.dev/), [RSpec](https://rspec.info/), [StandardRB](https://github.com/standardrb/standard)
+
+## Resources
+
+- [Architecture decisions](doc/architecture-decisions/) — ADRs explaining key technical choices and entity relationship diagrams
+- [DB diagram](doc/db_diagram_schema_code/) — import `schema.rb` into [dbdiagram.io](https://dbdiagram.io/d) for a live model diagram
+- [Product sense](doc/productsense.md) — mission and product philosophy (recommended reading for leads and product contributors)
+- [Wiki](https://github.com/rubyforgood/casa/wiki) — additional guides and who's who
+- [Google Calendar](https://bit.ly/casacal) — office hours and stakeholder meetings
+
+# Developing!
 ## How to Contribute
   See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
 ## Installation
 
-###  Getting Started (Codespaces - EXPERIMENTAL) 🛠️
+###  Getting Started (Codespaces) 🛠️
 
 [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/rubyforgood/casa/tree/main?quickstart=1)
 
 1. Follow the link above or follow instructions to [create a new Codespace.](https://docs.github.com/en/codespaces/developing-in-a-codespace/creating-a-codespace-for-a-repository); You can use the web editor, or even better open the Codespace in VSCode
 2. Wait for the container to start. This will take a few (10-15) minutes since Ruby needs to be installed, the database needs to be created, and the `bin/setup` script needs to run
 3. Run `bin/dev` and visit the URL that pops in VSCode up to see the CASA page
-4. Login as a sample user with these default credentials (which also work for [QA](https://casa-qa.herokuapp.com/)):
+4. Login as a sample user — see [Logging in with seed users](#logging-in-with-seed-users) for credentials (the same credentials also work on the [QA environment](#qa-environment))
 
 ### Local Setup Instructions
 **Downloading the Project**
@@ -133,43 +162,80 @@ If you are using Ubuntu on WSL and receive the following message when trying to 
  - [Docker](doc/DOCKER.md)
  - [Linux](doc/LINUX_SETUP.md)
  - [Mac](doc/MAC_SETUP.md)
- - Windows(Help Wanted)
- - [Windows Subsystem for Linux(WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
+ - Windows — see the [WSL setup guide](doc/WSL_SETUP.md) for the recommended Windows path
+ - [Windows Subsystem for Linux (WSL)](https://github.com/rubyforgood/casa/blob/main/doc/WSL_SETUP.md)
  - [Nix](doc/NIX_SETUP.md)
 
 ### Common issues
 
-1. If your rails/rake commands hang forever instead of running, try: `rails app:update:bin`
-1. There is currently no option for a user to sign up and create an account through the UI. This is intentional. If you want to log in, use a pre-seeded user account and its credentials.
-1. If you are on windows and see the error "Requirements support for mingw is not implemented yet" then use https://rubyinstaller.org/ instead
-1. Install imagemagick to see images locally. Instructions: https://imagemagick.org/script/download.php
-1. _If you are running on an M1 mac, run the following command before you start the installation process:_
-   1. _Set the architecture_: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
-   1. _Remove all gems before you proceed_: `gem uninstall -aIx`
-1. If `bin/setup` fails with a credentials error:
-   1. Open the `.env` file.
-   1. Update the values of `POSTGRES_USER` and `POSTGRES_PASSWORD`to match your PostgreSQL credentials.
-   1. Run `bin/setup`
+<details>
+<summary>Rails/rake commands hang forever instead of running</summary>
+
+Run: `rails app:update:bin`
+</details>
+
+<details>
+<summary>No option for a user to sign up through the UI</summary>
+
+This is intentional. Use a pre-seeded user account — see [Logging in with seed users](#logging-in-with-seed-users).
+</details>
+
+<details>
+<summary>Windows error: "Requirements support for mingw is not implemented yet"</summary>
+
+Use [RubyInstaller](https://rubyinstaller.org/) instead.
+</details>
+
+<details>
+<summary>Images not displaying locally</summary>
+
+Install imagemagick: https://imagemagick.org/script/download.php
+</details>
+
+<details>
+<summary>M1 Mac installation issues</summary>
+
+Run these commands before starting the installation process:
+
+1. Set the architecture: `$env /usr/bin/arch -arm64 /bin/zsh ---login`
+2. Remove all gems: `gem uninstall -aIx`
+</details>
+
+<details>
+<summary>bin/setup fails with a credentials error</summary>
+
+1. Open the `.env` file.
+2. Update `POSTGRES_USER` and `POSTGRES_PASSWORD` to match your PostgreSQL credentials.
+3. Run `bin/setup`
+</details>
 
 ## Running the App / Verifying Installation
 1. `cd casa/`
 1. Run `bin/setup`
 1. Run `bin/dev` and visit http://localhost:3000/ to see the app running.
 
-**Logging in with seed users**
+### QA Environment
 
-Login as a regular user at http://localhost:3000/users/sign_in. Some example seed users:
-- volunteer1@example.com    view site as a volunteer
-- supervisor1@example.com   view site as a supervisor
-- casa_admin1@example.com   view site as an admin
-- casa_admin2-1@example.com view site as admin from a different org
+A publicly accessible QA environment is available at **https://casa-qa.herokuapp.com/**. You can log in using the same seed credentials below — useful for exploring the app without any local setup.
 
-Login as an all CASA admin at http://localhost:3000/all_casa_admins/sign_in. An example seed user:
-- allcasaadmin@example.com view site as an all CASA admin
+### Logging in with seed users
 
-The password for all seed users is `12345678`
+**Local:** http://localhost:3000/users/sign_in — **QA:** https://casa-qa.herokuapp.com/users/sign_in
 
-**Local email**
+| Email | Role | Password |
+|---|---|---|
+| volunteer1@example.com | Volunteer | 12345678 |
+| supervisor1@example.com | Supervisor | 12345678 |
+| casa_admin1@example.com | Admin | 12345678 |
+| casa_admin2-1@example.com | Admin (different org) | 12345678 |
+
+All CASA admin login at http://localhost:3000/all_casa_admins/sign_in (QA: https://casa-qa.herokuapp.com/all_casa_admins/sign_in):
+
+| Email | Role | Password |
+|---|---|---|
+| allcasaadmin@example.com | All CASA Admin | 12345678 |
+
+### Local email
 
 We are using [Letter Opener](https://github.com/ryanb/letter_opener) in
 development to receive mail. All emails sent in development should open in a
@@ -177,14 +243,14 @@ new tab in the browser.
 
 To see local email previews, check out http://localhost:3000/rails/mailers
 
-**Running Tests**
+### Running Tests
  - run the ruby test suite `bin/rails spec`
  - run the javascript test suite `npm run test`
 
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.
 Test coverage is run by simplecov on all builds and aggregated by CodeClimate
 
-**Cleaning up before you pull request**
+### Cleaning up before you pull request
 
 Run `bin/lint` to run all linters and fix issues. This will run:
 
@@ -195,28 +261,47 @@ Run `bin/lint` to run all linters and fix issues. This will run:
 
 If additional work arises from your pull request that is outside the scope of the issue it resolves, please open a new issue.
 
-**Stimulus**
+### Frontend Architecture
 
-[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) started a refactor of Javascript to use
-[Hotwire's Stimulus](https://stimulus.hotwired.dev/handbook/origin). To see if it's working for you, go to
-`/casa_cases` and see **Stimulus is working!** in your browser console.
+The frontend uses [Hotwire](https://hotwired.dev/) — specifically [Turbo](https://turbo.hotwired.dev/) for page navigation and form handling, and [Stimulus](https://stimulus.hotwired.dev/) for lightweight JavaScript controllers attached to DOM elements.
 
-**Post-deployment tasks**
+[Issue 5016](https://github.com/rubyforgood/casa/issues/5016) tracks the ongoing migration from inline JavaScript to Stimulus. Stimulus controllers live in `app/javascript/controllers/`. To verify Stimulus is working in your local environment, navigate to `/casa_cases` and check your browser console for **Stimulus is working!**
 
-We are using [After Party](https://github.com/theSteveMitchell/after_party) to
-run post-deployment tasks. These tasks may include one-time necessary updates to the
-database. Run the tasks manually by:
-```
-bundle exec rake after_party:run
-```
+## Keeping Your Local Environment Up to Date
 
-Alternatively, every time you pull the main branch, run:
+After pulling new changes from `main`, run:
 ```
 bin/update
 ```
 
-which will run any database migrations, update gems and node packages, and run
-the after party post-deployment tasks.
+This runs any pending database migrations, updates gems and node packages, and executes post-deployment tasks in one step.
+
+**Post-deployment tasks**
+
+We use [After Party](https://github.com/theSteveMitchell/after_party) for post-deployment tasks that may include one-time database updates. To run them manually:
+```
+bundle exec rake after_party:run
+```
+
+# Contributors
+
+We welcome contributions of all kinds! To request attribution for your work, comment on your pull request with:
+
+```
+@all-contributors please add @<username> for <contributions>.
+```
+
+Replace `<contributions>` with `code`, `review`, `doc`, `bug`, or see the [emoji key](https://allcontributors.org/docs/en/emoji-key) for all contribution types.
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
 # Other Documentation
 Check out [the wiki](https://github.com/rubyforgood/casa/wiki)
