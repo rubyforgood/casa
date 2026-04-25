@@ -17,7 +17,6 @@ class ApplicationController < ActionController::Base
   KNOWN_ERRORS = [Pundit::NotAuthorizedError, Organizational::UnknownOrganization]
   rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
   rescue_from ActionController::UnknownFormat, with: :unsupported_media_type
 
@@ -154,17 +153,6 @@ class ApplicationController < ActionController::Base
         session[:user_return_to] = nil
         flash[:notice] = message
         redirect_to(root_url)
-      end
-    end
-  end
-
-  def record_not_found
-    respond_to do |format|
-      format.json do
-        render json: {error: "Record not found"}, status: :not_found
-      end
-      format.any do
-        render file: "#{Rails.root}/public/404.html", status: :not_found, layout: false
       end
     end
   end
