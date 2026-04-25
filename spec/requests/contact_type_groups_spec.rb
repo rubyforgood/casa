@@ -89,10 +89,12 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as admin from a different organization" do
       it "cannot access another organization's contact type group edit page" do
+        admin_org = create(:casa_org)
+        admin = create(:casa_admin, casa_org: admin_org)
         other_org = create(:casa_org)
         other_org_group = create(:contact_type_group, casa_org: other_org)
 
-        sign_in_as_admin
+        sign_in admin
 
         get edit_contact_type_group_path(other_org_group)
 
@@ -144,10 +146,12 @@ RSpec.describe "/contact_type_groups", type: :request do
 
     context "logged in as admin from a different organization" do
       it "cannot update another organization's contact type group" do
+        admin_org = create(:casa_org)
+        admin = create(:casa_admin, casa_org: admin_org)
         other_org = create(:casa_org)
         other_org_group = create(:contact_type_group, casa_org: other_org)
 
-        sign_in_as_admin
+        sign_in admin
 
         put contact_type_group_path(other_org_group), params: params
 
