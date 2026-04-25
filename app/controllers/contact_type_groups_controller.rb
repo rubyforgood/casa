@@ -38,7 +38,7 @@ class ContactTypeGroupsController < ApplicationController
   def record_not_found
     respond_to do |format|
       format.json { render json: {error: "Record not found"}, status: :not_found }
-      format.any { render file: Rails.root.join("public/404.html"), status: :not_found, layout: false }
+      format.any { render file: Rails.public_path.join("404.html"), status: :not_found, layout: false }
     end
   end
 
