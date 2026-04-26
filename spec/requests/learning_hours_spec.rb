@@ -3,6 +3,24 @@ require "rails_helper"
 RSpec.describe "LearningHours", type: :request do
   let(:volunteer) { create(:volunteer) }
 
+  shared_examples "test request with user" do |factory|
+    let(:user) { create(factory) }
+
+    before { sign_in user }
+
+    describe "GET /index" do
+      it "succeeds" do
+        get learning_hours_path
+        expect(response).to have_http_status(:success)
+      end
+
+      it "displays the time completed column" do
+        get learning_hours_path
+        expect(response.body).to include("Time Completed YTD")
+      end
+    end
+  end
+
   context "as a volunteer user" do
     before { sign_in volunteer }
 
@@ -27,38 +45,10 @@ RSpec.describe "LearningHours", type: :request do
   end
 
   context "as a supervisor user" do
-    let(:supervisor) { create(:supervisor) }
-
-    before { sign_in supervisor }
-
-    describe "GET /index" do
-      it "succeeds" do
-        get learning_hours_path
-        expect(response).to have_http_status(:success)
-      end
-
-      it "displays the time completed column" do
-        get learning_hours_path
-        expect(response.body).to include("Time Completed YTD")
-      end
-    end
+    include_examples "test request with user", :supervisor
   end
 
   context "as an admin user" do
-    let(:admin) { create(:casa_admin) }
-
-    before { sign_in admin }
-
-    describe "GET /index" do
-      it "succeeds" do
-        get learning_hours_path
-        expect(response).to have_http_status(:success)
-      end
-
-      it "displays the time completed column" do
-        get learning_hours_path
-        expect(response.body).to include("Time Completed YTD")
-      end
-    end
+    include_examples "test request with user", :casa_admin
   end
 end
