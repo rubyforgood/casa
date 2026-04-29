@@ -33,7 +33,10 @@ jobs:
           mkdir -p tmp/downloads
           chmod 777 tmp tmp/downloads
       - name: docker UP
-        run: docker compose up -d
+        run: |
+          docker compose up -d database selenium_chrome
+          docker compose run --rm --no-deps --user 0:0 --entrypoint sh web -c "chown -R app:app /usr/src/app /usr/local/bundle/gems"
+          docker compose up -d web
       - name: db:setup
         run: docker compose exec -T web rails db:setup
       - name: compile assets
