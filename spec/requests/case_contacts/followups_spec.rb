@@ -52,8 +52,9 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
     end
 
     context "with invalid case_contact" do
-      it "raises ActiveRecord::RecordNotFound" do
-        expect { post case_contact_followups_path(444444) }.to raise_error(ActiveRecord::RecordNotFound)
+      it "responds with 404" do
+        post case_contact_followups_path(444444)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end
@@ -116,8 +117,9 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
     end
 
     context "followup doesn't exists" do
-      it "raises ActiveRecord::RecordNotFound" do
-        expect { patch resolve_followup_path(444444) }.to raise_error(ActiveRecord::RecordNotFound)
+      it "responds with 404" do
+        patch resolve_followup_path(444444)
+        expect(response).to have_http_status(:not_found)
       end
     end
   end

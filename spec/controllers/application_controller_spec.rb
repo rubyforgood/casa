@@ -5,6 +5,8 @@ RSpec.describe ApplicationController, type: :controller do
   let(:volunteer) { create(:volunteer) }
 
   controller do
+    skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
+
     def index
       render plain: "hello there..."
     end
@@ -25,6 +27,10 @@ RSpec.describe ApplicationController, type: :controller do
 
     def unknown_organization
       raise Organizational::UnknownOrganization
+    end
+
+    def missing_record
+      raise ActiveRecord::RecordNotFound
     end
   end
 
@@ -79,6 +85,24 @@ RSpec.describe ApplicationController, type: :controller do
       routes.draw { get :unknown_organization, to: "anonymous#unknown_organization" }
       get :unknown_organization
       expect(response).to redirect_to(root_url)
+    end
+  end
+
+  describe "rescue_from ActiveRecord::RecordNotFound" do
+    before do
+      routes.draw { get :missing_record, to: "anonymous#missing_record" }
+    end
+
+    it "renders the static 404 page for HTML requests" do
+      get :missing_record
+      expect(response).to have_http_status(:not_found)
+      expect(response.body).to eq(File.read(Rails.public_path.join("404.html")))
+    end
+
+    it "renders a JSON error for JSON requests" do
+      get :missing_record, format: :json
+      expect(response).to have_http_status(:not_found)
+      expect(response.parsed_body).to eq("error" => "Record not found")
     end
   end
 

@@ -1,5 +1,6 @@
 class BannersController < ApplicationController
   after_action :verify_authorized, except: %i[dismiss]
+  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
   before_action :set_banner, only: %i[edit update destroy dismiss]
 
   def index

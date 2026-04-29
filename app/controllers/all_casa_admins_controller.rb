@@ -4,6 +4,7 @@ class AllCasaAdminsController < ApplicationController
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
   skip_after_action :verify_authorized
+  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
 
   def new
     @all_casa_admin = AllCasaAdmin.new

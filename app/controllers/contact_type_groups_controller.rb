@@ -2,8 +2,6 @@ class ContactTypeGroupsController < ApplicationController
   before_action :set_contact_type_group, except: [:new, :create]
   after_action :verify_authorized
 
-  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
-
   def new
     authorize ContactTypeGroup
     @contact_type_group = ContactTypeGroup.new
@@ -34,13 +32,6 @@ class ContactTypeGroupsController < ApplicationController
   end
 
   private
-
-  def record_not_found
-    respond_to do |format|
-      format.json { render json: {error: "Record not found"}, status: :not_found }
-      format.any { render file: Rails.public_path.join("404.html"), status: :not_found, layout: false }
-    end
-  end
 
   def contact_type_group_params
     params.require(:contact_type_group).permit(:name, :active)
