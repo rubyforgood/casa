@@ -25,14 +25,7 @@ RSpec.describe "/other_duties", type: :request do
     end
 
     context "when admin" do
-      it "redirects to root path" do
-        admin = create(:casa_admin)
-
-        sign_in admin
-        get new_other_duty_path
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "redirect to root (new)", :casa_admin
     end
   end
 
