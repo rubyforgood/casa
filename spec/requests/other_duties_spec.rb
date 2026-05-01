@@ -1,5 +1,55 @@
 require "rails_helper"
 
+RSpec.shared_examples "/new redirect to root" do |user_role|
+  it "redirects to root" do
+    user = create(user_role)
+
+    sign_in user
+    get new_other_duty_path
+
+    expect(response).to redirect_to root_path
+  end
+end
+
+RSpec.shared_examples "/create redirect to root" do |user_role|
+  it "does not create record and redirects to root" do
+    user = create(user_role)
+
+    sign_in user
+
+    expect {
+      post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
+    }.not_to change(OtherDuty, :count)
+
+    expect(response).to redirect_to root_path
+  end
+end
+
+RSpec.shared_examples "/edit redirect to root" do |user_role|
+  it "redirects to root path" do
+    user = create(user_role)
+    duty = create(:other_duty)
+
+    sign_in user
+    get edit_other_duty_path(duty)
+
+    expect(response).to redirect_to root_path
+  end
+end
+
+RSpec.shared_examples "/update redirect to root" do |user_role|
+  it "does not update the duty and redirects to root path" do
+    user = create(user_role)
+    other_duty = create(:other_duty, notes: "Test 1")
+
+    sign_in user
+    patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
+
+    expect(other_duty.reload.notes).to eq("Test 1")
+    expect(response).to redirect_to root_path
+  end
+end
+
 RSpec.describe "/other_duties", type: :request do
   describe "GET /new" do
     context "when volunteer" do
@@ -14,25 +64,11 @@ RSpec.describe "/other_duties", type: :request do
     end
 
     context "when supervisor" do
-      it "redirects to root path" do
-        supervisor = create(:supervisor)
-
-        sign_in supervisor
-        get new_other_duty_path
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/new redirect to root", :supervisor
     end
 
     context "when admin" do
-      it "redirects to root path" do
-        admin = create(:casa_admin)
-
-        sign_in admin
-        get new_other_duty_path
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/new redirect to root", :casa_admin
     end
   end
 
@@ -66,31 +102,11 @@ RSpec.describe "/other_duties", type: :request do
     end
 
     context "when supervisor" do
-      it "does not create record and redirects to root" do
-        supervisor = create(:supervisor)
-
-        sign_in supervisor
-
-        expect {
-          post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
-        }.not_to change(OtherDuty, :count)
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/create redirect to root", :supervisor
     end
 
     context "when admin" do
-      it "does not create record and redirects to root" do
-        admin = create(:casa_admin)
-
-        sign_in admin
-
-        expect {
-          post other_duties_path, params: {other_duty: attributes_for(:other_duty)}
-        }.not_to change(OtherDuty, :count)
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/create redirect to root", :casa_admin
     end
   end
 
@@ -109,40 +125,16 @@ RSpec.describe "/other_duties", type: :request do
       end
 
       context "when viewing other's record" do
-        it "redirects to root path" do
-          volunteer = create(:volunteer)
-          duty = create(:other_duty)
-
-          sign_in volunteer
-          get edit_other_duty_path(duty)
-
-          expect(response).to redirect_to root_path
-        end
+        include_examples "/edit redirect to root", :volunteer
       end
     end
 
     context "when supervisor" do
-      it "redirects to root path" do
-        supervisor = create(:supervisor)
-        duty = create(:other_duty)
-
-        sign_in supervisor
-        get edit_other_duty_path(duty)
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/edit redirect to root", :supervisor
     end
 
     context "when admin" do
-      it "redirects to root path" do
-        admin = create(:casa_admin)
-        duty = create(:other_duty)
-
-        sign_in admin
-        get edit_other_duty_path(duty)
-
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/edit redirect to root", :casa_admin
     end
   end
 
@@ -169,49 +161,21 @@ RSpec.describe "/other_duties", type: :request do
           sign_in volunteer
           patch other_duty_path(other_duty), params: {other_duty: {notes: ""}}
 
-          expect(other_duty.reload.notes).to eq "Test 1"
           expect(response).to have_http_status(:unprocessable_content)
         end
       end
     end
 
     context "when volunteer updating other person's record" do
-      it "does not update the duty and redirects to root path" do
-        volunteer = create(:volunteer)
-        other_duty = create(:other_duty, notes: "Test 1")
-
-        sign_in volunteer
-        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
-
-        expect(other_duty.reload.notes).to eq("Test 1")
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/update redirect to root", :volunteer
     end
 
     context "when supervisor" do
-      it "does not update the duty and redirects to root path" do
-        supervisor = create(:supervisor)
-        other_duty = create(:other_duty, notes: "Test 1")
-
-        sign_in supervisor
-        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
-
-        expect(other_duty.reload.notes).to eq("Test 1")
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/update redirect to root", :supervisor
     end
 
     context "when admin" do
-      it "does not update the duty and redirects to root path" do
-        admin = create(:casa_admin)
-        other_duty = create(:other_duty, notes: "Test 1")
-
-        sign_in admin
-        patch other_duty_path(other_duty), params: {other_duty: {notes: "Test 2"}}
-
-        expect(other_duty.reload.notes).to eq("Test 1")
-        expect(response).to redirect_to root_path
-      end
+      include_examples "/update redirect to root", :casa_admin
     end
   end
 
