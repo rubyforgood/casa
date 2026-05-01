@@ -416,8 +416,8 @@ GEM
     pg (1.6.3-x86_64-linux)
     pg_query (6.1.0)
       google-protobuf (>= 3.25.3)
-    pghero (3.7.0)
-      activerecord (>= 7.1)
+    pghero (3.8.0)
+      activerecord (>= 7.2)
     pp (0.6.3)
       prettyprint
     pretender (1.0.0)
