@@ -2,6 +2,18 @@
 
 require "rails_helper"
 
+RSpec.shared_examples "user redirect with error" do |user_role|
+  let(:user) { create(user_role) }
+
+  before { sign_in user }
+
+  it "redirects the user with an error message" do
+    visit new_supervisor_path
+
+    expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
+  end
+end
+
 RSpec.describe "supervisors/new", type: :system do
   context "when logged in as an admin" do
     let(:admin) { create(:casa_admin) }
@@ -80,26 +92,10 @@ RSpec.describe "supervisors/new", type: :system do
   end
 
   context "when logged in as a supervisor" do
-    let(:supervisor) { create(:supervisor) }
-
-    before { sign_in supervisor }
-
-    it "redirects the user with an error message" do
-      visit new_supervisor_path
-
-      expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
-    end
+    include_examples "user redirect with error", :supervisor
   end
 
   context "when logged in as a volunteer" do
-    let(:volunteer) { create(:volunteer) }
-
-    before { sign_in volunteer }
-
-    it "redirects the user with an error message" do
-      visit new_supervisor_path
-
-      expect(page).to have_selector(".alert", text: "Sorry, you are not authorized to perform this action.")
-    end
+    include_examples "user redirect with error", :volunteer
   end
 end
