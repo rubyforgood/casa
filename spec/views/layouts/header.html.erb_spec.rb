@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.shared_examples "render user information and header link" do |user_role|
   let(:user) { build_stubbed user_role }
-  
+
   it "renders user information", :aggregate_failures do
     sign_in user
 

@@ -26,7 +26,7 @@ RSpec.describe "followups/resolve", type: :system do
   before { sign_in admin }
 
   it_behaves_like "change status of followup to resolved"
-  
+
   context "logged in as admin, followup created by volunteer" do
     let(:cc_creator) { volunteer }
     let(:followup_creator) { volunteer }
@@ -34,7 +34,7 @@ RSpec.describe "followups/resolve", type: :system do
     before { sign_in admin }
 
     it_behaves_like "change status of followup to resolved"
-    
+
     it "removes followup icon and button changes back to 'Make Reminder'" do
       visit casa_case_path(case_contact.casa_case)
 
