@@ -60,6 +60,11 @@ RSpec.describe "layout/header", type: :view do
 
       expect(rendered).not_to have_link("Edit Organization")
     end
+
+    it "renders help issue link on the header" do
+      render partial: "layouts/header"
+      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-Volunteers-c24d9d2ef8b249bbbda8192191365039?pvs=4")
+    end
   end
 
   context "notifications" do
