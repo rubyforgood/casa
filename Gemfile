@@ -57,14 +57,14 @@ gem "stimulus-rails" # Stimulus JavaScript framework
 gem "strong_migrations" # Catch unsafe database migrations
 gem "turbo-rails", "~> 2.0" # Turbo framework for Rails
 gem "twilio-ruby" # Twilio helper functions
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files
+gem "tzinfo-data", platforms: %i[windows jruby] # Windows does not include zoneinfo files
 gem "view_component" # View components for reusability
 gem "wicked" # Multi-step form wizard for Rails
 
 group :development, :test, :production do
   gem "brakeman" # Security inspection
   gem "prosopite" # N+1 query detection via SQL pattern analysis
-  gem "byebug", platforms: %i[mri mingw x64_mingw] # Debugger console
+  gem "byebug", platforms: %i[mri windows] # Debugger console
   gem "dotenv-rails" # Environment variable management
   gem "erb_lint", require: false # ERB linter
   gem "factory_bot_rails" # Test data factories
