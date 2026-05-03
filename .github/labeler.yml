@@ -22,10 +22,18 @@ javascript:
 - changed-files:
   - any-glob-to-any-file: ["**/*.js", "package*.json", "package-lock.json"]
 
-Tests! 🎉💖👏:
+🧪 Tests:
 - changed-files:
   - any-glob-to-any-file: ["app/javascript/__tests__/**.test.js", "spec/**/*_spec.rb"]
 
 dependencies:
 - changed-files:
   - any-glob-to-any-file: ["Gemfile*", "package*.json", "package-lock.json"]
+
+pundit:
+- changed-files:
+  - any-glob-to-any-file: "app/policies/**/*.rb"
+
+db:
+- changed-files:
+  - any-glob-to-any-file: "db/**/*"
