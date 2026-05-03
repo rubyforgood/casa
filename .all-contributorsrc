@@ -3069,8 +3069,18 @@
       "contributions": [
         "code"
       ]
+    },
+    {
+      "login": "UtkarshDixit-97",
+      "name": "Utkarsh Dixit",
+      "avatar_url": "https://avatars.githubusercontent.com/u/72229040?v=4",
+      "profile": "https://www.linkedin.com/in/utkarsh-dixit-b34639103/",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
-  "skipCi": true
+  "skipCi": true,
+  "commitType": "docs"
 }
