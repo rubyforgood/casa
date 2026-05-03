@@ -23,7 +23,7 @@
                   <%= learning_hour.name %>
                 <% end %>
               </td>
-              <td> <%= learning_hour.learning_hour_type.name %> </td>
+              <td> <%= learning_hour.learning_hour_type&.name %> </td>
               <% if current_user.casa_org.learning_topic_active %>
                 <td> <%= learning_hour.learning_hour_topic&.name %> </td>
               <% end %>
