@@ -296,7 +296,6 @@ Replace `<contributions>` with `code`, `review`, `doc`, `bug`, or see the [emoji
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
 <!-- markdownlint-disable -->
-
 <table>
   <tbody>
     <tr>
@@ -736,6 +735,7 @@ Replace `<contributions>` with `code`, `review`, `doc`, `bug`, or see the [emoji
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/Ivarkentje"><img src="https://avatars.githubusercontent.com/u/22929670?v=4?s=100" width="100px;" alt="Ivarkentje"/><br /><sub><b>Ivarkentje</b></sub></a><br /><a href="https://github.com/rubyforgood/casa/commits?author=Ivarkentje" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jacobherrington"><img src="https://avatars.githubusercontent.com/u/11466782?v=4?s=100" width="100px;" alt="jacobherrington"/><br /><sub><b>jacobherrington</b></sub></a><br /><a href="https://github.com/rubyforgood/casa/commits?author=jacobherrington" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/jacoblogue"><img src="https://avatars.githubusercontent.com/u/86848183?v=4?s=100" width="100px;" alt="jacoblogue"/><br /><sub><b>jacoblogue</b></sub></a><br /><a href="https://github.com/rubyforgood/casa/commits?author=jacoblogue" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://www.linkedin.com/in/utkarsh-dixit-b34639103/"><img src="https://avatars.githubusercontent.com/u/72229040?v=4?s=100" width="100px;" alt="Utkarsh Dixit"/><br /><sub><b>Utkarsh Dixit</b></sub></a><br /><a href="https://github.com/rubyforgood/casa/commits?author=UtkarshDixit-97" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
