@@ -1,5 +1,24 @@
 require "rails_helper"
 
+RSpec.shared_examples "render user information and header link" do |user_role|
+  let(:user) { build_stubbed user_role }
+
+  it "renders user information", :aggregate_failures do
+    sign_in user
+
+    render partial: "layouts/header"
+
+    expect(rendered).to match "<strong>Role: #{user.role}</strong>"
+    expect(rendered).to match CGI.escapeHTML user.display_name
+    expect(rendered).to match CGI.escapeHTML user.email
+  end
+
+  it "renders help issue link on the header" do
+    render partial: "layouts/header"
+    expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
+  end
+end
+
 RSpec.describe "layout/header", type: :view do
   before do
     view.class.include PretenderContext
@@ -14,41 +33,11 @@ RSpec.describe "layout/header", type: :view do
   end
 
   context "when logged in as a casa admin" do
-    let(:user) { build_stubbed :casa_admin }
-
-    it "renders user information", :aggregate_failures do
-      sign_in user
-
-      render partial: "layouts/header"
-
-      expect(rendered).to match "<strong>Role: Casa Admin</strong>"
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
-    end
-
-    it "renders help issue link on the header" do
-      render partial: "layouts/header"
-      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
-    end
+    it_behaves_like "render user information and header link", :casa_admin
   end
 
   context "when logged in as a supervisor" do
-    let(:user) { build_stubbed :supervisor }
-
-    it "renders user information", :aggregate_failures do
-      sign_in user
-
-      render partial: "layouts/header"
-
-      expect(rendered).to match "<strong>Role: Supervisor</strong>"
-      expect(rendered).to match CGI.escapeHTML user.display_name
-      expect(rendered).to match CGI.escapeHTML user.email
-    end
-
-    it "renders help issue link on the header" do
-      render partial: "layouts/header"
-      expect(rendered).to have_link("Help", href: "https://thunder-flower-8c2.notion.site/Casa-Volunteer-Tracking-App-HelpSite-3b95705e80c742ffa729ccce7beeabfa")
-    end
+    it_behaves_like "render user information and header link", :supervisor
   end
 
   context "when logged in as a volunteer" do

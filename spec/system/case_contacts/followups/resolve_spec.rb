@@ -1,5 +1,17 @@
 require "rails_helper"
 
+RSpec.shared_examples "change status of followup to resolved" do
+  it "changes status of followup to resolved" do
+    visit casa_case_path(case_contact.casa_case)
+
+    click_button "Resolve Reminder"
+    expect(page).to have_button("Make Reminder")
+
+    expect(case_contact.followups.count).to eq(1)
+    expect(case_contact.followups.first.resolved?).to be_truthy
+  end
+end
+
 RSpec.describe "followups/resolve", type: :system do
   let(:casa_org) { build(:casa_org) }
   let(:admin) { build(:casa_admin, casa_org: casa_org) }
@@ -13,15 +25,7 @@ RSpec.describe "followups/resolve", type: :system do
 
   before { sign_in admin }
 
-  it "changes status of followup to resolved" do
-    visit casa_case_path(case_contact.casa_case)
-
-    click_button "Resolve Reminder"
-    expect(page).to have_button("Make Reminder")
-
-    expect(case_contact.followups.count).to eq(1)
-    expect(case_contact.followups.first.resolved?).to be_truthy
-  end
+  it_behaves_like "change status of followup to resolved"
 
   context "logged in as admin, followup created by volunteer" do
     let(:cc_creator) { volunteer }
@@ -29,15 +33,7 @@ RSpec.describe "followups/resolve", type: :system do
 
     before { sign_in admin }
 
-    it "changes status of followup to resolved" do
-      visit casa_case_path(case_contact.casa_case)
-
-      click_button "Resolve Reminder"
-      expect(page).to have_button("Make Reminder")
-
-      expect(case_contact.followups.count).to eq(1)
-      expect(case_contact.followups.first.resolved?).to be_truthy
-    end
+    it_behaves_like "change status of followup to resolved"
 
     it "removes followup icon and button changes back to 'Make Reminder'" do
       visit casa_case_path(case_contact.casa_case)
