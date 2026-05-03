@@ -398,8 +398,8 @@ GEM
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     pagy (9.4.0)
-    parallel (1.27.0)
-    parallel_tests (5.5.0)
+    parallel (1.28.0)
+    parallel_tests (5.7.0)
       parallel
     paranoia (3.1.0)
       activerecord (>= 7, < 8.2)
