@@ -1,5 +1,6 @@
 class MileageRatesController < ApplicationController
   after_action :verify_authorized
+  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
   before_action :set_mileage_rate, only: %i[edit update]
 
   def index

@@ -30,10 +30,9 @@ RSpec.describe EmancipationsController, type: :controller do
     end
 
     context "when case does not exist" do
-      it "raises a record not found error" do
-        expect {
-          get :show, params: {casa_case_id: "nonexistent-case"}
-        }.to raise_error(ActiveRecord::RecordNotFound)
+      it "responds with 404" do
+        get :show, params: {casa_case_id: "nonexistent-case"}
+        expect(response).to have_http_status(:not_found)
       end
     end
 

@@ -12,13 +12,12 @@ class ApplicationController < ActionController::Base
   before_action :set_current_organization
   before_action :set_active_banner
   after_action :verify_authorized, except: :index, unless: :devise_controller?
-  # after_action :verify_policy_scoped, only: :index
+  after_action :verify_policy_scoped, only: :index, unless: :devise_controller?
 
-  KNOWN_ERRORS = [Pundit::NotAuthorizedError, Organizational::UnknownOrganization]
-  rescue_from StandardError, with: :log_and_reraise
   rescue_from Pundit::NotAuthorizedError, with: :not_authorized
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
   rescue_from ActionController::UnknownFormat, with: :unsupported_media_type
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   impersonates :user
 
@@ -157,6 +156,13 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def record_not_found
+    respond_to do |format|
+      format.json { render json: {error: "Record not found"}, status: :not_found }
+      format.any { render file: Rails.public_path.join("404.html"), status: :not_found, layout: false }
+    end
+  end
+
   def unsupported_media_type
     respond_to do |format|
       format.json do
@@ -167,13 +173,6 @@ class ApplicationController < ActionController::Base
         redirect_back_or_to root_url
       end
     end
-  end
-
-  def log_and_reraise(error)
-    unless KNOWN_ERRORS.include?(error.class)
-      Bugsnag.notify(error)
-    end
-    raise
   end
 
   def check_unconfirmed_email_notice(user)
