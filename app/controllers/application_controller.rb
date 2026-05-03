@@ -4,7 +4,7 @@ class ApplicationController < ActionController::Base
   include Organizational
   include Users::TimeZone
 
-  protect_from_forgery
+  protect_from_forgery with: :exception
   before_action :store_user_location!, if: :storable_location?
   before_action :authenticate_user!
   before_action :set_current_user
