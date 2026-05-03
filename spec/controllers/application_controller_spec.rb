@@ -96,7 +96,7 @@ RSpec.describe ApplicationController, type: :controller do
     it "renders the static 404 page for HTML requests" do
       get :missing_record
       expect(response).to have_http_status(:not_found)
-      expect(response.body).to eq(File.read(Rails.public_path.join("404.html")))
+      expect(response.body).to eq(Rails.public_path.join("404.html").read)
     end
 
     it "renders a JSON error for JSON requests" do
