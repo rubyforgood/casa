@@ -1,5 +1,21 @@
 require "rails_helper"
 
+RSpec.shared_examples "casa_case access control" do |user_role|
+  it "renders a successful response" do
+    get casa_case_url(casa_case)
+    expect(response).to be_successful
+  end
+
+  it "fails across organizations" do
+    other_org = build(:casa_org)
+    other_case = create(:casa_case, casa_org: other_org)
+
+    get casa_case_url(other_case)
+    expect(response).to be_redirect
+    expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+  end
+end
+
 RSpec.describe "/casa_cases", type: :request do
   let(:date_in_care) { Date.today }
   let(:organization) { build(:casa_org) }
@@ -514,19 +530,7 @@ RSpec.describe "/casa_cases", type: :request do
     let!(:case_assignment) { create(:case_assignment, volunteer: user, casa_case: casa_case) }
 
     describe "GET /show" do
-      it "renders a successful response" do
-        get casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case access control"
     end
 
     describe "GET /new" do
@@ -652,19 +656,7 @@ RSpec.describe "/casa_cases", type: :request do
     let(:user) { create(:supervisor, casa_org: organization) }
 
     describe "GET /show" do
-      it "renders a successful response" do
-        get casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case access control"
     end
 
     describe "GET /new" do
