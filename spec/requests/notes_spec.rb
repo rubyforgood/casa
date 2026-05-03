@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/volunteers/notes", type: :request do
   RSpec.shared_examples "create" do
-    let(:organization)  { create(:casa_org) }
+    let(:organization) { create(:casa_org) }
 
     context "when in the same organization" do
       it "can create a note for volunteer" do
@@ -11,7 +11,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in user
 
         expect do
-          post volunteer_notes_path(volunteer), params: { note: { content: "Very nice!" } }
+          post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         end.to change(Note, :count).by(1)
         expect(response).to redirect_to edit_volunteer_path(volunteer)
         expect(Note.last.content).to eq "Very nice!"
@@ -26,7 +26,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         sign_in user
 
         expect do
-          post volunteer_notes_path(volunteer), params: { note: { content: "Very nice!" } }
+          post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         end.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
@@ -34,7 +34,7 @@ RSpec.describe "/volunteers/notes", type: :request do
   end
 
   RSpec.shared_examples "edit" do
-    let(:organization)  { create(:casa_org) }
+    let(:organization) { create(:casa_org) }
 
     context "when in the same organization" do
       let(:volunteer) { create(:volunteer, :with_assigned_supervisor, casa_org: organization) }
@@ -74,7 +74,7 @@ RSpec.describe "/volunteers/notes", type: :request do
   end
 
   RSpec.shared_examples "update" do
-    let(:organization)  { create(:casa_org) }
+    let(:organization) { create(:casa_org) }
 
     context "when in the same organization" do
       it "updates note and redirects to edit volunteer page" do
@@ -82,7 +82,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         note = create(:note, notable: volunteer, creator: user, content: "Good job.")
 
         sign_in user
-        patch volunteer_note_path(volunteer, note), params: { note: { content: "Very nice!" } }
+        patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
 
         expect(response).to redirect_to(edit_volunteer_path(volunteer))
         expect(note.reload.content).to eq "Very nice!"
@@ -96,7 +96,7 @@ RSpec.describe "/volunteers/notes", type: :request do
         note = create(:note, notable: volunteer, content: "Good job.")
 
         sign_in user
-        patch volunteer_note_path(volunteer, note), params: { note: { content: "Very nice!" } }
+        patch volunteer_note_path(volunteer, note), params: {note: {content: "Very nice!"}}
 
         expect(response).to redirect_to root_path
         expect(note.reload.content).to eq "Good job."
@@ -105,7 +105,7 @@ RSpec.describe "/volunteers/notes", type: :request do
   end
 
   RSpec.shared_examples "delete" do
-    let(:organization)  { create(:casa_org) }
+    let(:organization) { create(:casa_org) }
 
     context "when in the same organization" do
       it "can delete notes about a volunteer" do
@@ -157,7 +157,7 @@ RSpec.describe "/volunteers/notes", type: :request do
 
         sign_in volunteer
         expect {
-          post volunteer_notes_path(volunteer), params: { note: { content: "Very nice!" } }
+          post volunteer_notes_path(volunteer), params: {note: {content: "Very nice!"}}
         }.not_to change(Note, :count)
         expect(response).to redirect_to root_path
       end
