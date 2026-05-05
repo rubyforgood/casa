@@ -2,7 +2,7 @@ ARG ROOT=/usr/src/app/
 
 # available alpine packages: https://pkgs.alpinelinux.org/packages
 
-FROM node:24-alpine AS node-source
+FROM node:25-alpine AS node-source
 
 FROM ruby:4.0.3-alpine AS build
 ARG ROOT
