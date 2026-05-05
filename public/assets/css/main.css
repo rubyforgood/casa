@@ -20,11 +20,11 @@ body {
   -moz-box-sizing: border-box;
   box-sizing: border-box; }
 
-a:focus,
-input:focus,
-textarea:focus,
-button:focus,
-.btn:focus,
+a:focus:not(:focus-visible),
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+.btn:focus:not(:focus-visible),
 .btn.focus,
 .btn:not(:disabled):not(.disabled).active,
 .btn:not(:disabled):not(.disabled):active {
@@ -33,6 +33,14 @@ button:focus,
   -webkit-box-shadow: none;
   -moz-box-shadow: none;
   box-shadow: none; }
+
+a:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+button:focus-visible,
+.btn:focus-visible {
+  outline: 2px solid #4a6cf7;
+  outline-offset: 2px; }
 
 a:hover {
   color: #4a6cf7; }
