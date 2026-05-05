@@ -21,8 +21,10 @@ FileUtils.chdir APP_ROOT do
 
   puts "\n== Installing dependencies =="
   system! 'gem install foreman'
-  system! 'gem install bundler --conservative'
-  system!('bundle update --bundler --verbose')
+  # Pin bundler to a version Heroku supports for our Ruby. Match Heroku's
+  # supported Ruby/Bundler pairings as they evolve:
+  # https://devcenter.heroku.com/articles/ruby-support-reference#supported-ruby-versions
+  system! 'gem install bundler -v 4.0.6 --conservative'
   system!('bundle check') || system!('bundle install')
 
   # puts '\n== Copying sample files =='
