@@ -44,6 +44,13 @@ const defineCaseContactsTable = function () {
     ajax: {
       url: $('table#case_contacts').data('source'),
       type: 'POST',
+      data: function (d) {
+        const filters = collectCaseContactFilters()
+        if (Object.keys(filters).length > 0) {
+          d.additional_filters = filters
+        }
+        return d
+      },
       error: function (xhr, error, code) {
         console.error('DataTable error:', error, code)
       },
@@ -248,6 +255,43 @@ const defineCaseContactsTable = function () {
       success: () => table.ajax.reload(null, false)
     })
   })
+
+  $('#cc-filter-toggle').on('click', function () {
+    $('#cc-filter-panel').toggle()
+  })
+
+  $('#cc-filter-apply').on('click', function () {
+    table.ajax.reload(null, false)
+    $('#cc-filter-panel').hide()
+  })
+
+  $('#cc-filter-reset').on('click', function () {
+    $('#cc-filter-occurred-starting-at, #cc-filter-occurred-ending-at').val('')
+    $('#cc-filter-medium, #cc-filter-contact-made').val('')
+    $('.cc-filter-casa-case, .cc-filter-contact-type, #cc-filter-no-drafts').prop('checked', false)
+    table.ajax.reload(null, false)
+  })
+}
+
+function collectCaseContactFilters () {
+  const filters = {}
+  const startDate = $('#cc-filter-occurred-starting-at').val()
+  const endDate = $('#cc-filter-occurred-ending-at').val()
+  const casaIds = $('.cc-filter-casa-case:checked').map((_, el) => el.value).get()
+  const contactTypeIds = $('.cc-filter-contact-type:checked').map((_, el) => el.value).get()
+  const medium = $('#cc-filter-medium').val()
+  const contactMade = $('#cc-filter-contact-made').val()
+  const noDrafts = $('#cc-filter-no-drafts').is(':checked')
+
+  if (startDate) filters.occurred_starting_at = startDate
+  if (endDate) filters.occurred_ending_at = endDate
+  if (casaIds.length > 0) filters.casa_case_ids = casaIds
+  if (contactTypeIds.length > 0) filters.contact_type_ids = contactTypeIds
+  if (medium) filters.contact_medium = medium
+  if (contactMade !== '') filters.contact_made = contactMade
+  if (noDrafts) filters.no_drafts = '1'
+
+  return filters
 }
 
 $(() => { // JQuery's callback for the DOM loading

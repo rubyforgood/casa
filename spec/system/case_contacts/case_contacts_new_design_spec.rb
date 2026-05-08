@@ -25,6 +25,94 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     end
   end
 
+  describe "filter panel" do
+    let!(:in_person_contact) do
+      create(:case_contact, :active, casa_case: casa_case,
+        medium_type: CaseContact::IN_PERSON, occurred_at: 5.days.ago)
+    end
+    let!(:video_contact) do
+      create(:case_contact, :active, casa_case: casa_case,
+        medium_type: CaseContact::VIDEO, occurred_at: 2.days.ago)
+    end
+    let!(:draft_contact) do
+      create(:case_contact, casa_case: casa_case, status: "started", occurred_at: 1.day.ago)
+    end
+
+    before do
+      sign_in admin
+      visit case_contacts_new_design_path
+    end
+
+    it "shows the Filter button" do
+      expect(page).to have_button("Filter")
+    end
+
+    it "hides the filter panel by default" do
+      expect(page).not_to have_css("#cc-filter-panel", visible: true)
+    end
+
+    it "opens the filter panel when the Filter button is clicked" do
+      click_button "Filter"
+      expect(page).to have_css("#cc-filter-panel", visible: true)
+    end
+
+    it "closes the filter panel when the Filter button is clicked again" do
+      click_button "Filter"
+      click_button "Filter"
+      expect(page).not_to have_css("#cc-filter-panel", visible: true)
+    end
+
+    it "filters by contact medium" do
+      in_person_date = I18n.l(in_person_contact.occurred_at, format: :full)
+      video_date = I18n.l(video_contact.occurred_at, format: :full)
+
+      click_button "Filter"
+      select "In Person", from: "cc-filter-medium"
+      click_button "Apply Filters"
+
+      expect(page).to have_text(in_person_date)
+      expect(page).not_to have_text(video_date)
+    end
+
+    it "filters by date range" do
+      old_date = I18n.l(in_person_contact.occurred_at, format: :full)
+      recent_date = I18n.l(video_contact.occurred_at, format: :full)
+
+      click_button "Filter"
+      execute_script("document.getElementById('cc-filter-occurred-ending-at').value = '#{4.days.ago.to_date}'")
+      click_button "Apply Filters"
+
+      expect(page).to have_text(old_date)
+      expect(page).not_to have_text(recent_date)
+    end
+
+    it "hides drafts when the hide drafts checkbox is checked" do
+      draft_date = I18n.l(draft_contact.occurred_at, format: :full)
+
+      click_button "Filter"
+      check "cc-filter-no-drafts"
+      click_button "Apply Filters"
+
+      expect(page).not_to have_text(draft_date)
+    end
+
+    it "resets all filters when the Reset button is clicked" do
+      in_person_date = I18n.l(in_person_contact.occurred_at, format: :full)
+      video_date = I18n.l(video_contact.occurred_at, format: :full)
+
+      click_button "Filter"
+      select "In Person", from: "cc-filter-medium"
+      click_button "Apply Filters"
+      expect(page).not_to have_text(video_date)
+
+      click_button "Filter"
+      click_button "Reset"
+
+      expect(page).to have_text(in_person_date)
+      expect(page).to have_text(video_date)
+    end
+  end
+
   describe "New Case Contact button" do
     include_context "signed in as admin"
 
