@@ -1,4 +1,10 @@
 module EmancipationsHelper
+  # Memoized per request so the casa_cases index doesn't re-issue COUNT(*)
+  # for every transition-age row when rendering the emancipation badge.
+  def emancipation_category_total_count
+    @emancipation_category_total_count ||= EmancipationCategory.count
+  end
+
   def emancipation_category_checkbox_checked(casa_case, emancipation_category)
     case_contains_category?(casa_case, emancipation_category) ? "checked" : nil
   end

@@ -102,7 +102,7 @@ RSpec.describe CasaCaseDecorator do
 
       expect(casa_case).to(
         receive(:casa_case_emancipation_categories).and_return(
-          double(:categories, count: 2)
+          double(:categories, size: 2)
         )
       )
       expect(EmancipationCategory).to receive(:count).and_return(5)
