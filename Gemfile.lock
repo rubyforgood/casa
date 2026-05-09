@@ -326,7 +326,7 @@ GEM
       net-smtp
     marcel (1.1.0)
     matrix (0.4.3)
-    mcp (0.8.0)
+    mcp (0.9.2)
       json-schema (>= 4.1)
     method_source (1.1.0)
     mini_magick (5.2.0)
