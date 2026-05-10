@@ -55,7 +55,18 @@ class CaseContactDatatable < ApplicationDatatable
   end
 
   def filtered_records
-    raw_records.where(search_filter)
+    apply_additional_filters(raw_records.where(search_filter))
+  end
+
+  def apply_additional_filters(records)
+    records = records.occurred_starting_at(additional_filters[:occurred_starting_at])
+    records = records.occurred_ending_at(additional_filters[:occurred_ending_at])
+    records = records.with_casa_case(Array(additional_filters[:casa_case_ids])) if additional_filters[:casa_case_ids].present?
+    records = records.contact_type(Array(additional_filters[:contact_type_ids])) if additional_filters[:contact_type_ids].present?
+    records = records.contact_medium(additional_filters[:contact_medium])
+    records = records.contact_made(additional_filters[:contact_made])
+    records = records.no_drafts(additional_filters[:no_drafts].to_i) if additional_filters[:no_drafts].present?
+    records
   end
 
   def raw_records
