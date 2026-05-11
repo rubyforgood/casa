@@ -25,6 +25,31 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     end
   end
 
+  describe "columns panel" do
+    include_context "signed in as admin"
+
+    it "shows a Columns button in the toolbar" do
+      expect(page).to have_button("Columns")
+    end
+
+    it "shows a visible count badge on the Columns button" do
+      expect(page).to have_button(text: /Columns\s*\(6\/6\)/)
+    end
+
+    it "hides the columns panel by default" do
+      expect(page).not_to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "lists all 6 toggleable columns with toggle switches, all on by default" do
+      %w[Relationship Medium Contacted Topics Draft].each do |label|
+        expect(page).to have_css("#cc-columns-panel .form-switch", text: label, visible: :all)
+        expect(page).to have_field(label, checked: true, visible: :all)
+      end
+      expect(page).to have_css("#cc-columns-panel .form-switch", text: "Created By", visible: :all)
+      expect(page).to have_field("Created By", checked: true, visible: :all)
+    end
+  end
+
   describe "filter panel" do
     let!(:in_person_contact) do
       create(:case_contact, :active, casa_case: casa_case,
