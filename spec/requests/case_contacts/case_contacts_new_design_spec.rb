@@ -116,6 +116,123 @@ RSpec.describe "/case_contacts_new_design", type: :request do
         end
       end
 
+      context "with additional_filters" do
+        let!(:other_case) { create(:casa_case, casa_org: organization) }
+        let(:contact_type) { create(:contact_type) }
+
+        def post_with_filters(filters)
+          post datatable_case_contacts_new_design_path,
+            params: datatable_params.merge(additional_filters: filters),
+            as: :json
+        end
+
+        def ids
+          JSON.parse(response.body, symbolize_names: true)[:data].pluck(:id)
+        end
+
+        it "filters by occurred_starting_at" do
+          old_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: 2.weeks.ago)
+
+          post_with_filters(occurred_starting_at: 1.week.ago.to_date.to_s)
+
+          expect(ids).to include(case_contact.id.to_s)
+          expect(ids).not_to include(old_contact.id.to_s)
+        end
+
+        it "filters by occurred_ending_at" do
+          old_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: 2.weeks.ago)
+          recent_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: Time.zone.today)
+
+          post_with_filters(occurred_ending_at: 1.week.ago.to_date.to_s)
+
+          expect(ids).to include(old_contact.id.to_s)
+          expect(ids).not_to include(recent_contact.id.to_s)
+        end
+
+        it "filters by casa_case_ids" do
+          other_contact = create(:case_contact, :active, casa_case: other_case)
+
+          post_with_filters(casa_case_ids: [casa_case.id.to_s])
+
+          expect(ids).to include(case_contact.id.to_s)
+          expect(ids).not_to include(other_contact.id.to_s)
+        end
+
+        it "filters by contact_type_ids" do
+          matching_contact = create(:case_contact, :active, casa_case: casa_case, contact_types: [contact_type])
+          non_matching_contact = create(:case_contact, :active, casa_case: casa_case, contact_types: [create(:contact_type)])
+
+          post_with_filters(contact_type_ids: [contact_type.id.to_s])
+
+          expect(ids).to include(matching_contact.id.to_s)
+          expect(ids).not_to include(non_matching_contact.id.to_s)
+        end
+
+        it "filters by contact_medium" do
+          in_person_contact = create(:case_contact, :active, casa_case: casa_case, medium_type: CaseContact::IN_PERSON)
+          video_contact = create(:case_contact, :active, casa_case: casa_case, medium_type: CaseContact::VIDEO)
+
+          post_with_filters(contact_medium: CaseContact::IN_PERSON)
+
+          expect(ids).to include(in_person_contact.id.to_s)
+          expect(ids).not_to include(video_contact.id.to_s)
+        end
+
+        it "filters by contact_made true" do
+          reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: true)
+          not_reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: false)
+
+          post_with_filters(contact_made: "true")
+
+          expect(ids).to include(reached_contact.id.to_s)
+          expect(ids).not_to include(not_reached_contact.id.to_s)
+        end
+
+        it "filters by contact_made false" do
+          reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: true)
+          not_reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: false)
+
+          post_with_filters(contact_made: "false")
+
+          expect(ids).to include(not_reached_contact.id.to_s)
+          expect(ids).not_to include(reached_contact.id.to_s)
+        end
+
+        it "filters by no_drafts" do
+          active_contact = create(:case_contact, :active, casa_case: casa_case)
+          draft_contact = create(:case_contact, casa_case: casa_case, status: "started")
+
+          post_with_filters(no_drafts: "1")
+
+          expect(ids).to include(active_contact.id.to_s)
+          expect(ids).not_to include(draft_contact.id.to_s)
+        end
+
+        it "combines multiple filters with AND logic" do
+          matching = create(:case_contact, :active,
+            casa_case: casa_case,
+            medium_type: CaseContact::IN_PERSON,
+            occurred_at: 2.days.ago)
+          wrong_medium = create(:case_contact, :active,
+            casa_case: casa_case,
+            medium_type: CaseContact::VIDEO,
+            occurred_at: 2.days.ago)
+          wrong_case = create(:case_contact, :active,
+            casa_case: other_case,
+            medium_type: CaseContact::IN_PERSON,
+            occurred_at: 2.days.ago)
+
+          post_with_filters(
+            casa_case_ids: [casa_case.id.to_s],
+            contact_medium: CaseContact::IN_PERSON
+          )
+
+          expect(ids).to include(matching.id.to_s)
+          expect(ids).not_to include(wrong_medium.id.to_s)
+          expect(ids).not_to include(wrong_case.id.to_s)
+        end
+      end
+
       context "when user is a volunteer" do
         let(:volunteer) { create(:volunteer, casa_org: organization) }
 

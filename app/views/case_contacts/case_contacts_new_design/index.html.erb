@@ -1,10 +1,104 @@
 <div class="title-wrapper pt-30">
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-30">
-    <h1>Case Contacts</h1>
+  <h1 class="mb-20">Case Contacts</h1>
+
+  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3" id="cc-filter-toolbar">
+    <button type="button" id="cc-filter-toggle" class="main-btn secondary-btn btn-sm btn-hover">
+      <i class="lni lni-funnel mr-5" aria-hidden="true"></i>
+      Filter
+    </button>
+
     <%= link_to new_case_contact_path, class: "main-btn primary-btn btn-sm btn-hover" do %>
       <i class="lni lni-plus mr-10" aria-hidden="true"></i>
       New Case Contact
     <% end %>
+  </div>
+
+  <div id="cc-filter-panel" class="card-style mb-3" style="display: none;">
+    <div class="card-content">
+      <div class="row mb-3">
+        <div class="col-12"><h5>Date of contact</h5></div>
+        <div class="col-sm-6 input-style-1">
+          <label for="cc-filter-occurred-starting-at">Starting from</label>
+          <input type="date" id="cc-filter-occurred-starting-at" class="form-control" autocomplete="off">
+        </div>
+        <div class="col-sm-6 input-style-1">
+          <label for="cc-filter-occurred-ending-at">Ending at</label>
+          <input type="date" id="cc-filter-occurred-ending-at" class="form-control" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12"><h5>Case</h5></div>
+        <% current_organization.casa_cases.order(:case_number).each do |casa_case| %>
+          <div class="col-md-4">
+            <div class="form-check">
+              <input type="checkbox"
+                     class="form-check-input cc-filter-casa-case"
+                     id="cc-filter-case-<%= casa_case.id %>"
+                     value="<%= casa_case.id %>">
+              <label class="form-check-label" for="cc-filter-case-<%= casa_case.id %>">
+                <%= casa_case.case_number %>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-12"><h5>Relationship</h5></div>
+        <% @current_organization_groups.each do |group| %>
+          <div class="col-md-4">
+            <h6><%= group.name %></h6>
+            <% group.contact_types.each do |contact_type| %>
+              <div class="form-check">
+                <input type="checkbox"
+                       class="form-check-input cc-filter-contact-type"
+                       id="cc-filter-ct-<%= contact_type.id %>"
+                       value="<%= contact_type.id %>">
+                <label class="form-check-label" for="cc-filter-ct-<%= contact_type.id %>">
+                  <%= contact_type.name %>
+                </label>
+              </div>
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-md-4 select-style-1">
+          <label for="cc-filter-medium">Medium</label>
+          <div class="select-position">
+            <select id="cc-filter-medium" class="form-select">
+              <option value="">Display all</option>
+              <% CaseContact::CONTACT_MEDIUMS.each do |medium| %>
+                <option value="<%= medium %>"><%= medium.titleize %></option>
+              <% end %>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 select-style-1">
+          <label for="cc-filter-contact-made">Contacted</label>
+          <div class="select-position">
+            <select id="cc-filter-contact-made" class="form-select">
+              <option value="">Display all</option>
+              <option value="true">Reached</option>
+              <option value="false">Not Reached</option>
+            </select>
+          </div>
+        </div>
+        <div class="col-md-4 d-flex align-items-end pb-2">
+          <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="cc-filter-no-drafts">
+            <label class="form-check-label" for="cc-filter-no-drafts">Hide drafts</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="d-flex gap-2">
+        <button type="button" id="cc-filter-apply" class="main-btn primary-btn btn-sm btn-hover">Apply Filters</button>
+        <button type="button" id="cc-filter-reset" class="main-btn dark-btn-outline btn-sm btn-hover">Reset</button>
+      </div>
+    </div>
   </div>
 </div>
 
