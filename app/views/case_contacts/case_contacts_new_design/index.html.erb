@@ -10,7 +10,7 @@
 
       <button type="button" id="cc-columns-toggle" class="main-btn secondary-btn btn-sm btn-hover">
         <i class="lni lni-list mr-5" aria-hidden="true"></i>
-        Columns <span id="cc-columns-count">(6/6)</span>
+        Columns <span id="cc-columns-count">(<%= CaseContact::TOGGLEABLE_COLUMNS.length %>/<%= CaseContact::TOGGLEABLE_COLUMNS.length %>)</span>
       </button>
     </div>
 
@@ -136,7 +136,7 @@
 </div>
 
 <div class="card-style mb-30">
-  <div class="table-wrapper">
+  <div class="table-wrapper" style="overflow-x: auto">
     <table
       id="case_contacts"
       class="table"
