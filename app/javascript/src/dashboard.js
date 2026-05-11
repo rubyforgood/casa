@@ -37,6 +37,36 @@ function buildExpandedContent (data) {
 const defineCaseContactsTable = function () {
   const table = $('table#case_contacts').DataTable({
     autoWidth: false,
+    stateSave: true,
+    stateSaveCallback: function (settings, data) {
+      $.ajax({
+        url: '/preference_sets/table_state_update/' + settings.nTable.id + '_table',
+        data: { table_state: JSON.stringify(data) },
+        dataType: 'json',
+        type: 'POST',
+        error: function (jqXHR, textStatus, errorMessage) {
+          console.error(errorMessage)
+        }
+      })
+    },
+    stateSaveParams: function (settings, data) {
+      data.search.search = ''
+      return data
+    },
+    stateLoadCallback: function (settings, callback) {
+      $.ajax({
+        url: '/preference_sets/table_state/' + settings.nTable.id + '_table',
+        dataType: 'json',
+        type: 'GET',
+        success: function (json) { callback(json) }
+      })
+    },
+    initComplete: function () {
+      $('.cc-column-toggle').each(function () {
+        $(this).prop('checked', table.column($(this).data('column-index')).visible())
+      })
+      updateColumnsButtonBadge()
+    },
     searching: true,
     processing: true,
     serverSide: true,
@@ -259,7 +289,7 @@ const defineCaseContactsTable = function () {
   function updateColumnsButtonBadge () {
     const total = $('.cc-column-toggle').length
     const visible = $('.cc-column-toggle:checked').length
-    $('#cc-columns-count').text(`(${visible}/${total})`)
+    $('#cc-columns-count').text(`(${visible}/${total})`).css('visibility', 'visible')
   }
 
   $('#cc-columns-toggle').on('click', function () {
