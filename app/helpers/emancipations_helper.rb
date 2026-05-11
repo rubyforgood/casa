@@ -1,6 +1,6 @@
 module EmancipationsHelper
   # Memoized per request so the casa_cases index doesn't re-issue COUNT(*)
-  # for every transition-age row when rendering the emancipation badge.
+  # for every casa_case row when rendering the emancipation badge.
   def emancipation_category_total_count
     @emancipation_category_total_count ||= EmancipationCategory.count
   end
