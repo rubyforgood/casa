@@ -40,6 +40,17 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(page).not_to have_css("#cc-columns-panel", visible: true)
     end
 
+    it "opens the columns panel when the Columns button is clicked" do
+      click_button "Columns"
+      expect(page).to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "closes the columns panel when the Columns button is clicked again" do
+      click_button "Columns"
+      click_button "Columns"
+      expect(page).not_to have_css("#cc-columns-panel", visible: true)
+    end
+
     it "lists all 6 toggleable columns with toggle switches, all on by default" do
       %w[Relationship Medium Contacted Topics Draft].each do |label|
         expect(page).to have_css("#cc-columns-panel .form-switch", text: label, visible: :all)

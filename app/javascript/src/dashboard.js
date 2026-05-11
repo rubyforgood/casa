@@ -256,6 +256,10 @@ const defineCaseContactsTable = function () {
     })
   })
 
+  $('#cc-columns-toggle').on('click', function () {
+    $('#cc-columns-panel').toggle()
+  })
+
   $('#cc-filter-toggle').on('click', function () {
     $('#cc-filter-panel').toggle()
   })
