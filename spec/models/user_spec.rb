@@ -3,8 +3,32 @@ require "rails_helper"
 RSpec.describe User, type: :model do
   it { is_expected.to belong_to(:casa_org) }
 
-  it { is_expected.to have_many(:case_assignments) }
+  it { is_expected.to have_many(:case_assignments).with_foreign_key(:volunteer_id).dependent(:restrict_with_error) }
   it { is_expected.to have_many(:casa_cases).through(:case_assignments) }
+
+  describe "destroying a volunteer with case_assignments" do
+    # The deactivate flow (Volunteer#deactivate) is the supported way to retire
+    # a volunteer: it sets `active: false` on the user and on every
+    # case_assignment, preserving rows for audit. Hard-deleting a volunteer
+    # that still has assignments would silently discard that history, so the
+    # association is :restrict_with_error. Issue #6911.
+    let(:volunteer) { create(:volunteer) }
+
+    before do
+      create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
+    end
+
+    it "refuses to destroy the volunteer" do
+      expect { volunteer.destroy }.not_to change(CaseAssignment, :count)
+      expect(volunteer.persisted?).to eq(true)
+    end
+
+    it "leaves the volunteer's case_assignments intact" do
+      assignment = volunteer.case_assignments.first
+      volunteer.destroy
+      expect(CaseAssignment.exists?(assignment.id)).to eq(true)
+    end
+  end
   it { is_expected.to have_many(:case_contacts) }
   it { is_expected.to have_many(:sent_emails) }
   it { is_expected.to have_many(:user_languages) }
