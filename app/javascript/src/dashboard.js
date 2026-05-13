@@ -129,6 +129,7 @@ const defineCaseContactsTable = function () {
       },
       { // Medium column (index 5)
         data: 'medium_type',
+        orderable: false,
         render: (data) => data || ''
       },
       { // Created By column (index 6)
