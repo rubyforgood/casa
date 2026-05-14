@@ -2,10 +2,17 @@
   <h1 class="mb-20">Case Contacts</h1>
 
   <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3" id="cc-filter-toolbar">
-    <button type="button" id="cc-filter-toggle" class="main-btn secondary-btn btn-sm btn-hover">
-      <i class="lni lni-funnel mr-5" aria-hidden="true"></i>
-      Filter
-    </button>
+    <div class="d-flex gap-2">
+      <button type="button" id="cc-filter-toggle" class="main-btn secondary-btn btn-sm btn-hover">
+        <i class="lni lni-funnel mr-5" aria-hidden="true"></i>
+        Filter
+      </button>
+
+      <button type="button" id="cc-columns-toggle" class="main-btn secondary-btn btn-sm btn-hover">
+        <i class="lni lni-list mr-5" aria-hidden="true"></i>
+        Columns <span id="cc-columns-count" style="visibility: hidden">(<%= CaseContact::TOGGLEABLE_COLUMNS.length %>/<%= CaseContact::TOGGLEABLE_COLUMNS.length %>)</span>
+      </button>
+    </div>
 
     <%= link_to new_case_contact_path, class: "main-btn primary-btn btn-sm btn-hover" do %>
       <i class="lni lni-plus mr-10" aria-hidden="true"></i>
@@ -100,10 +107,36 @@
       </div>
     </div>
   </div>
+
+  <div id="cc-columns-panel" class="card-style mb-3" style="display: none;">
+    <div class="card-content">
+      <div class="row mb-3">
+        <% CaseContact::TOGGLEABLE_COLUMNS.each do |col| %>
+          <div class="col-md-4">
+            <div class="form-check form-switch">
+              <input type="checkbox"
+                     class="form-check-input cc-column-toggle"
+                     id="cc-col-<%= col[:key] %>"
+                     data-column-index="<%= col[:index] %>"
+                     role="switch"
+                     checked>
+              <label class="form-check-label" for="cc-col-<%= col[:key] %>">
+                <%= col[:label] %>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="d-flex gap-2">
+        <button type="button" id="cc-columns-update" class="main-btn primary-btn btn-sm btn-hover">Update View</button>
+        <button type="button" id="cc-columns-show-all" class="main-btn dark-btn-outline btn-sm btn-hover">Show All</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <div class="card-style mb-30">
-  <div class="table-wrapper">
+  <div class="table-wrapper" style="overflow-x: auto">
     <table
       id="case_contacts"
       class="table"

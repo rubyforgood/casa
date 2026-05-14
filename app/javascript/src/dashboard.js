@@ -36,7 +36,37 @@ function buildExpandedContent (data) {
 
 const defineCaseContactsTable = function () {
   const table = $('table#case_contacts').DataTable({
-    scrollX: true,
+    autoWidth: false,
+    stateSave: true,
+    stateSaveCallback: function (settings, data) {
+      $.ajax({
+        url: '/preference_sets/table_state_update/' + settings.nTable.id + '_table',
+        data: { table_state: JSON.stringify(data) },
+        dataType: 'json',
+        type: 'POST',
+        error: function (jqXHR, textStatus, errorMessage) {
+          console.error(errorMessage)
+        }
+      })
+    },
+    stateSaveParams: function (settings, data) {
+      data.search.search = ''
+      return data
+    },
+    stateLoadCallback: function (settings, callback) {
+      $.ajax({
+        url: '/preference_sets/table_state/' + settings.nTable.id + '_table',
+        dataType: 'json',
+        type: 'GET',
+        success: function (json) { callback(json) }
+      })
+    },
+    initComplete: function () {
+      $('.cc-column-toggle').each(function () {
+        $(this).prop('checked', table.column($(this).data('column-index')).visible())
+      })
+      updateColumnsButtonBadge()
+    },
     searching: true,
     processing: true,
     serverSide: true,
@@ -99,6 +129,7 @@ const defineCaseContactsTable = function () {
       },
       { // Medium column (index 5)
         data: 'medium_type',
+        orderable: false,
         render: (data) => data || ''
       },
       { // Created By column (index 6)
@@ -254,6 +285,33 @@ const defineCaseContactsTable = function () {
       headers: { 'X-CSRF-Token': csrfToken(), Accept: 'application/json' },
       success: () => table.ajax.reload(null, false)
     })
+  })
+
+  function updateColumnsButtonBadge () {
+    const total = $('.cc-column-toggle').length
+    const visible = $('.cc-column-toggle:checked').length
+    $('#cc-columns-count').text(`(${visible}/${total})`).css('visibility', 'visible')
+  }
+
+  $('#cc-columns-toggle').on('click', function () {
+    $('#cc-columns-panel').toggle()
+  })
+
+  $('#cc-columns-update').on('click', function () {
+    $('.cc-column-toggle').each(function () {
+      table.column($(this).data('column-index')).visible($(this).is(':checked'))
+    })
+    updateColumnsButtonBadge()
+    $('#cc-columns-panel').hide()
+  })
+
+  $('#cc-columns-show-all').on('click', function () {
+    $('.cc-column-toggle').prop('checked', true)
+    $('.cc-column-toggle').each(function () {
+      table.column($(this).data('column-index')).visible(true)
+    })
+    updateColumnsButtonBadge()
+    $('#cc-columns-panel').hide()
   })
 
   $('#cc-filter-toggle').on('click', function () {

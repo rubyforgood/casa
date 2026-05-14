@@ -69,12 +69,13 @@ describe('defineCaseContactsTable', () => {
       expect(config.searching).toBe(true)
     })
 
-    it('configures scrollX for horizontal scrolling', () => {
+    it('disables autoWidth so columns do not expand to oversized fixed widths', () => {
       defineCaseContactsTable()
 
       const config = mockDataTable.mock.calls[0][0]
 
-      expect(config.scrollX).toBe(true)
+      expect(config.autoWidth).toBe(false)
+      expect(config.scrollX).toBeUndefined()
     })
 
     it('sets default sort to Date column descending', () => {
@@ -674,7 +675,7 @@ describe('defineCaseContactsTable', () => {
       const config = mockDataTable.mock.calls[0][0]
 
       // Verify all critical config options are present
-      expect(config).toHaveProperty('scrollX')
+      expect(config).toHaveProperty('autoWidth')
       expect(config).toHaveProperty('searching')
       expect(config).toHaveProperty('processing')
       expect(config).toHaveProperty('serverSide')

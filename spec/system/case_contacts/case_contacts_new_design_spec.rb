@@ -25,6 +25,96 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     end
   end
 
+  describe "columns panel" do
+    include_context "signed in as admin"
+
+    it "shows a Columns button in the toolbar" do
+      expect(page).to have_button("Columns")
+    end
+
+    it "shows a visible count badge on the Columns button" do
+      expect(page).to have_button(text: /Columns\s*\(6\/6\)/)
+    end
+
+    it "hides the columns panel by default" do
+      expect(page).not_to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "opens the columns panel when the Columns button is clicked" do
+      click_button "Columns"
+      expect(page).to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "closes the columns panel when the Columns button is clicked again" do
+      click_button "Columns"
+      click_button "Columns"
+      expect(page).not_to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "hides a column when its toggle is switched off and Update View is clicked" do
+      click_button "Columns"
+      uncheck "Medium"
+      click_button "Update View"
+
+      expect(page).not_to have_css("th", text: "Medium")
+    end
+
+    it "shows a column again when its toggle is switched back on and Update View is clicked" do
+      click_button "Columns"
+      uncheck "Medium"
+      click_button "Update View"
+
+      click_button "Columns"
+      check "Medium"
+      click_button "Update View"
+
+      expect(page).to have_css("th", text: "Medium")
+    end
+
+    it "updates the badge count when a column is hidden" do
+      click_button "Columns"
+      uncheck "Medium"
+      click_button "Update View"
+
+      expect(page).to have_button(text: /Columns\s*\(5\/6\)/)
+    end
+
+    it "shows all columns and closes the panel when Show All is clicked" do
+      click_button "Columns"
+      uncheck "Medium"
+      uncheck "Topics"
+      click_button "Update View"
+
+      click_button "Columns"
+      click_button "Show All"
+
+      expect(page).to have_css("th", text: "Medium")
+      expect(page).to have_css("th", text: "Topics")
+      expect(page).to have_button(text: /Columns\s*\(6\/6\)/)
+      expect(page).not_to have_css("#cc-columns-panel", visible: true)
+    end
+
+    it "persists hidden columns across page reloads" do
+      click_button "Columns"
+      uncheck "Medium"
+      click_button "Update View"
+
+      visit case_contacts_new_design_path
+
+      expect(page).not_to have_css("th", text: "Medium")
+      expect(page).to have_button(text: /Columns\s*\(5\/6\)/)
+    end
+
+    it "lists all 6 toggleable columns with toggle switches, all on by default" do
+      %w[Relationship Medium Contacted Topics Draft].each do |label|
+        expect(page).to have_css("#cc-columns-panel .form-switch", text: label, visible: :all)
+        expect(page).to have_field(label, checked: true, visible: :all)
+      end
+      expect(page).to have_css("#cc-columns-panel .form-switch", text: "Created By", visible: :all)
+      expect(page).to have_field("Created By", checked: true, visible: :all)
+    end
+  end
+
   describe "filter panel" do
     let!(:in_person_contact) do
       create(:case_contact, :active, casa_case: casa_case,
