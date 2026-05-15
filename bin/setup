@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
-require "fileutils"
+require 'fileutils'
 
-APP_ROOT = File.expand_path("..", __dir__)
+# path to your application root.
+APP_ROOT = File.expand_path('..', __dir__)
 
 def system!(*args)
   system(*args, exception: true)
@@ -11,7 +12,6 @@ FileUtils.chdir APP_ROOT do
   # This script is a way to set up or update your development environment automatically.
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
-
   expected_ruby_version = `cat .ruby-version`.chomp
   current_ruby_version = `ruby -v`.chomp
   unless current_ruby_version.include?(expected_ruby_version)
@@ -19,17 +19,17 @@ FileUtils.chdir APP_ROOT do
     exit
   end
 
-  puts "== Installing dependencies =="
+  puts "\n== Installing dependencies =="
   system! 'gem install foreman'
   # Pin bundler to a version Heroku supports for our Ruby. Match Heroku's
   # supported Ruby/Bundler pairings as they evolve:
   # https://devcenter.heroku.com/articles/ruby-support-reference#supported-ruby-versions
   system! 'gem install bundler -v 4.0.6 --conservative'
-  system("bundle check") || system!("bundle install")
+  system!('bundle check') || system!('bundle install')
 
-  # puts "\n== Copying sample files =="
-  # unless File.exist?("config/database.yml")
-  #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
+  # puts '\n== Copying sample files =='
+  # unless File.exist?('config/database.yml')
+  #   FileUtils.cp 'config/database.yml.sample', 'config/database.yml'
   # end
 
   unless File.exist?('.env')
@@ -38,13 +38,13 @@ FileUtils.chdir APP_ROOT do
   end
 
   puts "\n== Preparing database =="
-  puts '⚠️ If you use docker to run postgres, make sure your database is running ⚠️'
-  system! "bin/rails db:prepare"
+  puts '⚠️  If you use docker to run postgres, make sure your database is running ⚠️'
+  system! 'bin/rails db:reset'
+  system! 'bin/rails db:test:prepare'
 
   puts "\n== Removing old logs and tempfiles =="
-  system! "bin/rails log:clear tmp:clear"
+  system! 'bin/rails log:clear tmp:clear'
 
-  
   puts "\n== Restarting application server =="
   system! 'bin/rails restart'
 
