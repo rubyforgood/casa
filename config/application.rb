@@ -20,7 +20,10 @@ module Casa
     #
     # These settings can be overridden in specific environments using the files
     # in config/environments, which are processed later.
-    
+    #
+    # config.time_zone = "Central Time (US & Canada)"
+    # config.eager_load_paths << Rails.root.join("extras")
+
     config.action_mailer.preview_paths << (defined?(Rails.root) ? Rails.root.join("lib/mailers/previews") : nil)
 
     config.eager_load_paths << Rails.root.join("app/lib/importers")
@@ -29,6 +32,7 @@ module Casa
     config.active_storage.content_types_to_serve_as_binary.delete("image/svg+xml")
     config.serve_static_assets = true
 
+    # to use ViewComponent previews
     config.view_component.previews.paths << "#{Rails.root.join("spec/components/previews")}"
   end
 end
