@@ -12,7 +12,19 @@ FileUtils.chdir APP_ROOT do
   # This script is idempotent, so that you can run it at any time and get an expectable outcome.
   # Add necessary setup steps to this file.
 
+  expected_ruby_version = `cat .ruby-version`.chomp
+  current_ruby_version = `ruby -v`.chomp
+  unless current_ruby_version.include?(expected_ruby_version)
+    puts "Ruby version must be #{expected_ruby_version}. You are on #{current_ruby_version}"
+    exit
+  end
+
   puts "== Installing dependencies =="
+  system! 'gem install foreman'
+  # Pin bundler to a version Heroku supports for our Ruby. Match Heroku's
+  # supported Ruby/Bundler pairings as they evolve:
+  # https://devcenter.heroku.com/articles/ruby-support-reference#supported-ruby-versions
+  system! 'gem install bundler -v 4.0.6 --conservative'
   system("bundle check") || system!("bundle install")
 
   # puts "\n== Copying sample files =="
@@ -20,15 +32,31 @@ FileUtils.chdir APP_ROOT do
   #   FileUtils.cp "config/database.yml.sample", "config/database.yml"
   # end
 
+  unless File.exist?('.env')
+    puts "\n== Setup .env file from .env.example =="
+    system!('cp .env.example .env')
+  end
+
   puts "\n== Preparing database =="
+  puts '⚠️ If you use docker to run postgres, make sure your database is running ⚠️'
   system! "bin/rails db:prepare"
 
   puts "\n== Removing old logs and tempfiles =="
   system! "bin/rails log:clear tmp:clear"
 
-  unless ARGV.include?("--skip-server")
-    puts "\n== Starting development server =="
-    STDOUT.flush # flush the output before exec(2) so that it displays
-    exec "bin/dev"
-  end
+  
+  puts "\n== Restarting application server =="
+  system! 'bin/rails restart'
+
+  puts "\n== Running post-deployment tasks =="
+  system! 'bin/rake after_party:run'
+
+  puts "\n== Installing npm packages =="
+  system!('npm ci') || abort('install npm and try again')
+
+  puts "\n== Building assets =="
+  system!('npm run build')
+  system!('npm run build:css')
+
+  puts "\n== Done =="
 end
