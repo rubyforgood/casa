@@ -14,17 +14,23 @@ RSpec.describe User, type: :model do
     # association is :restrict_with_error. Issue #6911.
     let(:volunteer) { create(:volunteer) }
 
-    before do
+    let!(:assignment) do
       create(:case_assignment, casa_case: create(:casa_case, casa_org: volunteer.casa_org), volunteer: volunteer)
     end
 
+    before do
+      ApiCredential.where(user: volunteer).delete_all
+      volunteer.case_assignments.reset
+    end
+
     it "refuses to destroy the volunteer" do
-      expect { volunteer.destroy }.not_to change(CaseAssignment, :count)
+      destroyed = nil
+      expect { destroyed = volunteer.destroy }.not_to change(CaseAssignment, :count)
+      expect(destroyed).to eq(false)
       expect(volunteer.persisted?).to eq(true)
     end
 
     it "leaves the volunteer's case_assignments intact" do
-      assignment = volunteer.case_assignments.first
       volunteer.destroy
       expect(CaseAssignment.exists?(assignment.id)).to eq(true)
     end
