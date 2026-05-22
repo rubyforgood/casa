@@ -48,6 +48,8 @@ A CASA (Court Appointed Special Advocate) is a role where a volunteer advocates 
 
 We are very happy to have you! CASA and Ruby for Good are committed to welcoming new contributors of all skill levels.
 
+Start with the [contributing guide](./CONTRIBUTING.md) for setup, issue claiming, testing, and pull request expectations.
+
 Find issues to work on [here](https://github.com/rubyforgood/casa/issues?q=is%3Aissue+is%3Aopen+no%3Aassignee) on the issue board. Issues on the [project's](https://github.com/rubyforgood/casa/projects/1) TODO column are another way to browse issues. Check to see that no one is assigned to the issue. Then comment on it to claim the issue. Commenting on an issue doesn't automatically get the issue assigned so double check the comments on an issue to see that no one is requesting assignment.
 
 Pull requests which are not for an issue but which improve the codebase are also welcome! Feel free to make GitHub issues for bugs and improvements. A maintainer will be keeping an eye on issues and PRs every day or three.
@@ -110,7 +112,7 @@ Key libraries: [Hotwire Turbo](https://turbo.hotwired.dev/), [Stimulus](https://
 
 # Developing!
 ## How to Contribute
-  See our [contributing guide](./doc/CONTRIBUTING.md) 💖 ✨
+  See our [contributing guide](./CONTRIBUTING.md) 💖 ✨
 ## Installation
 
 ###  Getting Started (Codespaces) 🛠️
