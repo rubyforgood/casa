@@ -149,7 +149,7 @@ Casa's install will also install the correct version of Rails.
 
 1. **Download the project**
 
-   **You should create a fork in GitHub if you don't have permission to directly commit to this repo. See our [contributing guide](https://github.com/rubyforgood/casa/blob/main/doc/CONTRIBUTING.md) for more detailed instructions.**
+   **You should create a fork in GitHub if you don't have permission to directly commit to this repo. See our [contributing guide](https://github.com/rubyforgood/casa/blob/main/CONTRIBUTING.md) for more detailed instructions.**
 
    `git clone <git address>` - use your fork's address if you have one
 
