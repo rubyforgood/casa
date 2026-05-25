@@ -86,7 +86,7 @@ group :development, :test, :production do
 end
 
 group :development do
-  gem "annotate" # Adds database field listings to models as comments
+  gem "annotaterb" # Adds database field listings to models as comments
   gem "bundler-audit" # Checks for security issues in gems
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "simplecov-mcp" # SimpleCov MCP integration
