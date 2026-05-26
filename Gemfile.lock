@@ -82,9 +82,9 @@ GEM
       public_suffix (>= 2.0.2, < 8.0)
     after_party (2.1.0)
     amazing_print (2.0.0)
-    annotate (3.2.0)
-      activerecord (>= 3.2, < 8.0)
-      rake (>= 10.4, < 14.0)
+    annotaterb (4.22.0)
+      activerecord (>= 6.0.0)
+      activesupport (>= 6.0.0)
     ast (2.4.3)
     authtrail (1.0.0)
       railties (>= 7.2)
@@ -707,7 +707,7 @@ PLATFORMS
 DEPENDENCIES
   after_party
   amazing_print
-  annotate
+  annotaterb
   authtrail
   azure-storage-blob
   blueprinter
