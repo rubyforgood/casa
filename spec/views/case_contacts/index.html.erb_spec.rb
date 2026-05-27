@@ -30,7 +30,7 @@ RSpec.describe "case_contacts/index", type: :view do
 
     assign(:current_organization_groups, groups)
     assign(:filterrific, filterrific_param_set)
-    assign(:presenter, CaseContactPresenter.new(case_contacts))
+    assign(:case_contacts, CaseContactsDecorator.decorate(case_contacts))
     assign(:pagy, pagy)
 
     render template: "case_contacts/index"
