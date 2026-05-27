@@ -106,7 +106,7 @@ Rails.application.routes.draw do
       post :generate
     end
   end
-  resources :reimbursements, only: %i[index change_complete_status], concerns: %i[with_datatable] do
+  resources :reimbursements, only: %i[index], concerns: %i[with_datatable] do
     patch :mark_as_complete, to: "reimbursements#change_complete_status"
     patch :mark_as_needs_review, to: "reimbursements#change_complete_status"
   end
@@ -138,7 +138,7 @@ Rails.application.routes.draw do
   resources :learning_hour_topics, only: %i[new create edit update]
   resources :placement_types, only: %i[new create edit update]
 
-  resources :contact_topics, except: %i[index show delete] do
+  resources :contact_topics, except: %i[index show] do
     delete "soft_delete", on: :member
   end
 

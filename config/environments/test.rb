@@ -1,5 +1,3 @@
-require "active_support/core_ext/integer/time"
-
 # The test environment is used exclusively to run your application's
 # test suite. You never need to work with it otherwise. Remember that
 # your test database is "scratch space" for the test suite and is wiped
@@ -7,9 +5,10 @@ require "active_support/core_ext/integer/time"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.action_mailer.default_url_options = {host: "localhost", port: 3000} # for devise authentication
+
   # While tests run files are not watched, reloading is not necessary.
-  # Turn false under Spring and add config.action_view.cache_template_loading = true.
+  config.enable_reloading = ENV["CI"].blank?
+
   config.action_view.cache_template_loading = true
 
   # Eager loading loads your entire application. When running a single test locally,
@@ -17,21 +16,20 @@ Rails.application.configure do
   # recommended that you enable it in continuous integration systems to ensure eager
   # loading is working properly before deploying your code.
   config.eager_load = ENV["CI"].present?
-  # cache classes on CI, but enable reloading for local work (bin/rspec)
-  config.enable_reloading = ENV["CI"].blank?
-  # Configure public file server for tests with Cache-Control for performance.
+
+  # Configure public file server for tests with cache-control for performance.
   config.public_file_server.enabled = true
   config.public_file_server.headers = {
     "Cache-Control" => "public, max-age=#{1.hour.to_i}"
   }
 
-  # Show full error reports and disable caching.
+  # Show full error reports.
   config.consider_all_requests_local = true
-  config.action_controller.perform_caching = false
-  # config.cache_store = :null_store
 
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = :none
+  config.action_controller.perform_caching = false
+
+  # Render exception templates for rescuable exceptions and raise for other exceptions.
+  config.action_dispatch.show_exceptions = :rescuable
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false
@@ -45,6 +43,9 @@ Rails.application.configure do
   # The :test delivery method accumulates sent emails in the
   # ActionMailer::Base.deliveries array.
   config.action_mailer.delivery_method = :test
+
+  # Set host to be used by links generated in mailer templates.
+  config.action_mailer.default_url_options = {host: "localhost", port: 3000}
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
@@ -63,14 +64,8 @@ Rails.application.configure do
   # Raises error for missing translations.
   config.i18n.raise_on_missing_translations = true
 
-  # Annotate rendered view with file names.
-  # config.action_view.annotate_rendered_view_with_filenames = true
-
-  # Raise error when a before_action's only/except options reference missing actions
+  # Raise error when a before_action's only/except options reference missing actions.
   config.action_controller.raise_on_missing_callback_actions = false
-
-  # https://github.com/rails/rails/issues/48468
-  config.active_job.queue_adapter = :test
 
   config.secret_key_base = ENV["SECRET_KEY_BASE"] || "dummy_test_secret_key"
 end
