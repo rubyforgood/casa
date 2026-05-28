@@ -111,7 +111,7 @@ GEM
     blueprinter (1.3.0)
     brakeman (7.1.1)
       racc
-    bugsnag (6.29.0)
+    bugsnag (6.30.0)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     bundler-audit (0.9.3)
