@@ -31,6 +31,12 @@ RSpec.describe LoadsCaseContacts do
         expect(response).to have_http_status(:success)
         expect(assigns(:filtered_case_contacts)).to be_present
       end
+
+      it "decorates case contacts with the correct decorator" do
+        get case_contacts_new_design_path
+
+        expect(assigns(:case_contacts)).to be_decorated_with CaseContactsDecorator
+      end
     end
 
     context "when new_case_contact_table flag is disabled" do

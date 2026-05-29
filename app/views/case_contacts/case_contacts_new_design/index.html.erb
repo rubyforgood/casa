@@ -158,8 +158,8 @@
       <!-- end table row-->
       </thead>
       <tbody>
-        <% @presenter.case_contacts.each do |casa_case_id, case_contacts| %>
-          <% case_contacts.each do |case_contact| %>
+        <% @case_contacts.object.each do |casa_case_id, contacts| %>
+          <% contacts.each do |case_contact| %>
             <tr data-testid="case_contact-row">
               <td>
                 <i class='fas fa-bell'></i>
@@ -171,7 +171,7 @@
                 <%= I18n.l(case_contact[:occurred_at], format: :full) if case_contact[:occurred_at].present? %>
               </td>
               <td>
-                <%= @presenter.display_case_number(casa_case_id) %>
+                <%= @case_contacts.display_case_number(casa_case_id) %>
               </td>
               <td>
                 <%= case_contact.decorate.contact_types_comma_separated %>
