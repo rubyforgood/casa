@@ -5,6 +5,7 @@ class LearningHoursController < ApplicationController
   def index
     authorize LearningHour
     @learning_hours = policy_scope(LearningHour)
+    @learning_hours = LearningHoursDashboardRowsService.new(current_user).perform
   end
 
   def show
