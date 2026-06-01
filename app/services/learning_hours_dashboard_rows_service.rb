@@ -1,12 +1,13 @@
 class LearningHoursDashboardRowsService
-  def initialize(user)
+  def initialize(user, learning_hours_scope)
     @user = user
+    @learning_hours_scope = learning_hours_scope
   end
 
   def perform
     case @user
     when Volunteer
-      @user.learning_hours
+      @learning_hours_scope
     when Supervisor
       supervisor_rows
     when CasaAdmin
