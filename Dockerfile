@@ -34,18 +34,14 @@ FROM ruby:4.0.2-alpine
     tzdata \
     && rm -rf /var/cache/apk/*
 
-  RUN addgroup -S app && adduser -S app -G app && chown app:app $ROOT
-
   COPY --from=node-source /usr/local/bin/node /usr/local/bin/node
   COPY --from=node-source /usr/local/lib/node_modules /usr/local/lib/node_modules
   RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 
-  USER app
-
-  COPY --chown=app:app package*.json ./
+  COPY package*.json ./
   RUN npm ci
 
-  COPY --chown=app:app . .
+  COPY . .
   COPY --from=build /usr/local/bundle/ /usr/local/bundle/
 
   EXPOSE 3000
