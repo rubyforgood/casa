@@ -67,8 +67,7 @@ RSpec.describe "court_dates/edit", type: :system do
   context "as a user from an organization not containing the court date" do
     let(:other_organization) { create(:casa_org) }
 
-    xit "does not allow the user to view the court date" do
-      # TODO the app or browser can't gracefully handle the URL
+    it "does not allow the user to view the court date" do
       sign_in create(:casa_admin, casa_org: other_organization)
       visit casa_case_court_date_path(casa_case, court_date)
 
