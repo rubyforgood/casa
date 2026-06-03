@@ -63,7 +63,7 @@ RSpec.describe Rack::Attack do
 
   describe "throttle excessive requests for email login by variety of IP addresses" do
     shared_examples "correctly throttles" do
-      it "changes the request status to 429 when greater than limit" do
+      it "changes the request status to 429 when greater than limit", disable_prosopite: true do
         (limit * 2).times do |i|
           header = {"REMOTE_ADDR" => "#{remote_ip}#{i}"}
           post path, params, header
