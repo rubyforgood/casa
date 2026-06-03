@@ -13,7 +13,6 @@ spec/decorators
 spec/policies
 spec/datatables
 spec/helpers
-spec/seeds
 spec/mailers
 spec/config
 spec/notifications
