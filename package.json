@@ -52,7 +52,7 @@
     "jest-environment-jsdom": "^30.4.1",
     "markdown-toc": "^1.2.0",
     "standard": "^17.1.2",
-    "start-server-and-test": "^2.1.5"
+    "start-server-and-test": "^3.0.7"
   },
   "standard": {
     "globals": [
