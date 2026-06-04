@@ -60,7 +60,7 @@ RSpec.describe NotificationsHelper, type: :helper do
       patch_note_2 = create(:patch_note, note: "Patch Note 2", patch_note_type: patch_note_type_b)
       patch_note_3 = create(:patch_note, note: "Patch Note 3", patch_note_type: patch_note_type_b)
 
-      patch_notes_hash = helper.patch_notes_as_hash_keyed_by_type_name(PatchNote.all)
+      patch_notes_hash = helper.patch_notes_as_hash_keyed_by_type_name(PatchNote.includes(:patch_note_type).all)
 
       expect(patch_notes_hash).to have_key(patch_note_type_a.name)
       expect(patch_notes_hash).to have_key(patch_note_type_b.name)
