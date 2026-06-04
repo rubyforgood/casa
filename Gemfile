@@ -93,7 +93,7 @@ group :development do
   gem "spring" # Speeds up development by keeping your application running in the background
   gem "spring-commands-rspec" # Spring integration for RSpec
   gem "traceroute" # Finds unused routes
-  gem "web-console", "~> 4.0" # Interactive console on exception pages
+  gem "web-console", "~> 4.3" # Interactive console on exception pages
 end
 
 group :test do
