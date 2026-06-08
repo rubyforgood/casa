@@ -12,6 +12,5 @@ spec/views
 spec/decorators
 spec/policies
 spec/datatables
-spec/helpers
 spec/mailers
 spec/notifications
