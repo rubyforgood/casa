@@ -1,2 +1,3 @@
 from_owner:
   - dependabot[bot]
+  - renovate[bot]
