@@ -1,0 +1,49 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+    ":dependencyDashboard",
+    ":semanticCommits",
+    ":timezone(America/Los_Angeles)"
+  ],
+  "description": "Renovate config for rubyforgood/casa",
+  "prConcurrentLimit": 3,
+  "prHourlyLimit": 2,
+  "platformAutomerge": true,
+  "minimumReleaseAge": "7 days",
+  "labels": ["renovate", "dependencies"],
+  "enabledManagers": ["bundler", "npm", "github-actions", "dockerfile", "docker-compose"],
+  "vulnerabilityAlerts": {
+    "labels": ["renovate", "security"],
+    "minimumReleaseAge": "0 days"
+  },
+  "packageRules": [
+    {
+      "description": "Major bumps: dashboard-gated, no automerge",
+      "matchUpdateTypes": ["major"],
+      "dependencyDashboardApproval": true,
+      "labels": ["renovate", "dependencies", "major"]
+    },
+    {
+      "description": "Minor/patch runtime deps: automerge after stability window",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchDepTypes": ["dependencies", "require"],
+      "automerge": true,
+      "labels": ["renovate", "dependencies", "automerge"]
+    },
+    {
+      "description": "Minor/patch dev deps: automerge after stability window",
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchDepTypes": ["devDependencies", "development"],
+      "automerge": true,
+      "labels": ["renovate", "devDependencies", "automerge"]
+    },
+    {
+      "description": "GitHub Actions: pin to digests and automerge minor/patch",
+      "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
+      "labels": ["renovate", "github-actions", "automerge"]
+    }
+  ]
+}
