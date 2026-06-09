@@ -4,7 +4,7 @@ RSpec.describe ReimbursementsController, type: :request do
   let(:admin) { create(:casa_admin) }
   let(:casa_org) { admin.casa_org }
   let(:case_contact) { create(:case_contact) }
-  let(:notification_double) { double("ReimbursementCompleteNotifier") }
+  let(:notification_double) { instance_double("ReimbursementCompleteNotifier") }
 
   before do
     sign_in(admin)
