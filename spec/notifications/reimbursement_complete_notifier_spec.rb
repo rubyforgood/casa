@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe ReimbursementCompleteNotifier, type: :model do
   describe "title" do
     it "returns 'Reimbursement Approved'" do
-      case_contact = create(:case_contact, :wants_reimbursement)
+      case_contact = build(:case_contact, :wants_reimbursement)
 
       notification = ReimbursementCompleteNotifier.with(case_contact:)
 
