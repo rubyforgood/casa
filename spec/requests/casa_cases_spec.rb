@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.shared_examples "casa_case access control" do |user_role|
+RSpec.shared_examples "casa_case access control" do
   it "renders a successful response" do
     get casa_case_url(casa_case)
     expect(response).to be_successful
@@ -13,6 +13,91 @@ RSpec.shared_examples "casa_case access control" do |user_role|
     get casa_case_url(other_case)
     expect(response).to be_redirect
     expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+  end
+end
+
+RSpec.shared_examples "casa_case index access control" do
+  it "renders a successful response" do
+    build_stubbed(:casa_case)
+    get casa_cases_url
+    expect(response).to be_successful
+  end
+
+  it "shows all my organization's cases" do
+    volunteer_1 = create(:volunteer, casa_org: user.casa_org)
+    volunteer_2 = create(:volunteer, casa_org: user.casa_org)
+    create(:case_assignment, volunteer: volunteer_1)
+    create(:case_assignment, volunteer: volunteer_2)
+
+    get casa_cases_url
+
+    expect(response.body).to include(volunteer_1.casa_cases.first.case_number)
+    expect(response.body).to include(volunteer_2.casa_cases.first.case_number)
+  end
+
+  it "doesn't show other organizations' cases" do
+    my_case_assignment = build(:case_assignment, casa_org: user.casa_org)
+    different_org = build(:casa_org)
+    not_my_case_assignment = build_stubbed(:case_assignment, casa_org: different_org)
+
+    get casa_cases_url
+
+    expect(response.body).to include(my_case_assignment.casa_case.case_number)
+    expect(response.body).not_to include(not_my_case_assignment.casa_case.case_number)
+  end
+end
+
+RSpec.shared_examples "casa_case edit access control" do
+  it "render a successful response" do
+    get edit_casa_case_url(casa_case)
+    expect(response).to be_successful
+  end
+
+  it "fails across organizations" do
+    other_org = build(:casa_org)
+    other_case = create(:casa_case, casa_org: other_org)
+
+    get edit_casa_case_url(other_case)
+    expect(response).to be_redirect
+    expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+  end
+end
+
+RSpec.shared_examples "denies casa_case creation" do
+  context "with valid parameters" do
+    it "denies access" do
+      post casa_cases_url, params: {casa_case: valid_attributes}
+
+      expect(response).not_to be_successful
+      expect(flash[:notice]).to match(/you are not authorized/)
+    end
+  end
+end
+
+RSpec.shared_examples "prevents cross-organization update" do
+  it "does not update across organizations" do
+    other_org = build(:casa_org)
+    other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
+
+    expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
+      change { other_casa_case.reload.attributes }
+    )
+  end
+end
+
+RSpec.shared_examples "denies casa_case deactivation" do
+  it "does not deactivate the requested casa_case" do
+    patch deactivate_casa_case_path(casa_case), params: params
+    casa_case.reload
+    expect(casa_case.active).to eq true
+  end
+end
+
+RSpec.shared_examples "denies casa_case reactivation" do
+  it "does not deactivate the requested casa_case" do
+    patch deactivate_casa_case_path(casa_case), params: params
+    casa_case.reload
+    expect(casa_case.active).to eq false
   end
 end
 
@@ -55,50 +140,11 @@ RSpec.describe "/casa_cases", type: :request do
     let(:user) { create(:casa_admin, casa_org: organization) }
 
     describe "GET /index" do
-      it "renders a successful response" do
-        create(:casa_case)
-        get casa_cases_url
-        expect(response).to be_successful
-      end
-
-      it "shows all my organization's cases" do
-        volunteer_1 = create(:volunteer, casa_org: user.casa_org)
-        volunteer_2 = create(:volunteer, casa_org: user.casa_org)
-        create(:case_assignment, volunteer: volunteer_1)
-        create(:case_assignment, volunteer: volunteer_2)
-
-        get casa_cases_url
-
-        expect(response.body).to include(volunteer_1.casa_cases.first.case_number)
-        expect(response.body).to include(volunteer_2.casa_cases.first.case_number)
-      end
-
-      it "doesn't show other organizations' cases" do
-        my_case_assignment = build(:case_assignment, casa_org: user.casa_org)
-        different_org = build(:casa_org)
-        not_my_case_assignment = build_stubbed(:case_assignment, casa_org: different_org)
-
-        get casa_cases_url
-
-        expect(response.body).to include(my_case_assignment.casa_case.case_number)
-        expect(response.body).not_to include(not_my_case_assignment.casa_case.case_number)
-      end
+      include_examples "casa_case index access control"
     end
 
     describe "GET /show" do
-      it "renders a successful response" do
-        get casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case access control"
 
       context "when exporting a csv" do
         subject(:casa_case_show) { get casa_case_path(casa_case, format: :csv) }
@@ -148,19 +194,7 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "GET /edit" do
-      it "render a successful response" do
-        get edit_casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get edit_casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case edit access control"
     end
 
     describe "POST /create" do
@@ -543,30 +577,11 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "POST /create" do
-      context "with valid parameters" do
-        it "denies access" do
-          post casa_cases_url, params: {casa_case: valid_attributes}
-
-          expect(response).not_to be_successful
-          expect(flash[:notice]).to match(/you are not authorized/)
-        end
-      end
+      include_examples "denies casa_case creation"
     end
 
     describe "GET /edit" do
-      it "render a successful response" do
-        get edit_casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get edit_casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case edit access control"
     end
 
     describe "PATCH /update" do
@@ -604,14 +619,7 @@ RSpec.describe "/casa_cases", type: :request do
         end
       end
 
-      it "does not update across organizations" do
-        other_org = build(:casa_org)
-        other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
-
-        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
-          change { other_casa_case.reload.attributes }
-        )
-      end
+      include_examples "prevents cross-organization update"
     end
 
     describe "GET /index" do
@@ -633,22 +641,14 @@ RSpec.describe "/casa_cases", type: :request do
       let(:casa_case) { build(:casa_case, :active, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
-      it "does not deactivate the requested casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
-        casa_case.reload
-        expect(casa_case.active).to eq true
-      end
+      include_examples "denies casa_case deactivation"
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { build(:casa_case, :inactive, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
-      it "does not deactivate the requested casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
-        casa_case.reload
-        expect(casa_case.active).to eq false
-      end
+      include_examples "denies casa_case reactivation"
     end
   end
 
@@ -668,30 +668,11 @@ RSpec.describe "/casa_cases", type: :request do
     end
 
     describe "POST /create" do
-      context "with valid parameters" do
-        it "denies access" do
-          post casa_cases_url, params: {casa_case: valid_attributes}
-
-          expect(response).not_to be_successful
-          expect(flash[:notice]).to match(/you are not authorized/)
-        end
-      end
+      include_examples "denies casa_case creation"
     end
 
     describe "GET /edit" do
-      it "render a successful response" do
-        get edit_casa_case_url(casa_case)
-        expect(response).to be_successful
-      end
-
-      it "fails across organizations" do
-        other_org = build(:casa_org)
-        other_case = create(:casa_case, casa_org: other_org)
-
-        get edit_casa_case_url(other_case)
-        expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
-      end
+      include_examples "casa_case edit access control"
     end
 
     describe "PATCH /update" do
@@ -742,44 +723,25 @@ RSpec.describe "/casa_cases", type: :request do
         end
       end
 
-      it "does not update across organizations" do
-        other_org = build(:casa_org)
-        other_casa_case = create(:casa_case, case_number: "abc", casa_org: other_org)
-
-        expect { patch casa_case_url(other_casa_case), params: {casa_case: new_attributes} }.not_to(
-          change { other_casa_case.reload.attributes }
-        )
-      end
+      include_examples "prevents cross-organization update"
     end
 
     describe "GET /index" do
-      it "renders a successful response" do
-        build_stubbed(:casa_case)
-        get casa_cases_url
-        expect(response).to be_successful
-      end
+      include_examples "casa_case index access control"
     end
 
     describe "PATCH /casa_cases/:id/deactivate" do
       let(:casa_case) { create(:casa_case, :active, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
-      it "does not deactivate the requested casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
-        casa_case.reload
-        expect(casa_case.active).to eq true
-      end
+      include_examples "denies casa_case deactivation"
     end
 
     describe "PATCH /casa_cases/:id/reactivate" do
       let(:casa_case) { create(:casa_case, :inactive, casa_org: organization, case_number: "111") }
       let(:params) { {id: casa_case.id} }
 
-      it "does not deactivate the requested casa_case" do
-        patch deactivate_casa_case_path(casa_case), params: params
-        casa_case.reload
-        expect(casa_case.active).to eq false
-      end
+      include_examples "denies casa_case reactivation"
     end
   end
 end
