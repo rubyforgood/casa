@@ -1,5 +1,5 @@
 if Rails.env.development?
-  desc "Create a emancipation_checklist_reminder_notifier notification"
+  desc "Create an emancipation_checklist_reminder_notifier notification"
   task emancipation_checklist_reminder_notifier: :environment do
     CasaCase.birthday_next_month.find_each do |casa_case|
       casa_case.case_assignments.active.find_each do |case_assignment|
