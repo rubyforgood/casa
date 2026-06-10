@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../../../lib/tasks/supervisor_weekly_digest"
 
 RSpec.describe SupervisorWeeklyDigest do
   describe "#send!" do

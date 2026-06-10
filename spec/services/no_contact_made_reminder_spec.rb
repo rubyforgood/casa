@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../../../lib/tasks/no_contact_made_reminder"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe NoContactMadeReminder do
