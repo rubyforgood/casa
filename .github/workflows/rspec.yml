@@ -79,7 +79,7 @@ jobs:
         run: |
           RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
 
-      - uses: qltysh/qlty-action/coverage@v2.2.0
+      - uses: qltysh/qlty-action/coverage@v2.2.1
         with:
           token: ${{ secrets.QLTY_COVERAGE_TOKEN }}
           files: coverage/.resultset.json
