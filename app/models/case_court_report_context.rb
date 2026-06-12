@@ -106,36 +106,46 @@ class CaseCourtReportContext
   # ]}
   # }
   def court_topics
-    topics = ContactTopic
-      .joins(contact_topic_answers: {case_contact: [:casa_case, :contact_types]}).distinct
-      .where(contact_topics: {exclude_from_court_report: false})
-      .where("casa_cases.id": @casa_case.id)
-      .where("case_contacts.occurred_at": @date_range)
-      .order(:occurred_at, :value)
-      .select(:details, :question, :occurred_at, :value, :contact_made,
-        "STRING_AGG(contact_types.name, ', ' ORDER BY contact_types.name) AS medium_types")
-      .group(:details, :question, :occurred_at, :value, :contact_made)
+    answers_by_topic_id = court_topic_answers
 
-    topics.each_with_object({}) do |topic, hash|
-      hash[topic.question] ||= {
-        answers: [],
+    report_topics(answers_by_topic_id.keys).each_with_object({}) do |topic, hash|
+      hash[topic.question] = {
+        answers: answers_by_topic_id.fetch(topic.id, []),
         topic: topic.question,
         details: topic.details
       }
-
-      formatted_date = CourtReportFormatContactDate.new(topic).format_long
-      answer_value = topic.value.presence || "No Answer Provided"
-      answer = {
-        date: formatted_date,
-        medium: topic.medium_types,
-        value: answer_value
-      }
-
-      hash[topic.question][:answers].push(answer)
     end
   end
 
   private
+
+  def report_topics(answered_topic_ids)
+    ContactTopic
+      .where(casa_org: @casa_case.casa_org, exclude_from_court_report: false)
+      .merge(ContactTopic.active.or(ContactTopic.where(id: answered_topic_ids)))
+      .order(:id)
+  end
+
+  def court_topic_answers
+    answer_rows = ContactTopic
+      .joins(contact_topic_answers: {case_contact: [:casa_case, :contact_types]}).distinct
+      .where("casa_cases.id": @casa_case.id)
+      .where("case_contacts.occurred_at": @date_range)
+      .order(:occurred_at, :value)
+      .select("contact_topics.id", :occurred_at, :value, :contact_made,
+        "STRING_AGG(contact_types.name, ', ' ORDER BY contact_types.name) AS medium_types")
+      .group("contact_topics.id", :occurred_at, :value, :contact_made)
+
+    answer_rows.group_by(&:id).transform_values do |rows|
+      rows.map do |row|
+        {
+          date: CourtReportFormatContactDate.new(row).format_long,
+          medium: row.medium_types,
+          value: row.value.presence || "No Answer Provided"
+        }
+      end
+    end
+  end
 
   def calculate_date_range(args)
     zone = args[:time_zone] ? ActiveSupport::TimeZone.new(args[:time_zone]) : Time.zone
