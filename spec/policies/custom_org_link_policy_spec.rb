@@ -18,4 +18,36 @@ RSpec.describe CustomOrgLinkPolicy, type: :policy do
       expect(described_class).not_to permit(volunteer)
     end
   end
+
+  describe "Scope#resolve" do
+    subject(:resolved_scope) { described_class::Scope.new(user, CustomOrgLink.all).resolve }
+
+    let(:casa_org) { create(:casa_org) }
+    let!(:custom_org_link) { create(:custom_org_link, casa_org: casa_org) }
+    let!(:other_org_custom_org_link) { create(:custom_org_link) }
+
+    context "when user is a casa admin" do
+      let(:user) { create(:casa_admin, casa_org: casa_org) }
+
+      it "resolves only links from the admin's organization" do
+        expect(resolved_scope).to contain_exactly(custom_org_link)
+      end
+    end
+
+    context "when user is a supervisor" do
+      let(:user) { create(:supervisor, casa_org: casa_org) }
+
+      it "resolves no links" do
+        expect(resolved_scope).to be_empty
+      end
+    end
+
+    context "when user is a volunteer" do
+      let(:user) { create(:volunteer, casa_org: casa_org) }
+
+      it "resolves no links" do
+        expect(resolved_scope).to be_empty
+      end
+    end
+  end
 end
