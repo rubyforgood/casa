@@ -139,7 +139,6 @@ class DbPopulator
       court_date = generate_court_date
       court_report_submitted = index.even?
 
-      new_casa_case = CasaCase.find_by(case_number: case_number)
       birth_month_year_youth = @case_fourteen_years_old ? ((Date.today - 18.year)..(Date.today - CasaCase::TRANSITION_AGE.year)).to_a.sample : ((Date.today - 18.year)..(Date.today - 1.year)).to_a.sample
       new_casa_case ||= CasaCase.find_or_create_by!(
         casa_org_id: casa_org.id,
@@ -147,7 +146,7 @@ class DbPopulator
         court_report_submitted_at: court_report_submitted ? Date.today : nil,
         court_report_status: court_report_submitted ? :submitted : :not_submitted,
         birth_month_year_youth: birth_month_year_youth,
-        date_in_care: Date.today - (rand * 1500)
+        date_in_care: Date.today - rand(1500)
       )
       new_court_date = CourtDate.find_or_create_by!(
         casa_case: new_casa_case,
