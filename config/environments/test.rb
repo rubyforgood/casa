@@ -6,7 +6,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # While tests run files are not watched, reloading is not necessary.
   config.enable_reloading = ENV["CI"].blank?
+
   config.action_view.cache_template_loading = true
 
   # Eager loading loads your entire application. When running a single test locally,
