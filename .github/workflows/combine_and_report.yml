@@ -10,7 +10,7 @@ jobs:
     steps:
       - name: Checkout Project
         if: ${{ !cancelled() }}
-        uses: actions/checkout@v6.0.3
+        uses: actions/checkout@v7.0.0
       - name: Download artifacts
         if: ${{ !cancelled() }}
         uses: actions/download-artifact@v8
