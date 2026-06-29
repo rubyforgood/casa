@@ -10,38 +10,38 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
+ActiveRecord::Schema[8.1].define(version: 2026_04_14_132818) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
   create_table "action_text_rich_texts", force: :cascade do |t|
-    t.string "name", null: false
     t.text "body"
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.datetime "updated_at", null: false
     t.index ["record_type", "record_id", "name"], name: "index_action_text_rich_texts_uniqueness", unique: true
   end
 
   create_table "active_storage_attachments", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "record_type", null: false
-    t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
     t.datetime "created_at", precision: nil, null: false
+    t.string "name", null: false
+    t.bigint "record_id", null: false
+    t.string "record_type", null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
 
   create_table "active_storage_blobs", force: :cascade do |t|
-    t.string "key", null: false
-    t.string "filename", null: false
-    t.string "content_type"
-    t.text "metadata"
     t.bigint "byte_size", null: false
     t.string "checksum"
+    t.string "content_type"
     t.datetime "created_at", precision: nil, null: false
+    t.string "filename", null: false
+    t.string "key", null: false
+    t.text "metadata"
     t.string "service_name", null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
@@ -54,65 +54,65 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
 
   create_table "additional_expenses", force: :cascade do |t|
     t.bigint "case_contact_id", null: false
+    t.datetime "created_at", null: false
     t.decimal "other_expense_amount"
     t.string "other_expenses_describe"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_additional_expenses_on_case_contact_id"
   end
 
   create_table "addresses", force: :cascade do |t|
     t.string "content"
-    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_addresses_on_user_id"
   end
 
   create_table "all_casa_admins", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "email", default: "", null: false
     t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "invitation_token"
-    t.datetime "invitation_created_at", precision: nil
-    t.datetime "invitation_sent_at", precision: nil
     t.datetime "invitation_accepted_at", precision: nil
+    t.datetime "invitation_created_at", precision: nil
     t.integer "invitation_limit"
+    t.datetime "invitation_sent_at", precision: nil
+    t.string "invitation_token"
     t.integer "invited_by_id"
     t.string "invited_by_type"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.string "reset_password_token"
+    t.datetime "updated_at", null: false
     t.index ["email"], name: "index_all_casa_admins_on_email", unique: true
     t.index ["invitation_token"], name: "index_all_casa_admins_on_invitation_token", unique: true
     t.index ["reset_password_token"], name: "index_all_casa_admins_on_reset_password_token", unique: true
   end
 
   create_table "api_credentials", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.datetime "token_expires_at", default: -> { "(now() + 'PT7H'::interval)" }
-    t.datetime "refresh_token_expires_at", default: -> { "(now() + 'P30D'::interval)" }
     t.string "api_token_digest"
-    t.string "refresh_token_digest"
     t.datetime "created_at", null: false
+    t.string "refresh_token_digest"
+    t.datetime "refresh_token_expires_at", default: -> { "(now() + 'P30D'::interval)" }
+    t.datetime "token_expires_at", default: -> { "(now() + 'PT7H'::interval)" }
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["api_token_digest"], name: "index_api_credentials_on_api_token_digest", unique: true, where: "(api_token_digest IS NOT NULL)"
     t.index ["refresh_token_digest"], name: "index_api_credentials_on_refresh_token_digest", unique: true, where: "(refresh_token_digest IS NOT NULL)"
   end
 
   create_table "banners", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
-    t.bigint "user_id", null: false
-    t.string "name"
     t.boolean "active", default: false
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.datetime "expires_at"
+    t.string "name"
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
   end
 
   create_table "casa_case_contact_types", force: :cascade do |t|
-    t.bigint "contact_type_id", null: false
     t.bigint "casa_case_id", null: false
+    t.bigint "contact_type_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_contact_types_on_casa_case_id"
@@ -121,67 +121,67 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
 
   create_table "casa_case_emancipation_categories", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
-    t.bigint "emancipation_category_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "emancipation_category_id", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_casa_case_emancipation_categories_on_casa_case_id"
   end
 
   create_table "casa_case_emancipation_options", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
-    t.bigint "emancipation_option_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "emancipation_option_id", null: false
     t.datetime "updated_at", null: false
     t.index ["casa_case_id", "emancipation_option_id"], name: "index_case_options_on_case_id_and_option_id", unique: true
   end
 
   create_table "casa_cases", force: :cascade do |t|
-    t.string "case_number", null: false
-    t.boolean "transition_aged_youth", default: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "casa_org_id", null: false
-    t.datetime "birth_month_year_youth", precision: nil
-    t.datetime "court_report_due_date", precision: nil
     t.boolean "active", default: true, null: false
-    t.datetime "court_report_submitted_at", precision: nil
+    t.datetime "birth_month_year_youth", precision: nil
+    t.bigint "casa_org_id", null: false
+    t.string "case_number", null: false
+    t.datetime "court_report_due_date", precision: nil
     t.integer "court_report_status", default: 0
-    t.string "slug"
+    t.datetime "court_report_submitted_at", precision: nil
+    t.datetime "created_at", null: false
     t.datetime "date_in_care"
+    t.string "slug"
+    t.boolean "transition_aged_youth", default: false
+    t.datetime "updated_at", null: false
     t.index ["casa_org_id"], name: "index_casa_cases_on_casa_org_id"
     t.index ["case_number", "casa_org_id"], name: "index_casa_cases_on_case_number_and_casa_org_id", unique: true
     t.index ["slug"], name: "index_casa_cases_on_slug"
   end
 
   create_table "casa_orgs", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "display_name"
+    t.boolean "additional_expenses_enabled", default: false
     t.string "address"
+    t.datetime "created_at", null: false
+    t.string "display_name"
     t.string "footer_links", default: [], array: true
-    t.string "slug"
+    t.boolean "learning_topic_active", default: false
+    t.string "name", null: false
+    t.boolean "other_duties_enabled", default: true
     t.boolean "show_driving_reimbursement", default: true
     t.boolean "show_fund_request", default: false
-    t.string "twilio_phone_number"
+    t.string "slug"
     t.string "twilio_account_sid"
-    t.string "twilio_api_key_sid"
     t.string "twilio_api_key_secret"
+    t.string "twilio_api_key_sid"
     t.boolean "twilio_enabled", default: false
-    t.boolean "additional_expenses_enabled", default: false
-    t.boolean "learning_topic_active", default: false
-    t.boolean "other_duties_enabled", default: true
+    t.string "twilio_phone_number"
+    t.datetime "updated_at", null: false
     t.index ["slug"], name: "index_casa_orgs_on_slug", unique: true
   end
 
   create_table "case_assignments", force: :cascade do |t|
-    t.bigint "casa_case_id", null: false
-    t.bigint "volunteer_id", null: false
     t.boolean "active", default: true, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "hide_old_contacts", default: false
     t.boolean "allow_reimbursement", default: true
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", null: false
+    t.boolean "hide_old_contacts", default: false
+    t.datetime "updated_at", null: false
+    t.bigint "volunteer_id", null: false
     t.index ["casa_case_id"], name: "index_case_assignments_on_casa_case_id"
     t.index ["volunteer_id"], name: "index_case_assignments_on_volunteer_id"
   end
@@ -196,23 +196,23 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
   end
 
   create_table "case_contacts", force: :cascade do |t|
-    t.bigint "creator_id", null: false
     t.bigint "casa_case_id"
-    t.integer "duration_minutes"
-    t.datetime "occurred_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "contact_made", default: false
-    t.string "medium_type"
-    t.integer "miles_driven", default: 0, null: false
-    t.boolean "want_driving_reimbursement", default: false
-    t.string "notes"
+    t.datetime "created_at", null: false
+    t.bigint "creator_id", null: false
     t.datetime "deleted_at", precision: nil
+    t.integer "draft_case_ids", default: [], array: true
+    t.integer "duration_minutes"
+    t.string "medium_type"
+    t.jsonb "metadata", default: {}
+    t.integer "miles_driven", default: 0, null: false
+    t.string "notes"
+    t.datetime "occurred_at", precision: nil
     t.boolean "reimbursement_complete", default: false
     t.string "status", default: "started"
-    t.integer "draft_case_ids", default: [], array: true
+    t.datetime "updated_at", null: false
     t.string "volunteer_address"
-    t.jsonb "metadata", default: {}
+    t.boolean "want_driving_reimbursement", default: false
     t.index ["casa_case_id"], name: "index_case_contacts_on_casa_case_id"
     t.index ["creator_id"], name: "index_case_contacts_on_creator_id"
     t.check_constraint "miles_driven IS NOT NULL OR NOT want_driving_reimbursement", name: "want_driving_reimbursement_only_when_miles_driven"
@@ -220,381 +220,381 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
 
   create_table "case_court_orders", force: :cascade do |t|
     t.bigint "casa_case_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "implementation_status"
     t.bigint "court_date_id"
+    t.datetime "created_at", null: false
+    t.integer "implementation_status"
     t.string "text"
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_case_court_orders_on_casa_case_id"
     t.index ["court_date_id"], name: "index_case_court_orders_on_court_date_id"
   end
 
   create_table "case_group_memberships", force: :cascade do |t|
-    t.bigint "case_group_id", null: false
     t.bigint "casa_case_id", null: false
+    t.bigint "case_group_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "case_groups", force: :cascade do |t|
     t.bigint "casa_org_id", null: false
-    t.string "name"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "checklist_items", force: :cascade do |t|
-    t.integer "hearing_type_id"
-    t.text "description", null: false
     t.string "category", null: false
-    t.boolean "mandatory", default: false, null: false
     t.datetime "created_at", null: false
+    t.text "description", null: false
+    t.integer "hearing_type_id"
+    t.boolean "mandatory", default: false, null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "contact_topic_answers", force: :cascade do |t|
-    t.text "value"
     t.bigint "case_contact_id", null: false
     t.bigint "contact_topic_id"
-    t.boolean "selected", default: false, null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.datetime "deleted_at"
+    t.boolean "selected", default: false, null: false
+    t.datetime "updated_at", null: false
+    t.text "value"
     t.index ["case_contact_id"], name: "index_contact_topic_answers_on_case_contact_id"
   end
 
   create_table "contact_topics", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
     t.boolean "active", default: true, null: false
-    t.boolean "soft_delete", default: false, null: false
-    t.text "details"
-    t.string "question"
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.text "details"
     t.boolean "exclude_from_court_report", default: false, null: false
+    t.string "question"
+    t.boolean "soft_delete", default: false, null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contact_type_groups", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "active", default: true
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "contact_types", force: :cascade do |t|
-    t.bigint "contact_type_group_id", null: false
-    t.string "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "active", default: true
+    t.bigint "contact_type_group_id", null: false
+    t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.datetime "updated_at", null: false
     t.index ["contact_type_group_id"], name: "index_contact_types_on_contact_type_group_id"
   end
 
   create_table "court_dates", force: :cascade do |t|
-    t.datetime "date", precision: nil, null: false
     t.bigint "casa_case_id", null: false
+    t.datetime "court_report_due_date", precision: nil
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "date", precision: nil, null: false
     t.bigint "hearing_type_id"
     t.bigint "judge_id"
-    t.datetime "court_report_due_date", precision: nil
+    t.datetime "updated_at", null: false
     t.index ["casa_case_id"], name: "index_court_dates_on_casa_case_id"
   end
 
   create_table "custom_org_links", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
-    t.string "text", null: false
-    t.string "url", null: false
     t.boolean "active", default: true, null: false
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
+    t.string "text", null: false
     t.datetime "updated_at", null: false
+    t.string "url", null: false
     t.index ["casa_org_id"], name: "index_custom_org_links_on_casa_org_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "failed_at", precision: nil
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at", precision: nil
     t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
     t.string "locked_by"
+    t.integer "priority", default: 0, null: false
     t.string "queue"
-    t.datetime "created_at"
+    t.datetime "run_at", precision: nil
     t.datetime "updated_at"
   end
 
   create_table "emancipation_categories", force: :cascade do |t|
-    t.string "name", null: false
-    t.boolean "mutually_exclusive", null: false
     t.datetime "created_at", null: false
+    t.boolean "mutually_exclusive", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_emancipation_categories_on_name", unique: true
   end
 
   create_table "emancipation_options", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "emancipation_category_id", null: false
     t.string "name", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["emancipation_category_id", "name"], name: "index_emancipation_options_on_emancipation_category_id_and_name", unique: true
   end
 
   create_table "flipper_features", force: :cascade do |t|
-    t.string "key", null: false
     t.datetime "created_at", null: false
+    t.string "key", null: false
     t.datetime "updated_at", null: false
     t.index ["key"], name: "index_flipper_features_on_key", unique: true
   end
 
   create_table "flipper_gates", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.string "feature_key", null: false
     t.string "key", null: false
-    t.text "value"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "value"
     t.index ["feature_key", "key", "value"], name: "index_flipper_gates_on_feature_key_and_key_and_value", unique: true
   end
 
   create_table "followups", force: :cascade do |t|
     t.bigint "case_contact_id"
-    t.bigint "creator_id"
-    t.integer "status", default: 0
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.text "note"
+    t.bigint "creator_id"
     t.bigint "followupable_id"
     t.string "followupable_type"
+    t.text "note"
+    t.integer "status", default: 0
+    t.datetime "updated_at", null: false
     t.index ["case_contact_id"], name: "index_followups_on_case_contact_id"
   end
 
   create_table "fund_requests", force: :cascade do |t|
-    t.text "submitter_email"
-    t.text "youth_name"
-    t.text "payment_amount"
     t.text "deadline"
-    t.text "request_purpose"
-    t.text "payee_name"
-    t.text "requested_by_and_relationship"
-    t.text "other_funding_source_sought"
-    t.text "impact"
     t.text "extra_information"
+    t.text "impact"
+    t.text "other_funding_source_sought"
+    t.text "payee_name"
+    t.text "payment_amount"
+    t.text "request_purpose"
+    t.text "requested_by_and_relationship"
+    t.text "submitter_email"
     t.text "timestamps"
+    t.text "youth_name"
   end
 
   create_table "healths", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.datetime "latest_deploy_time", precision: nil
     t.integer "singleton_guard"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["singleton_guard"], name: "index_healths_on_singleton_guard", unique: true
   end
 
   create_table "hearing_types", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
-    t.string "name", null: false
     t.boolean "active", default: true, null: false
+    t.bigint "casa_org_id", null: false
     t.string "checklist_updated_date", default: "None", null: false
+    t.string "name", null: false
   end
 
   create_table "judges", force: :cascade do |t|
+    t.boolean "active", default: true
     t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.boolean "active", default: true
     t.string "name"
+    t.datetime "updated_at", null: false
   end
 
   create_table "languages", force: :cascade do |t|
-    t.string "name"
     t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
   end
 
   create_table "learning_hour_topics", force: :cascade do |t|
-    t.string "name", null: false
     t.bigint "casa_org_id", null: false
-    t.integer "position", default: 1
     t.datetime "created_at", null: false
+    t.string "name", null: false
+    t.integer "position", default: 1
     t.datetime "updated_at", null: false
   end
 
   create_table "learning_hour_types", force: :cascade do |t|
-    t.bigint "casa_org_id", null: false
-    t.string "name"
     t.boolean "active", default: true
-    t.integer "position", default: 1
+    t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
+    t.string "name"
+    t.integer "position", default: 1
     t.datetime "updated_at", null: false
   end
 
   create_table "learning_hours", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.string "name", null: false
-    t.integer "duration_minutes", null: false
-    t.integer "duration_hours", null: false
-    t.datetime "occurred_at", precision: nil, null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "learning_hour_type_id"
+    t.integer "duration_hours", null: false
+    t.integer "duration_minutes", null: false
     t.bigint "learning_hour_topic_id"
+    t.bigint "learning_hour_type_id"
+    t.string "name", null: false
+    t.datetime "occurred_at", precision: nil, null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_learning_hours_on_user_id"
   end
 
   create_table "login_activities", force: :cascade do |t|
-    t.string "scope"
-    t.string "strategy"
-    t.string "identity"
-    t.boolean "success"
-    t.string "failure_reason"
-    t.string "user_type"
-    t.bigint "user_id"
-    t.string "context"
-    t.string "ip"
-    t.text "user_agent"
-    t.text "referrer"
     t.string "city"
-    t.string "region"
+    t.string "context"
     t.string "country"
+    t.datetime "created_at"
+    t.string "failure_reason"
+    t.string "identity"
+    t.string "ip"
     t.float "latitude"
     t.float "longitude"
-    t.datetime "created_at"
+    t.text "referrer"
+    t.string "region"
+    t.string "scope"
+    t.string "strategy"
+    t.boolean "success"
+    t.text "user_agent"
+    t.bigint "user_id"
+    t.string "user_type"
   end
 
   create_table "mileage_rates", force: :cascade do |t|
     t.decimal "amount"
+    t.bigint "casa_org_id", null: false
+    t.datetime "created_at", null: false
     t.date "effective_date"
     t.boolean "is_active", default: true
-    t.bigint "user_id"
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "casa_org_id", null: false
+    t.bigint "user_id"
   end
 
   create_table "notes", force: :cascade do |t|
     t.string "content"
-    t.bigint "creator_id"
-    t.string "notable_type"
-    t.bigint "notable_id"
     t.datetime "created_at", null: false
+    t.bigint "creator_id"
+    t.bigint "notable_id"
+    t.string "notable_type"
     t.datetime "updated_at", null: false
   end
 
   create_table "noticed_events", force: :cascade do |t|
-    t.string "type"
-    t.string "record_type"
-    t.bigint "record_id"
-    t.jsonb "params"
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.integer "notifications_count"
+    t.jsonb "params"
+    t.bigint "record_id"
+    t.string "record_type"
+    t.string "type"
+    t.datetime "updated_at", null: false
   end
 
   create_table "noticed_notifications", force: :cascade do |t|
-    t.string "type"
-    t.bigint "event_id", null: false
-    t.string "recipient_type", null: false
-    t.bigint "recipient_id", null: false
-    t.datetime "read_at", precision: nil
-    t.datetime "seen_at", precision: nil
     t.datetime "created_at", null: false
+    t.bigint "event_id", null: false
+    t.datetime "read_at", precision: nil
+    t.bigint "recipient_id", null: false
+    t.string "recipient_type", null: false
+    t.datetime "seen_at", precision: nil
+    t.string "type"
     t.datetime "updated_at", null: false
     t.index ["recipient_type", "recipient_id"], name: "index_noticed_notifications_on_recipient"
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.string "recipient_type", null: false
-    t.bigint "recipient_id", null: false
-    t.string "type", null: false
+    t.datetime "created_at", null: false
     t.jsonb "params"
     t.datetime "read_at", precision: nil
-    t.datetime "created_at", null: false
+    t.bigint "recipient_id", null: false
+    t.string "recipient_type", null: false
+    t.string "type", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "other_duties", force: :cascade do |t|
+    t.datetime "created_at", null: false
     t.bigint "creator_id", null: false
     t.string "creator_type"
-    t.datetime "occurred_at", precision: nil
     t.bigint "duration_minutes"
     t.text "notes"
-    t.datetime "created_at", null: false
+    t.datetime "occurred_at", precision: nil
     t.datetime "updated_at", null: false
   end
 
   create_table "patch_note_groups", force: :cascade do |t|
-    t.string "value", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "value", null: false
     t.index ["value"], name: "index_patch_note_groups_on_value", unique: true
   end
 
   create_table "patch_note_types", force: :cascade do |t|
-    t.string "name", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
     t.index ["name"], name: "index_patch_note_types_on_name", unique: true
   end
 
   create_table "patch_notes", force: :cascade do |t|
-    t.text "note", null: false
-    t.bigint "patch_note_type_id", null: false
-    t.bigint "patch_note_group_id", null: false
     t.datetime "created_at", null: false
+    t.text "note", null: false
+    t.bigint "patch_note_group_id", null: false
+    t.bigint "patch_note_type_id", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "placement_types", force: :cascade do |t|
-    t.string "name", null: false
     t.bigint "casa_org_id", null: false
     t.datetime "created_at", null: false
+    t.string "name", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "placements", force: :cascade do |t|
+    t.bigint "casa_case_id", null: false
+    t.datetime "created_at", null: false
+    t.bigint "creator_id", null: false
     t.datetime "placement_started_at", null: false
     t.bigint "placement_type_id", null: false
-    t.bigint "creator_id", null: false
-    t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "casa_case_id", null: false
   end
 
   create_table "preference_sets", force: :cascade do |t|
-    t.bigint "user_id"
     t.jsonb "case_volunteer_columns", default: "{}", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.jsonb "table_state", default: {}
+    t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["user_id"], name: "index_preference_sets_on_user_id"
   end
 
   create_table "sent_emails", force: :cascade do |t|
-    t.bigint "user_id"
     t.bigint "casa_org_id", null: false
-    t.string "mailer_type"
     t.string "category"
-    t.string "sent_address"
     t.datetime "created_at", null: false
+    t.string "mailer_type"
+    t.string "sent_address"
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
   end
 
   create_table "sms_notification_events", force: :cascade do |t|
-    t.string "name"
-    t.string "user_type"
     t.datetime "created_at", null: false
+    t.string "name"
     t.datetime "updated_at", null: false
+    t.string "user_type"
   end
 
   create_table "supervisor_volunteers", force: :cascade do |t|
-    t.bigint "supervisor_id", null: false
-    t.bigint "volunteer_id", null: false
     t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
     t.boolean "is_active", default: true
+    t.bigint "supervisor_id", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "volunteer_id", null: false
     t.index ["supervisor_id"], name: "index_supervisor_volunteers_on_supervisor_id"
     t.index ["volunteer_id"], name: "index_supervisor_volunteers_on_volunteer_id"
   end
@@ -604,64 +604,64 @@ ActiveRecord::Schema[8.0].define(version: 2026_04_14_132818) do
   end
 
   create_table "user_languages", force: :cascade do |t|
-    t.bigint "user_id"
-    t.bigint "language_id"
     t.datetime "created_at", null: false
+    t.bigint "language_id"
     t.datetime "updated_at", null: false
+    t.bigint "user_id"
     t.index ["language_id", "user_id"], name: "index_user_languages_on_language_id_and_user_id", unique: true
   end
 
   create_table "user_reminder_times", force: :cascade do |t|
-    t.bigint "user_id", null: false
     t.datetime "case_contact_types"
-    t.datetime "no_contact_made"
     t.datetime "created_at", null: false
+    t.datetime "no_contact_made"
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
     t.index ["user_id"], name: "index_user_reminder_times_on_user_id"
   end
 
   create_table "user_sms_notification_events", force: :cascade do |t|
-    t.bigint "user_id", null: false
-    t.bigint "sms_notification_event_id", null: false
     t.datetime "created_at", null: false
+    t.bigint "sms_notification_event_id", null: false
     t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
   end
 
   create_table "users", force: :cascade do |t|
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "reset_password_token"
-    t.datetime "reset_password_sent_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "casa_org_id", null: false
-    t.string "display_name", default: "", null: false
-    t.string "invitation_token"
-    t.datetime "invitation_created_at", precision: nil
-    t.datetime "invitation_sent_at", precision: nil
-    t.datetime "invitation_accepted_at", precision: nil
-    t.integer "invitation_limit"
-    t.string "invited_by_type"
-    t.bigint "invited_by_id"
-    t.integer "invitations_count", default: 0
-    t.string "type"
     t.boolean "active", default: true
-    t.integer "sign_in_count", default: 0, null: false
-    t.datetime "current_sign_in_at", precision: nil
-    t.datetime "last_sign_in_at", precision: nil
-    t.string "current_sign_in_ip"
-    t.string "last_sign_in_ip"
-    t.string "phone_number", default: ""
-    t.boolean "receive_sms_notifications", default: false, null: false
-    t.boolean "receive_email_notifications", default: true
+    t.bigint "casa_org_id", null: false
+    t.datetime "confirmation_sent_at"
     t.string "confirmation_token"
     t.datetime "confirmed_at"
-    t.datetime "confirmation_sent_at"
-    t.string "unconfirmed_email"
-    t.string "old_emails", default: [], array: true
-    t.boolean "receive_reimbursement_email", default: false
-    t.boolean "monthly_learning_hours_report", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.string "current_sign_in_ip"
     t.datetime "date_of_birth"
+    t.string "display_name", default: "", null: false
+    t.string "email", default: "", null: false
+    t.string "encrypted_password", default: "", null: false
+    t.datetime "invitation_accepted_at", precision: nil
+    t.datetime "invitation_created_at", precision: nil
+    t.integer "invitation_limit"
+    t.datetime "invitation_sent_at", precision: nil
+    t.string "invitation_token"
+    t.integer "invitations_count", default: 0
+    t.bigint "invited_by_id"
+    t.string "invited_by_type"
+    t.datetime "last_sign_in_at", precision: nil
+    t.string "last_sign_in_ip"
+    t.boolean "monthly_learning_hours_report", default: false, null: false
+    t.string "old_emails", default: [], array: true
+    t.string "phone_number", default: ""
+    t.boolean "receive_email_notifications", default: true
+    t.boolean "receive_reimbursement_email", default: false
+    t.boolean "receive_sms_notifications", default: false, null: false
+    t.datetime "reset_password_sent_at", precision: nil
+    t.string "reset_password_token"
+    t.integer "sign_in_count", default: 0, null: false
+    t.string "type"
+    t.string "unconfirmed_email"
+    t.datetime "updated_at", null: false
     t.index ["casa_org_id"], name: "index_users_on_casa_org_id"
     t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
     t.index ["email"], name: "index_users_on_email", unique: true
