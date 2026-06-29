@@ -151,4 +151,20 @@ RSpec.describe UserDecorator do
       expect(decorated_user.formatted_date_of_birth).to eq "1991/07/08"
     end
   end
+
+  describe "#email_confirmation_status" do
+    context "when the user's email is confirmed" do
+      it "returns Confirmed" do
+        user.update!(confirmed_at: Time.current)
+        expect(decorated_user.email_confirmation_status).to eq "Confirmed"
+      end
+    end
+
+    context "when the user's email is not confirmed" do
+      it "returns Not confirmed" do
+        user.update_column(:confirmed_at, nil)
+        expect(decorated_user.email_confirmation_status).to eq "Not confirmed"
+      end
+    end
+  end
 end
