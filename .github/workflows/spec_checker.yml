@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.3
       - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1.314.0
         with:
           bundler-cache: true
       - name: rake test_checker
