@@ -12,7 +12,7 @@ RSpec.describe CasaOrgValidator, type: :validator do
 
       described_class.new.validate(casa_org)
 
-      expect(casa_org.errors.added?(:number, "must be 10 digits or 12 digits including country code (+1)")).to be true
+      expect(casa_org.errors[:number]).to include("must be 10 digits or 12 digits including country code (+1)")
     end
 
     it "adds an error on :number when the twilio phone number contains non-digit characters" do
@@ -20,7 +20,7 @@ RSpec.describe CasaOrgValidator, type: :validator do
 
       described_class.new.validate(casa_org)
 
-      expect(casa_org.errors.added?(:number, "must be 10 digits or 12 digits including country code (+1)")).to be true
+      expect(casa_org.errors[:number]).to include("must be 10 digits or 12 digits including country code (+1)")
     end
 
     it "does not add an error for a valid 12 digit twilio phone number" do

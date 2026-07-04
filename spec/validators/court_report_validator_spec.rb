@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe CourtReportValidator, type: :validator do
   let(:casa_case) { build(:casa_case) }
 
-  # CasaCase#court_report_status= is a custom setter that auto-manages
+  # NOTE: CasaCase#court_report_status= is a custom setter that auto-manages
   # court_report_submitted_at (nils it out for :not_submitted, defaults it
   # to Time.current otherwise - see app/models/casa_case.rb). Assigning
   # court_report_status keeps this order intentional: it must come first,
@@ -39,7 +39,7 @@ RSpec.describe CourtReportValidator, type: :validator do
 
   describe "matching status and submission date" do
     context "when status is not_submitted and submitted_at is nil" do
-      it "adds no error" do
+      it "adds no error", :aggregate_failures do
         casa_case.court_report_status = :not_submitted
         casa_case.court_report_submitted_at = nil
 
@@ -51,7 +51,7 @@ RSpec.describe CourtReportValidator, type: :validator do
     end
 
     context "when status is submitted and submitted_at is present" do
-      it "adds no error" do
+      it "adds no error", :aggregate_failures do
         casa_case.court_report_status = :submitted
         casa_case.court_report_submitted_at = DateTime.now
 
