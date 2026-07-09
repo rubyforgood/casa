@@ -1,12 +1,15 @@
 module DesignSystemHelper
-  HONORIFICS = %w[mr mrs ms miss mx dr prof rev sir madam].freeze
+  # A person's display name with any honorific prefix removed (Mrs. Hung Bergstrom
+  # -> Hung Bergstrom), falling back to their email. Use this everywhere a user's
+  # name is shown so names render consistently without honorifics.
+  def display_person(user)
+    NamePresentation.strip_honorific(user.display_name.presence || user.email)
+  end
 
   # Two-letter initials for avatars: first + last name, ignoring honorific
-  # prefixes (Mr, Mrs, Ms, ...). Falls back to a single letter for one-word
-  # names or email-based fallbacks.
+  # prefixes. Falls back to a single letter for one-word names / emails.
   def avatar_initials(name)
-    tokens = name.to_s.gsub(/[^a-zA-Z ]/, " ").split
-    tokens = tokens.reject { |token| HONORIFICS.include?(token.downcase) } if tokens.size > 1
+    tokens = NamePresentation.strip_honorific(name.to_s).gsub(/[^a-zA-Z ]/, " ").split
     initials =
       if tokens.size >= 2
         "#{tokens.first[0]}#{tokens.last[0]}"

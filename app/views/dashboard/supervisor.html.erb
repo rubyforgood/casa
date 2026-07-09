@@ -83,7 +83,7 @@
               <div class="flex items-center gap-3">
                 <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
                 <div>
-                  <div class="font-semibold text-slate-800"><%= row.volunteer.display_name.presence || row.volunteer.email %></div>
+                  <div class="font-semibold text-slate-800"><%= display_person(row.volunteer) %></div>
                   <div class="text-xs text-slate-500"><%= pluralize(row.cases_count, "active case") %> · last contact <%= row.last_contact_label.downcase %></div>
                 </div>
               </div>
@@ -91,7 +91,7 @@
                 <%= link_to edit_volunteer_path(row.volunteer), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
                   <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
                 <% end %>
-                <%= link_to "View", edit_volunteer_path(row.volunteer), "aria-label": "View #{row.volunteer.display_name.presence || row.volunteer.email}", class: "rounded-lg px-2 py-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+                <%= link_to "View", edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: "rounded-lg px-2 py-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
               </div>
             </li>
           <% end %>
@@ -126,9 +126,9 @@
               <tr class="hover:bg-slate-50/70">
                 <td class="px-4 py-3">
                   <div class="flex items-center gap-3">
-                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold <%= avatar_classes[row.avatar_color] %>" aria-hidden="true"><%= avatar_initials(row.volunteer.display_name.presence || row.volunteer.email) %></span>
+                    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold <%= avatar_classes[row.avatar_color] %>" aria-hidden="true"><%= avatar_initials(display_person(row.volunteer)) %></span>
                     <div>
-                      <div class="font-medium text-slate-800"><%= row.volunteer.display_name.presence || row.volunteer.email %></div>
+                      <div class="font-medium text-slate-800"><%= display_person(row.volunteer) %></div>
                       <div class="text-xs text-slate-500"><%= row.volunteer.email %></div>
                     </div>
                   </div>
@@ -152,7 +152,7 @@
                   <% end %>
                 </td>
                 <td class="px-4 py-3 text-right">
-                  <%= link_to edit_volunteer_path(row.volunteer), "aria-label": "View #{row.volunteer.display_name.presence || row.volunteer.email}", class: "inline-grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+                  <%= link_to edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: "inline-grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
                     <i class="bi bi-chevron-right" aria-hidden="true"></i>
                   <% end %>
                 </td>

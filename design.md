@@ -86,6 +86,12 @@ Base: `inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-me
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
 pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 
+### Names
+User names render **without honorific prefixes** (Mrs./Mr./…), first + last only, on
+**every page**. Use the `display_person(user)` helper for the name and `avatar_initials`
+for initials (both backed by `NamePresentation`). This is presentation-only — the
+stored `display_name` is never mutated (it must round-trip raw input for security).
+
 ### Tag
 "mine" etc.: `rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-600`.
 
