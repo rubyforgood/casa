@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CASA Volunteer Tracker</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+</head>
+<body class="h-full bg-slate-50 font-sans text-slate-800 antialiased">
+  <% user_initials = (current_user.display_name.presence || current_user.email).to_s.gsub(/[^a-zA-Z ]/, " ").split.first(2).map { |part| part[0] }.join.upcase.presence || "U" %>
+  <div class="flex min-h-full">
+
+    <aside class="hidden w-64 shrink-0 flex-col border-r border-slate-200 bg-white lg:flex">
+      <div class="flex items-center gap-2.5 px-5 py-5">
+        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-sm font-bold text-white">CV</span>
+        <span class="truncate text-[15px] font-bold tracking-tight text-slate-900"><%= current_organization&.name.presence || "CASA Tracker" %></span>
+      </div>
+
+      <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm">
+        <% nav_items = [
+          ["Dashboard", "bi-grid-1x2", authenticated_user_root_path, "dashboard", true],
+          ["Volunteers", "bi-people", volunteers_path, "volunteers", policy(Volunteer).index?],
+          ["Supervisors", "bi-diagram-3", supervisors_path, "supervisors", policy(Supervisor).index?],
+          [cases_index_title, "bi-folder2", casa_cases_path, "cases", true],
+          ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
+          ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
+          ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
+          ["Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?]
+        ] %>
+        <% nav_items.each do |title, icon, path, key, allowed| %>
+          <% next unless allowed %>
+          <% active = (@active_nav == key) %>
+          <%= link_to path, class: "flex items-center gap-3 rounded-lg px-3 py-2 #{active ? "bg-brand-50 font-semibold text-brand-700" : "text-slate-600 hover:bg-slate-100"}" do %>
+            <i class="bi <%= icon %> text-base"></i> <%= title %>
+          <% end %>
+        <% end %>
+      </nav>
+
+      <div class="border-t border-slate-200 p-3">
+        <div class="flex items-center gap-3 rounded-lg px-2 py-2">
+          <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700"><%= user_initials %></span>
+          <div class="min-w-0">
+            <div class="truncate text-sm font-semibold text-slate-800"><%= current_user.display_name.presence || current_user.email %></div>
+            <div class="truncate text-xs text-slate-400"><%= current_role %></div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <header class="flex items-center gap-4 border-b border-slate-200 bg-white/80 px-6 py-3 backdrop-blur">
+        <span class="text-base font-bold tracking-tight text-slate-900 lg:hidden"><%= current_organization&.name.presence || "CASA" %></span>
+        <div class="ml-auto flex items-center gap-2">
+          <%= link_to notifications_path, class: "relative grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100" do %>
+            <i class="bi bi-bell text-lg"></i>
+            <% unread = current_user.notifications.unread.count %>
+            <% if unread.positive? %>
+              <span class="absolute right-1 top-1 grid h-4 min-w-[1rem] place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white"><%= unread %></span>
+            <% end %>
+          <% end %>
+          <details class="relative">
+            <summary class="flex cursor-pointer list-none items-center gap-2 rounded-lg px-2 py-1.5 hover:bg-slate-100">
+              <span class="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-xs font-semibold text-emerald-700"><%= user_initials %></span>
+              <span class="hidden text-sm font-medium text-slate-700 sm:block"><%= current_user.display_name.presence || current_user.email %></span>
+              <i class="bi bi-chevron-down text-xs text-slate-400"></i>
+            </summary>
+            <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+              <div class="border-b border-slate-100 px-4 py-2">
+                <div class="text-sm font-semibold text-slate-800"><%= current_user.display_name.presence || current_user.email %></div>
+                <div class="truncate text-xs text-slate-400"><%= current_user.email %></div>
+              </div>
+              <%= link_to "Edit profile", edit_users_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50" %>
+              <%= link_to "Messages", notifications_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50" %>
+              <%= link_to "Sign out", destroy_user_session_path, class: "block px-4 py-2 text-sm text-rose-600 hover:bg-rose-50" %>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <main class="flex-1">
+        <% if flash.any? { |_, message| message.present? } %>
+          <div class="space-y-2 px-6 pt-4 lg:px-8">
+            <% flash.each do |type, message| %>
+              <% next if message.blank? %>
+              <div class="rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+            <% end %>
+          </div>
+        <% end %>
+        <%= yield %>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

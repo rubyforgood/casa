@@ -49,8 +49,8 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
 - Page background: `bg-slate-50`.
 
 ### Iconography
-- **Inline SVG (Heroicons, outline)**, 16–20px, `currentColor`. (Mockups used
-  Bootstrap Icons; the app uses inline SVG for the same clean line-icon family.)
+- **Bootstrap Icons** (`bi-*`), loaded via CDN in the shell layout for now — matches the
+  approved mockups. Vendor into the asset pipeline before production.
 - **Icon tile pattern** — icons representing a *stat or status* sit on a soft
   colored rounded background:
   `grid place-items-center h-9 w-9 rounded-xl bg-{semantic}-50 text-{semantic}-600`.
@@ -114,8 +114,8 @@ pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 - [x] Tailwind v4 foundation + design tokens
 - [x] Typeface: Figtree
 - [x] Sign-in page
-- [ ] App shell (sidebar + top bar)
-- [ ] Supervisor dashboard / Volunteers landing
+- [x] App shell (sidebar + top bar)
+- [x] Supervisor dashboard / Volunteers landing
 - [ ] Remaining auth pages (forgot/reset password, invitation accept)
 - [ ] Volunteer & admin dashboards
 - [ ] Cases, case contacts, reports, settings
