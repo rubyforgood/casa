@@ -25,8 +25,7 @@
     <div id="nav-backdrop" class="fixed inset-0 z-30 hidden bg-slate-900/50 lg:hidden" aria-hidden="true"></div>
 
     <aside id="app-sidebar" aria-label="Primary" class="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 motion-reduce:transition-none lg:static lg:translate-x-0">
-      <div class="flex items-center gap-2.5 px-5 py-5">
-        <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-600 text-sm font-bold text-white" aria-hidden="true">CV</span>
+      <div class="flex items-center px-5 py-5">
         <span class="truncate text-[15px] font-bold tracking-tight text-slate-900"><%= current_organization&.name.presence || "CASA Tracker" %></span>
       </div>
 

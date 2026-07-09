@@ -104,12 +104,16 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
    filters + a "Clear filters" action.
 
 ## App shell
-- **Sidebar** (256px, `border-r border-slate-200 bg-white`): logo, nav links
-  (active = `bg-brand-50 text-brand-700`, idle = `text-slate-600 hover:bg-slate-100`),
-  user block pinned bottom. Nav visibility follows Pundit policies.
-- **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): search, primary
-  action, notifications, avatar.
-- **Content**: `bg-slate-50`, generous padding, cards.
+- **Sidebar** (256px, `border-r border-slate-200 bg-white`): org **name only** in the
+  header (no logo/brand mark — not a value-add at this size, and avoids image/variant
+  infrastructure), then nav links (active = `bg-brand-50 text-brand-700`, idle =
+  `text-slate-600 hover:bg-slate-100`). Nav visibility follows Pundit policies.
+  Collapses to an off-canvas drawer below `lg`.
+- **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): mobile nav
+  toggle, notifications, and the avatar **account menu** — the single place for identity
+  + account actions (no duplicate identity block in the sidebar).
+- **Content**: `bg-slate-50`, generous padding, cards. Full org logo is reserved for
+  contexts with room (sign-in, court reports / exports), not the shell.
 
 ## Key patterns
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
