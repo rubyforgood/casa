@@ -9,7 +9,9 @@ class DashboardController < ApplicationController
     elsif current_user.volunteer?
       redirect_to casa_cases_path
     elsif current_user.supervisor?
-      redirect_to volunteers_path
+      @active_nav = "dashboard"
+      @dashboard = SupervisorDashboard.new(current_user)
+      render "dashboard/supervisor", layout: "casa_app"
     elsif current_user.casa_admin?
       redirect_to supervisors_path
     end
