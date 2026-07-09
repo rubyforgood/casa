@@ -73,6 +73,10 @@ Hotwire-first: Turbo for navigation/forms, Stimulus controllers in `app/javascri
 ## Style
 This project uses **Standard.rb** (not vanilla RuboCop). Don't fight it on spacing/quotes/trailing commas. There is also a `.standard_todo.yml` of grandfathered violations — leave older files alone unless touching them substantively. Older migration files (2020–2024) are intentionally excluded from linting.
 
+## Design system (casadesign branch)
+
+This branch introduces a Tailwind CSS v4 design system, documented in **`design.md`** (repo root) — the source of truth for the new aesthetic. Read it before UI work and keep it updated. New pages use Tailwind-only layouts and coexist with the legacy Bootstrap UI (migrate page-by-page). **Workflow: on `casadesign`, commit and push to the `casadesign` branch at every checkpoint.**
+
 ## Where to look for more
 - `.github/instructions/ruby.instructions.md` and `.github/instructions/copilot-review.instructions.md` — the project's own review checklist; the source of truth for "what is a bug-shaped change here."
 - `doc/architecture-decisions/` — ADRs (especially 0002 no-UI-signup, 0003 two-user-tables, 0006 few-controller-tests, 0007 inline-email-CSS).
