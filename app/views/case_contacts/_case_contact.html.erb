@@ -56,18 +56,18 @@
       Created by:
       <% if policy(contact).edit? %>
         <% if current_user.volunteer? %>
-          <%= contact.creator&.display_name %>
+          <%= formatted_name(contact.creator&.display_name) %>
         <% else %>
           <% if contact.creator&.supervisor? %>
-            <%= link_to contact.creator&.display_name, edit_supervisor_path(contact.creator), data: { turbo: false } %>
+            <%= link_to formatted_name(contact.creator&.display_name), edit_supervisor_path(contact.creator), data: { turbo: false } %>
           <% elsif contact.creator&.casa_admin? %>
-            <%= link_to contact.creator&.display_name, edit_users_path, data: { turbo: false } %>
+            <%= link_to formatted_name(contact.creator&.display_name), edit_users_path, data: { turbo: false } %>
           <% else %>
-            <%= link_to contact.creator&.display_name, edit_volunteer_path(contact.creator), data: { turbo: false } %>
+            <%= link_to formatted_name(contact.creator&.display_name), edit_volunteer_path(contact.creator), data: { turbo: false } %>
           <% end %>
         <% end %>
       <% else %>
-        <%= contact.creator&.display_name %>
+        <%= formatted_name(contact.creator&.display_name) %>
       <% end %>
     </h6>
   </div>

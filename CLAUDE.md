@@ -75,7 +75,7 @@ This project uses **Standard.rb** (not vanilla RuboCop). Don't fight it on spaci
 
 ## Design system (casadesign branch)
 
-This branch introduces a Tailwind CSS v4 design system, documented in **`design.md`** (repo root) — the source of truth for the new aesthetic. Read it before UI work and keep it updated. New pages use Tailwind-only layouts and coexist with the legacy Bootstrap UI (migrate page-by-page). **On every page, show user names without honorific prefixes (first + last only) via the `display_person` helper — never mutate the stored `display_name`.** **Workflow: on `casadesign`, commit and push to the `casadesign` branch at every checkpoint.**
+This branch introduces a Tailwind CSS v4 design system, documented in **`design.md`** (repo root) — the source of truth for the new aesthetic. Read it before UI work and keep it updated. New pages use Tailwind-only layouts and coexist with the legacy Bootstrap UI (migrate page-by-page). **On every page, show user names without honorific prefixes (first + last only) — `display_person` for new UI, `formatted_name` at existing `.display_name` sites — never mutate the stored `display_name`.** **Workflow: on `casadesign`, commit and push to the `casadesign` branch at every checkpoint.**
 
 ## Where to look for more
 - `.github/instructions/ruby.instructions.md` and `.github/instructions/copilot-review.instructions.md` — the project's own review checklist; the source of truth for "what is a bug-shaped change here."

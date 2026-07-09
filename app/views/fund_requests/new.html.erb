@@ -51,7 +51,7 @@
     <div class="input-style-1">
       <%= form.label :requested_by_and_relationship, "Requested by & relationship to youth" %>
       <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false,
-value: "#{current_user.display_name} CASA Volunteer" %>
+value: "#{formatted_name(current_user.display_name)} CASA Volunteer" %>
     </div>
 
     <div class="input-style-1">

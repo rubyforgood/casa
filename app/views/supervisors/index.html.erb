@@ -69,7 +69,7 @@
             <% @supervisors.each do |supervisor| %>
               <tr>
                 <td id="name-<%= supervisor.id %>" class="min-width">
-                  <%= link_to(supervisor.display_name, edit_supervisor_path(supervisor)) %>
+                  <%= link_to(formatted_name(supervisor.display_name), edit_supervisor_path(supervisor)) %>
                 </td>
                 <td class="min-width">
                   <% no_attempt_volunteers = supervisor.no_attempt_for_two_weeks %>
@@ -140,7 +140,7 @@
               <% @available_volunteers.each do |volunteer| %>
                 <tr>
                   <td>
-                    <%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %>
+                    <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer) %>
                   </td>
                   <td>
                     <% volunteer.casa_cases.map do |casa_case| %>
@@ -191,10 +191,10 @@
                     <% if casa_case.active? %>
                       <% if current_user.volunteer? %>
                         <%= safe_join(casa_case.assigned_volunteers.map { |vol|
-                      vol.display_name }, ", ") %>
+                      formatted_name(vol.display_name) }, ", ") %>
                       <% else %>
                         <%= safe_join(casa_case.assigned_volunteers.map { |vol|
-                      link_to(vol.display_name, edit_volunteer_path(vol)) },
+                      link_to(formatted_name(vol.display_name), edit_volunteer_path(vol)) },
                                   ", ") %>
                       <% end %>
                     <% else %>

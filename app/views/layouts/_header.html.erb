@@ -3,7 +3,7 @@
 
   <% if current_user != true_user %>
     <%= link_to stop_impersonating_volunteers_path, method: :post, class: "pt-4 pb-4 bg-danger", style: "padding-left: 15px; display: block;" do %>
-      You (<%= true_user.display_name %>) are signed in as <%= current_user.display_name %>.
+      You (<%= formatted_name(true_user.display_name) %>) are signed in as <%= formatted_name(current_user.display_name) %>.
       Click here to stop impersonating.
     <% end %>
   <% end %>
@@ -49,7 +49,7 @@
               aria-expanded="false">
               <div class="profile-info">
                 <div class="info">
-                  <h6><%= current_user.display_name %>
+                  <h6><%= formatted_name(current_user.display_name) %>
                   </h6>
                   <div class="image">
                     <img

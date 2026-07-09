@@ -19,7 +19,7 @@
           <tr>
             <td id="volunteer-<%= reimbursement.id %>">
               <span class="mobile-label">Volunteer</span>
-              <%= link_to(reimbursement.creator.display_name, volunteer_path(reimbursement.creator)) %>
+              <%= link_to(formatted_name(reimbursement.creator.display_name), volunteer_path(reimbursement.creator)) %>
             </td>
 
             <td id="case-number-<%= reimbursement.id %>">

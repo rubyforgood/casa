@@ -56,11 +56,11 @@
   <tbody>
     <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
       <tr>
-        <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
+        <td><%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer) %></td>
         <td><%= volunteer.email %></td>
         <% if button_text == "Hide unassigned" %>
           <td>
-            <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
+            <%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No One" %>
           </td>
         <% end %>
         <td>

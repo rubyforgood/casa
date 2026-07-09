@@ -18,7 +18,7 @@ class VolunteerDatatable < ApplicationDatatable
         active: volunteer.active?,
         casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
         contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
-        display_name: volunteer.display_name,
+        display_name: NamePresentation.strip_honorific(volunteer.display_name),
         email: volunteer.email,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
@@ -27,7 +27,7 @@ class VolunteerDatatable < ApplicationDatatable
           case_id: volunteer.most_recent_attempt_case_id,
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
-        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
+        supervisor: {id: volunteer.supervisor_id, name: NamePresentation.strip_honorific(volunteer.supervisor_name)},
         hours_spent_in_days: volunteer.hours_spent_in_days(30),
         extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} }
       }

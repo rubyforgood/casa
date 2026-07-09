@@ -49,7 +49,7 @@
                                 policy(User).edit_name?(supervisor), # checked?
                                 class: "form-check-input",
                                 data: { value: supervisor.id } %>
-              <%= label_tag tag_name, supervisor.display_name, class: "form-check-label" %>
+              <%= label_tag tag_name, formatted_name(supervisor.display_name), class: "form-check-label" %>
             </div>
           <% end %>
         </div>
@@ -218,7 +218,7 @@
                           <option value="unselected">Choose a supervisor</option>
                           <option value="">None</option>
                           <% @supervisors&.active&.each do |supervisor| %>
-                            <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+                            <option value="<%= supervisor.id %>"><%= formatted_name(supervisor.display_name) %></option>
                           <% end %>
                        </select>
                        </div>

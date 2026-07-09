@@ -8,7 +8,7 @@
           <span class="font-weight-bold">
             Current Supervisor:
           </span>
-          <%= link_to(@volunteer.supervisor.display_name, edit_supervisor_path(@volunteer.supervisor.id)) %>
+          <%= link_to(formatted_name(@volunteer.supervisor.display_name), edit_supervisor_path(@volunteer.supervisor.id)) %>
         </h5>
         <%= button_to unassign_supervisor_volunteer_path(@volunteer),
                       method: :patch,
@@ -23,7 +23,7 @@
             <label for='supervisor_volunteer_supervisor_id'>Select a Supervisor</label>
             <select name='supervisor_volunteer[supervisor_id]' id="supervisor_volunteer_supervisor_id" class='form-control select2'>
               <% @supervisors.each do |supervisor| %>
-                <option value="<%= supervisor.id %>"><%= supervisor.display_name %></option>
+                <option value="<%= supervisor.id %>"><%= formatted_name(supervisor.display_name) %></option>
               <% end %>
             </select>
           </div>

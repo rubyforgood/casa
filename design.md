@@ -88,8 +88,9 @@ pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 
 ### Names
 User names render **without honorific prefixes** (Mrs./Mr./…), first + last only, on
-**every page**. Use the `display_person(user)` helper for the name and `avatar_initials`
-for initials (both backed by `NamePresentation`). This is presentation-only — the
+**every page**. Use `display_person(user)` (new UI) or `formatted_name(name)` (existing `.display_name`
+call sites) for the name, and `avatar_initials` for initials (all backed by
+`NamePresentation`). This is presentation-only — the
 stored `display_name` is never mutated (it must round-trip raw input for security).
 
 ### Tag

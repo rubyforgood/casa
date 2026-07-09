@@ -87,7 +87,7 @@
                   <td class="min-width">
                     <% if casa_case.active? %>
                       <%= safe_join(casa_case.assigned_volunteers.map { |vol|
-                    link_to(vol.display_name, edit_volunteer_path(vol)) },
+                    link_to(formatted_name(vol.display_name), edit_volunteer_path(vol)) },
                                 ", ") %>
                     <% else %>
                       Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %>

@@ -104,10 +104,10 @@
         <% Pundit.policy_scope(current_user, @casa_case.assigned_volunteers).each do |volunteer| %>
           <div class="row mb-3">
             <% if current_user.volunteer? %>
-              <div class="col-12"><%= volunteer.display_name %></div>
+              <div class="col-12"><%= formatted_name(volunteer.display_name) %></div>
             <% else %>
               <div class="col-2">
-                <%= link_to "#{volunteer.display_name} ", edit_volunteer_path(volunteer) %>
+                <%= link_to "#{formatted_name(volunteer.display_name)} ", edit_volunteer_path(volunteer) %>
               </div>
               <div class="col-10">
                 <%= render "volunteers/volunteer_reminder_form", volunteer: volunteer %>

@@ -48,7 +48,7 @@
                   <%= banner_expiration_time_in_words(banner) %>
                 </td>
                 <td class="min-width">
-                  <%= banner.user.display_name %>
+                  <%= formatted_name(banner.user.display_name) %>
                 </td>
                 <td class="min-width">
                   <%= time_ago_in_words(banner.updated_at) %> ago

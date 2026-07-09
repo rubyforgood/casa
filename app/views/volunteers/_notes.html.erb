@@ -19,7 +19,7 @@
               <% @volunteer.notes.each do |note| %>
                 <tr>
                   <td class="min-width"><%= note.content %></td>
-                  <td class="min-width"><%= note.creator.display_name %></td>
+                  <td class="min-width"><%= formatted_name(note.creator.display_name) %></td>
                   <td class="min-width"><%= l(note.created_at, format: :standard) %></td>
                   <td class="min-width">
                     <%= link_to edit_volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover btn-sm" do %>

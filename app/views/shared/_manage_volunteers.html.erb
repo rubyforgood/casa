@@ -39,7 +39,7 @@
             <select id="<%= select_id %>" name="<%= select_name %>" class='form-control select-style-2 mt-1'>
               <option value="">Please Select Volunteer</option>
               <% available_volunteers.each do |volunteer| %>
-                <option value="<%= volunteer.id %>"><%= volunteer.display_name %></option>
+                <option value="<%= volunteer.id %>"><%= formatted_name(volunteer.display_name) %></option>
               <% end %>
             </select>
           </div>

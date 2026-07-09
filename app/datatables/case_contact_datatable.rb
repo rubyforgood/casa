@@ -33,7 +33,7 @@ class CaseContactDatatable < ApplicationDatatable
         medium_type: case_contact.medium_type&.titleize,
         creator: {
           id: case_contact.creator_id,
-          display_name: case_contact.creator&.display_name,
+          display_name: NamePresentation.strip_honorific(case_contact.creator&.display_name),
           email: case_contact.creator&.email,
           role: case_contact.creator&.role
         },

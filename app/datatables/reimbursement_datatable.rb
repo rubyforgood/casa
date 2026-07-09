@@ -23,7 +23,7 @@ class ReimbursementDatatable < ApplicationDatatable
         occurred_at: case_contact.occurred_at,
         volunteer: {
           address: case_contact.creator.address&.content,
-          display_name: case_contact.creator.display_name,
+          display_name: NamePresentation.strip_honorific(case_contact.creator.display_name),
           email: case_contact.creator.email,
           id: case_contact.creator.id
         }

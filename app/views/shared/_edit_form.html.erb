@@ -15,7 +15,7 @@
 
     <%= f.text_field :display_name, placeholder: "Display Name" %>
   <% else %>
-    <input type="text" placeholder="<%= resource.display_name %>" autocomplete="off" readonly>
+    <input type="text" placeholder="<%= formatted_name(resource.display_name) %>" autocomplete="off" readonly>
   <% end %>
 </div>
 

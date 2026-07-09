@@ -12,7 +12,7 @@ class SupervisorDatatable < ApplicationDatatable
       {
         id: supervisor.id,
         active: supervisor.active?,
-        display_name: supervisor.display_name,
+        display_name: NamePresentation.strip_honorific(supervisor.display_name),
         email: supervisor.email,
         volunteer_assignments: supervisor.volunteers.count,
         transitions_volunteers: supervisor.volunteers_serving_transition_aged_youth,

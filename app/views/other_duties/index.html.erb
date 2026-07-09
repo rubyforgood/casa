@@ -23,7 +23,7 @@
           <% @volunteer_duties.each do |volunteer| %>
             <% if volunteer[:other_duties].any? %>
                 <% unless current_user.id == volunteer[:volunteer].id %>
-                  <%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %>
+                  <%= link_to(formatted_name(volunteer[:volunteer].display_name), volunteer_path(volunteer[:volunteer].id)) %>
                 <% end %>
                 <div class="table-wrapper table-responsive">
                   <table class="table">
