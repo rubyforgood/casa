@@ -18,11 +18,6 @@ class SupervisorDashboard
       status == :no_cases
     end
 
-    def initials
-      source = volunteer.display_name.presence || volunteer.email.to_s
-      source.gsub(/[^a-zA-Z ]/, " ").split.first(2).map { |part| part[0] }.join.upcase.presence || "?"
-    end
-
     def avatar_color
       AVATAR_COLORS[volunteer.id % AVATAR_COLORS.size]
     end
