@@ -1,42 +1,41 @@
-<div class="row">
-  <div class="col-lg-9 col-md-12 vertically-center">
-    <div class="container">
-      <div class="row">
-        <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8 pb-4">
-          <h2 class="my-4">Forgot your password?</h2>
+<% content_for :page_title, "Reset your password" %>
+<% field = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
-          <%= form_with(model: resource, as: resource_name, url: password_path(resource_name), html: {method: :post}) do |f| %>
-            <%= render "/shared/error_messages", resource: resource %>
-
-            <h4 class="mb-3">Please enter email or phone number to receive reset instructions.</h4>
-
-            <div class="input-style-1">
-              <%= f.label :email %>
-              <%= f.email_field :email, placeholder: "Email", autofocus: true, autocomplete: "email" %>
-            </div>
-
-            <div class="input-style-1">
-              <%= f.label :phone_number %>
-              <%= f.text_field :phone_number, placeholder: "Phone Number", autofocus: true, autocomplete: "phone number" %>
-            </div>
-
-            <div class="actions my-2">
-              <%= button_tag(
-                type: "submit",
-                class: "main-btn primary-btn btn-hover btn-sm"
-              ) do %>
-                <i class="lni lni-telegram-original mr-10"></i>Send me reset password instructions
-              <% end %>
-            </div>
-          <% end %>
-
-          <%= render "devise/shared/links" %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-7 d-none d-lg-block">
-    <aside class="display-image"></aside>
-  </div>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Reset your password</h2>
+  <p class="mt-2 text-sm text-slate-500">Enter your email or phone number and we'll send reset instructions.</p>
 </div>
+
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="mb-5 rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+<% end %>
+
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: resource, as: resource_name, url: password_path(resource_name), html: {method: :post}, class: "space-y-5") do |f| %>
+  <div>
+    <%= f.label :email, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: field %>
+  </div>
+  <div class="flex items-center gap-3">
+    <span class="h-px flex-1 bg-slate-200"></span>
+    <span class="text-xs font-medium uppercase tracking-wide text-slate-500">or</span>
+    <span class="h-px flex-1 bg-slate-200"></span>
+  </div>
+  <div>
+    <%= f.label :phone_number, "Phone number", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.telephone_field :phone_number, autocomplete: "tel", placeholder: "+1 555 123 4567", class: field %>
+  </div>
+  <%= f.submit "Send reset instructions", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
+
+<p class="mt-8 text-center text-sm text-slate-500">
+  <%= link_to "← Back to sign in", new_session_path(resource_name), class: "font-medium text-brand-600 hover:text-brand-700" %>
+</p>

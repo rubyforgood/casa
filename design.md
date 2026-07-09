@@ -126,7 +126,7 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
 - [x] Sign-in page
 - [x] App shell (sidebar + top bar)
 - [x] Supervisor dashboard / Volunteers landing
-- [ ] Remaining auth pages (forgot/reset password, invitation accept)
+- [x] Remaining auth pages (forgot/reset password, invitation accept)
 - [ ] Volunteer & admin dashboards
 - [ ] Cases, case contacts, reports, settings
 

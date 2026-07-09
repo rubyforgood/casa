@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Sign in · CASA Volunteer Tracker</title>
+  <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} · CASA Volunteer Tracker" : "CASA Volunteer Tracker" %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 

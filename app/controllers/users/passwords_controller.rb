@@ -3,6 +3,8 @@ class Users::PasswordsController < Devise::PasswordsController
   include PhoneNumberHelper
   include SmsBodyHelper
 
+  layout "casa_auth"
+
   def create
     @email = params.dig(resource_name, :email)
     @phone_number = params.dig(resource_name, :phone_number)

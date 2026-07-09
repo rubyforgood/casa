@@ -1,29 +1,32 @@
-<div class="password-box px-4 pb-3">
-  <h2 class="my-3">Set password</h2>
+<% content_for :page_title, "Accept your invitation" %>
+<% field = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
-  <%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), local: true, html: {method: :put}) do |f| %>
-    <%= render "/shared/error_messages", resource: resource %>
-    <%= f.hidden_field :invitation_token, readonly: true %>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Set your password</h2>
+  <p class="mt-2 text-sm text-slate-500">Welcome to CASA — choose a password to activate your account.</p>
+</div>
 
-    <% if f.object.class.require_password_on_accepting %>
-      <div class="input-style-1">
-        <%= f.label :password %>
-        <%= f.password_field :password, placeholder: "Password", required: true %>
-      </div>
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
 
-      <div class="input-style-1">
-        <%= f.label :password_confirmation %>
-        <%= f.password_field :password_confirmation, placeholder: "Password Confirmation", required: true %>
-      </div>
-    <% end %>
+<%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), local: true, html: {method: :put}, class: "space-y-5") do |f| %>
+  <%= f.hidden_field :invitation_token, readonly: true %>
 
-    <div class="actions mt-3">
-      <%= button_tag(
-        type: "submit",
-        class: "main-btn primary-btn btn-hover btn-sm"
-      ) do %>
-        <i class="lni lni-lock-alt mr-10"></i>Set my password
-      <% end %>
+  <% if f.object.class.require_password_on_accepting %>
+    <div>
+      <%= f.label :password, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= f.password_field :password, autofocus: true, autocomplete: "new-password", required: true, placeholder: "••••••••", class: field %>
+    </div>
+    <div>
+      <%= f.label :password_confirmation, "Confirm password", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, placeholder: "••••••••", class: field %>
     </div>
   <% end %>
-</div>
+
+  <%= f.submit "Activate account", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
