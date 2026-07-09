@@ -1,80 +1,49 @@
-<div class="signin-wrapper">
-  <div class="form-wrapper">
-    <h6 class="mb-15">Sign In</h6>
-    <p class="text-sm mb-25">
-      Not registered but want to join?
-      <a class='text-blue-500' href="mailto:casa@rubyforgood.org?Subject=Application%20Interest" target="_top">casa@rubyforgood.org</a>
-    </p>
-    <div class="row">
-      <%= form_with(model: resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-      <div class="alert-box">
-        <% if resource.errors.any? %>
-          <%= render "/shared/error_messages", resource: resource %>
-        <% else %>
-          <%= render "layouts/flash_messages" %>
-        <% end %>
-      </div>
-        <div class="col-12">
-          <div class="input-style-1" id="email-input">
-            <%= f.label "Email", for: "email" %>
-            <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "Email", class: "form-control", required: true, id:"email" %>
-          </div>
-        </div>
-        <!-- end col -->
-        <div class="col-12">
-          <div class="input-style-1">
-            <%= f.label :password %>
-            <%= f.password_field :password, autocomplete: "current-password", placeholder: "Password", class: "form-control", required: true %>
-          </div>
-        </div>
-        <div class="col-12">
-          <div class="input-style-1">
-            <%= link_to new_password_path(resource_name), class: "hover-underline" do %>
-              <i class="lni lni-lock mr-10"></i>Forgot your password?
-            <% end %>
-          </div>
-        </div>
-        <!-- end col -->
-        <div class="col-xxl-6 col-lg-12 col-md-6">
-          <div class="form-check checkbox-style mb-30">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              value=""
-              id="checkbox-remember">
-            <label
-              class="form-check-label"
-              for="checkbox-remember">
-              Remember me next time</label>
-          </div>
-        </div>
-        <!-- end col -->
-        <!-- end col -->
-        <div class="col-12">
-          <div
-            class="
-                            button-group
-                            d-flex
-                            justify-content-center
-                            flex-wrap
-                            actions
-                          ">
-            <%= button_tag(
-              type: "submit",
-              class: "main-btn primary-btn btn-hover w-100 text-center",
-              id: "log-in"
-            ) do %>
-              <i class="lni lni-chevron-right-circle mr-10"></i>Log In
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-      <div class="col-xxl-6 col-lg-12 col-md-6">
-        <div class="text-start text-md-end text-lg-start text-xxl-end mb-30">
-        </div>
-      </div>
-      <div class="col-xxl-6 col-lg-12 col-md-6">
-      </div>
-    </div>
-  </div>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Welcome back</h2>
+  <p class="mt-2 text-sm text-slate-500">Sign in to your CASA account to continue.</p>
 </div>
+
+<% flash.each do |type, message| %>
+  <div class="mb-5 rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>">
+    <%= message %>
+  </div>
+<% end %>
+
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: resource, as: resource_name, url: session_path(resource_name), class: "space-y-5") do |f| %>
+  <div>
+    <%= f.label :email, "Email", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true, placeholder: "you@example.com",
+          class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  </div>
+
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <%= f.label :password, "Password", class: "block text-sm font-medium text-slate-700" %>
+      <%= link_to "Forgot password?", new_password_path(resource_name), class: "text-sm font-medium text-brand-600 hover:text-brand-700" %>
+    </div>
+    <%= f.password_field :password, autocomplete: "current-password", required: true, placeholder: "••••••••",
+          class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  </div>
+
+  <label class="flex items-center gap-2 text-sm text-slate-600">
+    <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+    Remember me on this device
+  </label>
+
+  <%= f.submit "Sign in", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
+
+<p class="mt-8 text-center text-sm text-slate-500">
+  Not registered but want to join your local CASA?
+  <a href="mailto:casa@rubyforgood.org?Subject=Application%20Interest" class="font-medium text-brand-600 hover:text-brand-700">Get in touch →</a>
+</p>

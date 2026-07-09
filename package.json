@@ -9,7 +9,9 @@
     "build": "./bin/asset_bundling_scripts/build_js.js",
     "build:dev": "./bin/asset_bundling_scripts/build_js.js --watch",
     "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules",
-    "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
+    "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch",
+    "build:tailwind": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --minify",
+    "build:tailwind:dev": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --watch"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",
@@ -47,12 +49,14 @@
   "version": "0.1.0",
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
+    "@tailwindcss/cli": "^4.3.2",
     "faker": "^5.5.3",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "markdown-toc": "^1.2.0",
     "standard": "^17.1.2",
-    "start-server-and-test": "^2.1.5"
+    "start-server-and-test": "^2.1.5",
+    "tailwindcss": "^4.3.2"
   },
   "standard": {
     "globals": [
