@@ -46,10 +46,16 @@
             <% @casa_cases.each do |casa_case| %>
               <tr class="hover:bg-slate-50/70">
                 <td class="<%= td %>"><%= link_to casa_case.case_number, casa_case, class: "font-medium text-brand-600 hover:text-brand-700" %></td>
-                <td class="<%= td %>"><%= casa_case.hearing_type_name %></td>
-                <td class="<%= td %>"><%= casa_case.judge_name %></td>
+                <td class="<%= td %>"><%= casa_case.hearing_type_name.presence || tag.span("—", class: "text-slate-400") %></td>
+                <td class="<%= td %>"><%= casa_case.judge_name.presence || tag.span("—", class: "text-slate-400") %></td>
                 <td class="<%= td %>"><%= casa_case.decorate.status %></td>
-                <td class="<%= td %>"><%= casa_case.decorate.transition_aged_youth %></td>
+                <td class="<%= td %>">
+                  <% if casa_case.in_transition_age? %>
+                    <span class="inline-flex items-center rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">Yes</span>
+                  <% else %>
+                    <span class="text-slate-400">No</span>
+                  <% end %>
+                </td>
                 <% unless current_user.volunteer? %>
                   <td class="<%= td %>">
                     <% if casa_case.active? %>
@@ -61,8 +67,8 @@
                   </td>
                 <% end %>
                 <td class="px-4 py-3 text-right">
-                  <%= link_to edit_casa_case_path(casa_case), class: "inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:underline" do %>
-                    <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+                  <%= link_to edit_casa_case_path(casa_case), "aria-label": "Edit #{casa_case.case_number}", class: "inline-grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+                    <i class="bi bi-pencil" aria-hidden="true"></i>
                   <% end %>
                 </td>
               </tr>

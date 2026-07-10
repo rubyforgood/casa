@@ -112,7 +112,8 @@ Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filt
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
 submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial
 renders a Pagy instance as a bottom bar — "Showing X–Y of Z" left, page controls right
-(`nav` + `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params.
+(`nav` + `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params. Don't render
+decorative emoji as data (e.g. the 🦋/🐛 transition-aged icons) — use a plain label or pill.
 
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)

@@ -1,25 +1,38 @@
 <%# Casa case filter bar (casadesign, bespoke). Clear server-side selects that submit on
     change (auto-submit controller; Turbo Drive keeps it smooth). Volunteers never reach
     this — the view gates it on can_see_filters?. %>
-<% select_class = "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400" %>
 
 <%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 flex flex-wrap items-end gap-3" do %>
-  <div class="min-w-[9rem]">
+  <div class="min-w-[10rem]">
     <%= label_tag :status, "Status", class: label_class %>
-    <%= select_tag :status, options_for_select([["Active", "active"], ["Inactive", "inactive"], ["All", "all"]], params[:status].presence || "active"), class: select_class %>
+    <div class="relative">
+      <%= select_tag :status, options_for_select([["Active", "active"], ["Inactive", "inactive"], ["All", "all"]], params[:status].presence || "active"), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
   </div>
-  <div class="min-w-[9rem]">
+  <div class="min-w-[10rem]">
     <%= label_tag :assigned, "Assignment", class: label_class %>
-    <%= select_tag :assigned, options_for_select([["All volunteers", ""], ["Assigned", "assigned"], ["Unassigned", "unassigned"]], params[:assigned]), class: select_class %>
+    <div class="relative">
+      <%= select_tag :assigned, options_for_select([["All volunteers", ""], ["Assigned", "assigned"], ["Unassigned", "unassigned"]], params[:assigned]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
   </div>
-  <div class="min-w-[9rem]">
+  <div class="min-w-[10rem]">
     <%= label_tag :transition, "Transition-aged youth", class: label_class %>
-    <%= select_tag :transition, options_for_select([["All", ""], ["Yes", "yes"], ["No", "no"]], params[:transition]), class: select_class %>
+    <div class="relative">
+      <%= select_tag :transition, options_for_select([["All", ""], ["Yes", "yes"], ["No", "no"]], params[:transition]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
   </div>
-  <div class="min-w-[9rem]">
+  <div class="min-w-[10rem]">
     <%= label_tag :prefix, "Case number prefix", class: label_class %>
-    <%= select_tag :prefix, options_for_select([["All", ""], ["CINA", "CINA"], ["TPR", "TPR"], ["None", "None"]], params[:prefix]), class: select_class %>
+    <div class="relative">
+      <%= select_tag :prefix, options_for_select([["All", ""], ["CINA", "CINA"], ["TPR", "TPR"], ["None", "None"]], params[:prefix]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
   </div>
   <noscript>
     <%= submit_tag "Filter", class: "rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white" %>
