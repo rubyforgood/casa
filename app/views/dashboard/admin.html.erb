@@ -1,0 +1,87 @@
+<%#
+  Admin org-wide landing dashboard (casadesign). Rendered by DashboardController#show
+  inside the casa_app (Tailwind) layout. Data comes from AdminDashboard.
+%>
+<% content_for :page_title, "Dashboard" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+      <p class="mt-1 text-sm text-slate-500"><%= @dashboard.empty? ? "Let's get your chapter set up." : "Your chapter at a glance." %></p>
+    </div>
+    <%= link_to new_volunteer_path, class: "inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2" do %>
+      <i class="bi bi-person-plus" aria-hidden="true"></i> Invite a volunteer
+    <% end %>
+  </div>
+
+  <% if @dashboard.empty? %>
+    <div class="mx-auto max-w-lg py-16 text-center">
+      <div class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-brand-50 text-brand-600"><i class="bi bi-buildings text-3xl" aria-hidden="true"></i></div>
+      <h2 class="mt-5 text-xl font-bold tracking-tight text-slate-900">Welcome to your chapter</h2>
+      <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">Invite volunteers and add cases to get started. Once your chapter is active, this is where you'll see what needs attention.</p>
+      <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
+        <%= link_to "Invite a volunteer", new_volunteer_path, class: "inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2" %>
+        <%= link_to "Add a case", new_casa_case_path, class: "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+      </div>
+    </div>
+  <% else %>
+    <% stats = @dashboard.stats %>
+
+    <div class="grid grid-cols-2 gap-4 lg:grid-cols-4">
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-brand-50 text-brand-600"><i class="bi bi-people" aria-hidden="true"></i></span>
+        <div class="mt-3 text-3xl font-bold tracking-tight text-slate-900"><%= stats[:volunteers] %></div>
+        <div class="text-sm text-slate-500">Active volunteers</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <span class="grid h-9 w-9 place-items-center rounded-xl bg-sky-50 text-sky-600"><i class="bi bi-folder2" aria-hidden="true"></i></span>
+        <div class="mt-3 text-3xl font-bold tracking-tight text-slate-900"><%= stats[:cases] %></div>
+        <div class="text-sm text-slate-500">Active cases</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm <%= "ring-1 ring-rose-100" if stats[:unassigned].positive? %>">
+        <span class="grid h-9 w-9 place-items-center rounded-xl <%= stats[:unassigned].positive? ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600" %>"><i class="bi <%= stats[:unassigned].positive? ? "bi-person-dash" : "bi-check2-circle" %>" aria-hidden="true"></i></span>
+        <div class="mt-3 text-3xl font-bold tracking-tight <%= stats[:unassigned].positive? ? "text-rose-600" : "text-slate-900" %>"><%= stats[:unassigned] %></div>
+        <div class="text-sm text-slate-500">Unassigned cases</div>
+        <div class="mt-1 text-xs text-slate-500">No active volunteer</div>
+      </div>
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <span class="grid h-9 w-9 place-items-center rounded-xl <%= stats[:needs_contact].positive? ? "bg-amber-50 text-amber-600" : "bg-emerald-50 text-emerald-600" %>"><i class="bi <%= stats[:needs_contact].positive? ? "bi-clock-history" : "bi-check2-circle" %>" aria-hidden="true"></i></span>
+        <div class="mt-3 text-3xl font-bold tracking-tight text-slate-900"><%= stats[:needs_contact] %></div>
+        <div class="text-sm text-slate-500">Need a contact</div>
+        <div class="mt-1 text-xs text-slate-500">Not contacted in <%= Volunteer::CONTACT_MADE_IN_DAYS_NUM %>+ days</div>
+      </div>
+    </div>
+
+    <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="attention-heading">
+      <div class="mb-4 flex items-center justify-between">
+        <h2 id="attention-heading" class="text-base font-semibold text-slate-900">Needs your attention</h2>
+        <% if @dashboard.unassigned_cases.any? %><%= link_to "All cases", casa_cases_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %><% end %>
+      </div>
+      <% if @dashboard.needs_attention.any? %>
+        <p class="mb-3 text-sm text-slate-500"><%= pluralize(@dashboard.stats[:unassigned], "active case") %> with no volunteer assigned.</p>
+        <ul class="space-y-2.5">
+          <% @dashboard.needs_attention.each do |casa_case| %>
+            <li class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-100 bg-rose-50/40 px-4 py-3">
+              <div class="flex items-center gap-3">
+                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-person-dash" aria-hidden="true"></i></span>
+                <div class="font-semibold text-slate-800"><%= link_to casa_case.case_number, casa_case_path(casa_case), class: "hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></div>
+              </div>
+              <%= link_to casa_case_path(casa_case), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+                <i class="bi bi-person-plus" aria-hidden="true"></i> Assign a volunteer
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <div class="flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+          <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600"><i class="bi bi-check2-circle text-xl" aria-hidden="true"></i></span>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-900">Every case has a volunteer</h3>
+            <p class="mt-0.5 text-sm text-slate-600">Nice — no active cases are waiting for an assignment right now.</p>
+          </div>
+        </div>
+      <% end %>
+    </section>
+  <% end %>
+</div>

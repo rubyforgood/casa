@@ -83,16 +83,19 @@ RSpec.describe "/dashboard", type: :request do
 
   context "as an admin" do
     let(:admin) { create(:casa_admin, casa_org: organization) }
+    let!(:unassigned_case) { create(:casa_case, casa_org: organization) }
 
     before do
       sign_in admin
     end
 
     describe "GET /show" do
-      it "renders a successful response" do
+      it "renders the admin dashboard with cases needing attention" do
         get root_url
 
-        expect(response).to redirect_to(supervisors_path)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Dashboard")
+        expect(response.body).to include(unassigned_case.case_number)
       end
     end
   end

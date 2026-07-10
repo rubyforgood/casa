@@ -244,7 +244,7 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Edit profile
 - [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
-- [ ] Admin dashboard
+- [x] Admin dashboard (org triage: unassigned & stale cases)
 - [ ] Cases, case contacts, reports, settings
 - [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
 

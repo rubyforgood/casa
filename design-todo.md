@@ -36,8 +36,8 @@ design system on the `casadesign` branch.
 - [x] Volunteer dashboard / landing — triage (active cases, cases needing a contact,
   hours), keeping the single-active-case fast-path to "log a contact". Added an org
   announcement banner to the shell so it isn't lost on dashboard pages.
-- [ ] Admin dashboard — org-wide triage. Needs **batched/aggregate** queries (org scale)
-  to avoid N+1 / Prosopite failures; do not copy the supervisor per-row query style.
+- [x] Admin dashboard — org-wide triage (active volunteers/cases, unassigned cases,
+  cases needing a contact) using batched/aggregate queries, not per-row.
 
 ## Phase 3 — Core workflows (highest traffic)
 - [ ] Cases index (`casa_cases#index`) — volunteer "My Cases" + admin/supervisor roster.
