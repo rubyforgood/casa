@@ -21,6 +21,8 @@ import DisclosureController from './disclosure_controller'
 
 import DismissController from './dismiss_controller'
 
+import DropdownController from './dropdown_controller'
+
 import HelloController from './hello_controller'
 
 import IconToggleController from './icon_toggle_controller'
@@ -46,6 +48,7 @@ application.register('court-order-form', CourtOrderFormController)
 application.register('disable-form', DisableFormController)
 application.register('disclosure', DisclosureController)
 application.register('dismiss', DismissController)
+application.register('dropdown', DropdownController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
 application.register('multiple-select', MultipleSelectController)

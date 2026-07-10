@@ -37,7 +37,7 @@
 }
 .dataTables_wrapper .dataTables_length,
 .dataTables_wrapper .dataTables_filter {
-  @apply mb-4;
+  @apply mb-4 px-4 pt-4;
 }
 .dataTables_wrapper .dataTables_filter {
   @apply text-right;
@@ -74,10 +74,10 @@ table.dataTable tbody tr:hover {
 }
 
 .dataTables_wrapper .dataTables_info {
-  @apply mt-4 text-xs text-slate-500;
+  @apply mt-4 px-4 text-xs text-slate-500;
 }
 .dataTables_wrapper .dataTables_paginate {
-  @apply mt-4 flex flex-wrap items-center justify-end gap-1;
+  @apply mt-4 flex flex-wrap items-center justify-end gap-1 px-4;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
   @apply inline-flex min-w-[2.25rem] cursor-pointer items-center justify-center rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 no-underline;

@@ -149,6 +149,11 @@ style as the dashboard) and one sentence — **"Unable to save:"** followed by t
 joined with `to_sentence`, no bulleted list. Use the `shared/_form_errors` partial on
 Tailwind pages; the legacy `shared/_error_messages` stays for Bootstrap pages.
 
+### Dropdown / popover
+Overlay menus (case filters, column picker) use the `dropdown` Stimulus controller —
+toggle + close on outside-click/Escape. (Distinct from `disclosure`, which is for inline
+panels like the edit-profile forms that should stay open.)
+
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger
 button; the `disclosure` Stimulus controller toggles a `hidden` panel and keeps
@@ -267,7 +272,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
-- [ ] Cases, case contacts, reports, settings
+- [x] Cases index (jQuery DataTables themed via the skin; filters/column picker as
+  dropdown popovers)
+- [ ] Case show/new/edit, case contacts, reports, settings
 - [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
 
 ## Workflow

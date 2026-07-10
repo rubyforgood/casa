@@ -10,6 +10,8 @@ class CasaCasesController < ApplicationController
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
     @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
     @duties = OtherDuty.where(creator_id: current_user.id)
+    @active_nav = "cases"
+    render :index, layout: "casa_app"
   end
 
   def show

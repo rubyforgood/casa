@@ -22,11 +22,18 @@ RSpec.describe "casa_cases/index", type: :system do
     expect(page).to have_link("TPR-100", href: "/casa_cases/#{tpr.case_number.parameterize}")
     expect(page).to have_link("123-12-123", href: "/casa_cases/#{no_prefix.case_number.parameterize}")
 
-    click_on "Status"
-    click_on "Assigned to Volunteer"
-    click_on "Assigned to more than 1 Volunteer"
-    click_on "Assigned to Transition Aged Youth"
-    click_on "Casa Case Prefix"
+    # each filter is a dropdown popover; open then close it so the open panel
+    # doesn't intercept the click on the next (possibly wrapped) filter button
+    [
+      "Status",
+      "Assigned to Volunteer",
+      "Assigned to more than 1 Volunteer",
+      "Assigned to Transition Aged Youth",
+      "Casa Case Prefix"
+    ].each do |filter|
+      click_on filter
+      click_on filter
+    end
   end
 
   it "has a usable dropdown in sidebar" do

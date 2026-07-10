@@ -1,143 +1,66 @@
-<div>
-  <div class="row casa-case-filters">
-    <div class="col-sm-12 flex align-items-center">
-      <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
-        </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton1">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_active", "Active", true,
-                              class: "form-check-input",
-                              data: { value: "Active" } %>
-            <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_inactive", "Inactive", false,
-                              class: "form-check-input",
-                              data: { value: "Inactive" } %>
-            <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
-          </div>
-        </div>
+<%# Casa case filters (casadesign). Bootstrap dropdowns + modal replaced with Tailwind
+    dropdown popovers; the JS hooks (container classes, data-value, ids, #visibleColumns,
+    .toggle-visibility) are preserved so dashboard.js filtering + column toggles keep working.
+    The column picker stays OUTSIDE .casa-case-filters so the filter-redraw handler doesn't
+    bind to the column checkboxes. %>
+<% trigger = "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% panel = "hidden absolute left-0 z-20 mt-2 w-64 space-y-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-lg" %>
+<% option = "flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-slate-700 hover:bg-slate-50" %>
+<% box = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+
+<div class="mb-4 flex flex-wrap items-center gap-2">
+  <div class="flex flex-wrap items-center gap-2 casa-case-filters">
+    <span class="mr-1 text-sm font-medium text-slate-500">Filter by:</span>
+
+    <div data-controller="dropdown" class="relative">
+      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Status <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
+      <div data-dropdown-target="panel" class="<%= panel %> status-options">
+        <label class="<%= option %>"><%= check_box_tag "status_option_active", "Active", true, class: box, data: {value: "Active"} %> Active</label>
+        <label class="<%= option %>"><%= check_box_tag "status_option_inactive", "Inactive", false, class: box, data: {value: "Inactive"} %> Inactive</label>
       </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Volunteer
-        </button>
-        <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton2">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true,
-                              class: "form-check-input",
-                              data: { value: "Yes" } %>
-            <%= label_tag "assigned_to_volunteer_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check form-check checkbox-style">
-            <%= check_box_tag "assigned_to_volunteer_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No" } %>
-            <%= label_tag "assigned_to_volunteer_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
+    </div>
+
+    <div data-controller="dropdown" class="relative">
+      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to Volunteer <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
+      <div data-dropdown-target="panel" class="<%= panel %> assigned-to-volunteer-options">
+        <label class="<%= option %>"><%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true, class: box, data: {value: "Yes"} %> Yes</label>
+        <label class="<%= option %>"><%= check_box_tag "assigned_to_volunteer_option_no", "No", true, class: box, data: {value: "No"} %> No</label>
       </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to more than 1 Volunteer
-        </button>
-        <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
-                              class: "form-check-input",
-                              data: { value: "Yes" } %>
-            <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No" } %>
-            <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
+    </div>
+
+    <div data-controller="dropdown" class="relative">
+      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to more than 1 Volunteer <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
+      <div data-dropdown-target="panel" class="<%= panel %> more-than-one-volunteer-options">
+        <label class="<%= option %>"><%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true, class: box, data: {value: "Yes"} %> Yes</label>
+        <label class="<%= option %>"><%= check_box_tag "more_than_one_volunteer_option_no", "No", true, class: box, data: {value: "No"} %> No</label>
       </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Transition Aged Youth
-        </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
-                              class: "form-check-input",
-                              data: { value: "Yes 🦋" } %>
-            <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No 🐛" } %>
-            <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
+    </div>
+
+    <div data-controller="dropdown" class="relative">
+      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to Transition Aged Youth <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
+      <div data-dropdown-target="panel" class="<%= panel %> transition-youth-options">
+        <label class="<%= option %>"><%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true, class: box, data: {value: "Yes 🦋"} %> Yes</label>
+        <label class="<%= option %>"><%= check_box_tag "transition_youth_option_no", "No", true, class: box, data: {value: "No 🐛"} %> No</label>
       </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Casa Case Prefix
-          </button>
+    </div>
+
+    <div data-controller="dropdown" class="relative">
+      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Casa Case Prefix <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
+      <div data-dropdown-target="panel" class="<%= panel %> case-number-prefix-options">
+        <% ["CINA", "None", "TPR"].each do |prefix| %>
+          <% prefix_name = prefix.downcase.gsub(/[^a-z]+/, "") %>
+          <label class="<%= option %>"><%= check_box_tag "case_case_prefix_option_#{prefix_name}", prefix, true, class: box, data: {value: prefix} %> <%= prefix %></label>
         <% end %>
-        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton5">
-          <% ["CINA", "None", "TPR"].each do |option| %>
-            <div class="dropdown-item form-check checkbox-style">
-              <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
-              <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
-              <%= check_box_tag tag_name, option, true,
-                                class: "form-check-input",
-                                data: { value: option } %>
-              <%= label_tag tag_name, option, class: "form-check-label" %>
-            </div>
-          <% end %>
-        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="warning-modal">
-  <div class="modal fade" id="visibleColumns" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content card-style">
-        <div class="modal-header px-0 border-0">
-          <h5 class="text-bold">Pick Displayed Columns</h5>
-          <button
-            class="border-0 bg-transparent h1"
-            data-bs-dismiss="modal">
-            <i class="lni lni-cross-circle"></i>
-          </button>
-        </div>
-        <div class="modal-body px-0">
-          <div class="mb-30">
-            <h6 class="mb-20">
-              Select columns:
-  </h6>
-            <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-              <div class="form-check checkbox-style m-2">
-                <%= check_box_tag "pick-#{column}",
-                                  "1",
-                                  false,
-                                  class: "form-check-input toggle-visibility",
-                                  data: { column: index } %>
-                <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
-              </div>
-            <% end %>
-          </div>
-          <div class="action d-flex flex-wrap justify-content-end">
-            <button
-              data-bs-dismiss="modal"
-              class="main-btn danger-btn-outline btn-hover m-1"><i class="lni lni-ban mr-10"></i>
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
+  <div data-controller="dropdown" class="relative ml-auto">
+    <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>"><i class="bi bi-layout-three-columns text-slate-400" aria-hidden="true"></i> Columns</button>
+    <div id="visibleColumns" data-dropdown-target="panel" class="hidden absolute right-0 z-20 mt-2 w-64 space-y-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+      <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
+        <label class="<%= option %>"><%= check_box_tag "pick-#{column}", "1", false, class: "toggle-visibility #{box}", data: {column: index} %> <%= column.titleize %></label>
+      <% end %>
     </div>
   </div>
 </div>

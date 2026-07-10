@@ -40,9 +40,9 @@ design system on the `casadesign` branch.
   cases needing a contact) using batched/aggregate queries, not per-row.
 
 ## Phase 3 — Core workflows (highest traffic)
-- [ ] Cases index (`casa_cases#index`) — volunteer "My Cases" + admin/supervisor roster.
-  ERB-rendered rows, so the most tractable first datatable page: restyle the view, filter
-  partial, and column-picker modal on the shell; the skin covers the chrome.
+- [x] Cases index (`casa_cases#index`) — shell + DataTables skin; filters + column picker
+  rebuilt as `dropdown` popovers (JS hooks preserved). Action-button/column-header labels
+  kept Title Case (spec-coupled) pending the interactive-label sentence-case pass.
 - [ ] Case show (`casa_cases#show`).
 - [ ] Case new / edit.
 - [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
