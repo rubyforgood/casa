@@ -25,9 +25,8 @@ design system on the `casadesign` branch.
 
 ## Phase 1 — App-shell coherence (leaf pages reached from the new shell)
 - [x] Notifications (`notifications#index`).
-- [ ] Edit profile (`users#edit`) — profile, change password, change email, languages.
-  Legacy uses Bootstrap collapse/accordion; rebuild with `details` or a Stimulus
-  controller.
+- [x] Edit profile (`users#edit`) — profile, change password, change email, languages.
+  Rebuilt the Bootstrap collapse accordions with a `disclosure` Stimulus controller.
 - [ ] Impersonation banner inside `casa_app` (currently only in the legacy header).
 - [ ] Help link + sign-out in the account menu reach a consistent destination.
 - [ ] Flash / notifier parity — reconcile the `casa_app` flash strip with the legacy

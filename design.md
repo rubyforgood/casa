@@ -106,6 +106,19 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
 3. **No results** (filters/search): centered search icon + message tied to the active
    filters + a "Clear filters" action.
 
+### Form errors
+Summary panel shown above a form when saving fails: `rounded-lg border border-rose-200
+bg-rose-50 p-4`, a `text-sm font-semibold text-rose-800` heading, and a `list-disc` of
+messages in `text-rose-700`. Use the `shared/_form_errors` partial on Tailwind pages
+(the legacy `shared/_error_messages` stays for Bootstrap pages). Honours the
+`@custom_error_header` override.
+
+### Disclosure (collapsible panel)
+Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger
+button; the `disclosure` Stimulus controller toggles a `hidden` panel and keeps
+`aria-expanded` in sync. Keep the trigger a real `<button>` so it stays keyboard- and
+test-reachable.
+
 ## App shell
 - **Sidebar** (256px, `border-r border-slate-200 bg-white`): org **name only** in the
   header (no logo/brand mark — not a value-add at this size, and avoids image/variant
@@ -202,7 +215,8 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] App shell — sidebar + top bar (`casa_app` layout)
 - [x] Supervisor dashboard (triage-pattern reference)
 - [x] Notifications
-- [ ] Edit profile & other app-shell leaf pages
+- [x] Edit profile
+- [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
 - [ ] Volunteer & admin dashboards
 - [ ] Cases, case contacts, reports, settings
 - [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
