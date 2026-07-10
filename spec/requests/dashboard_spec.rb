@@ -23,15 +23,14 @@ RSpec.describe "/dashboard", type: :request do
       context "more than one active case" do
         let!(:active_case_assignment) { create :case_assignment, volunteer: volunteer }
 
-        it "renders a successful response" do
+        it "renders the volunteer dashboard" do
           get root_url
 
-          expect(response).to redirect_to(casa_cases_path)
+          expect(response).to have_http_status(:ok)
         end
 
         it "shows my cases" do
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)
@@ -42,7 +41,6 @@ RSpec.describe "/dashboard", type: :request do
           create(:case_assignment, volunteer: not_logged_in_volunteer)
 
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)
@@ -54,7 +52,6 @@ RSpec.describe "/dashboard", type: :request do
           not_my_case_assignment = create(:case_assignment, casa_org: different_org)
 
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)

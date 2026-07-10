@@ -153,7 +153,8 @@ test-reachable.
   email, and a **role badge** — `current_role` as a soft pill colour-coded by role
   (Volunteer = sky, Supervisor = violet, Casa Admin = amber) — the single place the
   user's role is surfaced.
-- **Content**: `bg-slate-50`, generous padding, cards. Full org logo is reserved for
+- **Content**: `bg-slate-50`, generous padding, cards. Org announcement banners render
+  at the top of the content area (`layouts/_casa_banner`). Full org logo is reserved for
   contexts with room (sign-in, court reports / exports), not the shell.
 
 ## Key patterns
@@ -242,7 +243,8 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Notifications
 - [x] Edit profile
 - [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
-- [ ] Volunteer & admin dashboards
+- [x] Volunteer dashboard (triage: cases, follow-ups, hours)
+- [ ] Admin dashboard
 - [ ] Cases, case contacts, reports, settings
 - [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
 

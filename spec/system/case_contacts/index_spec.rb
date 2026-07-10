@@ -184,29 +184,17 @@ RSpec.describe "case_contacts/index", type: :system do
       create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: today)
 
       # showing all cases
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on "All"
-      end
+      visit case_contacts_path
       expect(page).to have_text("Case 1 Notes")
       expect(page).to have_text("Case 2 Notes")
 
       # showing case 1
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on case_number
-      end
+      visit case_contacts_path(casa_case_id: casa_case.id)
       expect(page).to have_text("Case 1 Notes")
       expect(page).to have_no_text("Case 2 Notes")
 
       # showing case 2
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on another_case_number
-      end
+      visit case_contacts_path(casa_case_id: another_case.id)
       expect(page).to have_text("Case 2 Notes")
       expect(page).to have_no_text("Case 1 Notes")
 
@@ -218,11 +206,7 @@ RSpec.describe "case_contacts/index", type: :system do
       expect(page).to have_text("Case 2 Notes")
       expect(page).to have_no_text("Case 1 Notes")
 
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on case_number
-      end
+      visit case_contacts_path(casa_case_id: casa_case.id)
       click_on "Expand / Hide"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow

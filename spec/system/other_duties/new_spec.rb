@@ -37,7 +37,7 @@ RSpec.describe "other_duties/new", type: :system do
     end
 
     it "has an error if a new duty is attempted to be created without any notes" do
-      click_on "Other Duties"
+      visit other_duties_path
       click_on "New Duty"
 
       click_on "Submit"

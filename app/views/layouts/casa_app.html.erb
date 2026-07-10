@@ -84,6 +84,7 @@
       </header>
 
       <main id="main-content" class="flex-1">
+        <%= render "layouts/casa_banner" %>
         <% if flash.any? { |_, message| message.present? } %>
           <div class="space-y-2 px-4 pt-4 sm:px-6 lg:px-8">
             <% flash.each do |type, message| %>
