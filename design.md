@@ -87,6 +87,11 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
 ### Buttons
 - Primary: `rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700`
 - Secondary: `rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50`
+- Tertiary (ghost): `rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900` — no
+  border, fill, or shadow; the lowest-emphasis action, for repeated row / toolbar actions so they recede from brand
+  links. Neutral ink stays ≥ AA (slate-600 ≈ 7:1 — never `slate-400` under visible text). Leading icon via `gap-1.5`
+  + a `bi-*` glyph. Right-aligned in a table's trailing "actions" cell, give that cell extra end padding (`pr-6`) so the
+  control clears the card edge rather than skewing the button's own padding.
 - Danger-outline: `... border border-rose-200 text-rose-700 hover:bg-rose-50`
 - All: `focus:outline-none focus:ring-2 focus:ring-brand-500/40`
 
