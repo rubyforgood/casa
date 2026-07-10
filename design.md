@@ -128,8 +128,9 @@ test-reachable.
 - **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): mobile nav
   toggle, notifications, and the avatar **account menu** — the single place for identity
   + account actions (no duplicate identity block in the sidebar). Its header shows name,
-  email, and a **role badge** (`current_role` as a brand-tinted pill) — the single place
-  the user's role is surfaced.
+  email, and a **role badge** — `current_role` as a soft pill colour-coded by role
+  (Volunteer = sky, Supervisor = violet, Casa Admin = amber) — the single place the
+  user's role is surfaced.
 - **Content**: `bg-slate-50`, generous padding, cards. Full org logo is reserved for
   contexts with room (sign-in, court reports / exports), not the shell.
 

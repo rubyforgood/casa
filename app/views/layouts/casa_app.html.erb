@@ -18,6 +18,7 @@
 <body class="h-full bg-slate-50 font-sans text-slate-800 antialiased">
   <% initials = avatar_initials(display_person(current_user)) %>
   <% unread = current_user.notifications.unread.count %>
+  <% role_badge_class = {"Volunteer" => "bg-sky-50 text-sky-700", "Supervisor" => "bg-violet-50 text-violet-700", "Casa Admin" => "bg-amber-50 text-amber-700"}[current_role] || "bg-slate-100 text-slate-600" %>
 
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white">Skip to main content</a>
 
@@ -72,9 +73,7 @@
               <div class="border-b border-slate-100 px-4 py-3">
                 <div class="text-sm font-semibold text-slate-800"><%= display_person(current_user) %></div>
                 <div class="truncate text-xs text-slate-500"><%= current_user.email %></div>
-                <span class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
-                  <i class="bi bi-person-badge text-[11px]" aria-hidden="true"></i> <%= current_role %>
-                </span>
+                <span class="mt-1.5 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium <%= role_badge_class %>"><%= current_role %></span>
               </div>
               <%= link_to "Edit profile", edit_users_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
               <%= link_to "Messages", notifications_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
