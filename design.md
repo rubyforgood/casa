@@ -1,8 +1,10 @@
 # CASA Design System
 
-> Living design system for the CASA UI refresh (`casadesign` branch). This is the
-> source of truth for the new aesthetic — read it before building UI, and keep it
-> updated as patterns solidify.
+> **Permanent, living record** of the CASA UI refresh (`casadesign` branch) — the
+> **single source of truth** for the new design system and the decisions behind it.
+> **Refer to it for all UI work** so this direction never has to be rediscovered or
+> rebuilt. Read it before building UI, and keep it current as patterns solidify.
+> The live "what's left" backlog lives in [`design-todo.md`](design-todo.md).
 
 ## Status & approach
 
@@ -121,15 +123,89 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.
 
-## Migration checklist
+## Design decisions (rationale)
+
+The *why* behind the system, so choices aren't re-litigated or lost.
+
+- **Tailwind v4 runs alongside legacy Bootstrap, migrated page-by-page.** A big-bang
+  rewrite is too risky for a volunteer-run app; each page is moved wholesale onto one
+  system so the two CSS resets never collide. A page is "migrated" only when it renders
+  on a Tailwind layout with no Bootstrap classes doing layout work.
+- **Pages opt in to the new UI at the controller.** Render with `layout: "casa_app"`
+  (in-app shell) or set `layout "casa_auth"` (split auth). The default
+  `ApplicationController` layout stays the Bootstrap `application` layout, so untouched
+  screens are unaffected. Set `@active_nav` to the sidebar key (e.g. `"volunteers"`) to
+  light up the matching nav item. There is no global flag — the switch is
+  per-controller-action and reversible.
+- **Brand = indigo, neutrals = slate.** Calm, professional, high-contrast and
+  accessible; visibly distinct from the old teal/lineicons look so progress is legible.
+- **Figtree** as the typeface — a warm humanist sans that reads friendly but credible,
+  and is free via Google Fonts.
+- **Bootstrap Icons (`bi-*`), loaded by CDN — temporary.** They match the approved
+  mockups and were fast to adopt, but MUST be vendored into the asset pipeline before
+  production (tracked in `design-todo.md`). Font Awesome (`fas fa-*`) is **not** loaded
+  on Tailwind pages — using it renders nothing. Use `bi-*`.
+- **Icon tiles for status, initial-avatars for people — never mixed.** A soft colored
+  rounded tile behind an icon means "a stat/status"; a colored initials circle means
+  "a person". Keeping these disjoint avoids visual ambiguity.
+- **Sidebar shows the org name only (no logo mark); identity lives in one top-bar
+  account menu.** Dropping the logo avoids image/variant infrastructure that adds little
+  at 256px, and consolidating identity removes the duplicate sidebar identity block. The
+  full org logo is reserved for roomy contexts (sign-in, reports).
+- **Honorific-free names are presentation-only.** Show first + last (no Mr./Mrs./…) on
+  every page via `display_person` (new UI), `formatted_name` (legacy `.display_name`
+  sites) and `avatar_initials`, all backed by `NamePresentation`. The stored
+  `display_name` is **never** mutated — it must round-trip raw input for security.
+- **Landing pages use the triage pattern.** Greeting -> KPI row -> "needs your attention"
+  -> roster/table. Lead with what needs action, not vanity metrics; push power tools into
+  a "More" menu. (See the supervisor dashboard for the reference implementation.)
+- **Every screen designs its empty state** using one of the three patterns (cold-start /
+  all-caught-up / no-results). Never ship all-zero stat cards or a blank section.
+- **Accessibility is part of "done".** Skip link, `aria-current` on the active nav,
+  `aria-label` on icon-only controls, visible `focus-visible` rings, `sr-only` table
+  captions/labels, `role="status"`/`"alert"` on flashes, and `motion-reduce` on the
+  drawer. The shell already meets this bar — keep new pages there.
+- **Build:** `npm run build:tailwind` (minified) or `build:tailwind:dev` (watch, the `tw`
+  process in `Procfile.dev`). Class names are discovered via the `@source` globs in
+  `tailwind.css`. The output `app/assets/builds/tailwind.css` is **gitignored** and built
+  on deploy — don't commit it.
+
+## Migrating a page (playbook)
+
+Repeatable steps for moving one screen off Bootstrap:
+
+1. **Read first** — this doc, plus the page's existing specs (know what behavior is
+   pinned before you touch markup).
+2. **Opt the action into a Tailwind layout** — `render ..., layout: "casa_app"` (or
+   `layout "casa_auth"`), and set `@active_nav` when it maps to a sidebar item.
+3. **Rebuild the view with the components above.** Wrap page content in
+   `px-4 py-6 sm:px-6 lg:px-8`; use the h1/section-title scale; reuse the card, button,
+   input, pill, KPI, and empty-state patterns instead of inventing new ones.
+4. **Names:** `display_person` / `formatted_name` / `avatar_initials` — never raw
+   `display_name`. **Icons:** `bi-*` only. **Status vs people:** icon tile vs avatar.
+5. **Design the empty state** (pick the right one of the three).
+6. **Keep behavior specs green.** When a spec is coupled to a presentational class, move
+   it to a semantic hook (a `data-*` attribute) rather than weakening the assertion.
+   Prefer system specs for new UI behavior (ADR 0006).
+7. **Verify:** `npm run build:tailwind`, run the page's specs, then `bin/lint`.
+8. **Checkpoint:** commit and push to `casadesign`, tick the item off in
+   `design-todo.md`, and update the status below.
+
+## Migration status
+
+High-level progress; the granular, prioritized backlog lives in
+[`design-todo.md`](design-todo.md).
+
 - [x] Tailwind v4 foundation + design tokens
 - [x] Typeface: Figtree
-- [x] Sign-in page
-- [x] App shell (sidebar + top bar)
-- [x] Supervisor dashboard / Volunteers landing
-- [x] Remaining auth pages (forgot/reset password, invitation accept)
+- [x] Auth pages (sign-in, forgot/reset password, invitation accept)
+- [x] App shell — sidebar + top bar (`casa_app` layout)
+- [x] Supervisor dashboard (triage-pattern reference)
+- [x] Notifications
+- [ ] Edit profile & other app-shell leaf pages
 - [ ] Volunteer & admin dashboards
 - [ ] Cases, case contacts, reports, settings
+- [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**
