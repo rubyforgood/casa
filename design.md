@@ -104,6 +104,12 @@ the rounded bottom corner instead of butting against it (use `py-2` for a header
 list card — e.g. notifications — so the first row clears the top corner too). Keep rows
 a uniform height (a taller last row reads as a bug).
 
+### Data tables (DataTables)
+jQuery DataTables skinned to the system in `tailwind.css` (`.dataTables_*` chrome +
+`table.dataTable`): search box, page-length select, info text, pagination. Wrap the table
+in a `rounded-2xl` card. Sort-arrow sprites aren't loaded on the shell, so rely on
+click-to-sort (the header cursor changes) until we swap in `bi-*` carets.
+
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
 -> optional meta (`text-xs text-slate-400`). Danger stats use a rose number + `ring-1 ring-rose-100`.
@@ -216,6 +222,14 @@ The *why* behind the system, so choices aren't re-litigated or lost.
   process in `Procfile.dev`). Class names are discovered via the `@source` globs in
   `tailwind.css`. The output `app/assets/builds/tailwind.css` is **gitignored** and built
   on deploy — don't commit it.
+- **Data tables stay on jQuery DataTables — themed, not rewritten.** The server-side
+  tables (search, sort, paginate, filters, state save, column toggles) carry too much
+  logic to reimplement now, so a Tailwind *skin* in `tailwind.css` restyles the
+  DataTables chrome. Because `tailwind.css` only loads on the shell, that skin never
+  touches the legacy tables. Caveat: server-side tables render cells via JS
+  `columns.render` in `dashboard.js` (Bootstrap markup + `lni` icons), which must be
+  moved to Tailwind + `bi-*` per table; ERB-rendered tables (e.g. cases index) only need
+  their view markup restyled.
 
 ## Migrating a page (playbook)
 

@@ -41,9 +41,12 @@ design system on the `casadesign` branch.
 
 ## Phase 3 — Core workflows (highest traffic)
 - [ ] Cases index (`casa_cases#index`) — volunteer "My Cases" + admin/supervisor roster.
+  ERB-rendered rows, so the most tractable first datatable page: restyle the view, filter
+  partial, and column-picker modal on the shell; the skin covers the chrome.
 - [ ] Case show (`casa_cases#show`).
 - [ ] Case new / edit.
-- [ ] Case contacts index + the case-contact form (multi-step).
+- [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
+  `columns.render` rewrite) + the case-contact form (multi-step).
 - [ ] Case contacts "new design" table (`case_contacts/case_contacts_new_design`).
 
 ## Phase 4 — Management & rosters
@@ -78,8 +81,9 @@ design system on the `casadesign` branch.
 - [ ] **Vendor Bootstrap Icons** into the asset pipeline; drop the CDN link.
 - [ ] Move the inline nav-toggle `<script>` in `casa_app.html.erb` to a Stimulus
   controller (aligns with the jQuery -> Stimulus migration, issue #5016).
-- [ ] Datatable strategy — the app's server-driven jQuery DataTables need a Tailwind
-  theming (or replacement) decision before the roster pages land.
+- [x] Datatable strategy — keep jQuery DataTables, add a Tailwind skin in `tailwind.css`
+  for the chrome. Server-side tables also need their `dashboard.js` `columns.render`
+  output moved from Bootstrap + `lni` to Tailwind + `bi-*`, per table.
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
