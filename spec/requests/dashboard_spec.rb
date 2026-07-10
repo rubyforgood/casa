@@ -66,16 +66,20 @@ RSpec.describe "/dashboard", type: :request do
 
   context "as a supervisor" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
+    let(:volunteer) { create(:volunteer, casa_org: organization, display_name: "Wanda Volunteer") }
+    let!(:supervisor_volunteer) { create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer) }
 
     before do
       sign_in supervisor
     end
 
     describe "GET /show" do
-      it "redirects to the volunteers overview" do
+      it "renders the supervisor dashboard with the assigned volunteer" do
         get root_url
 
-        expect(response).to redirect_to(volunteers_url)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Dashboard")
+        expect(response.body).to include("Wanda Volunteer")
       end
     end
   end
