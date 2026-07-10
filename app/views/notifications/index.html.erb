@@ -11,7 +11,7 @@
     <% has_patch_notes = !(@deploy_time.nil? || @patch_notes.empty?) %>
 
     <% if has_notifications || has_patch_notes %>
-      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-sm">
         <div class="divide-y divide-slate-100">
           <% notifications_after_and_including_deploy(@notifications).each do |notification| %>
             <%= render NotificationComponent.new(notification: notification) %>

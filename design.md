@@ -100,8 +100,9 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
 Full-bleed table inside an `overflow-hidden rounded-2xl` card: a header row
 (`border-b border-slate-100 p-4`), then `thead`/`tbody` with cells `px-4 py-3` and
 `divide-y divide-slate-50` between rows. Add `pb-2` to the card so the last row clears
-the rounded bottom corner instead of butting against it — keep rows a uniform height
-(a taller last row reads as a bug).
+the rounded bottom corner instead of butting against it (use `py-2` for a header-less
+list card — e.g. notifications — so the first row clears the top corner too). Keep rows
+a uniform height (a taller last row reads as a bug).
 
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
