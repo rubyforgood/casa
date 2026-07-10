@@ -28,7 +28,14 @@ Bootstrap `application` layout. Never load both CSS resets on the same page.
   - Section title (h2): `text-base font-semibold text-slate-900`
   - Body: `text-sm text-slate-600`
   - Label: `text-sm font-medium text-slate-700`
-  - Muted / meta: `text-xs text-slate-400`
+  - Muted / meta: `text-xs text-slate-500` (never `text-slate-400` for text — fails AA)
+
+### Sentence case
+All UI copy — page titles, section headings, subtitles, table headers, field labels,
+buttons, badges and nav — uses **sentence case**: capitalise only the first word and
+proper nouns (CASA, Twilio, people's names). So "Track volunteer progress", not "Track
+Volunteer Progress" and never the shouty all-caps "TRACK…". Do **not** apply the
+`uppercase` CSS transform to labels; use size, weight and colour for hierarchy instead.
 
 ### Color
 Brand = indigo. Neutrals = slate. Semantic colors below.
@@ -59,6 +66,21 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   Use for KPI cards, section headers, and list-item leading icons.
   **Do not** use bare floating icons or ringed white "avatar" circles for status
   contexts — reserve initial-avatars for representing *people* only.
+
+### Accessibility (WCAG 2.1 AA)
+Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
+- **Contrast** ≥ 4.5:1 for text (3:1 for large ≥24px/bold text and for UI borders/icons).
+  Muted text is `slate-500` on white — **not `slate-400`, which fails AA** — and
+  `slate-600` on tinted surfaces. Never signal meaning by colour alone; pair a status
+  colour with an icon or word.
+- **Structure**: one `h1` per page, in-order headings, landmarks (`main`/`nav`/`aside`),
+  real lists, and `<caption>` + `scope` on tables.
+- **Forms**: every control has a real `<label>`; the error summary uses `role="alert"`
+  and names the field; invalid/required state is never colour-only.
+- **Keyboard & focus**: fully keyboard-operable, visible `focus-visible` rings, a skip
+  link, logical order; icon-only controls carry an `aria-label`, decorative icons are
+  `aria-hidden`.
+- **Motion**: respect `prefers-reduced-motion` (`motion-reduce:` variants).
 
 ## Components
 
@@ -107,11 +129,12 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
    filters + a "Clear filters" action.
 
 ### Form errors
-Summary panel shown above a form when saving fails: `rounded-lg border border-rose-200
-bg-rose-50 p-4`, a `text-sm font-semibold text-rose-800` heading, and a `list-disc` of
-messages in `text-rose-700`. Use the `shared/_form_errors` partial on Tailwind pages
-(the legacy `shared/_error_messages` stays for Bootstrap pages). Honours the
-`@custom_error_header` override.
+Streamlined `role="alert"` card shown above a form when saving fails:
+`rounded-xl border border-rose-200 bg-rose-50 p-4` with a leading rose
+`bi-exclamation-circle-fill` icon, a `text-rose-800` heading, and a tidy bulleted list in
+`text-rose-700`. Use the `shared/_form_errors` partial on Tailwind pages (the legacy
+`shared/_error_messages` stays for Bootstrap pages). Honours the `@custom_error_header`
+override.
 
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger

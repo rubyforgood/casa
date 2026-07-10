@@ -1,45 +1,45 @@
 <dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">CASA organization</dt>
+    <dt class="text-xs font-medium text-slate-500">CASA organization</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.casa_org&.name %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Added to system</dt>
+    <dt class="text-xs font-medium text-slate-500">Added to system</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_created_at %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Email</dt>
+    <dt class="text-xs font-medium text-slate-500">Email</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.email %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Email confirmation status</dt>
+    <dt class="text-xs font-medium text-slate-500">Email confirmation status</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate&.email_confirmation_status %></dd>
   </div>
   <% if resource&.unconfirmed_email.present? %>
     <div>
-      <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Pending email confirmation</dt>
+      <dt class="text-xs font-medium text-slate-500">Pending email confirmation</dt>
       <dd class="mt-0.5 text-sm text-slate-700"><%= resource.unconfirmed_email %></dd>
     </div>
   <% end %>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Invitation email sent</dt>
+    <dt class="text-xs font-medium text-slate-500">Invitation email sent</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Last logged in</dt>
+    <dt class="text-xs font-medium text-slate-500">Last logged in</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_current_sign_in_at || "never" %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Invitation accepted</dt>
+    <dt class="text-xs font-medium text-slate-500">Invitation accepted</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_accepted_at || "never" %></dd>
   </div>
   <div>
-    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Password reset last sent</dt>
+    <dt class="text-xs font-medium text-slate-500">Password reset last sent</dt>
     <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_reset_password_sent_at || "never" %></dd>
   </div>
   <% if resource.is_a?(Volunteer) %>
     <div>
-      <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Learning Hours This Year</dt>
+      <dt class="text-xs font-medium text-slate-500">Learning hours this year</dt>
       <dd class="mt-0.5 text-sm text-slate-700"><%= resource.learning_hours_spent_in_one_year %></dd>
     </div>
   <% end %>

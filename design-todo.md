@@ -67,6 +67,13 @@ design system on the `casadesign` branch.
 - [ ] Static / marketing pages.
 
 ## Cross-cutting / infrastructure
+- [ ] Finish the sentence-case pass on interactive copy that is shared across pages —
+  button/field labels like "Update Profile", "Change Password", "New Password",
+  "Enable Twilio For Text Messaging" live on the users / volunteers / all-CASA-admin
+  edit pages and a shared spec example, so rename them (and their
+  `click_on` / `fill_in` / `have_field` specs) holistically, not page-by-page.
+- [ ] Contrast audit of shipped pages: replace remaining `text-slate-400` body/meta text
+  with `slate-500` for WCAG AA; re-check pills and badges.
 - [ ] **Vendor Bootstrap Icons** into the asset pipeline; drop the CDN link.
 - [ ] Move the inline nav-toggle `<script>` in `casa_app.html.erb` to a Stimulus
   controller (aligns with the jQuery -> Stimulus migration, issue #5016).

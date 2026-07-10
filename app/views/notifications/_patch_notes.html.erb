@@ -9,7 +9,7 @@
     </div>
     <% patch_notes.each do |type, notes_per_type| %>
       <div class="mt-2">
-        <h3 class="text-xs font-semibold uppercase tracking-wide text-slate-500"><%= type %></h3>
+        <h3 class="text-xs font-semibold text-slate-500"><%= type %></h3>
         <ul class="mt-1 list-disc space-y-1 pl-5 text-sm text-slate-600 marker:text-slate-300">
           <% notes_per_type.each do |note_text| %>
             <li><%= simple_format note_text %></li>
