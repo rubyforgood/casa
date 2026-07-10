@@ -39,7 +39,7 @@ RSpec.describe "notifications/index", type: :view do
       it "has all notifications created after and including the deploy date above the patch note" do
         render template: "notifications/index"
 
-        notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
+        notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
         aggregate_failures do
@@ -53,7 +53,7 @@ RSpec.describe "notifications/index", type: :view do
       it "has all notifications created before the deploy date below the patch note" do
         render template: "notifications/index"
 
-        notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
+        notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
         patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
 
         expect(patch_note_index).to eq(3)
@@ -107,13 +107,13 @@ RSpec.describe "notifications/index", type: :view do
     it "shows the correct number of notifications" do
       render template: "notifications/index"
 
-      expect(rendered).to have_css(".list-group-item", count: 4)
+      expect(rendered).to have_css("[data-notification-list-item]", count: 4)
     end
 
     it "does not display patch notes" do
       render template: "notifications/index"
 
-      notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
+      notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
       view_patch_notes = notifications_html.select { |node| node.text.include?("Patch Notes") }
 
       expect(PatchNote.all.size).to eql(2)
