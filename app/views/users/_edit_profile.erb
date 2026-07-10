@@ -1,45 +1,46 @@
-<div class="mb-1">
-  <strong class="text-dark">CASA organization </strong>
-  <%= resource&.casa_org&.name %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Added to system </strong>
-  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_created_at %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Email</strong>
-  <%= resource&.email %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Email confirmation status </strong>
-  <%= resource&.decorate&.email_confirmation_status %>
-</div>
-<% if resource&.unconfirmed_email.present? %>
-  <div class="mb-1">
-    <strong class="text-dark">Pending email confirmation </strong>
-    <%= resource.unconfirmed_email %>
+<dl class="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">CASA organization</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.casa_org&.name %></dd>
   </div>
-<% end %>
-<div class="mb-1">
-  <strong class="text-dark">Invitation email sent </strong>
-  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Last logged in </strong>
-  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_current_sign_in_at || "never" %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Invitation accepted </strong>
-  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_accepted_at || "never" %>
-</div>
-<div class="mb-1">
-  <strong class="text-dark">Password reset last sent </strong>
-  <%= resource&.decorate(context: {format: :edit_profile})&.formatted_reset_password_sent_at || "never" %>
-</div>
-
-<% if resource.is_a?(Volunteer) %>
-  <div class="mb-1">
-    <strong class="text-dark">Learning Hours This Year</strong>
-    <%= resource.learning_hours_spent_in_one_year %>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Added to system</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_created_at %></dd>
   </div>
-<% end %>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Email</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.email %></dd>
+  </div>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Email confirmation status</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate&.email_confirmation_status %></dd>
+  </div>
+  <% if resource&.unconfirmed_email.present? %>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Pending email confirmation</dt>
+      <dd class="mt-0.5 text-sm text-slate-700"><%= resource.unconfirmed_email %></dd>
+    </div>
+  <% end %>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Invitation email sent</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %></dd>
+  </div>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Last logged in</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_current_sign_in_at || "never" %></dd>
+  </div>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Invitation accepted</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_accepted_at || "never" %></dd>
+  </div>
+  <div>
+    <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Password reset last sent</dt>
+    <dd class="mt-0.5 text-sm text-slate-700"><%= resource&.decorate(context: {format: :edit_profile})&.formatted_reset_password_sent_at || "never" %></dd>
+  </div>
+  <% if resource.is_a?(Volunteer) %>
+    <div>
+      <dt class="text-xs font-medium uppercase tracking-wide text-slate-400">Learning Hours This Year</dt>
+      <dd class="mt-0.5 text-sm text-slate-700"><%= resource.learning_hours_spent_in_one_year %></dd>
+    </div>
+  <% end %>
+</dl>

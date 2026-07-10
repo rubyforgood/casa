@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  layout "casa_app"
+
   before_action :get_user
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins

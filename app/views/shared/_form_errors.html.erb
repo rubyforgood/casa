@@ -1,0 +1,14 @@
+<%# Tailwind form-error summary for casadesign pages. Mirrors shared/_error_messages
+    (kept for the legacy Bootstrap forms) including the @custom_error_header hook. %>
+<% if resource.errors.any? %>
+  <div id="error_explanation" role="alert" class="rounded-lg border border-rose-200 bg-rose-50 p-4">
+    <h2 class="text-sm font-semibold text-rose-800">
+      <%= pluralize(resource.errors.count, "error") %> prohibited this <%= @custom_error_header || resource.model_name.human %> from being saved:
+    </h2>
+    <ul class="mt-2 list-disc space-y-1 pl-5 text-sm text-rose-700">
+      <% resource.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
