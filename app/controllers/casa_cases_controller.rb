@@ -6,11 +6,11 @@ class CasaCasesController < ApplicationController
 
   def index
     authorize CasaCase
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :casa_case_emancipation_categories)
-    @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
-    @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
-    @duties = OtherDuty.where(creator_id: current_user.id)
     @active_nav = "cases"
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :hearing_type, :judge)
+    scope = policy_scope(org_cases)
+    scope = filter_casa_cases(scope) if policy(CasaCase).can_see_filters?
+    @pagy, @casa_cases = pagy(scope.order(:case_number))
     render :index, layout: "casa_app"
   end
 
@@ -141,6 +141,34 @@ class CasaCasesController < ApplicationController
   end
 
   private
+
+  # Server-side filtering for the cases index (admins/supervisors). Params come from the
+  # filter bar selects; volunteers never reach this. Status defaults to active.
+  def filter_casa_cases(scope)
+    scope = case params[:status]
+    when "inactive" then scope.inactive
+    when "all" then scope
+    else scope.active
+    end
+
+    case params[:assigned]
+    when "assigned" then scope = scope.where(id: CaseAssignment.active.select(:casa_case_id))
+    when "unassigned" then scope = scope.where.not(id: CaseAssignment.active.select(:casa_case_id))
+    end
+
+    case params[:transition]
+    when "yes" then scope = scope.is_transitioned
+    when "no" then scope = scope.where.not(id: current_user.casa_org.casa_cases.is_transitioned.select(:id))
+    end
+
+    case params[:prefix]
+    when "CINA" then scope = scope.where("case_number ILIKE ?", "CINA%")
+    when "TPR" then scope = scope.where("case_number ILIKE ?", "TPR%")
+    when "None" then scope = scope.where.not("case_number ILIKE ? OR case_number ILIKE ?", "CINA%", "TPR%")
+    end
+
+    scope
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case

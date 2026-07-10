@@ -104,11 +104,15 @@ the rounded bottom corner instead of butting against it (use `py-2` for a header
 list card — e.g. notifications — so the first row clears the top corner too). Keep rows
 a uniform height (a taller last row reads as a bug).
 
-### Data tables (DataTables)
-jQuery DataTables skinned to the system in `tailwind.css` (`.dataTables_*` chrome +
-`table.dataTable`): search box, page-length select, info text, pagination. Wrap the table
-in a `rounded-2xl` card. Sort-arrow sprites aren't loaded on the shell, so rely on
-click-to-sort (the header cursor changes) until we swap in `bi-*` carets.
+### Tables (bespoke) + pagination
+Hand-built Tailwind (dashboard tables + cases index), not DataTables. `overflow-hidden
+rounded-2xl` card (+ `py-2` inset), full-bleed table, `thead th` = `text-xs font-semibold
+text-slate-600`, cells `px-4 py-3`, `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
+Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
+sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
+submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial
+renders a Pagy instance as a bottom bar — "Showing X–Y of Z" left, page controls right
+(`nav` + `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params.
 
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
@@ -227,14 +231,12 @@ The *why* behind the system, so choices aren't re-litigated or lost.
   process in `Procfile.dev`). Class names are discovered via the `@source` globs in
   `tailwind.css`. The output `app/assets/builds/tailwind.css` is **gitignored** and built
   on deploy — don't commit it.
-- **Data tables stay on jQuery DataTables — themed, not rewritten.** The server-side
-  tables (search, sort, paginate, filters, state save, column toggles) carry too much
-  logic to reimplement now, so a Tailwind *skin* in `tailwind.css` restyles the
-  DataTables chrome. Because `tailwind.css` only loads on the shell, that skin never
-  touches the legacy tables. Caveat: server-side tables render cells via JS
-  `columns.render` in `dashboard.js` (Bootstrap markup + `lni` icons), which must be
-  moved to Tailwind + `bi-*` per table; ERB-rendered tables (e.g. cases index) only need
-  their view markup restyled.
+- **Tables are bespoke, not jQuery DataTables (reversed).** Theming DataTables couldn't
+  match the dashboard tables or meet WCAG — its generated chrome fights the design system.
+  Build tables in Tailwind instead (matching the dashboard): server-side filtering +
+  **Pagy** pagination + optional sortable header links, with **Turbo Drive** smoothing the
+  GET navigations. Reuse each `*Datatable` class's query logic server-side; retire the
+  DataTables JS as each page migrates. See the cases index for the reference pattern.
 
 ## Migrating a page (playbook)
 
@@ -272,8 +274,7 @@ High-level progress; the granular, prioritized backlog lives in
 - [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
-- [x] Cases index (jQuery DataTables themed via the skin; filters/column picker as
-  dropdown popovers)
+- [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [ ] Case show/new/edit, case contacts, reports, settings
 - [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
 

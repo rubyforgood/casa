@@ -1,66 +1,27 @@
-<%# Casa case filters (casadesign). Bootstrap dropdowns + modal replaced with Tailwind
-    dropdown popovers; the JS hooks (container classes, data-value, ids, #visibleColumns,
-    .toggle-visibility) are preserved so dashboard.js filtering + column toggles keep working.
-    The column picker stays OUTSIDE .casa-case-filters so the filter-redraw handler doesn't
-    bind to the column checkboxes. %>
-<% trigger = "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
-<% panel = "hidden absolute left-0 z-20 mt-2 w-64 space-y-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-lg" %>
-<% option = "flex items-center gap-2.5 rounded-lg px-2 py-1.5 text-sm text-slate-700 hover:bg-slate-50" %>
-<% box = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<%# Casa case filter bar (casadesign, bespoke). Clear server-side selects that submit on
+    change (auto-submit controller; Turbo Drive keeps it smooth). Volunteers never reach
+    this — the view gates it on can_see_filters?. %>
+<% select_class = "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-8 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
 
-<div class="mb-4 flex flex-wrap items-center gap-2">
-  <div class="flex flex-wrap items-center gap-2 casa-case-filters">
-    <span class="mr-1 text-sm font-medium text-slate-500">Filter by:</span>
-
-    <div data-controller="dropdown" class="relative">
-      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Status <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
-      <div data-dropdown-target="panel" class="<%= panel %> status-options">
-        <label class="<%= option %>"><%= check_box_tag "status_option_active", "Active", true, class: box, data: {value: "Active"} %> Active</label>
-        <label class="<%= option %>"><%= check_box_tag "status_option_inactive", "Inactive", false, class: box, data: {value: "Inactive"} %> Inactive</label>
-      </div>
-    </div>
-
-    <div data-controller="dropdown" class="relative">
-      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to Volunteer <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
-      <div data-dropdown-target="panel" class="<%= panel %> assigned-to-volunteer-options">
-        <label class="<%= option %>"><%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true, class: box, data: {value: "Yes"} %> Yes</label>
-        <label class="<%= option %>"><%= check_box_tag "assigned_to_volunteer_option_no", "No", true, class: box, data: {value: "No"} %> No</label>
-      </div>
-    </div>
-
-    <div data-controller="dropdown" class="relative">
-      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to more than 1 Volunteer <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
-      <div data-dropdown-target="panel" class="<%= panel %> more-than-one-volunteer-options">
-        <label class="<%= option %>"><%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true, class: box, data: {value: "Yes"} %> Yes</label>
-        <label class="<%= option %>"><%= check_box_tag "more_than_one_volunteer_option_no", "No", true, class: box, data: {value: "No"} %> No</label>
-      </div>
-    </div>
-
-    <div data-controller="dropdown" class="relative">
-      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Assigned to Transition Aged Youth <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
-      <div data-dropdown-target="panel" class="<%= panel %> transition-youth-options">
-        <label class="<%= option %>"><%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true, class: box, data: {value: "Yes 🦋"} %> Yes</label>
-        <label class="<%= option %>"><%= check_box_tag "transition_youth_option_no", "No", true, class: box, data: {value: "No 🐛"} %> No</label>
-      </div>
-    </div>
-
-    <div data-controller="dropdown" class="relative">
-      <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>">Casa Case Prefix <i class="bi bi-chevron-down text-xs text-slate-400" aria-hidden="true"></i></button>
-      <div data-dropdown-target="panel" class="<%= panel %> case-number-prefix-options">
-        <% ["CINA", "None", "TPR"].each do |prefix| %>
-          <% prefix_name = prefix.downcase.gsub(/[^a-z]+/, "") %>
-          <label class="<%= option %>"><%= check_box_tag "case_case_prefix_option_#{prefix_name}", prefix, true, class: box, data: {value: prefix} %> <%= prefix %></label>
-        <% end %>
-      </div>
-    </div>
+<%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 flex flex-wrap items-end gap-3" do %>
+  <div class="min-w-[9rem]">
+    <%= label_tag :status, "Status", class: label_class %>
+    <%= select_tag :status, options_for_select([["Active", "active"], ["Inactive", "inactive"], ["All", "all"]], params[:status].presence || "active"), class: select_class %>
   </div>
-
-  <div data-controller="dropdown" class="relative ml-auto">
-    <button type="button" data-action="dropdown#toggle" data-dropdown-target="trigger" aria-expanded="false" class="<%= trigger %>"><i class="bi bi-layout-three-columns text-slate-400" aria-hidden="true"></i> Columns</button>
-    <div id="visibleColumns" data-dropdown-target="panel" class="hidden absolute right-0 z-20 mt-2 w-64 space-y-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
-      <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-        <label class="<%= option %>"><%= check_box_tag "pick-#{column}", "1", false, class: "toggle-visibility #{box}", data: {column: index} %> <%= column.titleize %></label>
-      <% end %>
-    </div>
+  <div class="min-w-[9rem]">
+    <%= label_tag :assigned, "Assignment", class: label_class %>
+    <%= select_tag :assigned, options_for_select([["All volunteers", ""], ["Assigned", "assigned"], ["Unassigned", "unassigned"]], params[:assigned]), class: select_class %>
   </div>
-</div>
+  <div class="min-w-[9rem]">
+    <%= label_tag :transition, "Transition-aged youth", class: label_class %>
+    <%= select_tag :transition, options_for_select([["All", ""], ["Yes", "yes"], ["No", "no"]], params[:transition]), class: select_class %>
+  </div>
+  <div class="min-w-[9rem]">
+    <%= label_tag :prefix, "Case number prefix", class: label_class %>
+    <%= select_tag :prefix, options_for_select([["All", ""], ["CINA", "CINA"], ["TPR", "TPR"], ["None", "None"]], params[:prefix]), class: select_class %>
+  </div>
+  <noscript>
+    <%= submit_tag "Filter", class: "rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white" %>
+  </noscript>
+<% end %>

@@ -40,9 +40,9 @@ design system on the `casadesign` branch.
   cases needing a contact) using batched/aggregate queries, not per-row.
 
 ## Phase 3 — Core workflows (highest traffic)
-- [x] Cases index (`casa_cases#index`) — shell + DataTables skin; filters + column picker
-  rebuilt as `dropdown` popovers (JS hooks preserved). Action-button/column-header labels
-  kept Title Case (spec-coupled) pending the interactive-label sentence-case pass.
+- [x] Cases index (`casa_cases#index`) — bespoke table + server-side filter selects + Pagy
+  pagination. Follow-ups: column-visibility picker + sortable headers (dropped for v1);
+  action-button/column-header labels kept Title Case (spec-coupled).
 - [ ] Case show (`casa_cases#show`).
 - [ ] Case new / edit.
 - [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
@@ -81,9 +81,10 @@ design system on the `casadesign` branch.
 - [ ] **Vendor Bootstrap Icons** into the asset pipeline; drop the CDN link.
 - [ ] Move the inline nav-toggle `<script>` in `casa_app.html.erb` to a Stimulus
   controller (aligns with the jQuery -> Stimulus migration, issue #5016).
-- [x] Datatable strategy — keep jQuery DataTables, add a Tailwind skin in `tailwind.css`
-  for the chrome. Server-side tables also need their `dashboard.js` `columns.render`
-  output moved from Bootstrap + `lni` to Tailwind + `bi-*`, per table.
+- [x] Table strategy (revised) — build tables bespoke in Tailwind (server-side filters +
+  Pagy pagination + Turbo Drive), matching the dashboard; retire jQuery DataTables
+  page-by-page. Theming DataTables was rejected (couldn't meet WCAG/design). Cases index
+  is the reference pattern (`shared/_pagination`, `auto-submit` controller).
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /

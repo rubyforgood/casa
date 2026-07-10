@@ -9,6 +9,8 @@ import AlertController from './alert_controller'
 
 import AutosaveController from './autosave_controller'
 
+import AutoSubmitController from './auto_submit_controller'
+
 import CasaNestedFormController from './casa_nested_form_controller'
 
 import CaseContactFormController from './case_contact_form_controller'
@@ -20,8 +22,6 @@ import DisableFormController from './disable_form_controller'
 import DisclosureController from './disclosure_controller'
 
 import DismissController from './dismiss_controller'
-
-import DropdownController from './dropdown_controller'
 
 import HelloController from './hello_controller'
 
@@ -42,13 +42,13 @@ import TruncatedTextController from './truncated_text_controller'
 application.register('nested-form', RailsNestedForm)
 application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
+application.register('auto-submit', AutoSubmitController)
 application.register('casa-nested-form', CasaNestedFormController)
 application.register('case-contact-form', CaseContactFormController)
 application.register('court-order-form', CourtOrderFormController)
 application.register('disable-form', DisableFormController)
 application.register('disclosure', DisclosureController)
 application.register('dismiss', DismissController)
-application.register('dropdown', DropdownController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
 application.register('multiple-select', MultipleSelectController)
