@@ -55,6 +55,34 @@ RSpec.describe CasaCaseDecorator do
     it { is_expected.to eq "12-09-2020" }
   end
 
+  describe "#formatted_next_court_date" do
+    subject { casa_case.decorate.formatted_next_court_date }
+
+    let(:casa_case) { create(:casa_case) }
+
+    context "with no court dates" do
+      it { is_expected.to be_nil }
+    end
+
+    context "with only past court dates" do
+      before { create(:court_date, casa_case: casa_case, date: 1.week.ago) }
+
+      it { is_expected.to be_nil }
+    end
+
+    context "with upcoming court dates" do
+      before do
+        create(:court_date, casa_case: casa_case, date: 3.weeks.from_now)
+        create(:court_date, casa_case: casa_case, date: 1.week.from_now)
+        create(:court_date, casa_case: casa_case, date: 2.weeks.ago)
+      end
+
+      it "returns the earliest upcoming date, formatted" do
+        expect(subject).to eq(I18n.l(1.week.from_now, format: :full))
+      end
+    end
+  end
+
   describe "#transition_age_youth" do
     it "returns transition age youth status with icon if not transition age youth && birthday is nil" do
       casa_case = build(:casa_case, birth_month_year_youth: nil)

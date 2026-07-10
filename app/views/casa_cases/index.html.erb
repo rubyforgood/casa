@@ -3,7 +3,7 @@
 <% btn_secondary = "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
 <% td = "px-4 py-3 text-slate-700" %>
-<% col_count = current_user.volunteer? ? 6 : 7 %>
+<% col_count = current_user.volunteer? ? 5 : 6 %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -30,13 +30,12 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-slate-100">
-            <th class="<%= th %>">Case Number</th>
-            <th class="<%= th %>">Hearing Type</th>
-            <th class="<%= th %>">Judge</th>
+            <th class="<%= th %>">Case number</th>
+            <th class="<%= th %>">Next court date</th>
             <th class="<%= th %>">Status</th>
-            <th class="<%= th %>">Transition Aged Youth</th>
+            <th class="<%= th %>">Transition aged youth</th>
             <% unless current_user.volunteer? %>
-              <th class="<%= th %>">Assigned To</th>
+              <th class="<%= th %>">Assigned to</th>
             <% end %>
             <th class="<%= th %>"><span class="sr-only">Actions</span></th>
           </tr>
@@ -46,8 +45,7 @@
             <% @casa_cases.each do |casa_case| %>
               <tr class="hover:bg-slate-50/70">
                 <td class="<%= td %>"><%= link_to casa_case.case_number, casa_case, class: "font-medium text-brand-600 hover:text-brand-700" %></td>
-                <td class="<%= td %>"><%= casa_case.hearing_type_name.presence || tag.span("—", class: "text-slate-400") %></td>
-                <td class="<%= td %>"><%= casa_case.judge_name.presence || tag.span("—", class: "text-slate-400") %></td>
+                <td class="<%= td %>"><%= casa_case.decorate.formatted_next_court_date || tag.span("—", class: "text-slate-400") %></td>
                 <td class="<%= td %>"><%= casa_case.decorate.status %></td>
                 <td class="<%= td %>">
                   <% if casa_case.in_transition_age? %>

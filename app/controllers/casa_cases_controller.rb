@@ -7,7 +7,7 @@ class CasaCasesController < ApplicationController
   def index
     authorize CasaCase
     @active_nav = "cases"
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :hearing_type, :judge)
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :court_dates)
     scope = policy_scope(org_cases)
     scope = filter_casa_cases(scope) if policy(CasaCase).can_see_filters?
     @pagy, @casa_cases = pagy(scope.order(:case_number))

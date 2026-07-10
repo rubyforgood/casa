@@ -41,8 +41,11 @@ design system on the `casadesign` branch.
 
 ## Phase 3 — Core workflows (highest traffic)
 - [x] Cases index (`casa_cases#index`) — bespoke table + server-side filter selects + Pagy
-  pagination. Follow-ups: column-visibility picker + sortable headers (dropped for v1);
-  action-button/column-header labels kept Title Case (spec-coupled).
+  pagination. Replaced the two always-empty Hearing Type / Judge columns (their case-level
+  columns were removed in 2023 — that data lives on court dates now) with a single
+  "Next court date" column (preloaded, no N+1); sentence-cased the column headers.
+  Follow-ups: column-visibility picker + sortable headers (dropped for v1); action-button
+  labels kept Title Case (spec-coupled).
 - [ ] Case show (`casa_cases#show`).
 - [ ] Case new / edit.
 - [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
@@ -88,6 +91,18 @@ design system on the `casadesign` branch.
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
-  `notification_icon` helpers).
+  `notification_icon` helpers; the vestigial `CasaCase#hearing_type` / `#judge`
+  `belongs_to` + `hearing_type_name` / `judge_name` delegates whose columns were dropped
+  in 2023 — still referenced by `supervisors/index` and the legacy case pages).
 - [ ] Decommission the Bootstrap `application` layout + `application.scss` once the last
   page is migrated.
+
+## Stakeholder / product questions (confirm before finalizing)
+- [ ] **Hearing type & judge on case lists.** The old cases index (and `supervisors/index`)
+  showed per-case "Hearing Type" and "Judge" columns, but their backing columns were removed
+  from `casa_cases` in 2023 (migration `20230729213608`) — that data moved to court dates, so
+  those columns have rendered blank for every case since. The migrated cases index now shows
+  "Next court date" instead. Ask stakeholders: is next court date the right thing to surface on
+  the roster, or do they want the upcoming hearing's type/judge (sourced from court dates)? The
+  answer decides whether we also fix `supervisors/index` and whether to delete the dead
+  `CasaCase` associations.

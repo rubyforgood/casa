@@ -114,6 +114,10 @@ submit on change (`auto-submit` controller). Pagination: the `shared/_pagination
 renders a Pagy instance as a bottom bar — "Showing X–Y of Z" left, page controls right
 (`nav` + `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params. Don't render
 decorative emoji as data (e.g. the 🦋/🐛 transition-aged icons) — use a plain label or pill.
+Verify a column's data source before carrying one forward: the legacy cases index kept
+Hearing Type / Judge columns that had rendered blank for every case since a 2023 migration
+moved that data onto court dates — drop dead columns or re-source them (the migrated index
+shows "Next court date" instead).
 
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
@@ -244,7 +248,8 @@ The *why* behind the system, so choices aren't re-litigated or lost.
 Repeatable steps for moving one screen off Bootstrap:
 
 1. **Read first** — this doc, plus the page's existing specs (know what behavior is
-   pinned before you touch markup).
+   pinned before you touch markup). Confirm each column / field you plan to keep still has a
+   live data source; don't carry blank legacy columns forward (see Tables, above).
 2. **Opt the action into a Tailwind layout** — `render ..., layout: "casa_app"` (or
    `layout "casa_auth"`), and set `@active_nav` when it maps to a sidebar item.
 3. **Rebuild the view with the components above.** Wrap page content in

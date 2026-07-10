@@ -17,12 +17,11 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_link("New Case", href: new_casa_case_path)
       expect(page).to have_select("Status")
       expect(page).to have_select("Case number prefix")
-      expect(page).to have_selector("th", text: "Case Number")
-      expect(page).to have_selector("th", text: "Hearing Type")
-      expect(page).to have_selector("th", text: "Judge")
+      expect(page).to have_selector("th", text: "Case number")
+      expect(page).to have_selector("th", text: "Next court date")
       expect(page).to have_selector("th", text: "Status")
-      expect(page).to have_selector("th", text: "Transition Aged Youth")
-      expect(page).to have_selector("th", text: "Assigned To")
+      expect(page).to have_selector("th", text: "Transition aged youth")
+      expect(page).to have_selector("th", text: "Assigned to")
     end
 
     it "filters by status", :js do
