@@ -69,9 +69,12 @@
               <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
             </summary>
             <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
-              <div class="border-b border-slate-100 px-4 py-2">
+              <div class="border-b border-slate-100 px-4 py-3">
                 <div class="text-sm font-semibold text-slate-800"><%= display_person(current_user) %></div>
                 <div class="truncate text-xs text-slate-500"><%= current_user.email %></div>
+                <span class="mt-1.5 inline-flex items-center gap-1 rounded-full bg-brand-50 px-2 py-0.5 text-xs font-medium text-brand-700">
+                  <i class="bi bi-person-badge text-[11px]" aria-hidden="true"></i> <%= current_role %>
+                </span>
               </div>
               <%= link_to "Edit profile", edit_users_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
               <%= link_to "Messages", notifications_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>

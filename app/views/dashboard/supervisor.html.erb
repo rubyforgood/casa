@@ -17,7 +17,7 @@
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
     <div>
       <h1 class="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h1>
-      <p class="mt-1 text-sm text-slate-500"><%= @dashboard.rows.any? ? "Here's where your volunteers stand today." : "Let's get your volunteers set up." %></p>
+      <p class="mt-1 text-sm text-slate-500"><%= @dashboard.rows.any? ? "Track volunteer progress at a glance." : "Let's get your volunteers set up." %></p>
     </div>
     <% if @dashboard.rows.any? %>
       <%= link_to volunteers_path, class: "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
