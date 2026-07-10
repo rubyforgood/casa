@@ -16,7 +16,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Password Confirmation", with: "123456789"
 
       click_on "Update Password"
-      expect(page).to have_content "1 error prohibited this password change from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -34,7 +34,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Password Confirmation", with: "1234"
 
       click_on "Update Password"
-      expect(page).to have_content "2 errors prohibited this password change from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
@@ -133,7 +133,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_volunteer@example.com"
 
       click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -164,7 +164,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -178,7 +178,7 @@ RSpec.describe "users/edit", type: :system do
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 
@@ -308,7 +308,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_supervisor@example"
 
       click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -338,7 +338,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -352,7 +352,7 @@ RSpec.describe "users/edit", type: :system do
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 
@@ -365,7 +365,7 @@ RSpec.describe "users/edit", type: :system do
 
       fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
       click_on "Update Profile"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Date of birth must be in the past.")
     end
   end
@@ -469,7 +469,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "New Email", with: "new_admin@example.com"
 
       click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -487,7 +487,7 @@ RSpec.describe "users/edit", type: :system do
       fill_in "Password Confirmation", with: "1234"
 
       click_on "Update Password"
-      expect(page).to have_content "2 errors prohibited this password change from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
@@ -559,7 +559,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -573,7 +573,7 @@ RSpec.describe "users/edit", type: :system do
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
       click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 

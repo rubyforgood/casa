@@ -1,18 +1,10 @@
-<%# Tailwind form-error summary for casadesign pages. Mirrors shared/_error_messages
-    (kept for the legacy Bootstrap forms) including the @custom_error_header hook. %>
+<%# Tailwind form-error summary for casadesign pages. The legacy shared/_error_messages
+    stays for Bootstrap pages. %>
 <% if resource.errors.any? %>
-  <div id="error_explanation" role="alert" class="flex gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4">
-    <i class="bi bi-exclamation-circle-fill mt-px shrink-0 text-lg leading-none text-rose-500" aria-hidden="true"></i>
-    <div class="min-w-0">
-      <h2 class="text-sm font-semibold text-rose-800"><%= pluralize(resource.errors.count, "error") %> prohibited this <%= @custom_error_header || resource.model_name.human %> from being saved:</h2>
-      <ul class="mt-1.5 space-y-1 text-sm text-rose-700">
-        <% resource.errors.full_messages.each do |message| %>
-          <li class="flex gap-2">
-            <span aria-hidden="true" class="mt-2 h-1 w-1 shrink-0 rounded-full bg-rose-400"></span>
-            <span><%= message %></span>
-          </li>
-        <% end %>
-      </ul>
-    </div>
+  <div id="error_explanation" role="alert" class="flex items-center gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4">
+    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600">
+      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
+    </span>
+    <p class="text-sm text-rose-800"><span class="font-semibold">Unable to save:</span> <%= resource.errors.full_messages.to_sentence %></p>
   </div>
 <% end %>

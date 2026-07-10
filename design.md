@@ -129,12 +129,11 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
    filters + a "Clear filters" action.
 
 ### Form errors
-Streamlined `role="alert"` card shown above a form when saving fails:
-`rounded-xl border border-rose-200 bg-rose-50 p-4` with a leading rose
-`bi-exclamation-circle-fill` icon, a `text-rose-800` heading, and a tidy bulleted list in
-`text-rose-700`. Use the `shared/_form_errors` partial on Tailwind pages (the legacy
-`shared/_error_messages` stays for Bootstrap pages). Honours the `@custom_error_header`
-override.
+Streamlined single-line `role="alert"` card shown above a form when saving fails:
+`rounded-xl border border-rose-200 bg-rose-50 p-4` with a rose danger **icon tile** (same
+style as the dashboard) and one sentence — **"Unable to save:"** followed by the messages
+joined with `to_sentence`, no bulleted list. Use the `shared/_form_errors` partial on
+Tailwind pages; the legacy `shared/_error_messages` stays for Bootstrap pages.
 
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger
