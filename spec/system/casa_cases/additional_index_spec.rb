@@ -60,6 +60,23 @@ RSpec.describe "casa_cases/index", type: :system do
       end
     end
 
+    it "searches by case number and volunteer name" do
+      zelda = create(:volunteer, casa_org: organization, display_name: "Zelda Fitzgerald")
+      create(:casa_case, casa_org: organization, case_number: "CINA-FINDME-1")
+      by_volunteer = create(:casa_case, casa_org: organization, case_number: "TPR-OTHER-2")
+      create(:case_assignment, volunteer: zelda, casa_case: by_volunteer)
+      create(:casa_case, casa_org: organization, case_number: "TPR-NOPE-9")
+
+      visit casa_cases_path(search: "FINDME")
+      expect(page).to have_content("CINA-FINDME-1")
+      expect(page).to have_no_content("TPR-NOPE-9")
+      expect(page).to have_content("matching")
+
+      visit casa_cases_path(search: "Zelda")
+      expect(page).to have_content("TPR-OTHER-2")
+      expect(page).to have_no_content("TPR-NOPE-9")
+    end
+
     it "filters by status", :js do
       active_case = create(:casa_case, active: true, casa_org: organization, case_number: "CINA-ACTIVE")
       inactive_case = create(:casa_case, active: false, casa_org: organization, case_number: "CINA-INACTIVE")

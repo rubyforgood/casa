@@ -32,6 +32,10 @@
     <%= render "filter" %>
   <% end %>
 
+  <% if params[:search].present? %>
+    <p class="mb-4 text-sm text-slate-500">Showing <%= @pagy.count %> <%= "case".pluralize(@pagy.count) %> matching &ldquo;<%= params[:search] %>&rdquo;</p>
+  <% end %>
+
   <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-sm">
     <div class="overflow-x-auto">
       <table class="w-full text-sm">

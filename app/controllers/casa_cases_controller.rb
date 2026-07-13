@@ -169,6 +169,16 @@ class CasaCasesController < ApplicationController
   # Server-side filtering for the cases index (admins/supervisors). Params come from the
   # filter bar selects; volunteers never reach this. Status defaults to active.
   def filter_casa_cases(scope)
+    if params[:search].present?
+      term = "%#{ActiveRecord::Base.sanitize_sql_like(params[:search].strip)}%"
+      scope = scope.where(
+        "casa_cases.case_number ILIKE :term OR EXISTS (SELECT 1 FROM case_assignments ca " \
+        "JOIN users u ON u.id = ca.volunteer_id WHERE ca.casa_case_id = casa_cases.id AND ca.active " \
+        "AND u.display_name ILIKE :term)",
+        term: term
+      )
+    end
+
     scope = case params[:status]
     when "inactive" then scope.inactive
     when "all" then scope
