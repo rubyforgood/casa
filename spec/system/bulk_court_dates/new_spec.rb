@@ -20,6 +20,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     travel_to now
     sign_in admin
     visit casa_cases_path
+    find("summary", text: "More").click
     click_on "New Bulk Court Date"
 
     select case_group.name, from: "Case Group"

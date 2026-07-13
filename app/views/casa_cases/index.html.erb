@@ -15,8 +15,15 @@
         <%= link_to new_casa_case_path, class: btn_primary do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New Case<% end %>
       <% end %>
       <% if policy(:application).admin_or_supervisor? %>
-        <%= link_to case_groups_path, class: btn_secondary do %><i class="bi bi-collection" aria-hidden="true"></i> Case Groups<% end %>
-        <%= link_to new_bulk_court_date_path, class: btn_secondary do %><i class="bi bi-calendar-plus" aria-hidden="true"></i> New Bulk Court Date<% end %>
+        <details class="relative" data-controller="dropdown">
+          <summary class="inline-flex cursor-pointer list-none items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 [&::-webkit-details-marker]:hidden">
+            More <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
+          </summary>
+          <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <%= link_to case_groups_path, class: "flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" do %><i class="bi bi-collection text-slate-400" aria-hidden="true"></i> Case Groups<% end %>
+            <%= link_to new_bulk_court_date_path, class: "flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" do %><i class="bi bi-calendar-plus text-slate-400" aria-hidden="true"></i> New Bulk Court Date<% end %>
+          </div>
+        </details>
       <% end %>
     </div>
   </div>

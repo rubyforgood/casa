@@ -164,9 +164,15 @@ joined with `to_sentence`, no bulleted list. Use the `shared/_form_errors` parti
 Tailwind pages; the legacy `shared/_error_messages` stays for Bootstrap pages.
 
 ### Dropdown / popover
-Overlay menus (case filters, column picker) use the `dropdown` Stimulus controller —
-toggle + close on outside-click/Escape. (Distinct from `disclosure`, which is for inline
-panels like the edit-profile forms that should stay open.)
+Menus (the header account menu, the cases-page "More" actions menu) are a native
+`<details>/<summary>` disclosure: the `<summary>` is the trigger (styled as a button,
+`[&::-webkit-details-marker]:hidden`), the panel an `absolute right-0 z-20 mt-2 w-56
+rounded-xl border border-slate-200 bg-white py-1 shadow-lg` card of links. The `dropdown`
+Stimulus controller enhances it — native toggle plus close on outside-click and Escape
+(focus returns to the summary) — and degrades to the plain native toggle without JS. Keep
+menus a disclosure-of-links (not a full ARIA `menu` widget) unless a screen needs arrow-key
+roving. (Distinct from `disclosure`, which is for inline panels like the edit-profile forms
+that should stay open.)
 
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger

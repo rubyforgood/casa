@@ -64,7 +64,7 @@
               <span class="absolute right-1 top-1 grid h-4 min-w-[1rem] place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white" aria-hidden="true"><%= unread %></span>
             <% end %>
           <% end %>
-          <details class="relative">
+          <details class="relative" data-controller="dropdown">
             <summary aria-label="Account menu" class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg p-0.5 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 [&::-webkit-details-marker]:hidden">
               <span class="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700"><%= initials %></span>
               <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
