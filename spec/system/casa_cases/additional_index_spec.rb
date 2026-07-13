@@ -33,6 +33,33 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_no_link("Case Groups")
     end
 
+    it "sorts cases by clicking a column header" do
+      create(:casa_case, casa_org: organization, case_number: "CINA-AAA")
+      create(:casa_case, casa_org: organization, case_number: "CINA-ZZZ")
+      visit casa_cases_path
+
+      expect(page).to have_selector("th[aria-sort='ascending']", text: "Case number")
+      expect(page.text.index("CINA-AAA")).to be < page.text.index("CINA-ZZZ")
+
+      click_on "Case number"
+      expect(page).to have_selector("th[aria-sort='descending']", text: "Case number")
+      expect(page.text.index("CINA-ZZZ")).to be < page.text.index("CINA-AAA")
+    end
+
+    it "ignores an unknown sort parameter" do
+      create(:casa_case, casa_org: organization, case_number: "CINA-1")
+      visit casa_cases_path(sort: "bogus", direction: "sideways")
+      expect(page).to have_selector("th[aria-sort='ascending']", text: "Case number")
+    end
+
+    it "renders every sortable column without error" do
+      create(:casa_case, casa_org: organization)
+      %w[case_number next_court_date status transition assigned].each do |column|
+        visit casa_cases_path(sort: column, status: "all")
+        expect(page).to have_selector("table")
+      end
+    end
+
     it "filters by status", :js do
       active_case = create(:casa_case, active: true, casa_org: organization, case_number: "CINA-ACTIVE")
       inactive_case = create(:casa_case, active: false, casa_org: organization, case_number: "CINA-INACTIVE")

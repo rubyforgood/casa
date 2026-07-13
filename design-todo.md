@@ -44,7 +44,8 @@ design system on the `casadesign` branch.
   pagination. Replaced the two always-empty Hearing Type / Judge columns (their case-level
   columns were removed in 2023 — that data lives on court dates now) with a single
   "Next court date" column (preloaded, no N+1); sentence-cased the column headers.
-  Follow-ups: column-visibility picker + sortable headers (dropped for v1); action-button
+  Follow-ups: column-visibility picker + free-text search (dropped for v1); sortable headers shipped
+  (server-side ?sort=, aria-sort, double-caret indicator); action-button
   labels kept Title Case (spec-coupled).
 - [ ] Case show (`casa_cases#show`).
 - [ ] Case new / edit.

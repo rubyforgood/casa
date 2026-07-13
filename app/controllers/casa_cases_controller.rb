@@ -4,13 +4,17 @@ class CasaCasesController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
 
+  SORT_COLUMNS = %w[case_number next_court_date status transition assigned].freeze
+
   def index
     authorize CasaCase
     @active_nav = "cases"
+    @sort = SORT_COLUMNS.include?(params[:sort]) ? params[:sort] : "case_number"
+    @direction = (params[:direction] == "desc") ? "desc" : "asc"
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :court_dates)
     scope = policy_scope(org_cases)
     scope = filter_casa_cases(scope) if policy(CasaCase).can_see_filters?
-    @pagy, @casa_cases = pagy(scope.order(:case_number))
+    @pagy, @casa_cases = pagy(order_casa_cases(scope))
     render :index, layout: "casa_app"
   end
 
@@ -141,6 +145,26 @@ class CasaCasesController < ApplicationController
   end
 
   private
+
+  # Orders the cases index by the whitelisted ?sort= column and ?direction=. Derived
+  # columns (next court date, assigned volunteer) use correlated subqueries; a secondary
+  # sort by case number keeps pagination stable.
+  def order_casa_cases(scope)
+    today = ActiveRecord::Base.connection.quote(Date.current)
+    clause =
+      case @sort
+      when "status" then "casa_cases.active"
+      when "transition" then "casa_cases.birth_month_year_youth"
+      when "next_court_date"
+        "(SELECT MIN(court_dates.date) FROM court_dates WHERE court_dates.casa_case_id = casa_cases.id AND court_dates.date >= #{today})"
+      when "assigned"
+        "(SELECT MIN(users.display_name) FROM case_assignments JOIN users ON users.id = case_assignments.volunteer_id WHERE case_assignments.casa_case_id = casa_cases.id AND case_assignments.active)"
+      else "casa_cases.case_number"
+      end
+    scope = scope.order(Arel.sql("#{clause} #{@direction} NULLS LAST"))
+    scope = scope.order(case_number: :asc) unless @sort == "case_number"
+    scope
+  end
 
   # Server-side filtering for the cases index (admins/supervisors). Params come from the
   # filter bar selects; volunteers never reach this. Status defaults to active.

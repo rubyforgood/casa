@@ -37,12 +37,12 @@
       <table class="w-full text-sm">
         <thead>
           <tr class="border-b border-slate-100">
-            <th class="<%= th %>">Case number</th>
-            <th class="<%= th %>">Next court date</th>
-            <th class="<%= th %>">Status</th>
-            <th class="<%= th %>">Transition aged youth</th>
+            <%= sortable_header("Case number", "case_number", sort: @sort, direction: @direction) %>
+            <%= sortable_header("Next court date", "next_court_date", sort: @sort, direction: @direction) %>
+            <%= sortable_header("Status", "status", sort: @sort, direction: @direction) %>
+            <%= sortable_header("Transition aged youth", "transition", sort: @sort, direction: @direction) %>
             <% unless current_user.volunteer? %>
-              <th class="<%= th %>">Assigned to</th>
+              <%= sortable_header("Assigned to", "assigned", sort: @sort, direction: @direction) %>
             <% end %>
             <th class="<%= th %>"><span class="sr-only">Actions</span></th>
           </tr>
