@@ -1,5 +1,54 @@
-<div id="health">
-  <canvas id="caseContactCreationTimeBubbleChart"></canvas>
-  <canvas id="monthLineChart" class="mt-5"></canvas>
-  <canvas id="uniqueUsersMonthLineChart" class="mt-5"></canvas>
+<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6">
+  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Health</h1>
+  <p class="mt-1 text-sm text-slate-500">Chapter activity and data quality over the last 12 months.</p>
+
+  <% cc = @case_contacts %>
+  <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <h2 class="text-base font-bold text-slate-900">Case contacts logged</h2>
+    <p class="mb-4 mt-1.5 text-sm text-slate-500">Monthly volume, how many carried notes, and how many distinct volunteers logged them.</p>
+    <% if cc[:series].first[:data].sum.zero? %>
+      <%= metric_empty_state("No contacts logged in this range", "Once volunteers log case contacts, the trend and totals appear here.") %>
+    <% else %>
+      <%= metric_tiles([
+            {value: cc[:series][0][:data].sum, label: "Total contacts", sub: "last 12 months"},
+            {value: cc[:series][1][:data].sum, label: "With notes", sub: "last 12 months"},
+            {value: cc[:distinct_loggers], label: "Unique loggers", sub: "distinct, 12 months"}
+          ]) %>
+      <div class="mt-4">
+        <%= metric_line_chart("cc", cc[:labels], cc[:series],
+              title: "Case contacts logged per month",
+              desc: "Line chart of total case contacts, contacts with notes, and unique loggers over the last 12 months.") %>
+      </div>
+      <%= metric_legend(cc[:series]) %>
+      <%= metric_data_table(cc[:labels], cc[:series],
+            caption: "Case contacts logged per month",
+            foot: {label: "12-month total", cells: [cc[:series][0][:data].sum, cc[:series][1][:data].sum, "#{cc[:distinct_loggers]} †"]},
+            footnote: "† Unique loggers is the distinct number of volunteers over the whole period, not the sum of the monthly counts.") %>
+    <% end %>
+  </section>
+
+  <section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <h2 class="text-base font-bold text-slate-900">When contacts are logged</h2>
+    <p class="mb-4 mt-1.5 text-sm text-slate-500">Contacts by day of week and hour of day. Darker cells mean more activity.</p>
+    <% if @contact_heatmap[:max].zero? %>
+      <%= metric_empty_state("No contacts logged in this range", "Once volunteers log case contacts, their timing appears here.") %>
+    <% else %>
+      <%= metric_heatmap(@contact_heatmap[:grid], @contact_heatmap[:max]) %>
+    <% end %>
+  </section>
+
+  <% au = @active_users %>
+  <section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <h2 class="text-base font-bold text-slate-900">Monthly active users</h2>
+    <p class="mb-4 mt-1.5 text-sm text-slate-500">Distinct volunteers, supervisors, and admins who signed in each month.</p>
+    <% if au[:series].sum { |ser| ser[:data].sum }.zero? %>
+      <%= metric_empty_state("No sign-in activity in this range", "Active-user counts appear once volunteers, supervisors, or admins sign in during the selected range.") %>
+    <% else %>
+      <%= metric_line_chart("au", au[:labels], au[:series],
+            title: "Monthly active users",
+            desc: "Line chart of active volunteers, supervisors, admins, and loggers per month.") %>
+      <%= metric_legend(au[:series]) %>
+      <%= metric_data_table(au[:labels], au[:series], caption: "Monthly active users") %>
+    <% end %>
+  </section>
 </div>

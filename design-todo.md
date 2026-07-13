@@ -67,6 +67,13 @@ design system on the `casadesign` branch.
 - [ ] Mileage rates, placement types, placements.
 - [ ] Banners, custom org links, checklist items.
 - [ ] Imports, court dates / bulk court dates, emancipation.
+- [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
+  (line charts with a distinct line-style + marker per series, heatmap-as-table, table
+  twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
+  `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups: a
+  functional date-range filter, a Stimulus hover / crosshair layer, a validated dark-mode
+  palette, and dropping the now-unused `chart.js` / `chartjs-adapter-luxon` from
+  package.json.
 
 ## Phase 6 — Edges
 - [ ] All-CASA-admin area (its own sidebar / shell).

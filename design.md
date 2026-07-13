@@ -124,6 +124,28 @@ Hearing Type / Judge columns that had rendered blank for every case since a 2023
 moved that data onto court dates — drop dead columns or re-source them (the migrated index
 shows "Next court date" instead).
 
+### Charts (data viz)
+Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
+and rendered on the metrics page. Validated with the data-viz method:
+- **Series identity is never color alone.** Each line carries a distinct **line style**
+  (solid, dashed, dotted, dash-dot) **and marker shape** (circle, square, triangle, diamond)
+  on top of a validated categorical palette (indigo, emerald, amber, rose; worst adjacent
+  CVD deltaE 31.3, all AA on white). The legend shows the line + marker key, not a swatch.
+- **A table twin per chart:** a `<details>` "View as table" with a real `<table>` (scope
+  headers); the SVG carries `role="img"` + `<title>` / `<desc>`; no value is color-only.
+- **Heatmaps are accessible tables:** a day x hour grid as a `<table>` with a sequential
+  single-hue background and the count in every cell (color plus number).
+- **Marks:** 2px lines, hairline solid gridlines, markers with a 2px surface ring, direct
+  end-value labels, muted axis ink (slate-500 / 600, AA).
+- **Totals live in stat tiles, never a row sum.** Correct range totals only (sums for
+  additive metrics, a distinct count for unique loggers, footnoted). Never sum
+  non-additive columns.
+- **States:** a genuine zero shows a muted `0`; a missing value shows "No data" (never a
+  fake 0); a section with no data swaps in an empty state; loading uses skeletons; error is
+  distinct with a retry.
+- Palette checked with the data-viz skill's `validate_palette.js`. Dark mode is deferred
+  (off-the-shelf Tailwind steps miss the dark lightness band; needs hand-tuned OKLCH).
+
 ### KPI stat card
 Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
 -> optional meta (`text-xs text-slate-400`). Danger stats use a rose number + `ring-1 ring-rose-100`.

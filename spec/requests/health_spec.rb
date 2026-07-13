@@ -10,9 +10,11 @@ RSpec.describe "Health", type: :request do
       get "/health"
     end
 
-    it "renders an html file" do
-      # delete this test when there are more specific tests about the page
+    it "renders the metrics page" do
       expect(response.header["Content-Type"]).to include("text/html")
+      expect(response.body).to include("Case contacts logged")
+      expect(response.body).to include("When contacts are logged")
+      expect(response.body).to include("Monthly active users")
     end
   end
 

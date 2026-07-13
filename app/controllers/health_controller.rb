@@ -9,7 +9,10 @@ class HealthController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        render :index
+        @case_contacts = monthly_case_contacts
+        @active_users = monthly_active_users
+        @contact_heatmap = contact_creation_heatmap
+        render :index, layout: "metrics"
       end
 
       format.json { render json: {latest_deploy_time: Health.instance.latest_deploy_time} }
@@ -84,6 +87,60 @@ class HealthController < ApplicationController
   end
 
   private
+
+  MONTHS_BACK = 12
+
+  def last_12_month_starts
+    (0..MONTHS_BACK - 1).map { |i| (MONTHS_BACK - 1 - i).months.ago.beginning_of_month }
+  end
+
+  def monthly_case_contacts
+    months = last_12_month_starts
+    pick = ->(counts) { months.map { |m| counts.find { |k, _| k.year == m.year && k.month == m.month }&.last || 0 } }
+    total = CaseContact.group_by_month(:created_at, last: MONTHS_BACK).count
+    with_notes = CaseContact.where.not(notes: [nil, ""]).group_by_month(:created_at, last: MONTHS_BACK).count
+    loggers = CaseContact.group_by_month(:created_at, last: MONTHS_BACK).distinct.count(:creator_id)
+    {
+      labels: months.map { |m| m.strftime("%b") },
+      series: [
+        {name: "Total contacts", data: pick.call(total)},
+        {name: "With notes", data: pick.call(with_notes)},
+        {name: "Unique loggers", data: pick.call(loggers)}
+      ],
+      distinct_loggers: CaseContact.where(created_at: months.first..).distinct.count(:creator_id)
+    }
+  end
+
+  def monthly_active_users
+    months = last_12_month_starts
+    keys = months.map { |m| m.strftime("%b %Y") }
+    by_type = ->(type) {
+      LoginActivity
+        .joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'")
+        .where(users: {type: type}, success: true)
+        .group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
+    }
+    volunteers = by_type.call("Volunteer")
+    supervisors = by_type.call("Supervisor")
+    admins = by_type.call("CasaAdmin")
+    logged = CaseContact.joins(supervisor_volunteer: :volunteer).group_by_month(:created_at, format: "%b %Y").distinct.count(:creator_id)
+    {
+      labels: months.map { |m| m.strftime("%b") },
+      series: [
+        {name: "Volunteers", data: keys.map { |k| volunteers[k] || 0 }},
+        {name: "Supervisors", data: keys.map { |k| supervisors[k] || 0 }},
+        {name: "Admins", data: keys.map { |k| admins[k] || 0 }},
+        {name: "Active loggers", data: keys.map { |k| logged[k] || 0 }}
+      ]
+    }
+  end
+
+  def contact_creation_heatmap
+    grid = CaseContact.where(created_at: MONTHS_BACK.months.ago.beginning_of_month..)
+      .group("EXTRACT(DOW FROM created_at)::int")
+      .group("EXTRACT(HOUR FROM created_at)::int").count
+    {grid: grid, max: grid.values.max || 0}
+  end
 
   def each_old_object
     ObjectSpace.each_object do |obj|
