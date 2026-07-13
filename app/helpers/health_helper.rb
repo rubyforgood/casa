@@ -6,7 +6,7 @@ module HealthHelper
   DAY_LABELS = %w[Sun Mon Tue Wed Thu Fri Sat].freeze
 
   def metric_tiles(items)
-    tag.div(safe_join(items.map { |item| metric_tile(item) }), class: "flex flex-wrap gap-3")
+    tag.div(safe_join(items.map { |item| metric_tile(item) }), class: "grid grid-cols-2 gap-3 sm:flex sm:flex-wrap")
   end
 
   def metric_empty_state(heading, body)
@@ -89,7 +89,7 @@ module HealthHelper
   def metric_heatmap(grid, max)
     hours = (0..23).to_a
     header = tag.tr do
-      safe_join([tag.th(tag.span("Day of week", class: "sr-only"), scope: "col", class: "px-1 py-1")] +
+      safe_join([tag.th(tag.span("Day of week", class: "sr-only"), scope: "col", class: "sticky left-0 z-10 bg-white px-1 py-1")] +
         hours.map { |hr| tag.th(hr, scope: "col", class: "px-1 py-1 text-center text-[10px] font-medium text-slate-500") })
     end
     rows = DAY_LABELS.each_with_index.map do |day, di|
@@ -100,7 +100,7 @@ module HealthHelper
           class: "w-[30px] min-w-[30px] rounded border-2 border-white py-1 text-center text-[11px]",
           title: "#{day} #{hr}:00, #{count} #{"contact".pluralize(count)}")
       end
-      tag.tr(safe_join([tag.th(day, scope: "row", class: "px-1 py-1 pr-2.5 text-right text-[11px] font-semibold text-slate-700")] + cells))
+      tag.tr(safe_join([tag.th(day, scope: "row", class: "sticky left-0 z-10 bg-white px-1 py-1 pr-2.5 text-right text-[11px] font-semibold text-slate-700")] + cells))
     end
     tag.div(class: "overflow-x-auto") do
       tag.table(class: "border-collapse") do
@@ -125,7 +125,7 @@ module HealthHelper
       else
         tag.div(value, class: "text-2xl font-bold leading-none text-slate-900")
       end
-    tag.div(class: "min-w-[130px] flex-1 rounded-xl bg-slate-50 px-3.5 py-3") do
+    tag.div(class: "rounded-xl bg-slate-50 px-3.5 py-3 sm:min-w-[130px] sm:flex-1") do
       safe_join([
         value_html,
         tag.div(item[:label], class: "mt-1 text-sm text-slate-600"),
