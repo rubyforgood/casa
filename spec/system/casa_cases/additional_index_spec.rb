@@ -24,6 +24,15 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Assigned to")
     end
 
+    it "opens only one header dropdown at a time", :js do
+      find("summary", text: "More").click
+      expect(page).to have_link("Case Groups")
+
+      find("summary[aria-label='Account menu']").click
+      expect(page).to have_link("Sign out")
+      expect(page).to have_no_link("Case Groups")
+    end
+
     it "filters by status", :js do
       active_case = create(:casa_case, active: true, casa_org: organization, case_number: "CINA-ACTIVE")
       inactive_case = create(:casa_case, active: false, casa_org: organization, case_number: "CINA-INACTIVE")
