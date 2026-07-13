@@ -70,9 +70,8 @@ design system on the `casadesign` branch.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
-  `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups (date-range filter and Stimulus hover now shipped): a validated dark-mode
-  palette, and dropping the now-unused `chart.js` / `chartjs-adapter-luxon` from
-  package.json.
+  `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups (date-range filter, Stimulus hover, and the unused chart.js deps removal now shipped): a validated dark-mode
+  palette.
 
 ## Phase 6 — Edges
 - [ ] All-CASA-admin area (its own sidebar / shell).
