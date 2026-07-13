@@ -44,7 +44,8 @@ design system on the `casadesign` branch.
   pagination. Replaced the two always-empty Hearing Type / Judge columns (their case-level
   columns were removed in 2023 — that data lives on court dates now) with a single
   "Next court date" column (preloaded, no N+1); sentence-cased the column headers.
-  Follow-ups: column-visibility picker (dropped for v1); free-text search shipped (case number + active
+  Follow-ups: column-visibility picker intentionally not planned (only 6 columns; a responsive layout is the
+  better mobile investment); free-text search shipped (case number + active
   volunteer name, submit-on-Enter) with live as-you-type search as a follow-up; sortable headers shipped
   (server-side ?sort=, aria-sort, double-caret indicator); action-button
   labels kept Title Case (spec-coupled).
@@ -96,6 +97,9 @@ design system on the `casadesign` branch.
   page-by-page. Theming DataTables was rejected (couldn't meet WCAG/design). Cases index
   is the reference pattern (`shared/_pagination`, `auto-submit` controller).
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
+- [ ] Responsive pass on each migrated page: verify mobile / tablet / desktop; give data
+  tables a stacked / card layout on small screens rather than horizontal scroll. Cases index
+  is the reference to build first.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
   `notification_icon` helpers; the vestigial `CasaCase#hearing_type` / `#judge`

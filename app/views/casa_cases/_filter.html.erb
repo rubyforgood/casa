@@ -5,39 +5,39 @@
 <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
 <% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400" %>
 
-<%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 flex flex-wrap items-end gap-3" do %>
-  <div class="min-w-[16rem] max-w-sm flex-1">
+<%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+  <div class="col-span-2 lg:min-w-[16rem] lg:max-w-sm lg:flex-1">
     <%= label_tag :search, "Search", class: label_class %>
     <div class="relative">
       <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400" aria-hidden="true"></i>
-      <%= search_field_tag :search, params[:search], placeholder: "Search case number or volunteer", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{params[:search].present? ? 'pr-9' : 'pr-3'} text-sm text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
+      <%= search_field_tag :search, params[:search], placeholder: "Search case number or volunteer", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{params[:search].present? ? 'pr-9' : 'pr-3'} text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
       <% if params[:search].present? %>
         <%= link_to casa_cases_path(request.query_parameters.except("search", "page")), "aria-label": "Clear search", class: "absolute right-2.5 top-1/2 -translate-y-1/2 grid h-5 w-5 place-items-center rounded text-slate-400 hover:text-slate-600" do %><i class="bi bi-x-lg text-[11px]" aria-hidden="true"></i><% end %>
       <% end %>
     </div>
   </div>
-  <div class="min-w-[10rem]">
+  <div class="lg:min-w-[10rem]">
     <%= label_tag :status, "Status", class: label_class %>
     <div class="relative">
       <%= select_tag :status, options_for_select([["Active", "active"], ["Inactive", "inactive"], ["All", "all"]], params[:status].presence || "active"), class: select_class %>
       <i class="<%= chevron_class %>" aria-hidden="true"></i>
     </div>
   </div>
-  <div class="min-w-[10rem]">
+  <div class="lg:min-w-[10rem]">
     <%= label_tag :assigned, "Assignment", class: label_class %>
     <div class="relative">
       <%= select_tag :assigned, options_for_select([["All volunteers", ""], ["Assigned", "assigned"], ["Unassigned", "unassigned"]], params[:assigned]), class: select_class %>
       <i class="<%= chevron_class %>" aria-hidden="true"></i>
     </div>
   </div>
-  <div class="min-w-[10rem]">
+  <div class="lg:min-w-[10rem]">
     <%= label_tag :transition, "Transition-aged youth", class: label_class %>
     <div class="relative">
       <%= select_tag :transition, options_for_select([["All", ""], ["Yes", "yes"], ["No", "no"]], params[:transition]), class: select_class %>
       <i class="<%= chevron_class %>" aria-hidden="true"></i>
     </div>
   </div>
-  <div class="min-w-[10rem]">
+  <div class="lg:min-w-[10rem]">
     <%= label_tag :prefix, "Case number prefix", class: label_class %>
     <div class="relative">
       <%= select_tag :prefix, options_for_select([["All", ""], ["CINA", "CINA"], ["TPR", "TPR"], ["None", "None"]], params[:prefix]), class: select_class %>
