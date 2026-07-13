@@ -18,6 +18,22 @@ RSpec.describe "Health", type: :request do
     end
   end
 
+  describe "date-range filter" do
+    it "renders presets and defaults to the 12-month range" do
+      get "/health"
+      expect(response.body).to include("Last 3 months")
+      expect(response.body).to include("Last 6 months")
+      expect(response.body).to include("Last 12 months")
+      expect(response.body).to include(%(aria-current="page"))
+    end
+
+    it "ignores an out-of-range value" do
+      get "/health", params: {range: 999}
+      expect(response).to have_http_status(:ok)
+      expect(response.body).to include("Last 12 months")
+    end
+  end
+
   describe "GET /health.json" do
     before do
       get "/health.json"

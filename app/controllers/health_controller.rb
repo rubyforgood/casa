@@ -6,12 +6,15 @@ class HealthController < ApplicationController
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
   before_action :verify_token_for_old_object_stats, only: [:old_objects]
 
+  ALLOWED_RANGES = [3, 6, 12].freeze
+
   def index
     respond_to do |format|
       format.html do
-        @case_contacts = monthly_case_contacts
-        @active_users = monthly_active_users
-        @contact_heatmap = contact_creation_heatmap
+        @range = ALLOWED_RANGES.include?(params[:range].to_i) ? params[:range].to_i : 12
+        @case_contacts = monthly_case_contacts(@range)
+        @active_users = monthly_active_users(@range)
+        @contact_heatmap = contact_creation_heatmap(@range)
         render :index, layout: "metrics"
       end
 
@@ -88,18 +91,16 @@ class HealthController < ApplicationController
 
   private
 
-  MONTHS_BACK = 12
-
-  def last_12_month_starts
-    (0..MONTHS_BACK - 1).map { |i| (MONTHS_BACK - 1 - i).months.ago.beginning_of_month }
+  def last_month_starts(months_back)
+    (0..months_back - 1).map { |i| (months_back - 1 - i).months.ago.beginning_of_month }
   end
 
-  def monthly_case_contacts
-    months = last_12_month_starts
+  def monthly_case_contacts(months_back)
+    months = last_month_starts(months_back)
     pick = ->(counts) { months.map { |m| counts.find { |k, _| k.year == m.year && k.month == m.month }&.last || 0 } }
-    total = CaseContact.group_by_month(:created_at, last: MONTHS_BACK).count
-    with_notes = CaseContact.where.not(notes: [nil, ""]).group_by_month(:created_at, last: MONTHS_BACK).count
-    loggers = CaseContact.group_by_month(:created_at, last: MONTHS_BACK).distinct.count(:creator_id)
+    total = CaseContact.group_by_month(:created_at, last: months_back).count
+    with_notes = CaseContact.where.not(notes: [nil, ""]).group_by_month(:created_at, last: months_back).count
+    loggers = CaseContact.group_by_month(:created_at, last: months_back).distinct.count(:creator_id)
     {
       labels: months.map { |m| m.strftime("%b") },
       series: [
@@ -111,8 +112,8 @@ class HealthController < ApplicationController
     }
   end
 
-  def monthly_active_users
-    months = last_12_month_starts
+  def monthly_active_users(months_back)
+    months = last_month_starts(months_back)
     keys = months.map { |m| m.strftime("%b %Y") }
     by_type = ->(type) {
       LoginActivity
@@ -135,8 +136,8 @@ class HealthController < ApplicationController
     }
   end
 
-  def contact_creation_heatmap
-    grid = CaseContact.where(created_at: MONTHS_BACK.months.ago.beginning_of_month..)
+  def contact_creation_heatmap(months_back)
+    grid = CaseContact.where(created_at: months_back.months.ago.beginning_of_month..)
       .group("EXTRACT(DOW FROM created_at)::int")
       .group("EXTRACT(HOUR FROM created_at)::int").count
     {grid: grid, max: grid.values.max || 0}

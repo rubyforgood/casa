@@ -29,7 +29,27 @@ module HealthHelper
   end
 
   def metric_line_chart(id, labels, series, title:, desc:)
-    raw(build_line_chart(id, labels, series, title, desc))
+    svg, config = build_line_chart(id, labels, series, title, desc)
+    tag.div(
+      safe_join([
+        raw(svg),
+        tag.div("", class: "pointer-events-none absolute left-0 top-0 z-10 rounded-lg bg-slate-900 px-2.5 py-2 text-xs text-white opacity-0 shadow-lg transition-opacity", data: {"chart-hover-target": "tip"})
+      ]),
+      class: "relative",
+      data: {controller: "chart-hover", "chart-hover-config-value": config.to_json}
+    )
+  end
+
+  def metric_range_filter(active)
+    presets = {3 => "Last 3 months", 6 => "Last 6 months", 12 => "Last 12 months"}
+    links = presets.map do |months, label|
+      current = (months == active)
+      classes = "rounded-lg border px-3 py-1.5 text-[13px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 " +
+        (current ? "border-brand-200 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50")
+      link_to(label, health_index_path(range: months), class: classes, "aria-current": (current ? "page" : nil))
+    end
+    tag.div(safe_join([tag.span("Range", class: "mr-1 text-[13px] text-slate-500")] + links),
+      class: "mb-5 flex flex-wrap items-center gap-2", role: "group", "aria-label": "Date range")
   end
 
   def metric_data_table(labels, series, caption:, foot: nil, footnote: nil)
@@ -150,8 +170,16 @@ module HealthHelper
       end
       out << %(<text x="#{xx.call(n - 1) + 8}" y="#{yy.call(ser[:data].last) + 4}" font-size="11" font-weight="700" fill="#0f172a">#{ser[:data].last}</text>)
     end
+    out << %(<rect x="#{pad_l}" y="#{pad_t}" width="#{plot_w}" height="#{plot_h}" fill="transparent"/>)
     out << "</svg>"
-    out
+    config = {
+      plotTop: pad_t,
+      plotBottom: pad_t + plot_h,
+      xs: (0...n).map { |i| xx.call(i) },
+      labels: labels,
+      series: series.each_with_index.map { |ser, si| {name: ser[:name], color: series_color(si), values: ser[:data], ys: ser[:data].map { |v| yy.call(v) }} }
+    }
+    [out, config]
   end
 
   def line_key_svg(i)
