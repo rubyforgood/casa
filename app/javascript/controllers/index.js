@@ -5,6 +5,8 @@ import RailsNestedForm from '@stimulus-components/rails-nested-form'
 
 import { application } from './application'
 
+import AddToCalendarController from './add_to_calendar_controller'
+
 import AlertController from './alert_controller'
 
 import AutosaveController from './autosave_controller'
@@ -29,6 +31,8 @@ import HelloController from './hello_controller'
 
 import IconToggleController from './icon_toggle_controller'
 
+import ModalController from './modal_controller'
+
 import MultipleSelectController from './multiple_select_controller'
 
 import NavbarController from './navbar_controller'
@@ -42,6 +46,7 @@ import SidebarGroupController from './sidebar_group_controller'
 import TruncatedTextController from './truncated_text_controller'
 
 application.register('nested-form', RailsNestedForm)
+application.register('add-to-calendar', AddToCalendarController)
 application.register('alert', AlertController)
 application.register('autosave', AutosaveController)
 application.register('auto-submit', AutoSubmitController)
@@ -54,6 +59,7 @@ application.register('dismiss', DismissController)
 application.register('dropdown', DropdownController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
+application.register('modal', ModalController)
 application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
 application.register('select-all', SelectAllController)
