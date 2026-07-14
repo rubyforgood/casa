@@ -102,7 +102,7 @@ design system on the `casadesign` branch.
   cases index, health metrics, supervisor + volunteer dashboards, notifications, edit profile,
   and the casa_auth pages (sign-in, forgot / reset password, accept invitation). All verified by
   measurement at true 375 / 414 / 768 / 1024 / 1280 widths via a CDP device-metrics override
-  (`tmp/measure.mjs`), which bypasses headless Chrome's 500px minimum-window clamp so media
+  (`bin/measure-responsive.mjs`), which bypasses headless Chrome's 500px minimum-window clamp so media
   queries evaluate at real phone width. The health heatmap is a density matrix, so it keeps
   horizontal scroll + a sticky day-of-week axis rather than card-stacking (which would destroy
   the visualization); its chart-twin data tables are months-as-rows (narrow) inside a collapsed

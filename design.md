@@ -302,7 +302,7 @@ Repeatable steps for moving one screen off Bootstrap:
    Prefer system specs for new UI behavior (ADR 0006).
 7. **Verify:** `npm run build:tailwind`, run the page's specs, then `bin/lint`. Confirm the
    page fits at true 375 / 414 / 768 / 1024 / 1280 widths, measured with a CDP device-metrics
-   override (`tmp/measure.mjs`) rather than `--window-size` (headless Chrome clamps its minimum
+   override (`bin/measure-responsive.mjs`) rather than `--window-size` (headless Chrome clamps its minimum
    window to ~500px, so `--window-size=375` silently measures 500).
 8. **Checkpoint:** commit and push to `casadesign`, tick the item off in
    `design-todo.md`, and update the status below.
