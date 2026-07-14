@@ -6,6 +6,11 @@ import { Controller } from '@hotwired/stimulus'
 // also closes it. No custom focus-trap or key handling to maintain.
 export default class extends Controller {
   static targets = ['dialog']
+  static values = { openOnConnect: Boolean }
+
+  connect () {
+    if (this.openOnConnectValue) this.open()
+  }
 
   open () {
     this.dialogTarget.showModal()

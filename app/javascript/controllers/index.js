@@ -19,6 +19,8 @@ import CaseContactFormController from './case_contact_form_controller'
 
 import CourtOrderFormController from './court_order_form_controller'
 
+import CourtReportController from './court_report_controller'
+
 import DisableFormController from './disable_form_controller'
 
 import DisclosureController from './disclosure_controller'
@@ -30,6 +32,8 @@ import DropdownController from './dropdown_controller'
 import HelloController from './hello_controller'
 
 import IconToggleController from './icon_toggle_controller'
+
+import LocalStorageResetController from './local_storage_reset_controller'
 
 import ModalController from './modal_controller'
 
@@ -53,12 +57,14 @@ application.register('auto-submit', AutoSubmitController)
 application.register('casa-nested-form', CasaNestedFormController)
 application.register('case-contact-form', CaseContactFormController)
 application.register('court-order-form', CourtOrderFormController)
+application.register('court-report', CourtReportController)
 application.register('disable-form', DisableFormController)
 application.register('disclosure', DisclosureController)
 application.register('dismiss', DismissController)
 application.register('dropdown', DropdownController)
 application.register('hello', HelloController)
 application.register('icon-toggle', IconToggleController)
+application.register('local-storage-reset', LocalStorageResetController)
 application.register('modal', ModalController)
 application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
