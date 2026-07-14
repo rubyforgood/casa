@@ -20,16 +20,24 @@
           <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: btn_primary do %>
             <i class="bi bi-plus-lg" aria-hidden="true"></i> New Case Contact
           <% end %>
-          <%= link_to edit_casa_case_path(@casa_case), class: btn_secondary do %>
-            <i class="bi bi-pencil" aria-hidden="true"></i> Edit Case Details
-          <% end %>
+          <%# Edit is a visible button on sm+ and collapses into the More menu on mobile %>
+          <span class="hidden sm:contents">
+            <%= link_to edit_casa_case_path(@casa_case), class: btn_secondary do %>
+              <i class="bi bi-pencil" aria-hidden="true"></i> Edit Case Details
+            <% end %>
+          </span>
         <% end %>
-        <%# Overflow: the occasional actions collapse into a More menu (matches the cases index) %>
+        <%# Overflow menu (matches the cases index). On mobile it also holds Edit. %>
         <details class="relative" data-controller="dropdown">
           <summary class="<%= btn_secondary %> cursor-pointer list-none [&::-webkit-details-marker]:hidden">
             More <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
           </summary>
           <div class="absolute right-0 z-20 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <% if @casa_case.active? %>
+              <%= link_to edit_casa_case_path(@casa_case), class: "#{menu_item} w-full sm:hidden" do %>
+                <i class="bi bi-pencil text-slate-400" aria-hidden="true"></i> Edit Case Details
+              <% end %>
+            <% end %>
             <%= render "casa_cases/court_report_modal", casa_case: @casa_case, trigger_class: "#{menu_item} w-full text-left", wrapper_class: "contents" %>
             <% if @casa_case.in_transition_age? %>
               <%= link_to casa_case_emancipation_path(@casa_case), class: "#{menu_item} justify-between" do %>

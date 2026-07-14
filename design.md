@@ -235,6 +235,12 @@ Generate Court Report, Emancipation, and New Fund Request. Do not bury a core ac
 is both a UX cost (an extra click on a common action) and a testability cost (rack_test
 cannot open a native `<details>`, so non-JS specs that click it break).
 
+On **mobile**, collapse the remaining visible secondaries into `More` too, so only the primary
+CTA and `More` share the top line. Render such an action twice with responsive visibility: a
+button wrapped in `hidden sm:contents` (shown `sm+`) and a `sm:hidden` menu item (shown on
+mobile). This keeps it no-JS and unambiguous, and a non-JS click still finds the visible
+button (rack_test ignores the `hidden` class but respects the closed `<details>`).
+
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger
 button; the `disclosure` Stimulus controller toggles a `hidden` panel and keeps
