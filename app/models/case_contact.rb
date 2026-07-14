@@ -16,8 +16,10 @@ class CaseContact < ApplicationRecord
     allow_nil: true
   }
   # NOTE: 'extra' day is a temporary fix for user selecting current date, but this validation failing
+  # NOTE: a lambda so the cutoff is evaluated per-validation, not frozen at class-load time (which
+  # made specs flaky when the class first loaded under travel_to a past date).
   validates :occurred_at, comparison: {
-    less_than: Time.zone.tomorrow + 1.day,
+    less_than: -> { Time.zone.tomorrow + 1.day },
     message: :cant_be_future,
     allow_nil: true
   }

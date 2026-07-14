@@ -43,6 +43,17 @@ RSpec.describe CaseContact, type: :model do
       expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
     end
 
+    it "evaluates the future cutoff at validation time, not class-load time" do
+      # Regression guard: the cutoff is a lambda, so it tracks the current clock. With the old
+      # class-load-time value, a date "future" relative to a travelled clock would pass.
+      travel_to Time.zone.local(2020, 6, 15) do
+        expect(build_stubbed(:case_contact, occurred_at: Time.zone.local(2020, 6, 15))).to be_valid
+        future = build_stubbed(:case_contact, occurred_at: Time.zone.local(2020, 6, 20))
+        expect(future).not_to be_valid
+        expect(future.errors[:occurred_at]).to eq(["can't be in the future"])
+      end
+    end
+
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).not_to be_valid
