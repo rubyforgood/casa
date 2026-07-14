@@ -1,0 +1,13 @@
+<%# Show-specific Tailwind reminder form (the shared volunteers/_volunteer_reminder_form is
+    still Bootstrap and used by the un-migrated volunteers/edit page). Keeps the exact
+    "Send Reminder" button + "Send CC to Supervisor and Admin" text the system spec asserts. %>
+<%= form_with url: reminder_volunteer_path(volunteer), method: :patch, class: "flex flex-wrap items-center gap-3" do %>
+  <label class="flex items-center gap-2 text-sm text-slate-600">
+    <%= check_box_tag "with_cc", 1, false, id: "with_cc_#{volunteer.id}", class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+    Send CC to Supervisor and Admin
+  </label>
+  <%= button_tag type: "submit", title: "Remind volunteer to input case contacts",
+        class: "inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-white px-3 py-1.5 text-sm font-medium text-brand-700 shadow-sm hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+    <i class="bi bi-bell" aria-hidden="true"></i> Send Reminder
+  <% end %>
+<% end %>

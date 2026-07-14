@@ -448,8 +448,8 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
       # update should redirect to the original referrer, casa_case_path(casa_case)
-      expect(page).to have_text "CASA Case Details"
-      expect(page).to have_text "Case number: #{case_number}"
+      expect(page).to have_text "Case details"
+      expect(page).to have_text "Case #{case_number}"
     end
 
     context "when multiple cases selected" do

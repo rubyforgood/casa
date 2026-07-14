@@ -24,8 +24,8 @@ RSpec.describe "view all volunteers", :js, type: :system do
           click_on volunteer.casa_cases.first.case_number
         end
 
-        expect(page).to have_text("CASA Case Details")
-        expect(page).to have_text("Case number: #{casa_case.case_number}")
+        expect(page).to have_text("Case details")
+        expect(page).to have_text("Case #{casa_case.case_number}")
         expect(page).to have_text("Transition Aged Youth: Yes")
         expect(page).to have_text("Next Court Date:")
         expect(page).to have_text("Court Report Status: Not submitted")

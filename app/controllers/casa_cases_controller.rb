@@ -20,9 +20,10 @@ class CasaCasesController < ApplicationController
 
   def show
     authorize @casa_case
+    @active_nav = "cases"
 
     respond_to do |format|
-      format.html {}
+      format.html { render layout: "casa_app" }
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts, CaseContactReport::COLUMNS).perform
