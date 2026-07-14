@@ -238,6 +238,12 @@ overflow-hidden rounded-2xl p-0 shadow-xl backdrop:bg-slate-900/40`, then three 
 3. **Footer** `flex items-center justify-end gap-2 border-t border-slate-100 px-5 py-4`:
    `button_classes(:secondary)` (Cancel) then the primary or `:danger` action, right-aligned.
 
+The template is the **`Dialog::` ViewComponent suite**: `Dialog::GroupComponent` (the
+<dialog> shell plus the trigger slot, size, aria label, and controller wiring) composed with
+`Dialog::HeaderComponent`, `Dialog::BodyComponent`, and `Dialog::FooterComponent`. Compose
+those (they work even inside a `form_with`) so the three regions cannot drift. This is the
+native-dialog replacement for the Bootstrap `Modal::*` suite.
+
 Shipped instances: the court-report generator (form modal; submit posts via the
 `court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
 action posts via `button_to`, and the trigger, title, message, and labels are locals). A

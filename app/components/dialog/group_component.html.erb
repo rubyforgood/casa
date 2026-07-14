@@ -1,0 +1,6 @@
+<%= tag.div class: "inline-flex", data: wrapper_data do %>
+  <%= trigger %>
+  <%= tag.dialog id: @id, class: panel_classes, aria: {label: @label}, data: {modal_target: "dialog", action: "click->modal#backdropClose"} do %>
+    <%= content %>
+  <% end %>
+<% end %>
