@@ -1,0 +1,41 @@
+<%# Destructive action gated behind an on-brand confirmation dialog (native <dialog> +
+    the `modal` Stimulus controller: focus-trapped, Escape-to-close). The trigger opens the
+    dialog; confirming submits the real request via button_to. Replaces native `confirm()`
+    and SweetAlert for deletes as pages migrate.
+
+    Locals:
+      url            destructive action path (required)
+      message        dialog body text (required)
+      method         HTTP method (default :delete)
+      title          dialog heading (default "Are you sure?")
+      confirm_label  confirm button text (default "Delete")
+      trigger_icon   bi-* class for the trigger (optional)
+      trigger_label  trigger text (optional; omit for an icon-only trigger)
+      trigger_class  classes for the trigger button (optional)
+      aria_label     accessible name for an icon-only trigger (optional) %>
+<% method = local_assigns.fetch(:method, :delete) %>
+<% title = local_assigns.fetch(:title, "Are you sure?") %>
+<% confirm_label = local_assigns.fetch(:confirm_label, "Delete") %>
+<% title_id = "confirm-title-#{SecureRandom.hex(4)}" %>
+<div data-controller="modal" class="inline-flex">
+  <%= tag.button type: "button", data: {action: "modal#open"}, class: local_assigns[:trigger_class], "aria-label": local_assigns[:aria_label] do %>
+    <% if local_assigns[:trigger_icon] %><i class="<%= trigger_icon %>" aria-hidden="true"></i><% end %><% if local_assigns[:trigger_label] %> <%= trigger_label %><% end %>
+  <% end %>
+  <dialog data-modal-target="dialog" data-action="click->modal#backdropClose" aria-labelledby="<%= title_id %>"
+          class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
+    <div class="flex items-center gap-3 border-b border-slate-100 px-5 py-4">
+      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-rose-100 text-rose-600"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
+      <h2 id="<%= title_id %>" class="min-w-0 flex-1 text-base font-semibold text-slate-900"><%= title %></h2>
+      <button type="button" data-action="modal#close" aria-label="Close" class="grid h-8 w-8 shrink-0 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+        <i class="bi bi-x-lg" aria-hidden="true"></i>
+      </button>
+    </div>
+    <div class="px-5 py-4">
+      <p class="text-sm text-slate-600"><%= message %></p>
+    </div>
+    <div class="flex items-center justify-end gap-2 border-t border-slate-100 px-5 py-4">
+      <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+      <%= button_to confirm_label, url, method: method, form_class: "contents", class: button_classes(:danger) %>
+    </div>
+  </dialog>
+</div>

@@ -1,6 +1,6 @@
 <% content_for :page_title, "Case #{@casa_case.case_number}" %>
-<% btn_primary = "inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2" %>
-<% btn_secondary = "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% btn_primary = button_classes(:primary) %>
+<% btn_secondary = button_classes(:secondary) %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-base font-semibold text-slate-900" %>
 <% fact_label = "text-sm font-medium text-slate-500" %>
@@ -42,7 +42,7 @@
             <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
               <div class="flex items-center justify-between border-b border-slate-100 px-5 py-4">
                 <h2 class="text-base font-semibold text-slate-900">Download court report</h2>
-                <button type="button" data-action="modal#close" aria-label="Close" class="grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+                <button type="button" data-action="modal#close" aria-label="Close" class="grid h-8 w-8 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
                   <i class="bi bi-x-lg" aria-hidden="true"></i>
                 </button>
               </div>
@@ -235,7 +235,7 @@
     <dialog data-modal-target="dialog" data-action="click->modal#backdropClose"
             class="w-[calc(100vw-2rem)] max-w-md rounded-2xl p-0 shadow-xl backdrop:bg-slate-900/40">
       <div class="px-6 pt-6 text-center">
-        <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><i class="bi bi-check-lg text-xl" aria-hidden="true"></i></div>
+        <div class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-emerald-50 text-emerald-600"><i class="bi bi-check-lg text-xl" aria-hidden="true"></i></div>
         <h2 class="mt-3 text-base font-semibold text-slate-900">Case contact created</h2>
         <p class="mt-1 text-sm text-slate-600"><%= thank_you_message %></p>
         <% case when_do_we_have_court_dates(@casa_case)

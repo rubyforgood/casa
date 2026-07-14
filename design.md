@@ -85,15 +85,28 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
 ## Components
 
 ### Buttons
-- Primary: `rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700`
-- Secondary: `rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50`
-- Tertiary (ghost): `rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900` — no
-  border, fill, or shadow; the lowest-emphasis action, for repeated row / toolbar actions so they recede from brand
-  links. Neutral ink stays ≥ AA (slate-600 ≈ 7:1 — never `slate-400` under visible text). Leading icon via `gap-1.5`
-  + a `bi-*` glyph. Right-aligned in a table's trailing "actions" cell, give that cell extra end padding (`pr-6`) so the
-  control clears the card edge rather than skewing the button's own padding.
-- Danger-outline: `... border border-rose-200 text-rose-700 hover:bg-rose-50`
-- All: `focus:outline-none focus:ring-2 focus:ring-brand-500/40`
+Use the **`button_classes(:variant)`** helper (`DesignSystemHelper`) as the single source of
+truth. Never hand-write button class strings in views; they drift (that is how the variants
+ended up mismatched). Variants:
+- `:primary` (filled brand): `bg-brand-600 text-white font-semibold hover:bg-brand-700`
+- `:secondary` (outlined): `border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50`
+- `:danger` (filled rose): `bg-rose-600 text-white font-semibold hover:bg-rose-700`
+
+Every variant shares a base of `inline-flex h-10 items-center justify-center gap-2 rounded-lg
+px-4 text-sm shadow-sm` plus a `focus-visible` brand ring and `disabled:` states. The fixed
+**`h-10` (40px) height token** is deliberate: with `box-sizing: border-box` it absorbs the
+outlined variant's 1px border, so filled and outlined buttons are the same height by
+construction (40px is the mainstream medium-button height: Material 3, Chakra, shadcn). **Do
+not** re-equalize sizes with `border border-transparent` on the filled variants; that is a
+fragile compensation pinned to the secondary's exact border width, and the height token
+already handles it.
+
+- Tertiary (ghost): `rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900`.
+  No border, fill, or shadow: the lowest-emphasis action, for repeated row / toolbar actions so they recede from brand
+  links. Not part of `button_classes` (it is a low-emphasis action, not a CTA). Neutral ink stays at or above AA
+  (slate-600 is about 7:1; never `slate-400` under visible text). Leading icon via `gap-1.5` plus a `bi-*` glyph.
+  Right-aligned in a table's trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the
+  card edge rather than skewing the button's own padding.
 
 ### Inputs
 `block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
@@ -210,15 +223,33 @@ test-reachable.
 
 ### Modal (native dialog)
 Built on the native `<dialog>` element driven by the `modal` Stimulus controller: `open`
-calls `showModal()` (which gives focus-trapping, Escape-to-close, and an inert background
-for free), `close` closes it, a backdrop click closes it, and an `openOnConnect` value
-auto-opens on load (e.g. the case-show thank-you dialog on the `?success` redirect). Panel
-is `rounded-2xl p-0 shadow-xl backdrop:bg-slate-900/40` with a header (title + close button),
-body, and a right-aligned footer. This replaces the legacy Bootstrap modal components on
-Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded on
-`casa_app`). For a form-driven modal (e.g. the court-report generator), wrap the form so its
-submit lives in the footer and post via a dedicated controller (`court-report`) rather than
-Bootstrap's `d-none` toggling.
+calls `showModal()` (focus-trapping, Escape-to-close, and an inert background for free),
+`close` closes it, a backdrop click closes it, and an `openOnConnect` value auto-opens on
+load (e.g. the case-show thank-you dialog on the `?success` redirect). Tailwind's reset zeroes
+the UA centering margin, so `tailwind.css` re-centers `dialog[data-modal-target="dialog"]`
+(fixed, horizontally centered, `top: 24vh`, and `18vh` under 640px).
+
+**One template for every task/confirm modal.** Panel: `w-[calc(100vw-2rem)] max-w-md
+overflow-hidden rounded-2xl p-0 shadow-xl backdrop:bg-slate-900/40`, then three regions:
+1. **Header** `flex items-center gap-3 border-b border-slate-100 px-5 py-4`: an optional 32px
+   status badge, the `<h2>` title (`flex-1`), then a 32px close button (`bi-x-lg`,
+   `text-slate-500`, `aria-label="Close"`).
+2. **Body** `px-5 py-4`.
+3. **Footer** `flex items-center justify-end gap-2 border-t border-slate-100 px-5 py-4`:
+   `button_classes(:secondary)` (Cancel) then the primary or `:danger` action, right-aligned.
+
+Shipped instances: the court-report generator (form modal; submit posts via the
+`court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
+action posts via `button_to`, and the trigger, title, message, and labels are locals). A
+separate **status variant** (the success/thank-you dialog) centers a 48px hero badge + title
++ single Close instead of a header bar. This replaces the legacy Bootstrap `Modal::*`
+components on Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded
+on `casa_app`).
+
+**Status badge token** (the modal icon): one shape, `rounded-full`, two sizes: **32px**
+(`h-8 w-8`) inline in a header, **48px** (`h-12 w-12`) centered as a hero. Colored by intent
+(`bg-rose-100 text-rose-600` destructive, `bg-emerald-50 text-emerald-600` success). This is
+distinct from the stat/KPI **icon tile** (`rounded-xl`).
 
 ## App shell
 - **Sidebar** (256px, `border-r border-slate-200 bg-white`): org **name only** in the

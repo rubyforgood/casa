@@ -90,4 +90,22 @@ RSpec.describe "Case Groups", :js, type: :system do
     visit case_groups_path
     expect(page).to have_text("A family").once
   end
+
+  it "deletes a case group through the confirmation dialog" do
+    create(:case_group, casa_org: organization, name: "Doomed group")
+
+    sign_in admin
+
+    visit case_groups_path
+    expect(page).to have_text("Doomed group")
+
+    click_on "Delete"
+    within("dialog[open]") do
+      expect(page).to have_text("Delete case group?")
+      click_button "Delete"
+    end
+
+    expect(page).to have_text("Case group deleted!")
+    expect(page).to have_no_text("Doomed group")
+  end
 end

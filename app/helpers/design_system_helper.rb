@@ -23,4 +23,29 @@ module DesignSystemHelper
       end
     initials.upcase.presence || "?"
   end
+
+  # Single source of truth for design-system button styling. These used to be
+  # copy-pasted class strings across views, which is how the variants drifted
+  # (mismatched heights, ad hoc padding). Repoint every button here instead.
+  #
+  # All variants are the same size by construction: the fixed `h-10` (40px) height
+  # token means `box-sizing: border-box` absorbs the outlined variant's 1px border,
+  # so a filled button (no border) and the outlined secondary render identically
+  # tall. Do NOT add a `border border-transparent` compensation to the filled
+  # variants; the height token already handles it.
+  #
+  # Keep every class a literal string per variant: Tailwind's source scan
+  # (`app/helpers/**/*.rb` is a @source) only sees class names written out in full.
+  # Never build them by interpolation (e.g. "bg-#{color}-600") or they won't compile.
+  def button_classes(variant = :primary)
+    base = "inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60"
+    variant_classes =
+      case variant
+      when :primary then "bg-brand-600 font-semibold text-white hover:bg-brand-700 focus-visible:ring-brand-500"
+      when :secondary then "border border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 focus-visible:ring-brand-500"
+      when :danger then "bg-rose-600 font-semibold text-white hover:bg-rose-700 focus-visible:ring-rose-500"
+      else raise ArgumentError, "unknown button variant: #{variant.inspect}"
+      end
+    "#{base} #{variant_classes}"
+  end
 end

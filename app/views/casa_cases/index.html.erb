@@ -1,6 +1,6 @@
 <% content_for :page_title, current_user.volunteer? ? "My cases" : "Cases" %>
-<% btn_primary = "inline-flex items-center gap-2 rounded-lg bg-brand-600 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2" %>
-<% btn_secondary = "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% btn_primary = button_classes(:primary) %>
+<% btn_secondary = button_classes(:secondary) %>
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
 <% td = "px-4 py-3 text-slate-700" %>
 <% col_count = current_user.volunteer? ? 5 : 6 %>

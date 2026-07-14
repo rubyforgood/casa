@@ -1,71 +1,110 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Case Groups</h1>
-      </div>
+<% content_for :page_title, "Case groups" %>
+<% btn_primary = button_classes(:primary) %>
+<% action_link = "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
+<% td = "px-4 py-3 align-top text-slate-700" %>
+<% case_links = ->(cg) { safe_join(cg.casa_cases.map { |c| tag.li(link_to(c.case_number, casa_case_path(c), class: "text-brand-600 hover:text-brand-700")) }) } %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Case Groups</h1>
+      <p class="mt-1 max-w-2xl text-sm text-slate-500">
+        Case groups bulk-create court dates for every case in the group. For example, if siblings share a court date, group them and use the
+        <%= link_to "Bulk Court Date", new_bulk_court_date_path, class: "font-medium text-brand-600 hover:text-brand-700" %> form to add a court date for all of them at once.
+      </p>
     </div>
+    <%= link_to new_case_group_path, class: btn_primary do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> New Case Group
+    <% end %>
   </div>
-</div>
-<div class="tables-wrapper">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card-style mb-30">
-        <h3 class="mb-10">Case Groups</h3>
-        <p class="text-sm mb-20">
-          Case groups are used to bulk create court dates for all cases in a group. For example, if siblings attend the same court data you can create a case group for them and then use the
-          <%= link_to 'Bulk Court Date', new_bulk_court_date_path %>
-          form to create a court date for all of them.
-        </p>
-        <%= link_to new_case_group_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-          <i class="lni lni-plus mr-10"></i>
-          New Case Group
-        <% end %>
-        <div class="table-wrapper table-responsive">
-          <table class="table striped-table" id="case-groups">
-            <thead>
-            <tr>
-              <th>Name</th>
-              <th>Case Numbers</th>
-              <th>Updated At</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% @case_groups.each do |case_group| %>
-              <tr>
-                <td class="min-width">
-                  <%= case_group.name %>
-                </td>
-                <td class="min-width">
-                  <ul>
-                    <% case_group.casa_cases.each do |casa_case| %>
-                      <li>
-                        <%= link_to casa_case.case_number, casa_case_path(casa_case) %>
-                        <%= volunteer_badge(casa_case, current_user) %>
-                      </li>
-                    <% end %>
-                  </ul>
-                </td>
-                <td class="min-width">
-                  <%= time_ago_in_words(case_group.updated_at) %> ago
-                </td>
-                <td>
-                  <%= link_to edit_case_group_path(case_group) do %>
-                    <div class="action">
-                      <button class="text-danger">
-                        <i class="lni lni-pencil-alt"></i> Edit
-                      </button>
-                    </div>
+
+  <% if @case_groups.any? %>
+    <%# Desktop: table (md and up) %>
+    <div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm md:block">
+      <table id="case-groups" class="w-full text-sm">
+        <thead>
+          <tr class="border-b border-slate-100">
+            <th class="<%= th %>">Name</th>
+            <th class="<%= th %>">Case numbers</th>
+            <th class="<%= th %>">Updated</th>
+            <th class="<%= th %>"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-50">
+          <% @case_groups.each do |case_group| %>
+            <tr class="hover:bg-slate-50/70">
+              <td class="<%= td %> font-medium text-slate-900"><%= case_group.name %></td>
+              <td class="<%= td %>">
+                <% if case_group.casa_cases.any? %>
+                  <ul class="space-y-1"><%= case_links.call(case_group) %></ul>
+                <% else %>
+                  <span class="text-slate-500">No cases</span>
+                <% end %>
+              </td>
+              <td class="<%= td %> whitespace-nowrap text-slate-500"><%= time_ago_in_words(case_group.updated_at) %> ago</td>
+              <td class="px-4 py-3 align-top text-right">
+                <div class="flex items-center justify-end gap-1">
+                  <%= link_to edit_case_group_path(case_group), class: "#{action_link} text-slate-600 hover:bg-slate-100 hover:text-slate-900" do %>
+                    <i class="bi bi-pencil" aria-hidden="true"></i> Edit
                   <% end %>
-                  <%= link_to 'Delete', case_group_path(case_group), class: 'btn btn-danger', method: :delete, data: { confirm: "Are you sure that you want to delete this case group?" } %>
-                </td>
-              </tr>
-            <% end %>
-            </tbody>
-          </table>
-        </div>
-      </div>
+                  <%= render "shared/confirm_button",
+                        url: case_group_path(case_group),
+                        title: "Delete case group?",
+                        message: "\"#{case_group.name}\" will be deleted. The cases in it are not affected.",
+                        trigger_icon: "bi bi-trash", trigger_label: "Delete",
+                        trigger_class: "#{action_link} text-rose-600 hover:bg-rose-50 hover:text-rose-700" %>
+                </div>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
-  </div>
+
+    <%# Mobile: stacked cards (below md) %>
+    <ul class="space-y-3 md:hidden">
+      <% @case_groups.each do |case_group| %>
+        <li class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <div class="flex items-start justify-between gap-3">
+            <h2 class="text-base font-semibold text-slate-900"><%= case_group.name %></h2>
+            <div class="flex flex-none items-center gap-1">
+              <%= link_to edit_case_group_path(case_group), "aria-label": "Edit #{case_group.name}", class: "#{action_link} text-slate-600 hover:bg-slate-100 hover:text-slate-900" do %>
+                <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+              <% end %>
+              <%= render "shared/confirm_button",
+                    url: case_group_path(case_group),
+                    title: "Delete case group?",
+                    message: "\"#{case_group.name}\" will be deleted. The cases in it are not affected.",
+                    trigger_icon: "bi bi-trash",
+                    aria_label: "Delete #{case_group.name}",
+                    trigger_class: "#{action_link} text-rose-600 hover:bg-rose-50 hover:text-rose-700" %>
+            </div>
+          </div>
+          <dl class="mt-3 space-y-2 text-sm">
+            <div>
+              <dt class="text-xs text-slate-500">Case numbers</dt>
+              <dd class="mt-0.5">
+                <% if case_group.casa_cases.any? %>
+                  <ul class="space-y-1"><%= case_links.call(case_group) %></ul>
+                <% else %>
+                  <span class="text-slate-500">No cases</span>
+                <% end %>
+              </dd>
+            </div>
+            <div>
+              <dt class="text-xs text-slate-500">Updated</dt>
+              <dd class="mt-0.5 text-slate-600"><%= time_ago_in_words(case_group.updated_at) %> ago</dd>
+            </div>
+          </dl>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="rounded-2xl border border-slate-200 bg-white px-4 py-14 text-center shadow-sm">
+      <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-collection text-xl" aria-hidden="true"></i></div>
+      <p class="mt-3 text-sm font-semibold text-slate-900">No case groups yet</p>
+      <p class="mt-1 text-sm text-slate-500">Group related cases to bulk-create court dates for them.</p>
+    </div>
+  <% end %>
 </div>
