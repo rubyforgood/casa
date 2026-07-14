@@ -208,6 +208,18 @@ button; the `disclosure` Stimulus controller toggles a `hidden` panel and keeps
 `aria-expanded` in sync. Keep the trigger a real `<button>` so it stays keyboard- and
 test-reachable.
 
+### Modal (native dialog)
+Built on the native `<dialog>` element driven by the `modal` Stimulus controller: `open`
+calls `showModal()` (which gives focus-trapping, Escape-to-close, and an inert background
+for free), `close` closes it, a backdrop click closes it, and an `openOnConnect` value
+auto-opens on load (e.g. the case-show thank-you dialog on the `?success` redirect). Panel
+is `rounded-2xl p-0 shadow-xl backdrop:bg-slate-900/40` with a header (title + close button),
+body, and a right-aligned footer. This replaces the legacy Bootstrap modal components on
+Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded on
+`casa_app`). For a form-driven modal (e.g. the court-report generator), wrap the form so its
+submit lives in the footer and post via a dedicated controller (`court-report`) rather than
+Bootstrap's `d-none` toggling.
+
 ## App shell
 - **Sidebar** (256px, `border-r border-slate-200 bg-white`): org **name only** in the
   header (no logo/brand mark — not a value-add at this size, and avoids image/variant

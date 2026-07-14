@@ -49,7 +49,15 @@ design system on the `casadesign` branch.
   volunteer name, submit-on-Enter) with live as-you-type search as a follow-up; sortable headers shipped
   (server-side ?sort=, aria-sort, double-caret indicator); action-button
   labels kept Title Case (spec-coupled).
-- [ ] Case show (`casa_cases#show`).
+- [x] Case show (`casa_cases#show`) on `casa_app`: Tailwind fact card, court dates,
+  assigned volunteers + reminder, and the case-contact list (new `casa_cases/_case_contact_card`).
+  Report generation is a native `<dialog>` (modal + court-report Stimulus controllers, no
+  Bootstrap modal / jQuery), the thank-you dialog auto-opens on the success redirect, and
+  Add-to-Calendar uses the `add-to-calendar` controller. Infra added: modal / add-to-calendar /
+  court-report / local-storage-reset controllers and `CaseContactDecorator#medium_icon`.
+  Follow-ups: consolidate the show-specific contact card + reminder form with the shared
+  Bootstrap partials when the contacts index / volunteers-edit migrate. Verified responsive
+  (375-1280) and WCAG AA.
 - [ ] Case new / edit.
 - [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
   `columns.render` rewrite) + the case-contact form (multi-step).
@@ -111,7 +119,8 @@ design system on the `casadesign` branch.
   footer white/60 -> white/80.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
-  `notification_icon` helpers; the vestigial `CasaCase#hearing_type` / `#judge`
+  `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
+  uses the native-dialog report modal); the vestigial `CasaCase#hearing_type` / `#judge`
   `belongs_to` + `hearing_type_name` / `judge_name` delegates whose columns were dropped
   in 2023 — still referenced by `supervisors/index` and the legacy case pages).
 - [ ] Decommission the Bootstrap `application` layout + `application.scss` once the last
