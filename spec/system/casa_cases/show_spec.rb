@@ -24,7 +24,8 @@ RSpec.describe "casa_cases/show", type: :system do
 
   shared_examples "shows emancipation checklist link" do
     context "when youth is in transition age" do
-      it "sees link to emancipation" do
+      it "sees link to emancipation", :js do
+        find("summary", text: "More").click
         expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
       end
     end

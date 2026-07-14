@@ -230,8 +230,8 @@ directly in the menu.
 **Header action pattern.** A page header shows **one primary CTA plus a `More` overflow
 disclosure**, not a flat row of equal buttons. Keep frequently-used, core actions visible and
 overflow only the occasional ones: the cases index overflows admin navigation (Case Groups,
-Bulk Court Date); the case show keeps New Case Contact, Edit, and Emancipation visible and
-overflows Generate Court Report and New Fund Request. Do not bury a core action in `More`, it
+Bulk Court Date); the case show keeps New Case Contact and Edit visible and overflows
+Generate Court Report, Emancipation, and New Fund Request. Do not bury a core action in `More`, it
 is both a UX cost (an extra click on a common action) and a testability cost (rack_test
 cannot open a native `<details>`, so non-JS specs that click it break).
 
