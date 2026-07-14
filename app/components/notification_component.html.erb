@@ -11,7 +11,7 @@
   <div class="min-w-0 flex-1">
     <div class="flex items-baseline justify-between gap-3">
       <p class="truncate text-sm font-semibold <%= read ? "text-slate-500" : "text-slate-900" %>"><%= notification.event.title %></p>
-      <span class="shrink-0 text-xs text-slate-400"><%= time_ago_in_words(notification.created_at) %> ago</span>
+      <span class="shrink-0 text-xs text-slate-500"><%= time_ago_in_words(notification.created_at) %> ago</span>
     </div>
     <div class="mt-0.5 text-sm text-slate-600"><%= simple_format notification.event.message %></div>
   </div>

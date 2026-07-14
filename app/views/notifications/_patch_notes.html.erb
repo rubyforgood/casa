@@ -5,7 +5,7 @@
   <div class="min-w-0 flex-1">
     <div class="flex items-baseline justify-between gap-3">
       <p class="text-sm font-semibold text-slate-900">Patch Notes</p>
-      <span class="shrink-0 text-xs text-slate-400"><%= time_ago_in_words(deploy_time) %> ago</span>
+      <span class="shrink-0 text-xs text-slate-500"><%= time_ago_in_words(deploy_time) %> ago</span>
     </div>
     <% patch_notes.each do |type, notes_per_type| %>
       <div class="mt-2">
