@@ -66,6 +66,11 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   Use for KPI cards, section headers, and list-item leading icons.
   **Do not** use bare floating icons or ringed white "avatar" circles for status
   contexts — reserve initial-avatars for representing *people* only.
+- **Leading-icon alignment** — an icon that precedes a label (menu items, list rows) is
+  **top-aligned to the first line** (`items-start`), like a list marker, never centered
+  against a wrapped block. Single-line labels look identical either way; `items-start` keeps
+  it correct once a label wraps. (Material and Primer both top-align multi-line leading
+  elements.)
 
 ### Accessibility (WCAG 2.1 AA)
 Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
@@ -214,6 +219,21 @@ Stimulus controller enhances it — native toggle plus close on outside-click an
 menus a disclosure-of-links (not a full ARIA `menu` widget) unless a screen needs arrow-key
 roving. (Distinct from `disclosure`, which is for inline panels like the edit-profile forms
 that should stay open.)
+
+The `<summary>` wears `button_classes(:secondary)` so the trigger matches the primary CTA's
+40px height. Menu items are `flex items-start gap-2 px-4 py-2 text-sm`: the leading icon is
+**top-aligned to the first line** (`items-start`), never centered, so a label that wraps
+still reads with its icon (see Iconography). A form-driven modal can be a menu item by
+rendering `Dialog::GroupComponent(wrapper_class: "contents")` so its trigger and dialog sit
+directly in the menu.
+
+**Header action pattern.** A page header shows **one primary CTA plus a `More` overflow
+disclosure**, not a flat row of equal buttons. Keep frequently-used, core actions visible and
+overflow only the occasional ones: the cases index overflows admin navigation (Case Groups,
+Bulk Court Date); the case show keeps New Case Contact, Edit, and Emancipation visible and
+overflows Generate Court Report and New Fund Request. Do not bury a core action in `More`, it
+is both a UX cost (an extra click on a common action) and a testability cost (rack_test
+cannot open a native `<details>`, so non-JS specs that click it break).
 
 ### Disclosure (collapsible panel)
 Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger

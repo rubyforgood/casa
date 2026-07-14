@@ -16,13 +16,17 @@ class Dialog::GroupComponent < ViewComponent::Base
   # open_on_connect: auto-open on connect via the modal controller
   # controllers:     extra Stimulus controllers on the wrapper (e.g. "court-report")
   # data:            extra wrapper data attributes (e.g. local-storage-reset-key-value)
-  def initialize(size: :md, label: nil, id: nil, open_on_connect: false, controllers: nil, data: {})
+  # wrapper_class:   layout for the wrapper div; default "inline-flex". Use "contents"
+  #                  to dissolve the wrapper so the trigger and dialog sit directly in
+  #                  a parent such as a dropdown menu (the trigger becomes a menu item).
+  def initialize(size: :md, label: nil, id: nil, open_on_connect: false, controllers: nil, data: {}, wrapper_class: "inline-flex")
     @size = size
     @label = label
     @id = id
     @open_on_connect = open_on_connect
     @controllers = controllers
     @data = data
+    @wrapper_class = wrapper_class
   end
 
   def wrapper_data

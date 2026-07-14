@@ -55,6 +55,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "generates a court report for the case's date range" do
+      find("summary", text: "More").click
       click_button "Generate Court Report"
 
       within("#generate-court-report") do

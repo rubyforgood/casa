@@ -26,6 +26,12 @@ RSpec.describe Dialog::GroupComponent, type: :component do
     expect(page).to have_button("Open")
   end
 
+  it "can dissolve its wrapper with display: contents for menu placement" do
+    render_inline(described_class.new(wrapper_class: "contents")) { "x" }
+
+    expect(page).to have_css("div.contents[data-controller='modal'] > dialog")
+  end
+
   it "wires extra controllers, auto-open, and extra data onto the wrapper" do
     render_inline(described_class.new(open_on_connect: true, controllers: "local-storage-reset", data: {local_storage_reset_key_value: "k"})) { "x" }
 

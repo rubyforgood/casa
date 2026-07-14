@@ -5,6 +5,7 @@
 <% section_title = "text-base font-semibold text-slate-900" %>
 <% fact_label = "text-sm font-medium text-slate-500" %>
 <% fact_value = "text-sm text-slate-800" %>
+<% menu_item = "flex items-start gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-5xl space-y-6">
@@ -29,45 +30,20 @@
             <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700"><%= @casa_case.decorate.emancipation_checklist_count %></span>
           <% end %>
         <% end %>
-        <% if @casa_case.casa_org.show_fund_request %>
-          <%= link_to "New Fund Request", new_casa_case_fund_request_path(@casa_case), class: btn_secondary %>
-        <% end %>
-        <%# Generate court report (design-system dialog + court-report Stimulus controller) %>
-        <%= render Dialog::GroupComponent.new(id: "generate-court-report", label: "Download court report", controllers: "court-report") do |dialog| %>
-          <% dialog.with_trigger do %>
-            <button type="button" data-action="modal#open" class="<%= btn_secondary %>">
-              <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Generate Court Report
-            </button>
-          <% end %>
-          <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
-            <%= render Dialog::HeaderComponent.new(title: "Download court report") %>
-            <%= render Dialog::BodyComponent.new(classes: "space-y-4") do %>
-              <p class="text-sm text-slate-600">Choose a date range for <span class="font-medium text-slate-900"><%= @casa_case.case_number %></span>.</p>
-              <div data-court-report-target="error" class="hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert"></div>
-              <%= form.hidden_field :case_number, value: @casa_case.case_number %>
-              <%= form.hidden_field :time_zone, data: {court_report_target: "timeZone"} %>
-              <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-                <div>
-                  <%= form.label :start_date, "Starting from", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-                  <%= form.date_field :start_date, value: (@casa_case.most_recent_past_court_date&.date || Date.current), required: true,
-                        class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-                </div>
-                <div>
-                  <%= form.label :end_date, "Ending at", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-                  <%= form.date_field :end_date, value: Date.current, required: true,
-                        class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-                </div>
-              </div>
+        <%# Overflow: the occasional actions collapse into a More menu (matches the cases index) %>
+        <details class="relative" data-controller="dropdown">
+          <summary class="<%= btn_secondary %> cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            More <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
+          </summary>
+          <div class="absolute right-0 z-20 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <%= render "casa_cases/court_report_modal", casa_case: @casa_case, trigger_class: "#{menu_item} w-full text-left", wrapper_class: "contents" %>
+            <% if @casa_case.casa_org.show_fund_request %>
+              <%= link_to new_casa_case_fund_request_path(@casa_case), class: menu_item do %>
+                <i class="bi bi-cash-coin text-slate-400" aria-hidden="true"></i> New Fund Request
+              <% end %>
             <% end %>
-            <%= render Dialog::FooterComponent.new do %>
-              <button type="button" data-action="modal#close" class="<%= btn_secondary %>">Cancel</button>
-              <button type="submit" data-action="court-report#generate" data-court-report-target="submit" class="<%= btn_primary %>">
-                <i class="bi bi-arrow-repeat hidden animate-spin" data-court-report-target="spinner" aria-hidden="true"></i>
-                <i class="bi bi-download" aria-hidden="true"></i> Generate Report
-              </button>
-            <% end %>
-          <% end %>
-        <% end %>
+          </div>
+        </details>
       </div>
     </div>
 
