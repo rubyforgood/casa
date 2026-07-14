@@ -98,8 +98,8 @@ design system on the `casadesign` branch.
   is the reference pattern (`shared/_pagination`, `auto-submit` controller).
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
 - [ ] Responsive pass on each migrated page: verify mobile / tablet / desktop; give data
-  tables a stacked / card layout on small screens rather than horizontal scroll. Cases index
-  is the reference to build first.
+  tables a stacked / card layout on small screens rather than horizontal scroll. Done so far:
+  cases index, health metrics, supervisor + volunteer dashboards (all verified by measurement).
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
   `notification_icon` helpers; the vestigial `CasaCase#hearing_type` / `#judge`
