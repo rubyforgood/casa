@@ -145,6 +145,23 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
+  describe "#medium_icon" do
+    {
+      "in-person" => "bi bi-people",
+      "text/email" => "bi bi-envelope",
+      "video" => "bi bi-camera-video",
+      "voice-only" => "bi bi-telephone",
+      "letter" => "bi bi-envelope-paper",
+      "something-else" => "bi bi-question-circle"
+    }.each do |medium, icon|
+      it "maps #{medium} to the bootstrap-icons class #{icon}" do
+        case_contact.medium_type = medium
+
+        expect(case_contact.decorate.medium_icon).to eq(icon)
+      end
+    end
+  end
+
   describe "#subheading" do
     let(:contact_group) { build_stubbed(:contact_type_group, name: "Group X") }
     let(:contact_type) { build_stubbed(:contact_type, contact_type_group: contact_group, name: "Type X") }

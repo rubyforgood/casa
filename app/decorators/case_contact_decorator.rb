@@ -90,6 +90,19 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  # Bootstrap Icons variant of medium_icon_classes, for the Tailwind (casa_app)
+  # views, which load bootstrap-icons rather than the legacy LineIcons font.
+  def medium_icon
+    case object.medium_type
+    when CaseContact::IN_PERSON then "bi bi-people"
+    when CaseContact::TEXT_EMAIL then "bi bi-envelope"
+    when CaseContact::VIDEO then "bi bi-camera-video"
+    when CaseContact::VOICE_ONLY then "bi bi-telephone"
+    when CaseContact::LETTER then "bi bi-envelope-paper"
+    else "bi bi-question-circle"
+    end
+  end
+
   def contact_groups
     groups = contact_groups_with_types.keys
     if groups.count > 0
