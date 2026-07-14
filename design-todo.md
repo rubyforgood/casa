@@ -97,9 +97,18 @@ design system on the `casadesign` branch.
   page-by-page. Theming DataTables was rejected (couldn't meet WCAG/design). Cases index
   is the reference pattern (`shared/_pagination`, `auto-submit` controller).
 - [ ] Per-page accessibility pass (axe) as each screen migrates.
-- [ ] Responsive pass on each migrated page: verify mobile / tablet / desktop; give data
-  tables a stacked / card layout on small screens rather than horizontal scroll. Done so far:
-  cases index, health metrics, supervisor + volunteer dashboards (all verified by measurement).
+- [x] Responsive pass on each migrated page: verify mobile / tablet / desktop; give data
+  tables a stacked / card layout on small screens rather than horizontal scroll. Complete:
+  cases index, health metrics, supervisor + volunteer dashboards, notifications, edit profile,
+  and the casa_auth pages (sign-in, forgot / reset password, accept invitation). All verified by
+  measurement at true 375 / 414 / 768 / 1024 / 1280 widths via a CDP device-metrics override
+  (`tmp/measure.mjs`), which bypasses headless Chrome's 500px minimum-window clamp so media
+  queries evaluate at real phone width. The health heatmap is a density matrix, so it keeps
+  horizontal scroll + a sticky day-of-week axis rather than card-stacking (which would destroy
+  the visualization); its chart-twin data tables are months-as-rows (narrow) inside a collapsed
+  `<details>`. A contrast pass over the swept pages fixed three AA misses: notification /
+  patch-note timestamps and all input placeholders slate-400 -> slate-500, and the auth aside
+  footer white/60 -> white/80.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
   `notification_icon` helpers; the vestigial `CasaCase#hearing_type` / `#judge`

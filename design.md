@@ -124,6 +124,12 @@ Hearing Type / Judge columns that had rendered blank for every case since a 2023
 moved that data onto court dates — drop dead columns or re-source them (the migrated index
 shows "Next court date" instead).
 
+**Responsive:** render the full table in `hidden md:block` and a stacked-card list below `md`
+(`md:hidden`, one card per row with a `<dl>` of labeled fields). A data table never relies on
+horizontal scroll alone. The exception is a density **matrix** (the health heatmap), which keeps
+horizontal scroll with a sticky axis column (`sticky left-0 z-10 bg-white`); stacking a 2D matrix
+into cards would destroy the visualization.
+
 ### Charts (data viz)
 Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
 and rendered on the metrics page. Validated with the data-viz method:
@@ -294,7 +300,10 @@ Repeatable steps for moving one screen off Bootstrap:
 6. **Keep behavior specs green.** When a spec is coupled to a presentational class, move
    it to a semantic hook (a `data-*` attribute) rather than weakening the assertion.
    Prefer system specs for new UI behavior (ADR 0006).
-7. **Verify:** `npm run build:tailwind`, run the page's specs, then `bin/lint`.
+7. **Verify:** `npm run build:tailwind`, run the page's specs, then `bin/lint`. Confirm the
+   page fits at true 375 / 414 / 768 / 1024 / 1280 widths, measured with a CDP device-metrics
+   override (`tmp/measure.mjs`) rather than `--window-size` (headless Chrome clamps its minimum
+   window to ~500px, so `--window-size=375` silently measures 500).
 8. **Checkpoint:** commit and push to `casadesign`, tick the item off in
    `design-todo.md`, and update the status below.
 
