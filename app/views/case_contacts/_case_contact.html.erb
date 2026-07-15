@@ -13,6 +13,17 @@
               <% if !contact.active? %>
                 <span class="badge badge-pill light-bg text-black">Draft</span>
               <% end %>
+              <% if contact.want_driving_reimbursement? %>
+                <% decorated_contact = contact.decorate %>
+                <span class="ms-auto">
+                  <%= render BadgeComponent.new(
+                    text: decorated_contact.reimbursement_status_text,
+                    type: decorated_contact.reimbursement_status_badge_type,
+                    rounded: true,
+                    margin: false
+                  ) %>
+                </span>
+              <% end %>
               <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, data: { turbo: false },
                           class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
             </h5>
