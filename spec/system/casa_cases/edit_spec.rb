@@ -163,10 +163,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         court_orders_text = casa_case.case_court_orders.map(&:text)
@@ -184,10 +182,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         current_orders.each do |orders|
@@ -202,10 +198,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         expect(selected_case.case_court_orders.count).to be > 0
@@ -612,10 +606,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         court_orders_text = casa_case.case_court_orders.map(&:text)
@@ -633,10 +625,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         current_orders.each do |orders|
@@ -651,10 +641,8 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         expect(selected_case.case_court_orders.count).to be > 0

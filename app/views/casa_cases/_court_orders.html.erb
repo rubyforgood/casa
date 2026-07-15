@@ -14,17 +14,38 @@
 
 <div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list" class="mt-4">
   <% if siblings_casa_cases && siblings_casa_cases.count >= 1 %>
-    <% siblings_casa_cases_options = siblings_casa_cases.map { |scc| [scc.case_number, scc.id] } %>
-    <div class="mb-4 flex flex-wrap items-end gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
-      <div class="min-w-0 flex-1">
-        <%= form.label :siblings_casa_cases, "Copy all orders from case", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-        <div class="relative">
-          <%= form.select :siblings_casa_cases, siblings_casa_cases_options, {include_blank: true},
-                {class: "siblings-casa-cases block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"} %>
-          <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+    <div data-controller="copy-court-orders" data-copy-court-orders-casa-case-id-value="<%= casa_case.id %>"
+         class="mb-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
+      <div class="flex flex-wrap items-end gap-2">
+        <div class="min-w-0 flex-1">
+          <label for="casa_case_siblings_casa_cases" class="mb-1.5 block text-sm font-medium text-slate-700">Copy all orders from case</label>
+          <div class="relative">
+            <select id="casa_case_siblings_casa_cases" data-copy-court-orders-target="select" data-action="copy-court-orders#toggle"
+                    class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
+              <option value="">Select a case</option>
+              <% siblings_casa_cases.each do |scc| %>
+                <option value="<%= scc.case_number %>"><%= scc.case_number %></option>
+              <% end %>
+            </select>
+            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+          </div>
         </div>
+        <%= button_tag "Copy", type: "button", id: "copy-court-button", disabled: true, data: {copy_court_orders_target: "button", action: "copy-court-orders#open"}, class: button_classes(:secondary) %>
       </div>
-      <%= button_tag "Copy", type: :button, id: "copy-court-button", class: "copy-court-button #{button_classes(:secondary)}" %><% if casa_case %><%= form.hidden_field :casa_case, value: casa_case.id %><% end %>
+
+      <div data-controller="modal" class="contents">
+        <dialog data-modal-target="dialog" data-copy-court-orders-target="dialog" data-action="click->modal#backdropClose"
+                aria-label="Copy court orders" class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
+          <%= render Dialog::HeaderComponent.new(title: "Copy court orders?", icon: "bi bi-files", variant: :info) %>
+          <%= render Dialog::BodyComponent.new do %>
+            <p class="text-sm text-slate-600">Copy all orders from case #<span data-copy-court-orders-target="caseNumber" class="font-medium text-slate-900"></span>? They are added to this case and existing orders are kept.</p>
+          <% end %>
+          <%= render Dialog::FooterComponent.new do %>
+            <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+            <button type="button" data-action="copy-court-orders#confirm" class="<%= button_classes(:primary) %>">Yes, copy</button>
+          <% end %>
+        </dialog>
+      </div>
     </div>
   <% end %>
 

@@ -166,7 +166,8 @@ pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that cl
 `<template>` (`court-order-form#add`), and a per-row **Delete** (`danger_outline`). Each row
 is a full-width textarea + a one-column design-system status select + Delete, in a
 `flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). Copy-from-sibling is a
-select + Copy button.
+select + Copy button with a Dialog confirm (the `copy-court-orders` controller PATCHes
+`copy_court_orders`, then reloads so the copied orders and the flash show).
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`
@@ -174,8 +175,9 @@ on the court-date pages, `shared/_manage_volunteers` on supervisors/edit), do **
 it in place: Tailwind classes render unstyled on Bootstrap and the reverse. Add a
 **casa_app-specific Tailwind twin** (`casa_cases/_court_orders`, `casa_cases/_volunteer_assignment`)
 that preserves every JS hook (ids, classes, data-actions, field names, and any DOM
-adjacency the JS relies on, e.g. the copy button's hidden-field next sibling), and leave the
-shared partial for the Bootstrap pages.
+adjacency the JS relies on). A legacy global-jQuery flow (copy-from-sibling) can instead be
+reimplemented as a small Stimulus controller on the twin, leaving the jQuery and the shared
+partial untouched for the Bootstrap pages.
 
 ### Card / panel
 `rounded-2xl border border-slate-200 bg-white shadow-sm` (pad `p-5`).
@@ -348,7 +350,7 @@ Shipped instances: the court-report generator (form modal; submit posts via the
 `court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
 action posts via `button_to`, and the trigger, title, message, and labels are locals). A
 confirm can also be opened **programmatically** by a Stimulus controller instead of a trigger
-slot (the court-orders remove): wrap the `<dialog>` in `<div data-controller="modal"
+slot (the court-orders remove and copy-from-sibling): wrap the `<dialog>` in `<div data-controller="modal"
 class="contents">`, mark it `data-modal-target="dialog"` (for the centering rule) and a
 target of the owning controller, call `showModal()` from that controller's action, and wire
 the confirm button to the controller; Cancel / X / backdrop still use `modal#close`. A

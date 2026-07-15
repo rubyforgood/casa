@@ -148,6 +148,7 @@ class CasaCasesController < ApplicationController
       dup_court_order.save
       @casa_case.case_court_orders.append dup_court_order
     end
+    flash[:notice] = "Court orders have been copied."
   end
 
   private

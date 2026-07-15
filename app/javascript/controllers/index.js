@@ -17,6 +17,7 @@ import CasaNestedFormController from './casa_nested_form_controller'
 
 import CaseContactFormController from './case_contact_form_controller'
 
+import CopyCourtOrdersController from './copy_court_orders_controller'
 import CourtOrderFormController from './court_order_form_controller'
 
 import CourtReportController from './court_report_controller'
@@ -56,6 +57,7 @@ application.register('autosave', AutosaveController)
 application.register('auto-submit', AutoSubmitController)
 application.register('casa-nested-form', CasaNestedFormController)
 application.register('case-contact-form', CaseContactFormController)
+application.register('copy-court-orders', CopyCourtOrdersController)
 application.register('court-order-form', CourtOrderFormController)
 application.register('court-report', CourtReportController)
 application.register('disable-form', DisableFormController)
