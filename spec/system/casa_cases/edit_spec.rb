@@ -66,14 +66,14 @@ RSpec.describe "Edit CASA Case", type: :system do
       page.find('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
-      within ".top-page-actions" do
-        click_on "Update CASA Case"
+      within ".actions-cc" do
+        click_on "Save changes"
       end
       expect(page).to have_text("Submitted")
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
-      expect(page).to have_text("Youth's Date in Care")
+      expect(page).to have_text("Youth's date in care")
       expect(page).to have_text("Court Order Text One")
       expect(page).not_to have_text("Deactivate Case")
 
@@ -94,7 +94,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
       expect(page).to have_text("Reactivate CASA Case")
-      expect(page).not_to have_text("Court Date")
+      expect(page).not_to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
     end
@@ -112,7 +112,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
       expect(page).to have_text("Deactivate CASA Case")
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
     end
@@ -121,8 +121,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "is able to assign volunteers if in the same organization", :js do
         visit edit_casa_case_path(casa_case)
 
-        expect(page).to have_content("Manage Volunteers")
-        expect(page).to have_css("#volunteer-assignment")
+        expect(page).to have_content("Assign a volunteer to this case")
       end
 
       it "errors if trying to assign volunteers for another organization" do
@@ -257,17 +256,17 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_css("input.form-check-input--checked", count: 2)
       end
       # since all contact type options checked, don't need to select one
-      within ".top-page-actions" do
-        click_on "Update CASA Case"
+      within ".actions-cc" do
+        click_on "Save changes"
       end
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
 
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date", with: "#{next_year}-09-08")
-      expect(page).to have_text("Youth's Date in Care")
+      expect(page).to have_text("Youth's date in care")
       expect(page).to have_text("Court Order Text One")
       expect(page).to have_text("Partially implemented")
 
@@ -282,9 +281,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
 
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
-      expect(page).not_to have_text("Court Date")
+      expect(page).not_to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
-      expect(page).not_to have_text("Youth's Date in Care")
+      expect(page).not_to have_text("Youth's date in care")
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")
       expect(page).not_to have_text("Year")
@@ -328,17 +327,17 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           expect(casa_case.case_assignments.count).to eq 1
 
-          unassign_button = page.find("button.btn-outline-danger")
+          unassign_button = page.find("button", text: "Unassign Volunteer")
           expect(unassign_button.text).to eq "Unassign Volunteer"
 
-          assign_badge = page.find("span.bg-success")
-          expect(assign_badge.text).to eq "ASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Assigned"
         end
 
         it "shows an assignment start date and no assignment end date" do
           sign_in_and_assign_volunteer
-          assignment_start = page.find("td[data-test=assignment-start]").text
-          assignment_end = page.find("td[data-test=assignment-end]").text
+          assignment_start = page.find("[data-test='assignment-start']").text
+          assignment_end = page.find("[data-test='assignment-end']").text
 
           expect(assignment_start).to eq("August 29, 2020")
           expect(assignment_end).to be_empty
@@ -348,18 +347,18 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when a volunteer is unassigned from a case" do
         it "marks the volunteer as unassigned and shows assignment start/end dates", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button.btn-outline-danger")
+          unassign_button = page.find("button", text: "Unassign Volunteer")
           expect(unassign_button.text).to eq "Unassign Volunteer"
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.bg-danger")
-          expect(assign_badge.text).to eq "UNASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Unassigned"
 
           expected_start_and_end_date = "August 29, 2020"
 
-          assignment_start = page.find("td[data-test=assignment-start]").text
-          assignment_end = page.find("td[data-test=assignment-end]").text
+          assignment_start = page.find("[data-test='assignment-start']").text
+          assignment_end = page.find("[data-test='assignment-end']").text
 
           expect(assignment_start).to eq(expected_start_and_end_date)
           expect(assignment_end).to eq(expected_start_and_end_date)
@@ -371,13 +370,13 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         it "unassigns volunteer", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button.btn-outline-danger")
+          unassign_button = page.find("button", text: "Unassign Volunteer")
           expect(unassign_button.text).to eq "Unassign Volunteer"
 
           click_on "Unassign Volunteer"
 
-          assign_badge = page.find("span.bg-danger")
-          expect(assign_badge.text).to eq "UNASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Unassigned"
         end
       end
 
@@ -403,7 +402,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         sign_in supervisor
         visit edit_casa_case_path(casa_case.id)
 
-        select volunteer_1.display_name, from: "Select a Volunteer"
+        select volunteer_1.display_name, from: "Select a volunteer"
         click_on "Assign Volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_1.display_name)
@@ -412,7 +411,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Assign Volunteer"
         expect(page).to have_text("Unable to assign volunteer to case: Volunteer must exist. Volunteer can't be blank.")
 
-        select volunteer_2.display_name, from: "Select a Volunteer"
+        select volunteer_2.display_name, from: "Select a volunteer"
         click_on "Assign Volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_2.display_name)
@@ -427,7 +426,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         select_element = find("#case_assignment_casa_case_id")
 
         # Check if the default option exists and has the expected text
-        expect(select_element).to have_selector("option[value='']", text: "Please Select Volunteer")
+        expect(select_element).to have_selector("option[value='']", text: "Please select a volunteer")
       end
     end
 
@@ -447,7 +446,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).not_to have_text(text)
 
         within ".actions-cc" do
-          click_on "Update CASA Case"
+          click_on "Save changes"
         end
         expect(page).not_to have_text(text)
       end
@@ -474,8 +473,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "is able to assign volunteers", :js do
         visit edit_casa_case_path(casa_case)
 
-        expect(page).to have_content("Manage Volunteers")
-        expect(page).to have_css("#volunteer-assignment")
+        expect(page).to have_content("Assign a volunteer to this case")
       end
     end
   end
@@ -547,11 +545,11 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
       within ".actions-cc" do
-        click_on "Update CASA Case"
+        click_on "Save changes"
       end
 
       expect(page).not_to have_field("Court Report Due Date")
-      expect(page).not_to have_text("Youth's Date in Care")
+      expect(page).not_to have_text("Youth's date in care")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(page).to have_css('button[data-action="court-order-form#add"]')

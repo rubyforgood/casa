@@ -1,0 +1,52 @@
+<%# Court orders for the CASA case edit page (casa_app / Tailwind). Self-contained so the
+    shared Bootstrap shared/_court_order_list (still used by the legacy court-date pages) is
+    left intact. Preserves the court-order-form Stimulus targets (template / target /
+    selectedCourtOrder) and the copy-from-sibling JS hooks: `copy-court-button` plus the
+    hidden `casa_case` field, which casa_case.js reads via the button's next sibling. %>
+<h2 class="text-base font-semibold text-slate-900">Court orders</h2>
+<p class="mt-1 text-sm text-slate-500">Please check that you didn't enter any youth names.</p>
+
+<template data-court-order-form-target="template">
+  <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
+    <%= render "casa_cases/court_order_fields", f: ff %>
+  <% end %>
+</template>
+
+<div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list" class="mt-4">
+  <% if siblings_casa_cases && siblings_casa_cases.count >= 1 %>
+    <% siblings_casa_cases_options = siblings_casa_cases.map { |scc| [scc.case_number, scc.id] } %>
+    <div class="mb-4 flex flex-wrap items-end gap-2 rounded-lg border border-slate-200 bg-slate-50 p-3">
+      <div class="min-w-0 flex-1">
+        <%= form.label :siblings_casa_cases, "Copy all orders from case", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+        <div class="relative">
+          <%= form.select :siblings_casa_cases, siblings_casa_cases_options, {include_blank: true},
+                {class: "siblings-casa-cases block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"} %>
+          <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+        </div>
+      </div>
+      <%= button_tag "Copy", type: :button, id: "copy-court-button", class: "copy-court-button #{button_classes(:secondary)}" %><% if casa_case %><%= form.hidden_field :casa_case, value: casa_case.id %><% end %>
+    </div>
+  <% end %>
+
+  <div class="space-y-3">
+    <%= form.fields_for :case_court_orders do |ff| %>
+      <%= render "casa_cases/court_order_fields", f: ff %>
+    <% end %>
+    <div data-court-order-form-target="target"></div>
+  </div>
+
+  <div class="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
+    <div class="min-w-0 flex-1">
+      <%= label_tag :selectedCourtOrder, "Court Order Type", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <div class="relative">
+        <%= select_tag :selectedCourtOrder, options_for_select(CaseCourtOrder.court_order_options),
+              include_blank: "Create custom court order", data: {court_order_form_target: "selectedCourtOrder"},
+              class: "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+        <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+      </div>
+    </div>
+    <%= button_tag type: "button", id: "add-standard-court-order-button", class: button_classes(:secondary), data: {action: "court-order-form#add"} do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> Add a court order
+    <% end %>
+  </div>
+</div>

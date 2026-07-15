@@ -1,6 +1,7 @@
 class CasaCasesController < ApplicationController
   before_action :set_casa_case, only: %i[show edit update deactivate reactivate copy_court_orders]
   before_action :set_contact_types, only: %i[new edit update create deactivate reactivate]
+  before_action -> { @active_nav = "cases" }, only: %i[edit update deactivate reactivate]
   before_action :require_organization!
   after_action :verify_authorized
 
@@ -46,6 +47,7 @@ class CasaCasesController < ApplicationController
   def edit
     @siblings_casa_cases = CasaCasePolicy::Scope.new(current_user, @casa_case).sibling_cases
     authorize @casa_case
+    render layout: "casa_app"
   end
 
   def create
@@ -89,7 +91,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -111,7 +113,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -133,7 +135,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end

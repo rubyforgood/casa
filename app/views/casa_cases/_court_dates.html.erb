@@ -1,24 +1,25 @@
+<%# Court dates list for the CASA case edit page (casa_app / Tailwind). Edit-only partial
+    (the court-date FORM fields live in court_dates/_fields, which stays Bootstrap). %>
 <% court_dates = casa_case.court_dates.includes(:hearing_type).ordered_ascending.load %>
-<label>Court dates: </label>
+<div class="flex flex-wrap items-center justify-between gap-3">
+  <h2 class="text-base font-semibold text-slate-900">Court dates</h2>
+  <%= link_to new_casa_case_court_date_path(casa_case), class: button_classes(:secondary) do %>
+    <i class="bi bi-plus-lg" aria-hidden="true"></i> Add a court date
+  <% end %>
+</div>
 <% if court_dates.empty? %>
-  No Court Dates
+  <p class="mt-3 text-sm text-slate-500">No court dates yet.</p>
 <% else %>
-  <ul>
+  <ul class="mt-3 divide-y divide-slate-100">
     <% court_dates.each do |pcd| %>
-      <li>
-        <div class="court-date-row">
-          <%= link_to(pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd), class: "court-date-link") %>
-          <%= render 'calendar_button',
-              id: "court-date-#{pcd.id}",
-              title: "Court Date #{pcd.casa_case.case_number}",
-              date: {
-                start: pcd.date.strftime("%Y-%m-%d"),
-                end: pcd.date.strftime("%Y-%m-%d")
-              },
+      <li class="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
+        <%= link_to pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd),
+              class: "text-sm font-medium text-brand-600 hover:text-brand-700" %>
+        <%= render "calendar_button", id: "court-date-#{pcd.id}", title: "Court Date #{pcd.casa_case.case_number}",
+              date: {start: pcd.date.strftime("%Y-%m-%d"), end: pcd.date.strftime("%Y-%m-%d")},
               tooltip: "Add court date to calendar" %>
-        </div>
         <% if report = pcd.latest_associated_report %>
-          <%= link_to(rails_blob_path(report, disposition: 'attachment')) do %>
+          <%= link_to rails_blob_path(report, disposition: "attachment"), class: "text-xs font-medium text-slate-500 hover:text-slate-700" do %>
             (Attached Report)
           <% end %>
         <% end %>
@@ -26,11 +27,3 @@
     <% end %>
   </ul>
 <% end %>
-<ul>
-  <div class="add-container past-court-dates my-3">
-    <%= link_to new_casa_case_court_date_path(casa_case), class: "main-btn btn-sm primary-btn btn-hover ml-3" do %>
-      <i class="lni lni-plus"></i>
-      Add a court date
-    <% end %>
-  </div>
-</ul>

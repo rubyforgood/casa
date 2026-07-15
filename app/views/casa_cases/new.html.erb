@@ -17,14 +17,14 @@
 
       <div class="mt-4 space-y-6">
         <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div class="mb-6">
+            <%= form.label :case_number, "Case number", class: label_class %>
+            <%= form.text_field :case_number, required: true, class: input_class %>
+          </div>
+
+          <h2 class="mb-3 text-sm font-semibold text-slate-900">Court details</h2>
+
           <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div class="sm:col-span-2">
-              <%= form.label :case_number, "Case number", class: label_class %>
-              <%= form.text_field :case_number, required: true, class: input_class %>
-            </div>
-
-            <h2 class="text-sm font-semibold text-slate-900 sm:col-span-2">Court details</h2>
-
             <%= render "casa_cases/month_year_select", form: form, method: :birth_month_year_youth,
                   label: "Youth's birth month and year", disabled: !policy(@casa_case).update_birth_month_year_youth? %>
 

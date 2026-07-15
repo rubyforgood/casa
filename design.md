@@ -142,6 +142,12 @@ is a single primary button at the **bottom** (no top CTA on a fill-then-save for
 and sentence case ("Create case", "Save changes"). Month/year pickers use
 `casa_cases/_month_year_select`.
 
+A **section heading** inside a form card (e.g. "Court details") lives **outside** the
+grid, not as a grid child, so it does not inherit the uniform `gap-5` on every side. Give
+the heading `mb-3` (12px) so it hugs the fields it introduces, and put the field above it
+(e.g. case number) in its own block with `mb-6` (24px) for section separation. A heading
+left as a grid child floats with equal 20px above and below and reads as detached.
+
 ### Multiselect
 Both the rich `Form::MultipleSelectComponent` (select-all + filterable list) and the basic
 `multiple-select` Stimulus controller render TomSelect, themed in `tailwind.css` (casa_app
@@ -153,6 +159,23 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   the viewport bottom, so the menu opens above and stays on screen.
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
+
+### Nested sub-form (repeatable rows)
+The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the
+pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that clones a
+`<template>` (`court-order-form#add`), and a per-row **Delete** (`danger_outline`). Each row
+is a full-width textarea + a one-column design-system status select + Delete, in a
+`flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). Copy-from-sibling is a
+select + Copy button.
+
+### Sharing a partial with Bootstrap
+When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`
+on the court-date pages, `shared/_manage_volunteers` on supervisors/edit), do **not** restyle
+it in place: Tailwind classes render unstyled on Bootstrap and the reverse. Add a
+**casa_app-specific Tailwind twin** (`casa_cases/_court_orders`, `casa_cases/_volunteer_assignment`)
+that preserves every JS hook (ids, classes, data-actions, field names, and any DOM
+adjacency the JS relies on, e.g. the copy button's hidden-field next sibling), and leave the
+shared partial for the Bootstrap pages.
 
 ### Card / panel
 `rounded-2xl border border-slate-200 bg-white shadow-sm` (pad `p-5`).
@@ -186,6 +209,11 @@ horizontal scroll alone. The exception is a density **matrix** (the health heatm
 horizontal scroll with a sticky axis column (`sticky left-0 z-10 bg-white`); stacking a 2D matrix
 into cards would destroy the visualization.
 
+When the container is **narrow** and each row has many fields (e.g. the volunteer assignment
+list inside the edit column), use a **card list at all widths** (one `<li>` per record: name +
+status pill on the first line, a `<dl>` of labeled meta, then the row actions) instead of
+squeezing a wide table into a narrow column.
+
 ### Charts (data viz)
 Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
 and rendered on the metrics page. Validated with the data-viz method:
@@ -216,7 +244,11 @@ Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-sl
 Base: `inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium`
 - On track: `bg-emerald-50 text-emerald-700` + check icon
 - Needs follow-up: `bg-rose-50 text-rose-700` + exclamation icon
-- No active cases: `bg-slate-100 text-slate-500` + minus icon
+- Neutral / deactivated: `bg-slate-100 text-slate-600` + minus icon (**slate-600**, not
+  slate-500: on the slate-100 tint slate-500 is only 4.34:1, below AA; slate-600 is 6.92:1)
+
+Volunteer assignment reuses these three: Assigned (emerald), Unassigned (rose),
+Deactivated volunteer (slate).
 
 ### Person avatar (initials)
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
