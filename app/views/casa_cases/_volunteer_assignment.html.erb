@@ -18,8 +18,8 @@
         <li class="p-4">
           <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
             <div class="min-w-0">
-              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer),
-                    class: "text-sm font-semibold text-brand-600 hover:text-brand-700", data: {test: "volunteer-name"} %>
+              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id),
+                    class: "text-sm font-medium text-slate-800 hover:text-brand-700 hover:underline", data: {test: "volunteer-name"} %>
               <p class="truncate text-sm text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
             </div>
             <% if assignment.active? %>

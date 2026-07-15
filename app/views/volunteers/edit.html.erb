@@ -1,4 +1,8 @@
-<%= link_to 'Back', volunteers_path, class: "my-2" %>
+<% if params[:from_case_id].present? && (from_case = current_organization.casa_cases.find_by(id: params[:from_case_id])) %>
+  <%= link_to "\u2190 Back to case #{from_case.case_number}", casa_case_path(from_case), class: "my-2" %>
+<% else %>
+  <%= link_to 'Back', volunteers_path, class: "my-2" %>
+<% end %>
 
 <div class="row">
   <div class="col-sm-12 form-header">

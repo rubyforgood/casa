@@ -83,7 +83,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can navigate to edit volunteer page" do
-      expect(page).to have_link("Bob Loblaw", href: "/volunteers/#{volunteer.id}/edit")
+      expect(page).to have_link("Bob Loblaw", href: %r{/volunteers/#{volunteer.id}/edit})
     end
 
     it "sees link to profile page" do
