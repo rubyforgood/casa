@@ -171,8 +171,9 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   `Select/Unselect all` in the menu. (Contact types is required, so blank plus the "at least
   one contact type" validation is the correct required-field UX; it is not a reason to
   default-select everything.)
-- **Chevron**: a `.ts-wrapper::after` **base64-SVG** caret with **`z-index: 2`**. The z-index
-  is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is
+- **Chevron**: the Bootstrap-Icons `chevron-down` shape as a `.ts-wrapper::after` **base64-SVG**,
+  sized (`text-xs`) and placed (`right-3`) to **match the single-select chevrons**, with
+  **`z-index: 2`**. The z-index is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is
   present but hidden without it (that stacking, not a missing rule, is why the chevron read as
   "missing" for so long). Do not use a CSS `content` glyph escape (the minifier drops it), a
   raw non-base64 `data:` URI (broke in the build), or an injected CDN icon-font element (never

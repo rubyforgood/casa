@@ -48,21 +48,23 @@
   border-color: #6366f1; /* brand-500 */
   box-shadow: 0 0 0 2px rgb(99 102 241 / 0.3);
 }
-/* Chevron: an inline base64 SVG caret. The key is `z-index`: TomSelect's opaque
-   `.ts-control` paints over a plain `::after`, so every earlier chevron (border caret, CDN
-   icon font, raw data-URI) was actually rendered but hidden behind the control. base64 is
-   minifier- and parser-safe (a raw `data:` URI and a `content` glyph escape both broke in
-   the build). Verified at the pixel level, not just computed style. */
+/* Chevron: the Bootstrap-Icons `chevron-down` shape as an inline base64 SVG, sized (text-xs)
+   and placed (right-3) to match the single-select chevrons. Needs `z-index` because
+   TomSelect's opaque `.ts-control` paints over a plain `::after` (that stacking, not a
+   missing rule, is why every earlier chevron was invisible). base64 is minifier- and
+   parser-safe; a raw `data:` URI and a `content` glyph escape both broke in the build, and
+   the injected icon-font element never painted. Pixel-verified to match the single-selects
+   (identical 8x4 dark extent), not just checked by computed style. */
 .ts-wrapper::after {
   content: "";
   position: absolute;
-  right: 0.7rem;
+  right: 0.75rem;
   top: 50%;
-  width: 1rem;
-  height: 1rem;
+  width: 0.75rem;
+  height: 0.75rem;
   transform: translateY(-50%);
   z-index: 2;
-  background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjQ3NDhiIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMy41IDYgOCAxMC41IDEyLjUgNiIvPjwvc3ZnPg==");
+  background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzY0NzQ4YiI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMS42NDYgNC42NDZhLjUuNSAwIDAgMSAuNzA4IDBMOCAxMC4yOTNsNS42NDYtNS42NDdhLjUuNSAwIDAgMSAuNzA4LjcwOGwtNiA2YS41LjUgMCAwIDEtLjcwOCAwbC02LTZhLjUuNSAwIDAgMSAwLS43MDh6Ii8+PC9zdmc+");
   pointer-events: none;
 }
 .ts-wrapper.dropdown-active::after { transform: translateY(-50%) rotate(180deg); }
