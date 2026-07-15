@@ -3,14 +3,11 @@
     (src/case_contact.js) binds the "Make Reminder" prompt. Labels stay Title Case
     because system specs click them by exact text. %>
 <% if followup %>
-  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false},
-        form_class: "inline",
-        class: "inline-flex items-center gap-1.5 rounded-lg bg-emerald-700 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-emerald-800 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2" do %>
+  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:success) do %>
     <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve Reminder
   <% end %>
 <% else %>
-  <button type="button" id="followup-button-<%= contact.id %>" data-turbo="false"
-          class="followup-button inline-flex items-center gap-1.5 rounded-lg border border-brand-200 bg-white px-3 py-1.5 text-sm font-medium text-brand-700 shadow-sm hover:bg-brand-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+  <button type="button" id="followup-button-<%= contact.id %>" data-turbo="false" class="followup-button <%= button_classes(:secondary) %>">
     <i class="bi bi-calendar-plus" aria-hidden="true"></i> Make Reminder
   </button>
 <% end %>

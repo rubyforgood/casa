@@ -131,7 +131,7 @@ class VolunteersController < ApplicationController
     end
     VolunteerMailer.case_contacts_reminder(@volunteer, cc_recipients).deliver
 
-    redirect_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
+    redirect_back_or_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
   end
 
   def impersonate

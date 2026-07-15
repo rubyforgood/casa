@@ -45,6 +45,7 @@ module DesignSystemHelper
       when :secondary then "border border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 focus-visible:ring-brand-500"
       when :danger then "bg-rose-600 font-semibold text-white hover:bg-rose-700 focus-visible:ring-rose-500"
       when :danger_outline then "border border-rose-200 bg-white font-medium text-rose-700 hover:bg-rose-50 focus-visible:ring-rose-500"
+      when :success then "bg-emerald-700 font-semibold text-white hover:bg-emerald-800 focus-visible:ring-emerald-500"
       else raise ArgumentError, "unknown button variant: #{variant.inspect}"
       end
     "#{base} #{variant_classes}"

@@ -23,31 +23,33 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       expect(page).to have_text("Editing Volunteer")
     end
 
-    it "sends reminder to volunteer" do
+    it "sends reminder to volunteer", :js do
       sign_in admin
       visit casa_case_path(casa_case.id)
 
       expect(page).to have_button("Send Reminder")
+      click_on "Send Reminder"
       expect(page).to have_text("Send CC to Supervisor and Admin")
 
-      click_on "Send Reminder"
+      click_on "Yes, send reminder"
 
-      expect(page).to have_current_path(edit_volunteer_path(volunteer))
+      expect(page).to have_current_path(casa_case_path(casa_case.id))
       expect(page).to have_text("Reminder sent to volunteer")
     end
   end
 
   context "user is a supervisor" do
-    it "sends reminder to volunteer" do
+    it "sends reminder to volunteer", :js do
       sign_in supervisor
       visit casa_case_path(casa_case.id)
 
       expect(page).to have_button("Send Reminder")
+      click_on "Send Reminder"
       expect(page).to have_text(/Send CC to Supervisor and Admin$/)
 
-      click_on "Send Reminder"
+      click_on "Yes, send reminder"
 
-      expect(page).to have_current_path(edit_volunteer_path(volunteer))
+      expect(page).to have_current_path(casa_case_path(casa_case.id))
       expect(page).to have_text("Reminder sent to volunteer")
     end
   end

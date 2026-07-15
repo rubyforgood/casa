@@ -96,6 +96,8 @@ ended up mismatched). Variants:
 - `:primary` (filled brand): `bg-brand-600 text-white font-semibold hover:bg-brand-700`
 - `:secondary` (outlined): `border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50`
 - `:danger` (filled rose): `bg-rose-600 text-white font-semibold hover:bg-rose-700`
+- `:danger_outline` (outlined rose): `border border-rose-200 bg-white text-rose-700 font-medium hover:bg-rose-50`
+- `:success` (filled emerald, for positive / resolve actions): `bg-emerald-700 text-white font-semibold hover:bg-emerald-800` (emerald-700, not 600: white on 600 is 3.77:1, below AA)
 
 Every variant shares a base of `inline-flex h-10 items-center justify-center gap-2 rounded-lg
 px-4 text-sm shadow-sm` plus a `focus-visible` brand ring and `disabled:` states. The fixed
@@ -112,6 +114,12 @@ already handles it.
   (slate-600 is about 7:1; never `slate-400` under visible text). Leading icon via `gap-1.5` plus a `bi-*` glyph.
   Right-aligned in a table's trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the
   card edge rather than skewing the button's own padding.
+
+**Audit before shipping:** grep the views you touched for clickable elements (`link_to` /
+`button_tag` / `button_to` / `<button` / `<a`) carrying a hand-rolled button shape
+(`inline-flex` + `rounded-lg` + `px-`/`py-` + `bg-`/`border-`) and convert them to
+`button_classes`. A bespoke string at `py-1.5` next to a 40px token is the recurring drift
+bug; the only non-`button_classes` clickable is the documented tertiary ghost.
 
 ### Inputs
 `block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
@@ -181,6 +189,15 @@ partial untouched for the Bootstrap pages.
 
 ### Card / panel
 `rounded-2xl border border-slate-200 bg-white shadow-sm` (pad `p-5`).
+
+### Fact / detail list
+Entity facts (the case-details card) are inline `dt` (muted `font-medium text-slate-500`) :
+`dd` (dark `text-slate-800`) pairs. Put any **derived / secondary** value (a relative
+duration, a submitted-at timestamp) on a **muted second line** (`mt-0.5 text-xs
+text-slate-500`), never as a light suffix after the dark value on the same line as the light
+label: light-dark-light on one line reads as broken. Keep the "Label:" wording (specs match
+it) and reword derived text to be self-explanatory ("In care for over 8 years", not
+"(over 8 years ago)").
 
 ### Table (in a card)
 Full-bleed table inside an `overflow-hidden rounded-2xl` card: a header row

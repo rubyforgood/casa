@@ -1,12 +1,25 @@
-<%# Show-specific Tailwind reminder form (the shared volunteers/_volunteer_reminder_form is
-    still Bootstrap and used by the un-migrated volunteers/edit page). Keeps the exact
-    "Send Reminder" button + "Send CC to Supervisor and Admin" text the system spec asserts. %>
-<%= form_with url: reminder_volunteer_path(volunteer), method: :patch, class: "flex flex-wrap items-center gap-3" do %>
-  <label class="flex items-center gap-2 text-sm text-slate-600">
-    <%= check_box_tag "with_cc", 1, false, id: "with_cc_#{volunteer.id}", class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
-    Send CC to Supervisor and Admin
-  </label>
-  <%= button_tag type: "submit", title: "Remind volunteer to input case contacts", class: button_classes(:secondary) do %>
-    <i class="bi bi-bell" aria-hidden="true"></i> Send Reminder
+<%# Show-page reminder control: a "Send Reminder" trigger opens a design-system Dialog to
+    confirm and optionally CC the supervisor/admin, then PATCHes volunteers#reminder (which
+    redirects back to the case). The shared volunteers/_volunteer_reminder_form is still
+    Bootstrap and used by the un-migrated volunteers/edit page. %>
+<%= render Dialog::GroupComponent.new(label: "Send a reminder to #{formatted_name(volunteer.display_name)}", wrapper_class: "contents") do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= button_tag type: "button", data: {action: "modal#open"}, title: "Remind volunteer to input case contacts", class: button_classes(:secondary) do %>
+      <i class="bi bi-bell" aria-hidden="true"></i> Send Reminder
+    <% end %>
+  <% end %>
+  <%= form_with url: reminder_volunteer_path(volunteer), method: :patch do %>
+    <%= render Dialog::HeaderComponent.new(title: "Send a reminder?", icon: "bi bi-bell", variant: :info) %>
+    <%= render Dialog::BodyComponent.new do %>
+      <p class="text-sm text-slate-600">Email <%= formatted_name(volunteer.display_name) %> a reminder to log their case contacts.</p>
+      <label class="mt-3 flex items-center gap-2 text-sm text-slate-700">
+        <%= check_box_tag "with_cc", 1, false, id: "with_cc_#{volunteer.id}", class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+        Send CC to Supervisor and Admin
+      </label>
+    <% end %>
+    <%= render Dialog::FooterComponent.new do %>
+      <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+      <%= button_tag "Yes, send reminder", type: "submit", class: button_classes(:primary) %>
+    <% end %>
   <% end %>
 <% end %>

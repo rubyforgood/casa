@@ -57,14 +57,12 @@
     <div class="flex flex-wrap items-center gap-2">
       <% if policy(contact).update? %>
         <%= render "casa_cases/case_contact_followup", contact: contact, followup: contact.requested_followup %>
-        <%= link_to edit_case_contact_path(contact), data: {turbo: false},
-              class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+        <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %>
           <i class="bi bi-pencil" aria-hidden="true"></i> Edit
         <% end %>
       <% end %>
       <% if policy(contact).destroy? && !contact.deleted? %>
-        <%= link_to case_contact_path(contact.id), method: :delete, data: {turbo: false},
-              class: "inline-flex items-center gap-1.5 rounded-lg border border-rose-200 bg-white px-3 py-1.5 text-sm font-medium text-rose-700 shadow-sm hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500" do %>
+        <%= link_to case_contact_path(contact.id), method: :delete, data: {turbo: false}, class: button_classes(:danger_outline) do %>
           <i class="bi bi-trash" aria-hidden="true"></i> Delete
         <% end %>
       <% end %>

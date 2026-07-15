@@ -60,8 +60,7 @@
       <div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 px-4 py-3">
         <p class="text-sm text-rose-800">Case was deactivated on <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>.</p>
         <% if Pundit.policy(current_user, @casa_case).update_case_status? %>
-          <%= link_to "Reactivate CASA Case", reactivate_casa_case_path(@casa_case), method: :patch,
-                class: "inline-flex items-center gap-2 rounded-lg bg-rose-600 px-3 py-1.5 text-sm font-medium text-white shadow-sm hover:bg-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500 focus-visible:ring-offset-2" %>
+          <%= link_to "Reactivate CASA Case", reactivate_casa_case_path(@casa_case), method: :patch, class: button_classes(:danger) %>
         <% end %>
       </div>
     <% end %>
@@ -96,15 +95,12 @@
         </div>
         <div>
           <dt class="inline font-medium text-slate-500">Court Report Status:</dt>
-          <dd class="inline text-slate-800">
-            <%= @casa_case.decorate.court_report_submission %>
-            <% unless @casa_case.court_report_not_submitted? %>
-              <% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %>
-                &middot; <%= link_to "Click to download", rails_blob_path(@casa_case.latest_court_report, disposition: "attachment"), class: "font-medium text-brand-600 hover:text-brand-700" %>
-              <% end %>
-              <span class="text-slate-500">&middot; Submitted <%= @casa_case.decorate.court_report_submitted_date %></span>
-            <% end %>
-          </dd>
+          <dd class="inline text-slate-800"><%= @casa_case.decorate.court_report_submission %></dd>
+          <% unless @casa_case.court_report_not_submitted? %>
+            <p class="mt-0.5 text-xs text-slate-500">
+              Submitted <%= @casa_case.decorate.court_report_submitted_date %><% if @casa_case.court_report_submitted? && @casa_case.court_reports.attached? %> &middot; <%= link_to "Click to download", rails_blob_path(@casa_case.latest_court_report, disposition: "attachment"), class: "font-medium text-brand-600 hover:text-brand-700" %><% end %>
+            </p>
+          <% end %>
         </div>
       </dl>
 
