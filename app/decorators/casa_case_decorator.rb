@@ -50,7 +50,7 @@ class CasaCaseDecorator < Draper::Decorator
 
   def duration_in_care
     return nil unless object.date_in_care
-    "(#{time_ago_in_words(object.date_in_care)} ago)"
+    "In care for #{time_ago_in_words(object.date_in_care)}"
   end
 
   def calendar_next_court_date

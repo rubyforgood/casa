@@ -108,7 +108,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see the time since the youth's Date In Care", :js do
-      expect(page).to have_content("#{time_ago_in_words(date_in_care)} ago")
+      expect(page).to have_content("In care for #{time_ago_in_words(date_in_care)}")
     end
 
     it "can see Add to Calendar buttons", :js do

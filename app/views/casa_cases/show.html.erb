@@ -76,10 +76,10 @@
         </div>
         <div>
           <dt class="inline font-medium text-slate-500">Youth's Date in Care:</dt>
-          <dd class="inline text-slate-800">
-            <%= @casa_case.decorate.date_in_care || tag.span("Not set", class: "text-slate-500") %>
-            <% if @casa_case.decorate.duration_in_care %><span class="text-slate-500"><%= @casa_case.decorate.duration_in_care %></span><% end %>
-          </dd>
+          <dd class="inline text-slate-800"><%= @casa_case.decorate.date_in_care || tag.span("Not set", class: "text-slate-500") %></dd>
+          <% if @casa_case.decorate.duration_in_care %>
+            <p class="mt-0.5 text-xs text-slate-500"><%= @casa_case.decorate.duration_in_care %></p>
+          <% end %>
         </div>
         <div>
           <dt class="inline font-medium text-slate-500">Next Court Date:</dt>
