@@ -37,6 +37,12 @@ proper nouns (CASA, Twilio, people's names). So "Track volunteer progress", not 
 Volunteer Progress" and never the shouty all-caps "TRACK…". Do **not** apply the
 `uppercase` CSS transform to labels; use size, weight and colour for hierarchy instead.
 
+**No trailing colon on a heading or subtitle** (`Assigned volunteers`, not `Assigned
+Volunteers:`; `Current placement`, not `Current Placement:`). A colon belongs only on an
+inline key:value **fact label** (a `dt` such as `Court report status:`), never on a section
+title. Audit the views you touch: `grep '<h[123][^>]*>[^<]*:</h'` should return nothing on a
+casa_app page.
+
 ### Color
 Brand = indigo. Neutrals = slate. Semantic colors below.
 
@@ -279,6 +285,14 @@ User names render **without honorific prefixes** (Mrs./Mr./…), first + last on
 call sites) for the name, and `avatar_initials` for initials (all backed by
 `NamePresentation`). This is presentation-only — the
 stored `display_name` is never mutated (it must round-trip raw input for security).
+
+A person's name is **identifying text, not a nav link**: render it `font-medium
+text-slate-800` (dark), the same whether or not it is clickable, so it reads as a name rather
+than a generic hyperlink. When it does link to that person's record, keep it dark with
+`hover:text-brand-700 hover:underline` (distinct from the brand record-nav links used for a
+case number or court date). Prefer not to send the user out of the current flow via a name;
+if a name must link away, its destination needs a clear path back (an unmigrated edit page
+with no return is a flow trap).
 
 ### Tag
 "mine" etc.: `rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-600`.

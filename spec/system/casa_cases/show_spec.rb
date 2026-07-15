@@ -92,7 +92,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
@@ -191,7 +191,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
@@ -247,7 +247,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it_behaves_like "shows emancipation checklist link"
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
     end
@@ -287,7 +287,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content("✅")
     end
@@ -297,7 +297,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content("❌")
     end
@@ -307,7 +307,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content("🕗")
     end
@@ -317,7 +317,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
       expect(page).to have_content("❌")
     end

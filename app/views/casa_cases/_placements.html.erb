@@ -1,9 +1,9 @@
 <% current_placement = casa_case.placements.order(placement_started_at: :desc).first %>
 <% if current_placement || casa_case.casa_org.placement_types.present? %>
   <div class="mt-6 border-t border-slate-100 pt-4">
-    <h3 class="text-sm font-semibold text-slate-900">Current Placement:</h3>
+    <h3 class="text-sm font-semibold text-slate-900">Current placement</h3>
     <% if current_placement %>
-      <p class="mt-1 text-sm text-slate-700"><%= current_placement.placement_type.name %></p>
+      <p class="mt-1 text-sm text-slate-800"><%= current_placement.placement_type.name %></p>
       <p class="mt-0.5 text-xs text-slate-500">Placed since: <%= current_placement.decorate.formatted_date %></p>
     <% else %>
       <p class="mt-1 text-sm text-slate-500">Unknown</p>

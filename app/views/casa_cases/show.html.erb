@@ -106,7 +106,7 @@
 
       <% if @casa_case.case_court_orders.exists? %>
         <div class="mt-6 border-t border-slate-100 pt-4">
-          <h3 class="text-sm font-semibold text-slate-900">Court Orders</h3>
+          <h3 class="text-sm font-semibold text-slate-900">Court orders</h3>
           <ul class="mt-2 space-y-1.5">
             <% @casa_case.case_court_orders.each do |court_order| %>
               <li class="flex items-start gap-2 text-sm text-slate-700">
@@ -155,7 +155,7 @@
 
     <%# Assigned volunteers %>
     <section class="<%= card %>">
-      <h2 class="<%= section_title %>">Assigned Volunteers:</h2>
+      <h2 class="<%= section_title %>">Assigned volunteers</h2>
       <% assigned = Pundit.policy_scope(current_user, @casa_case.assigned_volunteers) %>
       <% if assigned.any? %>
         <ul class="mt-3 space-y-3">
@@ -164,7 +164,7 @@
               <% if current_user.volunteer? %>
                 <span class="text-sm font-medium text-slate-800"><%= formatted_name(volunteer.display_name) %></span>
               <% else %>
-                <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer), class: "text-sm font-medium text-brand-600 hover:text-brand-700" %>
+                <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer), class: "text-sm font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
                 <%= render "casa_cases/volunteer_reminder_form", volunteer: volunteer %>
               <% end %>
             </li>

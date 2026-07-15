@@ -15,7 +15,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       sign_in admin
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_text("Assigned Volunteers:\nAndy Dwyer")
+      expect(page).to have_text("Assigned volunteers\nAndy Dwyer")
       expect(page).to have_link("Andy Dwyer")
 
       click_on "Andy Dwyer"
@@ -59,7 +59,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       sign_in volunteer
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_text("Assigned Volunteers:\nAndy Dwyer")
+      expect(page).to have_text("Assigned volunteers\nAndy Dwyer")
       expect(page).to have_no_link("Andy Dwyer", href: volunteer_path(volunteer.id))
     end
   end
