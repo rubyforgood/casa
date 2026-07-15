@@ -116,6 +116,44 @@ already handles it.
 ### Inputs
 `block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
 
+### Select
+A native `<select>`, but the browser's arrow is replaced with a Bootstrap-icon chevron so it
+looks the same across browsers and matches the app's other dropdowns (the cases-index filter
+is the reference). Wrap the select in a `relative` div and overlay the chevron:
+
+```erb
+<div class="relative">
+  <%= form.select :field, options, {}, class: "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+</div>
+```
+
+`appearance-none` hides the native arrow, and **`pr-9` is required** so the value never
+crowds the chevron: a plain `<select>` with `px-3` collides the text with the native arrow.
+Chevron ink is `slate-500` (AA). Month/year pickers reuse this through
+`casa_cases/_month_year_select` (it keeps Rails' `_1i`/`_2i` date-part field names).
+
+### Form layout
+Forms use a **two-column responsive grid**: `grid grid-cols-1 gap-5 sm:grid-cols-2`, which
+collapses to one column below `sm`. Wide fields (case number, a multiselect) get
+`sm:col-span-2`; compact fields (dates, a status select, a single-value select) take one
+column. Keep to just two widths, full and one-column, so it does not look loose. The submit
+is a single primary button at the **bottom** (no top CTA on a fill-then-save form), verb-first
+and sentence case ("Create case", "Save changes"). Month/year pickers use
+`casa_cases/_month_year_select`.
+
+### Multiselect
+Both the rich `Form::MultipleSelectComponent` (select-all + filterable list) and the basic
+`multiple-select` Stimulus controller render TomSelect, themed in `tailwind.css` (casa_app
+only; Bootstrap pages keep the tom-select.bootstrap5 theme):
+- **Chevron** on the right (`.ts-wrapper::after`) so it reads as a dropdown, like a `<select>`.
+- **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
+  component's LineIcons X and grey divider are overridden for casa_app).
+- **Flip-up**: the controller's `onDropdownOpen` adds `.ts-flip-up` when the control is near
+  the viewport bottom, so the menu opens above and stays on screen.
+- Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
+  its default grey theme wins otherwise.
+
 ### Card / panel
 `rounded-2xl border border-slate-200 bg-white shadow-sm` (pad `p-5`).
 
@@ -203,11 +241,15 @@ stored `display_name` is never mutated (it must round-trip raw input for securit
    filters + a "Clear filters" action.
 
 ### Form errors
-Streamlined single-line `role="alert"` card shown above a form when saving fails:
-`rounded-xl border border-rose-200 bg-rose-50 p-4` with a rose danger **icon tile** (same
-style as the dashboard) and one sentence — **"Unable to save:"** followed by the messages
-joined with `to_sentence`, no bulleted list. Use the `shared/_form_errors` partial on
-Tailwind pages; the legacy `shared/_error_messages` stays for Bootstrap pages.
+Two layers, both design-system-styled:
+- **Field level.** An invalid input / select / textarea shows a rose border. Rails wraps
+  invalid fields in `.field_with_errors`, so `tailwind.css` colors those `border-rose-500`
+  (`#f43f5e`, 3.67:1 against white, AA for a UI border) on casa_app. No per-field markup.
+- **Summary.** A single-line `role="alert"` card above the form:
+  `rounded-xl border border-rose-200 bg-rose-50 p-4` with a rose danger **icon tile** and one
+  sentence, **"Unable to save:"** followed by the messages joined with `to_sentence` (no
+  bulleted list). Use the `shared/_form_errors` partial on Tailwind pages; the legacy
+  `shared/_error_messages` stays for Bootstrap pages.
 
 ### Dropdown / popover
 Menus (the header account menu, the cases-page "More" actions menu) are a native

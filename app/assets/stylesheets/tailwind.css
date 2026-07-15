@@ -34,11 +34,12 @@
    brand-50 pills). Only loaded on casa_app; Bootstrap pages keep the
    tom-select.bootstrap5 theme from application.scss.
 ------------------------------------------------------------------ */
-.ts-wrapper { font-size: 0.875rem; }
+.ts-wrapper { font-size: 0.875rem; position: relative; width: 100%; }
 .ts-control {
   border-radius: 0.5rem;
   border: 1px solid #cbd5e1; /* slate-300 */
-  padding: 0.375rem 0.5rem;
+  padding: 0.375rem 2rem 0.375rem 0.625rem !important; /* right room for the chevron */
+  min-height: 2.625rem; /* match the text-input height so it reads as one control */
   box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
   background-color: #fff;
   gap: 0.375rem;
@@ -47,20 +48,59 @@
   border-color: #6366f1; /* brand-500 */
   box-shadow: 0 0 0 2px rgb(99 102 241 / 0.3);
 }
-.ts-control > .item {
+/* Chevron so it reads as a dropdown, matching the native <select> pattern. */
+.ts-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0.875rem;
+  top: 50%;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-right: 1.5px solid #64748b; /* slate-500 */
+  border-bottom: 1.5px solid #64748b;
+  transform: translateY(-75%) rotate(45deg);
+  pointer-events: none;
+}
+.ts-wrapper.dropdown-active::after { transform: translateY(-25%) rotate(-135deg); }
+.ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
+/* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
+   (grey), so match that specificity and use !important where tom-select does. */
+.ts-wrapper.multi .ts-control > .item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  margin: 0 0.25rem 0.25rem 0;
   border-radius: 9999px;
-  background-color: #eef2ff; /* brand-50 */
-  color: #4338ca; /* brand-700 */
-  padding: 0.125rem 0.625rem;
-  font-weight: 500;
   border: none;
+  background-color: #e0e7ff !important; /* brand-100 - reads clearly as selected */
+  color: #4338ca !important; /* brand-700 (6.4:1 on brand-100, AA) */
+  padding: 0.1875rem 0.5rem !important; /* beat the plugin's padding-right:0 !important */
+  font-weight: 500;
 }
-.ts-control > .item .remove {
-  border-left: none;
-  color: #6366f1;
-  padding: 0 0.35rem;
+/* the item template hardcodes .active, so keep it the same light brand-100 tint */
+.ts-wrapper.multi .ts-control > .item.active { background-color: #e0e7ff !important; }
+/* "select all" sentinel item (value " ") is a hidden placeholder chip. */
+.ts-control > .item[data-value=" "] { display: none !important; }
+.ts-wrapper.multi .ts-control > .item .remove {
+  border-left: none !important; /* drop tom-select's grey divider */
+  margin-left: 0 !important;
+  padding: 0 0.125rem !important;
+  color: #6366f1; /* brand-500 */
 }
-.ts-control > .item .remove:hover { background: transparent; color: #4338ca; }
+.ts-wrapper.multi .ts-control > .item .remove:hover { background: transparent !important; color: #3730a3; }
+/* The rich MultipleSelectComponent's remove button uses a LineIcons X that isn't
+   loaded on casa_app; draw a plain × instead. Scoped so the basic multiselect's
+   default × (case groups) is untouched. */
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a {
+  color: #4338ca !important; /* brand-700; override the template's text-white so the × shows */
+  border: none !important;
+  background: transparent !important;
+  margin-left: 0.125rem;
+  padding: 0 0.125rem;
+}
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a > i { display: none; }
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a::after { content: "\00d7"; font-size: 0.95rem; line-height: 1; }
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a:hover { color: #312e81 !important; }
 .ts-control input::placeholder { color: #64748b; } /* slate-500 */
 .ts-dropdown {
   border-radius: 0.5rem;
@@ -70,6 +110,18 @@
 }
 .ts-dropdown .option { padding: 0.5rem 0.75rem; color: #334155; } /* slate-700 */
 .ts-dropdown .active { background-color: #eef2ff; color: #4338ca; } /* brand-50 / brand-700 */
+/* Flip the menu above the control when there isn't room below (set by the
+   multiple-select controller's onDropdownOpen). */
+.ts-wrapper.ts-flip-up .ts-dropdown { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 0.25rem; }
+
+/* ------------------------------------------------------------------
+   Form validation. Rails wraps invalid fields in `.field_with_errors`; give them a
+   rose border so the error state reads on the field itself (paired with the
+   shared/_form_errors summary card). rose-500 is 3.67:1 on white (AA UI border).
+------------------------------------------------------------------ */
+.field_with_errors input,
+.field_with_errors select,
+.field_with_errors textarea { border-color: #f43f5e; }
 
 /* ------------------------------------------------------------------
    Native <dialog> modals (the `modal` Stimulus controller). Tailwind's reset

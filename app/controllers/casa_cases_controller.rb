@@ -39,6 +39,8 @@ class CasaCasesController < ApplicationController
   def new
     @casa_case = CasaCase.new(casa_org: current_organization)
     authorize @casa_case
+    @active_nav = "cases"
+    render layout: "casa_app"
   end
 
   def edit
@@ -65,8 +67,9 @@ class CasaCasesController < ApplicationController
     else
       set_contact_types
       @empty_court_date = court_date_unknown?
+      @active_nav = "cases"
       respond_to do |format|
-        format.html { render :new, status: :unprocessable_content }
+        format.html { render :new, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end

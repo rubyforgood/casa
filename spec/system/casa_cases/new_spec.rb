@@ -50,8 +50,8 @@ RSpec.describe "casa_cases/new", type: :system do
 
           select "Test User", from: "casa_case[case_assignments_attributes][0][volunteer_id]"
 
-          within ".top-page-actions" do
-            click_on "Create CASA Case"
+          within ".actions-cc" do
+            click_on "Create case"
           end
 
           expect(page).to have_content(case_number)
@@ -82,7 +82,7 @@ RSpec.describe "casa_cases/new", type: :system do
         select five_years, from: "casa_case_birth_month_year_youth_1i"
 
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(page).to have_content(case_number)
@@ -103,7 +103,7 @@ RSpec.describe "casa_cases/new", type: :system do
         check "casa_case_empty_court_date"
 
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(find("#casa_case_empty_court_date")).to be_checked
@@ -131,7 +131,7 @@ RSpec.describe "casa_cases/new", type: :system do
           check "casa_case_empty_court_date"
 
           within ".actions-cc" do
-            click_on "Create CASA Case"
+            click_on "Create case"
           end
 
           expect(page).to have_content(case_number)
@@ -161,7 +161,7 @@ RSpec.describe "casa_cases/new", type: :system do
           # 2/14/2025 - by default, all contact types are selected on page load so don't need to manually select
 
           within ".actions-cc" do
-            click_on "Create CASA Case"
+            click_on "Create case"
           end
 
           selected_contact_type = find(".ts-control .item").text
@@ -185,7 +185,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
         fill_in "Case number", with: case_number
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(page).to have_current_path(casa_cases_path, ignore_query: true)
