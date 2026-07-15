@@ -9,6 +9,23 @@ design system on the `casadesign` branch.
   checkpoint (see the workflow in `design.md`).
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
+## Next up — resume here (volunteer edit page migration)
+Scoped + planned. Build as ONE coherent casa_app view: every section must be Tailwind before
+flipping `volunteers#edit` to `layout: "casa_app"`, or the un-migrated sections render
+unstyled. It has a **745-line system spec**, so keep the whole thing green. The shared
+user-edit partials (`shared/_edit_form`, `_invite_login`, `_error_messages`, `_manage_active`)
+stay Bootstrap for the supervisor/admin edit pages -> build a self-contained casa_app view.
+1. Header: back-to-case-or-volunteers + "Edit volunteer" + Impersonate + the reminder Dialog.
+2. Profile form: email, display name, phone, DOB, mailing address, reimbursement checkbox
+   (phone/DOB/email validations + confirmable email-change flow). Save changes.
+3. Account card: org, invited / accepted / last-login dates, learning hours.
+4. Status / activation card: active badge, deactivate (confirm), activate, resend invitation,
+   reactivation SMS alert.
+5. Manage cases card: assigned-cases + per-case status + unassign, and an assign-a-case form.
+6. Manage supervisor card: current + unassign, or assign form.
+Flip the controller layout, keep the 745-line spec green, sentence-case labels as you go, then
+do the sentence-case sweep item below.
+
 ## Phase 0 — Stabilize what's shipped
 - [x] Fix stale supervisor dashboard request spec (it still asserted a redirect after
   the dashboard began rendering).
@@ -16,7 +33,7 @@ design system on the `casadesign` branch.
   `needs_attention`).
 - [ ] Sweep shipped pages for Font Awesome `fas fa-*` icons (they don't render on
   Tailwind layouts) and for stray Bootstrap classes doing layout work.
-- [ ] Fix a latent, order-dependent test flake (pre-existing, not design work):
+- [x] Fix a latent, order-dependent test flake (pre-existing, not design work):
   `CaseContact` validates `occurred_at` with `less_than: Time.zone.tomorrow + 1.day`
   in `app/models/case_contact.rb` — a value captured at class-load time, so if the
   class first loads while a spec is time-traveled to the past, the "future" cutoff
