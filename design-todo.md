@@ -123,6 +123,13 @@ design system on the `casadesign` branch.
   uses the native-dialog report modal); the vestigial `CasaCase#hearing_type` / `#judge`
   `belongs_to` + `hearing_type_name` / `judge_name` delegates whose columns were dropped
   in 2023 — still referenced by `supervisors/index` and the legacy case pages).
+- [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI
+  copy / defined terms: the case-details fact labels ("Transition Aged Youth:", "Youth's Date
+  in Care:", "Next Court Date:", "Court Report Status:", "No Court Dates"), the same term on
+  `volunteers/index` + `reports/index`, and any other Title Case labels/headings. It is
+  cross-cutting and locked by ~15 specs (some are `fill_in` field-label locators, not display
+  text), so do it as one deliberate pass. Proper nouns/acronyms (CASA, IEP) excepted; never
+  force-case free-form org data. (See the sentence-case scan rule in `design.md`.)
 - [ ] Decommission the Bootstrap `application` layout + `application.scss` once the last
   page is migrated.
 
