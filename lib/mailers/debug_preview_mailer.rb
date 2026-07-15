@@ -13,11 +13,11 @@ class DebugPreviewMailer < ActionMailer::Base
   # # the "missing_#{role}@example.com" convention so existing preview specs
   # # asserting on that address don't need to change.
   def no_data(role)
-     mail(
-       from: "reply@example.com",
-       to: "missing_#{role}@example.com",
-       subject: "no_preview_data",
-       body: "No #{role} record was found to preview"
-     )
-   end
+    mail(
+      from: "reply@example.com",
+      to: "missing_#{role}@example.com",
+      subject: "no_preview_data",
+      body: "No #{role} record was found to preview"
+    )
+  end
 end
