@@ -166,7 +166,15 @@ left as a grid child floats with equal 20px above and below and reads as detache
 Both the rich `Form::MultipleSelectComponent` (select-all + filterable list) and the basic
 `multiple-select` Stimulus controller render TomSelect, themed in `tailwind.css` (casa_app
 only; Bootstrap pages keep the tom-select.bootstrap5 theme):
-- **Chevron** on the right (`.ts-wrapper::after`) so it reads as a dropdown, like a `<select>`.
+- **Loads blank**: it defaults to an empty field with a placeholder (`Select or search
+  <term>`), **never pre-selected with every option**. `show_all_option` still offers
+  `Select/Unselect all` in the menu. (Contact types is required, so blank plus the "at least
+  one contact type" validation is the correct required-field UX; it is not a reason to
+  default-select everything.)
+- **Chevron**: an injected `bi bi-chevron-down` icon (`.ts-chevron`, appended to the wrapper
+  by the `multiple-select` controller) so it matches the single-selects exactly. Do **not**
+  use a CSS `::after { content: "\fXXX" }` glyph: the CSS minifier drops the escape, so the
+  caret vanishes in the built file (this is why it looked "missing" for so long).
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Flip-up**: the controller's `onDropdownOpen` adds `.ts-flip-up` when the control is near

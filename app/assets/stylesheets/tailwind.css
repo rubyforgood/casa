@@ -48,20 +48,19 @@
   border-color: #6366f1; /* brand-500 */
   box-shadow: 0 0 0 2px rgb(99 102 241 / 0.3);
 }
-/* Chevron so it reads as a dropdown, matching the native <select> pattern. */
-.ts-wrapper::after {
-  content: "";
+/* Chevron: an injected `bi bi-chevron-down` icon (the exact icon the single-selects use),
+   positioned here. The glyph comes from the bootstrap-icons CDN via the `.bi` class, which
+   avoids a `content` escape that the CSS minifier drops. */
+.ts-wrapper .ts-chevron {
   position: absolute;
-  right: 0.875rem;
+  right: 0.75rem;
   top: 50%;
-  width: 0.5rem;
-  height: 0.5rem;
-  border-right: 1.5px solid #64748b; /* slate-500 */
-  border-bottom: 1.5px solid #64748b;
-  transform: translateY(-75%) rotate(45deg);
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #64748b; /* slate-500 */
   pointer-events: none;
 }
-.ts-wrapper.dropdown-active::after { transform: translateY(-25%) rotate(-135deg); }
+.ts-wrapper.dropdown-active .ts-chevron { transform: translateY(-50%) rotate(180deg); }
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
 /* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
    (grey), so match that specificity and use !important where tom-select does. */

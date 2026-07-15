@@ -34,9 +34,15 @@ export default class extends Controller {
     }
   }
 
+  addChevron (control) {
+    const icon = document.createElement('i')
+    icon.className = 'bi bi-chevron-down ts-chevron'
+    icon.setAttribute('aria-hidden', 'true')
+    control.wrapper.appendChild(icon)
+  }
+
   createBasicMultiSelect () {
-    /* eslint-disable no-new */
-    new TomSelect(this.selectTarget, {
+    const control = new TomSelect(this.selectTarget, {
       plugins: {
         remove_button: {
           title: 'Remove this item'
@@ -45,6 +51,7 @@ export default class extends Controller {
       onDropdownOpen,
       onDropdownClose
     })
+    this.addChevron(control)
   }
 
   createMultiSelectWithOptionGroups () {
@@ -69,15 +76,16 @@ export default class extends Controller {
     let initItems = this.selectedItemsValue
     if (showAllOptionCheck) {
       const emptyItem = [' ']
-      initItems = hasInitialItems ? emptyItem.concat(this.selectedItemsValue) : orderedOptionVals
+      // Load blank (placeholder) when nothing is pre-selected; the dropdown's
+      // "Select/Unselect all" still selects everything on demand.
+      initItems = hasInitialItems ? emptyItem.concat(this.selectedItemsValue) : []
     }
 
     const dropdownOptions = showAllOptionCheck
       ? [{ text: 'Select/Unselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
       : this.optionsValue
 
-    /* eslint-disable no-new */
-    new TomSelect(this.selectTarget, {
+    const control = new TomSelect(this.selectTarget, {
       onDropdownOpen,
       onDropdownClose,
       onItemRemove: function (value) {
@@ -126,5 +134,6 @@ export default class extends Controller {
         }
       }
     })
+    this.addChevron(control)
   }
 }

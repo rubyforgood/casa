@@ -237,8 +237,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       find(".ts-control").click
 
       select_all_el = page.find("span[data-test=select-all-input]")
-      # uncheck all contact type options
-      select_all_el.click
+      # contact types load blank (nothing selected) by default
       within ".ts-dropdown-content" do
         expect(page).not_to have_css(".form-check-input--checked")
         expect(page).to have_css(".form-check-input--unchecked", count: 2)

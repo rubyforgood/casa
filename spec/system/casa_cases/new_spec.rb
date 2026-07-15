@@ -35,8 +35,7 @@ RSpec.describe "casa_cases/new", type: :system do
           find(".ts-control").click
 
           select_all_el = page.find("span[data-test=select-all-input]")
-          # uncheck all contact type options
-          select_all_el.click
+          # contact types load blank (nothing selected) by default
           within ".ts-dropdown-content" do
             expect(page).not_to have_css(".form-check-input--checked")
             expect(page).to have_css(".form-check-input--unchecked", count: 2)
@@ -80,6 +79,10 @@ RSpec.describe "casa_cases/new", type: :system do
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
+
+        find(".ts-control").click
+        find("span[data-test=select-all-input]").click
+        find("h1", text: "New case").click
 
         within ".actions-cc" do
           click_on "Create case"
@@ -130,6 +133,10 @@ RSpec.describe "casa_cases/new", type: :system do
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
 
+          find(".ts-control").click
+          find("span[data-test=select-all-input]").click
+          find("h1", text: "New case").click
+
           within ".actions-cc" do
             click_on "Create case"
           end
@@ -158,7 +165,9 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-          # 2/14/2025 - by default, all contact types are selected on page load so don't need to manually select
+          find(".ts-control").click
+          find("span[data-test=select-all-input]").click
+          find("h1", text: "New case").click
 
           within ".actions-cc" do
             click_on "Create case"
