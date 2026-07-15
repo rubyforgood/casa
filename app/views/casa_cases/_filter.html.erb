@@ -3,16 +3,16 @@
     this — the view gates it on can_see_filters?. %>
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
-<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-400" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
 <%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
   <div class="col-span-2 lg:min-w-[16rem] lg:max-w-sm lg:flex-1">
     <%= label_tag :search, "Search", class: label_class %>
     <div class="relative">
-      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-400" aria-hidden="true"></i>
+      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500" aria-hidden="true"></i>
       <%= search_field_tag :search, params[:search], placeholder: "Search case number or volunteer", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{params[:search].present? ? 'pr-9' : 'pr-3'} text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
       <% if params[:search].present? %>
-        <%= link_to casa_cases_path(request.query_parameters.except("search", "page")), "aria-label": "Clear search", class: "absolute right-2.5 top-1/2 -translate-y-1/2 grid h-5 w-5 place-items-center rounded text-slate-400 hover:text-slate-600" do %><i class="bi bi-x-lg text-[11px]" aria-hidden="true"></i><% end %>
+        <%= link_to casa_cases_path(request.query_parameters.except("search", "page")), "aria-label": "Clear search", class: "absolute right-2.5 top-1/2 -translate-y-1/2 grid h-5 w-5 place-items-center rounded text-slate-500 hover:text-slate-600" do %><i class="bi bi-x-lg text-[11px]" aria-hidden="true"></i><% end %>
       <% end %>
     </div>
   </div>

@@ -35,19 +35,19 @@
           <div class="absolute right-0 z-20 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
             <% if @casa_case.active? %>
               <%= link_to edit_casa_case_path(@casa_case), class: "#{menu_item} w-full sm:hidden" do %>
-                <i class="bi bi-pencil text-slate-400" aria-hidden="true"></i> Edit Case Details
+                <i class="bi bi-pencil text-slate-500" aria-hidden="true"></i> Edit Case Details
               <% end %>
             <% end %>
             <%= render "casa_cases/court_report_modal", casa_case: @casa_case, trigger_class: "#{menu_item} w-full text-left", wrapper_class: "contents" %>
             <% if @casa_case.in_transition_age? %>
               <%= link_to casa_case_emancipation_path(@casa_case), class: "#{menu_item} justify-between" do %>
-                <span class="flex items-start gap-2"><i class="bi bi-mortarboard text-slate-400" aria-hidden="true"></i> Emancipation</span>
+                <span class="flex items-start gap-2"><i class="bi bi-mortarboard text-slate-500" aria-hidden="true"></i> Emancipation</span>
                 <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-semibold text-slate-700"><%= @casa_case.decorate.emancipation_checklist_count %></span>
               <% end %>
             <% end %>
             <% if @casa_case.casa_org.show_fund_request %>
               <%= link_to new_casa_case_fund_request_path(@casa_case), class: menu_item do %>
-                <i class="bi bi-cash-coin text-slate-400" aria-hidden="true"></i> New Fund Request
+                <i class="bi bi-cash-coin text-slate-500" aria-hidden="true"></i> New Fund Request
               <% end %>
             <% end %>
           </div>

@@ -147,6 +147,13 @@ do the sentence-case sweep item below.
   cross-cutting and locked by ~15 specs (some are `fill_in` field-label locators, not display
   text), so do it as one deliberate pass. Proper nouns/acronyms (CASA, IEP) excepted; never
   force-case free-form org data. (See the sentence-case scan rule in `design.md`.)
+- [ ] **Contact-type default rename (guarded after-party, do once pages are migrated).** For
+  existing orgs, rename the contact types + the "Social Services" group whose names **exactly**
+  match the old Title Case defaults to the new sentence-case defaults ("Foster Parent" ->
+  "Foster parent", etc., per `ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS`). Exact-match only
+  so org customizations are left alone; associations are by id so contacts are unaffected;
+  **guard the per-org name-uniqueness edge case** (skip a rename if the sentence-case name
+  already exists in that org). New orgs already seed the new names.
 - [ ] Decommission the Bootstrap `application` layout + `application.scss` once the last
   page is migrated.
 
