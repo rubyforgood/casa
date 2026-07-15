@@ -29,7 +29,6 @@ class VolunteerMailerPreview < ActionMailer::Preview
     end
   end
 
-
   # Unlike the other previews above, a valid volunteer here isn't enough on
   # its own, they also need a case contact wanting reimbursement to render
   # against. If they don't have one, DebugPreviewMailer.no_data renders that
