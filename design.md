@@ -43,6 +43,13 @@ inline key:value **fact label** (a `dt` such as `Court report status:`), never o
 title. Audit the views you touch: `grep '<h[123][^>]*>[^<]*:</h'` should return nothing on a
 casa_app page.
 
+Sentence case also covers **app-shipped content**, not just view copy: seed defaults and
+constants (e.g. `ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS`, whose names render as the
+multiselect chips) are sentence-cased too. Before finishing, **scan the touched views and any
+app-shipped names/defaults for Title Case or ALL-CAPS** and fix them. Proper nouns and
+acronyms (CASA, IEP, Twilio) are the exception, and never force-case free-form org data (an
+org may legitimately name a type "ADHD coach").
+
 ### Color
 Brand = indigo. Neutrals = slate. Semantic colors below.
 
