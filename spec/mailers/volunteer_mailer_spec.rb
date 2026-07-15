@@ -41,6 +41,26 @@ RSpec.describe VolunteerMailer, type: :mailer do
     end
   end
 
+  describe ".reimbursement_complete_email" do
+    let(:case_contact) { create(:case_contact, :wants_reimbursement, creator: volunteer) }
+    let(:mail) { VolunteerMailer.reimbursement_complete_email(volunteer, case_contact) }
+
+    it "sends an email confirming the reimbursement was processed" do
+      expect(mail.to).to eq([volunteer.email])
+      expect(mail.subject).to eq("Your reimbursement request has been processed")
+      expect(mail.body.encoded).to match("#{case_contact.miles_driven}mi")
+      expect(mail.body.encoded).to match(case_contact.occurred_at_display)
+    end
+
+    context "when the casa org has a mileage rate" do
+      let!(:mileage_rate) { create(:mileage_rate, casa_org: case_contact.casa_case.casa_org, amount: 6.50, effective_date: 3.days.ago) }
+
+      it "includes the reimbursement amount" do
+        expect(mail.body.encoded).to match("$")
+      end
+    end
+  end
+
   describe ".invitation_instructions for a volunteer" do
     let(:mail) { volunteer.invite! }
     let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }
