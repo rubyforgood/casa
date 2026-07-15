@@ -171,10 +171,13 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   `Select/Unselect all` in the menu. (Contact types is required, so blank plus the "at least
   one contact type" validation is the correct required-field UX; it is not a reason to
   default-select everything.)
-- **Chevron**: an injected `bi bi-chevron-down` icon (`.ts-chevron`, appended to the wrapper
-  by the `multiple-select` controller) so it matches the single-selects exactly. Do **not**
-  use a CSS `::after { content: "\fXXX" }` glyph: the CSS minifier drops the escape, so the
-  caret vanishes in the built file (this is why it looked "missing" for so long).
+- **Chevron**: a `.ts-wrapper::after` **base64-SVG** caret with **`z-index: 2`**. The z-index
+  is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is
+  present but hidden without it (that stacking, not a missing rule, is why the chevron read as
+  "missing" for so long). Do not use a CSS `content` glyph escape (the minifier drops it), a
+  raw non-base64 `data:` URI (broke in the build), or an injected CDN icon-font element (never
+  painted). **Verify a chevron at the pixel level** (screenshot + darkest-pixel), never by
+  computed style, which reports the element as present even when nothing paints.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Flip-up**: the controller's `onDropdownOpen` adds `.ts-flip-up` when the control is near

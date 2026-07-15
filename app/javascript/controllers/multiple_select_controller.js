@@ -34,15 +34,9 @@ export default class extends Controller {
     }
   }
 
-  addChevron (control) {
-    const icon = document.createElement('i')
-    icon.className = 'bi bi-chevron-down ts-chevron'
-    icon.setAttribute('aria-hidden', 'true')
-    control.wrapper.appendChild(icon)
-  }
-
   createBasicMultiSelect () {
-    const control = new TomSelect(this.selectTarget, {
+    /* eslint-disable no-new */
+    new TomSelect(this.selectTarget, {
       plugins: {
         remove_button: {
           title: 'Remove this item'
@@ -51,7 +45,6 @@ export default class extends Controller {
       onDropdownOpen,
       onDropdownClose
     })
-    this.addChevron(control)
   }
 
   createMultiSelectWithOptionGroups () {
@@ -85,7 +78,8 @@ export default class extends Controller {
       ? [{ text: 'Select/Unselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
       : this.optionsValue
 
-    const control = new TomSelect(this.selectTarget, {
+    /* eslint-disable no-new */
+    new TomSelect(this.selectTarget, {
       onDropdownOpen,
       onDropdownClose,
       onItemRemove: function (value) {
@@ -134,6 +128,5 @@ export default class extends Controller {
         }
       }
     })
-    this.addChevron(control)
   }
 }

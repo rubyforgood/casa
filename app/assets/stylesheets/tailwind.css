@@ -48,19 +48,24 @@
   border-color: #6366f1; /* brand-500 */
   box-shadow: 0 0 0 2px rgb(99 102 241 / 0.3);
 }
-/* Chevron: an injected `bi bi-chevron-down` icon (the exact icon the single-selects use),
-   positioned here. The glyph comes from the bootstrap-icons CDN via the `.bi` class, which
-   avoids a `content` escape that the CSS minifier drops. */
-.ts-wrapper .ts-chevron {
+/* Chevron: an inline base64 SVG caret. The key is `z-index`: TomSelect's opaque
+   `.ts-control` paints over a plain `::after`, so every earlier chevron (border caret, CDN
+   icon font, raw data-URI) was actually rendered but hidden behind the control. base64 is
+   minifier- and parser-safe (a raw `data:` URI and a `content` glyph escape both broke in
+   the build). Verified at the pixel level, not just computed style. */
+.ts-wrapper::after {
+  content: "";
   position: absolute;
-  right: 0.75rem;
+  right: 0.7rem;
   top: 50%;
+  width: 1rem;
+  height: 1rem;
   transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #64748b; /* slate-500 */
+  z-index: 2;
+  background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNjQ3NDhiIiBzdHJva2Utd2lkdGg9IjIuNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBzdHJva2UtbGluZWpvaW49InJvdW5kIj48cGF0aCBkPSJNMy41IDYgOCAxMC41IDEyLjUgNiIvPjwvc3ZnPg==");
   pointer-events: none;
 }
-.ts-wrapper.dropdown-active .ts-chevron { transform: translateY(-50%) rotate(180deg); }
+.ts-wrapper.dropdown-active::after { transform: translateY(-50%) rotate(180deg); }
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
 /* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
    (grey), so match that specificity and use !important where tom-select does. */
