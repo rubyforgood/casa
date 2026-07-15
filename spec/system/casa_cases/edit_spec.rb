@@ -442,7 +442,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         find('button[data-action="click->court-order-form#remove"]').click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records of it unless it was included in a previous court report.")
 
-        find("button.swal2-confirm").click
+        click_on "Yes, remove"
         expect(page).not_to have_text(text)
 
         within ".actions-cc" do

@@ -347,6 +347,11 @@ native-dialog replacement for the Bootstrap `Modal::*` suite.
 Shipped instances: the court-report generator (form modal; submit posts via the
 `court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
 action posts via `button_to`, and the trigger, title, message, and labels are locals). A
+confirm can also be opened **programmatically** by a Stimulus controller instead of a trigger
+slot (the court-orders remove): wrap the `<dialog>` in `<div data-controller="modal"
+class="contents">`, mark it `data-modal-target="dialog"` (for the centering rule) and a
+target of the owning controller, call `showModal()` from that controller's action, and wire
+the confirm button to the controller; Cancel / X / backdrop still use `modal#close`. A
 separate **status variant** (the success/thank-you dialog) centers a 48px hero badge + title
 + single Close instead of a header bar. This replaces the legacy Bootstrap `Modal::*`
 components on Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded

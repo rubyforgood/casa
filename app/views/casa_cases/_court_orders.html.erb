@@ -50,3 +50,21 @@
     <% end %>
   </div>
 </div>
+
+<%# Confirm removing a persisted court order. Design-system Dialog: the modal controller
+    centers it and closes it (backdrop / Cancel / X); court-order-form opens it from #remove
+    and does the removal on #confirmRemove. %>
+<div data-controller="modal" class="contents">
+  <dialog data-modal-target="dialog" data-court-order-form-target="confirmDialog"
+          data-action="click->modal#backdropClose" aria-label="Remove this court order?"
+          class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
+    <%= render Dialog::HeaderComponent.new(title: "Remove this court order?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
+    <%= render Dialog::BodyComponent.new do %>
+      <p class="text-sm text-slate-600">Are you sure you want to remove this court order? Doing so will delete all records of it unless it was included in a previous court report.</p>
+    <% end %>
+    <%= render Dialog::FooterComponent.new do %>
+      <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+      <button type="button" data-action="court-order-form#confirmRemove" class="<%= button_classes(:danger) %>">Yes, remove</button>
+    <% end %>
+  </dialog>
+</div>
