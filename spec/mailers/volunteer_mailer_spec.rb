@@ -56,7 +56,14 @@ RSpec.describe VolunteerMailer, type: :mailer do
       let!(:mileage_rate) { create(:mileage_rate, casa_org: case_contact.casa_case.casa_org, amount: 6.50, effective_date: 3.days.ago) }
 
       it "includes the reimbursement amount" do
-        expect(mail.body.encoded).to match("$")
+        # Bare "$" is a regex end-anchor via String#match, not a literal dollar sign.
+        expect(mail.body.encoded).to match(/\$[\d,]+\.\d{2}/)
+      end
+    end
+
+    context "when the casa org has no mileage rate" do
+      it "omits the reimbursement amount rather than rendering a blank or nil value" do
+        expect(mail.body.encoded).not_to match(/\$[\d,]+\.\d{2}/)
       end
     end
   end
