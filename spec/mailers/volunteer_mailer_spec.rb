@@ -66,6 +66,14 @@ RSpec.describe VolunteerMailer, type: :mailer do
         expect(mail.body.encoded).not_to match(/\$[\d,]+\.\d{2}/)
       end
     end
+
+    describe "the currency pattern itself" do
+      # An unescaped "." would still match a real decimal point, so neither
+      # test above would catch it regressing; guard the escape directly.
+      it "does not match if the decimal point is some other character" do
+        expect("$40X50").not_to match(/\$[\d,]+\.\d{2}/)
+      end
+    end
   end
 
   describe ".invitation_instructions for a volunteer" do
