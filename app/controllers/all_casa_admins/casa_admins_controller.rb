@@ -22,11 +22,10 @@ class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
 
   def update
     @casa_admin = CasaAdmin.find(params[:id])
+    @casa_admin.skip_reconfirmation!
     if @casa_admin.update(all_casa_admin_params)
-      notice = check_unconfirmed_email_notice(@casa_admin)
-
       @casa_admin.filter_old_emails!(@casa_admin.email)
-      redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: notice
+      redirect_to edit_all_casa_admins_casa_org_casa_admin_path(@casa_org), notice: "Casa admin was successfully updated."
     else
       render :edit, status: :unprocessable_content
     end

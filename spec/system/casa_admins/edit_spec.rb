@@ -38,24 +38,14 @@ RSpec.describe "casa_admins/edit", type: :system do
       admin.reload
     end
 
-    it "sends a confirmation email upon submission and does not change the user's displayed email" do
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-      expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Click here to confirm your email")
+    it "updates the email immediately without requiring confirmation" do
+      expect(ActionMailer::Base.deliveries.count).to eq(0)
 
-      expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
-      expect(page).to have_field("Email", with: @old_email)
-      admin.reload
-      expect(admin.unconfirmed_email).to eq("new_admin_email@example.com")
-    end
-
-    it "succesfully updates the user email once the user confirms the changes" do
-      admin.confirm
-      visit edit_casa_admin_path(admin)
-
+      expect(page).to have_text "Casa Admin was successfully updated."
       expect(page).to have_field("Email", with: "new_admin_email@example.com")
       admin.reload
+      expect(admin.email).to eq("new_admin_email@example.com")
+      expect(admin.unconfirmed_email).to be_nil
       expect(admin.old_emails).to eq([@old_email])
     end
   end

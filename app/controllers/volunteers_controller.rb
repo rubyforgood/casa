@@ -61,11 +61,10 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
+    @volunteer.skip_reconfirmation!
     if @volunteer.update(update_volunteer_params)
-      notice = check_unconfirmed_email_notice(@volunteer)
-
       @volunteer.filter_old_emails!(@volunteer.email)
-      redirect_to edit_volunteer_path(@volunteer), notice: notice
+      redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was successfully updated."
     else
       render :edit, status: :unprocessable_content
     end
