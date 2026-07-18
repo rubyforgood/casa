@@ -42,6 +42,9 @@ Rails.application.configure do
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
+  # Do not fall back to on-demand asset compilation; assets are precompiled at build time.
+  config.assets.compile = false
+
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :microsoft
 
