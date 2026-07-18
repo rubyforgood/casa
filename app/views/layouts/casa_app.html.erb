@@ -53,7 +53,14 @@
 
     <div class="flex min-w-0 flex-1 flex-col">
       <%= render "layouts/impersonation_banner" %>
-      <header class="flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
+      <%# relative z-[25] keeps the top bar (and its account/notification dropdowns) above page
+          content: the account menu is an absolute panel inside this header, and relying on the
+          header's backdrop-blur stacking context alone let any page element with its own stacking
+          context (a positioned z-* toolbar, a transform/hover-lift card, a native control) tie it
+          and win by DOM order — painting a page button over the open dropdown. 25 sits above all
+          page content (which tops out at z-20) yet BELOW the mobile nav scrim (z-30) so the drawer
+          still dims the header, and below the sidebar drawer (z-40) and native <dialog> modals. %>
+      <header class="relative z-[25] flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
         <button type="button" id="nav-toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
           <i class="bi bi-list text-xl" aria-hidden="true"></i>
         </button>

@@ -460,6 +460,14 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   `.alert`) *and* the a11y `role` (`status`/`alert`). The class is a no-op on Tailwind but lets
   specs written against the legacy SweetAlert notifier match on casa_app (e.g. a create that
   redirects to a migrated edit page).
+- **Stacking order (z-index).** The top bar is `relative z-[25]` so its account / notification
+  dropdowns (absolute panels *inside* the header) always paint above page content. Relying on the
+  header's `backdrop-blur` stacking context alone was fragile: any page element that makes its own
+  stacking context (a positioned `z-*` toolbar, a `transform` / hover-lift card, a native control)
+  ties the header and wins by DOM order — painting a page **button over the open dropdown**. The
+  full order is **page content ≤ z-20 < top bar `z-[25]` < mobile nav scrim `z-30`** (so the open
+  drawer still dims the header) **< sidebar drawer `z-40` < native `<dialog>` modals** (top layer).
+  Keep page-content z-index ≤ 20; verify overlays with `elementFromPoint`, not by eye.
 
 ## Key patterns
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
