@@ -2,6 +2,7 @@ class VolunteersController < ApplicationController
   include SmsBodyHelper
 
   before_action :set_volunteer, except: %i[index new create datatable stop_impersonating]
+  before_action :set_edit_context, only: %i[edit update activate deactivate]
   after_action :verify_authorized, except: %i[stop_impersonating]
 
   def index
@@ -56,7 +57,7 @@ class VolunteersController < ApplicationController
 
   def edit
     authorize @volunteer
-    @supervisors = policy_scope current_organization.supervisors.active
+    render layout: "casa_app"
   end
 
   def update
@@ -67,7 +68,7 @@ class VolunteersController < ApplicationController
       @volunteer.filter_old_emails!(@volunteer.email)
       redirect_to edit_volunteer_path(@volunteer), notice: notice
     else
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -82,7 +83,7 @@ class VolunteersController < ApplicationController
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated. They have been sent an email."
       end
     else
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -91,7 +92,7 @@ class VolunteersController < ApplicationController
     if @volunteer.deactivate
       redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was deactivated."
     else
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -149,6 +150,14 @@ class VolunteersController < ApplicationController
 
   def set_volunteer
     @volunteer = Volunteer.find(params[:id])
+  end
+
+  # Shared setup for the actions that render the casa_app edit page (edit + the
+  # update/activate/deactivate failure re-renders): light up the sidebar nav and
+  # load the active supervisors the "assign a supervisor" form needs.
+  def set_edit_context
+    @active_nav = "volunteers"
+    @supervisors = policy_scope current_organization.supervisors.active
   end
 
   def generate_devise_password

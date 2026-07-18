@@ -1,80 +1,66 @@
-<div>
-  <h1 class="pt-5 mb-2">Manage Cases</h1>
+<%# Cases assigned to the volunteer (casa_app twin). A card list, not a wide table: the edit
+    column is narrow and each row has several fields (see design.md). #manage_cases and the
+    per-row case_assignment_<id> dom_ids are system-spec hooks; the status phrasings
+    ("Volunteer is Active/Unassigned", "Case was deactivated on:") and the Assign/Unassign Case
+    labels are spec-locked. %>
+<% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
+<section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="border-b border-slate-100 p-4 sm:px-6">
+    <h2 class="text-base font-semibold text-slate-900">Cases</h2>
+  </div>
 
-  <div class="card card-container">
-    <div class="card-body">
-      <% if @volunteer.case_assignments.any? %>
-        <h3 class="my-3">Assigned Cases</h3>
-        <div class="table-wrapper table-responsive">
-          <table class='table' id='manage_cases'>
-            <thead>
-              <tr>
-                <th>Case Number</th>
-                <th>Transition Aged Youth</th>
-                <th>Assignment status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @volunteer.case_assignments_with_cases.each do |assignment| %>
-                <tr id="<%= dom_id(assignment) %>">
-                  <td>
-                    <%= link_to assignment.casa_case.case_number, casa_case_path(assignment.casa_case) %>
-                    <%= volunteer_badge(assignment.casa_case, current_user) %>
-                  </td>
-                  <td><%= assignment.casa_case.decorate.transition_aged_youth %></td>
-                  <td>
-                    <% if @volunteer.active? && assignment.casa_case.active? && assignment.active? %>
-                      Volunteer is <%= render BadgeComponent.new(text: "Active", type: :success) %>
-                    <% elsif @volunteer.active? && assignment.casa_case.active? && assignment.inactive? %>
-                      Volunteer is <%= render BadgeComponent.new(text: "Unassigned", type: :danger) %>
-                    <% elsif @volunteer.active? %>
-                      Case was deactivated
-                      on: <%= I18n.l(assignment.casa_case.updated_at, format: :standard, default: nil) %>
-                    <% else %>
-                      Deactivated
-                    <% end %>
-                  </td>
-                  <td>
-                    <% if @volunteer.active? && assignment.active && assignment.casa_case.active? %>
-                      <%- if Pundit.policy(current_user, @volunteer).unassign_case? %>
-                        <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id),
-                                      method: :patch,
-                                      class: "main-btn danger-btn btn-hover btn-sm" do %>
-                          <i class="lni lni-cross-circle mr-5"></i> Unassign Case
-                        <% end %>
-                      <%- end %>
-                    <% else %>
-                      None
-                    <% end %>
-                  </td>
-                </tr>
+  <% if @volunteer.case_assignments.any? %>
+    <ul id="manage_cases" class="divide-y divide-slate-100">
+      <% @volunteer.case_assignments_with_cases.each do |assignment| %>
+        <% casa_case = assignment.casa_case %>
+        <li id="<%= dom_id(assignment) %>" class="p-4 sm:px-6">
+          <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+            <div class="min-w-0">
+              <%= link_to casa_case.case_number, casa_case_path(casa_case), class: "text-sm font-semibold text-brand-600 hover:text-brand-700 hover:underline" %>
+              <% if casa_case.in_transition_age? %>
+                <span class="ml-1 inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">Transition-aged youth</span>
               <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% end %>
-
-      <% if @volunteer.active? %>
-        <br/>
-        <h3 class="mb-3">Assign a New Case</h3>
-
-        <%= form_with(model: CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id)) do |form| %>
-
-          <div class="select-style-1">
-            <label for='case_assignment_casa_case_id'>Select a Case</label>
-            <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {},
-                            {class: "form-control select2"} %>
+            </div>
+            <% if @volunteer.active? && casa_case.active? && assignment.active? %>
+              <span class="<%= pill %> bg-emerald-50 text-emerald-700"><i class="bi bi-check-circle" aria-hidden="true"></i> Volunteer is Active</span>
+            <% elsif @volunteer.active? && casa_case.active? && assignment.inactive? %>
+              <span class="<%= pill %> bg-rose-50 text-rose-700"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Volunteer is Unassigned</span>
+            <% elsif @volunteer.active? %>
+              <span class="text-xs text-slate-500">Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %></span>
+            <% else %>
+              <span class="<%= pill %> bg-slate-100 text-slate-600"><i class="bi bi-dash-circle" aria-hidden="true"></i> Deactivated</span>
+            <% end %>
           </div>
 
-          <%= button_tag(
-            type: "submit",
-            class: "main-btn primary-btn btn-hover btn-sm"
-          ) do %>
-            <i class="lni lni-checkmark mr-5"></i> Assign Case
+          <% if @volunteer.active? && assignment.active && casa_case.active? && Pundit.policy(current_user, @volunteer).unassign_case? %>
+            <div class="mt-3">
+              <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
+                <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign Case
+              <% end %>
+            </div>
           <% end %>
-        <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="p-4 text-sm text-slate-500 sm:px-6">No cases are assigned to this volunteer yet.</p>
+  <% end %>
+
+  <% if @volunteer.active? %>
+    <div class="border-t border-slate-100 bg-slate-50 p-4 sm:px-6">
+      <h3 class="text-sm font-semibold text-slate-900">Assign a new case</h3>
+      <%= form_with model: CaseAssignment.new, url: case_assignments_path(volunteer_id: @volunteer.id) do |form| %>
+        <div class="mt-2 flex flex-wrap items-end gap-3">
+          <div class="min-w-0 flex-1">
+            <label for="case_assignment_casa_case_id" class="sr-only">Select a Case</label>
+            <div class="relative">
+              <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {}, class: "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+            </div>
+          </div>
+          <%= button_tag "Assign Case", type: "submit", class: button_classes(:primary) %>
+        </div>
       <% end %>
     </div>
-  </div>
-</div>
+  <% end %>
+</section>

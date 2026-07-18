@@ -52,6 +52,7 @@
     </aside>
 
     <div class="flex min-w-0 flex-1 flex-col">
+      <%= render "layouts/impersonation_banner" %>
       <header class="flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
         <button type="button" id="nav-toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
           <i class="bi bi-list text-xl" aria-hidden="true"></i>
@@ -89,7 +90,9 @@
           <div class="space-y-2 px-4 pt-4 sm:px-6 lg:px-8">
             <% flash.each do |type, message| %>
               <% next if message.blank? %>
-              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+              <%# The flash key doubles as a class (`notice`/`alert`) — a no-op on Tailwind but the
+                  legacy-notifier hook specs assert (flash parity), alongside the a11y role. %>
+              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= type %> rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
             <% end %>
           </div>
         <% end %>

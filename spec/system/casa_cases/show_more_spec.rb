@@ -20,7 +20,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
 
       click_on "Andy Dwyer"
 
-      expect(page).to have_text("Editing Volunteer")
+      expect(page).to have_text("Edit volunteer")
     end
 
     it "sends reminder to volunteer", :js do

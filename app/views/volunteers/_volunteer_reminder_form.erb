@@ -1,3 +1,18 @@
-<%= form_with url: reminder_volunteer_path(volunteer), method: :patch, id: "cc-check" do %>
-  <%= render "volunteers/send_reminder_button", volunteer: volunteer %>
-<% end %>
+<%# Send-a-reminder form (casa_app twin). Emails the volunteer to log case contacts; the CC
+    checkbox copies the supervisor (and admin, for admins) via the role-aware decorator label.
+    Kept as a visible inline form (not a Dialog) because the non-JS system specs assert the
+    button + checkbox and check/uncheck it directly. #cc-check / #reminder_button / with_cc are
+    spec hooks; "Send Reminder" is spec-locked. %>
+<div class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+  <%= form_with url: reminder_volunteer_path(volunteer), method: :patch, id: "cc-check" do %>
+    <div class="flex flex-wrap items-center gap-x-4 gap-y-3">
+      <%= button_tag type: "submit", id: "reminder_button", class: button_classes(:secondary) do %>
+        <i class="bi bi-alarm" aria-hidden="true"></i> Send Reminder
+      <% end %>
+      <label class="inline-flex cursor-pointer items-center gap-2 text-sm text-slate-600">
+        <%= check_box_tag "with_cc", 1, false, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+        <%= volunteer.decorate.cc_reminder_text %>
+      </label>
+    </div>
+  <% end %>
+</div>

@@ -1,59 +1,82 @@
-<div class="notes">
-  <h1 class="pt-5 mb-2">Notes</h1>
-
-  <div class="card card-container">
-    <div class="card-body">
-      <% if @volunteer.notes != [] %>
-        <h3 class="mb-4">Notes About This Volunteer</h3>
-        <div class="table-wrapper table-responsive">
-          <table class="table">
-            <thead>
-              <tr>
-                <th>Note</th>
-                <th>Creator</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              <% @volunteer.notes.each do |note| %>
-                <tr>
-                  <td class="min-width"><%= note.content %></td>
-                  <td class="min-width"><%= formatted_name(note.creator.display_name) %></td>
-                  <td class="min-width"><%= l(note.created_at, format: :standard) %></td>
-                  <td class="min-width">
-                    <%= link_to edit_volunteer_note_path(@volunteer, note), class: "main-btn primary-btn btn-hover btn-sm" do %>
-                      <i class="lni lni-pencil-alt mr-5"></i> Edit
-                    <% end %>
-                    <%= link_to volunteer_note_path(@volunteer, note), class: "main-btn danger-btn btn-hover btn-sm", method: :delete do %>
-                      <i class="lni lni-trash-can mr-5"></i> Delete
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            </tbody>
-          </table>
-        </div>
-      <% end %>
-      <br>
-      <%= form_with(model: @volunteer.notes.new, local: true, url: volunteer_notes_path(@volunteer),
-id: "volunteer-note-form") do |form| %>
-        <h3 class="mb-3">Create a New Note</h3>
-        <div class="input-style-1">
-          <%= form.text_area :content, :rows => 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.",
-          class: "form-control" %>
-        </div>
-
-        <div class="actions">
-          <%= button_tag(
-            type: "submit",
-            class: "main-btn primary-btn btn-hover btn-sm",
-            id: "note-submit"
-          ) do %>
-            <i class="lni lni-save mr-5"></i> Save Note
-          <% end %>
-        </div>
-      <% end %>
-    </div>
+<%# Notes about the volunteer (casa_app twin; admins/supervisors only — volunteers are
+    redirected before this renders). Responsive: stacked cards below md, a table at md+ (the
+    table stays in the DOM so the .notes .table tbody tr / Delete spec hooks hold at every
+    width — rack_test ignores the `hidden` class). .notes, note[content], #note-submit,
+    #volunteer-note-form are spec hooks; "Save Note"/"Delete"/"Edit" are spec-locked. %>
+<section class="notes overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="border-b border-slate-100 p-4 sm:px-6">
+    <h2 class="text-base font-semibold text-slate-900">Notes</h2>
   </div>
-</div>
+
+  <% if @volunteer.notes.any? %>
+    <div class="p-4 sm:px-6">
+      <h3 class="mb-3 text-sm font-semibold text-slate-900">Notes about this volunteer</h3>
+
+      <%# Mobile: stacked cards %>
+      <ul class="space-y-3 md:hidden">
+        <% @volunteer.notes.each do |note| %>
+          <li class="rounded-xl border border-slate-200 p-3">
+            <p class="text-sm text-slate-800"><%= note.content %></p>
+            <dl class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
+              <div class="flex gap-1"><dt>Creator:</dt><dd class="font-medium text-slate-700"><%= formatted_name(note.creator.display_name) %></dd></div>
+              <div class="flex gap-1"><dt>Date:</dt><dd class="font-medium text-slate-700"><%= l(note.created_at, format: :standard) %></dd></div>
+            </dl>
+            <div class="mt-3 flex items-center gap-2">
+              <%= link_to edit_volunteer_note_path(@volunteer, note), class: button_classes(:secondary) do %>
+                <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+              <% end %>
+              <%= link_to volunteer_note_path(@volunteer, note), method: :delete, class: button_classes(:danger_outline) do %>
+                <i class="bi bi-trash" aria-hidden="true"></i> Delete
+              <% end %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+
+      <%# md+: table %>
+      <div class="hidden overflow-x-auto md:block">
+        <table class="table w-full text-left text-sm">
+          <thead>
+            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-600">
+              <th scope="col" class="py-2 pr-4 font-semibold">Note</th>
+              <th scope="col" class="py-2 pr-4 font-semibold">Creator</th>
+              <th scope="col" class="py-2 pr-4 font-semibold">Date</th>
+              <th scope="col" class="py-2"><span class="sr-only">Actions</span></th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <% @volunteer.notes.each do |note| %>
+              <tr>
+                <td class="py-3 pr-4 align-top text-slate-800"><%= note.content %></td>
+                <td class="py-3 pr-4 align-top text-slate-600"><%= formatted_name(note.creator.display_name) %></td>
+                <td class="py-3 pr-4 align-top whitespace-nowrap text-slate-600"><%= l(note.created_at, format: :standard) %></td>
+                <td class="py-3 align-top">
+                  <div class="flex items-center gap-2">
+                    <%= link_to edit_volunteer_note_path(@volunteer, note), class: button_classes(:secondary) do %>
+                      <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+                    <% end %>
+                    <%= link_to volunteer_note_path(@volunteer, note), method: :delete, class: button_classes(:danger_outline) do %>
+                      <i class="bi bi-trash" aria-hidden="true"></i> Delete
+                    <% end %>
+                  </div>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="border-t border-slate-100 bg-slate-50 p-4 sm:px-6">
+    <%= form_with model: @volunteer.notes.new, url: volunteer_notes_path(@volunteer), id: "volunteer-note-form" do |form| %>
+      <h3 class="mb-3 text-sm font-semibold text-slate-900">Create a new note</h3>
+      <%= form.text_area :content, rows: 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.", class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+      <div class="actions mt-3">
+        <%= button_tag type: "submit", id: "note-submit", class: button_classes(:primary) do %>
+          <i class="bi bi-save" aria-hidden="true"></i> Save Note
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+</section>

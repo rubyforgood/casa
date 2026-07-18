@@ -123,7 +123,7 @@ RSpec.describe "view all volunteers", :js, type: :system do
         click_on "Edit"
       end
 
-      expect(page).to have_text("Editing Volunteer")
+      expect(page).to have_text("Edit volunteer")
     end
 
     it "can go to the new volunteer page" do

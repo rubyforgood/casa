@@ -249,7 +249,10 @@ shows "Next court date" instead).
 
 **Responsive:** render the full table in `hidden md:block` and a stacked-card list below `md`
 (`md:hidden`, one card per row with a `<dl>` of labeled fields). A data table never relies on
-horizontal scroll alone. The exception is a density **matrix** (the health heatmap), which keeps
+horizontal scroll alone. When a spec asserts a table hook (e.g. `.notes .table tbody tr` on the
+volunteer edit page), keep the `<table>` in the DOM as `hidden md:block` rather than dropping it
+below `md`: rack_test ignores the `hidden` class, so the hook holds at every width while the
+`md:hidden` card twin serves phones. The exception is a density **matrix** (the health heatmap), which keeps
 horizontal scroll with a sticky axis column (`sticky left-0 z-10 bg-white`); stacking a 2D matrix
 into cards would destroy the visualization.
 
@@ -429,11 +432,34 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 - **Content**: `bg-slate-50`, generous padding, cards. Org announcement banners render
   at the top of the content area (`layouts/_casa_banner`). Full org logo is reserved for
   contexts with room (sign-in, court reports / exports), not the shell.
+- **Impersonation banner** (`layouts/_impersonation_banner`, above the top bar): when
+  `current_user != true_user`, a full-width amber-400 bar (amber-950 ink, ~8:1) whose whole
+  surface is the "stop impersonating" link. It carries a `.header` hook because the volunteer
+  edit spec asserts the banner text `within(".header")` after impersonating lands on a
+  casa_app page.
+- **Flash strip parity**: each flash div carries the flash key as a class (`.notice` /
+  `.alert`) *and* the a11y `role` (`status`/`alert`). The class is a no-op on Tailwind but lets
+  specs written against the legacy SweetAlert notifier match on casa_app (e.g. a create that
+  redirects to a migrated edit page).
 
 ## Key patterns
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.
+- **Person edit page** (`volunteers#edit` is the reference): one `max-w-4xl` column of cards —
+  back link, an identity header (honorific-free name + email, with **Impersonate** as a
+  `:secondary` action and **no** top primary, since a fill-then-save page's primary Submit
+  lives at the form bottom), then Profile (two-column field grid), Account (`dl` metadata
+  grid), Status (activation controls), Cases (card list, not a wide table, in a narrow
+  column), Supervisor, and Notes. Fields are editable vs read-only per `update_user_setting?`
+  (the read-only branch omits the field id so the policy view-specs still pass). The current
+  supervisor renders as dark identifying text, not a link (their edit page is still Bootstrap —
+  linking there would trap the flow). A destructive link that a `:js` spec drives with
+  `accept_confirm`/`dismiss_confirm` keeps the **UJS `data: {confirm:}`** (native
+  `window.confirm`), *not* the Dialog confirm — the Capybara confirm helpers can only operate a
+  native confirm. Because a still-Bootstrap page (supervisors/edit) shares the `manage_active`
+  partial *name*, the casa_app page rebuilds its own `volunteers/_manage_active` twin and leaves
+  `supervisors/_manage_active` untouched.
 
 ## Design decisions (rationale)
 
@@ -525,12 +551,12 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Supervisor dashboard (triage-pattern reference)
 - [x] Notifications
 - [x] Edit profile
-- [ ] Other app-shell leaf pages (impersonation banner, help link, flash parity)
+- [~] Other app-shell leaf pages (impersonation banner + flash parity shipped; help-link destination remains)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [ ] Case show/new/edit, case contacts, reports, settings
-- [ ] Management rosters, admin CRUD long-tail, all-CASA-admin area
+- [~] Management rosters (volunteers#edit shipped — the person-edit reference; volunteers/supervisors index, supervisors#edit, case assignments remain), admin CRUD long-tail, all-CASA-admin area
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

@@ -9,22 +9,29 @@ design system on the `casadesign` branch.
   checkpoint (see the workflow in `design.md`).
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
-## Next up — resume here (volunteer edit page migration)
-Scoped + planned. Build as ONE coherent casa_app view: every section must be Tailwind before
-flipping `volunteers#edit` to `layout: "casa_app"`, or the un-migrated sections render
-unstyled. It has a **745-line system spec**, so keep the whole thing green. The shared
-user-edit partials (`shared/_edit_form`, `_invite_login`, `_error_messages`, `_manage_active`)
-stay Bootstrap for the supervisor/admin edit pages -> build a self-contained casa_app view.
-1. Header: back-to-case-or-volunteers + "Edit volunteer" + Impersonate + the reminder Dialog.
-2. Profile form: email, display name, phone, DOB, mailing address, reimbursement checkbox
-   (phone/DOB/email validations + confirmable email-change flow). Save changes.
-3. Account card: org, invited / accepted / last-login dates, learning hours.
-4. Status / activation card: active badge, deactivate (confirm), activate, resend invitation,
-   reactivation SMS alert.
-5. Manage cases card: assigned-cases + per-case status + unassign, and an assign-a-case form.
-6. Manage supervisor card: current + unassign, or assign form.
-Flip the controller layout, keep the 745-line spec green, sentence-case labels as you go, then
-do the sentence-case sweep item below.
+## Next up — resume here
+The volunteer edit page migration (below) is **shipped**. Good next candidates: the volunteers
+index (Phase 4) or the deferred sentence-case sweep, which can now also fold in this page's
+spec-locked Title Case labels.
+
+## Volunteer edit page migration — [x] SHIPPED
+Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
+Bootstrap user-edit partials stay for the supervisor/admin edit pages. All **745 system-spec
+examples green** (incl. the 2 previously-red impersonation examples, fixed by the new casa_app
+impersonation banner), the view + request specs green, and no horizontal overflow at 375–1280.
+The select chevron was darkest-pixel verified (minima 114 = slate-500). See the **Person edit
+page** pattern in `design.md`.
+- [x] Header: back-to-case-or-volunteers + "Edit volunteer" + Impersonate. (Reminder is a visible
+  inline card, not a Dialog — the non-JS specs check/uncheck it directly.)
+- [x] Profile form: email, display name, phone, DOB, mailing address, reimbursement checkbox
+  (editable vs read-only per `update_user_setting?`; confirmable email-change flow).
+- [x] Account card: org, invited / accepted / last-login dates, learning hours.
+- [x] Status / activation card: active pill, deactivate (UJS `data-confirm`, since a `:js` spec
+  drives `accept_confirm`), activate, resend invitation, reactivation SMS.
+- [x] Manage cases card (card list) + assign-a-case form.
+- [x] Manage supervisor card + assign form (supervisor name is dark text, not a flow-trap link).
+- Follow-up: this page's spec-locked Title Case labels (Submit, Assign Case, Resend Invitation,
+  Current Supervisor:, Assign/Select a Supervisor, Save Note, ...) are queued for the sweep below.
 
 ## Phase 0 — Stabilize what's shipped
 - [x] Fix stale supervisor dashboard request spec (it still asserted a redirect after
@@ -44,10 +51,13 @@ do the sentence-case sweep item below.
 - [x] Notifications (`notifications#index`).
 - [x] Edit profile (`users#edit`) — profile, change password, change email, languages.
   Rebuilt the Bootstrap collapse accordions with a `disclosure` Stimulus controller.
-- [ ] Impersonation banner inside `casa_app` (currently only in the legacy header).
+- [x] Impersonation banner inside `casa_app` (`layouts/_impersonation_banner`, above the top
+  bar; `.header` hook + amber-400/amber-950 ~8:1). Fixed the 2 impersonation examples that had
+  been red since the volunteer dashboard moved to casa_app.
 - [ ] Help link + sign-out in the account menu reach a consistent destination.
-- [ ] Flash / notifier parity — reconcile the `casa_app` flash strip with the legacy
-  SweetAlert notifier.
+- [x] Flash / notifier parity — the `casa_app` flash strip now carries the flash key as a class
+  (`.notice` / `.alert`) alongside `role="status"/"alert"`, so legacy-notifier specs match on
+  casa_app (a richer SweetAlert-style toast is still optional, not required).
 
 ## Phase 2 — Role landing dashboards
 - [x] Volunteer dashboard / landing — triage (active cases, cases needing a contact,
@@ -81,7 +91,8 @@ do the sentence-case sweep item below.
 - [ ] Case contacts "new design" table (`case_contacts/case_contacts_new_design`).
 
 ## Phase 4 — Management & rosters
-- [ ] Volunteers index + edit.
+- [~] Volunteers index + edit. (`volunteers#edit` shipped — the casa_app person-edit reference;
+  index still Bootstrap.)
 - [ ] Supervisors index + edit.
 - [ ] Case assignments.
 - [ ] Learning hours (volunteer + supervisor/admin views).
