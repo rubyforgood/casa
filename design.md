@@ -204,10 +204,10 @@ select + Copy button with a Dialog confirm (the `copy-court-orders` controller P
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`
-on the court-date pages, `shared/_manage_volunteers` on supervisors/edit), do **not** restyle
-it in place: Tailwind classes render unstyled on Bootstrap and the reverse. Add a
-**casa_app-specific Tailwind twin** (`casa_cases/_court_orders`, `casa_cases/_volunteer_assignment`)
-that preserves every JS hook (ids, classes, data-actions, field names, and any DOM
+on the court-date pages, `shared/_edit_form` / `_invite_login` on the casa_admin edit page), do
+**not** restyle it in place: Tailwind classes render unstyled on Bootstrap and the reverse. Add a
+**casa_app-specific Tailwind twin** (`casa_cases/_court_orders`, `casa_cases/_volunteer_assignment`,
+`supervisors/_manage_volunteers`) that preserves every JS hook (ids, classes, data-actions, field names, and any DOM
 adjacency the JS relies on). A legacy global-jQuery flow (copy-from-sibling) can instead be
 reimplemented as a small Stimulus controller on the twin, leaving the jQuery and the shared
 partial untouched for the Bootstrap pages.
@@ -471,14 +471,16 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   lives at the form bottom), then Profile (two-column field grid), Account (`dl` metadata
   grid), Status (activation controls), Cases (card list, not a wide table, in a narrow
   column), Supervisor, and Notes. Fields are editable vs read-only per `update_user_setting?`
-  (the read-only branch omits the field id so the policy view-specs still pass). The current
-  supervisor renders as dark identifying text, not a link (their edit page is still Bootstrap —
-  linking there would trap the flow). A destructive link that a `:js` spec drives with
-  `accept_confirm`/`dismiss_confirm` keeps the **UJS `data: {confirm:}`** (native
-  `window.confirm`), *not* the Dialog confirm — the Capybara confirm helpers can only operate a
-  native confirm. Because a still-Bootstrap page (supervisors/edit) shares the `manage_active`
-  partial *name*, the casa_app page rebuilds its own `volunteers/_manage_active` twin and leaves
-  `supervisors/_manage_active` untouched.
+  (the read-only branch omits the field id so the policy view-specs still pass). A person's
+  supervisor renders as dark identifying text, not a link (a valid honorific-free name treatment;
+  now that supervisors/edit is migrated too, linking it is an available polish rather than a flow
+  trap). A destructive link that a `:js` spec drives with `accept_confirm`/`dismiss_confirm` keeps
+  the **UJS `data: {confirm:}`** (native `window.confirm`), *not* the Dialog confirm — the Capybara
+  confirm helpers can only operate a native confirm. **`supervisors#edit` follows this same shape**
+  (Profile / Account / Status / Volunteers). The `manage_active` partial *name* is shared by both
+  edit pages, so each role keeps its own Tailwind twin (`volunteers/_manage_active`,
+  `supervisors/_manage_active`); likewise `supervisors/_manage_volunteers` is the casa_app twin of
+  the shared Bootstrap `manage_volunteers`.
 
 ## Design decisions (rationale)
 
@@ -575,9 +577,8 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [ ] Case show/new/edit, case contacts, reports, settings
-- [~] Management rosters (volunteers#edit + volunteers#index shipped — the person-edit and
-  roster references; supervisors index/edit, case assignments remain), admin CRUD long-tail,
-  all-CASA-admin area
+- [~] Management rosters (volunteers + supervisors index/edit shipped — the person-edit and
+  roster references; case assignments remain), admin CRUD long-tail, all-CASA-admin area
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

@@ -19,7 +19,7 @@ RSpec.describe "supervisors/edit", type: :system do
         click_on "Edit", match: :first
       end
 
-      expect(page).to have_text("Editing Supervisor")
+      expect(page).to have_text("Edit supervisor")
     end
 
     it "can edit supervisor by clicking on the supervisor's name from the supervisors list page" do
@@ -33,7 +33,7 @@ RSpec.describe "supervisors/edit", type: :system do
         click_on supervisor_name
       end
 
-      expect(page).to have_text("Editing Supervisor")
+      expect(page).to have_text("Edit supervisor")
     end
 
     context "with invalid data" do

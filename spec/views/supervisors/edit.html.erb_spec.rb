@@ -54,11 +54,13 @@ RSpec.describe "supervisors/edit", type: :view do
 
       render template: "supervisors/edit"
 
-      expect(rendered).to have_text("Added to system ")
-      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("CASA organization")
+      expect(rendered).to have_text("Added to system")
+      expect(rendered).to have_text("Invitation email sent")
       expect(rendered).to have_text("Last logged in")
-      expect(rendered).to have_text("Invitation accepted \n  never")
-      expect(rendered).to have_text("Password reset last sent \n  never")
+      expect(rendered).to have_text("Invitation accepted")
+      expect(rendered).to have_text("Password reset last sent")
+      expect(rendered).to have_text("never")
     end
 
     it "shows profile info form fields as editable for a supervisor editing their own profile" do
@@ -99,11 +101,13 @@ RSpec.describe "supervisors/edit", type: :view do
 
       render template: "supervisors/edit"
 
-      expect(rendered).to have_text("Added to system ")
-      expect(rendered).to have_text("Invitation email sent \n  never")
+      expect(rendered).to have_text("CASA organization")
+      expect(rendered).to have_text("Added to system")
+      expect(rendered).to have_text("Invitation email sent")
       expect(rendered).to have_text("Last logged in")
-      expect(rendered).to have_text("Invitation accepted \n  never")
-      expect(rendered).to have_text("Password reset last sent \n  never")
+      expect(rendered).to have_text("Invitation accepted")
+      expect(rendered).to have_text("Password reset last sent")
+      expect(rendered).to have_text("never")
     end
   end
 

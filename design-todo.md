@@ -10,9 +10,10 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-The volunteer edit + index pages (Phase 4) are **shipped**. Good next candidates: supervisors
-index + edit (Phase 4 — the volunteers pages are the reference), or the deferred sentence-case
-sweep, which can now also fold in the volunteer pages' spec-locked Title Case labels.
+The volunteer **and supervisor** edit + index pages (Phase 4) are **shipped**. Good next
+candidates: case assignments (Phase 4 — the last roster piece), learning hours, or the deferred
+sentence-case sweep, which can now fold in the volunteer + supervisor pages' spec-locked Title
+Case labels.
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -101,7 +102,23 @@ page** pattern in `design.md`.
   now-unused `volunteers#datatable` JSON action + `dashboard.js` volunteer block are dead
   (see the dead-code item); `hours_spent_in_days(30)` is still per-row (N+1 parity with the
   retired datatable).
-- [ ] Supervisors index + edit.
+- [x] Supervisors index + edit. Both on casa_app. The **index** is bespoke Tailwind: a supervisor
+  roster + a "volunteers without supervisors" list + a "CASA cases without court dates" list, with
+  a server-side status filter (auto-submit). Retired the serverSide DataTable by moving
+  `#supervisors` off the `<table>` onto its wrapper (like volunteers). The per-supervisor contact
+  stats are now labeled pills (color + icon + word: N attempting / N not attempting / N
+  transition-aged, or "No assigned volunteers") instead of the old color-only bar chart; the
+  transition-aged column is a Yes/No pill, not the 🦋/🐛 emoji; the always-blank Hearing type /
+  Judge columns are dropped (court-date-less cases never have them). The **edit** page is a
+  self-contained casa_app column (Profile / Account / Status / Volunteers): `supervisors/_manage_active`
+  is now Tailwind and a new `supervisors/_manage_volunteers` twin replaces the shared Bootstrap
+  `manage_volunteers` — the shared `_edit_form` / `_invite_login` stay for the casa_admin edit page,
+  rebuilt inline here. "Edit supervisor" heading; Deactivate keeps the UJS `data-confirm`. Both
+  view + system specs rewritten to semantic hooks (`[data-stat]`, `.supervisor-filters`,
+  `[data-test=cases-without-court-dates]`); chevrons darkest-pixel verified (114 = slate-500); no
+  overflow 375–1280. Follow-ups: the now-dead `supervisors#datatable` JSON action + `dashboard.js`
+  supervisor block + the now-unused `shared/_manage_volunteers` (see the dead-code item); the
+  per-supervisor stat methods stay per-row (N+1 parity with the retired datatable).
 - [ ] Case assignments.
 - [ ] Learning hours (volunteer + supervisor/admin views).
 - [ ] Reimbursements.
@@ -156,9 +173,12 @@ page** pattern in `design.md`.
 - [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
   `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
   `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
-  uses the native-dialog report modal); the vestigial `CasaCase#hearing_type` / `#judge`
-  `belongs_to` + `hearing_type_name` / `judge_name` delegates whose columns were dropped
-  in 2023 — still referenced by `supervisors/index` and the legacy case pages).
+  uses the native-dialog report modal); the `volunteers#datatable` + `supervisors#datatable` JSON
+  actions and their `dashboard.js` blocks (both indexes retired the serverSide DataTable, moving
+  the `#volunteers` / `#supervisors` hook off the `<table>`); the now-unused
+  `shared/_manage_volunteers` (supervisors/edit was its last consumer); the vestigial
+  `CasaCase#hearing_type` / `#judge` `belongs_to` + `hearing_type_name` / `judge_name` delegates
+  whose columns were dropped in 2023 — now only referenced by the legacy case pages).
 - [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI
   copy / defined terms: the case-details fact labels ("Transition Aged Youth:", "Youth's Date
   in Care:", "Next Court Date:", "Court Report Status:", "No Court Dates"), the same term on
@@ -180,8 +200,9 @@ page** pattern in `design.md`.
 - [ ] **Hearing type & judge on case lists.** The old cases index (and `supervisors/index`)
   showed per-case "Hearing Type" and "Judge" columns, but their backing columns were removed
   from `casa_cases` in 2023 (migration `20230729213608`) — that data moved to court dates, so
-  those columns have rendered blank for every case since. The migrated cases index now shows
-  "Next court date" instead. Ask stakeholders: is next court date the right thing to surface on
-  the roster, or do they want the upcoming hearing's type/judge (sourced from court dates)? The
-  answer decides whether we also fix `supervisors/index` and whether to delete the dead
+  those columns have rendered blank for every case since. Both migrated indexes have now dropped
+  them (the cases index shows "Next court date" instead; `supervisors/index` lists cases
+  *without* court dates, so type/judge/next-date are all N/A there). Ask stakeholders: is next
+  court date the right thing to surface on the main roster, or do they want the upcoming
+  hearing's type/judge (sourced from court dates)? The answer decides whether to delete the dead
   `CasaCase` associations.

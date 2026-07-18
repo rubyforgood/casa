@@ -7,13 +7,19 @@ class SupervisorsController < ApplicationController
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate, :resend_invitation, :change_to_admin]
   before_action :all_volunteers_ever_assigned, only: [:update]
   before_action :supervisor_has_unassigned_volunteers, only: [:edit]
+  before_action :set_active_nav, only: [:index, :edit, :update, :activate, :deactivate]
 
   after_action :verify_authorized
 
   def index
     authorize Supervisor
-    @supervisors = policy_scope(current_organization.supervisors)
+    @status = %w[active inactive all].include?(params[:status]) ? params[:status] : "active"
+    supervisors = policy_scope(current_organization.supervisors)
+    supervisors = supervisors.where(active: true) if @status == "active"
+    supervisors = supervisors.where(active: false) if @status == "inactive"
+    @supervisors = supervisors.order(:display_name)
     @casa_cases = current_organization.casa_cases.missing_court_dates
+    render :index, layout: "casa_app"
   end
 
   def new
@@ -45,6 +51,7 @@ class SupervisorsController < ApplicationController
       all_volunteers_ever_assigned
     end
     @unassigned_volunteer_count ||= 0
+    render layout: "casa_app"
   end
 
   def update
@@ -55,7 +62,7 @@ class SupervisorsController < ApplicationController
       @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: notice
     else
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -66,7 +73,7 @@ class SupervisorsController < ApplicationController
 
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated. They have been sent an email."
     else
-      render :edit, notice: "Supervisor could not be activated."
+      render :edit, layout: "casa_app", notice: "Supervisor could not be activated."
     end
   end
 
@@ -75,7 +82,7 @@ class SupervisorsController < ApplicationController
     if @supervisor.deactivate
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
     else
-      render :edit, notice: "Supervisor could not be deactivated."
+      render :edit, layout: "casa_app", notice: "Supervisor could not be deactivated."
     end
   end
 
@@ -105,6 +112,10 @@ class SupervisorsController < ApplicationController
 
   def set_supervisor
     @supervisor = Supervisor.find(params[:id])
+  end
+
+  def set_active_nav
+    @active_nav = "supervisors"
   end
 
   def all_volunteers_ever_assigned

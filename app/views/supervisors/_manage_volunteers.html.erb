@@ -1,0 +1,80 @@
+<%# Volunteers supervised by this supervisor (casa_app twin of shared/_manage_volunteers, which
+    is left untouched for the Bootstrap pages). A stacked-card list (the edit column is narrow
+    and each row has several fields) + an "assign a volunteer" form. Spec-locked: the
+    unassign_supervisor_volunteer_path button, the "Unassigned" status text, "Assigned
+    Volunteers"/"All Volunteers", "Include unassigned"/"Hide unassigned", "Currently Assigned
+    To", "No One", the #supervisor_volunteer_volunteer_id / supervisor_volunteer[volunteer_id]
+    select with its "Select a Volunteer" label, the "Assign Volunteer" button, and the empty
+    message. `available` defaults to [] so the rare activate/deactivate failure re-render (which
+    skips the available_volunteers before_action) doesn't blow up. %>
+<% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
+<% available = @available_volunteers || [] %>
+<% volunteer_title = (@unassigned_volunteer_count == 0) ? "Assigned Volunteers" : "All Volunteers" %>
+<% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
+<% show_assigned_volunteers = @supervisor_has_unassigned_volunteers || @supervisor.volunteers.any? %>
+<section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="border-b border-slate-100 p-4 sm:px-6">
+    <h2 class="text-base font-semibold text-slate-900">Volunteers</h2>
+  </div>
+
+  <% if show_assigned_volunteers %>
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50 p-4 sm:px-6">
+      <h3 class="text-sm font-semibold text-slate-900"><%= volunteer_title %></h3>
+      <% if @supervisor_has_unassigned_volunteers %>
+        <%= button_to button_text, edit_supervisor_path(@supervisor), params: {include_unassigned: @all_volunteers_ever_assigned.nil?}, method: :get, class: button_classes(:secondary) %>
+      <% end %>
+    </div>
+    <ul class="divide-y divide-slate-100">
+      <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
+        <li class="p-4 sm:px-6">
+          <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+            <div class="min-w-0">
+              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer), class: "text-sm font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
+              <p class="truncate text-sm text-slate-500"><%= volunteer.email %></p>
+            </div>
+            <% if volunteer.supervised_by?(@supervisor) %>
+              <%= button_to unassign_supervisor_volunteer_path(volunteer), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
+                <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign
+              <% end %>
+            <% else %>
+              <span class="<%= pill %> bg-rose-50 text-rose-700"><i class="bi bi-exclamation-circle" aria-hidden="true"></i> Unassigned</span>
+            <% end %>
+          </div>
+          <% if button_text == "Hide unassigned" %>
+            <dl class="mt-2 flex flex-wrap gap-x-2 text-xs text-slate-500">
+              <dt>Currently Assigned To:</dt>
+              <dd class="font-medium text-slate-700"><%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No One" %></dd>
+            </dl>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <div class="border-t border-slate-100 bg-slate-50 p-4 sm:px-6">
+    <h3 class="text-sm font-semibold text-slate-900">Assign a volunteer</h3>
+    <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
+      <fieldset class="m-0 border-0 p-0" <%= "disabled" unless available.any? %>>
+        <div class="mt-2 flex flex-wrap items-end gap-3">
+          <div class="min-w-0 flex-1">
+            <label for="supervisor_volunteer_volunteer_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a Volunteer</label>
+            <div class="relative">
+              <select id="supervisor_volunteer_volunteer_id" name="supervisor_volunteer[volunteer_id]" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500">
+                <option value="">Please Select Volunteer</option>
+                <% available.each do |volunteer| %>
+                  <option value="<%= volunteer.id %>"><%= formatted_name(volunteer.display_name) %></option>
+                <% end %>
+              </select>
+              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+            </div>
+          </div>
+          <%= form.hidden_field :supervisor_id, value: @supervisor.id %>
+          <%= button_tag "Assign Volunteer", type: "submit", class: button_classes(:primary) %>
+        </div>
+      </fieldset>
+    <% end %>
+    <% unless available.any? %>
+      <p class="mt-2 text-sm text-slate-500">There are no active, unassigned volunteers available.</p>
+    <% end %>
+  </div>
+</section>
