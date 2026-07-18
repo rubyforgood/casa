@@ -261,6 +261,25 @@ list inside the edit column), use a **card list at all widths** (one `<li>` per 
 status pill on the first line, a `<dl>` of labeled meta, then the row actions) instead of
 squeezing a wide table into a narrow column.
 
+**Retiring a jQuery DataTable** (cases index, volunteers index): reuse the page's `*Datatable`
+query **server-side** rather than its JSON protocol. The volunteers index maps its plain GET
+filters into the DataTables param shape and calls `VolunteerDatatable#index_relation` /
+`#index_count` (the count strips the custom `SELECT`/`ORDER` aliases AR's `COUNT` can't wrap and
+counts `DISTINCT users.id`). Crucially, **don't reuse the id `dashboard.js` targets**: it runs
+`$('table#volunteers').DataTable(...)` on DOM-ready and would re-init a server-side DataTable
+over the migrated markup (its `ajax.url` is undefined → a stray `POST` to the index). Put the
+spec's `#volunteers` hook on the table's **wrapper `<div>`**, not the `<table>`, so the legacy
+selector misses and the block no-ops (the filter handlers key off the old checkbox classes and
+no-op too). The unused JSON action + dashboard.js block are then dead (queue for cleanup).
+
+**Roster with bulk actions** (volunteers index): a hidden **Manage** trigger (`select-all`
+controller) reveals on selection, opens a native-dialog modal (`modal` controller) whose submit
+is gated by the `disable-form` controller. Put the row checkboxes in the **desktop table only**
+(one `data-select-all-target="checkbox"` per record, so counts/`find` stay unambiguous); bulk
+editing is a desktop tool. To hide a `button_classes` trigger, toggle **`hidden!`** (Tailwind v4
+important), not `hidden`: a plain `hidden` loses to the button's `inline-flex` in the cascade
+(the display utilities have equal specificity, so order decides and `inline-flex` wins).
+
 ### Charts (data viz)
 Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
 and rendered on the metrics page. Validated with the data-viz method:
@@ -556,7 +575,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [ ] Case show/new/edit, case contacts, reports, settings
-- [~] Management rosters (volunteers#edit shipped — the person-edit reference; volunteers/supervisors index, supervisors#edit, case assignments remain), admin CRUD long-tail, all-CASA-admin area
+- [~] Management rosters (volunteers#edit + volunteers#index shipped — the person-edit and
+  roster references; supervisors index/edit, case assignments remain), admin CRUD long-tail,
+  all-CASA-admin area
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

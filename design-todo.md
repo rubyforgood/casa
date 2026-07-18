@@ -10,9 +10,9 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-The volunteer edit page migration (below) is **shipped**. Good next candidates: the volunteers
-index (Phase 4) or the deferred sentence-case sweep, which can now also fold in this page's
-spec-locked Title Case labels.
+The volunteer edit + index pages (Phase 4) are **shipped**. Good next candidates: supervisors
+index + edit (Phase 4 — the volunteers pages are the reference), or the deferred sentence-case
+sweep, which can now also fold in the volunteer pages' spec-locked Title Case labels.
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -91,8 +91,16 @@ page** pattern in `design.md`.
 - [ ] Case contacts "new design" table (`case_contacts/case_contacts_new_design`).
 
 ## Phase 4 — Management & rosters
-- [~] Volunteers index + edit. (`volunteers#edit` shipped — the casa_app person-edit reference;
-  index still Bootstrap.)
+- [x] Volunteers index + edit. Both on casa_app. The **index** is a bespoke Tailwind table
+  (server-side filters + search + sortable headers + Pagy) that reuses `VolunteerDatatable`'s
+  SQL via `#index_relation` / `#index_count` (GET filters mapped into the DataTables param
+  shape); the column-visibility picker is dropped (design.md); bulk supervisor assignment is
+  preserved (select-all + native-dialog modal + disable-form, desktop-only checkboxes).
+  Retired the jQuery DataTable by moving `#volunteers` off the `<table>` onto its wrapper so
+  `dashboard.js`'s `$('table#volunteers').DataTable()` no longer matches. Follow-ups: the
+  now-unused `volunteers#datatable` JSON action + `dashboard.js` volunteer block are dead
+  (see the dead-code item); `hours_spent_in_days(30)` is still per-row (N+1 parity with the
+  retired datatable).
 - [ ] Supervisors index + edit.
 - [ ] Case assignments.
 - [ ] Learning hours (volunteer + supervisor/admin views).

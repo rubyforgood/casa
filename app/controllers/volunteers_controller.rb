@@ -7,7 +7,23 @@ class VolunteersController < ApplicationController
 
   def index
     authorize Volunteer
-    @supervisors = policy_scope(current_organization.supervisors)
+    @active_nav = "volunteers"
+    @supervisors = policy_scope(current_organization.supervisors.active)
+    @search = params[:search].to_s
+    @status = %w[active inactive all].include?(params[:status]) ? params[:status] : "active"
+    @supervisor_filter = params[:supervisor].to_s
+    @transition = %w[yes no].include?(params[:transition]) ? params[:transition] : ""
+    @extra_languages = %w[yes no].include?(params[:languages]) ? params[:languages] : ""
+    @sort = VolunteerDatatable::ORDERABLE_FIELDS.include?(params[:sort]) ? params[:sort] : "display_name"
+    @direction = (params[:direction] == "desc") ? "desc" : "asc"
+
+    datatable = VolunteerDatatable.new(policy_scope(current_organization.volunteers), volunteer_index_params)
+    count = datatable.index_count
+    per_page = 25
+    page = params[:page].to_i.clamp(1, [(count.to_f / per_page).ceil, 1].max)
+    @pagy = Pagy.new(count: count, page: page, limit: per_page)
+    @volunteers = datatable.index_relation.offset(@pagy.offset).limit(per_page).to_a
+    render :index, layout: "casa_app"
   end
 
   def show
@@ -158,6 +174,42 @@ class VolunteersController < ApplicationController
   def set_edit_context
     @active_nav = "volunteers"
     @supervisors = policy_scope current_organization.supervisors.active
+  end
+
+  # Map the index's plain GET filters into the DataTables param shape VolunteerDatatable
+  # understands, so the migrated (bespoke Pagy) index reuses its exact filter/search/order SQL.
+  def volunteer_index_params
+    {
+      search: {value: @search},
+      additional_filters: {
+        active: volunteer_active_filter,
+        supervisor: volunteer_supervisor_filter,
+        transition_aged_youth: (@transition.present? ? [(@transition == "yes").to_s] : %w[true false]),
+        extra_languages: (@extra_languages.present? ? [(@extra_languages == "yes").to_s] : nil)
+      },
+      columns: {"0" => {name: @sort}},
+      order: {"0" => {column: "0", dir: @direction}}
+    }.with_indifferent_access
+  end
+
+  def volunteer_active_filter
+    case @status
+    when "inactive" then %w[false]
+    when "all" then %w[true false]
+    else %w[true]
+    end
+  end
+
+  # The datatable's supervisor filter is value-list based: [""] means "no supervisor", a list of
+  # ids means those supervisors, and "" mixed with ids means "null OR those". "All" therefore
+  # passes "" + every active supervisor id so it also includes volunteers whose supervisor is
+  # inactive/absent (their joined supervisor is null).
+  def volunteer_supervisor_filter
+    case @supervisor_filter
+    when "", "all" then ["", *@supervisors.map { |s| s.id.to_s }]
+    when "unassigned" then [""]
+    else [@supervisor_filter]
+    end
   end
 
   def generate_devise_password

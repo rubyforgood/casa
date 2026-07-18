@@ -10,6 +10,21 @@ class VolunteerDatatable < ApplicationDatatable
     hours_spent_in_days
   ]
 
+  # Server-side entry point for the migrated (bespoke Pagy) index. Reuses the same
+  # filter/search/order SQL as the DataTables JSON path; the controller maps plain GET
+  # params into the DataTables param shape. Preloads languages for the extra-languages column.
+  def index_relation
+    filtered_records.includes(:languages)
+  end
+
+  # Count for the migrated index's Pagy bar. filtered_records carries a custom SELECT
+  # (COALESCE aliases) and an ORDER by one of those aliases, neither of which AR's COUNT
+  # can wrap, so strip them and count distinct volunteers (distinct guards the
+  # extra-languages join fan-out).
+  def index_count
+    index_relation.except(:select, :order, :includes).distinct.count("users.id")
+  end
+
   private
 
   def data
