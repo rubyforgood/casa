@@ -668,7 +668,11 @@ High-level progress; the granular, prioritized backlog lives in
   show keeps the src/case_emancipation.js AJAX/collapse hooks; index retires its DataTable). Banners
   brought `trix/dist/trix.css` into the casa_app tailwind bundle; placements/court-dates use
   Dialog / UJS deletes that satisfy non-`:js` specs.
-- [ ] Phase 6: the all-CASA-admin area, Devise edge pages, static / marketing pages.
+- [x] Phase 6 (complete): the all-CASA-admin area on its own Tailwind shell (dashboard, casa_orgs,
+  casa_admins, edit/new, patch notes — the jQuery clone-CRUD kept, its bundle + notifier wired in)
+  + its auth pages on the casa_auth shell; and the public `static#index` landing page rebuilt on
+  the brand palette (compiled tailwind, no CDN/Alpine). Regular-user Devise pages shipped in the
+  foundation phase.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

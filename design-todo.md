@@ -328,7 +328,15 @@ page** pattern in `design.md`.
   split-screen shell to match devise/sessions/new (kept the "All CASA Log In" heading, Email/Password
   labels, the .actions wrapper + "Log in", and flash for the sign-out landing). 13 examples green;
   pages fit 375-1280.
-- [ ] Devise edge pages audit; static / marketing `static#index` landing page.
+- [x] **static#index landing page** — the public marketing page rebuilt on the design system
+  (compiled tailwind.css + Figtree + brand palette + a brand-gradient hero, replacing the Tailwind
+  CDN + Alpine). Kept the spec-locked #organizations section, .org_logo images, and the "CASA
+  Organizations Powered by Our App" heading. 4 examples green; page fits 375-1280 (the header's
+  decorative blur is clipped by overflow-hidden, like casa_auth).
+
+**Phase 6 is complete** — the all-CASA-admin area (shell + org management + auth + patch notes)
+and the public landing page are all on the design system. (The regular-user Devise pages —
+sign-in / password / invitation — were done in the foundation phase.)
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal

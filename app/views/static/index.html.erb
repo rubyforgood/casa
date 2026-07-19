@@ -1,229 +1,124 @@
-<!doctype html>
-<html class="no-js" lang="en">
-
+<!DOCTYPE html>
+<%# Public marketing / landing page (static#index, layout false). Rebuilt on the CASA design
+    system: compiled tailwind.css + Figtree + the brand palette, replacing the Tailwind CDN + Alpine.
+    Signed-in users are redirected away by the controller. The #organizations section and .org_logo
+    images are spec-locked. %>
+<html lang="en" class="h-full scroll-smooth">
 <head>
-  <meta charset="utf-8">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CASA Volunteer Tracking</title>
-
-  <script src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.min.js" defer></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <%= stylesheet_link_tag "shared/noscript" %>
-    <style>
-      .app-images {
-        height: 400px;
-      }
-
-      .org_logo {
-        height: 200px;
-      }
-    </style>
+  <title>CASA Volunteer Tracker</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 </head>
-
-<body>
-  <noscript>
-    <div class="noscript alert alert-danger">
-      <h2 class="alert-heading">
-        Please enable javascript
-      </h2>
-      <p>
-        This app requires javascript to work
-      </p>
-    </div>
-  </noscript>
-  <header class="pt-2" style="background: #0949D7">
-    <div class="container max-w-7xl mx-auto pt-5 px-5">
-      <nav>
-        <div class="flex justify-between items-center">
-          <div>
-            <a class="text-lg lg:text-3xl lg:text-4xl font-bold text-white" href="/">CasaVolunteerTracking.org</a>
-          </div>
-
-          <div class="flex" id="myNavbar">
-            <div class="flex text-white space-x-4 md:space-x-10 text-md lg:text-2xl items-center">
-              <a class="hidden md:block hover:underline hover:decoration-blue-300 hover:opacity-90 focus:underline focus:decoration-blue-300" href="#about">About</a>
-              <a class="hidden md:block hover:underline hover:decoration-blue-300 hover:opacity-90 focus:underline focus:decoration-blue-300" href="#testimonials">Testimonials</a>
-              <a class="hidden md:block hover:underline hover:decoration-blue-300 hover:opacity-90 focus:underline focus:decoration-blue-300" href="#contact">Contact</a>
-              <a href="<%= new_user_session_path %>">
-                <button
-                  class="flex flex-row items-center w-full px-4 py-2 bg-green-800 hover:bg-green-700 rounded-2xl text-md">
-                  <span class="text-lg">Login</span>
-                </button>
-              </a>
-            </div>
-          </div>
+<body class="h-full bg-white font-sans text-slate-800 antialiased">
+  <header class="relative overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-indigo-500 text-white">
+    <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+    <div class="pointer-events-none absolute -bottom-32 -left-16 h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl"></div>
+    <div class="relative mx-auto max-w-7xl px-6">
+      <nav class="flex items-center justify-between py-6">
+        <a href="/" class="text-lg font-bold tracking-tight lg:text-2xl">CasaVolunteerTracking.org</a>
+        <div class="flex items-center gap-4 text-sm font-medium sm:gap-8">
+          <a href="#about" class="hidden hover:text-white/80 sm:block">About</a>
+          <a href="#testimonials" class="hidden hover:text-white/80 sm:block">Testimonials</a>
+          <a href="#contact" class="hidden hover:text-white/80 sm:block">Contact</a>
+          <%= link_to "Log in", new_user_session_path, class: "rounded-lg bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-white/90" %>
         </div>
       </nav>
-    </div>
 
-    <div class="container max-w-7xl mx-auto text-white font-bold flex px-5" style='height:60vh; min-height: 500px'>
-      <div class="flex flex-col justify-center items-center mx-auto lg:mx-0 text-center lg:text-left">
-        <div class="text-4xl">
-          <div>
-            <h1>Casa Volunteer Tracking removes<br>the complexity of managing your<br> CASA and tracking your
-              volunteers.</h1>
-            <p class="text-lg font-normal mb-3 mt-2">Ready to make yourself more efficient?</p>
+      <div class="grid items-center gap-10 pb-20 pt-8 lg:grid-cols-2 lg:pb-28 lg:pt-12">
+        <div class="text-center lg:text-left">
+          <h1 class="text-4xl font-bold leading-tight tracking-tight sm:text-5xl">CASA Volunteer Tracking removes the complexity of managing your CASA and tracking your volunteers.</h1>
+          <p class="mt-5 text-lg text-white/80">Ready to make yourself more efficient?</p>
+          <div class="mt-8">
+            <%= link_to new_user_session_path, class: "inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-brand-700 shadow-sm transition hover:bg-white/90" do %>
+              Sign in <i class="bi bi-arrow-right" aria-hidden="true"></i>
+            <% end %>
           </div>
         </div>
-        <div class="hidden lg:block absolute right-52 w-1/4">
-          <%= image_tag("hero-image.svg", alt: "" ) %>
-        </div>
+        <div class="hidden lg:block"><%= image_tag "hero-image.svg", alt: "", class: "mx-auto w-full max-w-md" %></div>
       </div>
     </div>
   </header>
 
   <main>
-    <div class="container max-w-7xl mx-auto pt-5" id="about">
-      <div class="text-center mt-10">
-        <h2 class="text-4xl text-gray-700">The Casa Volunteer Tracking app removes the <br> complexity from your day
-        </h2>
-        <p class="mt-1 text-gray-600">and lets you spend time helping those who need it.</p>
-        <a href="mailto:casa@rubyforgood.org?Subject=CasaVolunteerTracking%20Interest"><button type="button"
-            class="will-change-transform text-lg bg-green-800 text-white px-3 py-2 rounded-2xl mt-5 hover:bg-green-700 hover:-translate-y-0.5 hover:scale-x-110 transition-transform duration-200 ease-linear">Get In Touch</button></a>
-      </div>
-    </div>
-
-    <div class="w-3/4 mx-auto py-24">
-      <div class="flex flex-col md:flex-row justify-center">
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("case-contact.svg", class: "app-images" , alt: "man reading a book to a girl" ) %>
-          </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Case Contacts</h3>
-            <p class="text-gray-600 mt-2">Volunteers can record case contacts and learning hours.</p>
-          </div>
-        </div>
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("court-report.svg", class: "app-images" , alt: "judge raising a gavel" ) %>
-          </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Court Reports</h3>
-            <p class="text-gray-600 mt-2">Volunteers, supervisors, and admins can generate a court report for any case
-              with all recorded case contacts pre-filled.</p>
-          </div>
+    <section id="about" class="mx-auto max-w-7xl px-6 py-20">
+      <div class="mx-auto max-w-2xl text-center">
+        <h2 class="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Removes the complexity from your day</h2>
+        <p class="mt-3 text-lg text-slate-600">…and lets you spend time helping those who need it.</p>
+        <div class="mt-6">
+          <%= link_to "Get in touch", "mailto:casa@rubyforgood.org?Subject=CasaVolunteerTracking%20Interest", class: button_classes(:primary) %>
         </div>
       </div>
 
-      <div class="flex flex-col md:flex-row justify-center">
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("reimbursement.svg", class: "app-images" , alt: "car with two people" ) %>
+      <% features = [
+        ["case-contact.svg", "man reading a book to a girl", "Case contacts", "Volunteers can record case contacts and learning hours."],
+        ["court-report.svg", "judge raising a gavel", "Court reports", "Volunteers, supervisors, and admins can generate a court report for any case with all recorded case contacts pre-filled."],
+        ["reimbursement.svg", "car with two people", "Reimbursements", "Volunteers can submit reimbursement requests and admins can generate reports."],
+        ["add-case.svg", "file folders and file cabinet", "Add cases", "Supervisors and administrators can add cases and assign volunteers."],
+        ["spreadsheets.svg", "computer screen with graphs and charts", "Exportable data", "All CASA data is easily exportable in CSV format."],
+        ["communicate.svg", "woman holding a phone with a notification alert", "Communication", "Easily communicate with volunteers by email, SMS, or both."]
+      ] %>
+      <div class="mt-16 grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <% features.each do |img, alt, title, desc| %>
+          <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center shadow-sm">
+            <%= image_tag img, alt: alt, class: "mx-auto h-40 w-auto" %>
+            <h3 class="mt-5 text-lg font-semibold text-slate-900"><%= title %></h3>
+            <p class="mt-2 text-sm text-slate-600"><%= desc %></p>
           </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Reimbursements</h3>
-            <p class="text-gray-600 mt-2">Volunteers can submit reimbursement requests and admins can generate reports.
-            </p>
-          </div>
-        </div>
+        <% end %>
+      </div>
+    </section>
 
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("add-case.svg", class: "app-images" , alt: "file folders and file cabinet" ) %>
-          </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Add Cases</h3>
-            <p class="text-gray-600 mt-2">Supervisors and administrators can add cases and assign volunteers.</p>
-          </div>
+    <section id="testimonials" class="bg-brand-600 py-20 text-white">
+      <div class="mx-auto max-w-5xl px-6">
+        <h2 class="text-center text-3xl font-bold tracking-tight sm:text-4xl">Testimonials</h2>
+        <div class="mt-12 grid gap-8 md:grid-cols-2">
+          <figure class="rounded-2xl bg-white/10 p-6 ring-1 ring-white/15">
+            <blockquote class="text-lg leading-relaxed">“The tracker has helped us streamline our processes, and we no longer have to worry about losing track of important documents.”</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-white/80">— Sarah B. · Program Manager</figcaption>
+          </figure>
+          <figure class="rounded-2xl bg-white/10 p-6 ring-1 ring-white/15">
+            <blockquote class="text-lg leading-relaxed">“Thanks to the tracker, we can now make quicker decisions and effectively monitor our cases, resulting in a more pleasant experience for our volunteers.”</blockquote>
+            <figcaption class="mt-4 text-sm font-semibold text-white/80">— Nancy K. · Office Manager</figcaption>
+          </figure>
         </div>
       </div>
+    </section>
 
-      <div class="flex flex-col md:flex-row justify-center">
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("spreadsheets.svg", class: "app-images" , alt: "computer screen with graphs and charts" ) %>
-          </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Exportable Data</h3>
-            <p class="text-gray-600 mt-2">All CASA data is easily exportable in CSV format.</p>
-          </div>
-        </div>
-
-        <div class="flex flex-col justify-center items-center w-full sm:w-1/2">
-          <div class="pb-2">
-            <%= image_tag("communicate.svg", class: "app-images" ,
-              alt: "woman holding a phone with a notification alert" ) %>
-          </div>
-          <div class="text-center">
-            <h3 class="text-3xl">Communication</h3>
-            <p class="text-gray-600 mt-2">Easily communicate with volunteers by email, SMS or both.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="py-5 px-0 bg-blue-600 text-white" id="testimonials">
-      <div class="container max-w-7xl mx-auto flex flex-col md:flex-row py-5 justify-center items-center">
-        <div class="w-1/2 flex justify-center">
-          <%= image_tag("quote.svg", class: "quote-image" , style: "width: 300px" ,
-            alt: "Quote: No one is useless in this world who lightens the burdens of another - Charles Dickens" ) %>
-        </div>
-        <div class="pt-5 px-4 w-full sm:w-1/2">
-          <h3 class="text-4xl">Testimonials</h3>
-          <div class='mt-5'>
-            <div class='space-y-12'>
-              <div>
-                <p>The tracker has helped us streamline our processes, and we no longer have to worry about losing track
-                  of important documents.
-                </p>
-                <strong class='mt-2'> - Sarah B. | Program Manager</strong>
-              </div>
-              <div>
-                <p class="text-testimonials">Thanks to the tracker, we can now make quicker decisions and effectively
-                  monitor our cases, resulting in a more pleasant experience for our volunteers.</p>
-                <strong> - Nancy K. | Office Manager</strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="w-3/4 mx-auto py-24" id="organizations">
-      <div class="text-center">
-        <h2 class="text-4xl"> CASA Organizations Powered by Our App </h2>
-      </div>
-      <div class="flex flex-col flex-wrap md:flex-row justify-center py-14">
+    <section id="organizations" class="mx-auto max-w-7xl px-6 py-20">
+      <h2 class="text-center text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">CASA Organizations Powered by Our App</h2>
+      <div class="mt-12 grid grid-cols-2 items-start gap-x-8 gap-y-12 sm:grid-cols-3 lg:grid-cols-4">
         <% @casa_logos.each do |org| %>
-          <div class="flex flex-col justify-center items-center w-full sm:w-1/3">
-            <div class="py-8">
-              <%= image_tag org.logo, class: "org_logo" %>
-            </div>
-            <%= org.display_name %>
+          <div class="flex flex-col items-center gap-3 text-center">
+            <%= image_tag org.logo, class: "org_logo h-24 w-auto object-contain" %>
+            <span class="text-sm font-medium text-slate-600"><%= org.display_name %></span>
           </div>
-          <% end %>
+        <% end %>
       </div>
-    </div>
+    </section>
 
-    <div class="py-5 px-0 bg-blue-600 text-white">
-      <div class="container max-w-7xl mx-auto py-32 bg-blue-600 text-white" id="contact">
-        <div class="text-center">
-          <h2 class="text-4xl">Want to use the CASA Volunteer Tracking App?</h2>
-          <br><br>
-          <p>Have questions? Email us at <a class="text-green-400 hover:underline transition duration-100 hover:text-green-300"
-              href="mailto:casa@rubyforgood.org?Subject=CASA%20Interest" target="_top">casa@rubyforgood.org</a></p>
-        </div>
+    <section id="contact" class="bg-slate-900 py-20 text-white">
+      <div class="mx-auto max-w-2xl px-6 text-center">
+        <h2 class="text-3xl font-bold tracking-tight sm:text-4xl">Want to use the CASA Volunteer Tracking app?</h2>
+        <p class="mt-4 text-lg text-white/80">Have questions? Email us at <a href="mailto:casa@rubyforgood.org?Subject=CASA%20Interest" class="font-medium text-brand-300 hover:text-brand-200">casa@rubyforgood.org</a>.</p>
       </div>
-    </div>
+    </section>
   </main>
 
-  <footer class="bg-gray-200">
-    <div class="container max-w-7xl mx-auto py-32 text-white">
-      <div class="flex flex-col mx-auto text-center sm:text-left sm:flex-row space-y-10 sm:space-y-0">
-        <div class="w-full sm:w-1/2 text-3xl text-gray-700">
-          casavolunteertracking.org
-        </div>
-        <div class="w-full sm:w-1/2">
-          <strong class="text-gray-700">The CASA Volunteer Tracking app was lovingly built by:</strong>
-          <br>
-          <a class="text-blue-800 hover:underline transition duration-100 " href="http://rubyforgood.org/">Ruby for Good</a>
-          <br><br>
-          <a class="text-gray-700 hover:underline transition duration-100 " href="https://storyset.com/data">Data illustrations by Storyset</a>
-        </div>
+  <footer class="border-t border-slate-200 bg-slate-50 py-12">
+    <div class="mx-auto flex max-w-7xl flex-col gap-4 px-6 sm:flex-row sm:items-center sm:justify-between">
+      <div class="text-lg font-bold text-slate-700">casavolunteertracking.org</div>
+      <div class="text-sm text-slate-500">
+        Lovingly built by <%= link_to "Ruby for Good", "http://rubyforgood.org/", class: "font-medium text-brand-600 hover:text-brand-700" %>.
+        <%= link_to "Data illustrations by Storyset", "https://storyset.com/data", class: "hover:text-slate-700 hover:underline" %>.
       </div>
     </div>
   </footer>
 </body>
-
 </html>
