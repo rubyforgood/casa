@@ -37,7 +37,7 @@ RSpec.describe "case_contacts/index", type: :view do
   end
 
   it "Displays the Case Contacts title" do
-    expect(rendered).to have_text("Case Contacts")
+    expect(rendered).to have_text("Case contacts")
   end
 
   it "Has a New Case Contact button" do

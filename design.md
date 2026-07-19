@@ -588,7 +588,8 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
-- [ ] Case show/new/edit, case contacts, reports, settings
+- [~] Case show shipped; case contacts index + drafts shipped (filterrific kept, disclosure
+  collapse); case new/edit, the case-contact form, reports, settings remain
 - [~] Management rosters (volunteers + supervisors index/edit and learning hours shipped — the
   person-edit and roster references; case assignments are the assign/unassign actions already
   covered by the edit-page twins), admin CRUD long-tail, all-CASA-admin area

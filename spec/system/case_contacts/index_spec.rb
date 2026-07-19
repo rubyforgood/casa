@@ -165,8 +165,7 @@ RSpec.describe "case_contacts/index", type: :system do
           subject
 
           within ".card-title" do
-            title = find("strong.text-primary")
-            expect(title).to have_content(contact_group_text)
+            expect(page).to have_content(contact_group_text)
           end
         end
       end

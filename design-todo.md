@@ -91,9 +91,20 @@ page** pattern in `design.md`.
   Bootstrap partials when the contacts index / volunteers-edit migrate. Verified responsive
   (375-1280) and WCAG AA.
 - [ ] Case new / edit.
-- [ ] Case contacts index (server-side DataTable — also needs the `dashboard.js`
-  `columns.render` rewrite) + the case-contact form (multi-step).
-- [ ] Case contacts "new design" table (`case_contacts/case_contacts_new_design`).
+- [~] Case contacts index + drafts **shipped** on casa_app. The main index keeps **filterrific**
+  (the `.filter-form` auto-submits on `.filter-input` change, targeting the `:case_contacts`
+  turbo-frame) — its Bootstrap collapse was swapped for the `disclosure` controller (panel always
+  in the DOM so rack_test finds "Other filters", but `hidden` unless `expand_filters?` so JS users
+  see it collapsed). The `_case_contact` card + `_followup` were rewritten in place (both pages are
+  casa_app now): Tailwind card, `TruncatedTextComponent` reused, and the reminder JS hooks kept
+  (`.followup-button` / `#followup-button-<id>` / `#resolve`, `data-turbo:false`). Inert class
+  hooks the specs use (`.full-card`, `.container-fluid.mb-1`, `.card-title`) preserved; the
+  `strong.text-primary` color assertion + the view-spec title sentence-cased. Chevrons
+  darkest-pixel verified (114); no overflow 375-1280. **Remaining**: the multi-step case-contact
+  **form** (`case_contacts/form/*` — contact-type multiselect, nested additional expenses, topic
+  answers) and the `case_contacts_new_design` DataTable table.
+- [ ] Case-contact multi-step form (`case_contacts/form/*`) + the `case_contacts_new_design` table
+  (`dashboard.js` `defineCaseContactsTable` `columns.render` rewrite).
 
 ## Phase 4 — Management & rosters
 - [x] Volunteers index + edit. Both on casa_app. The **index** is a bespoke Tailwind table

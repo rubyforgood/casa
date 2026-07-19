@@ -1,74 +1,71 @@
+<%# Case-contact card (casa_app). Rendered by case_contacts#index and #drafts (both casa_app),
+    so it is rewritten in place rather than twinned. Keeps inert class hooks the specs use
+    (.container-fluid.mb-1 wrapper, .full-card, .card-title) and the reminder JS hooks in
+    _followup. TruncatedTextComponent renders each topic answer + the notes with a "label:"
+    prefix (the view spec asserts "Some question:" / "Additional Notes:"). Edit/Delete/undelete
+    keep data-turbo:false. %>
+<% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 <div class="container-fluid mb-1">
-  <div class="card-style-1 mb-15 pt-0 pb-3 full-card">
-    <div class="card-content">
-      <div>
-        <div class="mt-0">
-          <i class=" <%= "text-primary" %> <%= contact.decorate.medium_icon_classes %>"></i>
-          <div>
-            <h5 class="pt-0 mb-10 card-title d-flex align-items-center gap-2">
-              <strong class="<%= "text-primary" %>">
-                <%= "[DELETE] " if policy(contact).restore? && contact.deleted? %>
-                <%= contact.decorate.contact_groups %>
-              </strong>
-              <% if !contact.active? %>
-                <span class="badge badge-pill light-bg text-black">Draft</span>
-              <% end %>
-              <%= link_to("undelete", restore_case_contact_path(contact.id), method: :post, data: { turbo: false },
-                          class: "btn btn-info") if policy(contact).restore? && contact.deleted? %>
-            </h5>
-            <h6 class="card-subtitle mb-2 text-muted">
-              <%= contact.decorate.contact_types %>
-              <br>
-              <%= contact.decorate.subheading %>
-            </h6>
-            <div class="card-text mb-2">
-              <ul>
-                <% contact.contact_topic_answers.reject { _1.value.blank? }.each do |answer| %>
-                  <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
-                <% end %>
-                <% if contact.notes %>
-                  <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional Notes") %></li>
-                <% end %>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="d-flex justify-content-between align-items-center">
-        <% if Pundit.policy(current_user, contact).update? %>
-          <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
-          <div class="mr-2">
-            <%= link_to edit_case_contact_path(contact), class: "text-danger", data: { turbo: false } do %>
-              <i class="lni lni-pencil-alt"></i> Edit
+  <div class="full-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div class="p-4 sm:p-5">
+      <div class="flex items-start gap-3">
+        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i class="<%= contact.decorate.medium_icon %>" aria-hidden="true"></i></span>
+        <div class="min-w-0 flex-1">
+          <div class="card-title flex flex-wrap items-center gap-2">
+            <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
+            <% unless contact.active? %>
+              <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>
+            <% end %>
+            <% if policy(contact).restore? && contact.deleted? %>
+              <%= link_to "undelete", restore_case_contact_path(contact.id), method: :post, data: {turbo: false}, class: "#{pill} bg-sky-50 text-sky-700 hover:bg-sky-100" %>
             <% end %>
           </div>
-        <% end %>
-        <div class="action">
-        <% if policy(contact).destroy? && !contact.deleted? %>
-          <%= link_to case_contact_path(contact.id), class: "main-btn btn-sm danger-btn btn-hover", method: :delete, data: { turbo: false }  do %>
-          <i class="lni lni-trash-can mr-5"></i>Delete
-        <% end %>
-        <% end %>
+          <p class="mt-1 text-sm text-slate-600"><%= contact.decorate.contact_types %></p>
+          <p class="text-sm text-slate-500"><%= contact.decorate.subheading %></p>
+
+          <% answers = contact.contact_topic_answers.reject { _1.value.blank? } %>
+          <% if answers.any? || contact.notes.present? %>
+            <ul class="mt-3 space-y-2">
+              <% answers.each do |answer| %>
+                <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
+              <% end %>
+              <% if contact.notes %>
+                <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional Notes") %></li>
+              <% end %>
+            </ul>
+          <% end %>
         </div>
       </div>
-    </div>
-    <h6 class="mb-1 text-primary ml-30 mt-3">
-      Created by:
-      <% if policy(contact).edit? %>
-        <% if current_user.volunteer? %>
-          <%= formatted_name(contact.creator&.display_name) %>
-        <% else %>
-          <% if contact.creator&.supervisor? %>
-            <%= link_to formatted_name(contact.creator&.display_name), edit_supervisor_path(contact.creator), data: { turbo: false } %>
-          <% elsif contact.creator&.casa_admin? %>
-            <%= link_to formatted_name(contact.creator&.display_name), edit_users_path, data: { turbo: false } %>
-          <% else %>
-            <%= link_to formatted_name(contact.creator&.display_name), edit_volunteer_path(contact.creator), data: { turbo: false } %>
+
+      <div class="mt-4 flex flex-wrap items-center gap-2">
+        <% if Pundit.policy(current_user, contact).update? %>
+          <%= render "case_contacts/followup", contact: contact, followup: contact.requested_followup %>
+          <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %>
+            <i class="bi bi-pencil" aria-hidden="true"></i> Edit
           <% end %>
         <% end %>
+        <% if policy(contact).destroy? && !contact.deleted? %>
+          <%= link_to case_contact_path(contact.id), method: :delete, data: {turbo: false}, class: "#{button_classes(:danger_outline)} ml-auto" do %>
+            <i class="bi bi-trash" aria-hidden="true"></i> Delete
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-100 bg-slate-50 px-4 py-2.5 text-xs text-slate-500 sm:px-5">
+      Created by:
+      <% creator_name = formatted_name(contact.creator&.display_name) %>
+      <% if policy(contact).edit? && !current_user.volunteer? %>
+        <% if contact.creator&.supervisor? %>
+          <%= link_to creator_name, edit_supervisor_path(contact.creator), data: {turbo: false}, class: "font-medium text-slate-700 hover:text-brand-700 hover:underline" %>
+        <% elsif contact.creator&.casa_admin? %>
+          <%= link_to creator_name, edit_users_path, data: {turbo: false}, class: "font-medium text-slate-700 hover:text-brand-700 hover:underline" %>
+        <% else %>
+          <%= link_to creator_name, edit_volunteer_path(contact.creator), data: {turbo: false}, class: "font-medium text-slate-700 hover:text-brand-700 hover:underline" %>
+        <% end %>
       <% else %>
-        <%= formatted_name(contact.creator&.display_name) %>
+        <span class="font-medium text-slate-700"><%= creator_name %></span>
       <% end %>
-    </h6>
+    </div>
   </div>
 </div>
