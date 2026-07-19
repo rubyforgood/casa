@@ -1,65 +1,124 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Reimbursement Queue</h1>
+<% content_for :page_title, "Reimbursement queue" %>
+<%# reimbursements#index on the casa_app shell. Bespoke Tailwind table (server-side volunteer +
+    occurred-at filters via the auto-submit controller + Pagy) replacing the jQuery serverSide
+    DataTable: the #reimbursements-datatable table is gone, so src/reimbursements.js (still required
+    globally) simply no-ops. Mark-complete stays a per-row PATCH form (the checkbox auto-submits).
+    The "Needs review" / "Reimbursement complete" tab + column labels are sentence-cased. %>
+<% card = "rounded-2xl border border-slate-200 bg-white shadow-sm" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% th = "px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500" %>
+<% td = "px-3 py-3 text-sm text-slate-700 align-top" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reimbursement queue</h1>
+        <p class="mt-1 text-sm text-slate-500">Review volunteer travel reimbursement requests and mark them complete.</p>
       </div>
+      <%= form_with url: mileage_reports_path(format: :csv), method: :get do %>
+        <%= button_tag type: "submit", class: button_classes(:secondary), data: {disable_with: "Downloading\u2026"} do %>
+          <i class="bi bi-download" aria-hidden="true"></i> Download mileage report
+        <% end %>
+      <% end %>
     </div>
 
-    <div class="col-md-6">
-      <div class="breadcrumb-wrapper mb-30">
-        <span class="ml-5">
-          <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-                 <%= button_tag(
-                       type: "submit",
-                       class: "btn-sm main-btn primary-btn btn-hover report-form-submit",
-                       data: { disable_with: "Downloading Mileage Report" }
-                     ) do %>
-            <i class="lni lni-download mr-10"></i> Download Mileage Report
-            <% end %>
-          <% end %>
-        </span>
-      </div>
+    <div class="mb-5 border-b border-slate-200">
+      <nav class="-mb-px flex gap-6 text-sm font-medium" aria-label="Reimbursement status">
+        <% tab = "border-b-2 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+        <%= link_to "Needs review", reimbursements_path(status: "needs_review"), "aria-current": (@complete_status ? nil : "page"), class: "#{tab} #{@complete_status ? "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700" : "border-brand-600 text-brand-700"}" %>
+        <%= link_to "Reimbursement complete", reimbursements_path(status: "complete"), "aria-current": (@complete_status ? "page" : nil), class: "#{tab} #{@complete_status ? "border-brand-600 text-brand-700" : "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700"}" %>
+      </nav>
     </div>
-  </div>
-</div>
 
-<div>
-  <div class="row volunteer-filters">
-    <div class="col-sm-12 flex align-items-center">
-      <h4 class="pull-left mr-2 my-1">Filter by:</h4>
-      <div class="dropdown pull-left mx-2" data-filter="volunteer">
-        <select class="form-control select2 creator_ids" multiple="true" data-placeholder="Volunteer">
-          <% @volunteers_for_filter.each do |volunteer| %>
-            <option value="<%= volunteer[0] %>"><%= volunteer[1] %></option>
-          <% end %>
-        </select>
-      </div>
-      <!-- Occurred at filter -->
-      <div class="dropdown pull-left mr-2" data-filter="occurred_at">
-        <%= render partial: "filter_trigger", locals: { title: "Occurred at" } %>
-        <div class="dropdown-menu">
-          <%= render partial: "occurred_at_filter_input", locals: {
-            label: "Starting from",
-            name: :occurred_at_starting
-          } %>
-          <%= render partial: "occurred_at_filter_input", locals: {
-            label: "Ending at",
-            name: :occurred_at_ending
-          } %>
+    <%= form_with url: reimbursements_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "reimbursement-filters mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+      <% if params[:status].present? %><%= hidden_field_tag :status, params[:status] %><% end %>
+      <div class="col-span-2 lg:min-w-[16rem]">
+        <%= label_tag :volunteers, "Volunteer", class: label_class %>
+        <div class="relative">
+          <%= select_tag :volunteers, options_for_select([["All volunteers", ""]] + @volunteers_for_filter.map { |id, name| [formatted_name(name), id.to_s] }, params[:volunteers]), class: select_class %>
+          <i class="<%= chevron_class %>" aria-hidden="true"></i>
         </div>
       </div>
-    </div>
+      <div class="lg:min-w-[9rem]">
+        <%= label_tag "occurred_at[start]", "Occurred from", class: label_class %>
+        <%= date_field_tag "occurred_at[start]", params.dig(:occurred_at, :start), min: @occurred_at_filter_start_date.iso8601, max: Date.current.iso8601, autocomplete: "off", class: input_class %>
+      </div>
+      <div class="lg:min-w-[9rem]">
+        <%= label_tag "occurred_at[end]", "Occurred to", class: label_class %>
+        <%= date_field_tag "occurred_at[end]", params.dig(:occurred_at, :end), min: @occurred_at_filter_start_date.iso8601, max: Date.current.iso8601, autocomplete: "off", class: input_class %>
+      </div>
+      <% if params[:volunteers].present? || params.dig(:occurred_at, :start).present? || params.dig(:occurred_at, :end).present? %>
+        <div class="lg:self-end">
+          <%= link_to "Clear", reimbursements_path(status: params[:status]), class: "inline-flex h-9 items-center text-sm font-medium text-slate-600 hover:text-slate-900" %>
+        </div>
+      <% end %>
+      <noscript><%= submit_tag "Filter", class: button_classes(:primary) %></noscript>
+    <% end %>
+
+    <% if @reimbursements.any? %>
+      <div class="<%= card %> hidden overflow-hidden md:block">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="<%= th %>">Volunteer</th>
+                <th scope="col" class="<%= th %>">Case number</th>
+                <th scope="col" class="<%= th %>">Contact types</th>
+                <th scope="col" class="<%= th %>">Occurred at</th>
+                <th scope="col" class="<%= th %>">Miles driven</th>
+                <th scope="col" class="<%= th %>">Address</th>
+                <th scope="col" class="<%= th %>">Reimbursement complete</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @reimbursements.each do |reimbursement| %>
+                <tr data-test="reimbursement-row" class="hover:bg-slate-50">
+                  <td class="<%= td %> font-medium text-slate-800"><%= formatted_name(reimbursement.creator.display_name) %></td>
+                  <td class="<%= td %>"><%= link_to reimbursement.casa_case.case_number, casa_case_path(reimbursement.casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+                  <td class="<%= td %> text-slate-500"><%= contact_types_list(reimbursement) %></td>
+                  <td class="<%= td %> whitespace-nowrap"><%= reimbursement.occurred_at.strftime("%b %-d, %Y") %></td>
+                  <td class="<%= td %>"><%= reimbursement.miles_driven %></td>
+                  <td class="<%= td %> text-slate-500"><%= reimbursement.creator.address&.content.presence || "\u2014" %></td>
+                  <td class="<%= td %>"><%= render "reimbursement_toggle", reimbursement: reimbursement, check_class: check_class %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="space-y-3 md:hidden">
+        <% @reimbursements.each do |reimbursement| %>
+          <div class="<%= card %> p-4">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <p class="font-medium text-slate-800"><%= formatted_name(reimbursement.creator.display_name) %></p>
+                <p class="mt-0.5 text-sm"><%= link_to reimbursement.casa_case.case_number, casa_case_path(reimbursement.casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></p>
+              </div>
+              <span class="whitespace-nowrap text-xs text-slate-500"><%= reimbursement.occurred_at.strftime("%b %-d, %Y") %></span>
+            </div>
+            <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+              <div><dt class="text-xs text-slate-500">Miles driven</dt><dd class="text-slate-700"><%= reimbursement.miles_driven %></dd></div>
+              <div><dt class="text-xs text-slate-500">Contact types</dt><dd class="text-slate-700"><%= contact_types_list(reimbursement) %></dd></div>
+              <div class="col-span-2"><dt class="text-xs text-slate-500">Address</dt><dd class="text-slate-700"><%= reimbursement.creator.address&.content.presence || "\u2014" %></dd></div>
+            </dl>
+            <div class="mt-3 border-t border-slate-100 pt-3"><%= render "reimbursement_toggle", reimbursement: reimbursement, check_class: check_class %></div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= render "shared/pagination", pagy: @pagy %>
+    <% else %>
+      <div class="<%= card %> px-6 py-16 text-center">
+        <div class="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-slate-100 text-slate-400"><i class="bi bi-cash-coin text-xl" aria-hidden="true"></i></div>
+        <h2 class="text-base font-semibold text-slate-900"><%= @complete_status ? "No completed reimbursements" : "No reimbursements need review" %></h2>
+        <p class="mt-1 text-sm text-slate-500"><%= @complete_status ? "Completed reimbursements will appear here." : "Volunteer travel reimbursement requests will appear here." %></p>
+      </div>
+    <% end %>
   </div>
-</div>
-
-<div>
-  <nav class="nav nav-tabs justify-content-center nav-justified mt-3">
-    <%= link_to "Needs Review", reimbursements_path(status: "needs_review"),
-                class: "nav-item nav-link #{active_if(!@complete_status)}" %>
-
-    <%= link_to "Reimbursement Complete", reimbursements_path(status: "complete"),
-                class: "nav-item nav-link #{active_if(@complete_status)}" %>
-  </nav>
-  <%= render "datatable" %>
 </div>

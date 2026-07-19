@@ -38,6 +38,7 @@
           [cases_index_title, "bi-folder2", casa_cases_path, "cases", true],
           ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
           ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
+          ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?],
           ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
           ["Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?]
         ] %>

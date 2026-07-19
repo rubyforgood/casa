@@ -620,12 +620,13 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
-- [~] Case show shipped; case contacts index + drafts + the multi-step **form** shipped
-  (filterrific kept, disclosure collapse; the form is an autosave Wicked wizard on casa_app); case
-  new/edit, reports, settings and the `case_contacts_new_design` table remain
-- [~] Management rosters (volunteers + supervisors index/edit and learning hours shipped — the
-  person-edit and roster references; case assignments are the assign/unassign actions already
-  covered by the edit-page twins), admin CRUD long-tail, all-CASA-admin area
+- [x] Case workflows: cases index/show/new/edit + case contacts index + drafts + the multi-step
+  **form** all shipped (filterrific kept, disclosure collapse; the form is an autosave Wicked
+  wizard on casa_app). Only the `case_contacts_new_design` table remains in this area.
+- [~] Management: volunteers + supervisors index/edit, learning hours, case assignments, and
+  **reimbursements** shipped (bespoke Tailwind tables + Pagy; reimbursements added a sidebar item
+  and retired its serverSide DataTable). Reports hub + organization settings, the admin CRUD
+  long-tail, and the all-CASA-admin area remain.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

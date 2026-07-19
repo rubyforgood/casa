@@ -10,13 +10,14 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-Case contacts are **shipped**: index + drafts + the multi-step **form** (`case_contacts/form/*`).
-Phase 4 rosters are shipped too (volunteers + supervisors index/edit, learning hours, case
-assignments). Good next candidates: **case new/edit** (`casa_cases#new`/`#edit`, the last Phase 3
-core workflow) or the smaller Phase 4 pages (reimbursements, organization settings) as fast wins,
-then reports. The only case-contacts remnant is the `case_contacts_new_design` DataTable (a
-separate opt-in page). The deferred sentence-case sweep can now fold in the case-contact
-`form_title` + field/action labels alongside the volunteer / supervisor / learning-hours ones.
+Phase 3 core workflows are **done** (cases index/show/new/edit; case contacts index + drafts +
+the multi-step form). Phase 4 is nearly done — volunteers + supervisors index/edit, learning
+hours, case assignments, and **reimbursements** are all shipped. Remaining Phase 4: the **reports
+hub + individual reports/exports** and **organization settings** (`casa_org#edit`, large). Then
+Phase 5 (admin long-tail CRUD) and Phase 6 (all-CASA-admin, edges). Good next: reports (high
+value) or organization settings. The only case-contacts remnant is the `case_contacts_new_design`
+DataTable (a separate opt-in page). The deferred sentence-case sweep can fold in the case-contact
+`form_title` + field/action labels alongside the earlier spec-locked ones.
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -92,7 +93,12 @@ page** pattern in `design.md`.
   Follow-ups: consolidate the show-specific contact card + reminder form with the shared
   Bootstrap partials when the contacts index / volunteers-edit migrate. Verified responsive
   (375-1280) and WCAG AA.
-- [ ] Case new / edit.
+- [x] Case new / edit (`casa_cases#new`/`#edit`). Both already render on `layout: "casa_app"`
+  (Tailwind cards, chevron selects, `shared/form_errors`, the court-orders + volunteer-assignment
+  twins, `month_year_select`, the shared contact-type TomSelect, and a `confirm_button` deactivate).
+  The orphaned Bootstrap `casa_cases/_form.html.erb` is dead (new/edit render inline) — see
+  dead-code. Verified green this session (52 examples; the lone failure, a supervisor-unassign
+  `:js` example, is a load-only Selenium flake that passes 3/3 in isolation).
 - [~] Case contacts index + drafts **shipped** on casa_app. The main index keeps **filterrific**
   (the `.filter-form` auto-submits on `.filter-input` change, targeting the `:case_contacts`
   turbo-frame) — its Bootstrap collapse was swapped for the `disclosure` controller (panel always
@@ -174,7 +180,23 @@ page** pattern in `design.md`.
   specs updated to match. Chevrons darkest-pixel verified (114 = slate-500); no overflow 375-1280.
   Follow-up: the now-dead `learning_hours.js` DataTable init + the unrendered
   `learning_hours/_confirm_note` partial (see the dead-code item).
-- [ ] Reimbursements.
+- [x] Reimbursements (`reimbursements#index`). On casa_app: a bespoke Tailwind table (desktop
+  table + mobile card twin) reusing the controller's policy-scoped query + **Pagy**, retiring the
+  jQuery serverSide DataTable (the `#reimbursements-datatable` table is gone, so the globally-
+  required `src/reimbursements.js` no-ops). Server-side filters via the `auto-submit` controller:
+  a single-select **Volunteer** dropdown (was a select2 multi; options come from the status-scoped
+  set so selecting one does not collapse the list) + an occurred-at date range (the controller's
+  date parse switched to `Date.parse` so native date inputs' ISO values work; volunteer filter
+  guarded with `.present?` so "All" doesn't `where(creator_id: "")`). "Needs review" /
+  "Reimbursement complete" tabs (sentence-cased) + column headers sentence-cased; "Download
+  mileage report" CSV stays. Mark-complete is a per-row PATCH toggle (`_reimbursement_toggle`,
+  checkbox auto-submits — CSP-safe, no inline onchange). Added a **Reimbursements** item to the
+  casa_app sidebar (guarded by `policy(:reimbursement).index?`) so the page is reachable. Deleted
+  5 orphaned partials (`_datatable`, `_table`, `_reimbursement_complete`, `_filter_trigger`,
+  `_occurred_at_filter_input`). Chevron darkest-pixel 114; no overflow 375-1280; system + request
+  + view + datatable + policy + notifier specs green (49). Follow-up: the now-dead
+  `src/reimbursements.js` + `reimbursements#datatable` action + `ReimbursementDatatable` +
+  `with_datatable` route (see dead-code).
 - [ ] Reports hub + individual reports / exports.
 - [ ] Organization settings (`casa_org#edit`).
 
@@ -236,7 +258,11 @@ page** pattern in `design.md`.
   whose columns were dropped in 2023 — now only referenced by the legacy case pages;
   `Form::HourMinuteDurationComponent` (+ its `.html.erb` + component spec) — the case-contact form
   was its last consumer and now uses an inline Tailwind duration twin, like learning hours;
-  the unused `CaseContactDecorator#form_page_notes` method — no view renders it).
+  the unused `CaseContactDecorator#form_page_notes` method — no view renders it; the orphaned
+  `casa_cases/_form.html.erb` (new/edit render their forms inline); the retired reimbursements
+  DataTable stack now that its index is a bespoke table — `src/reimbursements.js` (+ its
+  `application.js` require), the `reimbursements#datatable` action, `ReimbursementDatatable`, and
+  the `with_datatable` route concern on `resources :reimbursements`).
 - [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI
   copy / defined terms: the case-details fact labels ("Transition Aged Youth:", "Youth's Date
   in Care:", "Next Court Date:", "Court Report Status:", "No Court Dates"), the same term on

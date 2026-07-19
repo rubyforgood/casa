@@ -1,0 +1,10 @@
+<%# Mark-complete toggle for one reimbursement (rendered by the desktop table + mobile card).
+    The checkbox auto-submits a PATCH to change_complete_status (CSP-safe: the auto-submit
+    controller calls requestSubmit on change), which redirects back to the queue. The wrapping
+    <label> associates the checkbox, and the id is row-unique. %>
+<%= form_with model: reimbursement, url: reimbursement_mark_as_complete_path(reimbursement), method: :patch, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "reimbursement-complete-form" do |form| %>
+  <label class="inline-flex cursor-pointer items-center gap-2">
+    <%= form.check_box :reimbursement_complete, id: "reimbursement_complete_#{reimbursement.id}", class: check_class %>
+    <span class="text-sm text-slate-700"><%= @complete_status ? "Complete" : "Mark complete" %></span>
+  </label>
+<% end %>
