@@ -242,9 +242,17 @@ page** pattern in `design.md`.
   `.ts-wrapper::after` caret.
 
 ## Phase 5 — Admin long-tail CRUD
+- [x] **Simple settings CRUD forms (batch 1)** — judges, languages, placement types, and
+  learning-hour types + topics. Each `_form` now renders one shared **`shared/_settings_form`**
+  (casa_app card: name + optional `Active?` checkbox + optional description + Submit; delegates
+  `form_with model:` so it infers the url/param key), and each controller got `layout "casa_app"`
+  + `@active_nav = "settings"`. Reached from the settings page (New/Edit links); redirects back to
+  settings on save. The old breadcrumb was dropped (no `current_organization` dependency, so the
+  no-layout view specs pass). 41 system + view + request examples green; no overflow. Reuse
+  `shared/_settings_form` for the remaining name(+active) resources below.
 - [ ] Contact types, contact type groups, contact topics.
-- [ ] Hearing types, judges, languages.
-- [ ] Mileage rates, placement types, placements.
+- [ ] Hearing types (+ its checklist-items sub-table + the `checklist_items` CRUD).
+- [ ] Mileage rates, placements.
 - [ ] Banners, custom org links, checklist items.
 - [ ] Imports, court dates / bulk court dates, emancipation.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG

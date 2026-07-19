@@ -1,4 +1,6 @@
 class PlacementTypesController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :set_placement_type, only: %i[edit update]
   after_action :verify_authorized
   after_action :verify_policy_scoped

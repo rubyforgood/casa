@@ -169,6 +169,15 @@ the heading `mb-3` (12px) so it hugs the fields it introduces, and put the field
 (e.g. case number) in its own block with `mb-6` (24px) for section separation. A heading
 left as a grid child floats with equal 20px above and below and reads as detached.
 
+**Simple settings CRUD forms** (the org-settings long-tail — judges, languages, placement types,
+learning-hour types/topics, and other name(+active) resources) share one partial,
+`shared/_settings_form` (locals: `model`, `title`, `show_active`, `description`). It renders the
+casa_app page shell + a card with a required name field, an optional `Active?` checkbox, an
+optional intro paragraph, and a Submit button; `form_with model:` infers the url + param key.
+The resource's `_form` is a one-line `render`, and its controller sets `layout "casa_app"` +
+`@active_nav = "settings"`. No breadcrumb (keeps it free of `current_organization`, so the
+no-layout view specs render it standalone); save redirects back to the settings page.
+
 ### Multiselect
 Both the rich `Form::MultipleSelectComponent` (select-all + filterable list) and the basic
 `multiple-select` Stimulus controller render TomSelect, themed in `tailwind.css` (casa_app
