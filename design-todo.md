@@ -12,12 +12,12 @@ design system on the `casadesign` branch.
 ## Next up — resume here
 Phase 3 core workflows are **done** (cases index/show/new/edit; case contacts index + drafts +
 the multi-step form). Phase 4 is nearly done — volunteers + supervisors index/edit, learning
-hours, case assignments, and **reimbursements** are all shipped. Remaining Phase 4: the **reports
-hub + individual reports/exports** and **organization settings** (`casa_org#edit`, large). Then
-Phase 5 (admin long-tail CRUD) and Phase 6 (all-CASA-admin, edges). Good next: reports (high
-value) or organization settings. The only case-contacts remnant is the `case_contacts_new_design`
-DataTable (a separate opt-in page). The deferred sentence-case sweep can fold in the case-contact
-`form_title` + field/action labels alongside the earlier spec-locked ones.
+hours, case assignments, **reimbursements**, and the **reports hub** are all shipped. Remaining
+Phase 4: **organization settings** (`casa_org#edit`, large). Then the **court report generator**
+(`case_court_reports#index`, a separate report page), Phase 5 (admin long-tail CRUD), and Phase 6
+(all-CASA-admin, edges). Good next: **organization settings**. Loose ends: the
+`case_contacts_new_design` DataTable (a separate opt-in page) and the deferred sentence-case sweep
+(which can now fold in the reports + case-contact + earlier spec-locked Title Case labels).
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -197,7 +197,19 @@ page** pattern in `design.md`.
   + view + datatable + policy + notifier specs green (49). Follow-up: the now-dead
   `src/reimbursements.js` + `reimbursements#datatable` action + `ReimbursementDatatable` +
   `with_datatable` route (see dead-code).
-- [ ] Reports hub + individual reports / exports.
+- [x] Reports hub (`reports#index`). On casa_app: a "Quick exports" grid (6 one-click CSV
+  buttons) + the filterable "Case Contacts Report" builder. Kept the `.report-form-submit` +
+  `data-disable-with` contract (`src/reports.js` native-submits so the CSV download bypasses
+  Turbo; the leading icons are pointer-events-none so `event.target` is the button). The 4 filter
+  selects stay NATIVE `<select multiple>` with their spec-locked ids (multiple-select-field1..4) —
+  select2 dropped (it hid the native select, breaking `select .. from:` / `have_select`);
+  person-name options are now honorific-free (`formatted_name`). The column filter moved from a
+  Bootstrap modal to a native `<details>`; deleted the orphaned `reports/_filter`. Individual
+  report endpoints are CSV downloads (no HTML views). Spec-locked Title Case headings / labels /
+  button names kept verbatim (sweep). No overflow 375-1280; specs green bar 2 pre-existing
+  volunteer not-authorized redirects (they land on "/" not `casa_cases_path` — the app-wide
+  redirect-target issue, unrelated to this view).
+- [ ] Court report generator (`case_court_reports#index`) — a separate report page, still Bootstrap.
 - [ ] Organization settings (`casa_org#edit`).
 
 ## Phase 5 — Admin long-tail CRUD
