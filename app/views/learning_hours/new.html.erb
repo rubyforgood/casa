@@ -1,5 +1,12 @@
-<h1 class="mt-3">Record Learning Hours</h1>
-
-<div class="flex-container">
-  <%= render 'form', learning_hour: @learning_hour, form_type: 'new' %>
+<% content_for :page_title, "Record learning hours" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <div>
+      <%= link_to learning_hours_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to learning hours
+      <% end %>
+    </div>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Record learning hours</h1>
+    <%= render "form", learning_hour: @learning_hour, form_type: "new" %>
+  </div>
 </div>

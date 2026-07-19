@@ -1,7 +1,13 @@
-<div class="row my-3">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1><%= formatted_name(@volunteer.display_name) %>'s Learning Hours</h1>
+<%# A volunteer's learning hours, viewed by a supervisor/admin (casa_app). Reuses the shared
+    entries table. The possessive heading is spec-locked. %>
+<% content_for :page_title, "Learning hours" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6">
+    <%= link_to learning_hours_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+      <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to learning hours
+    <% end %>
+    <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= formatted_name(@volunteer.display_name) %>'s Learning Hours</h1>
   </div>
-</div>
 
-<%= render "learning_hours/learning_hours_table", learning_hours: @learning_hours %>
+  <%= render "learning_hours/learning_hours_table", learning_hours: @learning_hours %>
+</div>

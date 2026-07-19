@@ -10,10 +10,11 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-The volunteer **and supervisor** edit + index pages (Phase 4) are **shipped**. Good next
-candidates: case assignments (Phase 4 — the last roster piece), learning hours, or the deferred
-sentence-case sweep, which can now fold in the volunteer + supervisor pages' spec-locked Title
-Case labels.
+Phase 4 rosters are **shipped**: volunteers + supervisors index/edit, learning hours, and case
+assignments (the last via the edit-page twins). Good next candidates: reimbursements or
+reports (Phase 4), the remaining Phase 3 core workflows (case new/edit, case contacts), or the
+deferred sentence-case sweep, which can now fold in the volunteer / supervisor / learning-hours
+spec-locked Title Case labels.
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -119,8 +120,22 @@ page** pattern in `design.md`.
   overflow 375–1280. Follow-ups: the now-dead `supervisors#datatable` JSON action + `dashboard.js`
   supervisor block + the now-unused `shared/_manage_volunteers` (see the dead-code item); the
   per-supervisor stat methods stay per-row (N+1 parity with the retired datatable).
-- [ ] Case assignments.
-- [ ] Learning hours (volunteer + supervisor/admin views).
+- [x] Case assignments — no standalone page to migrate: the assign / unassign / reimbursement
+  actions are already casa_app via the `volunteers/_manage_cases`, `casa_cases/_volunteer_assignment`,
+  and `supervisors/_manage_volunteers` twins (the `case_assignments#index` view is orphaned — no
+  route points at it).
+- [x] Learning hours (volunteer + supervisor/admin views + show + new/edit). All on casa_app.
+  Volunteer index = a bespoke entries table (desktop table + mobile card twin, reused by the
+  supervisor/admin `volunteers#show`). Supervisor/admin index = a per-volunteer roster with a
+  YTD total, server-rendered + **Pagy** paginated, retiring the client-side DataTable (dropped the
+  `table#learning-hours` id `learning_hours.js` targets). The new/edit form rebuilds the
+  Hour(s)/Minute(s) inputs as a Tailwind twin of `Form::HourMinuteDurationComponent` (left
+  untouched — still used by the Bootstrap case-contacts form); form-field + submit labels are
+  spec-locked (queued for the sweep). Show is a fact card + Edit/Delete. Column headers
+  sentence-cased ("Learning type", "Time spent", "Time completed this year"); the system + request
+  specs updated to match. Chevrons darkest-pixel verified (114 = slate-500); no overflow 375-1280.
+  Follow-up: the now-dead `learning_hours.js` DataTable init + the unrendered
+  `learning_hours/_confirm_note` partial (see the dead-code item).
 - [ ] Reimbursements.
 - [ ] Reports hub + individual reports / exports.
 - [ ] Organization settings (`casa_org#edit`).
@@ -175,8 +190,10 @@ page** pattern in `design.md`.
   `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
   uses the native-dialog report modal); the `volunteers#datatable` + `supervisors#datatable` JSON
   actions and their `dashboard.js` blocks (both indexes retired the serverSide DataTable, moving
-  the `#volunteers` / `#supervisors` hook off the `<table>`); the now-unused
-  `shared/_manage_volunteers` (supervisors/edit was its last consumer); the vestigial
+  the `#volunteers` / `#supervisors` hook off the `<table>`); the `learning_hours.js` DataTable
+  init + the unrendered `learning_hours/_confirm_note` partial (the migrated learning-hours roster
+  is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
+  last consumer); the vestigial
   `CasaCase#hearing_type` / `#judge` `belongs_to` + `hearing_type_name` / `judge_name` delegates
   whose columns were dropped in 2023 — now only referenced by the legacy case pages).
 - [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI

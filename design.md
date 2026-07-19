@@ -585,8 +585,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [ ] Case show/new/edit, case contacts, reports, settings
-- [~] Management rosters (volunteers + supervisors index/edit shipped — the person-edit and
-  roster references; case assignments remain), admin CRUD long-tail, all-CASA-admin area
+- [~] Management rosters (volunteers + supervisors index/edit and learning hours shipped — the
+  person-edit and roster references; case assignments are the assign/unassign actions already
+  covered by the edit-page twins), admin CRUD long-tail, all-CASA-admin area
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

@@ -16,7 +16,7 @@ RSpec.describe "LearningHours", type: :request do
 
       it "displays the time completed column" do
         get learning_hours_path
-        expect(response.body).to include("Time Completed YTD")
+        expect(response.body).to include("Time completed this year")
       end
     end
   end
@@ -33,13 +33,13 @@ RSpec.describe "LearningHours", type: :request do
       it "displays the Learning Topic column if learning_topic_active is true" do
         volunteer.casa_org.update(learning_topic_active: true)
         get learning_hours_path
-        expect(response.body).to include("Learning Topic")
+        expect(response.body).to include("Learning topic")
       end
 
       it "does not display the Learning Topic column if learning_topic_active is false" do
         volunteer.casa_org.update(learning_topic_active: false)
         get learning_hours_path
-        expect(response.body).not_to include("Learning Topic")
+        expect(response.body).not_to include("Learning topic")
       end
     end
   end
