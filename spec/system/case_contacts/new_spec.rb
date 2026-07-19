@@ -517,10 +517,14 @@ RSpec.describe "case_contacts/new", type: :system do
   context "when volunteer has one case" do
     let(:first_case) { volunteer.casa_cases.first }
 
-    it "selects the only case" do
+    # Asserts the sole case is pre-selected in the relevant-cases control (TomSelect). The
+    # legacy sidebar listed each case number, so the old non-JS text match happened to pass;
+    # the casa_app sidebar has one "My Cases" link, so we assert the actual widget selection
+    # like the multi-case sibling below. The server-side default is covered by the first spec.
+    it "selects the only case", :js do
       subject
 
-      expect(page).to have_text(first_case.case_number)
+      expect(page).to have_select("case_contact_draft_case_ids", selected: [first_case.case_number])
       expect(volunteer.casa_cases.size).to eq 1
     end
   end

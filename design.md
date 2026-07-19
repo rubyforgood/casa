@@ -202,6 +202,38 @@ is a full-width textarea + a one-column design-system status select + Delete, in
 select + Copy button with a Dialog confirm (the `copy-court-orders` controller PATCHes
 `copy_court_orders`, then reloads so the copied orders and the flash show).
 
+### Autosave wizard form (case-contact)
+The case-contact form (`case_contacts/form/details`, a Wicked single-step wizard) is the
+reference for a long **autosave** form on the shell. Render it by setting `layout "casa_app"` on
+the controller — `render_wizard` / `render step` pick it up, while the autosave JSON responses
+skip the layout automatically. Structure: Tailwind card sections (Details / Notes / Reimbursement)
+in one `max-w-3xl` column, plus a bottom action bar (a "Create Another" checkbox + the primary
+Submit). Three Stimulus contracts must survive a restyle **verbatim**:
+- **autosave** — `data-controller="autosave"` on a wrapper *outside* the `<form>`;
+  `data-autosave-target="form"` on the form; `data-action="input->autosave#save"` on each text
+  field that should autosave (notes, topic answers, expense descriptions — *not* the whole form);
+  and a `<small role="alert" data-autosave-target="alert">No changes have been saved.</small>`
+  status line per section (that literal text is asserted by a non-JS spec; the JS swaps in
+  "Autosaving…" / "Saved!" and toggles `invisible` / `visible`, both real Tailwind utilities).
+- **casa-nested-form** (repeatable rows; extends stimulus-rails-nested-form) — each row is a
+  `.nested-form-wrapper` with `data-casa-nested-form-target="wrapper"`, `data-new-record`,
+  `data-child-index`, and hidden `id` + `_destroy` fields; the container holds a `<template>`
+  target, the existing `fields_for` rows, an empty `target` div (new rows insert *before* it), and
+  an **Add** button (`casa-nested-form#addAndCreate`). Rows autosave-create on add and
+  autosave-destroy on delete. (This differs from the court-orders `court-order-form#add`, which
+  only clones client-side.)
+- **case-contact-form** — reveals the reimbursement sub-form by toggling Tailwind **`hidden`** (the
+  controller was switched off Bootstrap `d-none`, which Tailwind does not define; safe because only
+  this form uses the controller). Keep it initially `hidden` so the non-JS `have_no_field` specs
+  pass and rack_test (ignores CSS) can still reach the fields.
+
+Required-field markers are `tag.span("*", class: "text-rose-600", "aria-hidden": "true")` — **not** a
+`.html_safe` string literal, which erb_lint rejects as unsafe interpolation. Shared bits stay shared:
+relevant-case picking is `Form::MultipleSelectComponent` (TomSelect) and errors use
+`shared/form_errors`; only the form-private partials (`_contact_topic_answer`,
+`shared/_additional_expense_form`) are restyled in place. Duration is an inline Tailwind twin, like
+learning hours (`Form::HourMinuteDurationComponent` is now dead).
+
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`
 on the court-date pages, `shared/_edit_form` / `_invite_login` on the casa_admin edit page), do
@@ -588,8 +620,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
-- [~] Case show shipped; case contacts index + drafts shipped (filterrific kept, disclosure
-  collapse); case new/edit, the case-contact form, reports, settings remain
+- [~] Case show shipped; case contacts index + drafts + the multi-step **form** shipped
+  (filterrific kept, disclosure collapse; the form is an autosave Wicked wizard on casa_app); case
+  new/edit, reports, settings and the `case_contacts_new_design` table remain
 - [~] Management rosters (volunteers + supervisors index/edit and learning hours shipped — the
   person-edit and roster references; case assignments are the assign/unassign actions already
   covered by the edit-page twins), admin CRUD long-tail, all-CASA-admin area

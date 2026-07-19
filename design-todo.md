@@ -10,11 +10,13 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-Phase 4 rosters are **shipped**: volunteers + supervisors index/edit, learning hours, and case
-assignments (the last via the edit-page twins). Good next candidates: reimbursements or
-reports (Phase 4), the remaining Phase 3 core workflows (case new/edit, case contacts), or the
-deferred sentence-case sweep, which can now fold in the volunteer / supervisor / learning-hours
-spec-locked Title Case labels.
+Case contacts are **shipped**: index + drafts + the multi-step **form** (`case_contacts/form/*`).
+Phase 4 rosters are shipped too (volunteers + supervisors index/edit, learning hours, case
+assignments). Good next candidates: **case new/edit** (`casa_cases#new`/`#edit`, the last Phase 3
+core workflow) or the smaller Phase 4 pages (reimbursements, organization settings) as fast wins,
+then reports. The only case-contacts remnant is the `case_contacts_new_design` DataTable (a
+separate opt-in page). The deferred sentence-case sweep can now fold in the case-contact
+`form_title` + field/action labels alongside the volunteer / supervisor / learning-hours ones.
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -100,11 +102,30 @@ page** pattern in `design.md`.
   (`.followup-button` / `#followup-button-<id>` / `#resolve`, `data-turbo:false`). Inert class
   hooks the specs use (`.full-card`, `.container-fluid.mb-1`, `.card-title`) preserved; the
   `strong.text-primary` color assertion + the view-spec title sentence-cased. Chevrons
-  darkest-pixel verified (114); no overflow 375-1280. **Remaining**: the multi-step case-contact
-  **form** (`case_contacts/form/*` — contact-type multiselect, nested additional expenses, topic
-  answers) and the `case_contacts_new_design` DataTable table.
-- [ ] Case-contact multi-step form (`case_contacts/form/*`) + the `case_contacts_new_design` table
-  (`dashboard.js` `defineCaseContactsTable` `columns.render` rewrite).
+  darkest-pixel verified (114); no overflow 375-1280. **Remaining**: only the
+  `case_contacts_new_design` DataTable table (a separate opt-in page).
+- [x] Case-contact multi-step **form** (`case_contacts/form/details` + the `_contact_topic_answer`
+  and `shared/_additional_expense_form` nested rows) — SHIPPED on casa_app. Wicked single-step
+  wizard rendered on `layout "casa_app"` (the JSON autosave path skips the layout). Rebuilt in
+  Tailwind card sections (Details / Notes / Reimbursement) preserving all three Stimulus
+  contracts verbatim: **autosave** (`data-autosave-target="form"` + `input->autosave#save` on the
+  text fields + the `<small role="alert" data-autosave-target="alert">No changes have been
+  saved.</small>` lines a non-JS spec asserts), **case-contact-form** (reimbursement show/hide —
+  its JS now toggles Tailwind `hidden` instead of Bootstrap `d-none`, safe since only this form
+  uses the controller), and **casa-nested-form** (`.nested-form-wrapper` + template/target/wrapper
+  targets + hidden id/_destroy fields). Contact types stay grouped `.contact-form-type-checkbox`
+  checkboxes; relevant cases stay the shared `Form::MultipleSelectComponent` (TomSelect). Swapped
+  `shared/error_messages` for the Tailwind `shared/form_errors`. Duration is an inline Tailwind
+  twin (like learning hours), so `Form::HourMinuteDurationComponent` is now dead (see dead-code).
+  `form_title` + the field/action Title Case labels are spec-locked (queued for the sweep). One
+  non-JS spec ("selects the only case") was updated: it matched the legacy sidebar's case list, so
+  it now asserts the widget selection (`have_select`) with `:js` like its multi-case sibling.
+  Chevron darkest-pixel verified (114 = slate-500); no overflow 375-1280; 55 form-spec examples
+  green bar the pre-existing cross-org `edit_spec:76`. (Two expense `:js` specs flake only under
+  full-dir concurrent load; they pass 5/5 in isolation — pre-existing timing, JS logic unchanged.)
+  See the **Case-contact form** pattern in `design.md`.
+- [ ] `case_contacts_new_design` DataTable (`dashboard.js` `defineCaseContactsTable`
+  `columns.render` rewrite) — still Bootstrap.
 
 ## Phase 4 — Management & rosters
 - [x] Volunteers index + edit. Both on casa_app. The **index** is a bespoke Tailwind table
@@ -212,7 +233,10 @@ page** pattern in `design.md`.
   is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
   last consumer); the vestigial
   `CasaCase#hearing_type` / `#judge` `belongs_to` + `hearing_type_name` / `judge_name` delegates
-  whose columns were dropped in 2023 — now only referenced by the legacy case pages).
+  whose columns were dropped in 2023 — now only referenced by the legacy case pages;
+  `Form::HourMinuteDurationComponent` (+ its `.html.erb` + component spec) — the case-contact form
+  was its last consumer and now uses an inline Tailwind duration twin, like learning hours;
+  the unused `CaseContactDecorator#form_page_notes` method — no view renders it).
 - [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI
   copy / defined terms: the case-details fact labels ("Transition Aged Youth:", "Youth's Date
   in Care:", "Next Court Date:", "Court Report Status:", "No Court Dates"), the same term on

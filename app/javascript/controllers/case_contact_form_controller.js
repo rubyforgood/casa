@@ -72,13 +72,16 @@ export default class extends Controller {
   }
 
   setReimbursementFormVisibility = () => {
+    // Toggles Tailwind's `hidden` (display:none). The case-contact form is casadesign
+    // (Tailwind) now; Bootstrap's `d-none` is not defined there. This controller is used
+    // only by that form, so switching the class here is safe.
     if (this.wantDrivingReimbursementTarget.checked) {
-      this.reimbursementFormTarget.classList.remove('d-none')
+      this.reimbursementFormTarget.classList.remove('hidden')
       this.expenseDestroyTargets.forEach(el => (el.value = '0'))
     } else {
       this.clearExpenses()
       this.clearMileage()
-      this.reimbursementFormTarget.classList.add('d-none')
+      this.reimbursementFormTarget.classList.add('hidden')
     }
   }
 }

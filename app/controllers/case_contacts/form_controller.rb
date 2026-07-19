@@ -1,8 +1,13 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
+  # The wizard renders on the casadesign (Tailwind) shell. layout applies to the HTML
+  # render_wizard/render step paths; the autosave JSON responses skip it.
+  layout "casa_app"
+
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
+  before_action :set_active_nav, only: [:show, :update]
   after_action :verify_authorized
 
   steps :details
@@ -41,6 +46,10 @@ class CaseContacts::FormController < ApplicationController
   end
 
   private
+
+  def set_active_nav
+    @active_nav = "contacts"
+  end
 
   def set_case_contact
     @case_contact = CaseContact
