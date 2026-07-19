@@ -42,6 +42,8 @@ import MultipleSelectController from './multiple_select_controller'
 
 import NavbarController from './navbar_controller'
 
+import RevealController from './reveal_controller'
+
 import SearchableSelectController from './searchable_select_controller'
 
 import SelectAllController from './select_all_controller'
@@ -74,6 +76,7 @@ application.register('local-storage-reset', LocalStorageResetController)
 application.register('modal', ModalController)
 application.register('multiple-select', MultipleSelectController)
 application.register('navbar', NavbarController)
+application.register('reveal', RevealController)
 application.register('searchable-select', SearchableSelectController)
 application.register('select-all', SelectAllController)
 application.register('sidebar', SidebarController)

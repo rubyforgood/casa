@@ -13,10 +13,11 @@ design system on the `casadesign` branch.
 **Phases 3 and 4 are done, plus the court report generator.** Phase 3: cases index/show/new/edit
 + case contacts index/drafts/form. Phase 4: volunteers + supervisors index/edit, learning hours,
 case assignments, reimbursements, the reports hub, organization settings, and the **court report
-generator** — all shipped. Next: **Phase 5** (the admin long-tail CRUD — contact types/groups/topics, judges, hearing types, languages, learning
-types/topics, placements, banners, custom links, checklist items, imports, court dates,
-emancipation — many share a `_form` partial + a similar index, so they can migrate in batches),
-then **Phase 6** (all-CASA-admin area, Devise edges, static pages). Loose ends: the
+generator** — all shipped. **Phase 5** is well underway: batches 1–4 (judges, languages,
+placement/learning-hour types + topics, contact types/groups/topics, hearing types + checklist
+items, custom org links, **mileage rates, placements, banners**) are shipped. Next in Phase 5:
+**imports, court dates / bulk court dates, emancipation**, then **Phase 6** (all-CASA-admin area,
+Devise edges, static pages). Loose ends: the
 `case_contacts_new_design` DataTable (a separate opt-in page); mobile card-stacking for the
 settings admin tables; and the deferred sentence-case sweep (now covering settings + reports +
 case-contact + the earlier spec-locked Title Case labels).
@@ -264,7 +265,17 @@ page** pattern in `design.md`.
   nested under the hearing type; custom org links is a casa_app form (Display text / URL / Active?).
   57 system + view + request examples green; the checklist table scrolls within its card on mobile
   (same follow-up as the settings admin tables).
-- [ ] Mileage rates, placements, banners.
+- [x] Mileage rates, placements, banners (**batch 4**). Mileage rates: a casa_app settings index
+  (date / amount / Active? / Edit, no delete) + a date+currency+Active? form. Placements (nested
+  under a case): a casa_app index whose per-row Delete is a **Dialog** with a visible "Close" +
+  `button_to "Confirm"` so the **non-`:js`** destroy spec passes (rack_test can't match an
+  aria-label X); a date + chevron-select form; a fact-card show. Banners: a casa_app `#banners`
+  table (kept `td.min-width` for a system spec) with a `shared/_confirm_button` Delete, and a form
+  with the **rich-text** content editor + a live `reveal` warning (new Stimulus controller) when
+  another banner is already active. **Trix** needed its stylesheet folded into the casa_app tailwind
+  bundle (`@import "trix/dist/trix.css"`) — without it the toolbar was unstyled and overflowed the
+  page to ~900px. 58 system + view + request examples green; chevron darkest-pixel 114; pages fit
+  375–1280 (tables + the Trix toolbar scroll within their own containers).
 - [ ] Imports, court dates / bulk court dates, emancipation.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table

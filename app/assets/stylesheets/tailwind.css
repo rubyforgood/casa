@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tom-select/dist/css/tom-select.css";
+@import "trix/dist/trix.css";
 
 /* Where Tailwind should look for class names (paths are relative to this file). */
 @source "../../components/**/*.{erb,rb}";

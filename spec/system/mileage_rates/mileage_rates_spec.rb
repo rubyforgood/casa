@@ -19,13 +19,14 @@ RSpec.describe "mileage_rates/new", :js, type: :system do
     click_on "Save Mileage Rate"
 
     expect(page).to have_text("Mileage Rates")
-    expect(page).to have_text("Effective date")
+    # Table headers are uppercased by the design-system CSS (text-transform), so match case-insensitively.
+    expect(page).to have_text(/Effective date/i)
     expect(page).to have_text("January 2, 2020")
-    expect(page).to have_text("Amount")
+    expect(page).to have_text(/Amount/i)
     expect(page).to have_text("$1.35")
-    expect(page).to have_text("Active?")
+    expect(page).to have_text(/Active\?/i)
     expect(page).to have_text("No")
-    expect(page).to have_text("Actions")
+    expect(page).to have_text(/Actions/i)
     expect(page).to have_text("Edit")
   end
 end

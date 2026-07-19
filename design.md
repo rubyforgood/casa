@@ -178,6 +178,16 @@ The resource's `_form` is a one-line `render`, and its controller sets `layout "
 `@active_nav = "settings"`. No breadcrumb (keeps it free of `current_organization`, so the
 no-layout view specs render it standalone); save redirects back to the settings page.
 
+### Rich text (Trix)
+ActionText `rich_text_area` fields work on casa_app because `tailwind.css` `@import`s
+`trix/dist/trix.css` alongside `tailwindcss` + tom-select. Trix's styles otherwise ship only in
+the legacy `application` bundle, which casa_app does not load — without the import the toolbar is
+unstyled and blows the page width to ~900px on every screen. Trix's default `.trix-button-row`
+is `overflow-x: auto`, so once loaded the toolbar self-scrolls on narrow screens (the page fits;
+the measure script surfaces the contained button row like a scrolling table). Give the editor
+design-system chrome via `class: "trix-content rounded-lg border border-slate-300 shadow-sm"`.
+The banner form is the reference.
+
 ### Multiselect
 Both the rich `Form::MultipleSelectComponent` (select-all + filterable list) and the basic
 `multiple-select` Stimulus controller render TomSelect, themed in `tailwind.css` (casa_app
@@ -472,6 +482,16 @@ separate **status variant** (the success/thank-you dialog) centers a 48px hero b
 components on Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded
 on `casa_app`).
 
+**Delete confirm in a table row.** For a per-row destructive confirm, reuse
+`shared/_confirm_button` (a visible-label trigger + the Dialog). When a **non-`:js` (rack_test)**
+spec drives the flow — click "Delete", assert the title, then a visible "Close"/"Confirm" — render
+the Dialog directly with a **visible** "Close" button (rack_test can't match the header X's
+`aria-label`, and `enable_aria_label` is off) and a `button_to` "Confirm" (the only element
+rack_test actually submits; the trigger + Close are `type="button"` no-ops, and the whole dialog
+sits in the DOM regardless of open state). The placements index is the reference — contrast the
+checklist-item delete, a `button_to` + `turbo_confirm` for specs that click Delete and expect an
+immediate submit with no in-page confirm text.
+
 **Status badge token** (the modal icon): one shape, `rounded-full`, two sizes: **32px**
 (`h-8 w-8`) inline in a header, **48px** (`h-12 w-12`) centered as a hero. Colored by intent
 (`bg-rose-100 text-rose-600` destructive, `bg-emerald-50 text-emerald-600` success). This is
@@ -641,7 +661,12 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Court report generator (`case_court_reports#index`): a Dialog + the reused `court-report`
   controller, with a searchable single-select TomSelect case picker (the `searchable-select`
   controller) that preserves the select2 volunteer-name search.
-- [~] Remaining: the Phase 5 admin CRUD long-tail and the Phase 6 all-CASA-admin area.
+- [~] Phase 5 admin CRUD long-tail: judges/languages/placement-types/learning-hour-types+topics,
+  contact types/groups/topics, hearing types + checklist items, custom org links, **mileage rates,
+  banners, and placements** all shipped (banners brought `trix/dist/trix.css` into the casa_app
+  tailwind bundle for rich text; placements uses a per-row Dialog delete that satisfies a non-`:js`
+  destroy spec). Remaining: imports, court dates / bulk court dates, emancipation.
+- [ ] Phase 6: the all-CASA-admin area, Devise edge pages, static / marketing pages.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

@@ -16,5 +16,5 @@ RSpec.describe "placements/new", type: :view do
   it { is_expected.to have_selector("h1", text: "New Placement") }
   it { is_expected.to have_selector("h6", text: casa_case.case_number) }
   it { is_expected.to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}") }
-  it { is_expected.to have_selector(".primary-btn") }
+  it { is_expected.to have_button("Create") }
 end

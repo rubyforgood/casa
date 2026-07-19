@@ -35,6 +35,6 @@ RSpec.describe "placements/edit", type: :system do
     fill_in "Placement Started At", with: 1000.years.ago
     click_on "Update"
 
-    expect(page).to have_content("1 error prohibited this Placement from being saved:\nPlacement started at cannot be prior to 1/1/1989.")
+    expect(page).to have_content("Placement started at cannot be prior to 1/1/1989.")
   end
 end

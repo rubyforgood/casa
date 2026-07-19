@@ -1,47 +1,43 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>
-          <% if banner.persisted? %>
-            Edit Banner
-          <% else %>
-            New Banner
-          <% end %>
-        </h1>
-      </div>
-    </div>
-  </div>
-</div><!-- ==== end title ==== -->
-<div class="card-style mb-30">
-  <%= form_with model: banner do |form| %>
-    <%= render "shared/error_messages", resource: banner %>
+<%# casa_app banner new/edit form. The Active? checkbox reveals a warning (reveal controller)
+    when the org already has another active banner; conditionally_add_hidden_class seeds the
+    initial hidden state with the Tailwind `hidden` class. Content is an ActionText rich-text area
+    (id banner_content, driven by the system spec's fill_in_rich_text_area). Locals: banner. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
-    <div class="input-style-1">
-      <%= form.label :name %>
-      <%= form.text_field :name, required: true %>
-    </div>
-    <div data-controller="reveal" data-reveal-hidden-class="d-none" class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, data: { action: current_organization.has_alternate_active_banner?(@banner.id) && 'click->reveal#toggle' }, class: 'form-check-input' %>
-      <%= form.label :active, "Active?", class: 'form-check-label' %>
-      <span data-reveal-target="item" class="text-danger <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
-    </div>
-    <span class="input-style-1">
-      <%= form.label :expires_at, "Expires at (optional)" %>
-      <%= form.datetime_field :expires_at,
-                              value: banner.expires_at_in_time_zone(browser_time_zone),
-                              required: false,
-                              include_seconds: false,
-                              min: Time.current.in_time_zone(browser_time_zone) %>
-    </span>
-    <div class="input-style-1">
-      <%= form.label :content %>
-      <%= form.rich_text_area :content %>
-    </div>
-    <div class="actions mb-10">
-      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
-        <i class="lni lni-checkmark-circle mr-10"></i> Submit
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= banner.persisted? ? "Edit Banner" : "New Banner" %></h1>
+    <div class="<%= card %>">
+      <%= form_with model: banner, class: "space-y-5" do |form| %>
+        <%= render "shared/form_errors", resource: banner %>
+        <div>
+          <%= form.label :name, class: label_class %>
+          <%= form.text_field :name, required: true, class: input_class %>
+        </div>
+        <div data-controller="reveal" data-reveal-hidden-class="hidden">
+          <div class="flex items-center gap-2">
+            <%= form.check_box :active, data: {action: current_organization.has_alternate_active_banner?(@banner.id) && "click->reveal#toggle"}, class: check_class %>
+            <%= form.label :active, "Active?", class: "text-sm font-medium text-slate-700" %>
+          </div>
+          <span data-reveal-target="item" class="mt-1.5 block text-sm text-rose-600 <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
+        </div>
+        <div>
+          <%= form.label :expires_at, "Expires at (optional)", class: label_class %>
+          <%= form.datetime_field :expires_at, value: banner.expires_at_in_time_zone(browser_time_zone), required: false, include_seconds: false, min: Time.current.in_time_zone(browser_time_zone), class: input_class %>
+        </div>
+        <div>
+          <%= form.label :content, class: label_class %>
+          <%= form.rich_text_area :content, class: "trix-content rounded-lg border border-slate-300 shadow-sm" %>
+        </div>
+        <div>
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
       <% end %>
     </div>
-  <% end %>
+  </div>
 </div>

@@ -35,6 +35,7 @@ RSpec.describe "placements/new", type: :system do
     fill_in "Placement Started At", with: 1000.years.ago
     click_on "Create"
 
-    expect(page).to have_content("2 errors prohibited this Placement from being saved:\nPlacement type must exist Placement started at cannot be prior to 1/1/1989.")
+    expect(page).to have_content("Placement type must exist")
+    expect(page).to have_content("Placement started at cannot be prior to 1/1/1989.")
   end
 end
