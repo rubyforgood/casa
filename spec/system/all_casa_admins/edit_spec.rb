@@ -23,11 +23,11 @@ RSpec.describe "AllCasaAdmin edit page", type: :system do
   private
 
   def expect_password_section_hidden
-    expect(page).to have_selector("#collapseOne.collapse:not(.show)", visible: :all)
+    expect(page).to have_selector("#collapseOne.hidden", visible: :all)
   end
 
   def expect_password_section_visible
-    expect(page).to have_selector("#collapseOne.collapse.show")
+    expect(page).to have_selector("#collapseOne:not(.hidden)")
     expect(page).to have_field("all_casa_admin[password]")
     expect(page).to have_field("all_casa_admin[password_confirmation]")
     expect(page).to have_button("Update Password")

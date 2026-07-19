@@ -1,49 +1,48 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>All CASA Admin</h1>
+<% content_for :page_title, "All CASA Admin" %>
+<% card = "rounded-2xl border border-slate-200 bg-white shadow-sm" %>
+<% th = "px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500" %>
+<% td = "px-3 py-3 text-sm text-slate-700 align-top" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-5xl space-y-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">All CASA Admin</h1>
+      <div class="flex flex-wrap gap-2">
+        <%= link_to new_all_casa_admins_casa_org_path, class: button_classes(:primary) do %>
+          <i class="bi bi-plus-lg" aria-hidden="true"></i> New CASA Organization
+        <% end %>
+        <%= link_to new_all_casa_admin_path, class: button_classes(:secondary) do %>
+          <i class="bi bi-plus-lg" aria-hidden="true"></i> New All CASA Admin
+        <% end %>
       </div>
     </div>
-    <%= render "layouts/flash_messages" %>
-    <div class="col-md-6">
-      <div class="breadcrumb-wrapper mb-30">
-        <span class="ml-5">
-          <%= link_to new_all_casa_admins_casa_org_path,
-              class: "btn-sm main-btn primary-btn btn-hover" do %>
-            <i class="lni lni-plus mr-10"></i>New CASA Organization
-          <% end %>
-          <%= link_to new_all_casa_admin_path,
-              class: "btn-sm main-btn primary-btn btn-hover" do %>
-            <i class="lni lni-plus mr-10"></i>New All CASA Admin
-          <% end %>
-        </span>
+
+    <div>
+      <h2 class="mb-3 text-lg font-semibold text-slate-900">CASA Organizations</h2>
+      <div class="<%= card %> overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200" data-test="organization-table">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="<%= th %>">Name</th>
+                <th scope="col" class="<%= th %>">Created at</th>
+                <th scope="col" class="<%= th %>">User count</th>
+                <th scope="col" class="<%= th %>">Case contact count</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @organizations.each do |organization| %>
+                <tr>
+                  <td class="<%= td %>"><%= link_to organization.name, all_casa_admins_casa_org_path(organization), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+                  <td class="<%= td %> whitespace-nowrap"><%= I18n.l(organization.created_at, format: :full, default: nil) %></td>
+                  <td class="<%= td %>"><%= organization.user_count %></td>
+                  <td class="<%= td %>"><%= organization.case_contacts_count %></td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
-  </div>
-</div>
-<div class="card card-container">
-  <div class="card-body">
-    <h2 class="mb-30">CASA Organizations</h2>
-    <table class="table organization-list" data-test="organization-table">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Created At</th>
-          <th>User Count</th>
-          <th>Case Contact Count</th>
-        </tr>
-      </thead>
-      <tbody>
-      <% @organizations.each do |organization| %>
-        <tr>
-          <td><%= link_to organization.name, all_casa_admins_casa_org_path(organization) %></td>
-          <td><%= I18n.l(organization.created_at, format: :full, default: nil) %></td>
-          <td><%= organization.user_count %></td>
-          <td><%= organization.case_contacts_count %></td>
-        </tr>
-      <% end %>
-      </tbody>
-    </table>
   </div>
 </div>

@@ -300,8 +300,22 @@ page** pattern in `design.md`.
   index is a plain Tailwind table (dropped the all-case-emancipations id so the src/emancipations.js
   DataTable no-ops). 42 system + view + request examples green; pages fit 375-1280.
 
-**Phase 5 (admin long-tail CRUD) is complete.** Next: **Phase 6** — the all-CASA-admin area (its
-own shell), Devise edge pages, and static / marketing pages.
+**Phase 5 (admin long-tail CRUD) is complete.**
+
+## Phase 6 — all-CASA-admin area, Devise edges, static pages
+- [x] All-CASA-admin **shell + org management (6a)**. New Tailwind `all_casa_admin` layout (own
+  sidebar: CASA organizations / Patch Notes / Edit Profile / Feature Flags / Pg Dashboard + Log
+  Out; simplified topbar; footer with the Ruby For Good / site-issue / SMS-terms links; inline
+  flash keeping a .header-flash hook). Set on the base AllCasaAdminsController (patch_notes stays
+  on `application` until 6b). Migrated the dashboard (org table), casa_orgs new/show (+ metrics),
+  and casa_admins new/edit/_form to Tailwind cards/tables/forms; the profile edit uses the
+  disclosure controller for the change-password panel (kept id=collapseOne; specs moved off
+  Bootstrap .collapse/.show to .hidden). Kept shared/error_messages (specs lock #error_explanation
+  + the "N errors prohibited" format). 89 examples green (the one red, all_casa_admin_spec:14
+  casa_admin "/" -> /supervisors, is a pre-existing regular-app routing failure — red on legacy too).
+- [ ] All-CASA-admin **patch_notes** index (JS CRUD) (6b).
+- [ ] All-CASA-admin **auth**: sessions/new + passwords/new (casa_auth shell, match devise/sessions) (6c).
+- [ ] Devise edge pages audit; static / marketing `static#index` landing page.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal

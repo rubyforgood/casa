@@ -1,5 +1,6 @@
 class AllCasaAdmins::CasaAdminsController < AllCasaAdminsController
   before_action :set_casa_org
+  before_action -> { @active_nav = "organizations" }
 
   def new
     @casa_admin = CasaAdmin.new

@@ -1,16 +1,18 @@
-<%= form_with(model: casa_admin, url: all_casa_admins_casa_org_casa_admins_path(casa_org), id: :new_casa_admin) do |form| %>
-  <%= render "/shared/error_messages", resource: casa_admin %>
-  <div class="input-style-1">
-    <%= form.label :email, "Email" %>
-    <%= form.text_field :email, class: "form-control" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<%= form_with(model: casa_admin, url: all_casa_admins_casa_org_casa_admins_path(casa_org), id: :new_casa_admin, class: "space-y-5") do |form| %>
+  <%= render "shared/error_messages", resource: casa_admin %>
+  <div>
+    <%= form.label :email, "Email", class: label_class %>
+    <%= form.text_field :email, class: input_class %>
   </div>
-  <div class="input-style-1">
-    <%= form.label :display_name, "Display name" %>
-    <%= form.text_field :display_name, class: "form-control" %>
+  <div>
+    <%= form.label :display_name, "Display name", class: label_class %>
+    <%= form.text_field :display_name, class: input_class %>
   </div>
-  <div class="actions">
-    <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-      <i class="lni lni-checkmark-circle mr-5"></i> Submit
+  <div>
+    <%= button_tag type: "submit", class: button_classes(:primary) do %>
+      <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
     <% end %>
   </div>
 <% end %>

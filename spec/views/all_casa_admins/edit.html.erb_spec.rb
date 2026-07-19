@@ -16,9 +16,8 @@ RSpec.describe "all_casa_admins/edit", type: :view do
     expect(rendered).to have_button("Update Profile")
   end
 
-  it "renders the change password collapse section, hidden by default", :aggregate_failures do
-    expect(rendered).to have_selector("#collapseOne.collapse")
-    expect(rendered).not_to include('class="collapse show"')
+  it "renders the change password section, hidden by default", :aggregate_failures do
+    expect(rendered).to have_selector("#collapseOne.hidden")
     expect(rendered).to have_field("all_casa_admin[password]")
     expect(rendered).to have_field("all_casa_admin[password_confirmation]")
     expect(rendered).to have_button("Update Password")
@@ -31,11 +30,9 @@ RSpec.describe "all_casa_admins/edit", type: :view do
       render
     end
 
-    it "renders error and flash messages partials", :aggregate_failures do
+    it "renders the error messages partial", :aggregate_failures do
       expect(rendered).to have_selector("#error_explanation.alert")
       expect(rendered).to have_text("can't be blank")
-      expect(rendered).to have_selector(".header-flash")
-      expect(rendered).to have_text("Profile updated")
     end
   end
 

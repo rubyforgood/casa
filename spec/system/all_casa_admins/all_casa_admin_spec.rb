@@ -136,7 +136,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     # Invitation is valid within 1 week
     travel 2.days
     visit accept_all_casa_admin_invitation_path(invitation_token: raw_token)
-    expect(page).to have_text "Set my password"
+    expect(page).to have_text "Set your password"
 
     # Invitation expires after 1 week
     travel 8.days

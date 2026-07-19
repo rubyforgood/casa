@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} \u00b7 CASA" : "All CASA Admin" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+</head>
+<body class="h-full bg-slate-50 font-sans text-slate-800 antialiased">
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white">Skip to main content</a>
+
+  <div class="flex min-h-full">
+    <div id="nav-backdrop" class="fixed inset-0 z-30 hidden bg-slate-900/50 lg:hidden" aria-hidden="true"></div>
+
+    <aside id="app-sidebar" aria-label="Primary" class="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 motion-reduce:transition-none lg:static lg:translate-x-0">
+      <div class="flex items-center gap-2 px-5 py-5">
+        <i class="bi bi-shield-lock text-lg text-brand-600" aria-hidden="true"></i>
+        <span class="truncate text-[15px] font-bold tracking-tight text-slate-900">All CASA admin</span>
+      </div>
+
+      <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
+        <% nav_items = [
+          ["CASA organizations", "bi-buildings", authenticated_all_casa_admin_root_path, "organizations"],
+          ["Patch Notes", "bi-journal-text", all_casa_admins_patch_notes_path, "patch_notes"],
+          ["Edit Profile", "bi-person-gear", edit_all_casa_admins_path, "profile"],
+          ["Feature Flags", "bi-flag", "/flipper", "flipper"],
+          ["Pg Dashboard", "bi-speedometer2", "/pg_dashboard", "pg"]
+        ] %>
+        <% nav_items.each do |title, icon, path, key| %>
+          <% active = (@active_nav == key) %>
+          <%= link_to path, "aria-current": (active ? "page" : nil), class: "flex items-center gap-3 rounded-lg px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 #{active ? "bg-brand-50 font-semibold text-brand-700" : "text-slate-600 hover:bg-slate-100"}" do %>
+            <i class="bi <%= icon %> text-base" aria-hidden="true"></i> <%= title %>
+          <% end %>
+        <% end %>
+      </nav>
+
+      <div class="border-t border-slate-100 p-3">
+        <%= link_to destroy_all_casa_admin_session_path, id: "all-casa-log-out", class: "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-rose-500" do %>
+          <i class="bi bi-box-arrow-right text-base" aria-hidden="true"></i> Log Out
+        <% end %>
+      </div>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <header class="relative z-[25] flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
+        <button type="button" id="nav-toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
+          <i class="bi bi-list text-xl" aria-hidden="true"></i>
+        </button>
+        <span class="text-base font-bold tracking-tight text-slate-900 lg:hidden">All CASA admin</span>
+        <div class="ml-auto flex items-center gap-2">
+          <span class="hidden text-sm text-slate-500 sm:inline"><%= current_all_casa_admin&.email %></span>
+          <span class="grid h-9 w-9 place-items-center rounded-full bg-brand-100 text-sm font-semibold text-brand-700" aria-hidden="true"><i class="bi bi-shield-lock"></i></span>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1">
+        <% if flash.any? { |_, message| message.present? } %>
+          <div class="header-flash space-y-2 px-4 pt-4 sm:px-6 lg:px-8">
+            <% flash.each do |type, message| %>
+              <% next if message.blank? %>
+              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+            <% end %>
+          </div>
+        <% end %>
+        <%= yield %>
+      </main>
+
+      <footer class="border-t border-slate-200 px-4 py-4 text-xs text-slate-500 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span>Built by <%= link_to "Ruby For Good", "https://rubyforgood.org/", class: "font-medium text-brand-600 hover:text-brand-700" %></span>
+          <%= link_to "Report a site issue", "https://form.typeform.com/to/iXY4BubB", class: "hover:text-slate-700" %>
+          <%= link_to "SMS Terms & Conditions", "/sms-terms-conditions.html", class: "hover:text-slate-700" %>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var btn = document.getElementById("nav-toggle");
+      var sidebar = document.getElementById("app-sidebar");
+      var backdrop = document.getElementById("nav-backdrop");
+      if (!btn || !sidebar || !backdrop) return;
+      function setOpen(open) {
+        sidebar.classList.toggle("-translate-x-full", !open);
+        backdrop.classList.toggle("hidden", !open);
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        document.body.classList.toggle("overflow-hidden", open);
+      }
+      btn.addEventListener("click", function () { setOpen(sidebar.classList.contains("-translate-x-full")); });
+      backdrop.addEventListener("click", function () { setOpen(false); });
+      document.addEventListener("keydown", function (event) { if (event.key === "Escape") setOpen(false); });
+    })();
+  </script>
+</body>
+</html>

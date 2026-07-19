@@ -1,21 +1,22 @@
-<div class="col-md-6">
-  <div class="title mb-30 mt-30">
-    <h1>New All CASA Admin</h1>
-  </div>
-</div>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: @all_casa_admin, as: :all_casa_admin, url: all_casa_admins_path) do |form| %>
-      <%= render "/shared/error_messages", resource: @all_casa_admin %>
-
-      <div class="input-style-1">
-        <%= form.label :email, "Email" %>
-        <%= form.email_field :email, class: "form-control" %>
-      </div>
-      <%= button_tag( type: "submit" , class: "btn-sm main-btn primary-btn btn-hover" ) do %>
-        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+<% content_for :page_title, "New All CASA Admin" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New All CASA Admin</h1>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <%= form_with(model: @all_casa_admin, as: :all_casa_admin, url: all_casa_admins_path, class: "space-y-5") do |form| %>
+        <%= render "shared/error_messages", resource: @all_casa_admin %>
+        <div>
+          <%= form.label :email, "Email", class: label_class %>
+          <%= form.email_field :email, class: input_class %>
+        </div>
+        <div>
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
       <% end %>
-    <% end %>
+    </div>
   </div>
 </div>
