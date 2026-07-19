@@ -250,7 +250,13 @@ page** pattern in `design.md`.
   settings on save. The old breadcrumb was dropped (no `current_organization` dependency, so the
   no-layout view specs pass). 41 system + view + request examples green; no overflow. Reuse
   `shared/_settings_form` for the remaining name(+active) resources below.
-- [ ] Contact types, contact type groups, contact topics.
+- [x] Contact types, contact type groups, contact topics (**batch 2**). Contact type groups reuses
+  `shared/_settings_form` (name + Active? + description); contact types + contact topics get custom
+  casa_app forms — contact types adds a group **chevron-select** (id
+  `contact_type_contact_type_group_id` kept for the system spec), contact topics has
+  question/details + Active? + Exclude from Court Report?. Controllers on `layout "casa_app"` +
+  `@active_nav = "settings"`. 45 system + request examples green; chevron darkest-pixel 114; no
+  overflow.
 - [ ] Hearing types (+ its checklist-items sub-table + the `checklist_items` CRUD).
 - [ ] Mileage rates, placements.
 - [ ] Banners, custom org links, checklist items.

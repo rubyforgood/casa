@@ -1,43 +1,40 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>
-          <%= title %>
-        </h1>
-      </div>
-    </div>
-  </div>
-</div><!-- ==== end title ==== -->
+<%# Contact topic (court-report question) new/edit (casa_app). Question + details + Active? +
+    Exclude from Court Report?. Field/label copy is Title Case (spec-locked in the settings table);
+    kept verbatim for the sweep. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
-<!-- ========== card start ========== -->
-<div class="card-style mb-30">
-  <%= form_with(model: contact_topic, local: true) do |form| %>
-    <%= form.hidden_field :casa_org_id %>
-    <div class="alert-box danger-alert">
-      <%= render "/shared/error_messages", resource: contact_topic %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :question, "Question" %>
-      <%= form.text_field :question, class: "form-control", required: true %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :details, "Details?" %>
-      <%= form.text_area :details, rows: 5, class: "form-control", required: true %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, class: 'form-check-input' %>
-      <%= form.label :active, "Active?", class: 'form-check-label' %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :exclude_from_court_report, class: 'form-check-input' %>
-      <%= form.label :exclude_from_court_report, "Exclude from Court Report?", class: 'form-check-label' %>
-    </div>
-    <div class="actions mb-10">
-      <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
-        <i class="lni lni-checkmark-circle mr-5"></i> Submit
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= title %></h1>
+    <div class="<%= card %>">
+      <%= form_with model: contact_topic, local: true, class: "space-y-5" do |form| %>
+        <%= form.hidden_field :casa_org_id %>
+        <%= render "shared/form_errors", resource: contact_topic %>
+        <div>
+          <%= form.label :question, "Question", class: label_class %>
+          <%= form.text_field :question, required: true, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :details, "Details?", class: label_class %>
+          <%= form.text_area :details, rows: 5, required: true, class: input_class %>
+        </div>
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <%= form.check_box :active, class: check_class %>
+          <span>Active?</span>
+        </label>
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <%= form.check_box :exclude_from_court_report, class: check_class %>
+          <span>Exclude from Court Report?</span>
+        </label>
+        <div>
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
       <% end %>
     </div>
-  <% end %>
+  </div>
 </div>
-<!-- card end -->
