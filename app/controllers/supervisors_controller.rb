@@ -7,7 +7,7 @@ class SupervisorsController < ApplicationController
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate, :resend_invitation, :change_to_admin]
   before_action :all_volunteers_ever_assigned, only: [:update]
   before_action :supervisor_has_unassigned_volunteers, only: [:edit]
-  before_action :set_active_nav, only: [:index, :edit, :update, :activate, :deactivate]
+  before_action :set_active_nav, only: [:index, :new, :create, :edit, :update, :activate, :deactivate]
 
   after_action :verify_authorized
 
@@ -25,6 +25,7 @@ class SupervisorsController < ApplicationController
   def new
     authorize Supervisor
     @supervisor = Supervisor.new
+    render layout: "casa_app"
   end
 
   def create
@@ -41,7 +42,7 @@ class SupervisorsController < ApplicationController
       sms_status = deliver_sms_to @supervisor, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
-      render new_supervisor_path, status: :unprocessable_content
+      render :new, status: :unprocessable_content, layout: "casa_app"
     end
   end
 

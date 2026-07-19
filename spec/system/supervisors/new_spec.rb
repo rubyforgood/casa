@@ -81,11 +81,11 @@ RSpec.describe "supervisors/new", type: :system do
       end
 
       it "shows validation error messages" do
-        expect(page).to have_text "errors prohibited this Supervisor from being saved:"
+        expect(page).to have_text "Unable to save"
       end
 
       it "stays on the new supervisor page", :aggregate_failures do
-        expect(page).to have_text "errors prohibited this Supervisor from being saved:" # Guard to ensure no redirection happened
+        expect(page).to have_text "Unable to save" # Guard to ensure no redirection happened
         expect(page).to have_current_path(supervisors_path)
       end
     end

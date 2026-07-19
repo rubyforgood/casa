@@ -97,9 +97,14 @@
           <div class="space-y-2 px-4 pt-4 sm:px-6 lg:px-8">
             <% flash.each do |type, message| %>
               <% next if message.blank? %>
-              <%# The flash key doubles as a class (`notice`/`alert`) — a no-op on Tailwind but the
-                  legacy-notifier hook specs assert (flash parity), alongside the a11y role. %>
-              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= type %> rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+              <%# Every flash carries a base `alert` class plus the flash key (`notice`/`alert`/...) —
+                  a no-op on Tailwind, but it mirrors the Bootstrap `_flash_messages` mapping
+                  (`flash_class`: "alert notice ...") so both legacy hooks match: `.notice` for the
+                  SweetAlert-notifier specs and `.alert` for the shared not-authorized redirect
+                  (delivered via flash[:notice], so it only carries `.alert` because every flash
+                  does). Plus the a11y role. %>
+              <% flash_classes = ["alert", type.to_s].uniq.join(" ") %>
+              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= flash_classes %> rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
             <% end %>
           </div>
         <% end %>

@@ -456,10 +456,14 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   surface is the "stop impersonating" link. It carries a `.header` hook because the volunteer
   edit spec asserts the banner text `within(".header")` after impersonating lands on a
   casa_app page.
-- **Flash strip parity**: each flash div carries the flash key as a class (`.notice` /
-  `.alert`) *and* the a11y `role` (`status`/`alert`). The class is a no-op on Tailwind but lets
-  specs written against the legacy SweetAlert notifier match on casa_app (e.g. a create that
-  redirects to a migrated edit page).
+- **Flash strip parity**: each flash div carries a base `alert` class **plus** the flash key
+  (`.notice` / `.alert` / ...) *and* the a11y `role` (`status`/`alert`). This mirrors the Bootstrap
+  `_flash_messages` mapping (`flash_class` -> `"alert notice ..."`, so every flash box is an
+  `.alert`), which lets both legacy hooks match on casa_app: `.notice` for the SweetAlert-notifier
+  specs (e.g. a create that redirects to a migrated edit page), and `.alert` for the shared
+  not-authorized redirect — that message is delivered as `flash[:notice]` (locked by ~dozens of
+  request specs, so the key can't change), and only reads as an alert because the base class is
+  always present. The classes are no-ops on Tailwind (styling is by role/type).
 - **Stacking order (z-index).** The top bar is `relative z-[25]` so its account / notification
   dropdowns (absolute panels *inside* the header) always paint above page content. Relying on the
   header's `backdrop-blur` stacking context alone was fragile: any page element that makes its own

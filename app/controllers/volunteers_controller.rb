@@ -42,6 +42,8 @@ class VolunteersController < ApplicationController
   def new
     @volunteer = current_organization.volunteers.new
     authorize @volunteer
+    @active_nav = "volunteers"
+    render layout: "casa_app"
   end
 
   def create
@@ -67,7 +69,8 @@ class VolunteersController < ApplicationController
       sms_status = deliver_sms_to @volunteer, account_activation_msg("volunteer", hash_of_short_urls)
       redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
     else
-      render :new, status: :unprocessable_content
+      @active_nav = "volunteers"
+      render :new, status: :unprocessable_content, layout: "casa_app"
     end
   end
 

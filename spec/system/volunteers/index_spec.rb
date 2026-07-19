@@ -50,7 +50,7 @@ RSpec.describe "volunteers/index", type: :system do
       visit volunteers_path
       click_on "New Volunteer"
 
-      expect(page).to have_text("New Volunteer")
+      expect(page).to have_text("New volunteer")
       expect(page).to have_css("form#new_volunteer")
     end
   end

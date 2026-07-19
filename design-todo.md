@@ -57,9 +57,12 @@ page** pattern in `design.md`.
   bar; `.header` hook + amber-400/amber-950 ~8:1). Fixed the 2 impersonation examples that had
   been red since the volunteer dashboard moved to casa_app.
 - [ ] Help link + sign-out in the account menu reach a consistent destination.
-- [x] Flash / notifier parity — the `casa_app` flash strip now carries the flash key as a class
-  (`.notice` / `.alert`) alongside `role="status"/"alert"`, so legacy-notifier specs match on
-  casa_app (a richer SweetAlert-style toast is still optional, not required).
+- [x] Flash / notifier parity — the `casa_app` flash strip carries a base `alert` class **plus**
+  the flash key (`.notice` / `.alert`) alongside `role="status"/"alert"`, mirroring the Bootstrap
+  `flash_class` mapping so both legacy hooks match: `.notice` for the SweetAlert-notifier specs and
+  `.alert` for the shared not-authorized redirect (it ships as `flash[:notice]`, locked by ~dozens
+  of request specs, so it only reads as an alert because every flash box is an `.alert`). A richer
+  SweetAlert-style toast is still optional, not required.
 
 ## Phase 2 — Role landing dashboards
 - [x] Volunteer dashboard / landing — triage (active cases, cases needing a contact,
@@ -102,7 +105,10 @@ page** pattern in `design.md`.
   `dashboard.js`'s `$('table#volunteers').DataTable()` no longer matches. Follow-ups: the
   now-unused `volunteers#datatable` JSON action + `dashboard.js` volunteer block are dead
   (see the dead-code item); `hours_spent_in_days(30)` is still per-row (N+1 parity with the
-  retired datatable).
+  retired datatable). The **new / invite forms** (`volunteers#new` + `supervisors#new`) are also
+  on casa_app now — self-contained Tailwind forms using `shared/_form_errors`; the shared
+  not-authorized denial renders a `.alert` via the flash-parity base class (fixed the 3
+  `.alert` new/invite specs).
 - [x] Supervisors index + edit. Both on casa_app. The **index** is bespoke Tailwind: a supervisor
   roster + a "volunteers without supervisors" list + a "CASA cases without court dates" list, with
   a server-side status filter (auto-submit). Retired the serverSide DataTable by moving
