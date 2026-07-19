@@ -1,4 +1,6 @@
 class CustomOrgLinksController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :set_custom_org_link, only: %i[edit update destroy]
   after_action :verify_authorized
 

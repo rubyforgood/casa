@@ -1,100 +1,69 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>
-          <%= title %>
-        </h1>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="card-style mb-30">
-  <%= form_with(model: hearing_type, local: true) do |form| %>
-    <%= render "/shared/error_messages", resource: hearing_type %>
-    <div class="input-style-1">
-      <%= form.label :name, "Name" %>
-      <%= form.text_field :name, class: "form-control", required: true %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :active, class: 'form-check-input' %>
-      <%= form.label :active, class: 'form-check-label' %>
-    </div>
-    <% if !hearing_type.id.nil? %>
-      <div class="dashboard-table-header pt-2 pb-2">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <h3>Checklist</h3>
-          </div>
-          <!-- end col -->
-          <div class="col-md-6">
-            <div class="breadcrumb-wrapper">
-              <span class="ml-5">
-                <%= link_to new_hearing_type_checklist_item_path(hearing_type), class: "btn-sm main-btn primary-btn btn-hover" do %>
-                  <i class="lni lni-plus mr-10"></i>
-                  New List Item
-                <% end %>
-              </span>
-            </div>
-          </div>
-          <!-- end col -->
+<%# Hearing type new/edit (casa_app): name + Active?, and (once persisted) a checklist-items
+    table with New/Edit and a button_to Delete (a non-JS destroy spec drives "Delete", so no
+    Dialog confirm — turbo_confirm only, which rack_test ignores). %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= title %></h1>
+    <div class="<%= card %>">
+      <%= form_with model: hearing_type, local: true, class: "space-y-5" do |form| %>
+        <%= render "shared/form_errors", resource: hearing_type %>
+        <div>
+          <%= form.label :name, "Name", class: label_class %>
+          <%= form.text_field :name, required: true, class: input_class %>
         </div>
-      </div>
-      <!-- end table title -->
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table" id="checklist_items">
-          <thead>
-            <tr>
-              <th>Description</th>
-              <th>Category</th>
-              <th>Mandatory</th>
-              <th>Actions</th>
-            </tr>
-            <!-- end table row-->
-          </thead>
-          <tbody>
-            <% hearing_type.checklist_items.each do |checklist_item| %>
-              <tr id="checklist_item-<%= checklist_item.id %>">
-                <td class="min-width">
-                  <%= checklist_item.description %>
-                </td>
-                <td class="min-width">
-                  <%= checklist_item.category %>
-                </td>
-                <td class="min-width">
-                  <%= checklist_item.mandatory ? "Yes" : "Optional" %>
-                </td>
-                <td>
-                  <%= link_to edit_hearing_type_checklist_item_path(hearing_type, checklist_item) do %>
-                    <div class="action">
-                      <button class="text-danger">
-                        <i class="lni lni-pencil-alt"></i> Edit
-                      </button>
-                    </div>
-                  <% end %>
-                  <%= link_to hearing_type_checklist_item_path(hearing_type, checklist_item),
-                    method: :delete, data: { confirm: "Are you sure that you want to delete this checklist item?" } do %>
-                    <div class="action">
-                      <button class="text-danger">
-                        <i class="lni lni-trash-can"></i> Delete
-                      </button>
-                    </div>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-        <!-- end table -->
-      </div>
-    <% end %>
-    <div class="actions mb-10">
-      <%= button_tag(
-            type: "submit",
-            class: "btn-sm main-btn primary-btn btn-hover"
-          ) do %>
-          <i class="lni lni-checkmark-circle mr-10"></i> Submit
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <%= form.check_box :active, class: check_class %>
+          <span>Active?</span>
+        </label>
+        <div>
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
       <% end %>
     </div>
-  <% end %>
+
+    <% if hearing_type.persisted? %>
+      <div class="<%= card %>">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <h2 class="text-base font-semibold text-slate-900">Checklist</h2>
+          <%= link_to new_hearing_type_checklist_item_path(hearing_type), class: button_classes(:secondary) do %>
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> New List Item
+          <% end %>
+        </div>
+        <div class="mt-4 overflow-x-auto">
+          <table id="checklist_items" class="min-w-full divide-y divide-slate-200">
+            <thead>
+              <tr>
+                <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Description</th>
+                <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Category</th>
+                <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Mandatory</th>
+                <th scope="col" class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% hearing_type.checklist_items.each do |checklist_item| %>
+                <tr id="checklist_item-<%= checklist_item.id %>">
+                  <td class="px-3 py-2.5 text-sm text-slate-700"><%= checklist_item.description %></td>
+                  <td class="px-3 py-2.5 text-sm text-slate-500"><%= checklist_item.category %></td>
+                  <td class="px-3 py-2.5 text-sm text-slate-700"><%= checklist_item.mandatory ? "Yes" : "Optional" %></td>
+                  <td class="px-3 py-2.5 text-right text-sm">
+                    <div class="flex items-center justify-end gap-3">
+                      <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item), class: "font-medium text-brand-600 hover:text-brand-700" %>
+                      <%= button_to "Delete", hearing_type_checklist_item_path(hearing_type, checklist_item), method: :delete, form_class: "inline", data: {turbo_confirm: "Are you sure that you want to delete this checklist item?"}, class: "font-medium text-rose-600 hover:text-rose-700" %>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% end %>
+  </div>
 </div>

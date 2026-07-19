@@ -1,34 +1,34 @@
-<div class="pt-30">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-30">
-        <h1><%= title %></h1>
-      </div>
+<%# Checklist item new/edit (casa_app), nested under a hearing type. Category + Description +
+    Mandatory. Redirects to the hearing-type edit page on save. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= title %></h1>
+    <div class="<%= card %>">
+      <%= form_with model: [hearing_type, checklist_item], local: true, class: "space-y-5" do |form| %>
+        <%= render "shared/form_errors", resource: checklist_item %>
+        <div>
+          <%= form.label :category, "Category", class: label_class %>
+          <%= form.text_field :category, required: true, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :description, "Description", class: label_class %>
+          <%= form.text_field :description, required: true, class: input_class %>
+        </div>
+        <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+          <%= form.check_box :mandatory, class: check_class %>
+          <span>Mandatory</span>
+        </label>
+        <div>
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
+      <% end %>
     </div>
   </div>
 </div>
-
-<!-- ========== card start ========== -->
-<div class="card-style">
-  <%= form_with(model: [hearing_type, checklist_item], local: true) do |form| %>
-    <div class="danger-alert">
-      <%= render "/shared/error_messages", resource: checklist_item %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :category %>
-      <%= form.text_field :category, class: "form-control", required: true %>
-    </div>
-    <div class="select-style-1">
-      <%= form.label :description %>
-      <%= form.text_field :description, class: "form-control", required: true %>
-    </div>
-    <div class="checkbox-style mb-20">
-      <%= form.check_box :mandatory, class: 'form-check-input' %>
-      <%= form.label :mandatory, "Mandatory" %>
-    </div>
-    <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
-      <i class="lni lni-checkmark-circle mr-10"></i> Submit
-    <% end %>
-  <% end %>
-</div>
-<!-- card end -->

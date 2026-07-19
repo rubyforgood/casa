@@ -257,9 +257,14 @@ page** pattern in `design.md`.
   question/details + Active? + Exclude from Court Report?. Controllers on `layout "casa_app"` +
   `@active_nav = "settings"`. 45 system + request examples green; chevron darkest-pixel 114; no
   overflow.
-- [ ] Hearing types (+ its checklist-items sub-table + the `checklist_items` CRUD).
-- [ ] Mileage rates, placements.
-- [ ] Banners, custom org links, checklist items.
+- [x] Hearing types + checklist items + custom org links (**batch 3**). The hearing-type form is
+  name + Active? in a card, plus (once persisted) a Tailwind checklist-items table with New/Edit
+  links and a `button_to` Delete (turbo_confirm only — a non-JS destroy spec drives "Delete", so no
+  Dialog). checklist_items new/edit is a custom casa_app form (Category / Description / Mandatory)
+  nested under the hearing type; custom org links is a casa_app form (Display text / URL / Active?).
+  57 system + view + request examples green; the checklist table scrolls within its card on mobile
+  (same follow-up as the settings admin tables).
+- [ ] Mileage rates, placements, banners.
 - [ ] Imports, court dates / bulk court dates, emancipation.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
