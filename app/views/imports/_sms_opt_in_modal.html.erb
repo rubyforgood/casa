@@ -1,34 +1,22 @@
-<div class="modal show" id="smsOptIn" style="display: block;">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="smsOptIn">
-          SMS Opt In
-        </h5>
-        <a type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </a>
-      </div>
-      <div class="modal-body">
-        <div>
-          Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)
-        </div>
-        <br>
-        <span class="form-check checkbox-style">
-          <%= form.label :sms_opt_in_label, "Opt into SMS notifications", { class: "form-check-label"} %>
-          <%= form.check_box :sms_opt_in, { id: "sms-opt-in-checkbox", class: "form-check-input" } %>
-        </span>
-      </div>
-      <div class="modal-footer">
-        <%= form.submit "Continue Import",
-{ id: "sms-opt-in-continue-button", class: "main-btn primary-btn btn-hover", disabled: true } %>
-      </div>
-    </div>
+<%# SMS opt-in step (casa_app inline panel — was a Bootstrap modal). Rendered inside the
+    volunteer/supervisor import form after the server flags phone numbers. Keeps id="smsOptIn"
+    (src/import.js re-populates the file input from localStorage while this is present) plus the
+    sms-opt-in-checkbox / sms-opt-in-continue-button ids + the enable-on-check script. %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<div id="smsOptIn" class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+  <h3 class="flex items-center gap-2 text-sm font-semibold text-amber-900"><i class="bi bi-chat-dots" aria-hidden="true"></i> SMS Opt In</h3>
+  <p class="mt-1 text-sm text-amber-800">Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)</p>
+  <label class="mt-3 flex items-center gap-2 text-sm font-medium text-slate-700">
+    <%= form.check_box :sms_opt_in, id: "sms-opt-in-checkbox", class: check_class %>
+    <span>Opt into SMS notifications</span>
+  </label>
+  <div class="mt-3">
+    <%= form.submit "Continue Import", id: "sms-opt-in-continue-button", disabled: true, class: button_classes(:primary) %>
   </div>
 
   <script type="text/javascript">
-      document.getElementById('sms-opt-in-checkbox').addEventListener('change', function (event) {
-        document.getElementById('sms-opt-in-continue-button').disabled = !event.target.checked;
-      })
+    document.getElementById('sms-opt-in-checkbox').addEventListener('change', function (event) {
+      document.getElementById('sms-opt-in-continue-button').disabled = !event.target.checked
+    })
   </script>
 </div>

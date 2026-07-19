@@ -1,118 +1,46 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Imports</h1>
+<% content_for :page_title, "Imports" %>
+<%# imports#index on casa_app. The Bootstrap JS tabs become server-side link tabs keyed on
+    ?import_type= (the controller already reads @import_type); each tab keeps its id (a system
+    spec clicks "supervisor-tab") and "Import X" label. Only the active panel is rendered. The CSV
+    error is an inline alert (was a Bootstrap modal). File-upload + SMS-opt-in JS hooks live in the
+    panel partials + the global src/import.js (localStorage file persistence across the opt-in
+    reload). %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% tab = "whitespace-nowrap border-b-2 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% active = "border-brand-600 text-brand-700" %>
+<% inactive = "border-transparent text-slate-500 hover:border-slate-300 hover:text-slate-700" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Imports</h1>
+      <p class="mt-1 text-sm text-slate-500">Import files in this order: volunteers, then supervisors, then cases.</p>
+    </div>
+
+    <% if @import_error %>
+      <div class="rounded-xl border border-rose-200 bg-rose-50 p-4" role="alert">
+        <h2 class="flex items-center gap-2 text-sm font-semibold text-rose-800"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i> CSV Import Error</h2>
+        <div class="mt-1 text-sm text-rose-700"><%= sanitize @import_error %></div>
       </div>
+    <% end %>
+
+    <div class="border-b border-slate-200">
+      <nav class="-mb-px flex gap-6 overflow-x-auto text-sm font-medium" aria-label="Import type">
+        <%= link_to "Import Volunteers", imports_path(import_type: "volunteer"), id: "volunteer-tab", "aria-current": (@import_type == "volunteer" ? "page" : nil), class: "#{tab} #{@import_type == "volunteer" ? active : inactive}" %>
+        <%= link_to "Import Supervisors", imports_path(import_type: "supervisor"), id: "supervisor-tab", "aria-current": (@import_type == "supervisor" ? "page" : nil), class: "#{tab} #{@import_type == "supervisor" ? active : inactive}" %>
+        <%= link_to "Import Cases", imports_path(import_type: "casa_case"), id: "casa-case-tab", "aria-current": (@import_type == "casa_case" ? "page" : nil), class: "#{tab} #{@import_type == "casa_case" ? active : inactive}" %>
+      </nav>
+    </div>
+
+    <div class="<%= card %>">
+      <% case @import_type %>
+      <% when "supervisor" %>
+        <%= render "supervisors" %>
+      <% when "casa_case" %>
+        <%= render "cases" %>
+      <% else %>
+        <%= render "volunteers" %>
+      <% end %>
     </div>
   </div>
-</div>
-<div class="row">
-  <div class="col-sm-12">
-    <div class="card card-style">
-      <div class="card-body">
-        <h5 class="card-title">System Imports</h5>
-        <p class="card-text">
-          You should import files in the following order:
-        </p>
-        <ol style="list-style-type: decimal;" class="mx-4">
-          <li>Volunteers</li>
-          <li>Supervisors</li>
-          <li>Cases</li>
-        </ol>
-        <div>
-          <nav class="nav nav-tabs justify-content-center nav-justified mt-3">
-            <%= content_tag :a,
-                            role: "tab",
-                            href: "#volunteer",
-                            id: "volunteer-tab",
-                            class: [
-                                "nav-link",
-                                ("active" if @import_type == "volunteer")
-                            ].compact,
-                            data: {
-                              "bs-toggle" => "tab",
-                              "bs-target" => "#volunteer"
-                            },
-                            aria: {controls: "volunteer", selected: (@import_type == "volunteer")} do %>
-              Import Volunteers
-            <% end %>
-            <%= content_tag :a,
-                            role: "tab",
-                            href: "#supervisor",
-                            id: "supervisor-tab",
-                            class: [
-                                "nav-link",
-                                ("active" if @import_type == "supervisor")
-                            ].compact,
-                            data: {
-                              "bs-toggle" => "tab",
-                              "bs-target" => "#supervisor"
-                            },
-                            aria: {controls: "supervisor", selected: (@import_type == "supervisor")} do %>
-              Import Supervisors
-            <% end %>
-            <%= content_tag :a,
-                            role: "tab",
-                            href: "#casa-case",
-                            id: "casa-case-tab",
-                            class: [
-                                "nav-link",
-                                ("active" if @import_type == "casa_case")
-                            ].compact,
-                            data: {
-                              "bs-toggle" => "tab",
-                              "bs-target" => "#casa-case"
-                            },
-                            aria: {controls: "case", selected: (@import_type == "casa_case")} do %>
-              Import Cases
-            <% end %>
-          </nav>
-          <div class="tab-content">
-            <%= content_tag :div,
-                            role: "tabpanel",
-                            id: "volunteer",
-                            class: [
-                                "tab-pane",
-                                "fade",
-                                ("show" if @import_type == "volunteer"),
-                                ("active" if @import_type == "volunteer")
-                            ].compact,
-                            aria: {labelledby: "volunteer-tab"} do %>
-              <br>
-              <%= render "volunteers" %>
-            <%- end %>
-            <%= content_tag :div,
-                            role: "tabpanel",
-                            id: "supervisor",
-                            class: [
-                                "tab-pane",
-                                "fade",
-                                ("show" if @import_type == "supervisor"),
-                                ("active" if @import_type == "supervisor")
-                            ].compact,
-                            aria: {labelledby: "supervisor-tab"} do %>
-                <br>
-                <%= render "supervisors" %>
-              <%- end %>
-              <%= content_tag :div,
-                              role: "tabpanel",
-                              id: "casa-case",
-                              class: [
-                                  "tab-pane",
-                                  "fade",
-                                  ("show" if @import_type == "casa_case"),
-                                  ("active" if @import_type == "casa_case")
-                              ].compact,
-                              aria: {labelledby: "casa-case-tab"} do %>
-                <br>
-                <%= render "cases" %>
-              <%- end %>
-          </div>
-        </div>
-        <br>
-      </div>
-    </div>
-  </div>
-  <%= render "csv_error_modal", {import_error: @import_error} if @import_error %>
 </div>

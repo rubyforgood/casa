@@ -285,7 +285,14 @@ page** pattern in `design.md`.
   data-confirm (native window.confirm, like the volunteer deactivate). 80 examples green; chevron
   114; pages fit 375-1280. (bulk new_spec:15 is a pre-existing travel_to flake — fails identically
   on the legacy views when run after the edit spec.)
-- [ ] Imports, emancipation.
+- [x] Imports (**batch 5b**). CSV import page on casa_app: the Bootstrap JS tabs became server-side
+  link tabs keyed on ?import_type= (ids + "Import X" labels kept for the system spec), only the
+  active panel renders, and the CSV error is an inline alert (was a Bootstrap modal). The SMS
+  opt-in step is an inline amber panel that keeps id="smsOptIn" + the file/button ids + the
+  enable-on-check script, so the global src/import.js (button enable + localStorage file
+  persistence across the opt-in reload) keeps working. 21 system + request examples green; page
+  fits 375-1280 (tabs scroll within their nav on the narrowest screen).
+- [ ] Emancipation.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
