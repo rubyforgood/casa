@@ -9,7 +9,7 @@
       <i class="bi bi-plus-lg" aria-hidden="true"></i> New Language
     <% end %>
   </div>
-  <div class="mt-4 overflow-x-auto">
+  <div class="mt-4 hidden overflow-x-auto md:block">
     <table class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
@@ -30,5 +30,19 @@
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <div class="mt-4 space-y-3 md:hidden">
+    <div class="rounded-xl border border-slate-200 p-4">
+      <p class="break-words font-medium text-slate-800">English (default language)</p>
+    </div>
+    <% languages.each do |lang| %>
+      <div class="rounded-xl border border-slate-200 p-4">
+        <p class="break-words font-medium text-slate-800"><%= lang.name %></p>
+        <div class="mt-3 border-t border-slate-100 pt-3 text-sm">
+          <%= link_to "Edit", edit_language_path(lang), class: "font-medium text-brand-600 hover:text-brand-700" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

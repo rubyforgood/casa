@@ -6,7 +6,7 @@
       <i class="bi bi-plus-lg" aria-hidden="true"></i> New Placement Type
     <% end %>
   </div>
-  <div class="mt-4 overflow-x-auto">
+  <div class="mt-4 hidden overflow-x-auto md:block">
     <table id="placement-types-table" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
@@ -23,5 +23,16 @@
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <div class="mt-4 space-y-3 md:hidden">
+    <% placement_types.each do |placement_type| %>
+      <div class="rounded-xl border border-slate-200 p-4">
+        <p class="break-words font-medium text-slate-800"><%= placement_type.name %></p>
+        <div class="mt-3 border-t border-slate-100 pt-3 text-sm">
+          <%= link_to "Edit", edit_placement_type_path(placement_type), class: "font-medium text-brand-600 hover:text-brand-700" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>

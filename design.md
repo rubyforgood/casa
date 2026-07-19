@@ -307,6 +307,17 @@ below `md`: rack_test ignores the `hidden` class, so the hook holds at every wid
 horizontal scroll with a sticky axis column (`sticky left-0 z-10 bg-white`); stacking a 2D matrix
 into cards would destroy the visualization.
 
+The **org-settings / checklist admin tables** (rendered inside a white section card) use a
+**compact** `md:hidden` twin — `rounded-xl border border-slate-200 p-4` cards (lighter than the
+top-level `card`): the primary column as a `font-medium text-slate-800` line, other columns in a
+`<dl>` (`flex justify-between` rows; multi-line values like Details / URL stacked with
+`whitespace-pre-line` / `break-all`), then Edit / Delete in a `border-t` footer. Keep the `<tr id>`
+and per-row `shared/_confirm_button` on the **table only** — the card omits the id (it's a `<dl>`,
+not a row) and a duplicate confirm_button is safe (each Dialog is scoped by its own
+`data-controller="modal"` wrapper, id nil, so nothing collides). A table already narrow enough to fit
+a phone with no horizontal scroll (the 2-column emancipation-checklists index, measured W360/375)
+keeps its plain table — the rule targets scroll, not tables.
+
 When the container is **narrow** and each row has many fields (e.g. the volunteer assignment
 list inside the edit column), use a **card list at all widths** (one `<li>` per record: name +
 status pill on the first line, a `<dl>` of labeled meta, then the row actions) instead of

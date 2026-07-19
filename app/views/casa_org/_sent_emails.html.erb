@@ -2,7 +2,7 @@
     the id/time format are locked by the view spec; only the wrapper/table styling changed. %>
 <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
   <h3 class="text-base font-semibold text-slate-900">Sent Emails</h3>
-  <div class="mt-4 overflow-x-auto">
+  <div class="mt-4 hidden overflow-x-auto md:block">
     <table id="sent-emails" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
@@ -23,5 +23,27 @@
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <div class="mt-4 space-y-3 md:hidden">
+    <% @sent_emails.each do |sent_email| %>
+      <div class="rounded-xl border border-slate-200 p-4">
+        <p class="break-words font-medium text-slate-800"><%= sent_email.mailer_type %></p>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div class="flex justify-between gap-3">
+            <dt class="text-slate-500">Category</dt>
+            <dd class="text-right text-slate-700"><%= sent_email.category %></dd>
+          </div>
+          <div>
+            <dt class="text-slate-500">Recipient</dt>
+            <dd class="mt-0.5 break-words text-slate-700"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</dd>
+          </div>
+          <div class="flex justify-between gap-3">
+            <dt class="text-slate-500">Time Sent</dt>
+            <dd class="text-right text-slate-500"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></dd>
+          </div>
+        </dl>
+      </div>
+    <% end %>
   </div>
 </div>

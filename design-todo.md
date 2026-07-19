@@ -18,9 +18,9 @@ placement/learning-hour types + topics, contact types/groups/topics, hearing typ
 items, custom org links, **mileage rates, placements, banners**) are shipped. Next in Phase 5:
 **imports, court dates / bulk court dates, emancipation**, then **Phase 6** (all-CASA-admin area,
 Devise edges, static pages). Loose ends: the
-`case_contacts_new_design` DataTable (a separate opt-in page); mobile card-stacking for the
-settings admin tables; and the deferred sentence-case sweep (now covering settings + reports +
-case-contact + the earlier spec-locked Title Case labels).
+`case_contacts_new_design` DataTable (a separate opt-in page); and the deferred sentence-case
+sweep (now covering settings + reports + case-contact + the earlier spec-locked Title Case labels).
+The settings / checklist admin tables now card-stack on mobile (done).
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -223,9 +223,9 @@ page** pattern in `design.md`.
   contact-topic + custom-link deletes moved from the Bootstrap dropdown/`Modal::` to the Dialog
   `shared/confirm_button`. Section anchor ids (#contact-types, #case-contact-topics, ...) kept for
   deep links. Title-Case headings/labels kept verbatim (sweep). 33 view + system + request
-  examples green; no page overflow 375-1280. **Follow-up:** the admin tables scroll horizontally
-  within their card on mobile (matches the old `.table-responsive`); card-stacking them is deferred
-  (11 low-traffic admin tables). The entity CRUD pages the New/Edit links point at
+  examples green; no page overflow 375-1280. The 11 admin tables now **card-stack on mobile**
+  (`hidden md:block` table + `md:hidden` `<dl>` cards per design.md; measured fitting 375-1280).
+  The entity CRUD pages the New/Edit links point at
   (contact_types#new, judges, ...) are still Bootstrap (Phase 5).
 - [x] Court report generator (`case_court_reports#index`). On casa_app: reuses the `court-report`
   Stimulus controller + Dialog from the case-show modal (posts the case + date range to the JSON
@@ -263,8 +263,8 @@ page** pattern in `design.md`.
   links and a `button_to` Delete (turbo_confirm only — a non-JS destroy spec drives "Delete", so no
   Dialog). checklist_items new/edit is a custom casa_app form (Category / Description / Mandatory)
   nested under the hearing type; custom org links is a casa_app form (Display text / URL / Active?).
-  57 system + view + request examples green; the checklist table scrolls within its card on mobile
-  (same follow-up as the settings admin tables).
+  57 system + view + request examples green; the checklist table now **card-stacks on mobile**
+  (`md:hidden` `<dl>` cards per design.md), like the settings admin tables.
 - [x] Mileage rates, placements, banners (**batch 4**). Mileage rates: a casa_app settings index
   (date / amount / Active? / Edit, no delete) + a date+currency+Active? form. Placements (nested
   under a case): a casa_app index whose per-row Delete is a **Dialog** with a visible "Close" +

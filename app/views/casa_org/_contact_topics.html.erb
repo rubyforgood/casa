@@ -7,7 +7,7 @@
       <i class="bi bi-plus-lg" aria-hidden="true"></i> New Contact Topic
     <% end %>
   </div>
-  <div class="mt-4 overflow-x-auto">
+  <div class="mt-4 hidden overflow-x-auto md:block">
     <table id="contact-topics" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
@@ -33,5 +33,27 @@
         <% end %>
       </tbody>
     </table>
+  </div>
+
+  <div class="mt-4 space-y-3 md:hidden">
+    <% @contact_topics.each do |contact_topic| %>
+      <div class="rounded-xl border border-slate-200 p-4">
+        <p class="break-words font-medium text-slate-800"><%= contact_topic.question %></p>
+        <dl class="mt-2 space-y-1 text-sm">
+          <div>
+            <dt class="text-slate-500">Details</dt>
+            <dd class="mt-0.5 whitespace-pre-line text-slate-700"><%= contact_topic.details %></dd>
+          </div>
+          <div class="flex justify-between gap-3">
+            <dt class="text-slate-500">Active?</dt>
+            <dd class="text-right text-slate-700"><%= contact_topic.active ? "Yes" : "No" %></dd>
+          </div>
+        </dl>
+        <div class="mt-3 flex items-center gap-4 border-t border-slate-100 pt-3 text-sm">
+          <%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "font-medium text-brand-600 hover:text-brand-700" %>
+          <%= render "shared/confirm_button", url: soft_delete_contact_topic_path(contact_topic), method: :delete, title: "Delete Contact Topic?", message: "This topic and its related questions will be deleted and will no longer be presented while filling out case contacts. This will not affect case contacts that have already been created.", confirm_label: "Delete Court Report Topic", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
