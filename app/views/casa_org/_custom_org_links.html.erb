@@ -1,65 +1,42 @@
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card-style mb-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <h3>Custom Links</h3>
-        </div>
-        <div class="col-md-6">
-          <div class="breadcrumb-wrapper">
-            <span class="ml-5">
-              <%= link_to new_custom_org_link_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-                <i class="lni lni-plus mr-10"></i> New Custom Link
-              <% end %>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table">
-          <thead>
+<%# Org-settings Custom Links list (casa_app; rendered only by casa_org/edit). %>
+<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-base font-semibold text-slate-900">Custom Links</h3>
+    <%= link_to new_custom_org_link_path, class: button_classes(:secondary) do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> New Custom Link
+    <% end %>
+  </div>
+  <div class="mt-4 overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Display Text</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">URL</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Active?</th>
+          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% if @custom_org_links.blank? %>
+          <tr>
+            <td colspan="4" class="px-3 py-6 text-center text-sm italic text-slate-500">No custom links have been added for this organization.</td>
+          </tr>
+        <% else %>
+          <% @custom_org_links.each do |custom_link| %>
             <tr>
-              <th>Display Text</th>
-              <th>URL</th>
-              <th>Active?</th>
-              <th>Actions</th>
+              <td class="px-3 py-2.5 text-sm text-slate-700"><%= custom_link.text %></td>
+              <td class="px-3 py-2.5 text-sm text-slate-500"><%= truncate(custom_link.url, length: 90) %></td>
+              <td class="px-3 py-2.5 text-sm text-slate-700"><%= custom_link.active ? "Yes" : "No" %></td>
+              <td class="px-3 py-2.5 text-right text-sm">
+                <div class="flex items-center justify-end gap-3">
+                  <%= link_to "Edit", edit_custom_org_link_path(custom_link), class: "font-medium text-brand-600 hover:text-brand-700" %>
+                  <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>
+                </div>
+              </td>
             </tr>
-          </thead>
-          <tbody>
-            <% if @custom_org_links.blank? %>
-              <tr>
-                <td colspan="4">
-                  <span class="fw-light fst-italic text-center">No custom links have been added for this organization.</span>
-                </td>
-              </tr>
-            <% else %>
-              <% @custom_org_links.each do |custom_link| %>
-                <tr>
-                  <td><%= custom_link.text %></td>
-                  <td><%= truncate(custom_link.url, length: 90) %></td>
-                  <td><%= custom_link.active ? "Yes" : "No" %></td>
-                  <td>
-                    <%= link_to edit_custom_org_link_path(custom_link) do %>
-                      <div class="action">
-                        <button class="text-danger">
-                          <i class="lni lni-pencil-alt"></i> Edit
-                        </button>
-                      </div>
-                    <% end %>
-                    <%= link_to custom_org_link_path(custom_link), method: :delete do %>
-                      <div class="action">
-                        <button class="text-danger">
-                          <i class="lni lni-trash-can"></i> Delete
-                        </button>
-                      </div>
-                    <% end %>
-                  </td>
-                </tr>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+          <% end %>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

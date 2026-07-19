@@ -1,50 +1,27 @@
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card-style mb-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <h3>Learning Topic</h3>
-        </div>
-        <div class="col-md-6">
-          <div class="breadcrumb-wrapper">
-            <span class="ml-5">
-              <%= link_to new_learning_hour_topic_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-                <i class="lni lni-plus mr-10"></i>
-                New Learning Topic
-              <% end %>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table">
-          <thead>
-          <tr>
-            <th>Name</th>
-            <th>Actions</th>
+<%# Org-settings Learning Topics list (casa_app; rendered only by casa_org/edit). %>
+<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-base font-semibold text-slate-900">Learning Topic</h3>
+    <%= link_to new_learning_hour_topic_path, class: button_classes(:secondary) do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> New Learning Topic
+    <% end %>
+  </div>
+  <div class="mt-4 overflow-x-auto">
+    <table class="min-w-full divide-y divide-slate-200">
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
+          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @learning_hour_topics.each do |learning_hour_topic| %>
+          <tr id="learning_hour_topic-<%= learning_hour_topic.id %>">
+            <td class="px-3 py-2.5 text-sm text-slate-700"><%= learning_hour_topic.name %></td>
+            <td class="px-3 py-2.5 text-right text-sm"><%= link_to "Edit", edit_learning_hour_topic_path(learning_hour_topic), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
-          </thead>
-          <tbody>
-          <% @learning_hour_topics.each do |learning_hour_topic| %>
-            <tr id="learning_hour_topic-<%= learning_hour_topic.id %>">
-              <td scope="row" class="min-width">
-                <%= learning_hour_topic.name %>
-              </td>
-
-              <td>
-                <%= link_to edit_learning_hour_topic_path(learning_hour_topic) do %>
-                  <div class="action">
-                    <button class="text-danger">
-                      <i class="lni lni-pencil-alt"></i> Edit
-                    </button>
-                  </div>
-                <% end %>
-              </td>
-            </tr>
-          <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

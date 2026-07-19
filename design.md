@@ -623,12 +623,14 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Case workflows: cases index/show/new/edit + case contacts index + drafts + the multi-step
   **form** all shipped (filterrific kept, disclosure collapse; the form is an autosave Wicked
   wizard on casa_app). Only the `case_contacts_new_design` table remains in this area.
-- [~] Management: volunteers + supervisors index/edit, learning hours, case assignments,
-  **reimbursements**, and the **reports hub** shipped (bespoke Tailwind tables + Pagy;
-  reimbursements added a sidebar item and retired its serverSide DataTable; the reports hub keeps
-  its `.report-form-submit` CSV-download JS and native `<select multiple>` filters). Organization
-  settings, the court report generator, the admin CRUD long-tail, and the all-CASA-admin area
-  remain.
+- [x] Management (Phase 4): volunteers + supervisors index/edit, learning hours, case assignments,
+  reimbursements, the reports hub, and **organization settings** all shipped (bespoke Tailwind
+  tables + Pagy; reimbursements retired its serverSide DataTable; the reports hub keeps its
+  `.report-form-submit` CSV-download JS + native `<select multiple>` filters; settings uses a
+  `twilio` Stimulus controller that reveals the credential fields + toggles their required/disabled
+  from the enable checkbox, replacing the jQuery + Bootstrap-collapse `src/casa_org.js`).
+- [~] Remaining: the court report generator (`case_court_reports#index`), the Phase 5 admin CRUD
+  long-tail, and the Phase 6 all-CASA-admin area.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

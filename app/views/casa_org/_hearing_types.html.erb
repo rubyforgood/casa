@@ -1,57 +1,31 @@
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card-style mb-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <h3>Hearing Types</h3>
-        </div>
-        <div class="col-md-6">
-          <div class="breadcrumb-wrapper">
-            <span class="ml-5">
-              <%= link_to new_hearing_type_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-                <i class="lni lni-plus mr-10"></i>
-                New Hearing Type
-              <% end %>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table" id="hearing-types">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Checklist</th>
-              <th>Active?</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @hearing_types.each do |hearing_type| %>
-              <tr id="hearing_type-<%= hearing_type.id %>">
-                <td scope="row" class="min-width">
-                  <%= hearing_type.name %>
-                </td>
-                <td class="min-width">
-                  <%= "#{hearing_type.checklist_updated_date}" %>
-                </td>
-                <td scope="row" class="min-width">
-                  <%= hearing_type.active ? "Yes" : "No" %>
-                </td>
-                <td>
-                  <%= link_to edit_hearing_type_path(hearing_type) do %>
-                    <div class="action">
-                      <button class="text-danger">
-                        <i class="lni lni-pencil-alt"></i> Edit
-                      </button>
-                    </div>
-                  <% end %>
-                </td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<%# Org-settings Hearing Types list (casa_app; rendered only by casa_org/edit). %>
+<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-base font-semibold text-slate-900">Hearing Types</h3>
+    <%= link_to new_hearing_type_path, class: button_classes(:secondary) do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> New Hearing Type
+    <% end %>
+  </div>
+  <div class="mt-4 overflow-x-auto">
+    <table id="hearing-types" class="min-w-full divide-y divide-slate-200">
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Name</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Checklist</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Active?</th>
+          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @hearing_types.each do |hearing_type| %>
+          <tr id="hearing_type-<%= hearing_type.id %>">
+            <td class="px-3 py-2.5 text-sm text-slate-700"><%= hearing_type.name %></td>
+            <td class="px-3 py-2.5 text-sm text-slate-500"><%= hearing_type.checklist_updated_date %></td>
+            <td class="px-3 py-2.5 text-sm text-slate-700"><%= hearing_type.active ? "Yes" : "No" %></td>
+            <td class="px-3 py-2.5 text-right text-sm"><%= link_to "Edit", edit_hearing_type_path(hearing_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

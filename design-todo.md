@@ -10,14 +10,17 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-Phase 3 core workflows are **done** (cases index/show/new/edit; case contacts index + drafts +
-the multi-step form). Phase 4 is nearly done — volunteers + supervisors index/edit, learning
-hours, case assignments, **reimbursements**, and the **reports hub** are all shipped. Remaining
-Phase 4: **organization settings** (`casa_org#edit`, large). Then the **court report generator**
-(`case_court_reports#index`, a separate report page), Phase 5 (admin long-tail CRUD), and Phase 6
-(all-CASA-admin, edges). Good next: **organization settings**. Loose ends: the
-`case_contacts_new_design` DataTable (a separate opt-in page) and the deferred sentence-case sweep
-(which can now fold in the reports + case-contact + earlier spec-locked Title Case labels).
+**Phase 3 and Phase 4 are done.** Phase 3: cases index/show/new/edit + case contacts index/drafts/
+form. Phase 4: volunteers + supervisors index/edit, learning hours, case assignments,
+reimbursements, the reports hub, and **organization settings** — all shipped. Next: the **court
+report generator** (`case_court_reports#index`, a standalone report page), then **Phase 5** (the
+admin long-tail CRUD — contact types/groups/topics, judges, hearing types, languages, learning
+types/topics, placements, banners, custom links, checklist items, imports, court dates,
+emancipation — many share a `_form` partial + a similar index, so they can migrate in batches),
+then **Phase 6** (all-CASA-admin area, Devise edges, static pages). Loose ends: the
+`case_contacts_new_design` DataTable (a separate opt-in page); mobile card-stacking for the
+settings admin tables; and the deferred sentence-case sweep (now covering settings + reports +
+case-contact + the earlier spec-locked Title Case labels).
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -209,8 +212,22 @@ page** pattern in `design.md`.
   button names kept verbatim (sweep). No overflow 375-1280; specs green bar 2 pre-existing
   volunteer not-authorized redirects (they land on "/" not `casa_cases_path` — the app-wide
   redirect-target issue, unrelated to this view).
+- [x] Organization settings (`casa_org#edit`). On casa_app: the org-profile form (name, logo,
+  court-report template + download, feature toggles) + the Twilio credentials, revealed by a new
+  `twilio` Stimulus controller that flips the fields' visibility + required/disabled from the
+  "Enable Twilio" checkbox — replacing (and deleting) the jQuery + Bootstrap-collapse
+  `src/casa_org.js`, which had to go because it also disabled the twilio fields by id globally and
+  clobbered the controller. The 11 admin entity lists (contact types/groups/topics, judges,
+  hearing types, languages, learning types/topics, placement types, custom links, sent emails) are
+  restyled Tailwind tables keeping their spec-locked ids + cells + row ids + Edit/New links;
+  contact-topic + custom-link deletes moved from the Bootstrap dropdown/`Modal::` to the Dialog
+  `shared/confirm_button`. Section anchor ids (#contact-types, #case-contact-topics, ...) kept for
+  deep links. Title-Case headings/labels kept verbatim (sweep). 33 view + system + request
+  examples green; no page overflow 375-1280. **Follow-up:** the admin tables scroll horizontally
+  within their card on mobile (matches the old `.table-responsive`); card-stacking them is deferred
+  (11 low-traffic admin tables). The entity CRUD pages the New/Edit links point at
+  (contact_types#new, judges, ...) are still Bootstrap (Phase 5).
 - [ ] Court report generator (`case_court_reports#index`) — a separate report page, still Bootstrap.
-- [ ] Organization settings (`casa_org#edit`).
 
 ## Phase 5 — Admin long-tail CRUD
 - [ ] Contact types, contact type groups, contact topics.

@@ -1,183 +1,142 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1 id="organization-details">Editing CASA Organization</h1>
-      </div>
+<% content_for :page_title, "Organization settings" %>
+<%# casa_org#edit (organization settings) on the casa_app shell. The org profile form (with the
+    Twilio credentials revealed by the `twilio` Stimulus controller — replacing the jQuery +
+    Bootstrap-collapse toggle) followed by the admin entity lists. The anchor ids on the section
+    headings are deep-link targets (e.g. the case-contact form links to #case-contact-topics), so
+    keep them. Title-Case heading/label copy that specs assert is kept verbatim (sweep). %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% file_class = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-3 file:border-0 file:bg-slate-100 file:px-3.5 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl space-y-8">
+    <div>
+      <h1 id="organization-details" class="text-2xl font-bold tracking-tight text-slate-900">Editing CASA Organization</h1>
+      <p class="mt-1 text-sm text-slate-500">Organization profile, features, and admin settings.</p>
     </div>
-  </div>
-</div>
-<div class="card-style mb-30">
-  <%= form_with(model: current_organization, local: true) do |form| %>
-    <%= render "/shared/error_messages", resource: current_organization %>
-    <div class="input-style-1">
-      <%= form.label :name, "Name" %>
-      <%= form.text_field :name, class: "form-control", required: true %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :display_name, "Display name" %>
-      <%= form.text_field :display_name, class: "form-control" %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :address, "Address" %>
-      <%= form.text_field :address, class: "form-control" %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :logo, "Logo" %>
-      <%= form.file_field :logo, class: "form-control h-auto", accept: ".png,.gif,.jpg,.jpeg,.webp,.svg" %>
-    </div>
-    <div class="input-style-1">
-      <%= form.label :court_report_template, "Court report template" %>
-      <div class="row">
-        <div class="col-sm">
-          <%= form.file_field :court_report_template, class: "form-control" %>
+
+    <section class="<%= card %>">
+      <%= form_with model: current_organization, local: true, class: "space-y-5" do |form| %>
+        <%= render "shared/form_errors", resource: current_organization %>
+
+        <div>
+          <%= form.label :name, "Name", class: label_class %>
+          <%= form.text_field :name, required: true, class: input_class %>
         </div>
-         <div class="col-sm align-middle my-auto">
-          <% if current_organization.court_report_template.attached? %>
-          <% ActiveStorage::Current.url_options = { host: request.base_url } %>
-           <%= link_to 'Download Current Template', current_organization.court_report_template.url(only_path: true), class: "btn btn-info" %>
+        <div>
+          <%= form.label :display_name, "Display name", class: label_class %>
+          <%= form.text_field :display_name, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :address, "Address", class: label_class %>
+          <%= form.text_field :address, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :logo, "Logo", class: label_class %>
+          <%= form.file_field :logo, accept: ".png,.gif,.jpg,.jpeg,.webp,.svg", class: file_class %>
+        </div>
+        <div>
+          <%= form.label :court_report_template, "Court report template", class: label_class %>
+          <div class="flex flex-wrap items-center gap-3">
+            <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
+            <% if current_organization.court_report_template.attached? %>
+              <% ActiveStorage::Current.url_options = {host: request.base_url} %>
+              <%= link_to "Download Current Template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-5">
+          <h2 class="mb-3 text-base font-semibold text-slate-900">Organization Features</h2>
+          <div class="space-y-3">
+            <label class="flex items-start gap-2 text-sm text-slate-700">
+              <%= form.check_box :show_driving_reimbursement, class: check_class %>
+              <span>Show driving reimbursement</span>
+            </label>
+            <label class="flex items-start gap-2 text-sm text-slate-700">
+              <%= form.check_box :learning_topic_active, class: check_class %>
+              <span>Enable Learning Topic</span>
+            </label>
+            <label class="flex items-start gap-2 text-sm text-slate-700">
+              <%= form.check_box :other_duties_enabled, class: check_class %>
+              <span>Enable Other Duties</span>
+            </label>
+            <% if Flipper.enabled?(:show_additional_expenses) %>
+              <label class="flex items-start gap-2 text-sm text-slate-700">
+                <%= form.check_box :additional_expenses_enabled, class: check_class %>
+                <span>Volunteers can add Other Expenses</span>
+              </label>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-5" data-controller="twilio">
+          <% twilio_on = current_organization.twilio_enabled %>
+          <label class="flex items-start gap-2 text-sm text-slate-700">
+            <%= form.check_box :twilio_enabled, class: check_class, data: {twilio_target: "checkbox", action: "change->twilio#toggle"} %>
+            <span>Enable Twilio</span>
+          </label>
+          <div data-twilio-target="panel" class="mt-4 space-y-4 <%= "hidden" unless twilio_on %>">
+            <div>
+              <%= form.label :twilio_phone_number, "Twilio Phone Number", class: label_class %>
+              <%= form.text_field :twilio_phone_number, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+            </div>
+            <div>
+              <%= form.label :twilio_account_sid, "Twilio Account SID", class: label_class %>
+              <%= form.text_field :twilio_account_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+            </div>
+            <div>
+              <%= form.label :twilio_api_key_sid, "Twilio API Key SID", class: label_class %>
+              <%= form.text_field :twilio_api_key_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+            </div>
+            <div>
+              <%= form.label :twilio_api_key_secret, "Twilio API Key Secret", class: label_class %>
+              <%= form.text_field :twilio_api_key_secret, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+            </div>
+          </div>
+        </div>
+
+        <div class="border-t border-slate-100 pt-5">
+          <%= button_tag type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
           <% end %>
         </div>
-      </div>
-    </div>
-    <hr>
-    <h3 class="mb-2">Organization Features</h3>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :show_driving_reimbursement, class: 'form-check-input' %>
-      <%= form.label :show_driving_reimbursement, "Show driving reimbursement", class: 'form-check-label mb-2' %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :learning_topic_active, class: 'form-check-input' %>
-      <%= form.label :learning_topic_active, "Enable Learning Topic", class: 'form-check-label mb-2' %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :other_duties_enabled, class: 'form-check-input' %>
-      <%= form.label :other_duties_enabled, "Enable Other Duties", class: 'form-check-label mb-2' %>
-    </div>
-    <div class="form-check checkbox-style mb-20">
-      <%= form.check_box :twilio_enabled, class: 'form-check-input accordionTwilio' %>
-      <%= form.label :twilio_enabled, "Enable Twilio", class: 'form-check-label mb-2' %>
-    </div>
-    <%# Twilio Form Begin %>
-      <div class="accordionGroup">
-        <div id="collapseTwilio" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionTwilio">
-          <div class="input-style-1">
-            <%= form.label :twilio_phone_number, "Twilio Phone Number" %>
-            <%= form.text_field :twilio_phone_number, class: "form-control", required: true %>
-          </div>
-          <div class="input-style-1">
-            <%= form.label :twilio_account_sid, "Twilio Account SID" %>
-            <%= form.text_field :twilio_account_sid, class: "form-control", required: true %>
-          </div>
-          <div class="input-style-1">
-            <%= form.label :twilio_api_key_sid, "Twilio API Key SID" %>
-            <%= form.text_field :twilio_api_key_sid, class: "form-control", required: true %>
-          </div>
-          <div class="input-style-1">
-            <%= form.label :twilio_api_key_secret, "Twilio API Key Secret" %>
-            <%= form.text_field :twilio_api_key_secret, class: "form-control", required: true %>
-          </div>
-        </div>
-      </div>
-    <%# Twilio Form End %>
-    <% if Flipper.enabled?(:show_additional_expenses) %>
-        <div class="form-check checkbox-style mb-20">
-          <%= form.check_box :additional_expenses_enabled, class: 'form-check-input' %>
-          <%= form.label :additional_expenses_enabled, "Volunteers can add Other Expenses", class: 'form-check-label mb-2' %>
-        </div>
-    <% end %>
-    <div class="actions mb-10">
-      <%= button_tag(
-            type: "submit",
-            class: "btn-sm main-btn primary-btn btn-hover"
-          ) do %>
-        <i class="lni lni-checkmark-circle mr-10"></i> Submit
       <% end %>
-    </div>
-  <% end %>
-</div>
-<div class="tables-wrapper">
-  <%= render "languages", languages: current_organization.languages %>
-</div>
-<div class="tables-wrapper">
-  <%= render "custom_org_links" %>
-</div>
-<!-- end -->
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h2 id="contact-types">
-          Manage Contact Types
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="tables-wrapper">
-  <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
-  <%= render "contact_types", contact_types: @contact_types %>
-</div>
-<!-- end -->
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h2 id="court-details">
-          Manage Court Details
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="tables-wrapper">
-  <%= render "hearing_types" %>
-  <%= render "judges" %>
-  <%= render "sent_emails" %>
-</div>
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h2 id="learning-hours">
-          Manage Learning Hours
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="tables-wrapper">
-  <%= render "learning_hour_types" %>
-</div>
-<div class="tables-wrapper">
-  <%= render "learning_hour_topics" %>
-</div>
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h2 id="case-contact-topics">
-          Manage Case Contact Topics
-        </h2>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="tables-wrapper">
-  <%= render "contact_topics" %>
-</div>
+    </section>
 
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h2 id="placement-types">
-          Manage Case Placement Types
-        </h2>
-      </div>
-    </div>
+    <%= render "languages", languages: current_organization.languages %>
+    <%= render "custom_org_links" %>
+
+    <section class="space-y-4">
+      <h2 id="contact-types" class="<%= section_title %>">Manage Contact Types</h2>
+      <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
+      <%= render "contact_types", contact_types: @contact_types %>
+    </section>
+
+    <section class="space-y-4">
+      <h2 id="court-details" class="<%= section_title %>">Manage Court Details</h2>
+      <%= render "hearing_types" %>
+      <%= render "judges" %>
+      <%= render "sent_emails" %>
+    </section>
+
+    <section class="space-y-4">
+      <h2 id="learning-hours" class="<%= section_title %>">Manage Learning Hours</h2>
+      <%= render "learning_hour_types" %>
+      <%= render "learning_hour_topics" %>
+    </section>
+
+    <section class="space-y-4">
+      <h2 id="case-contact-topics" class="<%= section_title %>">Manage Case Contact Topics</h2>
+      <%= render "contact_topics" %>
+    </section>
+
+    <section class="space-y-4">
+      <h2 id="placement-types" class="<%= section_title %>">Manage Case Placement Types</h2>
+      <%= render "placement_types", placement_types: @placement_types %>
+    </section>
   </div>
-</div>
-<div class="tables-wrapper">
-  <%= render "placement_types", placement_types: @placement_types %>
 </div>

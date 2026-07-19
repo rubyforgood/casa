@@ -12,9 +12,11 @@ class CasaOrgController < ApplicationController
   before_action :require_organization!
   after_action :verify_authorized
   before_action :set_active_storage_url_options, only: %i[edit update]
+  before_action -> { @active_nav = "settings" }, only: %i[edit update]
 
   def edit
     authorize @casa_org
+    render layout: "casa_app"
   end
 
   def update
@@ -30,7 +32,7 @@ class CasaOrgController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_org.errors.full_messages, status: :unprocessable_content }
       end
     end

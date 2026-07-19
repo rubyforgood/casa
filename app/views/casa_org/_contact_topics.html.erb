@@ -1,65 +1,37 @@
-<div class="row">
-  <div class="col-lg-12">
-    <div class="card-style mb-30">
-      <div class="row align-items-center">
-        <div class="col-md-6">
-          <h3>Contact Topics</h3>
-        </div>
-        <div class="col-md-6">
-          <div class="breadcrumb-wrapper">
-            <span class="ml-5">
-              <%= link_to new_contact_topic_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-                <i class="lni lni-plus mr-10"></i>
-                New Contact Topic
-              <% end %>
-            </span>
-          </div>
-        </div>
-      </div>
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table" id="contact-topics">
-          <thead>
-            <tr>
-              <th>Question</th>
-              <th>Details</th>
-              <th>Active?</th>
-            </tr>
-          </thead>
-          <tbody>
-            <% @contact_topics.each do |contact_topic| %>
-              <% id = "contact_topic-#{contact_topic.id}" %>
-              <tr>
-                <td scope="row" class="min-width">
-                  <%= contact_topic.question %>
-                </td>
-                <td scope="row" class="min-width pre-line"><%= contact_topic.details %></td>
-                <td scope="row" class="min-width">
-                  <%= contact_topic.active ? "Yes" : "No" %>
-                </td>
-                <td>
-                  <%= render(DropdownMenuComponent.new(menu_title: "Actions Menu", hide_label: true)) do %>
-                    <li><%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "dropdown-item" %></li>
-                    <li><%= render(Modal::OpenLinkComponent.new(text: "Delete", target: id, klass: "dropdown-item")) %></li>
-                  <% end %>
-                </td>
-              </tr>
-              <%= render(Modal::GroupComponent.new(id: id)) do |component| %>
-                <% component.with_header(text: "Delete Contact Topic?", id: id) %>
-                <% component.with_body(text: [
-                  "This topic and its related questions will be deleted and will no longer be presented while filling out case contacts.",
-                  "This will not affect case contacts that have already been created."]) %>
-                <% component.with_footer do %>
-                  <%= link_to soft_delete_contact_topic_path(contact_topic), method: :delete,
-                    class: "btn-sm main-btn danger-btn btn-hover ms-auto" do %>
-                    <i class="lni lni-trash-can mr-10"></i>
-                    Delete Court Report Topic
-                  <% end %>
-                <% end %>
-              <% end %>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
+<%# Org-settings Contact Topics list (casa_app; rendered only by casa_org/edit). Delete moved
+    from the Bootstrap dropdown + Modal:: to a Dialog confirm-button (shared/confirm_button). %>
+<div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <div class="flex flex-wrap items-center justify-between gap-3">
+    <h3 class="text-base font-semibold text-slate-900">Contact Topics</h3>
+    <%= link_to new_contact_topic_path, class: button_classes(:secondary) do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> New Contact Topic
+    <% end %>
+  </div>
+  <div class="mt-4 overflow-x-auto">
+    <table id="contact-topics" class="min-w-full divide-y divide-slate-200">
+      <thead>
+        <tr>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Question</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Details</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Active?</th>
+          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Actions</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-100">
+        <% @contact_topics.each do |contact_topic| %>
+          <tr id="contact_topic-<%= contact_topic.id %>">
+            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_topic.question %></td>
+            <td class="whitespace-pre-line px-3 py-2.5 text-sm text-slate-500"><%= contact_topic.details %></td>
+            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_topic.active ? "Yes" : "No" %></td>
+            <td class="px-3 py-2.5 text-right text-sm">
+              <div class="flex items-center justify-end gap-3">
+                <%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "font-medium text-brand-600 hover:text-brand-700" %>
+                <%= render "shared/confirm_button", url: soft_delete_contact_topic_path(contact_topic), method: :delete, title: "Delete Contact Topic?", message: "This topic and its related questions will be deleted and will no longer be presented while filling out case contacts. This will not affect case contacts that have already been created.", confirm_label: "Delete Court Report Topic", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
 </div>

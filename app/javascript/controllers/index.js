@@ -50,6 +50,8 @@ import SidebarGroupController from './sidebar_group_controller'
 
 import TruncatedTextController from './truncated_text_controller'
 
+import TwilioController from './twilio_controller'
+
 application.register('nested-form', RailsNestedForm)
 application.register('add-to-calendar', AddToCalendarController)
 application.register('alert', AlertController)
@@ -74,3 +76,4 @@ application.register('select-all', SelectAllController)
 application.register('sidebar', SidebarController)
 application.register('sidebar-group', SidebarGroupController)
 application.register('truncated-text', TruncatedTextController)
+application.register('twilio', TwilioController)
