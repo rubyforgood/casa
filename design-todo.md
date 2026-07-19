@@ -314,7 +314,10 @@ page** pattern in `design.md`.
   + the "N errors prohibited" format). 89 examples green (the one red, all_casa_admin_spec:14
   casa_admin "/" -> /supervisors, is a pre-existing regular-app routing failure — red on legacy too).
 - [ ] All-CASA-admin **patch_notes** index (JS CRUD) (6b).
-- [ ] All-CASA-admin **auth**: sessions/new + passwords/new (casa_auth shell, match devise/sessions) (6c).
+- [x] All-CASA-admin **auth (6c)**: sessions/new + passwords/new rebuilt on the casa_auth
+  split-screen shell to match devise/sessions/new (kept the "All CASA Log In" heading, Email/Password
+  labels, the .actions wrapper + "Log in", and flash for the sign-out landing). 13 examples green;
+  pages fit 375-1280.
 - [ ] Devise edge pages audit; static / marketing `static#index` landing page.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
