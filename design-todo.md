@@ -313,7 +313,17 @@ page** pattern in `design.md`.
   Bootstrap .collapse/.show to .hidden). Kept shared/error_messages (specs lock #error_explanation
   + the "N errors prohibited" format). 89 examples green (the one red, all_casa_admin_spec:14
   casa_admin "/" -> /supervisors, is a pre-existing regular-app routing failure — red on legacy too).
-- [ ] All-CASA-admin **patch_notes** index (JS CRUD) (6b).
+- [x] All-CASA-admin **patch_notes index (6b)** — the JS clone-CRUD page. Kept the exact DOM the
+  jQuery reads (`#patch-note-list` child order; each `.card-body`'s direct textarea /
+  .label-and-select x2 / .patch-note-button-controls; the .button-edit/.button-delete hooks) and
+  restyled to Tailwind cards/native-selects; the shell now also loads the separate `all_casa_admin`
+  JS bundle (its `tables` DataTable no-ops on the plain Tailwind tables) and renders the
+  `layouts/components/_notifier` (the Notifier needs its `.messages` container). Ported the JS's
+  injected Edit/Delete/Save/Cancel buttons from Bootstrap+FontAwesome to button_classes strings +
+  bi-* icons. Also fixed the emancipation show page, which had the same bare `#notifications` (its
+  AJAX save feedback was silently dropped). **The all-CASA-admin authenticated area is now fully on
+  the shell.** 23 patch_notes + 91 all-casa examples green (only pre-existing all_casa_admin_spec:14
+  red); page fits 375-1280.
 - [x] All-CASA-admin **auth (6c)**: sessions/new + passwords/new rebuilt on the casa_auth
   split-screen shell to match devise/sessions/new (kept the "All CASA Log In" heading, Email/Password
   labels, the .actions wrapper + "Log in", and flash for the sign-out landing). 13 examples green;

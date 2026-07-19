@@ -1,33 +1,39 @@
-<div class="patch-note-list-item card">
-  <div id="patch-note-<%= patch_note.id %>" class="card-body">
-    <textarea disabled="true"><%= patch_note.note %></textarea>
-    <div class="select-style-1 label-and-select">
-      <label for="patch-note-<%= patch_note.id %>-type">Patch Note Type:</label>
-      <select id="patch-note-<%= patch_note.id %>-type" disabled="true">
+<%# One existing patch note (all_casa_admin shell). Same structure as #new-patch-note so the
+    jQuery in src/all_casa_admin/patch_notes.js can edit/save/delete it; inputs start disabled and
+    the Edit/Delete buttons keep their .button-edit / .button-delete hooks. %>
+<% textarea_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500" %>
+<% select_class = "block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<div class="patch-note-list-item card rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div id="patch-note-<%= patch_note.id %>" class="card-body space-y-4 p-5 sm:p-6">
+    <textarea disabled="true" class="<%= textarea_class %>"><%= patch_note.note %></textarea>
+    <div class="label-and-select">
+      <label for="patch-note-<%= patch_note.id %>-type" class="<%= label_class %>">Patch note type</label>
+      <select id="patch-note-<%= patch_note.id %>-type" disabled="true" class="<%= select_class %>">
         <% @patch_note_types&.each do |patch_note_type| %>
-          <option value="<%= patch_note_type.id %>" <% if patch_note_type.id === patch_note.patch_note_type_id %> selected="selected" <% end %>>
-            <%= patch_note_type.name %>
-          </option>
-        <% end %>
-      </select>
-    </div>
-    <div class="select-style-1 label-and-select">
-      <label for="patch-note-<%= patch_note.id %>-group">User Group:</label>
-      <select id="patch-note-<%= patch_note.id %>-group" disabled="true">
-        <% @patch_note_groups&.each do |patch_note_group| %>
-          <% if patch_note_group.id === patch_note.patch_note_group_id %>
-            <option value="<%= patch_note_group.id %>" selected="selected">
+          <% if patch_note_type.id == patch_note.patch_note_type_id %>
+            <option value="<%= patch_note_type.id %>" selected="selected"><%= patch_note_type.name %></option>
           <% else %>
-            <option value="<%= patch_note_group.id %>">
+            <option value="<%= patch_note_type.id %>"><%= patch_note_type.name %></option>
           <% end %>
-              <%= patch_note_group.value %>
-            </option>
         <% end %>
       </select>
     </div>
-    <div class="patch-note-button-controls">
-      <button type="button" class="main-btn primary-btn btn-hover button-edit"><i class="lni lni-pencil-alt mr-10"></i>Edit</button>
-      <button type="button" class="main-btn danger-btn btn-hover button-delete"><i class="lni lni-trash-can mr-10"></i>Delete</button>
+    <div class="label-and-select">
+      <label for="patch-note-<%= patch_note.id %>-group" class="<%= label_class %>">User group</label>
+      <select id="patch-note-<%= patch_note.id %>-group" disabled="true" class="<%= select_class %>">
+        <% @patch_note_groups&.each do |patch_note_group| %>
+          <% if patch_note_group.id == patch_note.patch_note_group_id %>
+            <option value="<%= patch_note_group.id %>" selected="selected"><%= patch_note_group.value %></option>
+          <% else %>
+            <option value="<%= patch_note_group.id %>"><%= patch_note_group.value %></option>
+          <% end %>
+        <% end %>
+      </select>
+    </div>
+    <div class="patch-note-button-controls flex flex-wrap gap-2">
+      <button type="button" class="<%= button_classes(:secondary) %> button-edit"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
+      <button type="button" class="<%= button_classes(:danger_outline) %> button-delete"><i class="bi bi-trash" aria-hidden="true"></i> Delete</button>
     </div>
   </div>
 </div>
