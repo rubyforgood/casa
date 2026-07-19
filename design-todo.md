@@ -10,11 +10,10 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-**Phase 3 and Phase 4 are done.** Phase 3: cases index/show/new/edit + case contacts index/drafts/
-form. Phase 4: volunteers + supervisors index/edit, learning hours, case assignments,
-reimbursements, the reports hub, and **organization settings** — all shipped. Next: the **court
-report generator** (`case_court_reports#index`, a standalone report page), then **Phase 5** (the
-admin long-tail CRUD — contact types/groups/topics, judges, hearing types, languages, learning
+**Phases 3 and 4 are done, plus the court report generator.** Phase 3: cases index/show/new/edit
++ case contacts index/drafts/form. Phase 4: volunteers + supervisors index/edit, learning hours,
+case assignments, reimbursements, the reports hub, organization settings, and the **court report
+generator** — all shipped. Next: **Phase 5** (the admin long-tail CRUD — contact types/groups/topics, judges, hearing types, languages, learning
 types/topics, placements, banners, custom links, checklist items, imports, court dates,
 emancipation — many share a `_form` partial + a similar index, so they can migrate in batches),
 then **Phase 6** (all-CASA-admin area, Devise edges, static pages). Loose ends: the
@@ -227,7 +226,20 @@ page** pattern in `design.md`.
   within their card on mobile (matches the old `.table-responsive`); card-stacking them is deferred
   (11 low-traffic admin tables). The entity CRUD pages the New/Edit links point at
   (contact_types#new, judges, ...) are still Bootstrap (Phase 5).
-- [ ] Court report generator (`case_court_reports#index`) — a separate report page, still Bootstrap.
+- [x] Court report generator (`case_court_reports#index`). On casa_app: reuses the `court-report`
+  Stimulus controller + Dialog from the case-show modal (posts the case + date range to the JSON
+  generate endpoint, spinner, opens the docx). The case picker is a new **searchable single-select
+  TomSelect** (`searchable-select` controller) — its text search covers the volunteer names
+  embedded in the option labels, so the select2 volunteer-name search is preserved (and both
+  volunteers and admins now get it). Dropped select2; native `#case-selection` stays (TomSelect
+  hides it, so option assertions use `visible: :all`) with its data-lookup/transition option
+  attributes. Dates are native date inputs (ISO) like the show-page modal. Added a **Court
+  reports** sidebar item (guarded by `see_court_reports_page?`). Rewrote the ~250-line select2 +
+  Bootstrap-modal system spec + `CaseCourtReportHelpers` for the Dialog + TomSelect; the two
+  old client-validation examples (hide-error-on-select, clear-on-reopen) were dropped — the empty
+  selection now surfaces the server's "not found" error via the shared controller. 49 system +
+  view + request examples green; no overflow 375-1280; TomSelect chevron is the documented global
+  `.ts-wrapper::after` caret.
 
 ## Phase 5 — Admin long-tail CRUD
 - [ ] Contact types, contact type groups, contact topics.

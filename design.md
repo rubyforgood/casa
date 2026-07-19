@@ -629,8 +629,10 @@ High-level progress; the granular, prioritized backlog lives in
   `.report-form-submit` CSV-download JS + native `<select multiple>` filters; settings uses a
   `twilio` Stimulus controller that reveals the credential fields + toggles their required/disabled
   from the enable checkbox, replacing the jQuery + Bootstrap-collapse `src/casa_org.js`).
-- [~] Remaining: the court report generator (`case_court_reports#index`), the Phase 5 admin CRUD
-  long-tail, and the Phase 6 all-CASA-admin area.
+- [x] Court report generator (`case_court_reports#index`): a Dialog + the reused `court-report`
+  controller, with a searchable single-select TomSelect case picker (the `searchable-select`
+  controller) that preserves the select2 volunteer-name search.
+- [~] Remaining: the Phase 5 admin CRUD long-tail and the Phase 6 all-CASA-admin area.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

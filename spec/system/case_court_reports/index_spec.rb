@@ -15,37 +15,21 @@ RSpec.shared_context "when on the court reports page" do |user_role|
   end
 end
 
-RSpec.shared_examples "a user with organization-level case visibility in autocomplete" do
-  before do
-    open_court_report_modal
-    open_case_select2_dropdown
-  end
+# On casa_app the case picker is a searchable single-select TomSelect (no select2), so the
+# native #case-selection is display:none; its options are asserted with visible: :all.
+RSpec.shared_examples "a user with organization-level case visibility" do
+  before { open_court_report_modal }
 
   it "shows all cases in their organization", :aggregate_failures do
-    # Ensure the dropdown results area is ready
-    expect(page).to have_css("ul.select2-results__options")
+    expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(unassigned_case.case_number)}/i, visible: :all)
 
-    # Check for the unassigned case created in the calling context
-    expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(unassigned_case.case_number)}/i)
-
-    # Check for each case assigned to the volunteer (created in the calling context)
     volunteer.casa_cases.each do |casa_case|
-      # Use regex to flexibly match text format (e.g., "CASE-NUM - status(assigned...)")
-      expect(page).to have_css(".select2-results__option", text: /#{Regexp.escape(casa_case.case_number)}/i)
+      expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(casa_case.case_number)}/i, visible: :all)
     end
   end
 
-  it "hides cases from other organizations", :aggregate_failures do
-    # Find and interact with the search field
-    input_field = find("input.select2-search__field", visible: :all)
-    input_field.click # Ensure focus before typing
-    input_field.send_keys(other_org_case.case_number)
-
-    # Assert that "No results found" IS visible (Capybara waits)
-    expect(page).to have_css(".select2-results__option", text: "No results found", visible: :visible, wait: 5)
-
-    # Assert that the specific other org case number is NOT visible
-    expect(page).not_to have_css(".select2-results__option", text: other_org_case.case_number, visible: :visible)
+  it "hides cases from other organizations" do
+    expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(other_org_case.case_number)}/i, visible: :all)
   end
 end
 
@@ -75,114 +59,77 @@ RSpec.describe "case_court_reports/index", type: :system do
       open_court_report_modal
     end
 
-    it "shows the Generate button", :aggregate_failures do
+    it "shows the Generate button and a searchable picker", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :visible
-      expect(page).not_to have_selector ".select2"
+      expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
     end
 
     it "shows correct default dates", :aggregate_failures do
-      date = Date.current
-      formatted_date = date.strftime("%B %d, %Y") # January 01, 2021
-
-      expect(page.find("#start_date").value).to eq(formatted_date)
-      expect(page.find("#end_date").value).to eq(formatted_date)
+      expect(page.find("#start_date").value).to eq(Date.current.to_s)
+      expect(page.find("#end_date").value).to eq(Date.current.to_s)
     end
 
     it "lists all assigned cases" do
-      expected_number_of_options = casa_cases.size + 1 # +1 for "Select case"
-      expect(page).to have_selector "#case-selection option", count: expected_number_of_options
+      expected_number_of_options = casa_cases.size + 1 # +1 for the prompt
+      expect(page).to have_selector "#case-selection option", count: expected_number_of_options, visible: :all
     end
 
-    it "shows correct transition status labels", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
+    it "shows correct transition status labels", :aggregate_failures do
       younger_than_transition_age = volunteer.casa_cases.reject(&:in_transition_age?).first
       at_least_transition_age = volunteer.casa_cases.detect(&:in_transition_age?)
 
-      expected_text_transition = "#{at_least_transition_age.case_number} - transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text_transition
-
-      expected_text_non_transition = "#{younger_than_transition_age.case_number} - non-transition"
-      expect(page).to have_selector "#case-selection option", text: expected_text_non_transition
+      expect(page).to have_selector "#case-selection option", text: "#{at_least_transition_age.case_number} - transition", visible: :all
+      expect(page).to have_selector "#case-selection option", text: "#{younger_than_transition_age.case_number} - non-transition", visible: :all
     end
 
     it "adds data-lookup attribute for volunteer searching" do
       casa_cases.each do |casa_case|
         lookup = casa_case.assigned_volunteers.map(&:display_name).join(",")
-        expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']"
+        expect(page).to have_selector "#case-selection option[data-lookup='#{lookup}']", visible: :all
       end
     end
 
-    it "defaults to 'Select case number' prompt", :aggregate_failures do
-      expect(page).to have_select "case-selection", selected: "Select case number"
-      # Extra check for the first option specifically
-      expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number"
+    it "defaults to the 'Select case number' prompt", :aggregate_failures do
+      expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number", visible: :all
+      within "#generate-docx-report-modal" do
+        expect(page).to have_css ".ts-control", text: "Select case number"
+      end
     end
 
-    it "shows an error when generating without a selection", :aggregate_failures do # rubocop:disable RSpec/ExampleLength
-      # Ensure default is selected
-      page.select "Select case number", from: "case-selection"
-      click_button "Generate Report"
-
-      expect(page).to have_selector(".select-required-error", visible: :visible)
-      # Check button state remains unchanged (not disabled, spinner hidden)
-      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :visible)
-      expect(page).not_to have_selector("#btnGenerateReport[disabled]")
-      expect(page).to have_selector("#spinner", visible: :hidden)
+    it "shows an error when generating without a selection" do
+      within "#generate-docx-report-modal" do
+        click_button "Generate Report"
+        expect(page).to have_selector "[data-court-report-target='error']", visible: :visible
+      end
     end
 
-    it "hides the error when a valid case is selected", :aggregate_failures do
-      click_button "Generate Report" # First, make the error appear
-      expect(page).to have_selector(".select-required-error", visible: :visible)
-
-      test_case_number = casa_cases.detect(&:in_transition_age?).case_number.to_s
-      page.select test_case_number, from: "case-selection"
-      expect(page).not_to have_selector(".select-required-error", visible: :visible)
-    end
-
-    it "clears the error message when the modal is reopened", :aggregate_failures do
-      click_button "Generate Report" # Make error appear
-      expect(page).to have_selector(".select-required-error", visible: :visible)
-
-      click_button "Close"
-      open_court_report_modal # Reopen using the helper
-      expect(page).not_to have_selector(".select-required-error", visible: :visible) # Error should be gone
-    end
-
-    # NOTE: select by option VALUE (stable), stub `window.open` to capture the download URL,
-    # wait for the button to re-enable (page-level signal), and assert UI state + opened URL.
-    it "generates a report and opens the download link on success", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+    # Select via TomSelect, stub window.open to capture the download URL, wait for the button to
+    # re-enable (page-level signal), then assert UI state + the opened URL.
+    it "generates a report and opens the download link on success", :aggregate_failures do
       transition_case = casa_cases.detect(&:in_transition_age?)
 
-      # Stub window.open so we can capture the download URL in the browser
       page.execute_script(<<~JS)
         window.__last_opened_url = null;
         window.open = function(url) { window.__last_opened_url = url; };
       JS
 
-      # Ensure the option exists, then select it by VALUE (case number)
-      expect(page).to have_selector("#case-selection option[value='#{transition_case.case_number}']", visible: :all)
-      find("#case-selection").find("option[value='#{transition_case.case_number}']").select_option
+      within "#generate-docx-report-modal" do
+        find(".ts-control").click
+        find(".ts-dropdown .option[data-value='#{transition_case.case_number}']").click
+        click_button "Generate Report"
 
-      # Trigger generation
-      click_button "Generate Report"
+        expect(page).to have_selector "#btnGenerateReport[disabled]"
+        expect(page).not_to have_selector "#btnGenerateReport[disabled]", wait: 10
+        expect(page).to have_selector "#spinner", visible: :hidden
+      end
 
-      # Button should be disabled while processing
-      expect(page).to have_selector("#btnGenerateReport[disabled]")
-
-      # Wait for the button to re-enable (report generated successfully)
-      expect(page).not_to have_selector("#btnGenerateReport[disabled]", wait: 10)
-
-      # Verify the UI reflects a successful generation
-      expect(page).to have_selector("#btnGenerateReport .lni-download", visible: :visible)
-      expect(page).to have_selector("#spinner", visible: :hidden)
-
-      # Verify the browser attempted to open the generated .docx link
       opened_url = page.evaluate_script("window.__last_opened_url")
       expect(opened_url).to be_present
       expect(opened_url).to match(/#{Regexp.escape(transition_case.case_number)}.*\.docx$/i)
     end
   end
 
-  context "when logged in as a supervisor" do
+  context "when logged in as a supervisor", :js do
     let(:volunteer) do
       create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Name Last")
     end
@@ -190,23 +137,24 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     include_context "when on the court reports page", :supervisor
 
-    it { expect(page).to have_selector ".select2" }
-    it { expect(page).to have_text "Search by volunteer name or case number" }
+    it "shows the searchable case picker" do
+      open_court_report_modal
+      expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
+    end
 
     context "when searching for cases" do
       let(:casa_case) { volunteer.casa_cases.first }
       let(:search_term) { casa_case.case_number[-3..] }
 
-      it "selects the correct case", :aggregate_failures, :js do # rubocop:disable RSpec/ExampleLength
+      it "selects the correct case", :aggregate_failures do
         open_court_report_modal
-        open_case_select2_dropdown
-        send_keys(search_term)
-        # Wait for the search result to appear in the dropdown
-        expect(page).to have_css(".select2-results__option", text: casa_case.case_number, visible: :visible)
-        # Click the result instead of sending enter
-        find(".select2-results__option", text: casa_case.case_number).click
-        # Wait for selection to update
-        expect(page).to have_css(".select2-selection__rendered", text: casa_case.case_number, visible: :visible)
+        open_case_select_dropdown
+        within "#generate-docx-report-modal" do
+          find(".ts-control input").set(search_term)
+          expect(page).to have_css(".ts-dropdown .option", text: casa_case.case_number, visible: :visible)
+          find(".ts-dropdown .option", text: casa_case.case_number).click
+          expect(page).to have_css(".ts-control .item", text: casa_case.case_number, visible: :visible)
+        end
       end
     end
   end
@@ -216,7 +164,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     let!(:volunteer_assigned_to_case) do
       create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor, display_name: "Assigned Volunteer")
     end
-    let(:casa_org) { volunteer_assigned_to_case.casa_org } # Derive org from the volunteer
+    let(:casa_org) { volunteer_assigned_to_case.casa_org }
     let!(:unassigned_case) { create(:casa_case, casa_org: casa_org, case_number: "UNASSIGNED-CASE-1", active: true) }
     let!(:other_org) { create(:casa_org) }
     let!(:other_org_case) { create(:casa_case, casa_org: other_org, case_number: "OTHER-ORG-CASE-99", active: true) } # rubocop:disable RSpec/LetSetup
@@ -225,30 +173,25 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:volunteer) { volunteer_assigned_to_case }
       let!(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
       let!(:other_volunteer_case) do
-        create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer],
-          active: true)
+        create(:casa_case, casa_org: volunteer.casa_org, case_number: "OTHER-VOL-CASE-88", volunteers: [other_volunteer], active: true)
       end
 
       include_context "when on the court reports page", :volunteer
 
-      before do
-        open_court_report_modal
-      end
+      before { open_court_report_modal }
 
-      it "shows all assigned cases in autocomplete search", :aggregate_failures do
+      it "shows all assigned cases", :aggregate_failures do
         volunteer.casa_cases.select(&:active?).each do |c|
-          expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i)
+          expect(page).to have_selector("#case-selection option", text: /#{Regexp.escape(c.case_number)}/i, visible: :all)
         end
       end
 
-      it "does not show unassigned cases in autocomplete search" do
-        expect(page).not_to have_selector("#case-selection option",
-          text: /#{Regexp.escape(unassigned_case.case_number)}/i)
+      it "does not show unassigned cases" do
+        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(unassigned_case.case_number)}/i, visible: :all)
       end
 
-      it "does not show cases assigned to other volunteers in autocomplete search" do
-        expect(page).not_to have_selector("#case-selection option",
-          text: /#{Regexp.escape(other_volunteer_case.case_number)}/i)
+      it "does not show cases assigned to other volunteers" do
+        expect(page).not_to have_selector("#case-selection option", text: /#{Regexp.escape(other_volunteer_case.case_number)}/i, visible: :all)
       end
     end
 
@@ -257,7 +200,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:supervisor) { create(:supervisor, casa_org: volunteer.casa_org) }
 
       include_context "when on the court reports page", :supervisor
-      it_behaves_like "a user with organization-level case visibility in autocomplete"
+      it_behaves_like "a user with organization-level case visibility"
     end
 
     context "when logged in as an admin" do
@@ -265,7 +208,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       let(:casa_admin) { create(:casa_admin, casa_org: volunteer.casa_org) }
 
       include_context "when on the court reports page", :casa_admin
-      it_behaves_like "a user with organization-level case visibility in autocomplete"
+      it_behaves_like "a user with organization-level case visibility"
     end
   end
   # rubocop:enable RSpec/MultipleMemoizedHelpers
