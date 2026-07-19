@@ -1,6 +1,8 @@
 class BulkCourtDatesController < ApplicationController
   include CourtDateParams
 
+  layout "casa_app"
+  before_action -> { @active_nav = "cases" }
   before_action :require_organization!
 
   def new

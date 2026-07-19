@@ -276,7 +276,16 @@ page** pattern in `design.md`.
   bundle (`@import "trix/dist/trix.css"`) — without it the toolbar was unstyled and overflowed the
   page to ~900px. 58 system + view + request examples green; chevron darkest-pixel 114; pages fit
   375–1280 (tables + the Trix toolbar scroll within their own containers).
-- [ ] Imports, court dates / bulk court dates, emancipation.
+- [x] Court dates + bulk court dates (**batch 5**). Both nested court-date forms render on casa_app,
+  sharing court_dates/_fields (date + due-date + judge/hearing chevron-selects) and the casa_app
+  court-orders twin (casa_cases/_court_orders, siblings off, resource "court_date"), so the
+  court-order-form nested sub-form + its dialogs are shared with the case-edit page. Submit stays
+  inside .top-page-actions (spec hook); the show page keeps its <dt><h6>Label:</h6></dt><dd> xpath
+  structure (Title-Case colons ride the sweep) and deletes a future date via UJS method: :delete +
+  data-confirm (native window.confirm, like the volunteer deactivate). 80 examples green; chevron
+  114; pages fit 375-1280. (bulk new_spec:15 is a pre-existing travel_to flake — fails identically
+  on the legacy views when run after the edit spec.)
+- [ ] Imports, emancipation.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal

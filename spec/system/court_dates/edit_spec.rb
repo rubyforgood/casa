@@ -56,7 +56,8 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_field("court_date_court_report_due_date")
       expect(page).to have_select("Judge")
       expect(page).to have_select("Hearing type")
-      expect(page).to have_text("Court Orders - Please check that you didn't enter any youth names")
+      expect(page).to have_text("Court orders")
+      expect(page).to have_text("Please check that you didn't enter any youth names")
       expect(page).to have_text("Add a court order")
 
       page.find('button[data-action="court-order-form#add"]').click

@@ -1,40 +1,38 @@
-<div class="input-style-1">
-  <%= form.label :date, "Add Court Date" %>
-  <%= form.date_field :date,
-                      value: court_date.date&.to_date || Time.zone.now,
-                      class: "form-control" %>
-</div>
-<div class="input-style-1">
-  <%= form.label :court_report_due_date, "Add Court Report Due Date" %>
-  <%= form.date_field :court_report_due_date,
-                      value: court_date.court_report_due_date&.to_date,
-                      class: "form-control" %>
-</div>
-<div class="select-style-1">
-  <%= form.label :judge_id, "Judge" %>
-  <div class="select-position">
-    <%= form.collection_select(
-          :judge_id,
-          Judge.for_organization(current_organization),
-          :id, :name,
-          {include_hidden: false, include_blank: "-Select Judge-"},
-          {class: "form-control"}
-        ) %>
+<%# Court-date form fields (casa_app), shared by court_dates/_form and bulk_court_dates/new:
+    date + court-report-due-date, judge + hearing-type native selects (design-system chevron),
+    then the court-orders nested sub-form. Reuses the casa_app court-orders twin
+    (casa_cases/_court_orders) with siblings nil + resource "court_date", so the court-order-form
+    Stimulus hooks are shared with the case-edit page. Locals: form, court_date, casa_case. %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron = tag.i("", class: "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500", aria: {hidden: true}) %>
+
+<div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+  <div>
+    <%= form.label :date, "Add Court Date", class: label_class %>
+    <%= form.date_field :date, value: court_date.date&.to_date || Time.zone.now, class: input_class %>
+  </div>
+  <div>
+    <%= form.label :court_report_due_date, "Add Court Report Due Date", class: label_class %>
+    <%= form.date_field :court_report_due_date, value: court_date.court_report_due_date&.to_date, class: input_class %>
+  </div>
+  <div>
+    <%= form.label :judge_id, "Judge", class: label_class %>
+    <div class="relative">
+      <%= form.collection_select(:judge_id, Judge.for_organization(current_organization), :id, :name, {include_hidden: false, include_blank: "-Select Judge-"}, {class: select_class}) %>
+      <%= chevron %>
+    </div>
+  </div>
+  <div>
+    <%= form.label :hearing_type_id, "Hearing type", class: label_class %>
+    <div class="relative">
+      <%= form.collection_select(:hearing_type_id, HearingType.active.for_organization(current_organization), :id, :name, {include_hidden: false, include_blank: "-Select Hearing Type-"}, {class: select_class}) %>
+      <%= chevron %>
+    </div>
   </div>
 </div>
-<div class="select-style-1">
-  <%= form.label :hearing_type_id, "Hearing type" %>
-  <div class="select-position">
-    <%= form.collection_select(
-          :hearing_type_id,
-          HearingType.active.for_organization(current_organization),
-          :id, :name,
-          {include_hidden: false, include_blank: "-Select Hearing Type-"},
-          {class: "form-control"}
-        ) %>
-  </div>
-</div>
-<div class="field form-group court-orders">
-  <%= render partial: "shared/court_order_list",
-             locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form, resource: 'court_date'} %>
+
+<div class="mt-6 border-t border-slate-100 pt-6">
+  <%= render partial: "casa_cases/court_orders", locals: {casa_case: casa_case, siblings_casa_cases: nil, form: form, resource: "court_date"} %>
 </div>
