@@ -661,11 +661,13 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Court report generator (`case_court_reports#index`): a Dialog + the reused `court-report`
   controller, with a searchable single-select TomSelect case picker (the `searchable-select`
   controller) that preserves the select2 volunteer-name search.
-- [~] Phase 5 admin CRUD long-tail: judges/languages/placement-types/learning-hour-types+topics,
-  contact types/groups/topics, hearing types + checklist items, custom org links, **mileage rates,
-  banners, and placements** all shipped (banners brought `trix/dist/trix.css` into the casa_app
-  tailwind bundle for rich text; placements uses a per-row Dialog delete that satisfies a non-`:js`
-  destroy spec). Remaining: imports, court dates / bulk court dates, emancipation.
+- [x] Phase 5 admin CRUD long-tail (complete): judges/languages/placement-types/learning-hour-types+topics,
+  contact types/groups/topics, hearing types + checklist items, custom org links, mileage rates,
+  banners, placements, **court dates + bulk court dates** (shared court-order twin), **imports**
+  (server-side link tabs + inline SMS-opt-in keeping src/import.js), and **emancipation** (checklist
+  show keeps the src/case_emancipation.js AJAX/collapse hooks; index retires its DataTable). Banners
+  brought `trix/dist/trix.css` into the casa_app tailwind bundle; placements/court-dates use
+  Dialog / UJS deletes that satisfy non-`:js` specs.
 - [ ] Phase 6: the all-CASA-admin area, Devise edge pages, static / marketing pages.
 
 ## Workflow

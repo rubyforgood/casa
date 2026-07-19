@@ -292,7 +292,16 @@ page** pattern in `design.md`.
   enable-on-check script, so the global src/import.js (button enable + localStorage file
   persistence across the opt-in reload) keeps working. 21 system + request examples green; page
   fits 375-1280 (tabs scroll within their nav on the narrowest screen).
-- [ ] Emancipation.
+- [x] Emancipation (**batch 5c**). The emancipation checklist show page is on casa_app with every
+  AJAX/collapse hook preserved verbatim (the .emancipation-category h6 + data-is-open, its child
+  .category-collapse-icon, the adjacent .category-options sibling the Toggler reads via .next(),
+  the .emacipation-category-input-label-pair div, .check-item options, and a #notifications element
+  so the Notifier — hence the whole src/case_emancipation.js — constructs and binds). The checklist
+  index is a plain Tailwind table (dropped the all-case-emancipations id so the src/emancipations.js
+  DataTable no-ops). 42 system + view + request examples green; pages fit 375-1280.
+
+**Phase 5 (admin long-tail CRUD) is complete.** Next: **Phase 6** — the all-CASA-admin area (its
+own shell), Devise edge pages, and static / marketing pages.
 - [x] Health / metrics page (`health#index`): rebuilt as bespoke server-rendered SVG
   (line charts with a distinct line-style + marker per series, heatmap-as-table, table
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
