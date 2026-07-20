@@ -18,8 +18,8 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_current_path "/all_casa_admins/sign_in", ignore_query: true
     expect(page).to have_text "You need to sign in before continuing."
     visit "/"
-    expect(page).to have_current_path "/supervisors", ignore_query: true
-    expect(page).to have_text "Sign Out"
+    expect(page).to have_current_path "/", ignore_query: true
+    expect(page).to have_text "Sign out"
   end
 
   it "login and create new CasaOrg and new CasaAdmin for CasaOrg" do

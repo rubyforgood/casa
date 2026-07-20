@@ -109,7 +109,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
       sign_in volunteer
 
       visit reports_path
-      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
+      expect(page).to have_current_path(root_path, ignore_query: true)
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
 
@@ -117,7 +117,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
       sign_in volunteer
 
       visit followup_reports_path
-      expect(page).to have_current_path(casa_cases_path, ignore_query: true)
+      expect(page).to have_current_path(root_path, ignore_query: true)
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
   end

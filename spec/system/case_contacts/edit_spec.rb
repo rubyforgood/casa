@@ -75,7 +75,7 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       it "fails across organizations" do
         visit edit_case_contact_path(case_contact)
-        expect(page).to have_current_path supervisors_path, ignore_query: true
+        expect(page).to have_current_path root_path, ignore_query: true
       end
     end
   end
