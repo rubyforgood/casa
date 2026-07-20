@@ -2,7 +2,7 @@
     redirected before this renders). Responsive: stacked cards below md, a table at md+ (the
     table stays in the DOM so the .notes .table tbody tr / Delete spec hooks hold at every
     width — rack_test ignores the `hidden` class). .notes, note[content], #note-submit,
-    #volunteer-note-form are spec hooks; "Save Note"/"Delete"/"Edit" are spec-locked. %>
+    #volunteer-note-form are spec hooks; "Save note"/"Delete"/"Edit" are spec-locked. %>
 <section class="notes overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
   <div class="border-b border-slate-100 p-4 sm:px-6">
     <h2 class="text-base font-semibold text-slate-900">Notes</h2>
@@ -74,7 +74,7 @@
       <%= form.text_area :content, rows: 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.", class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
       <div class="actions mt-3">
         <%= button_tag type: "submit", id: "note-submit", class: button_classes(:primary) do %>
-          <i class="bi bi-save" aria-hidden="true"></i> Save Note
+          <i class="bi bi-save" aria-hidden="true"></i> Save note
         <% end %>
       </div>
     <% end %>

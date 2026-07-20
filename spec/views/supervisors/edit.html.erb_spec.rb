@@ -111,7 +111,7 @@ RSpec.describe "supervisors/edit", type: :view do
     end
   end
 
-  describe "'Change to Admin' button" do
+  describe "'Change to admin' button" do
     let(:supervisor) { build_stubbed :supervisor }
 
     before do
@@ -122,7 +122,7 @@ RSpec.describe "supervisors/edit", type: :view do
     it "shows for an admin editing a supervisor" do
       render template: "supervisors/edit"
 
-      expect(rendered).to have_text("Change to Admin")
+      expect(rendered).to have_text("Change to admin")
       expect(rendered).to include(change_to_admin_supervisor_path(supervisor))
     end
 
@@ -132,7 +132,7 @@ RSpec.describe "supervisors/edit", type: :view do
       allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       render template: "supervisors/edit"
 
-      expect(rendered).not_to have_text("Change to Admin")
+      expect(rendered).not_to have_text("Change to admin")
       expect(rendered).not_to include(change_to_admin_supervisor_path(supervisor))
     end
   end

@@ -1,26 +1,26 @@
 <%# Volunteer's supervisor (casa_app twin). The supervisor_volunteer[supervisor_id] select
     name + #supervisor_volunteer_supervisor_id id are request/system-spec hooks. The current
     supervisor is dark identifying text, not a link: their edit page is still Bootstrap, so
-    linking there would trap the flow (see design.md). "Current Supervisor:", "Assign a
-    Supervisor" and "Select a Supervisor" are spec-locked. %>
+    linking there would trap the flow (see design.md). "Current supervisor:", "Assign a
+    Supervisor" and "Select a supervisor" are spec-locked. %>
 <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
   <h2 class="text-base font-semibold text-slate-900">Supervisor</h2>
 
   <% if @volunteer.has_supervisor? %>
     <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-      <p class="text-sm text-slate-600">Current Supervisor:
+      <p class="text-sm text-slate-600">Current supervisor:
         <span class="font-medium text-slate-800"><%= formatted_name(@volunteer.supervisor.display_name) %></span>
       </p>
       <%= button_to unassign_supervisor_volunteer_path(@volunteer), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
-        <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign from Supervisor
+        <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign from supervisor
       <% end %>
     </div>
   <% else %>
-    <h3 class="mt-4 text-sm font-semibold text-slate-900">Assign a Supervisor</h3>
+    <h3 class="mt-4 text-sm font-semibold text-slate-900">Assign a supervisor</h3>
     <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: @volunteer.id) do |form| %>
       <div class="mt-2 flex flex-wrap items-end gap-3">
         <div class="min-w-0 flex-1">
-          <label for="supervisor_volunteer_supervisor_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a Supervisor</label>
+          <label for="supervisor_volunteer_supervisor_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a supervisor</label>
           <div class="relative">
             <select name="supervisor_volunteer[supervisor_id]" id="supervisor_volunteer_supervisor_id" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
               <% @supervisors.each do |supervisor| %>
@@ -31,7 +31,7 @@
           </div>
         </div>
         <%= form.hidden_field :volunteer_id, value: @volunteer.id %>
-        <%= button_tag "Assign Supervisor", type: "submit", class: button_classes(:primary) %>
+        <%= button_tag "Assign supervisor", type: "submit", class: button_classes(:primary) %>
       </div>
     <% end %>
   <% end %>

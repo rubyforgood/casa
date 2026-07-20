@@ -2,14 +2,14 @@
     is left untouched for the Bootstrap pages). A stacked-card list (the edit column is narrow
     and each row has several fields) + an "assign a volunteer" form. Spec-locked: the
     unassign_supervisor_volunteer_path button, the "Unassigned" status text, "Assigned
-    Volunteers"/"All Volunteers", "Include unassigned"/"Hide unassigned", "Currently Assigned
-    To", "No One", the #supervisor_volunteer_volunteer_id / supervisor_volunteer[volunteer_id]
-    select with its "Select a Volunteer" label, the "Assign Volunteer" button, and the empty
+    Volunteers"/"All volunteers", "Include unassigned"/"Hide unassigned", "Currently Assigned
+    To", "No one", the #supervisor_volunteer_volunteer_id / supervisor_volunteer[volunteer_id]
+    select with its "Select a volunteer" label, the "Assign volunteer" button, and the empty
     message. `available` defaults to [] so the rare activate/deactivate failure re-render (which
     skips the available_volunteers before_action) doesn't blow up. %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 <% available = @available_volunteers || [] %>
-<% volunteer_title = (@unassigned_volunteer_count == 0) ? "Assigned Volunteers" : "All Volunteers" %>
+<% volunteer_title = (@unassigned_volunteer_count == 0) ? "Assigned volunteers" : "All volunteers" %>
 <% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
 <% show_assigned_volunteers = @supervisor_has_unassigned_volunteers || @supervisor.volunteers.any? %>
 <section class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -42,8 +42,8 @@
           </div>
           <% if button_text == "Hide unassigned" %>
             <dl class="mt-2 flex flex-wrap gap-x-2 text-xs text-slate-500">
-              <dt>Currently Assigned To:</dt>
-              <dd class="font-medium text-slate-700"><%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No One" %></dd>
+              <dt>Currently assigned to:</dt>
+              <dd class="font-medium text-slate-700"><%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No one" %></dd>
             </dl>
           <% end %>
         </li>
@@ -57,10 +57,10 @@
       <fieldset class="m-0 border-0 p-0" <%= "disabled" unless available.any? %>>
         <div class="mt-2 flex flex-wrap items-end gap-3">
           <div class="min-w-0 flex-1">
-            <label for="supervisor_volunteer_volunteer_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a Volunteer</label>
+            <label for="supervisor_volunteer_volunteer_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a volunteer</label>
             <div class="relative">
               <select id="supervisor_volunteer_volunteer_id" name="supervisor_volunteer[volunteer_id]" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500">
-                <option value="">Please Select Volunteer</option>
+                <option value="">Please select a volunteer</option>
                 <% available.each do |volunteer| %>
                   <option value="<%= volunteer.id %>"><%= formatted_name(volunteer.display_name) %></option>
                 <% end %>
@@ -69,7 +69,7 @@
             </div>
           </div>
           <%= form.hidden_field :supervisor_id, value: @supervisor.id %>
-          <%= button_tag "Assign Volunteer", type: "submit", class: button_classes(:primary) %>
+          <%= button_tag "Assign volunteer", type: "submit", class: button_classes(:primary) %>
         </div>
       </fieldset>
     <% end %>

@@ -306,7 +306,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         select volunteer.display_name, from: "case_assignment[volunteer_id]"
 
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
       end
 
       before do
@@ -396,16 +396,16 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit edit_casa_case_path(casa_case.id)
 
         select volunteer_1.display_name, from: "Select a volunteer"
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_1.display_name)
 
         # Attempt to assign a second volunteer without selecting one
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Unable to assign volunteer to case: Volunteer must exist. Volunteer can't be blank.")
 
         select volunteer_2.display_name, from: "Select a volunteer"
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_2.display_name)
       end

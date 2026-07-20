@@ -35,7 +35,7 @@
 
       <% if (current_user.supervisor? || current_user.casa_admin?) && user.invitation_accepted_at.nil? %>
         <%= link_to resend_invitation_volunteer_path(user), class: button_classes(:secondary) do %>
-          <i class="bi bi-send" aria-hidden="true"></i> Resend Invitation (Email)
+          <i class="bi bi-send" aria-hidden="true"></i> Resend invitation (email)
         <% end %>
       <% end %>
 
@@ -43,7 +43,7 @@
         <%= link_to send_reactivation_alert_volunteer_path(user),
               id: (current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"),
               class: button_classes(:secondary) do %>
-          <i class="bi bi-bell" aria-hidden="true"></i> <%= current_user.casa_org.twilio_enabled? ? "Send Reactivation Alert (SMS)" : "Enable Twilio To Send Reactivation Alert (SMS)" %>
+          <i class="bi bi-bell" aria-hidden="true"></i> <%= current_user.casa_org.twilio_enabled? ? "Send reactivation alert (SMS)" : "Enable Twilio to send reactivation alert (SMS)" %>
         <% end %>
       <% end %>
     </div>

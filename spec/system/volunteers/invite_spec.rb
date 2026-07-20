@@ -138,7 +138,7 @@ RSpec.describe "Inviting volunteers", type: :system do
     it "allows admin to resend invitation to volunteer who hasn't accepted" do
       visit edit_volunteer_path(volunteer)
 
-      click_on "Resend Invitation"
+      click_on "Resend invitation"
 
       expect(page).to have_text "Invitation sent"
 
@@ -152,7 +152,7 @@ RSpec.describe "Inviting volunteers", type: :system do
 
       visit edit_volunteer_path(volunteer)
 
-      expect(page).not_to have_link("Resend Invitation")
+      expect(page).not_to have_link("Resend invitation")
     end
   end
 

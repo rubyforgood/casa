@@ -170,7 +170,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
         render template: "volunteers/edit"
 
-        expect(rendered).to have_content("Resend Invitation")
+        expect(rendered).to have_content("Resend invitation")
       end
 
       it "allows a supervisor to resend invitation to a volunteer" do
@@ -186,7 +186,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
         render template: "volunteers/edit"
 
-        expect(rendered).to have_content("Resend Invitation")
+        expect(rendered).to have_content("Resend invitation")
       end
     end
   end
