@@ -10,15 +10,15 @@
     <table id="placement-types-table" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Name</th>
-          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold text-slate-600">Actions</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Name</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% placement_types.each do |placement_type| %>
           <tr id="placement_type-<%= placement_type.id %>">
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= placement_type.name %></td>
-            <td class="px-3 py-2.5 text-right text-sm"><%= link_to "Edit", edit_placement_type_path(placement_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= placement_type.name %></td>
+            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_placement_type_path(placement_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

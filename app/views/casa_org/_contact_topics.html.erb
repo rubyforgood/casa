@@ -11,19 +11,19 @@
     <table id="contact-topics" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Question</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Details</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Active?</th>
-          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold text-slate-600">Actions</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Question</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Details</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Active?</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% @contact_topics.each do |contact_topic| %>
           <tr id="contact_topic-<%= contact_topic.id %>">
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_topic.question %></td>
-            <td class="whitespace-pre-line px-3 py-2.5 text-sm text-slate-500"><%= contact_topic.details %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_topic.active ? "Yes" : "No" %></td>
-            <td class="px-3 py-2.5 text-right text-sm">
+            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_topic.question %></td>
+            <td class="whitespace-pre-line px-4 py-3 text-sm text-slate-500"><%= contact_topic.details %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_topic.active ? "Yes" : "No" %></td>
+            <td class="px-4 py-3 text-right text-sm">
               <div class="flex items-center justify-end gap-3">
                 <%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "font-medium text-brand-600 hover:text-brand-700" %>
                 <%= render "shared/confirm_button", url: soft_delete_contact_topic_path(contact_topic), method: :delete, title: "Delete contact topic?", message: "This topic and its related questions will be deleted and will no longer be presented while filling out case contacts. This will not affect case contacts that have already been created.", confirm_label: "Delete court report topic", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>

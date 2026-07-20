@@ -2,7 +2,7 @@
 <%# other_duties#index on casa_app. Grouped by volunteer (admins/supervisors see many; a volunteer
     sees only their own). Bespoke Tailwind tables + a mobile card twin. "Other duties" heading +
     the "New duty" link are spec-locked. %>
-<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
 <% td = "px-4 py-3 align-top text-sm text-slate-700" %>
 <% ghost = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
 <% groups = @volunteer_duties.select { |g| g[:other_duties].any? } %>

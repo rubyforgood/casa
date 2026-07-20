@@ -6,19 +6,19 @@
     <table id="sent-emails" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Mailer type</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Category</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Recipient</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Time sent</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Mailer type</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Category</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Recipient</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Time sent</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% @sent_emails.each do |sent_email| %>
           <tr id="email-<%= sent_email.id %>">
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= sent_email.mailer_type %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= sent_email.category %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</td>
-            <td class="px-3 py-2.5 text-sm text-slate-500"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= sent_email.mailer_type %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= sent_email.category %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</td>
+            <td class="px-4 py-3 text-sm text-slate-500"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></td>
           </tr>
         <% end %>
       </tbody>

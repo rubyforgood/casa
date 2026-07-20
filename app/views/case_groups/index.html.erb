@@ -1,7 +1,7 @@
 <% content_for :page_title, "Case groups" %>
 <% btn_primary = button_classes(:primary) %>
 <% action_link = "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
-<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
 <% td = "px-4 py-3 align-top text-slate-700" %>
 <% case_links = ->(cg) { safe_join(cg.casa_cases.map { |c| tag.li(link_to(c.case_number, casa_case_path(c), class: "text-brand-600 hover:text-brand-700")) }) } %>
 

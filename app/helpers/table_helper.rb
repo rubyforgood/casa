@@ -10,7 +10,7 @@ module TableHelper
     next_direction = (active && direction == "asc") ? "desc" : "asc"
     href = url_for(request.query_parameters.merge("sort" => column.to_s, "direction" => next_direction).except("page"))
     link_class = "inline-flex items-center rounded text-xs font-semibold #{active ? "text-slate-900" : "text-slate-600"} hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
-    content_tag(:th, class: "px-4 py-3 text-left", "aria-sort": aria) do
+    content_tag(:th, class: "px-4 py-3 text-left align-top", "aria-sort": aria) do
       link_to(href, class: link_class) { safe_join([label, sort_caret(state)]) }
     end
   end

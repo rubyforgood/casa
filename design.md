@@ -297,7 +297,10 @@ rounded-2xl` card (+ `py-2` inset), full-bleed table, `thead th` = `text-xs font
 text-slate-600` — **never an `uppercase`/`tracking-wide` transform** (column headers are sentence
 case like every other label; an ALL-CAPS `text-slate-500` eyebrow header is a recurring drift — it
 had crept into the reimbursements / settings / court-date / placements / all-CASA tables — converge
-every `<th>` on this one token, matching what `sortable_header` emits). Cells `px-4 py-3`, `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
+every `<th>` on this one token, matching what `sortable_header` emits). Header and body cells share the same `px-4 py-3` padding (so columns line up), and every `<th>`
+is `align-top` — a column whose header wraps to two lines then anchors all headers to one top line
+instead of vertically-centring the single-line neighbours (the browser `vertical-align: middle`
+default, which reads as stray space). `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
 Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
 submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial

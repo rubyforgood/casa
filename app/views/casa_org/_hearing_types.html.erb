@@ -10,19 +10,19 @@
     <table id="hearing-types" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Name</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Checklist</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Active?</th>
-          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold text-slate-600">Actions</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Name</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Checklist</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Active?</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% @hearing_types.each do |hearing_type| %>
           <tr id="hearing_type-<%= hearing_type.id %>">
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= hearing_type.name %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-500"><%= hearing_type.checklist_updated_date %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= hearing_type.active ? "Yes" : "No" %></td>
-            <td class="px-3 py-2.5 text-right text-sm"><%= link_to "Edit", edit_hearing_type_path(hearing_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= hearing_type.name %></td>
+            <td class="px-4 py-3 text-sm text-slate-500"><%= hearing_type.checklist_updated_date %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= hearing_type.active ? "Yes" : "No" %></td>
+            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_hearing_type_path(hearing_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

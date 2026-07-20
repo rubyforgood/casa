@@ -10,24 +10,24 @@
     <table class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Display text</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">URL</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Active?</th>
-          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold text-slate-600">Actions</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Display text</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">URL</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Active?</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% if @custom_org_links.blank? %>
           <tr>
-            <td colspan="4" class="px-3 py-6 text-center text-sm italic text-slate-500">No custom links have been added for this organization.</td>
+            <td colspan="4" class="px-4 py-6 text-center text-sm italic text-slate-500">No custom links have been added for this organization.</td>
           </tr>
         <% else %>
           <% @custom_org_links.each do |custom_link| %>
             <tr>
-              <td class="px-3 py-2.5 text-sm text-slate-700"><%= custom_link.text %></td>
-              <td class="px-3 py-2.5 text-sm text-slate-500"><%= truncate(custom_link.url, length: 90) %></td>
-              <td class="px-3 py-2.5 text-sm text-slate-700"><%= custom_link.active ? "Yes" : "No" %></td>
-              <td class="px-3 py-2.5 text-right text-sm">
+              <td class="px-4 py-3 text-sm text-slate-700"><%= custom_link.text %></td>
+              <td class="px-4 py-3 text-sm text-slate-500"><%= truncate(custom_link.url, length: 90) %></td>
+              <td class="px-4 py-3 text-sm text-slate-700"><%= custom_link.active ? "Yes" : "No" %></td>
+              <td class="px-4 py-3 text-right text-sm">
                 <div class="flex items-center justify-end gap-3">
                   <%= link_to "Edit", edit_custom_org_link_path(custom_link), class: "font-medium text-brand-600 hover:text-brand-700" %>
                   <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>

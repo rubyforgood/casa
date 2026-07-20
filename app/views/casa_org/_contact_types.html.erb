@@ -10,19 +10,19 @@
     <table id="contact-types" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Name</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Group</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-slate-600">Active?</th>
-          <th scope="col" class="px-3 py-2 text-right text-xs font-semibold text-slate-600">Actions</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Name</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Group</th>
+          <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Active?</th>
+          <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
         <% contact_types.each do |contact_type| %>
           <tr id="contact_type-<%= contact_type.id %>">
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_type.name %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-500"><%= contact_type.contact_type_group.name %></td>
-            <td class="px-3 py-2.5 text-sm text-slate-700"><%= contact_type.active? ? "Yes" : "No" %></td>
-            <td class="px-3 py-2.5 text-right text-sm"><%= link_to "Edit", edit_contact_type_path(contact_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_type.name %></td>
+            <td class="px-4 py-3 text-sm text-slate-500"><%= contact_type.contact_type_group.name %></td>
+            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_type.active? ? "Yes" : "No" %></td>
+            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_contact_type_path(contact_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

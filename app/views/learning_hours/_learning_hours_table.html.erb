@@ -1,7 +1,7 @@
 <%# Learning-hours entries table (casa_app). Reused by the volunteer index and the
     supervisor/admin volunteers#show. Volunteers see the title as a link to the entry;
     supervisors/admins see plain dark text. Desktop table (md+) + a mobile card twin. %>
-<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-middle" %>
 <% topic_active = current_user.casa_org.learning_topic_active %>
 <% entries = learning_hours.order(occurred_at: :desc) %>
