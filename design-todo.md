@@ -15,7 +15,7 @@ design system on the `casadesign` branch.
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
 layout, so **resume there** — `fund_requests#new`, `casa_admins`, `other_duties`, and `notes#edit`
-are done; next is **`case_assignments#index`**, then the error pages. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
+are done; `case_assignments#index` was orphaned dead code (deleted). Last one: the **error pages**. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
 vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
 `application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
 
@@ -386,7 +386,10 @@ migrate before `application.html.erb` + `application.scss` can be deleted.
   single volunteer-note edit form (max-w-2xl card, back-link to the volunteer edit page); Note has
   no validations so update always redirects back. Kept `note[content]` + the spec-locked "Update
   Note" button (queued for the sweep). 23 examples green (system + request).
-- [ ] `case_assignments#index` — assignment listing.
+- [x] `case_assignments#index` — **not a page**: `resources :case_assignments, only: %i[create
+  destroy]` has no index route or action, and the view set no `@volunteer`, so
+  `case_assignments/index.html.erb` was orphaned dead code that could never render (it even used
+  the DataTable `id='casa_cases'`). **Deleted** it rather than migrate. 45 request examples green.
 - [ ] `error#index` — error pages (404 / 422 / 500).
 
 _Data-only actions on the default layout render no HTML and need no migration: the `*_reports`
