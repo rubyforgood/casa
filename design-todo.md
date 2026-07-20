@@ -492,6 +492,16 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   export column headers, the emancipation DOCX filename/template, model validation messages, mailer
   copy, and the notifier "Emancipation Checklist Reminder". Dead Bootstrap shared partials skipped
   (see dead-code).
+  **Round 2 (comprehensive re-sweep) — DONE:** round 1 was incomplete. It missed block-form button
+  labels (`</i> Label` between `do %>` / `<% end %>`), labels inside Ruby arrays (the all-CASA
+  sidebar nav), several `content_for :page_title`s, and `spec/support` helper couplings; it also
+  left two "kept verbatim / Title Case for specs" cop-out comments. Re-swept all of `app/views` +
+  `app/components` with **four** grep patterns until zero remained -- text nodes `>X<`, quoted
+  `"X"`, text-after-tag-at-EOL `[>}%] X$`, and indented pure-text `^\s*X$` -- covering settings,
+  reports/court reports, casa_cases, the New/Create/Manage/Edit buttons, reminders/followups, the
+  court-report modal, imports, banners, case groups, all-CASA, and the landing page; ~37 coupled
+  specs (incl. shared support helpers) updated in lockstep. **When auditing, use all four patterns,
+  not just `>X<`.**
 - [ ] **Contact-type default rename (guarded after-party, do once pages are migrated).** For
   existing orgs, rename the contact types + the "Social Services" group whose names **exactly**
   match the old Title Case defaults to the new sentence-case defaults ("Foster Parent" ->
