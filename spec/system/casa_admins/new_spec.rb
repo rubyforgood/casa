@@ -10,7 +10,7 @@ RSpec.describe "casa_admins/new", type: :system do
     sign_in admin
     visit casa_admins_path
     click_on "New Admin"
-    expect(page).to have_content "Create New Casa Admin"
+    expect(page).to have_content "Create new CASA admin"
 
     click_button "Submit"
     expect(page).to have_content "2 errors prohibited this Casa admin from being saved:"

@@ -16,9 +16,9 @@ RSpec.describe "other_duties/new", type: :system do
   end
 
   context "as a volunteer", :js do
-    it "sees a New Duty link" do
+    it "sees a New duty link" do
       visit other_duties_path
-      expect(page).to have_link("New Duty", href: new_other_duty_path)
+      expect(page).to have_link("New duty", href: new_other_duty_path)
     end
 
     it "sees all their other duties", :js do
@@ -30,7 +30,7 @@ RSpec.describe "other_duties/new", type: :system do
 
       visit other_duties_path
 
-      expect(page).to have_text("Other Duties")
+      expect(page).to have_text("Other duties")
       expect(page).to have_text(other_duty_1.notes)
       expect(page).to have_text(other_duty_2.notes)
       expect(page).not_to have_text(other_duty_3.notes)
@@ -38,7 +38,7 @@ RSpec.describe "other_duties/new", type: :system do
 
     it "has an error if a new duty is attempted to be created without any notes" do
       visit other_duties_path
-      click_on "New Duty"
+      click_on "New duty"
 
       click_on "Submit"
 

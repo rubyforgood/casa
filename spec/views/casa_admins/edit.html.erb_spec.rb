@@ -18,7 +18,7 @@ RSpec.describe "casa_admins/edit", type: :view do
     expect(rendered).to have_text("Password reset last sent")
   end
 
-  describe "'Change to Supervisor' button" do
+  describe "'Change to supervisor' button" do
     let(:supervisor) { build_stubbed :supervisor }
 
     before do
@@ -32,7 +32,7 @@ RSpec.describe "casa_admins/edit", type: :view do
       allow(view).to receive(:current_organization).and_return(admin.casa_org)
       render template: "casa_admins/edit"
 
-      expect(rendered).to have_text("Change to Supervisor")
+      expect(rendered).to have_text("Change to supervisor")
       expect(rendered).to include(change_to_supervisor_casa_admin_path(admin))
     end
 
@@ -42,7 +42,7 @@ RSpec.describe "casa_admins/edit", type: :view do
       allow(view).to receive(:current_organization).and_return(supervisor.casa_org)
       render template: "casa_admins/edit"
 
-      expect(rendered).not_to have_text("Change to Supervisor")
+      expect(rendered).not_to have_text("Change to supervisor")
       expect(rendered).not_to include(change_to_supervisor_casa_admin_path(admin))
     end
   end

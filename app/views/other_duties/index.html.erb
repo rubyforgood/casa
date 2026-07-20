@@ -1,7 +1,7 @@
 <% content_for :page_title, "Other duties" %>
 <%# other_duties#index on casa_app. Grouped by volunteer (admins/supervisors see many; a volunteer
-    sees only their own). Bespoke Tailwind tables + a mobile card twin. "Other Duties" heading +
-    the "New Duty" link are spec-locked. %>
+    sees only their own). Bespoke Tailwind tables + a mobile card twin. "Other duties" heading +
+    the "New duty" link are spec-locked. %>
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
 <% td = "px-4 py-3 align-top text-sm text-slate-700" %>
 <% ghost = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
@@ -9,9 +9,9 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Other Duties</h1>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Other duties</h1>
     <% if current_user.volunteer? %>
-      <%= link_to new_other_duty_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New Duty<% end %>
+      <%= link_to new_other_duty_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New duty<% end %>
     <% end %>
   </div>
 

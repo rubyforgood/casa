@@ -2,8 +2,8 @@
     the page shell. The Hour(s)/Minute(s) duration inputs are the Tailwind twin (like learning
     hours); the controller's convert_duration_minutes combines them into duration_minutes. Notes
     stays `required` with the default #other_duty_notes id (a :js spec asserts the HTML5
-    validation message). Spec-locked strings kept verbatim ("New Duty" / "Editing Duty",
-    "Occurred On", "Duty Duration", "Enter Notes", "Submit") — queued for the sentence-case sweep. %>
+    validation message). Spec-locked strings kept verbatim ("New duty" / "Editing duty",
+    "Occurred on", "Duty duration", "Enter notes", "Submit") — queued for the sentence-case sweep. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
@@ -24,12 +24,12 @@
 
       <section class="<%= card %> mt-4 space-y-5">
         <div>
-          <%= form.label :occurred_at, "Occurred On", class: label_class %>
+          <%= form.label :occurred_at, "Occurred on", class: label_class %>
           <%= form.date_field :occurred_at, value: occurred_at.to_date, class: input_class %>
         </div>
 
         <fieldset class="m-0 border-0 p-0">
-          <legend class="<%= label_class %>">Duty Duration</legend>
+          <legend class="<%= label_class %>">Duty duration</legend>
           <div class="grid grid-cols-2 gap-4">
             <div>
               <%= form.label :duration_hours, "Hour(s)", class: label_class %>
@@ -43,7 +43,7 @@
         </fieldset>
 
         <div>
-          <%= form.label :notes, "Enter Notes *", class: label_class %>
+          <%= form.label :notes, "Enter notes *", class: label_class %>
           <%= form.text_area :notes, rows: 5, placeholder: "Enter notes here", required: true, class: input_class %>
         </div>
 

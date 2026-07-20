@@ -1,6 +1,6 @@
 <% content_for :page_title, "Edit note" %>
 <%# notes#edit on casa_app. A single volunteer note (admins/supervisors only); on save the
-    controller redirects back to the volunteer edit page. `note[content]` + the "Update Note"
+    controller redirects back to the volunteer edit page. `note[content]` + the "Update note"
     button are spec-locked. Note has no validations, so there is no failure re-render. %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
@@ -20,7 +20,7 @@
         <%= form.text_area :content, rows: 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.", class: input_class %>
         <div class="actions mt-4">
           <%= form.button type: "submit", id: "note-submit", class: button_classes(:primary) do %>
-            <i class="bi bi-save" aria-hidden="true"></i> Update Note
+            <i class="bi bi-save" aria-hidden="true"></i> Update note
           <% end %>
         </div>
       <% end %>

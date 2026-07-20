@@ -3,7 +3,7 @@
     shared/_edit_form + shared/_invite_login). Profile form + Account facts + a Status section.
     Deactivate keeps the UJS data-confirm (native window.confirm) that the :js spec drives with
     accept_confirm/dismiss_confirm. Spec-locked labels kept verbatim: "Submit", "Deactivate",
-    "Resend Invitation", "Change to Supervisor", "Receive Monthly Learning Hours Report", and the
+    "Resend invitation", "Change to supervisor", "Receive monthly learning hours report", and the
     Account fact labels. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-base font-semibold text-slate-900" %>
@@ -54,7 +54,7 @@
           <div class="mt-4">
             <label class="inline-flex items-center gap-2 text-sm text-slate-700">
               <%= form.check_box :monthly_learning_hours_report, class: check_class %>
-              Receive Monthly Learning Hours Report
+              Receive monthly learning hours report
             </label>
           </div>
         <% end %>
@@ -130,13 +130,13 @@
 
           <% if current_user.casa_admin? && @casa_admin.invitation_accepted_at.nil? %>
             <%= link_to resend_invitation_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:secondary) do %>
-              <i class="bi bi-send" aria-hidden="true"></i> Resend Invitation
+              <i class="bi bi-send" aria-hidden="true"></i> Resend invitation
             <% end %>
           <% end %>
 
           <% if current_user.casa_admin? %>
             <%= link_to change_to_supervisor_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:secondary) do %>
-              <i class="bi bi-person-down" aria-hidden="true"></i> Change to Supervisor
+              <i class="bi bi-person-down" aria-hidden="true"></i> Change to supervisor
             <% end %>
           <% end %>
         </div>
