@@ -7,6 +7,9 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
 
+  <%# window.timeout (minutes) drives src/session_timeout_poller.js; @timeout_duration =
+      current_user.timeout_in (set in ApplicationController). Must precede the deferred bundle. %>
+  <% if @timeout_duration %><script>window.timeout = <%= @timeout_duration.in_minutes.to_i.to_json %>;</script><% end %>
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
 </head>
