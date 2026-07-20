@@ -462,7 +462,8 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   not a sweep:** `CasaCase#hearing_type` / `#judge` + the `hearing_type_name` / `judge_name`
   delegates are still consumed by `case_court_report_context.rb` and `PreferenceSet`'s
   case-column-visibility keys, so removing them would entangle the court report + column prefs.
-  Minor follow-up: `sass` + `bootstrap-scss` are now unused `package.json` devDeps.
+  Follow-up (done): dropped the now-unused `sass` + `bootstrap-scss` deps from `package.json`
+  (no `build:css`/importer remained after the SCSS + CDN removal).
 - [x] **Sentence-case sweep — DONE.** Proper nouns/acronyms (CASA, IEP, Twilio) kept; free-form org
   data untouched. Done in verified batches, each with its coupled system/view/request specs updated
   in lockstep (incl. specs that matched old labels by case-sensitive substring, e.g.
