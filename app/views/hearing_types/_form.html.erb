@@ -49,9 +49,9 @@
             <tbody class="divide-y divide-slate-100">
               <% hearing_type.checklist_items.each do |checklist_item| %>
                 <tr id="checklist_item-<%= checklist_item.id %>">
-                  <td class="px-4 py-3 text-sm text-slate-700"><%= checklist_item.description %></td>
-                  <td class="px-4 py-3 text-sm text-slate-500"><%= checklist_item.category %></td>
-                  <td class="px-4 py-3 text-sm text-slate-700"><%= checklist_item.mandatory ? "Yes" : "Optional" %></td>
+                  <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= checklist_item.description %></td>
+                  <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= checklist_item.category %></td>
+                  <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= checklist_item.mandatory ? "Yes" : "Optional" %></td>
                   <td class="px-4 py-3 text-right text-sm">
                     <div class="flex items-center justify-end gap-3">
                       <%= link_to "Edit", edit_hearing_type_checklist_item_path(hearing_type, checklist_item), class: "font-medium text-brand-600 hover:text-brand-700" %>

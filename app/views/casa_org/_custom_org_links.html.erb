@@ -24,9 +24,9 @@
         <% else %>
           <% @custom_org_links.each do |custom_link| %>
             <tr>
-              <td class="px-4 py-3 text-sm text-slate-700"><%= custom_link.text %></td>
-              <td class="px-4 py-3 text-sm text-slate-500"><%= truncate(custom_link.url, length: 90) %></td>
-              <td class="px-4 py-3 text-sm text-slate-700"><%= custom_link.active ? "Yes" : "No" %></td>
+              <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= custom_link.text %></td>
+              <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= truncate(custom_link.url, length: 90) %></td>
+              <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= custom_link.active ? "Yes" : "No" %></td>
               <td class="px-4 py-3 text-right text-sm">
                 <div class="flex items-center justify-end gap-3">
                   <%= link_to "Edit", edit_custom_org_link_path(custom_link), class: "font-medium text-brand-600 hover:text-brand-700" %>

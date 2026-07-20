@@ -20,9 +20,9 @@
       <tbody class="divide-y divide-slate-100">
         <% @contact_topics.each do |contact_topic| %>
           <tr id="contact_topic-<%= contact_topic.id %>">
-            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_topic.question %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_topic.question %></td>
             <td class="whitespace-pre-line px-4 py-3 text-sm text-slate-500"><%= contact_topic.details %></td>
-            <td class="px-4 py-3 text-sm text-slate-700"><%= contact_topic.active ? "Yes" : "No" %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_topic.active ? "Yes" : "No" %></td>
             <td class="px-4 py-3 text-right text-sm">
               <div class="flex items-center justify-end gap-3">
                 <%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "font-medium text-brand-600 hover:text-brand-700" %>

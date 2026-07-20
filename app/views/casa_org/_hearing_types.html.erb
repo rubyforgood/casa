@@ -19,9 +19,9 @@
       <tbody class="divide-y divide-slate-100">
         <% @hearing_types.each do |hearing_type| %>
           <tr id="hearing_type-<%= hearing_type.id %>">
-            <td class="px-4 py-3 text-sm text-slate-700"><%= hearing_type.name %></td>
-            <td class="px-4 py-3 text-sm text-slate-500"><%= hearing_type.checklist_updated_date %></td>
-            <td class="px-4 py-3 text-sm text-slate-700"><%= hearing_type.active ? "Yes" : "No" %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= hearing_type.name %></td>
+            <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= hearing_type.checklist_updated_date %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= hearing_type.active ? "Yes" : "No" %></td>
             <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_hearing_type_path(hearing_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>

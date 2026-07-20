@@ -15,10 +15,10 @@
       <tbody class="divide-y divide-slate-100">
         <% @sent_emails.each do |sent_email| %>
           <tr id="email-<%= sent_email.id %>">
-            <td class="px-4 py-3 text-sm text-slate-700"><%= sent_email.mailer_type %></td>
-            <td class="px-4 py-3 text-sm text-slate-700"><%= sent_email.category %></td>
-            <td class="px-4 py-3 text-sm text-slate-700"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</td>
-            <td class="px-4 py-3 text-sm text-slate-500"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= sent_email.mailer_type %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= sent_email.category %></td>
+            <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</td>
+            <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></td>
           </tr>
         <% end %>
       </tbody>
