@@ -343,11 +343,6 @@ sign-in / password / invitation — were done in the foundation phase.)
   `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups (date-range filter, Stimulus hover, and the unused chart.js deps removal now shipped): a validated dark-mode
   palette.
 
-## Phase 6 — Edges
-- [ ] All-CASA-admin area (its own sidebar / shell).
-- [ ] Devise edge pages (unlock / confirmation, if enabled) and error pages.
-- [ ] Static / marketing pages.
-
 ## Cross-cutting / infrastructure
 - [ ] Finish the sentence-case pass on interactive copy that is shared across pages —
   button/field labels like "Update Profile", "Change Password", "New Password",
