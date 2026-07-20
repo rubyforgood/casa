@@ -144,14 +144,6 @@ class CaseContactDecorator < Draper::Decorator
     active? ? "Editing existing case contact" : "Record new case contact"
   end
 
-  def form_page_notes
-    {
-      details: nil,
-      notes: "This question will be included in the court report for your assigned foster youth. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
-      expenses: nil
-    }
-  end
-
   def form_updated_message
     "Case contact created at #{I18n.l(created_at, format: :time_on_date)}, was successfully updated."
   end
