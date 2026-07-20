@@ -1,15 +1,15 @@
 <%# Org-settings Sent Emails list (casa_app; rendered only by casa_org/edit). Cell content +
     the id/time format are locked by the view spec; only the wrapper/table styling changed. %>
 <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-  <h3 class="text-base font-semibold text-slate-900">Sent Emails</h3>
+  <h3 class="text-base font-semibold text-slate-900">Sent emails</h3>
   <div class="mt-4 hidden overflow-x-auto md:block">
     <table id="sent-emails" class="min-w-full divide-y divide-slate-200">
       <thead>
         <tr>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Mailer Type</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Mailer type</th>
           <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Category</th>
           <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Recipient</th>
-          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Time Sent</th>
+          <th scope="col" class="px-3 py-2 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Time sent</th>
         </tr>
       </thead>
       <tbody class="divide-y divide-slate-100">
@@ -39,7 +39,7 @@
             <dd class="mt-0.5 break-words text-slate-700"><%= formatted_name(sent_email.user.display_name) %> &lt;<%= sent_email.sent_address %>&gt;</dd>
           </div>
           <div class="flex justify-between gap-3">
-            <dt class="text-slate-500">Time Sent</dt>
+            <dt class="text-slate-500">Time sent</dt>
             <dd class="text-right text-slate-500"><%= to_user_timezone(sent_email.created_at).strftime("%l:%M%P %d %b %Y") %></dd>
           </div>
         </dl>

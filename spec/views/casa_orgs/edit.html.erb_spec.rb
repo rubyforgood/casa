@@ -102,7 +102,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
     render template: "casa_org/edit"
 
-    expect(rendered).to have_text("Manage Case Placement Types")
+    expect(rendered).to have_text("Manage case placement types")
     expect(rendered).to have_table("placement-types-table",
       with_rows:
       [
@@ -114,7 +114,7 @@ RSpec.describe "casa_org/edit", type: :view do
   it "does not show download prompt with no custom template" do
     render template: "casa_org/edit"
 
-    expect(rendered).not_to have_text("Download Current Template")
+    expect(rendered).not_to have_text("Download current template")
   end
 
   it "has sent emails content" do
@@ -146,7 +146,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
       render template: "casa_org/edit"
 
-      expect(rendered).to have_text("Download Current Template")
+      expect(rendered).to have_text("Download current template")
     end
   end
 
@@ -157,7 +157,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
         render template: "casa_org/edit"
 
-        expect(rendered).to have_text("Volunteers can add Other Expenses")
+        expect(rendered).to have_text("Volunteers can add other expenses")
       end
     end
 
@@ -167,7 +167,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
         render template: "casa_org/edit"
 
-        expect(rendered).not_to have_text("Volunteers can add Other Expenses")
+        expect(rendered).not_to have_text("Volunteers can add other expenses")
       end
     end
   end
@@ -178,7 +178,7 @@ RSpec.describe "casa_org/edit", type: :view do
 
     it "has custom org link content" do
       render template: "casa_org/edit"
-      expect(rendered).to have_text("Custom Links")
+      expect(rendered).to have_text("Custom links")
     end
 
     context "when the org has no custom links" do

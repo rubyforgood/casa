@@ -3,7 +3,7 @@
     Twilio credentials revealed by the `twilio` Stimulus controller — replacing the jQuery +
     Bootstrap-collapse toggle) followed by the admin entity lists. The anchor ids on the section
     headings are deep-link targets (e.g. the case-contact form links to #case-contact-topics), so
-    keep them. Title-Case heading/label copy that specs assert is kept verbatim (sweep). %>
+    keep them. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
@@ -44,13 +44,13 @@
             <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
             <% if current_organization.court_report_template.attached? %>
               <% ActiveStorage::Current.url_options = {host: request.base_url} %>
-              <%= link_to "Download Current Template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
+              <%= link_to "Download current template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
             <% end %>
           </div>
         </div>
 
         <div class="border-t border-slate-100 pt-5">
-          <h2 class="mb-3 text-base font-semibold text-slate-900">Organization Features</h2>
+          <h2 class="mb-3 text-base font-semibold text-slate-900">Organization features</h2>
           <div class="space-y-3">
             <label class="flex items-start gap-2 text-sm text-slate-700">
               <%= form.check_box :show_driving_reimbursement, class: check_class %>
@@ -58,16 +58,16 @@
             </label>
             <label class="flex items-start gap-2 text-sm text-slate-700">
               <%= form.check_box :learning_topic_active, class: check_class %>
-              <span>Enable Learning Topic</span>
+              <span>Enable learning topic</span>
             </label>
             <label class="flex items-start gap-2 text-sm text-slate-700">
               <%= form.check_box :other_duties_enabled, class: check_class %>
-              <span>Enable Other Duties</span>
+              <span>Enable other duties</span>
             </label>
             <% if Flipper.enabled?(:show_additional_expenses) %>
               <label class="flex items-start gap-2 text-sm text-slate-700">
                 <%= form.check_box :additional_expenses_enabled, class: check_class %>
-                <span>Volunteers can add Other Expenses</span>
+                <span>Volunteers can add other expenses</span>
               </label>
             <% end %>
           </div>
@@ -81,19 +81,19 @@
           </label>
           <div data-twilio-target="panel" class="mt-4 space-y-4 <%= "hidden" unless twilio_on %>">
             <div>
-              <%= form.label :twilio_phone_number, "Twilio Phone Number", class: label_class %>
+              <%= form.label :twilio_phone_number, "Twilio phone number", class: label_class %>
               <%= form.text_field :twilio_phone_number, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
             </div>
             <div>
-              <%= form.label :twilio_account_sid, "Twilio Account SID", class: label_class %>
+              <%= form.label :twilio_account_sid, "Twilio account SID", class: label_class %>
               <%= form.text_field :twilio_account_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
             </div>
             <div>
-              <%= form.label :twilio_api_key_sid, "Twilio API Key SID", class: label_class %>
+              <%= form.label :twilio_api_key_sid, "Twilio API key SID", class: label_class %>
               <%= form.text_field :twilio_api_key_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
             </div>
             <div>
-              <%= form.label :twilio_api_key_secret, "Twilio API Key Secret", class: label_class %>
+              <%= form.label :twilio_api_key_secret, "Twilio API key secret", class: label_class %>
               <%= form.text_field :twilio_api_key_secret, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
             </div>
           </div>
@@ -111,20 +111,20 @@
     <%= render "custom_org_links" %>
 
     <section class="space-y-4">
-      <h2 id="contact-types" class="<%= section_title %>">Manage Contact Types</h2>
+      <h2 id="contact-types" class="<%= section_title %>">Manage contact types</h2>
       <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
       <%= render "contact_types", contact_types: @contact_types %>
     </section>
 
     <section class="space-y-4">
-      <h2 id="court-details" class="<%= section_title %>">Manage Court Details</h2>
+      <h2 id="court-details" class="<%= section_title %>">Manage court details</h2>
       <%= render "hearing_types" %>
       <%= render "judges" %>
       <%= render "sent_emails" %>
     </section>
 
     <section class="space-y-4">
-      <h2 id="learning-hours" class="<%= section_title %>">Manage Learning Hours</h2>
+      <h2 id="learning-hours" class="<%= section_title %>">Manage learning hours</h2>
       <%= render "learning_hour_types" %>
       <%= render "learning_hour_topics" %>
     </section>
@@ -135,7 +135,7 @@
     </section>
 
     <section class="space-y-4">
-      <h2 id="placement-types" class="<%= section_title %>">Manage Case Placement Types</h2>
+      <h2 id="placement-types" class="<%= section_title %>">Manage case placement types</h2>
       <%= render "placement_types", placement_types: @placement_types %>
     </section>
   </div>
