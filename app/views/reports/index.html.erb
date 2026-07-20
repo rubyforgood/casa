@@ -28,12 +28,12 @@
       <p class="mt-1 text-sm text-slate-500">One-click CSV downloads.</p>
       <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
         <% exports = [
-          ["Mileage Report", "Downloading Mileage Report", mileage_reports_path(format: :csv), "bi-signpost-2"],
-          ["Missing Data Report", "Downloading Missing Data Report", missing_data_reports_path(format: :csv), "bi-database"],
-          ["Learning Hours Report", "Downloading Learning Hours Report", learning_hours_reports_path(format: :csv), "bi-hourglass-split"],
-          ["Export Volunteers Emails", "Downloading Export Volunteers Emails", export_emails_path(format: :csv), "bi-envelope"],
-          ["Followups Report", "Downloading Followups Report", followup_reports_path(format: :csv), "bi-check2-square"],
-          ["Placements Report", "Downloading Placements Report", placement_reports_path(format: :csv), "bi-house-door"]
+          ["Mileage report", "Downloading mileage report", mileage_reports_path(format: :csv), "bi-signpost-2"],
+          ["Missing data report", "Downloading missing data report", missing_data_reports_path(format: :csv), "bi-database"],
+          ["Learning hours report", "Downloading learning hours report", learning_hours_reports_path(format: :csv), "bi-hourglass-split"],
+          ["Export volunteers emails", "Downloading export volunteers emails", export_emails_path(format: :csv), "bi-envelope"],
+          ["Followups report", "Downloading followups report", followup_reports_path(format: :csv), "bi-check2-square"],
+          ["Placements report", "Downloading placements report", placement_reports_path(format: :csv), "bi-house-door"]
         ] %>
         <% exports.each do |label, feedback, url, icon| %>
           <%= form_with url: url, method: :get do %>
@@ -46,7 +46,7 @@
     </section>
 
     <section class="<%= card %>">
-      <h2 class="<%= section_title %>">Case Contacts Report</h2>
+      <h2 class="<%= section_title %>">Case contacts report</h2>
       <p class="mt-1 text-sm text-slate-500">A CSV of all fields for every volunteer's case contacts. Choose a date range and optional filters.</p>
 
       <%= form_with url: case_contact_reports_path(format: :csv), scope: "report", method: :get, local: true, class: "mt-5 space-y-5" do |f| %>
@@ -64,7 +64,7 @@
         <% if current_user&.casa_admin? || current_user&.supervisor? %>
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <%= f.label :supervisor_ids, "Assigned To", class: label_class, for: "multiple-select-field1" %>
+              <%= f.label :supervisor_ids, "Assigned to", class: label_class, for: "multiple-select-field1" %>
               <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
@@ -72,11 +72,11 @@
               <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
-              <%= f.label :contact_type_ids, "Contact Type", class: label_class, for: "multiple-select-field3" %>
+              <%= f.label :contact_type_ids, "Contact type", class: label_class, for: "multiple-select-field3" %>
               <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
-              <%= f.label :contact_type_group_ids, "Contact Type Group", class: label_class, for: "multiple-select-field4" %>
+              <%= f.label :contact_type_group_ids, "Contact type group", class: label_class, for: "multiple-select-field4" %>
               <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, size: 4, class: multiselect_class} %>
             </div>
           </div>
@@ -119,7 +119,7 @@
         </details>
 
         <div>
-          <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:primary)}", data: {disable_with: "Downloading Report"} do %>
+          <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:primary)}", data: {disable_with: "Downloading report"} do %>
             <i class="bi bi-download pointer-events-none" aria-hidden="true"></i> Download Report
           <% end %>
         </div>

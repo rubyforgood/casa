@@ -40,7 +40,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     include_context "when on the court reports page", :volunteer
 
     it "generation modal hidden", :aggregate_failures do
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :hidden
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate report", visible: :hidden
       expect(page).to have_selector "#case-selection", visible: :hidden
       expect(page).not_to have_selector ".select2"
     end
@@ -60,7 +60,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows the Generate button and a searchable picker", :aggregate_failures do
-      expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: :visible
+      expect(page).to have_selector "#btnGenerateReport", text: "Generate report", visible: :visible
       expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
     end
 
@@ -98,7 +98,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
     it "shows an error when generating without a selection" do
       within "#generate-docx-report-modal" do
-        click_button "Generate Report"
+        click_button "Generate report"
         expect(page).to have_selector "[data-court-report-target='error']", visible: :visible
       end
     end
@@ -116,7 +116,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       within "#generate-docx-report-modal" do
         find(".ts-control").click
         find(".ts-dropdown .option[data-value='#{transition_case.case_number}']").click
-        click_button "Generate Report"
+        click_button "Generate report"
 
         expect(page).to have_selector "#btnGenerateReport[disabled]"
         expect(page).not_to have_selector "#btnGenerateReport[disabled]", wait: 10

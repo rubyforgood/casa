@@ -9,7 +9,7 @@
 <%= render Dialog::GroupComponent.new(id: "generate-docx-report-modal", label: "Download court report as a .docx", controllers: "court-report") do |dialog| %>
   <% dialog.with_trigger do %>
     <%= tag.button type: "button", data: {action: "modal#open"}, class: button_classes(:primary) do %>
-      <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Download Court Report as .docx
+      <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Download court report as a .docx
     <% end %>
   <% end %>
   <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
@@ -38,7 +38,7 @@
       <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
       <button type="submit" id="btnGenerateReport" data-action="court-report#generate" data-court-report-target="submit" class="<%= button_classes(:primary) %>">
         <i id="spinner" class="bi bi-arrow-repeat hidden animate-spin" data-court-report-target="spinner" aria-hidden="true"></i>
-        <i class="bi bi-download" aria-hidden="true"></i> Generate Report
+        <i class="bi bi-download" aria-hidden="true"></i> Generate report
       </button>
     <% end %>
   <% end %>
