@@ -41,6 +41,22 @@ RSpec.describe MetricsReport do
     end
   end
 
+  describe "#contacts_this_month / #contacts_previous_month" do
+    let(:org) { create(:casa_org) }
+    let(:kase) { create(:casa_case, casa_org: org) }
+
+    it "counts contacts by created_at within each calendar month, scoped to the org" do
+      create(:case_contact, :active, casa_case: kase, created_at: Time.current.beginning_of_month + 1.day)
+      create(:case_contact, :active, casa_case: kase, created_at: 1.month.ago.beginning_of_month + 1.day)
+      # another chapter, this month -- must not leak in
+      create(:case_contact, :active, casa_case: create(:casa_case, casa_org: create(:casa_org)), created_at: Time.current.beginning_of_month + 1.day)
+
+      report = described_class.new(casa_org: org)
+      expect(report.contacts_this_month).to eq(1)
+      expect(report.contacts_previous_month).to eq(1)
+    end
+  end
+
   describe "#monthly_active_users" do
     let(:org) { create(:casa_org) }
 

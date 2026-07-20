@@ -60,6 +60,17 @@ class MetricsReport
     {grid: grid, max: grid.values.max || 0}
   end
 
+  # Contacts logged (by created_at, matching the trend charts) in the current calendar
+  # month, and in the previous one -- the two together give the month-over-month delta
+  # shown on the Analytics KPI cards.
+  def contacts_this_month
+    case_contacts.where(created_at: Time.current.beginning_of_month..).count
+  end
+
+  def contacts_previous_month
+    case_contacts.where(created_at: 1.month.ago.beginning_of_month...Time.current.beginning_of_month).count
+  end
+
   private
 
   attr_reader :casa_org

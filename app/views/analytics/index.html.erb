@@ -3,6 +3,37 @@
   <div class="mx-auto max-w-4xl">
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Analytics</h1>
     <p class="mt-1 text-sm text-slate-500">Your chapter's activity and data quality. Hover a chart for details.</p>
+
+    <% k = @kpis %>
+    <div class="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="text-3xl font-bold leading-none <%= k[:contacts_this_month].zero? ? "text-slate-500" : "text-slate-900" %>"><%= k[:contacts_this_month] %></div>
+        <div class="mt-2 text-sm font-medium text-slate-600">Contacts this month</div>
+        <div class="mt-1">
+          <% d = k[:contacts_delta] %>
+          <% if d > 0 %>
+            <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700"><i class="bi bi-arrow-up-short" aria-hidden="true"></i>+<%= d %> vs last month</span>
+          <% elsif d < 0 %>
+            <span class="inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-xs font-medium text-rose-700"><i class="bi bi-arrow-down-short" aria-hidden="true"></i><%= d %> vs last month</span>
+          <% else %>
+            <span class="inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600">No change vs last month</span>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="text-3xl font-bold leading-none <%= k[:active_volunteers].zero? ? "text-slate-500" : "text-slate-900" %>"><%= k[:active_volunteers] %></div>
+        <div class="mt-2 text-sm font-medium text-slate-600">Active volunteers</div>
+        <div class="mt-1 text-xs text-slate-500">Currently active in this chapter</div>
+      </div>
+
+      <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div class="text-3xl font-bold leading-none <%= k[:cases_needing_contact].zero? ? "text-slate-500" : "text-amber-700" %>"><%= k[:cases_needing_contact] %></div>
+        <div class="mt-2 text-sm font-medium text-slate-600">Cases needing contact</div>
+        <div class="mt-1 text-xs text-slate-500">No contact in <%= k[:followup_days] %> days</div>
+      </div>
+    </div>
+
     <%= render "metrics/dashboard", cc: @case_contacts, heatmap: @contact_heatmap, au: @active_users, range: @range, base_path: analytics_path %>
   </div>
 </div>

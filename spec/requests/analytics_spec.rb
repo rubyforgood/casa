@@ -19,6 +19,22 @@ RSpec.describe "Analytics", type: :request do
         get analytics_path(range: 3)
         expect(response.body).to include("Last 3 months")
       end
+
+      it "shows the chapter KPI cards" do
+        get analytics_path
+        expect(response.body).to include("Contacts this month")
+        expect(response.body).to include("Active volunteers")
+        expect(response.body).to include("Cases needing contact")
+      end
+
+      it "computes the month-over-month contact delta" do
+        kase = create(:casa_case, casa_org: organization)
+        2.times { create(:case_contact, :active, casa_case: kase, created_at: Time.current.beginning_of_month + 1.day) }
+        create(:case_contact, :active, casa_case: kase, created_at: 1.month.ago.beginning_of_month + 1.day)
+
+        get analytics_path
+        expect(response.body).to include("+1 vs last month")
+      end
     end
 
     context "as a supervisor" do
