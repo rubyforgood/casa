@@ -431,25 +431,33 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   `<details>`. A contrast pass over the swept pages fixed three AA misses: notification /
   patch-note timestamps and all input placeholders slate-400 -> slate-500, and the auth aside
   footer white/60 -> white/80.
-- [ ] Remove dead legacy code once confirmed unused (e.g. the unrendered
-  `app/views/notifications/_notification.html.erb` + its `notification_row_class` /
-  `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
-  uses the native-dialog report modal); the `volunteers#datatable` + `supervisors#datatable` JSON
-  actions and their `dashboard.js` blocks (both indexes retired the serverSide DataTable, moving
-  the `#volunteers` / `#supervisors` hook off the `<table>`); the `learning_hours.js` DataTable
-  init + the unrendered `learning_hours/_confirm_note` partial (the migrated learning-hours roster
-  is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
-  last consumer); the now-unused `shared/_edit_form` + `shared/_invite_login` (casa_admins/_form,
-  now retired, was their last consumer); the vestigial
-  `CasaCase#hearing_type` / `#judge` `belongs_to` + `hearing_type_name` / `judge_name` delegates
-  whose columns were dropped in 2023 — now only referenced by the legacy case pages;
-  `Form::HourMinuteDurationComponent` (+ its `.html.erb` + component spec) — the case-contact form
-  was its last consumer and now uses an inline Tailwind duration twin, like learning hours;
-  the unused `CaseContactDecorator#form_page_notes` method — no view renders it; the orphaned
-  `casa_cases/_form.html.erb` (new/edit render their forms inline); the retired reimbursements
-  DataTable stack now that its index is a bespoke table — `src/reimbursements.js` (+ its
-  `application.js` require), the `reimbursements#datatable` action, `ReimbursementDatatable`, and
-  the `with_datatable` route concern on `resources :reimbursements`).
+- [x] **Dead-code removal — DONE** (7 verified batches, each committed with specs/build green):
+  1. orphaned partials + `Form::HourMinuteDurationComponent` (+spec) +
+     `CaseContactDecorator#form_page_notes` (`notifications/_notification` + its
+     `notification_row_class`/`notification_icon` helpers, `shared/_manage_volunteers`,
+     `shared/_edit_form`, `shared/_invite_login`, `casa_cases/_form`, `learning_hours/_confirm_note`).
+  2. Bootstrap sidebar/header layout partials (`layouts/_sidebar`, `_header`,
+     `_all_casa_admin_sidebar` + specs) + `Sidebar::Link`/`GroupComponent` (kept `SidebarHelper`,
+     live via `cases_index_title`).
+  3. reimbursements serverSide DataTable stack (`src/reimbursements.js` + its `application.js`
+     require, `reimbursements#datatable` + its sole-caller helper, `ReimbursementDatatable` + spec,
+     `with_datatable` off the reimbursements route).
+  4. `dashboard.js` (466 lines) + `volunteers#datatable` / `supervisors#datatable` actions + the
+     `with_datatable` concern (all three refs, incl. case_contacts whose action never existed) +
+     `SupervisorDatatable` (+spec) + its `brakeman.ignore` entry. **Kept** `VolunteerDatatable`
+     (live: volunteers index reuses its SQL) + `Notifier` (shared).
+  5. the now-dead `datatable?` Pundit predicates in volunteer/supervisor/casa_admin/case_contact
+     policies + `ReimbursementPolicy#datatable?` (+ their spec coverage).
+  6. `learning_hours.js` DataTable init (**kept** `datatable.js`, still used by
+     `all_casa_admin/tables.js`).
+  7. the 33 orphaned Bootstrap-era SCSS partials under `shared/` (except the manifest-linked
+     `noscript.css`), `pages/`, and `base/` — their compiled root `application.scss` was already
+     gone and the CSS build is Tailwind-only.
+  `casa_cases/_generate_report_modal` was already gone. **Not dead — needs a deliberate migration,
+  not a sweep:** `CasaCase#hearing_type` / `#judge` + the `hearing_type_name` / `judge_name`
+  delegates are still consumed by `case_court_report_context.rb` and `PreferenceSet`'s
+  case-column-visibility keys, so removing them would entangle the court report + column prefs.
+  Minor follow-up: `sass` + `bootstrap-scss` are now unused `package.json` devDeps.
 - [x] **Sentence-case sweep — DONE.** Proper nouns/acronyms (CASA, IEP, Twilio) kept; free-form org
   data untouched. Done in verified batches, each with its coupled system/view/request specs updated
   in lockstep (incl. specs that matched old labels by case-sensitive substring, e.g.
