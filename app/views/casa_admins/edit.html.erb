@@ -1,1 +1,146 @@
-<%= render partial: "form", locals: {title: "Edit Casa Admin", casa_admin: @casa_admin} %>
+<% content_for :page_title, "Edit admin" %>
+<%# casa_admins#edit on casa_app. Self-contained (retires the shared Bootstrap _form +
+    shared/_edit_form + shared/_invite_login). Profile form + Account facts + a Status section.
+    Deactivate keeps the UJS data-confirm (native window.confirm) that the :js spec drives with
+    accept_confirm/dismiss_confirm. Spec-locked labels kept verbatim: "Submit", "Deactivate",
+    "Resend Invitation", "Change to Supervisor", "Receive Monthly Learning Hours Report", and the
+    Account fact labels. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% section_title = "text-base font-semibold text-slate-900" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl space-y-6">
+    <div>
+      <%= link_to casa_admins_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to admins
+      <% end %>
+    </div>
+
+    <div class="min-w-0">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit admin</h1>
+      <p class="mt-1 truncate text-sm text-slate-500"><% if @casa_admin.display_name.present? %><span class="font-medium text-slate-800"><%= formatted_name(@casa_admin.display_name) %></span> &middot; <% end %><%= @casa_admin.email %></p>
+    </div>
+
+    <%= render "casa_admins/errors", resource: @casa_admin %>
+
+    <%# Profile %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Profile</h2>
+      <%= form_with model: @casa_admin, url: casa_admin_path(@casa_admin), method: :patch do |form| %>
+        <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :email, "Email", class: label_class %>
+            <%= form.email_field :email, placeholder: "Email", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :display_name, "Display name", class: label_class %>
+            <%= form.text_field :display_name, placeholder: "Display name", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <%= form.date_field :date_of_birth, value: @casa_admin.date_of_birth, class: input_class %>
+          </div>
+        </div>
+
+        <% if current_user.casa_admin? %>
+          <div class="mt-4">
+            <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+              <%= form.check_box :monthly_learning_hours_report, class: check_class %>
+              Receive Monthly Learning Hours Report
+            </label>
+          </div>
+        <% end %>
+
+        <div class="actions mt-5">
+          <%= form.button type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+
+    <%# Account %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Account</h2>
+      <dl class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-slate-500">CASA organization</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.casa_org&.name %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Added to system</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.decorate.formatted_created_at %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation email sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.decorate.formatted_invitation_sent_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation accepted</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.decorate.formatted_invitation_accepted_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Last logged in</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.decorate.formatted_current_sign_in_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Password reset last sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @casa_admin.decorate.formatted_reset_password_sent_at || "never" %></dd>
+        </div>
+      </dl>
+    </section>
+
+    <%# Status %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Status</h2>
+      <div class="mt-4">
+        <% if @casa_admin.active? %>
+          <p class="flex flex-wrap items-center gap-2 text-sm text-slate-600">Admin is
+            <span class="<%= pill %> bg-emerald-50 text-emerald-700"><i class="bi bi-check-circle" aria-hidden="true"></i> Active</span>
+          </p>
+        <% else %>
+          <div role="alert" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+            Admin was deactivated on: <%= @casa_admin.decorate.formatted_updated_at %>
+          </div>
+        <% end %>
+
+        <div class="mt-4 flex flex-wrap gap-2">
+          <% if @casa_admin.active? %>
+            <% if policy(@casa_admin).deactivate? %>
+              <%= link_to deactivate_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:danger_outline),
+                    data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} do %>
+                <i class="bi bi-slash-circle" aria-hidden="true"></i> Deactivate
+              <% end %>
+            <% end %>
+          <% else %>
+            <% if policy(@casa_admin).activate? %>
+              <%= link_to activate_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:success) do %>
+                <i class="bi bi-check-circle" aria-hidden="true"></i> Activate admin
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <% if current_user.casa_admin? && @casa_admin.invitation_accepted_at.nil? %>
+            <%= link_to resend_invitation_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:secondary) do %>
+              <i class="bi bi-send" aria-hidden="true"></i> Resend Invitation
+            <% end %>
+          <% end %>
+
+          <% if current_user.casa_admin? %>
+            <%= link_to change_to_supervisor_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:secondary) do %>
+              <i class="bi bi-person-down" aria-hidden="true"></i> Change to Supervisor
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>

@@ -14,8 +14,8 @@ design system on the `casadesign` branch.
 (now a bespoke server-rendered casa_app table; its dead DataTable stack was removed). But a
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
-layout, so **resume there** — `fund_requests#new` is done; next is **`casa_admins`**, then
-`other_duties`. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
+layout, so **resume there** — `fund_requests#new` and `casa_admins` are done; next is
+**`other_duties`**. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
 vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
 `application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
 
@@ -363,8 +363,16 @@ migrate before `application.html.erb` + `application.scss` can be deleted.
   label substrings the spec fills by + the `* / **` footnotes. Sentence-cased the feature copy
   (h1/page-title, "Submit fund request", the flash, and the case-show link), updating the 2 spec
   assertions. 2 system + 11 request examples green; no overflow at 500/768/1280.
-- [ ] `casa_admins#index/new/edit` — the CASA-admin roster (Phase 4 did volunteers + supervisors,
-  not this third user table).
+- [x] `casa_admins#index/new/edit` — **SHIPPED** on casa_app (`layout "casa_app"`). Rebuilt as
+  self-contained casa_app views mirroring the supervisors sibling: a bespoke index table (`#admins`
+  hook on the wrapper, "Deactivated" tag), a minimal new form, and an edit page (Profile / Account /
+  Status) whose Deactivate keeps the UJS `data-confirm` the `:js` spec drives. Kept the legacy
+  "N errors prohibited this Casa admin from being saved:" format + `#error_explanation` via a
+  casa_app-styled `casa_admins/_errors` partial. Retired the shared `casa_admins/_form` + its
+  `shared/_edit_form` + `shared/_invite_login` (now dead — see dead-code). Spec-locked Title Case
+  ("Create New Casa Admin", "Receive Monthly Learning Hours Report", "Resend Invitation", "Change to
+  Supervisor") kept verbatim, queued for the sentence-case sweep. 53 examples green; no overflow
+  500/768/1280.
 - [ ] `other_duties#index/new/edit` — volunteer "other duties" logging (has system specs).
 - [ ] `notes#edit` — edit a case-contact note.
 - [ ] `case_assignments#index` — assignment listing.
@@ -409,7 +417,8 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   the `#volunteers` / `#supervisors` hook off the `<table>`); the `learning_hours.js` DataTable
   init + the unrendered `learning_hours/_confirm_note` partial (the migrated learning-hours roster
   is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
-  last consumer); the vestigial
+  last consumer); the now-unused `shared/_edit_form` + `shared/_invite_login` (casa_admins/_form,
+  now retired, was their last consumer); the vestigial
   `CasaCase#hearing_type` / `#judge` `belongs_to` + `hearing_type_name` / `judge_name` delegates
   whose columns were dropped in 2023 — now only referenced by the legacy case pages;
   `Form::HourMinuteDurationComponent` (+ its `.html.erb` + component spec) — the case-contact form
