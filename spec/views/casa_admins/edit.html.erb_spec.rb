@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "casa_admins/edit", type: :view do
   let(:admin) { build_stubbed :casa_admin }
 
-  it "shows invite and login info" do
+  it "shows account info" do
     enable_pundit(view, admin)
     allow(view).to receive(:current_user).and_return(admin)
     allow(view).to receive(:current_organization).and_return(admin.casa_org)
@@ -11,11 +11,11 @@ RSpec.describe "casa_admins/edit", type: :view do
 
     render template: "casa_admins/edit"
 
-    expect(rendered).to have_text("Added to system ")
-    expect(rendered).to have_text("Invitation email sent \n  never")
+    expect(rendered).to have_text("Added to system")
+    expect(rendered).to have_text("Invitation email sent")
     expect(rendered).to have_text("Last logged in")
-    expect(rendered).to have_text("Invitation accepted \n  never")
-    expect(rendered).to have_text("Password reset last sent \n  never")
+    expect(rendered).to have_text("Invitation accepted")
+    expect(rendered).to have_text("Password reset last sent")
   end
 
   describe "'Change to Supervisor' button" do
