@@ -22,22 +22,10 @@ class CaseContacts::CaseContactsNewDesignController < ApplicationController
     render layout: "casa_app"
   end
 
-  # Retained for the legacy jQuery DataTable JSON protocol; the migrated casa_app index no
-  # longer calls it (server-rendered + Pagy instead). Dead once the flag is retired — queued
-  # for cleanup in design-todo.md, like the volunteers/supervisors #datatable actions.
-  def datatable
-    authorize CaseContact
-    case_contacts = policy_scope(current_organization.case_contacts)
-    datatable = CaseContactDatatable.new(case_contacts, params, current_user)
-
-    render json: datatable
-  end
-
   private
 
-  # Maps the plain GET filter params to the existing CaseContact scopes (the same ones the
-  # DataTable used via CaseContactDatatable#apply_additional_filters). Contact type is a
-  # subquery so multi-type contacts are never duplicated by the join.
+  # Maps the plain GET filter params to the CaseContact scopes. Contact type is a subquery so
+  # multi-type contacts are never duplicated by the join.
   def filter_case_contacts(scope)
     scope = scope.occurred_starting_at(params[:occurred_starting_at])
     scope = scope.occurred_ending_at(params[:occurred_ending_at])

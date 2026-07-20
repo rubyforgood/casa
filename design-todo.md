@@ -142,10 +142,10 @@ page** pattern in `design.md`.
   dropdown (clipped by `overflow-x-auto`). Dropped the DataTables column-visibility picker (design
   already rejected it for the cases index). `followups#create/#resolve` now `redirect_back_or_to`
   and `case_contacts#destroy` already `redirect_to request.referer`, so reminders/delete stay on the
-  list. The table drops the `id="case_contacts"` hook so `dashboard.js`'s `defineCaseContactsTable`
-  no-ops. 38 request + 22 system examples green. See **Expandable rows + inline row actions** in
-  `design.md`. Dead now (queued below): the `datatable` action + route, `CaseContactDatatable`, and
-  the `defineCaseContactsTable` block in `dashboard.js` (+ its jest test).
+  list. 38 request + 22 system examples green. See **Expandable rows + inline row actions** in
+  `design.md`. Also **removed** the now-dead datatable stack: the `#datatable` action + its route,
+  `CaseContactDatatable` (+ spec), and the `defineCaseContactsTable` block in `dashboard.js` (+ its
+  jest test + the POST /datatable request examples).
 
 ## Phase 4 — Management & rosters
 - [x] Volunteers index + edit. Both on casa_app. The **index** is a bespoke Tailwind table
@@ -387,11 +387,7 @@ sign-in / password / invitation — were done in the foundation phase.)
   `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
   uses the native-dialog report modal); the `volunteers#datatable` + `supervisors#datatable` JSON
   actions and their `dashboard.js` blocks (both indexes retired the serverSide DataTable, moving
-  the `#volunteers` / `#supervisors` hook off the `<table>`); the
-  `CaseContacts::CaseContactsNewDesignController#datatable` action + its
-  `datatable_case_contacts_new_design` route + `CaseContactDatatable` + the `defineCaseContactsTable`
-  block in `dashboard.js` (and its jest test), now that the new-design page is server-rendered and
-  drops the `#case_contacts` hook; the `learning_hours.js` DataTable
+  the `#volunteers` / `#supervisors` hook off the `<table>`); the `learning_hours.js` DataTable
   init + the unrendered `learning_hours/_confirm_note` partial (the migrated learning-hours roster
   is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
   last consumer); the vestigial
