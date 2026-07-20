@@ -14,7 +14,7 @@ RSpec.describe "supervisors/index", type: :view do
 
       render template: "supervisors/index"
 
-      expect(rendered).to have_link("New Supervisor", href: new_supervisor_path)
+      expect(rendered).to have_link("New supervisor", href: new_supervisor_path)
     end
 
     it "shows the casa_cases-without-court-dates list" do
@@ -169,7 +169,7 @@ RSpec.describe "supervisors/index", type: :view do
       sign_in user
       render template: "supervisors/index"
 
-      expect(rendered).not_to have_link("New Supervisor", href: new_supervisor_path)
+      expect(rendered).not_to have_link("New supervisor", href: new_supervisor_path)
     end
   end
 end

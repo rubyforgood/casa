@@ -21,7 +21,7 @@ RSpec.describe "reports", :js, type: :system do
       instance_exec(&setup_action) if setup_action
       visit reports_path
       instance_exec(&filter_action)
-      click_on "Download Report"
+      click_on "Download report"
       expect(page).to have_text("Downloading report")
     end
   end
@@ -29,7 +29,7 @@ RSpec.describe "reports", :js, type: :system do
   shared_examples "empty select downloads report" do |select_id, description|
     it "renders the #{description} select with no options and downloads the report" do
       expect(page).to have_select(select_id, options: [])
-      click_on "Download Report"
+      click_on "Download report"
       expect(page).to have_text("Downloading report")
     end
   end
@@ -81,7 +81,7 @@ RSpec.describe "reports", :js, type: :system do
       end
 
       it "downloads case contacts report with default filters" do
-        click_on "Download Report"
+        click_on "Download report"
         expect(page).to have_text("Downloading report")
       end
 
@@ -94,7 +94,7 @@ RSpec.describe "reports", :js, type: :system do
 
       shared_examples "case contacts report with filter" do |filter_type|
         it "downloads case contacts report with #{filter_type}" do
-          click_on "Download Report"
+          click_on "Download report"
           expect(page).to have_text("Downloading report")
         end
       end

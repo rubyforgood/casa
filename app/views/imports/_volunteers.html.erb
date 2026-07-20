@@ -17,13 +17,13 @@
       <ul class="list-disc space-y-1 pl-5 text-sm text-slate-600">
         <li>Click the choose file button, navigate to the saved file, and select it.</li>
         <li><strong>Do not</strong> change any of the values in the first line of the example CSV file.</li>
-        <li>Then click "Import Volunteers CSV" to import your volunteers. <strong>This will email the new volunteers asking them to log in.</strong></li>
+        <li>Then click "Import volunteers CSV" to import your volunteers. <strong>This will email the new volunteers asking them to log in.</strong></li>
       </ul>
       <%= f.file_field :file, id: "volunteer-file", accept: "text/csv", class: file_input %>
       <%= render "sms_opt_in_modal", form: f if @sms_opt_in_warning == "volunteer" %>
       <div>
         <%= button_tag id: "volunteer-import-button", disabled: true, data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
-          <i class="bi bi-upload" aria-hidden="true"></i> Import Volunteers CSV
+          <i class="bi bi-upload" aria-hidden="true"></i> Import volunteers CSV
         <% end %>
       </div>
     <% end %>

@@ -91,7 +91,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         assign :casa_cases, [case_contact.casa_case]
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
-        expect(rendered).to have_button("Make Reminder")
+        expect(rendered).to have_button("Make reminder")
       end
     end
   end

@@ -27,7 +27,7 @@ RSpec.describe "imports/index", type: :system do
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
 
-        expect(page).to have_text("SMS Opt In")
+        expect(page).to have_text("SMS opt in")
         expect(page).to have_button("sms-opt-in-continue-button", disabled: true)
 
         check "sms-opt-in-checkbox"
@@ -70,7 +70,7 @@ RSpec.describe "imports/index", type: :system do
         check "sms-opt-in-checkbox"
         click_button "sms-opt-in-continue-button"
 
-        expect(page).to have_text("CSV Import Error")
+        expect(page).to have_text("CSV import error")
       end
     end
 
@@ -89,7 +89,7 @@ RSpec.describe "imports/index", type: :system do
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
 
-        expect(page).to have_text("SMS Opt In")
+        expect(page).to have_text("SMS opt in")
         expect(page).to have_button("sms-opt-in-continue-button", disabled: true)
 
         find("#sms-opt-in-checkbox", visible: true).check
@@ -136,7 +136,7 @@ RSpec.describe "imports/index", type: :system do
         check "sms-opt-in-checkbox"
         click_button "sms-opt-in-continue-button"
 
-        expect(page).to have_text("CSV Import Error")
+        expect(page).to have_text("CSV import error")
       end
     end
   end

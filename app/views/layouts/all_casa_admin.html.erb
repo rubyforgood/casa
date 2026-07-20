@@ -26,10 +26,10 @@
       <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
         <% nav_items = [
           ["CASA organizations", "bi-buildings", authenticated_all_casa_admin_root_path, "organizations"],
-          ["Patch Notes", "bi-journal-text", all_casa_admins_patch_notes_path, "patch_notes"],
-          ["Edit Profile", "bi-person-gear", edit_all_casa_admins_path, "profile"],
-          ["Feature Flags", "bi-flag", "/flipper", "flipper"],
-          ["Pg Dashboard", "bi-speedometer2", "/pg_dashboard", "pg"]
+          ["Patch notes", "bi-journal-text", all_casa_admins_patch_notes_path, "patch_notes"],
+          ["Edit profile", "bi-person-gear", edit_all_casa_admins_path, "profile"],
+          ["Feature flags", "bi-flag", "/flipper", "flipper"],
+          ["PG dashboard", "bi-speedometer2", "/pg_dashboard", "pg"]
         ] %>
         <% nav_items.each do |title, icon, path, key| %>
           <% active = (@active_nav == key) %>
@@ -41,7 +41,7 @@
 
       <div class="border-t border-slate-100 p-3">
         <%= link_to destroy_all_casa_admin_session_path, id: "all-casa-log-out", class: "flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-rose-600 hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-rose-500" do %>
-          <i class="bi bi-box-arrow-right text-base" aria-hidden="true"></i> Log Out
+          <i class="bi bi-box-arrow-right text-base" aria-hidden="true"></i> Log out
         <% end %>
       </div>
     </aside>

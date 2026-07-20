@@ -39,7 +39,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "edits case", :js do
       visit casa_case_path(casa_case.id)
-      click_on "Edit Case Details"
+      click_on "Edit case details"
       select "Submitted", from: "casa_case_court_report_status"
 
       find(".ts-control").click
@@ -159,7 +159,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
@@ -177,7 +177,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
@@ -194,7 +194,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
@@ -232,7 +232,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
-      expect(page).to have_text("Set Implementation Status")
+      expect(page).to have_text("Set implementation status")
 
       find(".ts-control").click
 
@@ -302,7 +302,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       def sign_in_and_assign_volunteer
         sign_in supervisor1
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
 
         select volunteer.display_name, from: "case_assignment[volunteer_id]"
 
@@ -601,7 +601,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
@@ -619,7 +619,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
@@ -636,7 +636,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"

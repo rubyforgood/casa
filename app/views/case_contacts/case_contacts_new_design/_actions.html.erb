@@ -22,7 +22,7 @@
     <% if row %>
       <%= button_to resolve_followup_path(requested_followup), method: :patch, form_class: "inline-flex", data: {turbo: false}, class: ghost, "aria-label": "Resolve reminder", title: "Resolve reminder" do %><i class="bi bi-calendar-check" aria-hidden="true"></i><% end %>
     <% else %>
-      <%= button_to resolve_followup_path(requested_followup), method: :patch, form_class: "inline-flex", data: {turbo: false}, class: button_classes(:success) do %><i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve Reminder<% end %>
+      <%= button_to resolve_followup_path(requested_followup), method: :patch, form_class: "inline-flex", data: {turbo: false}, class: button_classes(:success) do %><i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder<% end %>
     <% end %>
   <% else %>
     <%= render Dialog::GroupComponent.new(label: "Set a reminder") do |dialog| %>
@@ -30,7 +30,7 @@
         <% if row %>
           <%= tag.button type: "button", data: {action: "modal#open"}, class: ghost, "aria-label": "Set reminder", title: "Set reminder" do %><i class="bi bi-calendar-plus" aria-hidden="true"></i><% end %>
         <% else %>
-          <%= tag.button type: "button", data: {action: "modal#open"}, class: button_classes(:secondary) do %><i class="bi bi-calendar-plus" aria-hidden="true"></i> Set Reminder<% end %>
+          <%= tag.button type: "button", data: {action: "modal#open"}, class: button_classes(:secondary) do %><i class="bi bi-calendar-plus" aria-hidden="true"></i> Set reminder<% end %>
         <% end %>
       <% end %>
       <%= form_with url: case_contact_followups_path(contact), method: :post, data: {turbo: false} do |f| %>

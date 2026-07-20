@@ -17,7 +17,7 @@ RSpec.describe "Learning Hours Index", type: :system do
       expect(page).to have_content("Learning hours")
       expect(page).to have_content("Title")
       expect(page).to have_content("Time spent")
-      expect(page).to have_link("Record Learning Hours", href: new_learning_hour_path)
+      expect(page).to have_link("Record learning hours", href: new_learning_hour_path)
     end
   end
 

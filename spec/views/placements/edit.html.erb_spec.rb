@@ -26,6 +26,6 @@ RSpec.describe "placements/edit", type: :view do
   end
 
   it "has a select input for placement type with the correct placeholder" do
-    expect(rendered).to have_select("placement[placement_type_id]", with_options: ["-Select Placement Type-"])
+    expect(rendered).to have_select("placement[placement_type_id]", with_options: ["-Select placement type-"])
   end
 end

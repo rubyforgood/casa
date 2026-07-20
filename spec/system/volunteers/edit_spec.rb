@@ -475,10 +475,10 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in supervisor
       visit edit_volunteer_path(volunteer)
 
-      expect(page).to have_button("Send Reminder")
+      expect(page).to have_button("Send reminder")
       expect(page).to have_text("Send CC to Supervisor")
       uncheck "with_cc"
-      click_on "Send Reminder"
+      click_on "Send reminder"
 
       expect(page).to have_content("Reminder sent to volunteer")
 
@@ -495,7 +495,7 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       check "with_cc"
-      click_on "Send Reminder"
+      click_on "Send reminder"
 
       expect(page).to have_content("Reminder sent to volunteer")
 
@@ -512,7 +512,7 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer_without_supervisor)
 
       check "with_cc"
-      click_on "Send Reminder"
+      click_on "Send reminder"
 
       expect(page).to have_content("Reminder sent to volunteer")
 
@@ -530,10 +530,10 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in admin
       visit edit_volunteer_path(volunteer)
 
-      expect(page).to have_button("Send Reminder")
+      expect(page).to have_button("Send reminder")
       expect(page).to have_text("Send CC to Supervisor and Admin")
 
-      click_on "Send Reminder"
+      click_on "Send reminder"
 
       expect(page).to have_content("Reminder sent to volunteer")
 
@@ -548,7 +548,7 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in admin
       visit edit_volunteer_path(volunteer)
       check "with_cc"
-      click_on "Send Reminder"
+      click_on "Send reminder"
 
       expect(page).to have_content("Reminder sent to volunteer")
 

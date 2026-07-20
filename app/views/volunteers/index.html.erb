@@ -17,7 +17,7 @@
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Volunteers</h1>
     <% if policy(current_organization.volunteers.new).new? %>
-      <%= link_to new_volunteer_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New Volunteer<% end %>
+      <%= link_to new_volunteer_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New volunteer<% end %>
     <% end %>
   </div>
 
@@ -29,7 +29,7 @@
 
   <%# hidden! (Tailwind v4 important) so the select-all controller can reliably hide the trigger:
       a plain `hidden` loses to button_classes' `inline-flex` in the cascade. %>
-  <div data-controller="select-all modal" data-select-all-hidden-class="hidden!" data-select-all-button-label-value="Manage Volunteer">
+  <div data-controller="select-all modal" data-select-all-hidden-class="hidden!" data-select-all-button-label-value="Manage volunteer">
     <div class="mb-3 min-h-[2.5rem]">
       <button type="button" class="<%= button_classes(:secondary) %> hidden!" data-select-all-target="button" data-action="modal#open">
         <i class="bi bi-people" aria-hidden="true"></i> <span data-select-all-target="buttonLabel"></span>

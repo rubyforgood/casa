@@ -6,7 +6,7 @@
 <%= render Dialog::GroupComponent.new(id: "generate-court-report", label: "Download court report", controllers: "court-report", wrapper_class: local_assigns.fetch(:wrapper_class, "inline-flex")) do |dialog| %>
   <% dialog.with_trigger do %>
     <button type="button" data-action="modal#open" class="<%= trigger_class %>">
-      <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Generate Court Report
+      <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Generate court report
     </button>
   <% end %>
   <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
@@ -33,7 +33,7 @@
       <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
       <button type="submit" data-action="court-report#generate" data-court-report-target="submit" class="<%= button_classes(:primary) %>">
         <i class="bi bi-arrow-repeat hidden animate-spin" data-court-report-target="spinner" aria-hidden="true"></i>
-        <i class="bi bi-download" aria-hidden="true"></i> Generate Report
+        <i class="bi bi-download" aria-hidden="true"></i> Generate report
       </button>
     <% end %>
   <% end %>

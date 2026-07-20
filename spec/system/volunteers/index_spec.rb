@@ -48,7 +48,7 @@ RSpec.describe "volunteers/index", type: :system do
       sign_in admin
 
       visit volunteers_path
-      click_on "New Volunteer"
+      click_on "New volunteer"
 
       expect(page).to have_text("New volunteer")
       expect(page).to have_css("form#new_volunteer")
@@ -166,26 +166,26 @@ RSpec.describe "volunteers/index", type: :system do
     end
 
     it "hides the manage button until a volunteer is selected" do
-      expect(page).to have_no_text("Manage Volunteer")
+      expect(page).to have_no_text("Manage volunteer")
 
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-      expect(page).to have_text("Manage Volunteer")
+      expect(page).to have_text("Manage volunteer")
     end
 
     it "pluralizes the label with the selected count" do
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-      expect(page).to have_text("Manage Volunteer (1)")
+      expect(page).to have_text("Manage volunteer (1)")
 
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
-      expect(page).to have_text("Manage Volunteers (2)")
+      expect(page).to have_text("Manage volunteers (2)")
     end
 
     it "hides the button again when the last volunteer is deselected" do
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-      expect(page).to have_text("Manage Volunteer")
+      expect(page).to have_text("Manage volunteer")
 
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-      expect(page).to have_no_text("Manage Volunteer")
+      expect(page).to have_no_text("Manage volunteer")
     end
 
     describe "select-all checkbox" do

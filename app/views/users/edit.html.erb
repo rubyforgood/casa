@@ -123,13 +123,13 @@
         <div class="mt-4 space-y-3">
           <label class="flex items-center gap-3 text-sm text-slate-700">
             <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications #{checkbox_class}" %>
-            Email Me
+            Email me
           </label>
 
           <% if @user.casa_org.twilio_enabled? %>
             <label class="flex items-center gap-3 text-sm text-slate-700">
               <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications #{checkbox_class}" %>
-              Text Me
+              Text me
             </label>
             <div class="mt-1 space-y-2 border-l-2 border-slate-100 pl-4">
               <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type), :id, :name) do |event| %>

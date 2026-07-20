@@ -46,7 +46,7 @@ RSpec.describe "supervisors/index", type: :system do
       it "can access the New Supervisor button" do
         visit supervisors_path
 
-        expect(page).to have_link("New Supervisor", href: new_supervisor_path)
+        expect(page).to have_link("New supervisor", href: new_supervisor_path)
       end
     end
 
@@ -59,7 +59,7 @@ RSpec.describe "supervisors/index", type: :system do
         visit supervisors_path
 
         expect(page).to have_css("h1", text: "Supervisors")
-        expect(page).to have_no_link("New Supervisor", href: new_supervisor_path)
+        expect(page).to have_no_link("New supervisor", href: new_supervisor_path)
       end
     end
   end

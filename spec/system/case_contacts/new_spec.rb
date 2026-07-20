@@ -245,7 +245,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:reimbursement_checkbox) { "case_contact_want_driving_reimbursement" }
     let(:miles_driven_input) { "case_contact_miles_driven" }
     let(:volunteer_address_input) { "case_contact_volunteer_address" }
-    let(:add_expense_button_text) { "Add Another Expense" }
+    let(:add_expense_button_text) { "Add another expense" }
 
     before do
       allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)

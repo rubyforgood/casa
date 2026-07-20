@@ -89,10 +89,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
     subject
 
     (contact_topics.size - 1).times do
-      click_on "Add Another Discussion Topic"
+      click_on "Add another discussion topic"
     end
 
-    expect(notes_section).to have_button("Add Another Discussion Topic", disabled: true)
+    expect(notes_section).to have_button("Add another discussion topic", disabled: true)
   end
 
   it "disables contact topics that are already selected", :js do
@@ -103,7 +103,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
 
     expect(notes_section).to have_select(class: topic_select_class, count: 1)
     expect(notes_section).to have_no_select(class: topic_select_class, disabled_options: [topic_one_question])
-    click_on "Add Another Discussion Topic"
+    click_on "Add another discussion topic"
     expect(notes_section).to have_select(class: topic_select_class, count: 2)
     expect(notes_section).to have_select(class: topic_select_class, disabled_options: [topic_one_question], count: 1)
   end
@@ -113,7 +113,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
 
     it "displays a field for contact.notes", :js do
       subject
-      expect(page).to have_no_button "Add Another Discussion Topic"
+      expect(page).to have_no_button "Add another discussion topic"
       expect(notes_section).to have_field "Additional notes"
 
       fill_in_contact_details
@@ -203,7 +203,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
         contact_made: false, medium: "In Person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
       )
 
-      click_on "Add Another Discussion Topic"
+      click_on "Add another discussion topic"
       answer_topic contact_topics.first.question, "Topic One answer."
       within autosave_alert_div do
         find(autosave_alert_css, text: autosave_alert_text, wait: 3)

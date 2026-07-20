@@ -1,11 +1,11 @@
-<%# Show-page reminder control: a "Send Reminder" trigger opens a design-system Dialog to
+<%# Show-page reminder control: a "Send reminder" trigger opens a design-system Dialog to
     confirm and optionally CC the supervisor/admin, then PATCHes volunteers#reminder (which
     redirects back to the case). The shared volunteers/_volunteer_reminder_form is still
     Bootstrap and used by the un-migrated volunteers/edit page. %>
 <%= render Dialog::GroupComponent.new(label: "Send a reminder to #{formatted_name(volunteer.display_name)}", wrapper_class: "contents") do |dialog| %>
   <% dialog.with_trigger do %>
     <%= button_tag type: "button", data: {action: "modal#open"}, title: "Remind volunteer to input case contacts", class: button_classes(:secondary) do %>
-      <i class="bi bi-bell" aria-hidden="true"></i> Send Reminder
+      <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
     <% end %>
   <% end %>
   <%= form_with url: reminder_volunteer_path(volunteer), method: :patch do %>

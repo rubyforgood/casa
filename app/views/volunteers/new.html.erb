@@ -1,7 +1,7 @@
 <% content_for :page_title, "New volunteer" %>
 <%# volunteers#new on the casa_app shell. Self-contained (the old volunteers/_form was used
     only here). There is no UI sign-up (ADR 0002) — admins/supervisors invite; on save the
-    volunteer is emailed an invitation. Field labels + the "Create Volunteer" button are
+    volunteer is emailed an invitation. Field labels + the "Create volunteer" button are
     spec-locked (invite_spec / new_spec). %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
@@ -43,7 +43,7 @@
         </div>
         <div class="actions mt-5">
           <%= form.button type: "submit", class: button_classes(:primary) do %>
-            <i class="bi bi-person-plus" aria-hidden="true"></i> Create Volunteer
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Create volunteer
           <% end %>
         </div>
       <% end %>

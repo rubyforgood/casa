@@ -16,7 +16,7 @@
         <%= link_to @current_case.case_number, casa_case_path(@current_case), class: "mt-1 inline-block text-sm font-medium text-brand-600 hover:text-brand-700" %>
       </div>
       <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: button_classes(:primary) do %>
-        <i class="bi bi-download" aria-hidden="true"></i> Download Checklist
+        <i class="bi bi-download" aria-hidden="true"></i> Download checklist
       <% end %>
     </div>
 

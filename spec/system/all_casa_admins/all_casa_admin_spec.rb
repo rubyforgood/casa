@@ -29,14 +29,14 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     visit "/"
     expect(page).to have_text "All CASA Admin"
     expect(page).to have_text "New CASA Organization"
-    expect(page).to have_text "New All CASA Admin"
+    expect(page).to have_text "New all CASA admin"
     expect(page).to have_text "CASA Organizations"
 
     # left sidebar
-    expect(page).to have_text "Patch Notes"
-    expect(page).to have_text "Edit Profile"
-    expect(page).to have_text "Feature Flags"
-    expect(page).to have_text "Log Out"
+    expect(page).to have_text "Patch notes"
+    expect(page).to have_text "Edit profile"
+    expect(page).to have_text "Feature flags"
+    expect(page).to have_text "Log out"
 
     # footer
     expect(page).to have_link("Ruby For Good", href: "https://rubyforgood.org/")

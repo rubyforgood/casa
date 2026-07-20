@@ -42,7 +42,7 @@ RSpec.describe "supervisors/new", type: :system do
         fill_in "Display name", with: new_supervisor_name
         fill_in "Phone number", with: new_supervisor_phone_number
 
-        click_on "Create Supervisor"
+        click_on "Create supervisor"
       end
 
       it "shows a success message" do
@@ -73,7 +73,7 @@ RSpec.describe "supervisors/new", type: :system do
     context "with invalid form submission" do
       before do
         # Don't fill in any fields
-        click_on "Create Supervisor"
+        click_on "Create supervisor"
       end
 
       it "does not create a new user" do

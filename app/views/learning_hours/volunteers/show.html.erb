@@ -6,7 +6,7 @@
     <%= link_to learning_hours_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
       <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to learning hours
     <% end %>
-    <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= formatted_name(@volunteer.display_name) %>'s Learning Hours</h1>
+    <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= formatted_name(@volunteer.display_name) %>'s learning hours</h1>
   </div>
 
   <%= render "learning_hours/learning_hours_table", learning_hours: @learning_hours %>

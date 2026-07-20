@@ -12,7 +12,7 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Display name", with: "New Volunteer Display Name 2"
       fill_in "Date of birth", with: Date.new(2000, 1, 2)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       visit volunteers_path
       expect(page).to have_text("New Volunteer Display Name 2")

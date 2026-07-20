@@ -25,7 +25,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
 
     expect(page).to have_no_field(class: "expense-amount-input", visible: :all)
     expect(page).to have_no_field(class: "expense-describe-input", visible: :all)
-    expect(page).to have_no_button("Add Another Expense", visible: :all)
+    expect(page).to have_no_button("Add another expense", visible: :all)
   end
 
   it "is not shown until Reimbursement is checked and Add Another Expense clicked", :js do
@@ -33,11 +33,11 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     visit new_case_contact_path casa_case
     fill_in_contact_details
 
-    expect(page).to have_no_button "Add Another Expense"
+    expect(page).to have_no_button "Add another expense"
     check "Request travel or other reimbursement"
     expect(page).to have_no_field(class: "expense-amount-input", visible: :all)
     expect(page).to have_no_field(class: "expense-describe-input", visible: :all)
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     expect(page).to have_field(class: "expense-describe-input")
     expect(page).to have_field(class: "expense-amount-input")
   end
@@ -45,7 +45,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
   it "does not submit values if reimbursement is cancelled (unchecked)", :js do
     subject
 
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     fill_expense_fields 5.34, "Lunch"
     uncheck "Request travel or other reimbursement"
 
@@ -66,11 +66,11 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     fill_in "case_contact_miles_driven", with: 50
     fill_in "case_contact_volunteer_address", with: "123 Params St"
 
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     fill_expense_fields 1.50, "1st meal"
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     fill_expense_fields 2.50, "2nd meal"
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     fill_expense_fields 2.00, "3rd meal"
 
     within "#contact-form-expenses" do
@@ -91,7 +91,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
   it "requires a description for each additional expense", :js do
     subject
 
-    click_on "Add Another Expense"
+    click_on "Add another expense"
     fill_expense_fields 5.34, nil
 
     click_on "Submit"
@@ -122,7 +122,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
       expect(page).to have_field(class: "expense-describe-input", with: "First Expense")
       expect(page).to have_field(class: "expense-amount-input", with: "2.22")
       expect(page).to have_field(class: "expense-describe-input", with: "Second Expense")
-      expect(page).to have_button "Add Another Expense"
+      expect(page).to have_button "Add another expense"
     end
 
     it "allows removing expenses", :js do
@@ -150,7 +150,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     it "can add an expense", :js do
       subject
 
-      click_on "Add Another Expense"
+      click_on "Add another expense"
       fill_expense_fields 11.50, "Gas"
       click_on "Submit"
 

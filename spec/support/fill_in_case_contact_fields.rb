@@ -55,7 +55,7 @@ module FillInCaseContactFields
   def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
     within NOTES_ID do
       Array.wrap(contact_topic_answers_attrs).each_with_index do |attributes, index|
-        click_on "Add Another Discussion Topic" if index > 0
+        click_on "Add another discussion topic" if index > 0
         answer_topic_unscoped attributes[:question], attributes[:answer]
       end
 

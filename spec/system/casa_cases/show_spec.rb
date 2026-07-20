@@ -52,19 +52,19 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "keeps the generate button inside the closed modal" do
-      expect(page).to have_button("Generate Report", visible: false)
+      expect(page).to have_button("Generate report", visible: false)
     end
 
     it "generates a court report for the case's date range" do
       find("summary", text: "More").click
-      click_button "Generate Court Report"
+      click_button "Generate court report"
 
       within("#generate-court-report") do
         expect(page).to have_content(casa_case.case_number)
         expect(page.find("#start_date").value).to eq("2021-01-01") # default: today, no past court dates
         expect(page.find("#end_date").value).to eq("2021-01-01")
 
-        click_button "Generate Report"
+        click_button "Generate report"
       end
 
       wait_for_download

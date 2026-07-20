@@ -16,7 +16,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Jane Doe"
       fill_in "Date of birth", with: Date.new(1995, 5, 15)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
@@ -39,7 +39,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "John Smith"
       fill_in "Date of birth", with: Date.new(1990, 1, 1)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
@@ -171,7 +171,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Supervisor's Volunteer"
       fill_in "Date of birth", with: Date.new(1992, 3, 20)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 

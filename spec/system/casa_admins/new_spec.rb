@@ -9,7 +9,7 @@ RSpec.describe "casa_admins/new", type: :system do
 
     sign_in admin
     visit casa_admins_path
-    click_on "New Admin"
+    click_on "New admin"
     expect(page).to have_content "Create new CASA admin"
 
     click_button "Submit"
@@ -34,7 +34,7 @@ RSpec.describe "casa_admins/new", type: :system do
     expect(last_email.subject).to have_text "CASA Console invitation instructions"
     expect(last_email.html_part.body.encoded).to have_text "your new CasaAdmin account."
 
-    click_on "New Admin"
+    click_on "New admin"
     fill_in "Email", with: "valid@example.com"
     fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"

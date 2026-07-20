@@ -16,8 +16,8 @@ RSpec.describe "notifications/index", :js, type: :system do
       sign_in volunteer
 
       visit case_contacts_path
-      click_button "Resolve Reminder"
-      has_button?("Make Reminder")
+      click_button "Resolve reminder"
+      has_button?("Make reminder")
     end
 
     it "lists my notifications" do
@@ -64,7 +64,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     context "when followup has a note" do
       before do
-        click_button "Make Reminder"
+        click_button "Make reminder"
         find(".swal2-textarea").set(note)
 
         click_button "Confirm"
@@ -72,7 +72,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
       it "lists followup notifications, showing their note" do
         within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
+          expect(page).to have_content "Resolve reminder"
         end
 
         sign_in volunteer
@@ -88,13 +88,13 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     context "when followup doesn't have a note" do
       before do
-        click_button "Make Reminder"
+        click_button "Make reminder"
         click_button "Confirm"
       end
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
         within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
+          expect(page).to have_content "Resolve reminder"
         end
 
         sign_in volunteer
@@ -111,14 +111,14 @@ RSpec.describe "notifications/index", :js, type: :system do
       let(:new_notification_message) { "#{created_by_name} has flagged a Case Contact that needs follow up." }
 
       before do
-        click_button "Make Reminder"
+        click_button "Make reminder"
       end
 
       it "lists followup notifications showing admin current name" do
         click_button "Confirm"
 
         within("#resolve", wait: 5) do
-          expect(page).to have_content "Resolve Reminder"
+          expect(page).to have_content "Resolve reminder"
         end
 
         visit edit_users_path

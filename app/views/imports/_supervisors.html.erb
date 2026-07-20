@@ -15,13 +15,13 @@
       <ul class="list-disc space-y-1 pl-5 text-sm text-slate-600">
         <li>Click the choose file button, navigate to the saved file, and select it.</li>
         <li><strong>Do not</strong> change any of the values in the first line of the example CSV file.</li>
-        <li>Then click "Import Supervisors CSV" to import your supervisors.</li>
+        <li>Then click "Import supervisors CSV" to import your supervisors.</li>
       </ul>
       <%= f.file_field :file, id: "supervisor-file", accept: "text/csv", class: file_input %>
       <%= render "sms_opt_in_modal", form: f if @sms_opt_in_warning == "supervisor" %>
       <div>
         <%= button_tag id: "supervisor-import-button", disabled: true, data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
-          <i class="bi bi-upload" aria-hidden="true"></i> Import Supervisors CSV
+          <i class="bi bi-upload" aria-hidden="true"></i> Import supervisors CSV
         <% end %>
       </div>
     <% end %>

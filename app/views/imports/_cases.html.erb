@@ -15,12 +15,12 @@
       <ul class="list-disc space-y-1 pl-5 text-sm text-slate-600">
         <li>Click the choose file button, navigate to the saved file, and select it.</li>
         <li><strong>Do not</strong> change any of the values in the first line of the example CSV file.</li>
-        <li>Then click "Import Cases CSV" to import your cases.</li>
+        <li>Then click "Import cases CSV" to import your cases.</li>
       </ul>
       <%= f.file_field :file, id: "case-file", accept: "text/csv", class: file_input %>
       <div>
         <%= button_tag id: "case-import-button", disabled: true, data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
-          <i class="bi bi-upload" aria-hidden="true"></i> Import Cases CSV
+          <i class="bi bi-upload" aria-hidden="true"></i> Import cases CSV
         <% end %>
       </div>
 

@@ -5,11 +5,11 @@
 <div>
   <% if followup %>
     <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", form_class: "contents", data: {turbo: false}, class: button_classes(:success) do %>
-      <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve Reminder
+      <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
     <% end %>
   <% else %>
     <button type="button" class="followup-button <%= button_classes(:secondary) %>" id="followup-button-<%= contact.id %>" data-turbo="false">
-      <i class="bi bi-calendar-plus" aria-hidden="true"></i> Make Reminder
+      <i class="bi bi-calendar-plus" aria-hidden="true"></i> Make reminder
     </button>
   <% end %>
 </div>
