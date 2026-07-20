@@ -15,9 +15,13 @@ design system on the `casadesign` branch.
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
 layout, so **resume there** — `fund_requests#new`, `casa_admins`, `other_duties`, and `notes#edit`
-are done; `case_assignments#index` was orphaned dead code (deleted). Last one: the **error pages**. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
-vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
-`application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
+and the `error#index` test page are done; `case_assignments#index` was orphaned dead code (deleted).
+**All straggler HTML pages are now migrated.** Next: verify no controller still renders an HTML page
+on the Bootstrap `application` layout (the remaining default-layout controllers are data-only —
+CSV/XLSX reports, `preference_sets`, `api/*`, and AJAX sub-resources), then the endgame — the
+deferred **sentence-case sweep**, the contrast audit, vendoring Bootstrap Icons, dead-code removal,
+and finally deleting the `application` layout + `application.scss`. Remaining product question:
+hearing type / judge on case lists (stakeholder).
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -390,7 +394,11 @@ migrate before `application.html.erb` + `application.scss` can be deleted.
   destroy]` has no index route or action, and the view set no `@volunteer`, so
   `case_assignments/index.html.erb` was orphaned dead code that could never render (it even used
   the DataTable `id='casa_cases'`). **Deleted** it rather than migrate. 45 request examples green.
-- [ ] `error#index` — error pages (404 / 422 / 500).
+- [x] `error#index` — **SHIPPED**. This is the public dev/QA "Intentional error test" page
+  (`GET /error`; a button POSTs to raise a test exception), **not** the 404/422/500 handler (those
+  stay static `public/*.html`). Since it's viewable logged-out, it can't use the casa_app shell
+  (needs `current_user`), so added a minimal logged-out `layouts/error.html.erb` (compiled tailwind
+  + Figtree, no app JS) and rebuilt the page as a centered Tailwind card. 2 request examples green.
 
 _Data-only actions on the default layout render no HTML and need no migration: the `*_reports`
 CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*` endpoints._
