@@ -37,11 +37,6 @@
           class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
   </div>
 
-  <label class="flex items-center gap-2 text-sm text-slate-600">
-    <%= f.check_box :remember_me, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
-    Remember me on this device
-  </label>
-
   <%= f.submit "Sign in", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
 <% end %>
 

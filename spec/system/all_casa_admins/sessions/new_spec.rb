@@ -37,9 +37,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
       fill_in "Email", with: all_casa_admin.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        click_on "Log in"
-      end
+      click_on "Log in"
 
       expect(page).to have_text "All CASA Admin"
     end
@@ -49,9 +47,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
       fill_in "Email", with: volunteer.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        click_on "Log in"
-      end
+      click_on "Log in"
 
       expect(page).to have_text(/invalid email or password/i)
     end
