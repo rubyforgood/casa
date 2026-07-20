@@ -1,8 +1,7 @@
 <% content_for :page_title, "Reimbursement queue" %>
 <%# reimbursements#index on the casa_app shell. Bespoke Tailwind table (server-side volunteer +
-    occurred-at filters via the auto-submit controller + Pagy) replacing the jQuery serverSide
-    DataTable: the #reimbursements-datatable table is gone, so src/reimbursements.js (still required
-    globally) simply no-ops. Mark-complete stays a per-row PATCH form (the checkbox auto-submits).
+    occurred-at filters via the auto-submit controller + Pagy) replacing the retired jQuery
+    serverSide DataTable. Mark-complete stays a per-row PATCH form (the checkbox auto-submits).
     The "Needs review" / "Reimbursement complete" tab + column labels are sentence-cased. %>
 <% card = "rounded-2xl border border-slate-200 bg-white shadow-sm" %>
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>

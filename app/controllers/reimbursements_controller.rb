@@ -16,17 +16,6 @@ class ReimbursementsController < ApplicationController
     render :index, layout: "casa_app"
   end
 
-  def datatable
-    authorize :reimbursement
-
-    @complete_status = params[:status] == "complete"
-    datatable = ReimbursementDatatable.new(
-      fetch_filtered_reimbursements(@complete_status), params
-    )
-
-    render json: datatable
-  end
-
   def change_complete_status
     authorize :reimbursement
 
@@ -82,10 +71,6 @@ class ReimbursementsController < ApplicationController
       .want_driving_reimbursement(true)
       .created_max_ago(1.year.ago)
       .filter_by_reimbursement_status(complete_only)
-  end
-
-  def fetch_filtered_reimbursements(complete_only)
-    apply_filters_to_query(status_scoped_reimbursements(complete_only))
   end
 
   def get_normalised_time_for_occurred_at_filter(key)
