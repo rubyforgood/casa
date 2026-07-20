@@ -33,6 +33,6 @@
   <% end %>
 
   <%= @form.select @name, {}, { multiple: true } , {
-    data: { "multiple-select-target": "select",  } , class: "form-control-lg form-select form-select-lg input-group-lg"
+    data: { "multiple-select-target": "select",  } , "aria-label": (@placeholder_term.presence || @name.to_s.humanize).to_s.capitalize, class: "form-control-lg form-select form-select-lg input-group-lg"
   } %>
 </div>

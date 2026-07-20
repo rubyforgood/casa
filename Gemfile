@@ -97,6 +97,7 @@ group :development do
 end
 
 group :test do
+  gem "axe-core-rspec" # Accessibility (axe-core) assertions for system specs
   gem "capybara" # Integration testing framework
   gem "capybara-screenshot" # Automatic screenshot on test failure
   gem "database_cleaner-active_record" # Database cleaning strategies for tests

@@ -98,7 +98,11 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
 - **Structure**: one `h1` per page, in-order headings, landmarks (`main`/`nav`/`aside`),
   real lists, and `<caption>` + `scope` on tables.
 - **Forms**: every control has a real `<label>`; the error summary uses `role="alert"`
-  and names the field; invalid/required state is never colour-only.
+  and names the field; invalid/required state is never colour-only. A control with an
+  **overridden id** or a **JS-enhanced widget** (a TomSelect multiselect, the month/year
+  `select_tag`s) needs an explicit accessible name — point the `<label for>` at the *actual*
+  rendered id, or set `aria-label` — because the default `for` no longer matches and axe's
+  `select-name` rule then fails. Guarded by `spec/system/accessibility/axe_spec.rb`.
 - **Keyboard & focus**: fully keyboard-operable, visible `focus-visible` rings, a skip
   link, logical order; icon-only controls carry an `aria-label`, decorative icons are
   `aria-hidden`.

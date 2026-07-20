@@ -64,19 +64,19 @@
         <% if current_user&.casa_admin? || current_user&.supervisor? %>
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
-              <%= f.label :supervisor_ids, "Assigned To", class: label_class %>
+              <%= f.label :supervisor_ids, "Assigned To", class: label_class, for: "multiple-select-field1" %>
               <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
-              <%= f.label :creator_ids, "Volunteers", class: label_class %>
+              <%= f.label :creator_ids, "Volunteers", class: label_class, for: "multiple-select-field2" %>
               <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
-              <%= f.label :contact_type_ids, "Contact Type", class: label_class %>
+              <%= f.label :contact_type_ids, "Contact Type", class: label_class, for: "multiple-select-field3" %>
               <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, size: 4, class: multiselect_class} %>
             </div>
             <div>
-              <%= f.label :contact_type_group_ids, "Contact Type Group", class: label_class %>
+              <%= f.label :contact_type_group_ids, "Contact Type Group", class: label_class, for: "multiple-select-field4" %>
               <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, size: 4, class: multiselect_class} %>
             </div>
           </div>

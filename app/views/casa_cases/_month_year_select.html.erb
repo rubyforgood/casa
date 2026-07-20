@@ -10,13 +10,13 @@
     <div class="relative">
       <%= select_tag "#{form.object_name}[#{method}(2i)]",
             options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m] }, current&.month),
-            prompt: "Month", id: "#{form.object_name}_#{method}_2i", disabled: local_assigns[:disabled], class: my_select %>
+            prompt: "Month", id: "#{form.object_name}_#{method}_2i", disabled: local_assigns[:disabled], "aria-label": "#{label} month", class: my_select %>
       <i class="<%= my_chevron %>" aria-hidden="true"></i>
     </div>
     <div class="relative">
       <%= select_tag "#{form.object_name}[#{method}(1i)]",
             options_for_select((1989..Date.current.year).to_a.reverse.map { |y| [y, y] }, current&.year),
-            prompt: "Year", id: "#{form.object_name}_#{method}_1i", disabled: local_assigns[:disabled], class: my_select %>
+            prompt: "Year", id: "#{form.object_name}_#{method}_1i", disabled: local_assigns[:disabled], "aria-label": "#{label} year", class: my_select %>
       <i class="<%= my_chevron %>" aria-hidden="true"></i>
     </div>
   </div>

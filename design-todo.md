@@ -433,7 +433,15 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   Pagy pagination + Turbo Drive), matching the dashboard; retire jQuery DataTables
   page-by-page. Theming DataTables was rejected (couldn't meet WCAG/design). Cases index
   is the reference pattern (`shared/_pagination`, `auto-submit` controller).
-- [ ] Per-page accessibility pass (axe) as each screen migrates.
+- [x] **Per-page accessibility pass (axe) — DONE (initial sweep).** Added `axe-core-rspec` +
+  `spec/system/accessibility/axe_spec.rb` (headless-chrome `:js`) asserting `be_axe_clean` on 13
+  migrated pages (dashboard, cases index/show/edit, case contacts, volunteers, supervisors,
+  reports, learning hours, reimbursements, admins, org settings, sign-in). Fixed every violation
+  it found (all `select-name`, critical): associated the reports multiselect `<label>`s with
+  their spec-locked `multiple-select-fieldN` ids, gave the month/year `select_tag`s an `aria-label`
+  (`_month_year_select` — fixes birth + date-in-care), and gave `Form::MultipleSelectComponent`'s
+  TomSelect `<select>` an `aria-label`. Still open: the non-text-contrast chevron noted above, and
+  extending the sweep to the remaining pages/forms.
 - [x] Responsive pass on each migrated page: verify mobile / tablet / desktop; give data
   tables a stacked / card layout on small screens rather than horizontal scroll. Complete:
   cases index, health metrics, supervisor + volunteer dashboards, notifications, edit profile,
