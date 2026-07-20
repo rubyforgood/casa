@@ -25,7 +25,7 @@ RSpec.describe "casa_cases/new", type: :system do
           fourteen_years = (Date.today.year - 14).to_s
           fill_in "Case number", with: case_number
 
-          fill_in "Court Date", with: court_date
+          fill_in "Next court date", with: court_date
 
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
@@ -57,7 +57,7 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content(I18n.l(court_date, format: :day_and_date))
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
-          expect(page).to have_content("Transition Aged Youth: Yes")
+          expect(page).to have_content("Transition-aged youth: Yes")
           expect(page).to have_content(volunteer_display_name)
         end
       end
@@ -75,7 +75,7 @@ RSpec.describe "casa_cases/new", type: :system do
         visit new_casa_case_path
 
         fill_in "Case number", with: case_number
-        fill_in "Next Court Date", with: DateTime.now.next_month
+        fill_in "Next court date", with: DateTime.now.next_month
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
@@ -90,9 +90,9 @@ RSpec.describe "casa_cases/new", type: :system do
 
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date: ")
+        expect(page).to have_content("Next court date: ")
         expect(page).not_to have_content("Court Report Due Date:")
-        expect(page).to have_content("Transition Aged Youth: No")
+        expect(page).to have_content("Transition-aged youth: No")
       end
     end
 
@@ -143,9 +143,9 @@ RSpec.describe "casa_cases/new", type: :system do
 
           expect(page).to have_content(case_number)
           expect(page).to have_content("CASA case was successfully created.")
-          expect(page).to have_content("Next Court Date:")
+          expect(page).to have_content("Next court date:")
           expect(page).not_to have_content("Court Report Due Date:")
-          expect(page).to have_content("Transition Aged Youth: No")
+          expect(page).to have_content("Transition-aged youth: No")
         end
       end
 

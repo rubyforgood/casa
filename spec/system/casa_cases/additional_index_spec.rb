@@ -20,7 +20,7 @@ RSpec.describe "casa_cases/index", type: :system do
       expect(page).to have_selector("th", text: "Case number")
       expect(page).to have_selector("th", text: "Next court date")
       expect(page).to have_selector("th", text: "Status")
-      expect(page).to have_selector("th", text: "Transition aged youth")
+      expect(page).to have_selector("th", text: "Transition-aged youth")
       expect(page).to have_selector("th", text: "Assigned to")
     end
 

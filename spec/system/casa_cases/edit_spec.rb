@@ -223,7 +223,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     it "edits case", :js do
       stub_twilio
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
+      expect(page).to have_text("Court report status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
 
@@ -265,7 +265,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_text("Court Report Status: Submitted")
+      expect(page).to have_text("Court report status: Submitted")
       expect(page).not_to have_text("8-SEP-#{next_year}")
     end
 
@@ -534,7 +534,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "edits case" do
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
+      expect(page).to have_text("Court report status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
       within ".actions-cc" do
@@ -548,7 +548,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_css('button[data-action="court-order-form#add"]')
 
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Submitted")
+      expect(page).to have_text("Court report status: Submitted")
     end
 
     it "adds a standard court order", :js do

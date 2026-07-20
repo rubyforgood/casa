@@ -70,18 +70,18 @@
       <h2 class="<%= section_title %>">Case details</h2>
       <dl class="mt-4 grid grid-cols-1 gap-x-8 gap-y-3 text-sm sm:grid-cols-2">
         <div>
-          <dt class="inline font-medium text-slate-500">Transition Aged Youth:</dt>
+          <dt class="inline font-medium text-slate-500">Transition-aged youth:</dt>
           <dd class="inline text-slate-800"><%= @casa_case.in_transition_age? ? "Yes" : "No" %></dd>
         </div>
         <div>
-          <dt class="inline font-medium text-slate-500">Youth's Date in Care:</dt>
+          <dt class="inline font-medium text-slate-500">Youth's date in care:</dt>
           <dd class="inline text-slate-800"><%= @casa_case.decorate.date_in_care || tag.span("Not set", class: "text-slate-500") %></dd>
           <% if @casa_case.decorate.duration_in_care %>
             <p class="mt-0.5 text-xs text-slate-500"><%= @casa_case.decorate.duration_in_care %></p>
           <% end %>
         </div>
         <div>
-          <dt class="inline font-medium text-slate-500">Next Court Date:</dt>
+          <dt class="inline font-medium text-slate-500">Next court date:</dt>
           <dd class="inline text-slate-800">
             <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: "None set") %>
             <% if (cal = @casa_case.decorate.calendar_next_court_date) %>
@@ -94,7 +94,7 @@
           </dd>
         </div>
         <div>
-          <dt class="inline font-medium text-slate-500">Court Report Status:</dt>
+          <dt class="inline font-medium text-slate-500">Court report status:</dt>
           <dd class="inline text-slate-800"><%= @casa_case.decorate.court_report_submission %></dd>
           <% unless @casa_case.court_report_not_submitted? %>
             <p class="mt-0.5 text-xs text-slate-500">
@@ -131,7 +131,7 @@
         <% end %>
       </div>
       <% if court_dates.empty? %>
-        <p class="mt-3 text-sm text-slate-500">No Court Dates</p>
+        <p class="mt-3 text-sm text-slate-500">No court dates</p>
       <% else %>
         <ul class="mt-3 divide-y divide-slate-100">
           <% court_dates.each do |pcd| %>

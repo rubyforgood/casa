@@ -72,9 +72,9 @@ RSpec.describe "reports", :js, type: :system do
         expect(page).to have_text "Volunteers"
         expect(page).to have_text "Contact Type"
         expect(page).to have_text "Contact Type Group"
-        expect(page).to have_text "Want Driving Reimbursement"
-        expect(page).to have_text "Contact Made"
-        expect(page).to have_text "Transition Aged Youth"
+        expect(page).to have_text "Want driving reimbursement"
+        expect(page).to have_text "Contact made"
+        expect(page).to have_text "Transition-aged youth"
         expect(page).to have_field("Both", count: 3)
         expect(page).to have_field("Yes", count: 3)
         expect(page).to have_field("No", count: 3)

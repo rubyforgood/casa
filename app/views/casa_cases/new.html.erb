@@ -35,7 +35,7 @@
             <% if policy(@casa_case).update_court_date? %>
               <div>
                 <%= form.fields_for :court_dates, @casa_case.court_dates.new do |cdf| %>
-                  <%= cdf.label :date, "Next Court Date", class: label_class %>
+                  <%= cdf.label :date, "Next court date", class: label_class %>
                   <%= cdf.date_field :date, class: input_class, hidden: @empty_court_date %>
                 <% end %>
                 <label class="mt-2 inline-flex items-center gap-2 text-sm text-slate-700">

@@ -98,12 +98,12 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see next court date", :js do
-      expect(page).to have_content("Next Court Date:")
+      expect(page).to have_content("Next court date:")
       expect(page).to have_content(I18n.l(future_court_date.date, format: :day_and_date))
     end
 
     it "can see the youth's Date In Care", :js do
-      expect(page).to have_content("Youth's Date in Care:")
+      expect(page).to have_content("Youth's date in care:")
       expect(page).to have_content(I18n.l(date_in_care, format: :youth_date_of_birth))
     end
 

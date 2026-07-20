@@ -39,7 +39,7 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match(casa_case.case_number)
-      expect(rendered).to have_content("No Court Dates")
+      expect(rendered).to have_content("No court dates")
     end
 
     it "render button to add court date" do
