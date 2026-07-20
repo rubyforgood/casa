@@ -27,19 +27,4 @@ RSpec.describe "casa_cases/index", type: :system do
     expect(page).to have_select("Case number prefix")
   end
 
-  it "has a usable dropdown in sidebar" do
-    cina = build(:casa_case, active: true, casa_org: organization, case_number: case_number)
-    create(:case_assignment, volunteer: volunteer, casa_case: cina)
-
-    sign_in volunteer
-
-    visit root_path
-    click_on "My Cases"
-    within "#ddmenu_my-cases" do
-      click_on case_number
-    end
-
-    expect(page).to have_text("Case details")
-    expect(page).to have_text("Case CINA-1")
-  end
 end

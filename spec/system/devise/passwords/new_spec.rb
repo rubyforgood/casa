@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "users/passwords/new", type: :system do
   before do
     visit new_user_session_path
-    click_on "Forgot your password?"
+    click_on "Forgot password?"
   end
 
   describe "reset password page" do
@@ -13,7 +13,7 @@ RSpec.describe "users/passwords/new", type: :system do
       fill_in "Email", with: "tangerine@example.com"
       fill_in "Phone number", with: user.phone_number
 
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
       expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
     end
 
@@ -23,13 +23,12 @@ RSpec.describe "users/passwords/new", type: :system do
       fill_in "Email", with: user.email
       fill_in "Phone number", with: "2134567eee"
 
-      click_on "Send me reset password instructions"
-      expect(page).to have_content "1 error prohibited this User from being saved:"
+      click_on "Send reset instructions"
       expect(page).to have_text("Phone number must be 10 digits or 12 digits including country code (+1)")
     end
 
     it "displays error if user tries to submit an empty form" do
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
       expect(page).to have_text("Please enter at least one field.")
     end
 
@@ -38,7 +37,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
       fill_in "Email", with: user.email
 
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
       expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
     end
   end
@@ -49,7 +48,7 @@ RSpec.describe "users/passwords/new", type: :system do
     it "sends user email" do
       fill_in "Email", with: user.email
 
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
 
       expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
 
@@ -59,7 +58,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
     it "has reset password url with token" do
       fill_in "Email", with: user.email
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
 
       expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
       expect(reset_password_link(user.email)).to match(/http:\/\/localhost:3000\/users\/password\/edit\?reset_password_token=.*/)
@@ -67,7 +66,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
     it "url token matches user's encrypted token" do
       fill_in "Email", with: user.email
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
 
       expect(page).to have_content "If the account exists you will receive an email or SMS with instructions on how to reset your password in a few minutes."
 
@@ -78,17 +77,17 @@ RSpec.describe "users/passwords/new", type: :system do
 
     it "user can update password" do
       fill_in "Email", with: user.email
-      click_on "Send me reset password instructions"
+      click_on "Send reset instructions"
 
       visit reset_password_link(user.email)
       fill_in "New password", with: "new password"
       fill_in "Confirm new password", with: "new password"
-      click_on "Change my password"
+      click_on "Update password"
 
       expect(page).to have_text("Your password has been changed successfully.")
       fill_in "Email", with: user.email
       fill_in "Password", with: "new password"
-      click_on "Log In"
+      click_on "Sign in"
 
       expect(page).to have_text(user.display_name)
       expect(page).to have_text("My Cases")

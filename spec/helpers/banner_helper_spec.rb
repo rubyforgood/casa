@@ -10,7 +10,7 @@ RSpec.describe BannerHelper, type: :helper do
 
       allow(current_organization).to receive(:has_alternate_active_banner?).and_return(true)
 
-      expect(helper.conditionally_add_hidden_class(false)).to eq("d-none")
+      expect(helper.conditionally_add_hidden_class(false)).to eq("hidden")
     end
 
     it "returns d-none if current banner is active and org does not have an alternate active banner" do
@@ -21,7 +21,7 @@ RSpec.describe BannerHelper, type: :helper do
 
       allow(current_organization).to receive(:has_alternate_active_banner?).and_return(false)
 
-      expect(helper.conditionally_add_hidden_class(true)).to eq("d-none")
+      expect(helper.conditionally_add_hidden_class(true)).to eq("hidden")
     end
 
     it "returns nil if current banner is active and org has an alternate active banner" do

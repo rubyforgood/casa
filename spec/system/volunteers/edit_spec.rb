@@ -581,7 +581,7 @@ RSpec.describe "volunteers/edit", type: :system do
     context "when user is a supervisor" do
       it "impersonates the volunteer" do
         organization = create(:casa_org)
-        supervisor = create(:supervisor, casa_org: organization)
+        supervisor = create(:supervisor, casa_org: organization, display_name: "Jane Smith")
         volunteer = create(:volunteer, casa_org: organization, display_name: "John Doe")
         sign_in supervisor
         visit edit_volunteer_path(volunteer)
