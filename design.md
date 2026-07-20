@@ -294,7 +294,10 @@ a uniform height (a taller last row reads as a bug).
 ### Tables (bespoke) + pagination
 Hand-built Tailwind (dashboard tables + cases index), not DataTables. `overflow-hidden
 rounded-2xl` card (+ `py-2` inset), full-bleed table, `thead th` = `text-xs font-semibold
-text-slate-600`, cells `px-4 py-3`, `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
+text-slate-600` — **never an `uppercase`/`tracking-wide` transform** (column headers are sentence
+case like every other label; an ALL-CAPS `text-slate-500` eyebrow header is a recurring drift — it
+had crept into the reimbursements / settings / court-date / placements / all-CASA tables — converge
+every `<th>` on this one token, matching what `sortable_header` emits). Cells `px-4 py-3`, `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
 Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
 submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial

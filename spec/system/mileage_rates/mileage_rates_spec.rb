@@ -19,7 +19,7 @@ RSpec.describe "mileage_rates/new", :js, type: :system do
     click_on "Save mileage rate"
 
     expect(page).to have_text("Mileage rates")
-    # Table headers are uppercased by the design-system CSS (text-transform), so match case-insensitively.
+    # Column headers render in sentence case (no uppercase transform); matched case-insensitively defensively.
     expect(page).to have_text(/Effective date/i)
     expect(page).to have_text("January 2, 2020")
     expect(page).to have_text(/Amount/i)

@@ -14,11 +14,11 @@
     <div class="<%= card %>">
       <dl class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
-          <dt class="text-xs font-medium uppercase tracking-wide text-slate-500">Case number</dt>
+          <dt class="text-xs font-medium text-slate-500">Case number</dt>
           <dd class="mt-1 text-sm"><%= link_to @casa_case.case_number, casa_case_path(@casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></dd>
         </div>
         <div>
-          <dt class="text-xs font-medium uppercase tracking-wide text-slate-500">Placement type</dt>
+          <dt class="text-xs font-medium text-slate-500">Placement type</dt>
           <dd class="mt-1 text-sm font-medium text-slate-800"><%= @placement.placement_type.name %></dd>
         </div>
       </dl>
