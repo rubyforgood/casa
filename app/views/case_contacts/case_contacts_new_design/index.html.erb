@@ -133,15 +133,15 @@
                 </td>
                 <td class="<%= td %> whitespace-nowrap">
                   <% if contact.requested_followup %><i class="bi bi-bell-fill mr-1 text-amber-500" role="img" aria-label="Reminder set"></i><% end %>
-                  <%= I18n.l(contact.occurred_at, format: :full, default: nil) || tag.span("No date", class: "text-slate-400") %>
+                  <%= I18n.l(contact.occurred_at, format: :full, default: nil) || tag.span("No date", class: "text-slate-500") %>
                 </td>
                 <td class="<%= td %>">
                   <% if contact.casa_case %>
                     <%= link_to contact.casa_case.case_number, casa_case_path(contact.casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %>
-                  <% else %><span class="text-slate-400">&mdash;</span><% end %>
+                  <% else %><span class="text-slate-500">&mdash;</span><% end %>
                 </td>
                 <td class="<%= td %>"><%= contact.decorate.contact_types_comma_separated %></td>
-                <td class="<%= td %> whitespace-nowrap"><%= contact.medium_type&.titleize || tag.span("\u2014", class: "text-slate-400") %></td>
+                <td class="<%= td %> whitespace-nowrap"><%= contact.medium_type&.titleize || tag.span("\u2014", class: "text-slate-500") %></td>
                 <td class="<%= td %> whitespace-nowrap"><%= render "case_contacts/case_contacts_new_design/creator", contact: contact %></td>
                 <td class="<%= td %> whitespace-nowrap">
                   <% if contact.contact_made %>
@@ -220,7 +220,7 @@
                   <% if contact.requested_followup %><i class="bi bi-bell-fill text-amber-500" role="img" aria-label="Reminder set"></i><% end %>
                   <% if contact.casa_case %>
                     <%= link_to contact.casa_case.case_number, casa_case_path(contact.casa_case), class: "text-base font-semibold text-brand-600 hover:text-brand-700" %>
-                  <% else %><span class="text-base font-semibold text-slate-400">&mdash;</span><% end %>
+                  <% else %><span class="text-base font-semibold text-slate-500">&mdash;</span><% end %>
                 </div>
                 <p class="mt-0.5 text-sm text-slate-500"><%= I18n.l(contact.occurred_at, format: :full, default: "No date") %></p>
               </div>

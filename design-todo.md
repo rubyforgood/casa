@@ -409,8 +409,14 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   "Enable Twilio For Text Messaging" (Twilio kept) sentence-cased across users/edit +
   all_casa_admins/edit + all_casa_admins/casa_admins/edit and every coupled spec (incl. the shared
   phone-error example + the standalone "Password Confirmation" substring locators).
-- [ ] Contrast audit of shipped pages: replace remaining `text-slate-400` body/meta text
-  with `slate-500` for WCAG AA; re-check pills and badges.
+- [x] **Contrast audit — DONE.** Replaced the readable `text-slate-400` text/placeholders with
+  `slate-500` for WCAG AA: the case_contacts_new_design "No date" label + its `—`/medium-type
+  placeholders, and the case-contact form's "last used" meta timestamp. **Left** `text-slate-400`
+  on decorative `aria-hidden` empty-state icons (WCAG-exempt) and the supervisor-dashboard
+  aria-hidden `—` (paired with an `sr-only` "No recent activity"). Pills/badges use
+  `text-{color}-700` on a `-50` tint (and `slate-600` on `slate-100`) — all AA. Deferred to the
+  axe pass: the faint `text-slate-400` chevron on the supervisor-dashboard "view" icon-links
+  (non-text contrast, WCAG 1.4.11).
 - [x] **Vendor Bootstrap Icons + Figtree — DONE.** Self-hosted: font binaries under
   `public/vendor/{bootstrap-icons,figtree}/`, the `@font-face`/glyph CSS vendored under
   `app/assets/stylesheets/vendor/` and `@import`ed by `tailwind.css`; dropped the Google Fonts +
