@@ -317,7 +317,7 @@ shows "Next court date" instead).
 horizontal scroll alone. When a spec asserts a table hook (e.g. `.notes .table tbody tr` on the
 volunteer edit page), keep the `<table>` in the DOM as `hidden md:block` rather than dropping it
 below `md`: rack_test ignores the `hidden` class, so the hook holds at every width while the
-`md:hidden` card twin serves phones. The exception is a density **matrix** (the health heatmap), which keeps
+`md:hidden` card twin serves phones. The exception is a density **matrix** (the contact-timing heatmap on Metrics/Analytics), which keeps
 horizontal scroll with a sticky axis column (`sticky left-0 z-10 bg-white`); stacking a 2D matrix
 into cards would destroy the visualization.
 
@@ -374,8 +374,11 @@ permission-gated action. Set/Resolve reminder and delete return via `redirect_ba
 `redirect_to request.referer`, so the action stays on the list rather than jumping to the case page.
 
 ### Charts (data viz)
-Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
-and rendered on the metrics page. Validated with the data-viz method:
+Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `MetricsHelper`
+and rendered on the all-CASA **Metrics** console (platform-wide) and the per-chapter **Analytics**
+page (org-scoped) -- both reuse the shared `metrics/_dashboard` partial and get their numbers from
+`MetricsReport` (scope-parameterized: global by default, `casa_org:` for one chapter). Validated
+with the data-viz method:
 - **Series identity is never color alone.** Each line carries a distinct **line style**
   (solid, dashed, dotted, dash-dot) **and marker shape** (circle, square, triangle, diamond)
   on top of a validated categorical palette (indigo, emerald, amber, rose; worst adjacent
@@ -396,8 +399,15 @@ and rendered on the metrics page. Validated with the data-viz method:
   (off-the-shelf Tailwind steps miss the dark lightness band; needs hand-tuned OKLCH).
 
 ### KPI stat card
-Icon tile (semantic) -> number (`text-3xl font-bold`) -> label (`text-sm text-slate-500`)
--> optional meta (`text-xs text-slate-400`). Danger stats use a rose number + `ring-1 ring-rose-100`.
+Semantic icon tile (`grid h-9 w-9 place-items-center rounded-xl bg-{hue}-50 text-{hue}-600`) ->
+number (`text-3xl font-bold tracking-tight text-slate-900`) -> label (`text-sm text-slate-500`) ->
+optional meta (`text-xs text-slate-500`, not slate-400 -- the contrast audit bumped readable
+slate-400 to AA slate-500). One shared token across the admin/supervisor/volunteer dashboards and
+the Analytics page. Two accented variants: **danger** (e.g. unassigned cases) = rose number + rose
+icon tile + `ring-1 ring-rose-100`; **attention** (e.g. cases needing contact) = slate number but
+the icon tile flips to amber (`bg-amber-50 text-amber-600`) when positive, emerald when zero. A
+**trend delta** (Analytics "contacts this month") is the meta line, colored emerald/rose/slate for
+up/down/flat with a direction arrow + signed number + "vs last month" (never color-only).
 
 ### Status pill
 Base: `inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium`
@@ -718,6 +728,14 @@ High-level progress; the granular, prioritized backlog lives in
   + its auth pages on the casa_auth shell; and the public `static#index` landing page rebuilt on
   the brand palette (compiled tailwind, no CDN/Alpine). Regular-user Devise pages shipped in the
   foundation phase.
+- [x] **Metrics & Analytics**: the platform activity charts were extracted from HealthController
+  into a scope-parameterized `MetricsReport` and surfaced in two authenticated homes -- an all-CASA
+  **Metrics** console (platform-wide, in the all_casa_admin sidebar) and a per-chapter **Analytics**
+  page (org-scoped, admin+supervisor, with chapter KPI cards; beside Reports in the casa_app sidebar).
+  Both share `metrics/_dashboard` + the `metric_*` helpers + the `chart-hover` controller (already in
+  the app bundle). `/health` was slimmed to a minimal self-contained ops status page + deploy-time
+  JSON, taking the cross-org charts off the public surface; the dead `metrics` JS bundle/layout and
+  the unused legacy `/health` JSON graph endpoints were retired.
 
 ## Workflow
 - On the `casadesign` branch: **commit and push at every checkpoint.**

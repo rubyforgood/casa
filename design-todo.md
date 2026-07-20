@@ -23,6 +23,12 @@ deferred **sentence-case sweep**, the contrast audit, vendoring Bootstrap Icons,
 and finally deleting the `application` layout + `application.scss`. Remaining product question:
 hearing type / judge on case lists (stakeholder).
 
+**Beyond the migration:** a **Metrics & Analytics** capability shipped on top of the design system —
+the platform activity charts now live in an authenticated all-CASA **Metrics** console (nav'd in the
+all_casa_admin sidebar) plus a per-chapter **Analytics** page (org-scoped via `MetricsReport`,
+admin+supervisor, beside Reports in the casa_app sidebar, with chapter KPI cards), and the public
+`/health` was slimmed to an ops status endpoint. See design.md > Migration status.
+
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
 Bootstrap user-edit partials stay for the supervisor/admin edit pages. All **745 system-spec
@@ -361,6 +367,12 @@ sign-in / password / invitation — were done in the foundation phase.)
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
   `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups (date-range filter, Stimulus hover, and the unused chart.js deps removal now shipped): a validated dark-mode
   palette.
+  - [x] **Charts relocated (shipped):** the chart math was extracted into a scope-parameterized
+    `MetricsReport` and the charts moved off the public `health#index` into an authenticated all-CASA
+    **Metrics** console + a per-chapter **Analytics** page (org-scoped, admin+supervisor, with chapter
+    KPI cards). `/health` is now a minimal self-contained ops status page + deploy-time JSON (no public
+    cross-org data); the `metrics` layout/JS bundle + the unused legacy `/health` JSON graph endpoints
+    were retired. Cross-org isolation is unit-tested in `spec/models/metrics_report_spec.rb`.
 
 ## Straggler pages (still on the Bootstrap `application` layout) — block decommission
 Found by auditing controllers not on casa_app / casa_auth / all_casa / metrics (Bootstrap markers
