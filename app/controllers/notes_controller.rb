@@ -1,4 +1,6 @@
 class NotesController < ApplicationController
+  layout "casa_app"
+
   before_action :find_volunteer
   before_action :find_note, only: %i[edit update destroy]
 
@@ -10,6 +12,7 @@ class NotesController < ApplicationController
 
   def edit
     authorize @note
+    @active_nav = "volunteers"
   end
 
   def update

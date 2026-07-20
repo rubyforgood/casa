@@ -14,8 +14,8 @@ design system on the `casadesign` branch.
 (now a bespoke server-rendered casa_app table; its dead DataTable stack was removed). But a
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
-layout, so **resume there** — `fund_requests#new`, `casa_admins`, and `other_duties` are done;
-next is **`notes#edit`**, then `case_assignments#index` and the error pages. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
+layout, so **resume there** — `fund_requests#new`, `casa_admins`, `other_duties`, and `notes#edit`
+are done; next is **`case_assignments#index`**, then the error pages. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
 vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
 `application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
 
@@ -382,7 +382,10 @@ migrate before `application.html.erb` + `application.scss` can be deleted.
   format here). Spec-locked Title Case ("Other Duties", "New Duty", "Editing Duty", "Occurred On",
   "Duty Duration", "Enter Notes") kept verbatim, queued for the sweep. 26 examples green (view +
   system + request); no overflow 500/768/1280.
-- [ ] `notes#edit` — edit a case-contact note.
+- [x] `notes#edit` — **SHIPPED** on casa_app (`layout "casa_app"`, `@active_nav = "volunteers"`). A
+  single volunteer-note edit form (max-w-2xl card, back-link to the volunteer edit page); Note has
+  no validations so update always redirects back. Kept `note[content]` + the spec-locked "Update
+  Note" button (queued for the sweep). 23 examples green (system + request).
 - [ ] `case_assignments#index` — assignment listing.
 - [ ] `error#index` — error pages (404 / 422 / 500).
 
