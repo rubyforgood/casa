@@ -1,7 +1,7 @@
 class VolunteersController < ApplicationController
   include SmsBodyHelper
 
-  before_action :set_volunteer, except: %i[index new create datatable stop_impersonating]
+  before_action :set_volunteer, except: %i[index new create stop_impersonating]
   before_action :set_edit_context, only: %i[edit update activate deactivate]
   after_action :verify_authorized, except: %i[stop_impersonating]
 
@@ -29,14 +29,6 @@ class VolunteersController < ApplicationController
   def show
     authorize @volunteer
     redirect_to action: :edit
-  end
-
-  def datatable
-    authorize Volunteer
-    volunteers = policy_scope current_organization.volunteers
-    datatable = VolunteerDatatable.new volunteers, params
-
-    render json: datatable
   end
 
   def new

@@ -13,10 +13,6 @@ Rails.application.routes.draw do
     }
   end
 
-  concern :with_datatable do
-    post "datatable", on: :collection
-  end
-
   authenticated :all_casa_admin do
     root to: "all_casa_admins/dashboard#show", as: :authenticated_all_casa_admin_root
   end
@@ -85,7 +81,7 @@ Rails.application.routes.draw do
 
   # Feature flag for new case contact table design
   get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index"
-  resources :case_contacts, except: %i[create update show], concerns: %i[with_datatable] do
+  resources :case_contacts, except: %i[create update show] do
     member do
       post :restore
     end
@@ -155,7 +151,7 @@ Rails.application.routes.draw do
     resources :volunteers, only: :show
   end
 
-  resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
+  resources :supervisors, except: %i[destroy show] do
     member do
       patch :activate
       patch :deactivate
@@ -171,7 +167,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+  resources :volunteers, except: %i[destroy] do
     post :stop_impersonating, on: :collection
     member do
       patch :activate

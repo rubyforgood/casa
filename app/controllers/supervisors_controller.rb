@@ -101,14 +101,6 @@ class SupervisorsController < ApplicationController
     redirect_to edit_casa_admin_path(@supervisor), notice: "Supervisor was changed to Admin."
   end
 
-  def datatable
-    authorize Supervisor
-    supervisors = policy_scope(current_organization.supervisors)
-    datatable = SupervisorDatatable.new supervisors, params
-
-    render json: datatable
-  end
-
   private
 
   def set_supervisor
