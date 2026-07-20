@@ -10,7 +10,7 @@
         reimbursementForm, milesDriven, volunteerAddress, expenseDestroy, addTopicButton).
       * casa-nested-form — add/remove nested topic-answer + expense rows; needs
         .nested-form-wrapper + template/target/wrapper targets + hidden id/_destroy fields.
-    form_title ("Record New Case Contact" / "Editing Existing Case Contact") and several
+    form_title ("Record new case contact" / "Editing existing case contact") and several
     field/action labels are Title Case and spec-locked; kept verbatim and queued for the
     cross-cutting sentence-case sweep. Contact types stay grouped checkboxes
     (.contact-form-type-checkbox); relevant-case picking stays the shared TomSelect
@@ -51,7 +51,7 @@
           <div class="grid gap-5 sm:grid-cols-2">
             <%# RELEVANT CASES %>
             <div>
-              <label class="<%= label_class %>" for="case_contact_draft_case_ids">Relevant Case(s) <%= req %></label>
+              <label class="<%= label_class %>" for="case_contact_draft_case_ids">Relevant case(s) <%= req %></label>
               <div id="draft-case-id-selector">
                 <%= render(Form::MultipleSelectComponent.new(
                   form: form,
@@ -68,7 +68,7 @@
             <div>
               <% min_date = CaseContact::MINIMUM_DATE %>
               <% current_date = Time.zone.today %>
-              <%= form.label :occurred_at, class: label_class do %>Contact Date <%= req %><% end %>
+              <%= form.label :occurred_at, class: label_class do %>Contact date <%= req %><% end %>
               <%= form.date_field(:occurred_at,
                 required: true,
                 max: (current_date + 1.day).to_fs(:iso8601),
@@ -79,7 +79,7 @@
 
           <%# CONTACT TYPES %>
           <fieldset class="m-0 border-0 p-0">
-            <legend class="<%= label_class %>">Contact Type(s) <%= req %></legend>
+            <legend class="<%= label_class %>">Contact type(s) <%= req %></legend>
             <% casa_case_ids = @casa_cases.pluck(:id) %>
             <div id="contact-form-types" class="space-y-4">
               <% @grouped_contact_types.each do |group_name, contact_types| %>
@@ -109,7 +109,7 @@
 
           <%# MEDIUM %>
           <fieldset id="contact-medium" class="m-0 border-0 p-0">
-            <legend class="<%= label_class %>">Contact Medium <%= req %></legend>
+            <legend class="<%= label_class %>">Contact medium <%= req %></legend>
             <div class="space-y-2">
               <%= form.collection_radio_buttons(:medium_type, contact_mediums, "value", "label") do |b| %>
                 <div class="flex items-center gap-2">
@@ -122,7 +122,7 @@
 
           <%# DURATION (Tailwind twin of Form::HourMinuteDurationComponent) %>
           <fieldset class="m-0 border-0 p-0">
-            <legend class="<%= label_class %>">Contact Duration</legend>
+            <legend class="<%= label_class %>">Contact duration</legend>
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <%= form.label :duration_hours, "Hour(s)", class: label_class %>
@@ -148,7 +148,7 @@
           <% if @contact_topics.empty? %>
             <p class="text-sm text-slate-500">
               <% if current_user.casa_admin? %>
-                Visit <%= link_to "Manage Case Contact Topics", edit_casa_org_path(current_organization, anchor: "case-contact-topics"), class: "font-medium text-brand-600 hover:text-brand-700" %> to set your organization Court report topics.
+                Visit <%= link_to "Manage case contact topics", edit_casa_org_path(current_organization, anchor: "case-contact-topics"), class: "font-medium text-brand-600 hover:text-brand-700" %> to set your organization Court report topics.
               <% else %>
                 Your organization has not set any Court Report Topics yet. Contact your admin to learn more.
               <% end %>
@@ -182,7 +182,7 @@
 
           <% if form.object.notes.present? || @contact_topics.empty? %>
             <div>
-              <%= form.label :notes, "Additional Notes", class: label_class %>
+              <%= form.label :notes, "Additional notes", class: label_class %>
               <%= form.text_area(:notes, data: {action: "input->autosave#save"}, rows: 5, class: input_class) %>
             </div>
           <% end %>
@@ -222,14 +222,14 @@
             <div data-case-contact-form-target="reimbursementForm" class="hidden space-y-5">
               <div class="grid gap-5 sm:grid-cols-2">
                 <div>
-                  <%= form.label :miles_driven, class: label_class do %>Total Miles Driven <%= req %><% end %>
+                  <%= form.label :miles_driven, class: label_class do %>Total miles driven <%= req %><% end %>
                   <%= form.number_field(:miles_driven,
                     min: "0", max: 10000, placeholder: "0",
                     class: input_class,
                     data: {case_contact_form_target: "milesDriven"}) %>
                 </div>
                 <div>
-                  <%= form.label :volunteer_address, class: label_class do %>Mailing Address for Reimbursement Check <%= req %><% end %>
+                  <%= form.label :volunteer_address, class: label_class do %>Mailing address for reimbursement check <%= req %><% end %>
                   <%= form.text_area(:volunteer_address,
                     value: @case_contact.decorate.address_of_volunteer,
                     disabled: @case_contact.address_field_disabled?,
@@ -287,7 +287,7 @@
             <%= form.fields_for :metadata do |metadata_form| %>
               <div class="flex items-center gap-2">
                 <%= metadata_form.check_box :create_another, class: check_class %>
-                <%= metadata_form.label :create_another, "Create Another", class: "text-sm font-medium text-slate-700" %>
+                <%= metadata_form.label :create_another, "Create another", class: "text-sm font-medium text-slate-700" %>
               </div>
               <p class="mt-1 pl-6 text-xs text-slate-500">Start a new contact for the same case(s) after submitting.</p>
             <% end %>

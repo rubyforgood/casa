@@ -3,7 +3,7 @@
     newest first; each row shows the placement type + the span it covered (from its start date to
     the next placement's start, or Present for the current one). Delete opens a native-dialog
     confirm (Dialog::) whose "Confirm" is a button_to DELETE. The non-:js destroy spec drives
-    Delete -> "Delete Placement?" -> Close/Confirm, all in the DOM. %>
+    Delete -> "Delete placement?" -> Close/Confirm, all in the DOM. %>
 <% card = "rounded-2xl border border-slate-200 bg-white shadow-sm" %>
 <% th = "px-3 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500" %>
 <% td = "px-3 py-3 text-sm text-slate-700 align-top" %>
@@ -49,11 +49,11 @@
                       <%= link_to edit_casa_case_placement_path(@casa_case, placement), class: button_classes(:secondary) do %>
                         <i class="bi bi-pencil" aria-hidden="true"></i> Edit
                       <% end %>
-                      <%= render Dialog::GroupComponent.new(id: placement.id, label: "Delete Placement?") do |dialog| %>
+                      <%= render Dialog::GroupComponent.new(id: placement.id, label: "Delete placement?") do |dialog| %>
                         <% dialog.with_trigger do %>
                           <%= tag.button "Delete", type: "button", data: {action: "modal#open"}, class: button_classes(:danger_outline) %>
                         <% end %>
-                        <%= render Dialog::HeaderComponent.new(title: "Delete Placement?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
+                        <%= render Dialog::HeaderComponent.new(title: "Delete placement?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
                         <%= render Dialog::BodyComponent.new do %>
                           <p class="text-sm text-slate-600">This will permanently remove this placement from the case's history.</p>
                         <% end %>

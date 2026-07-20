@@ -19,7 +19,7 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Case contacts</h1>
-    <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New Case Contact<% end %>
+    <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New case contact<% end %>
   </div>
 
   <%= form_with url: case_contacts_new_design_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-6" do %>

@@ -1,4 +1,4 @@
-<% content_for :page_title, "New Bulk Court Date" %>
+<% content_for :page_title, "New bulk court date" %>
 <%# bulk_court_dates#new on casa_app: pick a case group, then the same court-date fields as a
     single court date; on submit one court date is created for every case in the group. Reuses
     court_dates/_fields (casa_case nil -> the copy-from-sibling block stays off). %>
@@ -8,7 +8,7 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-3xl space-y-6">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New Bulk Court Date</h1>
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New bulk court date</h1>
     <div class="<%= card %>">
       <%= form_with(model: @court_date, url: bulk_court_dates_path, method: :post, local: true,
             data: {controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"}, class: "space-y-6") do |form| %>

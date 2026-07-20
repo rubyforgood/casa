@@ -6,14 +6,14 @@
     #case-selection, #btnGenerateReport, #start_date, #end_date, #spinner, #user-time-zone. %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
-<%= render Dialog::GroupComponent.new(id: "generate-docx-report-modal", label: "Download Court Report as a .docx", controllers: "court-report") do |dialog| %>
+<%= render Dialog::GroupComponent.new(id: "generate-docx-report-modal", label: "Download court report as a .docx", controllers: "court-report") do |dialog| %>
   <% dialog.with_trigger do %>
     <%= tag.button type: "button", data: {action: "modal#open"}, class: button_classes(:primary) do %>
       <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Download Court Report as .docx
     <% end %>
   <% end %>
   <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
-    <%= render Dialog::HeaderComponent.new(title: "Download Court Report as a .docx") %>
+    <%= render Dialog::HeaderComponent.new(title: "Download court report as a .docx") %>
     <%= render Dialog::BodyComponent.new(classes: "space-y-4") do %>
       <p class="text-sm text-slate-600">To download a court report, choose an active case and specify the date range.</p>
       <div data-court-report-target="error" class="hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert"></div>

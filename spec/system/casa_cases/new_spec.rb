@@ -18,7 +18,7 @@ RSpec.describe "casa_cases/new", type: :system do
         visit root_path
 
         click_on "Cases"
-        click_on "New Case"
+        click_on "New case"
 
         travel_to Time.zone.local(2020, 12, 1) do
           court_date = 21.days.from_now

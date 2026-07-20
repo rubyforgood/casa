@@ -105,15 +105,15 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     end
   end
 
-  describe "New Case Contact button" do
+  describe "New case contact button" do
     include_context "signed in as admin"
 
     it "is visible to an admin" do
-      expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+      expect(page).to have_link("New case contact", href: new_case_contact_path)
     end
 
     it "navigates to the new case contact form when clicked as an admin" do
-      click_link "New Case Contact"
+      click_link "New case contact"
       expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
     end
 
@@ -126,11 +126,11 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       end
 
       it "is visible to a volunteer" do
-        expect(page).to have_link("New Case Contact", href: new_case_contact_path)
+        expect(page).to have_link("New case contact", href: new_case_contact_path)
       end
 
       it "navigates to the new case contact form when clicked as a volunteer" do
-        click_link "New Case Contact"
+        click_link "New case contact"
         expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
       end
     end

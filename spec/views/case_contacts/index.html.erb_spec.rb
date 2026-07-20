@@ -40,7 +40,7 @@ RSpec.describe "case_contacts/index", type: :view do
     expect(rendered).to have_text("Case contacts")
   end
 
-  it "Has a New Case Contact button" do
-    expect(rendered).to have_link("New Case Contact", href: new_case_contact_path)
+  it "Has a New case contact button" do
+    expect(rendered).to have_link("New case contact", href: new_case_contact_path)
   end
 end

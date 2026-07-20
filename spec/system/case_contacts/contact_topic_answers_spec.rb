@@ -114,10 +114,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
     it "displays a field for contact.notes", :js do
       subject
       expect(page).to have_no_button "Add Another Discussion Topic"
-      expect(notes_section).to have_field "Additional Notes"
+      expect(notes_section).to have_field "Additional notes"
 
       fill_in_contact_details
-      fill_in "Additional Notes", with: "This is a note."
+      fill_in "Additional notes", with: "This is a note."
 
       click_on "Submit"
       expect(page).to have_content("Case contact successfully created.")
@@ -128,11 +128,11 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
       expect(contact.notes).to eq "This is a note."
     end
 
-    it "saves 'Additional Notes' answer as contact.notes", :js do
+    it "saves 'Additional notes' answer as contact.notes", :js do
       subject
       fill_in_contact_details(contact_types: [contact_type.name])
 
-      fill_in "Additional Notes", with: "This is a fake a topic answer."
+      fill_in "Additional notes", with: "This is a fake a topic answer."
 
       click_on "Submit"
       expect(page).to have_text("Case contact successfully created")
@@ -209,7 +209,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
         find(autosave_alert_css, text: autosave_alert_text, wait: 3)
       end
 
-      expect(page).to have_content("Editing Existing Case Contact")
+      expect(page).to have_content("Editing existing case contact")
 
       expect(CaseContact.count).to eq(1)
       case_contact = CaseContact.last
@@ -229,10 +229,10 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
 
       before { case_contact.update! notes: }
 
-      it "presents an 'Additional Notes' field" do
+      it "presents an 'Additional notes' field" do
         subject
 
-        expect(notes_section).to have_field("Additional Notes", with: case_contact.notes)
+        expect(notes_section).to have_field("Additional notes", with: case_contact.notes)
       end
     end
   end

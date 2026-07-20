@@ -18,7 +18,7 @@
       <div class="flex flex-wrap items-center gap-2">
         <% if @casa_case.active? %>
           <%= link_to new_case_contact_path(case_contact: {casa_case_id: @casa_case.id}), class: btn_primary do %>
-            <i class="bi bi-plus-lg" aria-hidden="true"></i> New Case Contact
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> New case contact
           <% end %>
           <%# Edit is a visible button on sm+ and collapses into the More menu on mobile %>
           <span class="hidden sm:contents">

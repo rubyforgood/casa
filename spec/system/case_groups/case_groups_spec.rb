@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Case Groups", :js, type: :system do
+RSpec.describe "Case groups", :js, type: :system do
   let(:admin) { create(:casa_admin) }
   let(:organization) { admin.casa_org }
 
@@ -11,7 +11,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     sign_in admin
 
     visit case_groups_path
-    click_on "New Case Group"
+    click_on "New case group"
     fill_in "Name", with: "A family"
     find(".ts-control > input").click
     find("div.option", text: casa_case1.case_number).click
@@ -37,7 +37,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     sign_in admin
 
     visit case_groups_path
-    click_on "New Case Group"
+    click_on "New case group"
     fill_in "Name", with: "A family"
     find(".ts-control > input").click
     find("div.option", text: casa_case1.case_number).click
@@ -70,7 +70,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     sign_in admin
 
     visit case_groups_path
-    click_on "New Case Group"
+    click_on "New case group"
     fill_in "Name", with: "A family"
     find(".ts-control > input").click
     find("div.option", text: casa_case.case_number).click
@@ -78,7 +78,7 @@ RSpec.describe "Case Groups", :js, type: :system do
     click_on "Submit"
 
     visit case_groups_path
-    click_on "New Case Group"
+    click_on "New case group"
     fill_in "Name", with: "A Family "
     find(".ts-control > input").click
     find("div.option", text: casa_case.case_number).click

@@ -60,7 +60,7 @@ module FillInCaseContactFields
       end
 
       if notes.present?
-        fill_in "Additional Notes", with: notes
+        fill_in "Additional notes", with: notes
       end
     end
   end

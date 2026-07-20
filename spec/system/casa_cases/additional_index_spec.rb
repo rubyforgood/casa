@@ -14,7 +14,7 @@ RSpec.describe "casa_cases/index", type: :system do
 
     it "has content" do
       expect(page).to have_text("Cases")
-      expect(page).to have_link("New Case", href: new_casa_case_path)
+      expect(page).to have_link("New case", href: new_casa_case_path)
       expect(page).to have_select("Status")
       expect(page).to have_select("Case number prefix")
       expect(page).to have_selector("th", text: "Case number")
@@ -26,11 +26,11 @@ RSpec.describe "casa_cases/index", type: :system do
 
     it "opens only one header dropdown at a time", :js do
       find("summary", text: "More").click
-      expect(page).to have_link("Case Groups")
+      expect(page).to have_link("Case groups")
 
       find("summary[aria-label='Account menu']").click
       expect(page).to have_link("Sign out")
-      expect(page).to have_no_link("Case Groups")
+      expect(page).to have_no_link("Case groups")
     end
 
     it "sorts cases by clicking a column header" do

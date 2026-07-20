@@ -49,7 +49,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).not_to have_text("Additional Notes:")
+        expect(rendered).not_to have_text("Additional notes:")
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).to have_text("Additional Notes:")
+        expect(rendered).to have_text("Additional notes:")
         expect(rendered).to have_text("This is a note")
       end
     end

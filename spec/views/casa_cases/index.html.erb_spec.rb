@@ -31,7 +31,7 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).to have_link "New Case"
+      expect(rendered).to have_link "New case"
     end
   end
 
@@ -47,7 +47,7 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).not_to have_link "New Case"
+      expect(rendered).not_to have_link "New case"
     end
   end
 end

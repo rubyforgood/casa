@@ -2,7 +2,7 @@
     so it is rewritten in place rather than twinned. Keeps inert class hooks the specs use
     (.container-fluid.mb-1 wrapper, .full-card, .card-title) and the reminder JS hooks in
     _followup. TruncatedTextComponent renders each topic answer + the notes with a "label:"
-    prefix (the view spec asserts "Some question:" / "Additional Notes:"). Edit/Delete/undelete
+    prefix (the view spec asserts "Some question:" / "Additional notes:"). Edit/Delete/undelete
     keep data-turbo:false. %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 <div class="container-fluid mb-1">
@@ -30,7 +30,7 @@
                 <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
               <% end %>
               <% if contact.notes %>
-                <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional Notes") %></li>
+                <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional notes") %></li>
               <% end %>
             </ul>
           <% end %>

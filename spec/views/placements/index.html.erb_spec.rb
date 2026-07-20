@@ -56,7 +56,7 @@ RSpec.describe "placements/index", type: :view do
     placements.each do |placement|
       expect(rendered).to have_selector("dialog##{placement.id}")
       within "dialog##{placement.id}" do
-        expect(rendered).to have_content("Delete Placement?")
+        expect(rendered).to have_content("Delete placement?")
         expect(rendered).to have_selector("form[action='#{casa_case_placement_path(casa_case, placement)}']")
         expect(rendered).to have_button("Confirm")
       end

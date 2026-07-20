@@ -249,7 +249,7 @@ RSpec.describe "case_contacts/index", type: :system do
   context "without case contacts" do
     it "shows helper text" do
       subject
-      expect(page).to have_text("You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!")
+      expect(page).to have_text("You have no case contacts for this case. Please click New case contact button above to create a case contact for your youth!")
     end
   end
 end

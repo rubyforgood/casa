@@ -155,7 +155,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     complete_details_page(contact_made: true)
     expect(case_contact.reload.notes).to eq "Hello from the other side"
 
-    fill_in "Additional Notes", with: "Hello world"
+    fill_in "Additional notes", with: "Hello world"
 
     within autosave_alert_div do
       find(autosave_alert_css, text: autosave_alert_text)
@@ -163,17 +163,17 @@ RSpec.describe "case_contacts/edit", type: :system do
     expect(case_contact.reload.notes).to eq "Hello world"
   end
 
-  context "when 'Create Another' option is checked" do
+  context "when 'Create another' option is checked" do
     it "creates a duplicate case contact for the second contact", :js do
       case_contact_draft_ids = case_contact.draft_case_ids
       visit edit_case_contact_path(case_contact)
 
-      check "Create Another"
+      check "Create another"
 
       click_on "Submit"
 
       expect(page).to have_text("successfully updated")
-      expect(page).to have_text "New Case Contact"
+      expect(page).to have_text "Record new case contact"
       expect(page).to have_text casa_case.case_number
 
       expect(CaseContact.started.count).to eq(1)
