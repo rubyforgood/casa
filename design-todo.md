@@ -14,7 +14,7 @@ design system on the `casadesign` branch.
 (now a bespoke server-rendered casa_app table; its dead DataTable stack was removed). But a
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
-layout, so **resume there, starting with `fund_requests#new`**, then `casa_admins`, then
+layout, so **resume there** — `fund_requests#new` is done; next is **`casa_admins`**, then
 `other_duties`. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
 vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
 `application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
@@ -357,7 +357,12 @@ sign-in / password / invitation — were done in the foundation phase.)
 Found by auditing controllers not on casa_app / casa_auth / all_casa / metrics (Bootstrap markers
 present, zero casa_app markers). These reachable leaf pages were never in the phase plan and must
 migrate before `application.html.erb` + `application.scss` can be deleted.
-- [ ] `fund_requests#new` — the "New Fund Request" form (linked from the case-show More menu).
+- [x] `fund_requests#new` — **SHIPPED** on casa_app (`layout "casa_app"`, `@active_nav = "cases"`,
+  back-link to the case). Reused the casa_cases/new form pattern (max-w-2xl card, 2-col grid of
+  short fields + full-width textareas, `shared/form_errors`, bottom primary submit); kept the field
+  label substrings the spec fills by + the `* / **` footnotes. Sentence-cased the feature copy
+  (h1/page-title, "Submit fund request", the flash, and the case-show link), updating the 2 spec
+  assertions. 2 system + 11 request examples green; no overflow at 500/768/1280.
 - [ ] `casa_admins#index/new/edit` — the CASA-admin roster (Phase 4 did volunteers + supervisors,
   not this third user table).
 - [ ] `other_duties#index/new/edit` — volunteer "other duties" logging (has system specs).
