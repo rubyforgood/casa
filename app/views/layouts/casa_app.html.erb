@@ -38,6 +38,7 @@
           ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
           ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?],
           ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
+          ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],
           ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?],
           ["Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?]
         ] %>

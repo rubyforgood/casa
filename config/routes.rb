@@ -91,6 +91,7 @@ Rails.application.routes.draw do
   resources :contact_topic_answers, only: %i[create destroy]
 
   resources :reports, only: %i[index]
+  resources :analytics, only: %i[index]
   get :export_emails, to: "reports#export_emails"
 
   resources :case_court_reports, only: %i[index show] do
