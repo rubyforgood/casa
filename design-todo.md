@@ -47,6 +47,11 @@ page** pattern in `design.md`.
   the dashboard began rendering).
 - [ ] Add a `SupervisorDashboard` service spec (stats, per-volunteer status,
   `needs_attention`).
+- [ ] Run the full suite (`bundle exec rspec`, background) to confirm green. Last full run:
+  **3451 examples, 15 failures** — all 15 triaged + fixed (stale Bootstrap->casa_app auth/migration
+  specs, one sentence-case coupled-spec miss, the `window.timeout` wiring bug, and the
+  truncated-text preview/component bug), each verified green in isolation; re-run end-to-end to
+  confirm 0 failures (system specs have occasional headless-chrome flakes that `rspec-retry` absorbs).
 - [x] Sweep shipped pages for Font Awesome `fas fa-*` icons (they don't render on Tailwind
   layouts). Verified: 0 `fas/far/fal fa-*` usages remain in casa_app views — the migrated pages
   use `bi bi-*`.
