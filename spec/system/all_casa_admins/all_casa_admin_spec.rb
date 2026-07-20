@@ -105,26 +105,26 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
 
     # validate email uniqueness
     fill_in "all_casa_admin_email", with: other_admin.email
-    click_on "Update Profile"
+    click_on "Update profile"
     expect(page).to have_text "already been taken"
 
     # update email
     fill_in "all_casa_admin_email", with: "newemail@example.com"
-    click_on "Update Profile"
+    click_on "Update profile"
     expect(page).to have_text "successfully updated"
     expect(ActionMailer::Base.deliveries.last.body.encoded).to match(">Your CASA account's email has been updated to newemail@example.com")
 
     # change password
-    click_on "Change Password"
+    click_on "Change password"
     fill_in "all_casa_admin_password", with: "newpassword"
     fill_in "all_casa_admin_password_confirmation", with: "badmatch"
-    click_on "Update Password"
+    click_on "Update password"
     expect(page).to have_text "confirmation doesn't match"
 
-    click_on "Change Password"
+    click_on "Change password"
     fill_in "all_casa_admin_password", with: "newpassword"
     fill_in "all_casa_admin_password_confirmation", with: "newpassword"
-    click_on "Update Password"
+    click_on "Update password"
     expect(page).to have_text "Password was successfully updated."
     expect(ActionMailer::Base.deliveries.last.body.encoded).to match("Your CASA password has been changed.")
   end

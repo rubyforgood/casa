@@ -20,14 +20,14 @@
                 <i class="bi bi-slash-circle" aria-hidden="true"></i> Deactivate
               <% end %>
             </div>
-            <div><%= form.submit "Update Profile", class: button_classes(:primary) %></div>
+            <div><%= form.submit "Update profile", class: button_classes(:primary) %></div>
           <% else %>
             <div class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
               Admin was deactivated on: <%= I18n.l(@casa_admin.updated_at, format: :standard, default: nil) %>
             </div>
             <div class="flex flex-wrap gap-2">
               <%= link_to "Activate", activate_all_casa_admins_casa_org_casa_admin_path, method: :patch, class: button_classes(:success) %>
-              <%= form.submit "Update Profile", class: button_classes(:primary) %>
+              <%= form.submit "Update profile", class: button_classes(:primary) %>
             </div>
           <% end %>
         <% end %>

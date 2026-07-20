@@ -15,8 +15,8 @@
           <%= form.email_field :email, class: input_class %>
         </div>
         <div class="flex flex-wrap gap-2">
-          <%= form.button "Update Profile", type: "submit", class: button_classes(:primary) %>
-          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="collapseOne" class="<%= button_classes(:secondary) %>">Change Password</button>
+          <%= form.button "Update profile", type: "submit", class: button_classes(:primary) %>
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="collapseOne" class="<%= button_classes(:secondary) %>">Change password</button>
         </div>
       <% end %>
 
@@ -31,7 +31,7 @@
             <%= f.password_field :password_confirmation, minlength: 6, class: input_class %>
           </div>
           <div>
-            <%= f.submit "Update Password", class: button_classes(:danger) %>
+            <%= f.submit "Update password", class: button_classes(:danger) %>
           </div>
         <% end %>
       </div>

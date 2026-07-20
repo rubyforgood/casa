@@ -8,11 +8,11 @@ RSpec.describe "AllCasaAdmin password change", type: :system do
   before do
     sign_in admin
     visit edit_all_casa_admins_path
-    click_button "Change Password"
+    click_button "Change password"
   end
 
   it "shows error when password fields are blank", :aggregate_failures, :js do
-    click_button "Update Password"
+    click_button "Update password"
     expect(page).to have_selector("#error_explanation.alert")
     expect(page).to have_text("Password can't be blank")
   end
@@ -20,7 +20,7 @@ RSpec.describe "AllCasaAdmin password change", type: :system do
   it "shows error when password confirmation doesn't match", :aggregate_failures, :js do
     fill_in "all_casa_admin[password]", with: "newpassword"
     fill_in "all_casa_admin[password_confirmation]", with: "wrongconfirmation"
-    click_button "Update Password"
+    click_button "Update password"
     expect(page).to have_selector("#error_explanation.alert")
     expect(page).to have_text("Password confirmation doesn't match Password")
   end
@@ -28,7 +28,7 @@ RSpec.describe "AllCasaAdmin password change", type: :system do
   it "shows success flash when password is updated", :aggregate_failures, :js do
     fill_in "all_casa_admin[password]", with: "newpassword"
     fill_in "all_casa_admin[password_confirmation]", with: "newpassword"
-    click_button "Update Password"
+    click_button "Update password"
     expect(page).to have_selector(".header-flash")
     expect(page).to have_text("Password was successfully updated.")
   end

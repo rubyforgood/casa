@@ -13,14 +13,14 @@ RSpec.describe "all_casa_admins/edit", type: :view do
   it "renders the edit profile form", :aggregate_failures do
     expect(rendered).to have_selector("form[action='#{all_casa_admins_path}'][method='post']")
     expect(rendered).to have_field("all_casa_admin[email]")
-    expect(rendered).to have_button("Update Profile")
+    expect(rendered).to have_button("Update profile")
   end
 
   it "renders the change password section, hidden by default", :aggregate_failures do
     expect(rendered).to have_selector("#collapseOne.hidden")
     expect(rendered).to have_field("all_casa_admin[password]")
     expect(rendered).to have_field("all_casa_admin[password_confirmation]")
-    expect(rendered).to have_button("Update Password")
+    expect(rendered).to have_button("Update password")
   end
 
   context "when there are error and flash messages" do

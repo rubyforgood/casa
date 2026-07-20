@@ -36,7 +36,7 @@ RSpec.describe "notifications/index", :js, type: :system do
       it "lists notifications showing it's current name" do
         visit edit_users_path
         fill_in "Display name", with: created_by_name
-        click_on "Update Profile"
+        click_on "Update profile"
         expect(page).to have_content "Profile was successfully updated"
 
         sign_in admin
@@ -123,7 +123,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
         visit edit_users_path
         fill_in "Display name", with: created_by_name
-        click_on "Update Profile"
+        click_on "Update profile"
         expect(page).to have_content "Profile was successfully updated"
 
         sign_in volunteer
