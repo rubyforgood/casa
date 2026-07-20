@@ -1,227 +1,291 @@
-<div class="title-wrapper pt-30">
-  <h1 class="mb-20">Case Contacts</h1>
+<% content_for :page_title, "Case contacts" %>
+<%# case_contacts/new_design on casa_app (feature flag :new_case_contact_table). Bespoke
+    server-rendered table (retired the jQuery serverSide DataTable): server-side filter scopes +
+    ?sort= + Pagy, matching the cases-index reference. Filter is a `disclosure` panel that
+    auto-submits (GET). Each row expands (multi-<tbody> `disclosure`) to its topic answers + notes;
+    per-row actions are inline (see _actions). Card-stacks below md. The table drops the
+    id="case_contacts" hook so dashboard.js's defineCaseContactsTable no-ops here. %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600" %>
+<% td = "px-4 py-3 align-top text-slate-700" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% pill = "inline-flex items-center rounded-full bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-600" %>
+<% draft_pill = "inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600" %>
+<% filters_active = [params[:occurred_starting_at], params[:occurred_ending_at], params[:casa_case_ids], params[:contact_type_ids], params[:contact_medium], params[:contact_made], params[:no_drafts]].any?(&:present?) %>
 
-  <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3" id="cc-filter-toolbar">
-    <div class="d-flex gap-2">
-      <button type="button" id="cc-filter-toggle" class="main-btn secondary-btn btn-sm btn-hover">
-        <i class="lni lni-funnel mr-5" aria-hidden="true"></i>
-        Filter
-      </button>
-
-      <button type="button" id="cc-columns-toggle" class="main-btn secondary-btn btn-sm btn-hover">
-        <i class="lni lni-list mr-5" aria-hidden="true"></i>
-        Columns <span id="cc-columns-count" style="visibility: hidden">(<%= CaseContact::TOGGLEABLE_COLUMNS.length %>/<%= CaseContact::TOGGLEABLE_COLUMNS.length %>)</span>
-      </button>
-    </div>
-
-    <%= link_to new_case_contact_path, class: "main-btn primary-btn btn-sm btn-hover" do %>
-      <i class="lni lni-plus mr-10" aria-hidden="true"></i>
-      New Case Contact
-    <% end %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Case contacts</h1>
+    <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New Case Contact<% end %>
   </div>
 
-  <div id="cc-filter-panel" class="card-style mb-3" style="display: none;">
-    <div class="card-content">
-      <div class="row mb-3">
-        <div class="col-12"><h5>Date of contact</h5></div>
-        <div class="col-sm-6 input-style-1">
-          <label for="cc-filter-occurred-starting-at">Starting from</label>
-          <input type="date" id="cc-filter-occurred-starting-at" class="form-control" autocomplete="off">
-        </div>
-        <div class="col-sm-6 input-style-1">
-          <label for="cc-filter-occurred-ending-at">Ending at</label>
-          <input type="date" id="cc-filter-occurred-ending-at" class="form-control" autocomplete="off">
+  <%= form_with url: case_contacts_new_design_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-6" do %>
+    <div data-controller="disclosure" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <div class="flex items-center justify-between gap-3">
+        <h2 class="text-base font-semibold text-slate-900">Filter by</h2>
+        <div class="flex items-center gap-2">
+          <%= link_to "Reset filters", case_contacts_new_design_path, class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= filters_active %>" aria-controls="cc-filter-panel" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+            Expand / hide <i class="bi bi-chevron-down text-xs" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
 
-      <div class="row mb-3">
-        <div class="col-12"><h5>Case</h5></div>
-        <% current_organization.casa_cases.order(:case_number).each do |casa_case| %>
-          <div class="col-md-4">
-            <div class="form-check">
-              <input type="checkbox"
-                     class="form-check-input cc-filter-casa-case"
-                     id="cc-filter-case-<%= casa_case.id %>"
-                     value="<%= casa_case.id %>">
-              <label class="form-check-label" for="cc-filter-case-<%= casa_case.id %>">
-                <%= casa_case.case_number %>
-              </label>
+      <div id="cc-filter-panel" data-disclosure-target="panel" class="<%= "hidden" unless filters_active %> mt-5 space-y-5 border-t border-slate-100 pt-5">
+        <div>
+          <h3 class="mb-2 text-sm font-semibold text-slate-900">Date of contact</h3>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <%= label_tag :occurred_starting_at, "Starting from", class: label_class %>
+              <%= date_field_tag :occurred_starting_at, params[:occurred_starting_at], autocomplete: "off", class: input_class %>
+            </div>
+            <div>
+              <%= label_tag :occurred_ending_at, "Ending at", class: label_class %>
+              <%= date_field_tag :occurred_ending_at, params[:occurred_ending_at], autocomplete: "off", class: input_class %>
             </div>
           </div>
-        <% end %>
-      </div>
+        </div>
 
-      <div class="row mb-3">
-        <div class="col-12"><h5>Relationship</h5></div>
-        <% @current_organization_groups.each do |group| %>
-          <div class="col-md-4">
-            <h6><%= group.name %></h6>
-            <% group.contact_types.each do |contact_type| %>
-              <div class="form-check">
-                <input type="checkbox"
-                       class="form-check-input cc-filter-contact-type"
-                       id="cc-filter-ct-<%= contact_type.id %>"
-                       value="<%= contact_type.id %>">
-                <label class="form-check-label" for="cc-filter-ct-<%= contact_type.id %>">
-                  <%= contact_type.name %>
-                </label>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          <div class="sm:col-span-2">
+            <%= label_tag :casa_case_ids, "Cases", class: label_class %>
+            <div data-controller="multiple-select">
+              <%= select_tag "casa_case_ids[]", options_for_select(@filterable_cases.map { |c| [c.case_number, c.id] }, params[:casa_case_ids]), multiple: true, include_blank: false, data: {"multiple-select-target": "select"}, class: "w-full" %>
+            </div>
+          </div>
+          <div>
+            <%= label_tag :contact_medium, "Medium", class: label_class %>
+            <div class="relative">
+              <%= select_tag :contact_medium, options_from_collection_for_select(contact_mediums, "value", "label", params[:contact_medium]), include_blank: "Display all", class: select_class %>
+              <i class="<%= chevron %>" aria-hidden="true"></i>
+            </div>
+          </div>
+          <div>
+            <%= label_tag :contact_made, "Contacted", class: label_class %>
+            <div class="relative">
+              <%= select_tag :contact_made, options_for_select([["Reached", "true"], ["Not reached", "false"]], params[:contact_made]), include_blank: "Display all", class: select_class %>
+              <i class="<%= chevron %>" aria-hidden="true"></i>
+            </div>
+          </div>
+          <label class="inline-flex items-center gap-2 pb-2.5 text-sm text-slate-700 sm:pt-7">
+            <%= check_box_tag :no_drafts, "1", params[:no_drafts].present?, class: check_class %>
+            Hide drafts
+          </label>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-semibold text-slate-900">Contact types</h3>
+          <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+            <% @current_organization_groups.each do |group| %>
+              <div>
+                <h4 class="mb-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500"><%= group.name %></h4>
+                <div class="space-y-1.5">
+                  <% group.contact_types.each do |contact_type| %>
+                    <label class="flex items-center gap-2 text-sm text-slate-700">
+                      <%= check_box_tag "contact_type_ids[]", contact_type.id, Array(params[:contact_type_ids]).include?(contact_type.id.to_s), id: "contact_type_#{contact_type.id}", class: check_class %>
+                      <%= contact_type.name %>
+                    </label>
+                  <% end %>
+                </div>
               </div>
             <% end %>
           </div>
-        <% end %>
-      </div>
-
-      <div class="row mb-3">
-        <div class="col-md-4 select-style-1">
-          <label for="cc-filter-medium">Medium</label>
-          <div class="select-position">
-            <select id="cc-filter-medium" class="form-select">
-              <option value="">Display all</option>
-              <% CaseContact::CONTACT_MEDIUMS.each do |medium| %>
-                <option value="<%= medium %>"><%= medium.titleize %></option>
-              <% end %>
-            </select>
-          </div>
         </div>
-        <div class="col-md-4 select-style-1">
-          <label for="cc-filter-contact-made">Contacted</label>
-          <div class="select-position">
-            <select id="cc-filter-contact-made" class="form-select">
-              <option value="">Display all</option>
-              <option value="true">Reached</option>
-              <option value="false">Not Reached</option>
-            </select>
-          </div>
-        </div>
-        <div class="col-md-4 d-flex align-items-end pb-2">
-          <div class="form-check">
-            <input type="checkbox" class="form-check-input" id="cc-filter-no-drafts">
-            <label class="form-check-label" for="cc-filter-no-drafts">Hide drafts</label>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex gap-2">
-        <button type="button" id="cc-filter-apply" class="main-btn primary-btn btn-sm btn-hover">Apply Filters</button>
-        <button type="button" id="cc-filter-reset" class="main-btn dark-btn-outline btn-sm btn-hover">Reset</button>
       </div>
     </div>
-  </div>
+    <noscript><div class="mt-3"><%= submit_tag "Apply filters", class: button_classes(:primary) %></div></noscript>
+  <% end %>
 
-  <div id="cc-columns-panel" class="card-style mb-3" style="display: none;">
-    <div class="card-content">
-      <div class="row mb-3">
-        <% CaseContact::TOGGLEABLE_COLUMNS.each do |col| %>
-          <div class="col-md-4">
-            <div class="form-check form-switch">
-              <input type="checkbox"
-                     class="form-check-input cc-column-toggle"
-                     id="cc-col-<%= col[:key] %>"
-                     data-column-index="<%= col[:index] %>"
-                     role="switch"
-                     checked>
-              <label class="form-check-label" for="cc-col-<%= col[:key] %>">
-                <%= col[:label] %>
-              </label>
-            </div>
-          </div>
-        <% end %>
-      </div>
-      <div class="d-flex gap-2">
-        <button type="button" id="cc-columns-update" class="main-btn primary-btn btn-sm btn-hover">Update View</button>
-        <button type="button" id="cc-columns-show-all" class="main-btn dark-btn-outline btn-sm btn-hover">Show All</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="card-style mb-30">
-  <div class="table-wrapper" style="overflow-x: auto">
-    <table
-      id="case_contacts"
-      class="table"
-      data-source="<%= datatable_case_contacts_new_design_path format: :json %>">
-      <thead>
-      <tr>
-        <th data-orderable="false"></th>
-        <th data-orderable="false"></th>
-        <th><h6>Date</h6></th>
-        <th><h6>Case</h6></th>
-        <th><h6>Relationship</h6></th>
-        <th><h6>Medium</h6></th>
-        <th><h6>Created By</h6></th>
-        <th><h6>Contacted</h6></th>
-        <th><h6>Topics</h6></th>
-        <th><h6>Draft</h6></th>
-        <th data-orderable="false"></th>
-      </tr>
-      <!-- end table row-->
-      </thead>
-      <tbody>
-        <% @case_contacts.object.each do |casa_case_id, contacts| %>
-          <% contacts.each do |case_contact| %>
-            <tr data-testid="case_contact-row">
-              <td>
-                <i class='fas fa-bell'></i>
-              </td>
-              <td>
-                <i class="fa-solid fa-chevron-down"></i>
-              </td>
-              <td>
-                <%= I18n.l(case_contact[:occurred_at], format: :full) if case_contact[:occurred_at].present? %>
-              </td>
-              <td>
-                <%= @case_contacts.display_case_number(casa_case_id) %>
-              </td>
-              <td>
-                <%= case_contact.decorate.contact_types_comma_separated %>
-              </td>
-              <td>
-                <%= case_contact.medium_type&.capitalize %>
-              </td>
-              <td>
-                <% if policy(case_contact).edit? %>
-                  <% if current_user.volunteer? %>
-                    <%= formatted_name(case_contact.creator&.display_name) %>
-                  <% else %>
-                    <% if case_contact.creator&.supervisor? %>
-                      <%= link_to formatted_name(case_contact.creator&.display_name), edit_supervisor_path(case_contact.creator), data: { turbo: false } %>
-                    <% elsif case_contact.creator&.casa_admin? %>
-                      <%= link_to formatted_name(case_contact.creator&.display_name), edit_users_path, data: { turbo: false } %>
-                    <% else %>
-                      <%= link_to formatted_name(case_contact.creator&.display_name), edit_volunteer_path(case_contact.creator), data: { turbo: false } %>
-                    <% end %>
+  <%# Desktop: full table (md and up) %>
+  <div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-sm md:block">
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse text-sm">
+        <thead>
+          <tr class="border-b border-slate-100">
+            <th class="<%= th %> w-px"><span class="sr-only">Expand</span></th>
+            <%= sortable_header("Date", "occurred_at", sort: @sort, direction: @direction) %>
+            <th class="<%= th %>">Case</th>
+            <th class="<%= th %>">Relationship</th>
+            <%= sortable_header("Medium", "medium_type", sort: @sort, direction: @direction) %>
+            <th class="<%= th %>">Created by</th>
+            <%= sortable_header("Contacted", "contact_made", sort: @sort, direction: @direction) %>
+            <th class="<%= th %>">Topics</th>
+            <th class="<%= th %>">Draft</th>
+            <th class="<%= th %> w-px"><span class="sr-only">Actions</span></th>
+          </tr>
+        </thead>
+        <% if @case_contacts.any? %>
+          <% @case_contacts.each do |contact| %>
+            <% answers = contact.contact_topic_answers.reject { |a| a.value.blank? } %>
+            <% has_details = answers.any? || contact.notes.present? %>
+            <% topics = contact.contact_topics.map(&:question) %>
+            <tbody data-controller="disclosure">
+              <tr class="border-t border-slate-100 hover:bg-slate-50/70" data-testid="case_contact-row">
+                <td class="<%= td %>">
+                  <% if has_details %>
+                    <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-label="Toggle contact details" class="expand-toggle group grid h-7 w-7 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+                      <i class="bi bi-chevron-down transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
+                    </button>
                   <% end %>
-                <% else %>
-                  <%= formatted_name(case_contact.creator&.display_name) %>
-                <% end %>
-              </td>
-              <td>
-                <% if case_contact.contact_made %>
-                  <i class="lni lni-checkmark-circle" style="color: green;"></i>
-                <% else %>
-                  <i class="lni lni-cross-circle" style="color: orange;"></i>
-                <% end %>
-                <%= "(#{"%02d:%02d" % [case_contact.duration_minutes / 60, case_contact.duration_minutes % 60]})" if case_contact.duration_minutes %>
-              </td>
-              <td>
-                <%= case_contact.contact_topics.map(&:question).join(" | ") %>
-              </td>
-              <td>
-                <% if !case_contact.active? %>
-                  <span class="badge badge-pill light-bg text-black" data-testid="draft-badge">
-                    Draft
-                  </span>
-                <% end %>
-              </td>
-              <td>
-                <i class="fas fa-ellipsis-v"></i>
+                </td>
+                <td class="<%= td %> whitespace-nowrap">
+                  <% if contact.requested_followup %><i class="bi bi-bell-fill mr-1 text-amber-500" role="img" aria-label="Reminder set"></i><% end %>
+                  <%= I18n.l(contact.occurred_at, format: :full, default: nil) || tag.span("No date", class: "text-slate-400") %>
+                </td>
+                <td class="<%= td %>">
+                  <% if contact.casa_case %>
+                    <%= link_to contact.casa_case.case_number, casa_case_path(contact.casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %>
+                  <% else %><span class="text-slate-400">&mdash;</span><% end %>
+                </td>
+                <td class="<%= td %>"><%= contact.decorate.contact_types_comma_separated %></td>
+                <td class="<%= td %> whitespace-nowrap"><%= contact.medium_type&.titleize || tag.span("\u2014", class: "text-slate-400") %></td>
+                <td class="<%= td %> whitespace-nowrap"><%= render "case_contacts/case_contacts_new_design/creator", contact: contact %></td>
+                <td class="<%= td %> whitespace-nowrap">
+                  <% if contact.contact_made %>
+                    <i class="bi bi-check-circle-fill text-emerald-500" role="img" aria-label="Reached"></i>
+                  <% else %>
+                    <i class="bi bi-x-circle-fill text-amber-500" role="img" aria-label="Not reached"></i>
+                  <% end %>
+                  <% if contact.duration_minutes %><span class="text-slate-500">(<%= "%02d:%02d" % [contact.duration_minutes / 60, contact.duration_minutes % 60] %>)</span><% end %>
+                </td>
+                <td class="<%= td %>">
+                  <% if topics.any? %>
+                    <div class="flex flex-wrap gap-1">
+                      <% topics.first(2).each do |q| %><span class="<%= pill %>"><%= q %></span><% end %>
+                      <% if topics.size > 2 %><span class="<%= pill %>">+<%= topics.size - 2 %> more</span><% end %>
+                    </div>
+                  <% end %>
+                </td>
+                <td class="<%= td %>">
+                  <% unless contact.active? %><span class="<%= draft_pill %>" data-testid="draft-badge">Draft</span><% end %>
+                </td>
+                <td class="<%= td %>">
+                  <div class="flex items-center justify-end gap-1"><%= render "case_contacts/case_contacts_new_design/actions", contact: contact, layout: :row %></div>
+                </td>
+              </tr>
+              <% if has_details %>
+                <tr class="hidden" data-disclosure-target="panel">
+                  <td colspan="10" class="bg-slate-50/60 px-4 pb-4 pt-1">
+                    <div class="rounded-xl border border-slate-200 bg-white p-4">
+                      <dl class="space-y-3">
+                        <% answers.each do |a| %>
+                          <div>
+                            <dt class="text-xs font-semibold text-slate-500"><%= a.contact_topic.question %></dt>
+                            <dd class="mt-0.5 whitespace-pre-line text-sm text-slate-700"><%= a.value %></dd>
+                          </div>
+                        <% end %>
+                        <% if contact.notes.present? %>
+                          <div>
+                            <dt class="text-xs font-semibold text-slate-500">Additional notes</dt>
+                            <dd class="mt-0.5 whitespace-pre-line text-sm text-slate-700"><%= contact.notes %></dd>
+                          </div>
+                        <% end %>
+                      </dl>
+                    </div>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          <% end %>
+        <% else %>
+          <tbody>
+            <tr>
+              <td colspan="10" class="px-4 py-14 text-center">
+                <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-chat-square-text text-xl" aria-hidden="true"></i></div>
+                <p class="mt-3 text-sm font-semibold text-slate-900">No case contacts found</p>
+                <p class="mt-1 text-sm text-slate-500"><%= filters_active ? "Try adjusting your filters." : "New case contacts will appear here." %></p>
               </td>
             </tr>
-          <% end %>
+          </tbody>
         <% end %>
-      </tbody>
-    </table>
-    <!-- end table -->
+      </table>
+    </div>
   </div>
+
+  <%# Mobile: stacked cards (below md) %>
+  <div class="md:hidden">
+    <% if @case_contacts.any? %>
+      <ul class="space-y-3">
+        <% @case_contacts.each do |contact| %>
+          <% answers = contact.contact_topic_answers.reject { |a| a.value.blank? } %>
+          <% has_details = answers.any? || contact.notes.present? %>
+          <% topics = contact.contact_topics.map(&:question) %>
+          <li class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+              <div class="min-w-0">
+                <div class="flex items-center gap-2">
+                  <% if contact.requested_followup %><i class="bi bi-bell-fill text-amber-500" role="img" aria-label="Reminder set"></i><% end %>
+                  <% if contact.casa_case %>
+                    <%= link_to contact.casa_case.case_number, casa_case_path(contact.casa_case), class: "text-base font-semibold text-brand-600 hover:text-brand-700" %>
+                  <% else %><span class="text-base font-semibold text-slate-400">&mdash;</span><% end %>
+                </div>
+                <p class="mt-0.5 text-sm text-slate-500"><%= I18n.l(contact.occurred_at, format: :full, default: "No date") %></p>
+              </div>
+              <% unless contact.active? %><span class="<%= draft_pill %>">Draft</span><% end %>
+            </div>
+            <dl class="mt-3 grid grid-cols-2 gap-x-4 gap-y-3">
+              <div class="col-span-2">
+                <dt class="text-xs text-slate-500">Relationship</dt>
+                <dd class="mt-0.5 text-sm text-slate-700"><%= contact.decorate.contact_types_comma_separated %></dd>
+              </div>
+              <div>
+                <dt class="text-xs text-slate-500">Medium</dt>
+                <dd class="mt-0.5 text-sm text-slate-700"><%= contact.medium_type&.titleize || "\u2014" %></dd>
+              </div>
+              <div>
+                <dt class="text-xs text-slate-500">Contacted</dt>
+                <dd class="mt-0.5 text-sm text-slate-700">
+                  <% if contact.contact_made %><span class="text-emerald-600">Reached</span><% else %><span class="text-amber-600">Not reached</span><% end %><% if contact.duration_minutes %> (<%= "%02d:%02d" % [contact.duration_minutes / 60, contact.duration_minutes % 60] %>)<% end %>
+                </dd>
+              </div>
+              <div class="col-span-2">
+                <dt class="text-xs text-slate-500">Created by</dt>
+                <dd class="mt-0.5 text-sm"><%= render "case_contacts/case_contacts_new_design/creator", contact: contact %></dd>
+              </div>
+            </dl>
+            <% if topics.any? %>
+              <div class="mt-3 flex flex-wrap gap-1">
+                <% topics.each do |q| %><span class="<%= pill %>"><%= q %></span><% end %>
+              </div>
+            <% end %>
+            <% if has_details %>
+              <details class="mt-3">
+                <summary class="inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 [&::-webkit-details-marker]:hidden">Details <i class="bi bi-chevron-down text-xs" aria-hidden="true"></i></summary>
+                <dl class="mt-2 space-y-3 rounded-xl border border-slate-200 bg-slate-50/60 p-3">
+                  <% answers.each do |a| %>
+                    <div>
+                      <dt class="text-xs font-semibold text-slate-500"><%= a.contact_topic.question %></dt>
+                      <dd class="mt-0.5 whitespace-pre-line text-sm text-slate-700"><%= a.value %></dd>
+                    </div>
+                  <% end %>
+                  <% if contact.notes.present? %>
+                    <div>
+                      <dt class="text-xs font-semibold text-slate-500">Additional notes</dt>
+                      <dd class="mt-0.5 whitespace-pre-line text-sm text-slate-700"><%= contact.notes %></dd>
+                    </div>
+                  <% end %>
+                </dl>
+              </details>
+            <% end %>
+            <div class="mt-4 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-3">
+              <%= render "case_contacts/case_contacts_new_design/actions", contact: contact, layout: :bar %>
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <div class="rounded-2xl border border-slate-200 bg-white px-4 py-14 text-center shadow-sm">
+        <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-chat-square-text text-xl" aria-hidden="true"></i></div>
+        <p class="mt-3 text-sm font-semibold text-slate-900">No case contacts found</p>
+        <p class="mt-1 text-sm text-slate-500"><%= filters_active ? "Try adjusting your filters." : "New case contacts will appear here." %></p>
+      </div>
+    <% end %>
+  </div>
+
+  <% if @case_contacts.any? %>
+    <div class="mt-4"><%= render "shared/pagination", pagy: @pagy %></div>
+  <% end %>
 </div>

@@ -342,6 +342,23 @@ editing is a desktop tool. To hide a `button_classes` trigger, toggle **`hidden!
 important), not `hidden`: a plain `hidden` loses to the button's `inline-flex` in the cascade
 (the display utilities have equal specificity, so order decides and `inline-flex` wins).
 
+**Expandable rows + inline row actions** (the case-contacts new-design table, the third
+bespoke-table reference). A row that reveals detail (topic answers + notes) is a **separate
+`<tbody>` per row** (valid HTML — a table may have many) wearing `data-controller="disclosure"`:
+the main `<tr>` holds the toggle (`disclosure#toggle` + a `trigger` target, a chevron that spins via
+`group-aria-[expanded=true]:rotate-180`) and a hidden detail `<tr data-disclosure-target="panel">`
+holds the `<td colspan>` panel. Give the `<table>` `border-collapse` so the per-`<tr>` `border-t`
+separators render across the multiple tbodies. **Row actions stay inline** (icon ghost buttons +
+the native Dialog:: suite for the delete confirm / set-reminder note), **never a per-row
+`<details>` dropdown**: an absolutely-positioned dropdown is clipped by the table's
+`overflow-x-auto` (which also forces `overflow-y: auto`), whereas a native `<dialog>` opens in the
+top layer and escapes the clip. Render the actions once as an `_actions` partial with `layout: :row`
+(desktop icon buttons) / `:bar` (the mobile card's labeled buttons); duplicate Dialog instances
+across the two twins are safe (each is scoped by its own `modal` controller). A row-level state
+indicator (the amber `bell-fill` "Reminder set") lives in a data cell, independent of the
+permission-gated action. Set/Resolve reminder and delete return via `redirect_back_or_to` /
+`redirect_to request.referer`, so the action stays on the list rather than jumping to the case page.
+
 ### Charts (data viz)
 Charts are **bespoke server-rendered SVG** (no canvas, no Chart.js), built in `HealthHelper`
 and rendered on the metrics page. Validated with the data-viz method:
@@ -662,7 +679,10 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
 - [x] Case workflows: cases index/show/new/edit + case contacts index + drafts + the multi-step
   **form** all shipped (filterrific kept, disclosure collapse; the form is an autosave Wicked
-  wizard on casa_app). Only the `case_contacts_new_design` table remains in this area.
+  wizard on casa_app). The opt-in `case_contacts_new_design` table is now a bespoke
+  server-rendered casa_app table too (retired its jQuery serverSide DataTable; server-side filter
+  scopes + ?sort= + Pagy; disclosure filter panel; expandable rows + inline row actions) — the case
+  area is fully migrated.
 - [x] Management (Phase 4): volunteers + supervisors index/edit, learning hours, case assignments,
   reimbursements, the reports hub, and **organization settings** all shipped (bespoke Tailwind
   tables + Pagy; reimbursements retired its serverSide DataTable; the reports hub keeps its

@@ -1,0 +1,16 @@
+<%# Created-by name for the case-contacts new-design page. Dark identifying text (not a brand
+    nav link); admins/supervisors get a link to the creator's edit page, matching the
+    _case_contact card. Names are first+last only (formatted_name, no honorific). %>
+<% name = formatted_name(contact.creator&.display_name) %>
+<% link_class = "font-medium text-slate-700 hover:text-brand-700 hover:underline" %>
+<% if policy(contact).edit? && !current_user.volunteer? && contact.creator %>
+  <% if contact.creator.supervisor? %>
+    <%= link_to name, edit_supervisor_path(contact.creator), data: {turbo: false}, class: link_class %>
+  <% elsif contact.creator.casa_admin? %>
+    <%= link_to name, edit_users_path, data: {turbo: false}, class: link_class %>
+  <% else %>
+    <%= link_to name, edit_volunteer_path(contact.creator), data: {turbo: false}, class: link_class %>
+  <% end %>
+<% else %>
+  <span class="font-medium text-slate-800"><%= name %></span>
+<% end %>

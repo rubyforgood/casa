@@ -17,8 +17,7 @@ generator** — all shipped. **Phase 5** is well underway: batches 1–4 (judges
 placement/learning-hour types + topics, contact types/groups/topics, hearing types + checklist
 items, custom org links, **mileage rates, placements, banners**) are shipped. Next in Phase 5:
 **imports, court dates / bulk court dates, emancipation**, then **Phase 6** (all-CASA-admin area,
-Devise edges, static pages). Loose ends: the
-`case_contacts_new_design` DataTable (a separate opt-in page); and the deferred sentence-case
+Devise edges, static pages). Loose ends: the deferred sentence-case
 sweep (now covering settings + reports + case-contact + the earlier spec-locked Title Case labels).
 The settings / checklist admin tables now card-stack on mobile (done).
 
@@ -111,8 +110,8 @@ page** pattern in `design.md`.
   (`.followup-button` / `#followup-button-<id>` / `#resolve`, `data-turbo:false`). Inert class
   hooks the specs use (`.full-card`, `.container-fluid.mb-1`, `.card-title`) preserved; the
   `strong.text-primary` color assertion + the view-spec title sentence-cased. Chevrons
-  darkest-pixel verified (114); no overflow 375-1280. **Remaining**: only the
-  `case_contacts_new_design` DataTable table (a separate opt-in page).
+  darkest-pixel verified (114); no overflow 375-1280. The opt-in `case_contacts_new_design`
+  table is now migrated too (below), so the whole case area is on casa_app.
 - [x] Case-contact multi-step **form** (`case_contacts/form/details` + the `_contact_topic_answer`
   and `shared/_additional_expense_form` nested rows) — SHIPPED on casa_app. Wicked single-step
   wizard rendered on `layout "casa_app"` (the JSON autosave path skips the layout). Rebuilt in
@@ -133,8 +132,20 @@ page** pattern in `design.md`.
   green bar the pre-existing cross-org `edit_spec:76`. (Two expense `:js` specs flake only under
   full-dir concurrent load; they pass 5/5 in isolation — pre-existing timing, JS logic unchanged.)
   See the **Case-contact form** pattern in `design.md`.
-- [ ] `case_contacts_new_design` DataTable (`dashboard.js` `defineCaseContactsTable`
-  `columns.render` rewrite) — still Bootstrap.
+- [x] `case_contacts_new_design` (feature flag `:new_case_contact_table`) — **SHIPPED** on casa_app
+  as a bespoke server-rendered table, retiring the jQuery serverSide DataTable. Reuses the existing
+  `CaseContact` filter scopes server-side (contact-type as a subquery so multi-type rows don't
+  duplicate) + `?sort=` + Pagy; a `disclosure` filter panel that auto-submits, with the case picker
+  a reused `multiple-select` TomSelect (chevron darkest-pixel verified to match the single-selects,
+  153 vs 151 at DPR-1). Rows expand (multi-`<tbody>` `disclosure`) to topic answers + notes; row
+  actions are inline (icon ghost buttons + Dialog delete-confirm / set-reminder note), never a
+  dropdown (clipped by `overflow-x-auto`). Dropped the DataTables column-visibility picker (design
+  already rejected it for the cases index). `followups#create/#resolve` now `redirect_back_or_to`
+  and `case_contacts#destroy` already `redirect_to request.referer`, so reminders/delete stay on the
+  list. The table drops the `id="case_contacts"` hook so `dashboard.js`'s `defineCaseContactsTable`
+  no-ops. 38 request + 22 system examples green. See **Expandable rows + inline row actions** in
+  `design.md`. Dead now (queued below): the `datatable` action + route, `CaseContactDatatable`, and
+  the `defineCaseContactsTable` block in `dashboard.js` (+ its jest test).
 
 ## Phase 4 — Management & rosters
 - [x] Volunteers index + edit. Both on casa_app. The **index** is a bespoke Tailwind table
@@ -376,7 +387,11 @@ sign-in / password / invitation — were done in the foundation phase.)
   `notification_icon` helpers; `casa_cases/_generate_report_modal` (orphaned now that Case show
   uses the native-dialog report modal); the `volunteers#datatable` + `supervisors#datatable` JSON
   actions and their `dashboard.js` blocks (both indexes retired the serverSide DataTable, moving
-  the `#volunteers` / `#supervisors` hook off the `<table>`); the `learning_hours.js` DataTable
+  the `#volunteers` / `#supervisors` hook off the `<table>`); the
+  `CaseContacts::CaseContactsNewDesignController#datatable` action + its
+  `datatable_case_contacts_new_design` route + `CaseContactDatatable` + the `defineCaseContactsTable`
+  block in `dashboard.js` (and its jest test), now that the new-design page is server-rendered and
+  drops the `#case_contacts` hook; the `learning_hours.js` DataTable
   init + the unrendered `learning_hours/_confirm_note` partial (the migrated learning-hours roster
   is server-rendered + Pagy); the now-unused `shared/_manage_volunteers` (supervisors/edit was its
   last consumer); the vestigial
