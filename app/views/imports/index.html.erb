@@ -26,9 +26,9 @@
 
     <div class="border-b border-slate-200">
       <nav class="-mb-px flex gap-6 overflow-x-auto text-sm font-medium" aria-label="Import type">
-        <%= link_to "Import Volunteers", imports_path(import_type: "volunteer"), id: "volunteer-tab", "aria-current": (@import_type == "volunteer" ? "page" : nil), class: "#{tab} #{@import_type == "volunteer" ? active : inactive}" %>
-        <%= link_to "Import Supervisors", imports_path(import_type: "supervisor"), id: "supervisor-tab", "aria-current": (@import_type == "supervisor" ? "page" : nil), class: "#{tab} #{@import_type == "supervisor" ? active : inactive}" %>
-        <%= link_to "Import Cases", imports_path(import_type: "casa_case"), id: "casa-case-tab", "aria-current": (@import_type == "casa_case" ? "page" : nil), class: "#{tab} #{@import_type == "casa_case" ? active : inactive}" %>
+        <%= link_to "Import volunteers", imports_path(import_type: "volunteer"), id: "volunteer-tab", "aria-current": (@import_type == "volunteer" ? "page" : nil), class: "#{tab} #{@import_type == "volunteer" ? active : inactive}" %>
+        <%= link_to "Import supervisors", imports_path(import_type: "supervisor"), id: "supervisor-tab", "aria-current": (@import_type == "supervisor" ? "page" : nil), class: "#{tab} #{@import_type == "supervisor" ? active : inactive}" %>
+        <%= link_to "Import cases", imports_path(import_type: "casa_case"), id: "casa-case-tab", "aria-current": (@import_type == "casa_case" ? "page" : nil), class: "#{tab} #{@import_type == "casa_case" ? active : inactive}" %>
       </nav>
     </div>
 

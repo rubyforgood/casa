@@ -23,7 +23,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     find("summary", text: "More").click
     click_on "New bulk court date"
 
-    select case_group.name, from: "Case Group"
+    select case_group.name, from: "Case group"
     fill_in "court_date_date", with: :now
     fill_in "court_date_court_report_due_date", with: :now
     select judge.name, from: "Judge"

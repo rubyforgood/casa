@@ -27,7 +27,7 @@ RSpec.describe "placements/index", type: :view do
   end
 
   it "has a link to create a new placement" do
-    expect(rendered).to have_link("New Placement", href: new_casa_case_placement_path(casa_case))
+    expect(rendered).to have_link("New placement", href: new_casa_case_placement_path(casa_case))
   end
 
   it "displays placement information for each placement" do

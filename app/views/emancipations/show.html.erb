@@ -1,4 +1,4 @@
-<% content_for :page_title, "Emancipation Checklist" %>
+<% content_for :page_title, "Emancipation checklist" %>
 <%# emancipations#show on casa_app. The category/option checkboxes are AJAX-saved and collapsed by
     the global src/case_emancipation.js, so every hook is preserved verbatim: the .emancipation-category
     h6 with data-is-open, its child .category-collapse-icon, the IMMEDIATELY-adjacent .category-options
@@ -12,7 +12,7 @@
   <div class="mx-auto max-w-3xl space-y-6">
     <div class="flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation Checklist</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation checklist</h1>
         <%= link_to @current_case.case_number, casa_case_path(@current_case), class: "mt-1 inline-block text-sm font-medium text-brand-600 hover:text-brand-700" %>
       </div>
       <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: button_classes(:primary) do %>

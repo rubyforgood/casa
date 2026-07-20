@@ -9,7 +9,7 @@
   data-child-index="<%= form.options[:child_index] %>">
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
-      <%= form.label :contact_topic_id, "Discussion Topic", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= form.label :contact_topic_id, "Discussion topic", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <div class="relative">
         <%= form.select(:contact_topic_id,
           select_options,
@@ -24,7 +24,7 @@
       </div>
     </div>
     <div>
-      <%= form.label :value, "Discussion Notes", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= form.label :value, "Discussion notes", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <%= form.text_area(:value,
         data: {action: "input->autosave#save"},
         rows: 3,

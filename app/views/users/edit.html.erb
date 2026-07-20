@@ -105,10 +105,10 @@
                   <%= f.password_field :current_password, autocomplete: "off", class: input_class, id: "current_password_email", required: true %>
                 </div>
                 <div>
-                  <%= f.label :email, "New Email", class: label_class %>
+                  <%= f.label :email, "New email", class: label_class %>
                   <%= f.text_field :email, type: "email", class: "#{input_class} email-new", autocomplete: "off", value: nil, required: true %>
                 </div>
-                <%= f.submit "Update Email", class: "#{btn_primary} submit-email" %>
+                <%= f.submit "Update email", class: "#{btn_primary} submit-email" %>
               </div>
             <% end %>
           </div>
@@ -148,7 +148,7 @@
         </div>
 
         <div class="mt-5">
-          <%= form.submit "Save Preferences", class: "#{btn_primary} save-preference" %>
+          <%= form.submit "Save preferences", class: "#{btn_primary} save-preference" %>
         </div>
       <% end %>
     </section>

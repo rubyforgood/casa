@@ -15,9 +15,9 @@
         <%= render "shared/form_errors", resource: @court_date %>
         <h6 class="text-sm text-slate-500">Create a court date for all cases in a group.</h6>
         <div>
-          <%= form.label :case_group_id, "Case Group", class: label_class %>
+          <%= form.label :case_group_id, "Case group", class: label_class %>
           <div class="relative">
-            <%= form.collection_select(:case_group_id, current_organization.case_groups, :id, :name, {include_hidden: false, include_blank: "-Select Case Group-"}, {class: select_class}) %>
+            <%= form.collection_select(:case_group_id, current_organization.case_groups, :id, :name, {include_hidden: false, include_blank: "-Select case group-"}, {class: select_class}) %>
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
           </div>
         </div>

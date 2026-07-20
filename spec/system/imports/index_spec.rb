@@ -21,7 +21,7 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
+        expect(page).to have_content("Import volunteers")
         expect(page).to have_button("volunteer-import-button", disabled: true)
 
         attach_file "volunteer-file", import_file_path
@@ -45,7 +45,7 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
+        expect(page).to have_content("Import volunteers")
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
@@ -62,7 +62,7 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
+        expect(page).to have_content("Import volunteers")
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
@@ -83,7 +83,7 @@ RSpec.describe "imports/index", type: :system do
         visit imports_path
         click_on "supervisor-tab"
 
-        expect(page).to have_content("Import Supervisors")
+        expect(page).to have_content("Import supervisors")
         expect(page).to have_button("supervisor-import-button", disabled: true)
 
         attach_file "supervisor-file", import_file_path
@@ -107,9 +107,9 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path
 
-        click_on "Import Supervisors"
+        click_on "Import supervisors"
 
-        expect(page).to have_content("Import Supervisors")
+        expect(page).to have_content("Import supervisors")
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
@@ -126,9 +126,9 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path
 
-        click_on "Import Supervisors"
+        click_on "Import supervisors"
 
-        expect(page).to have_content("Import Supervisors")
+        expect(page).to have_content("Import supervisors")
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"

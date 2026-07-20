@@ -20,8 +20,8 @@ RSpec.describe "placements/edit", type: :system do
   it "updates placement with valid form data", :js do
     expect(page).to have_content("123")
 
-    fill_in "Placement Started At", with: now - 5.years
-    select "Kinship", from: "Placement Type"
+    fill_in "Placement started at", with: now - 5.years
+    select "Kinship", from: "Placement type"
 
     click_on "Update"
 
@@ -32,7 +32,7 @@ RSpec.describe "placements/edit", type: :system do
   end
 
   it "rejects placement update with invalid form data" do
-    fill_in "Placement Started At", with: 1000.years.ago
+    fill_in "Placement started at", with: 1000.years.ago
     click_on "Update"
 
     expect(page).to have_content("Placement started at cannot be prior to 1/1/1989.")

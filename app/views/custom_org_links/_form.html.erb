@@ -11,7 +11,7 @@
       <%= form_with model: @custom_org_link, local: true, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: @custom_org_link %>
         <div>
-          <%= form.label :text, "Display Text", class: label_class %>
+          <%= form.label :text, "Display text", class: label_class %>
           <%= form.text_field :text, required: true, class: input_class %>
         </div>
         <div>

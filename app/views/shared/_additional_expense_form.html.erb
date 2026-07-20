@@ -9,7 +9,7 @@
   data-child-index="<%= form.options[:child_index] %>">
   <div class="grid gap-4 sm:grid-cols-2">
     <div>
-      <%= form.label :other_expense_amount, "Other Expense Amount", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= form.label :other_expense_amount, "Other expense amount", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <div class="flex">
         <span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm text-slate-500">$</span>
         <%= form.number_field(:other_expense_amount,
@@ -20,7 +20,7 @@
       </div>
     </div>
     <div>
-      <%= form.label :other_expenses_describe, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Other Expense Details <span class="text-rose-600" aria-hidden="true">*</span><% end %>
+      <%= form.label :other_expenses_describe, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Other expense details <span class="text-rose-600" aria-hidden="true">*</span><% end %>
       <%= form.text_area(:other_expenses_describe,
         placeholder: "Enter other expense details",
         rows: 2,

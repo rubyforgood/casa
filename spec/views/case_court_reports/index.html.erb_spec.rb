@@ -21,7 +21,7 @@ RSpec.describe "case_court_reports/index", type: :view do
     end
 
     it "page has title 'Gererate Reports'" do
-      expect(rendered).to have_selector("h1", text: "Generate Reports", count: 1)
+      expect(rendered).to have_selector("h1", text: "Generate reports", count: 1)
     end
 
     it "has button with 'Download Court Report as .docx' text" do

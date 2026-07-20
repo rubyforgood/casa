@@ -105,12 +105,12 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       click_on "Change email"
-      expect(page).to have_field("New Email", disabled: false)
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_volunteer@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_volunteer@example.com"
+      click_on "Update email"
 
       expect(page).to have_content "Click the link in your new email to finalize the email transfer"
 
@@ -130,9 +130,9 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_volunteer@example.com"
+      fill_in "New email", with: "new_volunteer@example.com"
 
-      click_on "Update Email"
+      click_on "Update email"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
@@ -163,7 +163,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
@@ -177,7 +177,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
@@ -280,12 +280,12 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       click_on "Change email"
-      expect(page).to have_field("New Email", disabled: false)
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_supervisor@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_supervisor@example.com"
+      click_on "Update email"
 
       expect(page).to have_content "Click the link in your new email to finalize the email transfer"
 
@@ -305,9 +305,9 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_supervisor@example"
+      fill_in "New email", with: "new_supervisor@example"
 
-      click_on "Update Email"
+      click_on "Update email"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
@@ -337,7 +337,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
@@ -351,7 +351,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
@@ -443,12 +443,12 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       click_on "Change email"
-      expect(page).to have_field("New Email", disabled: false)
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_admin@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_admin@example.com"
+      click_on "Update email"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
@@ -466,9 +466,9 @@ RSpec.describe "users/edit", type: :system do
       click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_admin@example.com"
+      fill_in "New email", with: "new_admin@example.com"
 
-      click_on "Update Email"
+      click_on "Update email"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
@@ -558,7 +558,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
@@ -572,7 +572,7 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
+      click_on "Save preferences"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end

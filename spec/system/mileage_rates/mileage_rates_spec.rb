@@ -16,9 +16,9 @@ RSpec.describe "mileage_rates/new", :js, type: :system do
     fill_in "Effective date", with: Date.new(2020, 1, 2)
     fill_in "Amount", with: 1.35
     uncheck "Currently active?"
-    click_on "Save Mileage Rate"
+    click_on "Save mileage rate"
 
-    expect(page).to have_text("Mileage Rates")
+    expect(page).to have_text("Mileage rates")
     # Table headers are uppercased by the design-system CSS (text-transform), so match case-insensitively.
     expect(page).to have_text(/Effective date/i)
     expect(page).to have_text("January 2, 2020")

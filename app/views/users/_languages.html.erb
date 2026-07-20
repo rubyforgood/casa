@@ -28,7 +28,7 @@
   <%= form_with(model: volunteer, url: add_language_users_path) do |form| %>
     <div class="mt-4 flex flex-wrap items-end gap-3">
       <div>
-        <%= form.label :languages, "Add Language", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+        <%= form.label :languages, "Add language", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
         <%= form.select :languages,
               current_organization.languages.map { |lang| [lang.name, lang.id] },
               {include_blank: true},

@@ -14,14 +14,14 @@ RSpec.describe "placements/new", type: :system do
   before do
     sign_in admin
     visit casa_case_placements_path(casa_case)
-    click_link("New Placement")
+    click_link("New placement")
   end
 
   it "creates placement with valid form data", :js do
     expect(page).to have_content("123")
 
-    fill_in "Placement Started At", with: now
-    select placement_type.name, from: "Placement Type"
+    fill_in "Placement started at", with: now
+    select placement_type.name, from: "Placement type"
 
     click_on "Create"
 
@@ -32,7 +32,7 @@ RSpec.describe "placements/new", type: :system do
   end
 
   it "rejects placement with invalid form data" do
-    fill_in "Placement Started At", with: 1000.years.ago
+    fill_in "Placement started at", with: 1000.years.ago
     click_on "Create"
 
     expect(page).to have_content("Placement type must exist")
