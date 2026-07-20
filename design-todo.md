@@ -14,8 +14,8 @@ design system on the `casadesign` branch.
 (now a bespoke server-rendered casa_app table; its dead DataTable stack was removed). But a
 straggler audit found several reachable **leaf pages never in the phase plan that are still on the
 Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
-layout, so **resume there** — `fund_requests#new` and `casa_admins` are done; next is
-**`other_duties`**. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
+layout, so **resume there** — `fund_requests#new`, `casa_admins`, and `other_duties` are done;
+next is **`notes#edit`**, then `case_assignments#index` and the error pages. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
 vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
 `application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
 
@@ -373,7 +373,15 @@ migrate before `application.html.erb` + `application.scss` can be deleted.
   ("Create New Casa Admin", "Receive Monthly Learning Hours Report", "Resend Invitation", "Change to
   Supervisor") kept verbatim, queued for the sentence-case sweep. 53 examples green; no overflow
   500/768/1280.
-- [ ] `other_duties#index/new/edit` — volunteer "other duties" logging (has system specs).
+- [x] `other_duties#index/new/edit` — **SHIPPED** on casa_app (`layout "casa_app"`). Index is a
+  bespoke Tailwind table grouped by volunteer (desktop table + mobile card twin); new/edit stay thin
+  `render "form"` wrappers over a rebuilt casa_app `_form` (the Hour(s)/Minute(s) duration twin like
+  learning hours; the controller's `convert_duration_minutes` still combines them). Notes keeps
+  `required` + the default `#other_duty_notes` id (a `:js` spec asserts the HTML5 validation
+  message). Swapped `shared/error_messages` for `shared/form_errors` (no spec locks the legacy
+  format here). Spec-locked Title Case ("Other Duties", "New Duty", "Editing Duty", "Occurred On",
+  "Duty Duration", "Enter Notes") kept verbatim, queued for the sweep. 26 examples green (view +
+  system + request); no overflow 500/768/1280.
 - [ ] `notes#edit` — edit a case-contact note.
 - [ ] `case_assignments#index` — assignment listing.
 - [ ] `error#index` — error pages (404 / 422 / 500).
