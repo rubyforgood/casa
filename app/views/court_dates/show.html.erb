@@ -1,5 +1,5 @@
-<% content_for :page_title, "Court Date" %>
-<%# court_dates#show on casa_app. The <dt><h6>Label:</h6></dt><dd> structure + "Court Orders:"
+<% content_for :page_title, "Court date" %>
+<%# court_dates#show on casa_app. The <dt><h6>Label:</h6></dt><dd> structure + "Court orders:"
     h6/<p> are preserved verbatim (view + system specs assert them by xpath / substring); the
     Title-Case-with-colon fact labels ride the deferred sentence-case sweep. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
@@ -11,7 +11,7 @@
   <div class="mx-auto max-w-3xl space-y-6">
     <div class="flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Court Date</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Court date</h1>
         <time datetime="<%= @court_date.date %>" class="mt-1 block text-sm text-slate-500"><%= @court_date.decorate.formatted_date %></time>
       </div>
       <%= link_to edit_casa_case_court_date_path(@casa_case, @court_date), class: button_classes(:primary) do %>
@@ -21,17 +21,17 @@
 
     <div class="<%= card %>">
       <dl>
-        <dt><h6 class="<%= label %>">Case Number:</h6></dt>
+        <dt><h6 class="<%= label %>">Case number:</h6></dt>
         <dd class="mb-4 mt-1 text-sm"><%= link_to @casa_case.case_number, casa_case_path(@casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></dd>
-        <dt><h6 class="<%= label %>">Court Report Due Date:</h6></dt>
+        <dt><h6 class="<%= label %>">Court report due date:</h6></dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= I18n.l(@court_date.court_report_due_date, format: :full, default: "None") %></dd>
         <dt><h6 class="<%= label %>">Judge:</h6></dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.judge&.name || "None" %></dd>
-        <dt><h6 class="<%= label %>">Hearing Type:</h6></dt>
+        <dt><h6 class="<%= label %>">Hearing type:</h6></dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.hearing_type&.name || "None" %></dd>
       </dl>
 
-      <h6 class="<%= label %> mb-2">Court Orders:</h6>
+      <h6 class="<%= label %> mb-2">Court orders:</h6>
       <% if @court_date.case_court_orders.any? %>
         <div class="overflow-hidden rounded-xl border border-slate-200">
           <div class="overflow-x-auto">
@@ -59,11 +59,11 @@
 
       <div class="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-5">
         <%= link_to casa_case_court_date_path(@casa_case, @court_date, format: :docx), class: button_classes(:secondary) do %>
-          <i class="bi bi-download" aria-hidden="true"></i> Download Report (.docx)
+          <i class="bi bi-download" aria-hidden="true"></i> Download report (.docx)
         <% end %>
         <% if policy(:court_date).destroy? && @court_date.date > Time.now %>
           <%= link_to casa_case_court_date_path(@casa_case, @court_date), method: :delete, data: {confirm: "Are you sure?"}, class: "#{button_classes(:danger_outline)} sm:ms-auto" do %>
-            <i class="bi bi-trash" aria-hidden="true"></i> Delete Future Court Date
+            <i class="bi bi-trash" aria-hidden="true"></i> Delete future court date
           <% end %>
         <% end %>
       </div>

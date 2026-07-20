@@ -6,7 +6,7 @@
   <%= form_with(model: court_date, url: [casa_case, court_date], local: true,
         data: {controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"}, class: "space-y-6") do |form| %>
     <%= render "shared/form_errors", resource: court_date %>
-    <h6 class="text-sm text-slate-500">Case Number: <%= link_to casa_case.case_number, casa_case, class: "font-medium text-brand-600 hover:text-brand-700" %></h6>
+    <h6 class="text-sm text-slate-500">Case number: <%= link_to casa_case.case_number, casa_case, class: "font-medium text-brand-600 hover:text-brand-700" %></h6>
     <%= render "court_dates/fields", court_date: court_date, form: form, casa_case: casa_case %>
     <div class="top-page-actions border-t border-slate-100 pt-5">
       <%= button_tag type: "submit", class: button_classes(:primary) do %>

@@ -25,7 +25,7 @@ RSpec.describe "court_dates/show", type: :view do
     end
 
     it "displays the download button for .docx" do
-      expect(rendered).to include "Download Report (.docx)"
+      expect(rendered).to include "Download report (.docx)"
       expect(rendered).to include "/casa_cases/#{court_date.casa_case.case_number.parameterize}/court_dates/#{court_date.id}.docx"
     end
   end
@@ -37,7 +37,7 @@ RSpec.describe "court_dates/show", type: :view do
       render template: "court_dates/show"
 
       expect(rendered).to include("Judge:")
-      expect(rendered).to include("Hearing Type")
+      expect(rendered).to include("Hearing type")
       expect(rendered).to include("None")
 
       expect(rendered).to include("There are no court orders associated with this court date.")

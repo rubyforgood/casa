@@ -10,11 +10,11 @@
 
 <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
   <div>
-    <%= form.label :date, "Add Court Date", class: label_class %>
+    <%= form.label :date, "Add court date", class: label_class %>
     <%= form.date_field :date, value: court_date.date&.to_date || Time.zone.now, class: input_class %>
   </div>
   <div>
-    <%= form.label :court_report_due_date, "Add Court Report Due Date", class: label_class %>
+    <%= form.label :court_report_due_date, "Add court report due date", class: label_class %>
     <%= form.date_field :court_report_due_date, value: court_date.court_report_due_date&.to_date, class: input_class %>
   </div>
   <div>

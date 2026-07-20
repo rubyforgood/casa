@@ -47,12 +47,12 @@ RSpec.describe "court_dates/edit", type: :system do
     end
 
     it "edits past court date", :js do
-      expect(page).to have_text("Editing Court Date")
-      expect(page).to have_text("Case Number:")
+      expect(page).to have_text("Editing court date")
+      expect(page).to have_text("Case number:")
       expect(page).to have_text(casa_case.case_number)
-      expect(page).to have_text("Add Court Date")
+      expect(page).to have_text("Add court date")
       expect(page).to have_field("court_date_date", with: "2020-12-25")
-      expect(page).to have_text("Add Court Report Due Date")
+      expect(page).to have_text("Add court report due date")
       expect(page).to have_field("court_date_court_report_due_date")
       expect(page).to have_select("Judge")
       expect(page).to have_select("Hearing type")
@@ -79,7 +79,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
-        page.find("a", text: "Delete Future Court Date").click
+        page.find("a", text: "Delete future court date").click
       end
       expect(page).to have_content "Court date was successfully deleted"
 
@@ -100,7 +100,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
-        page.find("a", text: "Delete Future Court Date").click
+        page.find("a", text: "Delete future court date").click
       end
 
       expect(page).to have_content "Court date was successfully deleted."
@@ -122,7 +122,7 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
 
-      expect(page).not_to have_content "Delete Future Court Date"
+      expect(page).not_to have_content "Delete future court date"
     end
   end
 end
