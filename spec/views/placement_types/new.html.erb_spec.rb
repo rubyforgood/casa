@@ -13,7 +13,7 @@ RSpec.describe "placement_types/new.html.erb", type: :view do
   it "allows creating a placement type" do
     assign :placement_type, placement_type
     render template: "placement_types/new"
-    expect(rendered).to have_text("New Placement Type")
+    expect(rendered).to have_text("New placement type")
     expect(rendered).to have_field("placement_type[name]")
     expect(rendered).to have_button("Submit")
   end

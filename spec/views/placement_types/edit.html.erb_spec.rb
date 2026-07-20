@@ -13,7 +13,7 @@ RSpec.describe "placement_types/edit.html.erb", type: :view do
   it "allows editing the placement type" do
     assign :placement_type, placement_type
     render template: "placement_types/edit"
-    expect(rendered).to have_text("Edit Placement Type")
+    expect(rendered).to have_text("Edit placement type")
     expect(rendered).to have_field("placement_type[name]", with: placement_type.name)
     expect(rendered).to have_button("Submit")
   end

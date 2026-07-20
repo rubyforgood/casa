@@ -11,8 +11,8 @@ RSpec.describe "mileage_rates/new", :js, type: :system do
   end
 
   it "add new mileage rate" do
-    click_on "New Mileage Rate"
-    expect(page).to have_text("New Mileage Rate")
+    click_on "New mileage rate"
+    expect(page).to have_text("New mileage rate")
     fill_in "Effective date", with: Date.new(2020, 1, 2)
     fill_in "Amount", with: 1.35
     uncheck "Currently active?"

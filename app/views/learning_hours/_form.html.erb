@@ -14,12 +14,12 @@
 
   <section class="<%= card %> mt-4 space-y-5">
     <div>
-      <%= form.label :name, "Learning Hours Title", class: label_class %>
+      <%= form.label :name, "Learning hours title", class: label_class %>
       <%= form.text_field :name, placeholder: "-- Enter a title --", value: learning_hour.name, required: true, class: input_class %>
     </div>
 
     <div>
-      <%= form.label :learning_hour_type_id, "Type of Learning", class: label_class %>
+      <%= form.label :learning_hour_type_id, "Type of learning", class: label_class %>
       <div class="relative">
         <%= form.collection_select :learning_hour_type_id, LearningHourType.for_organization(current_user.casa_org).active, :id, :name, {prompt: "Select learning type"}, {class: select_class} %>
         <i class="<%= chevron %>" aria-hidden="true"></i>
@@ -28,7 +28,7 @@
 
     <% if current_user.casa_org.learning_topic_active %>
       <div>
-        <%= form.label :learning_hour_topic_id, "Learning Topic", class: label_class %>
+        <%= form.label :learning_hour_topic_id, "Learning topic", class: label_class %>
         <div class="relative">
           <%= form.collection_select :learning_hour_topic_id, LearningHourTopic.for_organization(current_user.casa_org), :id, :name, {prompt: "Select learning topic"}, {class: select_class} %>
           <i class="<%= chevron %>" aria-hidden="true"></i>
@@ -52,16 +52,16 @@
 
     <div>
       <% occurred_at = learning_hour.occurred_at || Date.today %>
-      <%= form.label :occurred_at, "Occurred On", class: label_class %>
+      <%= form.label :occurred_at, "Occurred on", class: label_class %>
       <%= form.date_field :occurred_at, value: occurred_at.to_date, class: input_class %>
     </div>
 
     <div class="actions">
       <%= form.button type: "submit", class: button_classes(:primary) do %>
         <% if learning_hour.persisted? %>
-          <i class="bi bi-save" aria-hidden="true"></i> Update Learning Hours Entry
+          <i class="bi bi-save" aria-hidden="true"></i> Update learning hours entry
         <% else %>
-          <i class="bi bi-check-lg" aria-hidden="true"></i> Create New Learning Hours Entry
+          <i class="bi bi-check-lg" aria-hidden="true"></i> Create new learning hours entry
         <% end %>
       <% end %>
     </div>

@@ -37,7 +37,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       sign_in volunteer
       visit new_learning_hour_path
-      expect(page).to have_text("Learning Topic")
+      expect(page).to have_text("Learning topic")
     end
 
     it "does not display learning hour topic when disabled", :js do
@@ -46,7 +46,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       sign_in volunteer
       visit new_learning_hour_path
-      expect(page).not_to have_text("Learning Topic")
+      expect(page).not_to have_text("Learning topic")
     end
   end
 end

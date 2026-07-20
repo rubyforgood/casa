@@ -11,7 +11,7 @@ RSpec.describe "judges/new", type: :view do
   end
 
   it "shows new judge form" do
-    expect(rendered).to have_text("New Judge")
+    expect(rendered).to have_text("New judge")
     expect(rendered).to have_selector("input", id: "judge_name")
     expect(rendered).to have_selector("input", id: "judge_active")
     expect(rendered).to have_selector("button[type=submit]")
