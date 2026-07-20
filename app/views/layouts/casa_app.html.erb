@@ -17,10 +17,10 @@
 
   <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white">Skip to main content</a>
 
-  <div class="flex min-h-full">
-    <div id="nav-backdrop" class="fixed inset-0 z-30 hidden bg-slate-900/50 lg:hidden" aria-hidden="true"></div>
+  <div class="flex min-h-full" data-controller="nav-drawer" data-action="keydown.esc@window->nav-drawer#close">
+    <div id="nav-backdrop" data-nav-drawer-target="backdrop" data-action="click->nav-drawer#close" class="fixed inset-0 z-30 hidden bg-slate-900/50 lg:hidden" aria-hidden="true"></div>
 
-    <aside id="app-sidebar" aria-label="Primary" class="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 motion-reduce:transition-none lg:static lg:translate-x-0">
+    <aside id="app-sidebar" data-nav-drawer-target="sidebar" aria-label="Primary" class="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 motion-reduce:transition-none lg:static lg:translate-x-0">
       <div class="flex items-center px-5 py-5">
         <span class="truncate text-[15px] font-bold tracking-tight text-slate-900"><%= current_organization&.name.presence || "CASA Tracker" %></span>
       </div>
@@ -58,7 +58,7 @@
           page content (which tops out at z-20) yet BELOW the mobile nav scrim (z-30) so the drawer
           still dims the header, and below the sidebar drawer (z-40) and native <dialog> modals. %>
       <header class="relative z-[25] flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
-        <button type="button" id="nav-toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
+        <button type="button" id="nav-toggle" data-nav-drawer-target="button" data-action="click->nav-drawer#toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
           <i class="bi bi-list text-xl" aria-hidden="true"></i>
         </button>
         <span class="text-base font-bold tracking-tight text-slate-900 lg:hidden"><%= current_organization&.name.presence || "CASA" %></span>
@@ -109,23 +109,5 @@
       </main>
     </div>
   </div>
-
-  <script>
-    (function () {
-      var btn = document.getElementById("nav-toggle");
-      var sidebar = document.getElementById("app-sidebar");
-      var backdrop = document.getElementById("nav-backdrop");
-      if (!btn || !sidebar || !backdrop) return;
-      function setOpen(open) {
-        sidebar.classList.toggle("-translate-x-full", !open);
-        backdrop.classList.toggle("hidden", !open);
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-        document.body.classList.toggle("overflow-hidden", open);
-      }
-      btn.addEventListener("click", function () { setOpen(sidebar.classList.contains("-translate-x-full")); });
-      backdrop.addEventListener("click", function () { setOpen(false); });
-      document.addEventListener("keydown", function (event) { if (event.key === "Escape") setOpen(false); });
-    })();
-  </script>
 </body>
 </html>

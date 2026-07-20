@@ -40,6 +40,8 @@ import ModalController from './modal_controller'
 
 import MultipleSelectController from './multiple_select_controller'
 
+import NavDrawerController from './nav_drawer_controller'
+
 import NavbarController from './navbar_controller'
 
 import RevealController from './reveal_controller'
@@ -75,6 +77,7 @@ application.register('icon-toggle', IconToggleController)
 application.register('local-storage-reset', LocalStorageResetController)
 application.register('modal', ModalController)
 application.register('multiple-select', MultipleSelectController)
+application.register('nav-drawer', NavDrawerController)
 application.register('navbar', NavbarController)
 application.register('reveal', RevealController)
 application.register('searchable-select', SearchableSelectController)

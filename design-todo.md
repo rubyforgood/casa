@@ -417,8 +417,12 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   jsdelivr CDN `<link>`s from all six shells (casa_app, casa_auth, all_casa_admin, error, metrics,
   static landing). Absolute `url()`s so the Tailwind CLI (Lightning CSS) leaves them untouched;
   served from `public/` by the same static middleware as the compiled `tailwind.css`.
-- [ ] Move the inline nav-toggle `<script>` in `casa_app.html.erb` to a Stimulus
-  controller (aligns with the jQuery -> Stimulus migration, issue #5016).
+- [x] **Nav-toggle -> Stimulus — DONE** (aligns with the jQuery -> Stimulus migration, #5016).
+  The inline mobile-nav `<script>` in `casa_app.html.erb` *and* the identical one in
+  `all_casa_admin.html.erb` are replaced by a shared `nav-drawer` controller
+  (`app/javascript/controllers/nav_drawer_controller.js`): `sidebar`/`backdrop`/`button` targets;
+  `click->nav-drawer#toggle` on the button, `click->nav-drawer#close` on the backdrop, and
+  `keydown.esc@window->nav-drawer#close`. Jest-covered (open/close/backdrop/Escape).
 - [x] Table strategy (revised) — build tables bespoke in Tailwind (server-side filters +
   Pagy pagination + Turbo Drive), matching the dashboard; retire jQuery DataTables
   page-by-page. Theming DataTables was rejected (couldn't meet WCAG/design). Cases index
