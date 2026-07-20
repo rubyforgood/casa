@@ -464,8 +464,15 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   so org customizations are left alone; associations are by id so contacts are unaffected;
   **guard the per-org name-uniqueness edge case** (skip a rename if the sentence-case name
   already exists in that org). New orgs already seed the new names.
-- [ ] Decommission the Bootstrap `application` layout + `application.scss` once the last
-  page is migrated.
+- [ ] Decommission the Bootstrap `application` layout + `application.scss`. **Now unblocked** —
+  audited: no web controller renders an HTML page on the `application` layout anymore (all remaining
+  default-layout controllers are data-only — CSV/XLSX reports, `preference_sets`, `api/*`,
+  `android_app_associations`, and AJAX sub-resources with no `.html.erb`; the only application-layout
+  `.html.erb` templates left are mailer views, which use the `mailer` layout). Endgame steps: give
+  `ApplicationController` a safe default layout (or fallback) so no future no-layout controller
+  breaks, run the full spec suite, then delete `application.html.erb` + `application.scss`.
+  **Caveat:** `application.js` is still loaded by `casa_app` (`javascript_include_tag "application"`),
+  so only the layout + SCSS go here, not the JS bundle.
 
 ## Stakeholder / product questions (confirm before finalizing)
 - [ ] **Hearing type & judge on case lists.** The old cases index (and `supervisors/index`)
