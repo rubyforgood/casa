@@ -404,11 +404,11 @@ _Data-only actions on the default layout render no HTML and need no migration: t
 CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*` endpoints._
 
 ## Cross-cutting / infrastructure
-- [ ] Finish the sentence-case pass on interactive copy that is shared across pages —
-  button/field labels like "Update Profile", "Change Password", "New Password",
-  "Enable Twilio For Text Messaging" live on the users / volunteers / all-CASA-admin
-  edit pages and a shared spec example, so rename them (and their
-  `click_on` / `fill_in` / `have_field` specs) holistically, not page-by-page.
+- [x] **Edit-profile shared labels — DONE (sweep batch 3).** "Update Profile", "Change Password",
+  "New Password"(+ Confirmation), "Current Password", "Update Password", "Change Email", and
+  "Enable Twilio For Text Messaging" (Twilio kept) sentence-cased across users/edit +
+  all_casa_admins/edit + all_casa_admins/casa_admins/edit and every coupled spec (incl. the shared
+  phone-error example + the standalone "Password Confirmation" substring locators).
 - [ ] Contrast audit of shipped pages: replace remaining `text-slate-400` body/meta text
   with `slate-500` for WCAG AA; re-check pills and badges.
 - [ ] **Vendor Bootstrap Icons** into the asset pipeline; drop the CDN link.
@@ -450,13 +450,27 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   DataTable stack now that its index is a bespoke table — `src/reimbursements.js` (+ its
   `application.js` require), the `reimbursements#datatable` action, `ReimbursementDatatable`, and
   the `with_datatable` route concern on `resources :reimbursements`).
-- [ ] **Sentence-case sweep (do once pages are migrated).** Fix the remaining Title Case UI
-  copy / defined terms: the case-details fact labels ("Transition Aged Youth:", "Youth's Date
-  in Care:", "Next Court Date:", "Court Report Status:", "No Court Dates"), the same term on
-  `volunteers/index` + `reports/index`, and any other Title Case labels/headings. It is
-  cross-cutting and locked by ~15 specs (some are `fill_in` field-label locators, not display
-  text), so do it as one deliberate pass. Proper nouns/acronyms (CASA, IEP) excepted; never
-  force-case free-form org data. (See the sentence-case scan rule in `design.md`.)
+- [~] **Sentence-case sweep (in progress).** Proper nouns/acronyms (CASA, IEP, Twilio) excepted;
+  never force-case free-form org data. (See the sentence-case scan rule in `design.md`.)
+  - [x] Batch 1 — case-detail fact labels: casa_cases show/new/index + reports/index (canonical
+    "Transition-aged youth").
+  - [x] Batch 2 — court_dates pages (headings + fact labels + form/action buttons).
+  - [x] Batch 3 — edit-profile shared labels (see the item above).
+  - [x] Batch 4a — casa_admins / other_duties / notes (this session's migrated pages).
+  - [ ] Batch 4b — **volunteers/edit + supervisors/edit** and their partials (`_manage_active`,
+    `_manage_volunteers`/`_volunteer_assignment`, `_manage_cases`, `_manage_supervisor`, `_notes`):
+    Submit, Assign Case/Volunteer, Select a Volunteer, Current Supervisor:, Currently Assigned To,
+    Deactivate Supervisor, Resend Invitation, Change to Admin, Save Note, Make/Resolve Reminder,
+    "Enable Twilio To Send Reactivation Alert (SMS)", etc. Heavy `:js`/spec coupling (the 745-line
+    volunteer-edit spec).
+  - [ ] Batch 4c — learning_hours (`_form`: "Learning Hours Title", "Type of Learning", ...) +
+    the simple settings CRUD forms (`shared/_settings_form` model titles; learning_hour_types,
+    contact_types, casa_org labels like "Enable Twilio").
+  - [ ] Batch 4d — case_contacts index + the multi-step form (`form/details`): field/action Title
+    Case labels, "New Case Contact".
+  - [ ] cases#index action buttons ("New Case", "Case Groups", "New Bulk Court Date") + any other
+    Title Case CTA labels surfaced by a final `grep`. (Skip `layouts/_sidebar` — dead, see
+    dead-code.)
 - [ ] **Contact-type default rename (guarded after-party, do once pages are migrated).** For
   existing orgs, rename the contact types + the "Social Services" group whose names **exactly**
   match the old Title Case defaults to the new sentence-case defaults ("Foster Parent" ->
