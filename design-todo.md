@@ -411,7 +411,12 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   phone-error example + the standalone "Password Confirmation" substring locators).
 - [ ] Contrast audit of shipped pages: replace remaining `text-slate-400` body/meta text
   with `slate-500` for WCAG AA; re-check pills and badges.
-- [ ] **Vendor Bootstrap Icons** into the asset pipeline; drop the CDN link.
+- [x] **Vendor Bootstrap Icons + Figtree — DONE.** Self-hosted: font binaries under
+  `public/vendor/{bootstrap-icons,figtree}/`, the `@font-face`/glyph CSS vendored under
+  `app/assets/stylesheets/vendor/` and `@import`ed by `tailwind.css`; dropped the Google Fonts +
+  jsdelivr CDN `<link>`s from all six shells (casa_app, casa_auth, all_casa_admin, error, metrics,
+  static landing). Absolute `url()`s so the Tailwind CLI (Lightning CSS) leaves them untouched;
+  served from `public/` by the same static middleware as the compiled `tailwind.css`.
 - [ ] Move the inline nav-toggle `<script>` in `casa_app.html.erb` to a Stimulus
   controller (aligns with the jQuery -> Stimulus migration, issue #5016).
 - [x] Table strategy (revised) — build tables bespoke in Tailwind (server-side filters +

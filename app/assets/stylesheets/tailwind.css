@@ -2,6 +2,11 @@
 @import "tom-select/dist/css/tom-select.css";
 @import "trix/dist/trix.css";
 
+/* Self-hosted fonts + icons (vendored under app/assets/stylesheets/vendor/,
+   binaries in public/vendor/) -- replaces the Google Fonts + jsdelivr CDN links. */
+@import "./vendor/figtree.css";
+@import "./vendor/bootstrap-icons.css";
+
 /* Where Tailwind should look for class names (paths are relative to this file). */
 @source "../../components/**/*.{erb,rb}";
 @source "../../views/**/*.erb";

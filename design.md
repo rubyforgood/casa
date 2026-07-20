@@ -22,7 +22,9 @@ Bootstrap `application` layout. Never load both CSS resets on the same page.
 ## Foundations
 
 ### Typography
-- **Figtree** (Google Fonts), weights 400/500/600/700/800. Warm humanist sans.
+- **Figtree**, weights 400/500/600/700/800. Warm humanist sans. Self-hosted (latin + latin-ext
+  woff2 under `public/vendor/figtree/`; `@font-face` in `app/assets/stylesheets/vendor/figtree.css`,
+  `@import`ed by `tailwind.css`) — no CDN.
 - Scale:
   - Page title (h1): `text-2xl font-bold tracking-tight text-slate-900`
   - Section title (h2): `text-base font-semibold text-slate-900`
@@ -71,8 +73,10 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
 - Page background: `bg-slate-50`.
 
 ### Iconography
-- **Bootstrap Icons** (`bi-*`), loaded via CDN in the shell layout for now — matches the
-  approved mockups. Vendor into the asset pipeline before production.
+- **Bootstrap Icons** (`bi-*`), self-hosted: font binaries under `public/vendor/bootstrap-icons/`,
+  CSS vendored at `app/assets/stylesheets/vendor/bootstrap-icons.css` and `@import`ed by
+  `tailwind.css` (no CDN). Vendored from the `bootstrap-icons` (icons) + `@fontsource/figtree`
+  (font) npm packages via `npm i --no-save`, with `url()` rewritten to the `public/vendor/` paths.
 - **Icon tile pattern** — icons representing a *stat or status* sit on a soft
   colored rounded background:
   `grid place-items-center h-9 w-9 rounded-xl bg-{semantic}-50 text-{semantic}-600`.
