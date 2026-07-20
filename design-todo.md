@@ -10,16 +10,14 @@ design system on the `casadesign` branch.
 - `[x]` done · `[~]` in progress · `[ ]` not started.
 
 ## Next up — resume here
-**Phases 3 and 4 are done, plus the court report generator.** Phase 3: cases index/show/new/edit
-+ case contacts index/drafts/form. Phase 4: volunteers + supervisors index/edit, learning hours,
-case assignments, reimbursements, the reports hub, organization settings, and the **court report
-generator** — all shipped. **Phase 5** is well underway: batches 1–4 (judges, languages,
-placement/learning-hour types + topics, contact types/groups/topics, hearing types + checklist
-items, custom org links, **mileage rates, placements, banners**) are shipped. Next in Phase 5:
-**imports, court dates / bulk court dates, emancipation**, then **Phase 6** (all-CASA-admin area,
-Devise edges, static pages). Loose ends: the deferred sentence-case
-sweep (now covering settings + reports + case-contact + the earlier spec-locked Title Case labels).
-The settings / checklist admin tables now card-stack on mobile (done).
+**All migration phases (0–6) are shipped**, including the opt-in `case_contacts_new_design` table
+(now a bespoke server-rendered casa_app table; its dead DataTable stack was removed). But a
+straggler audit found several reachable **leaf pages never in the phase plan that are still on the
+Bootstrap `application` layout** — see **Straggler pages** below. They block deleting the Bootstrap
+layout, so **resume there, starting with `fund_requests#new`**, then `casa_admins`, then
+`other_duties`. After the stragglers: the deferred **sentence-case sweep**, the contrast audit,
+vendoring Bootstrap Icons, and dead-code removal — then decommission the `application` layout +
+`application.scss`. Remaining product question: hearing type / judge on case lists (stakeholder).
 
 ## Volunteer edit page migration — [x] SHIPPED
 Built as ONE self-contained casa_app view (`volunteers#edit` on `layout: "casa_app"`); the shared
@@ -45,8 +43,9 @@ page** pattern in `design.md`.
   the dashboard began rendering).
 - [ ] Add a `SupervisorDashboard` service spec (stats, per-volunteer status,
   `needs_attention`).
-- [ ] Sweep shipped pages for Font Awesome `fas fa-*` icons (they don't render on
-  Tailwind layouts) and for stray Bootstrap classes doing layout work.
+- [x] Sweep shipped pages for Font Awesome `fas fa-*` icons (they don't render on Tailwind
+  layouts). Verified: 0 `fas/far/fal fa-*` usages remain in casa_app views — the migrated pages
+  use `bi bi-*`.
 - [x] Fix a latent, order-dependent test flake (pre-existing, not design work):
   `CaseContact` validates `occurred_at` with `less_than: Time.zone.tomorrow + 1.day`
   in `app/models/case_contact.rb` — a value captured at class-load time, so if the
@@ -101,7 +100,7 @@ page** pattern in `design.md`.
   The orphaned Bootstrap `casa_cases/_form.html.erb` is dead (new/edit render inline) — see
   dead-code. Verified green this session (52 examples; the lone failure, a supervisor-unassign
   `:js` example, is a load-only Selenium flake that passes 3/3 in isolation).
-- [~] Case contacts index + drafts **shipped** on casa_app. The main index keeps **filterrific**
+- [x] Case contacts index + drafts **shipped** on casa_app. The main index keeps **filterrific**
   (the `.filter-form` auto-submits on `.filter-input` change, targeting the `:case_contacts`
   turbo-frame) — its Bootstrap collapse was swapped for the `disclosure` controller (panel always
   in the DOM so rack_test finds "Other filters", but `hidden` unless `expand_filters?` so JS users
@@ -353,6 +352,21 @@ sign-in / password / invitation — were done in the foundation phase.)
   twins, stat tiles with correct totals, and zero / no-data / empty states) on a minimal
   `metrics` layout; retired the Chart.js + jQuery `display_app_metric.js`. Follow-ups (date-range filter, Stimulus hover, and the unused chart.js deps removal now shipped): a validated dark-mode
   palette.
+
+## Straggler pages (still on the Bootstrap `application` layout) — block decommission
+Found by auditing controllers not on casa_app / casa_auth / all_casa / metrics (Bootstrap markers
+present, zero casa_app markers). These reachable leaf pages were never in the phase plan and must
+migrate before `application.html.erb` + `application.scss` can be deleted.
+- [ ] `fund_requests#new` — the "New Fund Request" form (linked from the case-show More menu).
+- [ ] `casa_admins#index/new/edit` — the CASA-admin roster (Phase 4 did volunteers + supervisors,
+  not this third user table).
+- [ ] `other_duties#index/new/edit` — volunteer "other duties" logging (has system specs).
+- [ ] `notes#edit` — edit a case-contact note.
+- [ ] `case_assignments#index` — assignment listing.
+- [ ] `error#index` — error pages (404 / 422 / 500).
+
+_Data-only actions on the default layout render no HTML and need no migration: the `*_reports`
+CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*` endpoints._
 
 ## Cross-cutting / infrastructure
 - [ ] Finish the sentence-case pass on interactive copy that is shared across pages —
