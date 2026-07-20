@@ -16,7 +16,7 @@ RSpec.describe "Users::InvitationsController", type: :request do
         get accept_user_invitation_path(invitation_token: invitation_token)
 
         expect(response).to have_http_status(:success)
-        expect(response.body).to include("Set my password")
+        expect(response.body).to include("Activate account")
       end
 
       it "sets the invitation_token on the resource" do

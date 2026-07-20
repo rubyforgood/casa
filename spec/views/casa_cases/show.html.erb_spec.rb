@@ -55,14 +55,14 @@ RSpec.describe "casa_cases/show", type: :view do
   context "when there is a placement" do
     it "renders casa case with placements" do
       casa_case = create(:casa_case, case_number: "111")
-      create(:placement, casa_case: casa_case, placement_started_at: Date.new(2023, 5, 6))
+      placement = create(:placement, casa_case: casa_case, placement_started_at: Date.new(2023, 5, 6))
 
       assign(:casa_case, casa_case)
       render
 
       expect(rendered).to match("111")
-      expect(rendered).to match("Current Placement:")
-      expect(rendered).to match(/Placement Type/)
+      expect(rendered).to match("Current placement")
+      expect(rendered).to include(placement.placement_type.name)
       expect(rendered).to match("Placed since: May 6, 2023")
       expect(rendered).to match("See All Placements")
     end
@@ -77,7 +77,7 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match(casa_case.case_number)
-      expect(rendered).to have_content("Current Placement:")
+      expect(rendered).to have_content("Current placement")
       expect(rendered).to have_content("Unknown")
       expect(rendered).to have_content("See All Placements")
     end
@@ -89,7 +89,7 @@ RSpec.describe "casa_cases/show", type: :view do
       render
 
       expect(rendered).to match(casa_case.case_number)
-      expect(rendered).not_to have_content("Current Placement:")
+      expect(rendered).not_to have_content("Current placement")
       expect(rendered).not_to have_content("Unknown")
       expect(rendered).not_to have_content("See All Placements")
     end

@@ -499,13 +499,18 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
     (queue in dead-code): `layouts/_sidebar`, `_header`, `_all_casa_admin_sidebar`; every Bootstrap
     SCSS partial under `app/assets/stylesheets/` (`shared/*`, `base/*`, bootstrap overrides); and the
     legacy icon-font assets the deleted CSS referenced.
-- [ ] **Refresh stale view/request specs (pre-existing, predate this migration work).** 18 examples
-  are red on the branch because view specs still assert old Bootstrap markup for pages migrated to
-  casa_app/casa_auth in earlier phases (view specs don't use layouts, so unrelated to the layout
-  deletion; confirmed failing at the pre-session base commit): `casa_cases/{index,new,edit,show}`,
-  `volunteers/index`, `devise/{passwords/new,invitations/edit}` view specs, and
-  `users/invitations_spec` (accept form). Update their assertions to the casa_app/casa_auth markup
-  (as done for `casa_admins/edit`) or retire them per ADR 0006 (system specs preferred).
+- [x] **Refresh stale view/request specs — DONE.** The pre-existing reds asserted old Bootstrap
+  markup for pages migrated in earlier phases. Fixed: `casa_cases/index` (stub the `_filter` +
+  `shared/pagination` partials the bespoke view now renders + assign `@pagy`), `casa_cases/new` +
+  `casa_cases/show` (sentence-cased labels — "Youth's birth month and year", "Assign a volunteer",
+  "Current placement"; `have_content` for the HTML-escaped apostrophe), `casa_cases/edit` (added the
+  `#volunteer-assignment` id back to the `_volunteer_assignment` twin), and the devise
+  `passwords/new` + `invitations/edit` view specs + `users/invitations` request spec ("Reset your
+  password", "Set your password", "Confirm password", "Activate account"). Retired
+  `spec/views/volunteers/index.html.erb_spec.rb` per ADR 0006 — the bespoke index is coupled to
+  `VolunteerDatatable`'s computed `supervisor_name`, so a view spec feeding plain records can't
+  render it, and `spec/system/volunteers/index_spec.rb` already covers the roster + supervisor
+  column (incl. the inactive-supervisor case) + New-volunteer nav.
 
 ## Stakeholder / product questions (confirm before finalizing)
 - [ ] **Hearing type & judge on case lists.** The old cases index (and `supervisors/index`)
