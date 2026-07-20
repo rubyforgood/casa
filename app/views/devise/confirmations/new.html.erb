@@ -1,0 +1,34 @@
+<% content_for :page_title, "Resend confirmation instructions" %>
+<%# Resend-confirmation form on the casa_auth shell (Users::ConfirmationsController /
+    all-CASA default). Mirrors devise/passwords/new; resource-agnostic. %>
+<% field = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Resend confirmation instructions</h2>
+  <p class="mt-2 text-sm text-slate-500">Enter your email and we&rsquo;ll send a new confirmation link.</p>
+</div>
+
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="mb-5 rounded-lg border px-4 py-3 text-sm <%= (type.to_s == "notice") ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+<% end %>
+
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: resource, as: resource_name, url: confirmation_path(resource_name), html: {method: :post}, class: "space-y-5") do |f| %>
+  <div>
+    <%= f.label :email, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: field %>
+  </div>
+  <%= f.submit "Resend confirmation instructions", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
+
+<p class="mt-8 text-center text-sm text-slate-500">
+  <%= link_to "\u2190 Back to sign in", new_session_path(resource_name), class: "font-medium text-brand-600 hover:text-brand-700" %>
+</p>

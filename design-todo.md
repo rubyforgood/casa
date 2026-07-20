@@ -464,24 +464,25 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   so org customizations are left alone; associations are by id so contacts are unaffected;
   **guard the per-org name-uniqueness edge case** (skip a rename if the sentence-case name
   already exists in that org). New orgs already seed the new names.
-- [~] Decommission the Bootstrap `application` layout + `application.scss`.
-  - [x] **Deleted `layouts/application.html.erb`** (+ its view spec). Verified safe: no web
-    controller renders an HTML page on it (remaining default-layout controllers are data-only —
-    CSV/XLSX reports, `preference_sets`, `api/*`, `android_app_associations`, AJAX sub-resources
-    with no `.html.erb`; the only application-layout `.html.erb` templates are mailer views, on the
-    `mailer` layout). Devise's default controllers resolve to `layouts/devise`, not `application`;
-    Rails renders layout-less if an implicit `application` layout is ever missing. Left
-    `ApplicationController`'s layout implicit (no explicit default) — setting `layout "casa_app"`
-    would be inherited by `Devise::*` controllers (logged-out) and break them.
-  - [ ] **`application.scss` is still blocked** — `layouts/devise.html.erb` loads it, and that
-    layout is the live shell for Devise's **default** controllers (`Devise::ConfirmationsController`
-    — `User` is `:confirmable`, `/users/confirmation/new` is routed + linked; plus any all-CASA
-    devise defaults). Retire it by migrating those Devise edge pages to `casa_auth` (custom
-    `Users::ConfirmationsController` + a styled `devise/confirmations/new`), then delete
-    `devise.html.erb` + `application.scss` + the legacy `/assets/css/*` (lineicons / mdi / main).
-  - Note: `application.js` stays regardless — `casa_app` still loads it (`javascript_include_tag
-    "application"`). And `layouts/_sidebar` + `_header` (Bootstrap) are now dead (only
-    application.html.erb rendered them) — queue in dead-code.
+- [x] **Decommission the Bootstrap `application` layout + `application.scss` — DONE.**
+  - Deleted `layouts/application.html.erb` (+ its view spec), `layouts/devise.html.erb`,
+    `app/assets/stylesheets/application.scss`, and the legacy
+    `public/assets/css/{lineicons,materialdesignicons.min,main}.css`.
+  - Moved Devise's last un-customized default controllers onto `casa_auth` so nothing needs
+    `layouts/devise`: thin `layout "casa_auth"` subclasses `Users::ConfirmationsController`,
+    `AllCasaAdmins::PasswordsController`, `AllCasaAdmins::InvitationsController` (routed via
+    `devise_for`). Styled `devise/confirmations/new` and rebuilt `devise/invitations/new` on
+    casa_auth — this also **fixes** the all-CASA password/invite pages, which had been rendering
+    Tailwind views on the CSS-less Bootstrap devise shell (unstyled).
+  - Rewired the build off Bootstrap SCSS: dropped `build:css` / `build:css:dev` (package.json) +
+    the `css:` `Procfile.dev` process; pointed `bin/setup` + `bin/update` + the assets git hook at
+    `build:tailwind`.
+  - Verified: all 6 devise HTML pages render 200 on casa_auth; auth specs green; full
+    request+view sweep adds **no** new failures.
+  - `application.js` stays — `casa_app` + `casa_auth` still load it. Now-orphaned by these deletions
+    (queue in dead-code): `layouts/_sidebar`, `_header`, `_all_casa_admin_sidebar`; every Bootstrap
+    SCSS partial under `app/assets/stylesheets/` (`shared/*`, `base/*`, bootstrap overrides); and the
+    legacy icon-font assets the deleted CSS referenced.
 - [ ] **Refresh stale view/request specs (pre-existing, predate this migration work).** 18 examples
   are red on the branch because view specs still assert old Bootstrap markup for pages migrated to
   casa_app/casa_auth in earlier phases (view specs don't use layouts, so unrelated to the layout

@@ -8,8 +8,6 @@
     "toc": "markdown-toc -i README.md",
     "build": "./bin/asset_bundling_scripts/build_js.js",
     "build:dev": "./bin/asset_bundling_scripts/build_js.js --watch",
-    "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules",
-    "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch",
     "build:tailwind": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --minify",
     "build:tailwind:dev": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --watch"
   },

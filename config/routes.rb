@@ -4,8 +4,8 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
 
-  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
-  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords", invitations: "users/invitations"}
+  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions", passwords: "all_casa_admins/passwords", invitations: "all_casa_admins/invitations"}
+  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords", invitations: "users/invitations", confirmations: "users/confirmations"}
   authenticate :all_casa_admins do
     mount PgHero::Engine, at: "pg_dashboard", constraints: lambda { |request|
       admin = request.env["warden"].user(:all_casa_admin)

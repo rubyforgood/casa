@@ -33,7 +33,7 @@
    design system. tom-select.css above provides the structure; these rules
    theme it to match our inputs (slate border, rounded-lg, brand focus +
    brand-50 pills). Only loaded on casa_app; Bootstrap pages keep the
-   tom-select.bootstrap5 theme from application.scss.
+   tom-select.bootstrap5 theme from the retired Bootstrap bundle.
 ------------------------------------------------------------------ */
 .ts-wrapper { font-size: 0.875rem; position: relative; width: 100%; }
 .ts-control {

@@ -1,23 +1,27 @@
-<div class="row p-3">
-  <h2 class="mb-2">Send invitation</h2>
+<% content_for :page_title, "Send an invitation" %>
+<%# Devise's generic send-invitation form on the casa_auth shell. Vestigial (the app invites via
+    its own new-volunteer/supervisor/admin flows), but kept styled + resource-agnostic. %>
+<% field = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
-  <%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}) do |f| %>
-    <%= render "/shared/error_messages", resource: resource %>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Send an invitation</h2>
+  <p class="mt-2 text-sm text-slate-500">They&rsquo;ll get an email invitation to set a password and join.</p>
+</div>
 
-    <% resource.class.invite_key_fields.each do |field| -%>
-      <div class="input-style-1">
-        <%= f.label field %>
-        <%= f.text_field field, placeholder: field %>
-      </div>
-    <% end -%>
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
 
-    <div class="actions mt-1">
-      <%= button_tag(
-        type: "submit",
-        class: "main-btn primary-btn btn-hover btn-sm"
-      ) do %>
-        <i class="lni lni-telegram-original mr-10"></i>Send an invitation
-      <% end %>
+<%= form_with(model: resource, as: resource_name, url: invitation_path(resource_name), html: {method: :post}, class: "space-y-5") do |f| %>
+  <% resource.class.invite_key_fields.each do |fieldname| %>
+    <div>
+      <%= f.label fieldname, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= f.text_field fieldname, placeholder: fieldname.to_s, class: field %>
     </div>
   <% end %>
-</div>
+  <%= f.submit "Send an invitation", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
