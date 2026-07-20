@@ -58,15 +58,15 @@
 
             <div class="ml-auto flex flex-wrap items-center gap-2">
               <% if policy(assignment).unassign? %>
-                <%= button_to "Unassign Volunteer", unassign_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:danger_outline) %>
+                <%= button_to "Unassign volunteer", unassign_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:danger_outline) %>
               <% else %>
                 <% if !volunteer.active? && policy(volunteer).activate? %>
-                  <%= button_to "Activate Volunteer", activate_volunteer_path(volunteer, redirect_to_path: "casa_case", casa_case_id: @casa_case.id), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                  <%= button_to "Activate volunteer", activate_volunteer_path(volunteer, redirect_to_path: "casa_case", casa_case_id: @casa_case.id), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
                 <% end %>
                 <% if assignment.hide_old_contacts? %>
-                  <%= button_to "Show Old Contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                  <%= button_to "Show old contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
                 <% else %>
-                  <%= button_to "Hide Old Contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                  <%= button_to "Hide old contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
                 <% end %>
               <% end %>
             </div>

@@ -32,7 +32,7 @@ RSpec.describe "court_dates/edit", type: :system do
     end
 
     it "adds a standard court order", :js do
-      select("Family therapy", from: "Court Order Type")
+      select("Family therapy", from: "Court order type")
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last

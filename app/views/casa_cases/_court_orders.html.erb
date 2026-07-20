@@ -58,7 +58,7 @@
 
   <div class="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
     <div class="min-w-0 flex-1">
-      <%= label_tag :selectedCourtOrder, "Court Order Type", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+      <%= label_tag :selectedCourtOrder, "Court order type", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <div class="relative">
         <%= select_tag :selectedCourtOrder, options_for_select(CaseCourtOrder.court_order_options),
               include_blank: "Create custom court order", data: {court_order_form_target: "selectedCourtOrder"},

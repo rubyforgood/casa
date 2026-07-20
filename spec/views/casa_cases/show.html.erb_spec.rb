@@ -64,7 +64,7 @@ RSpec.describe "casa_cases/show", type: :view do
       expect(rendered).to match("Current placement")
       expect(rendered).to include(placement.placement_type.name)
       expect(rendered).to match("Placed since: May 6, 2023")
-      expect(rendered).to match("See All Placements")
+      expect(rendered).to match("See all placements")
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe "casa_cases/show", type: :view do
       expect(rendered).to match(casa_case.case_number)
       expect(rendered).to have_content("Current placement")
       expect(rendered).to have_content("Unknown")
-      expect(rendered).to have_content("See All Placements")
+      expect(rendered).to have_content("See all placements")
     end
 
     it "renders nothing about placements when org has no placement types" do
@@ -91,7 +91,7 @@ RSpec.describe "casa_cases/show", type: :view do
       expect(rendered).to match(casa_case.case_number)
       expect(rendered).not_to have_content("Current placement")
       expect(rendered).not_to have_content("Unknown")
-      expect(rendered).not_to have_content("See All Placements")
+      expect(rendered).not_to have_content("See all placements")
     end
   end
 end

@@ -320,8 +320,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           expect(casa_case.case_assignments.count).to eq 1
 
-          unassign_button = page.find("button", text: "Unassign Volunteer")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
           assign_badge = page.find("[data-test='assignment-status']")
           expect(assign_badge.text).to eq "Assigned"
@@ -340,10 +340,10 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when a volunteer is unassigned from a case" do
         it "marks the volunteer as unassigned and shows assignment start/end dates", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button", text: "Unassign Volunteer")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
-          click_on "Unassign Volunteer"
+          click_on "Unassign volunteer"
 
           assign_badge = page.find("[data-test='assignment-status']")
           expect(assign_badge.text).to eq "Unassigned"
@@ -363,10 +363,10 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         it "unassigns volunteer", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button", text: "Unassign Volunteer")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
-          click_on "Unassign Volunteer"
+          click_on "Unassign volunteer"
 
           assign_badge = page.find("[data-test='assignment-status']")
           expect(assign_badge.text).to eq "Unassigned"
@@ -553,7 +553,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "adds a standard court order", :js do
       visit edit_casa_case_path(casa_case)
-      select("Family therapy", from: "Court Order Type")
+      select("Family therapy", from: "Court order type")
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last
