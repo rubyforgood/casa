@@ -3,21 +3,16 @@ require "objspace"
 class HealthController < ApplicationController
   skip_before_action :authenticate_user!
   skip_after_action :verify_authorized
-  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
+  skip_after_action :verify_policy_scoped
   before_action :verify_token_for_old_object_stats, only: [:old_objects]
 
-  ALLOWED_RANGES = [3, 6, 12].freeze
-
+  # Public ops health check. HTML renders a minimal, self-contained status page; JSON
+  # returns the latest deploy time (consumed by uptime monitors). Activity charts have
+  # moved to the authenticated all-CASA "Metrics" console and the per-chapter "Analytics"
+  # page (see MetricsReport), so this public endpoint exposes no cross-org data.
   def index
     respond_to do |format|
-      format.html do
-        @range = ALLOWED_RANGES.include?(params[:range].to_i) ? params[:range].to_i : 12
-        @case_contacts = monthly_case_contacts(@range)
-        @active_users = monthly_active_users(@range)
-        @contact_heatmap = contact_creation_heatmap(@range)
-        render :index, layout: "metrics"
-      end
-
+      format.html { render :index, layout: false }
       format.json { render json: {latest_deploy_time: Health.instance.latest_deploy_time} }
     end
   end
@@ -33,115 +28,7 @@ class HealthController < ApplicationController
       content_type: "application/json"
   end
 
-  def case_contacts_creation_times_in_last_week
-    case_contacts_created_in_last_week = CaseContact.where("created_at >= ?", 1.week.ago)
-
-    unix_timestamps_of_case_contacts_created_in_last_week = case_contacts_created_in_last_week.pluck(:created_at).map { |creation_time| creation_time.to_i }
-
-    render json: {timestamps: unix_timestamps_of_case_contacts_created_in_last_week}
-  end
-
-  def monthly_line_graph_data
-    first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month }
-
-    if first_day_of_last_12_months.size > 12
-      first_day_of_last_12_months = first_day_of_last_12_months[1..12]
-    end
-
-    monthly_counts_of_case_contacts_created = CaseContact.group_by_month(:created_at, last: 12).count
-    monthly_counts_of_case_contacts_with_notes_created = CaseContact.left_outer_joins(:contact_topic_answers).where("case_contacts.notes != '' OR contact_topic_answers.value != ''").select(:id).distinct.group_by_month(:created_at, last: 12).count
-    monthly_counts_of_users_who_have_created_case_contacts = CaseContact.select(:creator_id).distinct.group_by_month(:created_at, last: 12).count
-
-    monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
-      [
-        month.strftime("%b %Y"),
-        monthly_counts_of_case_contacts_created[month],
-        monthly_counts_of_case_contacts_with_notes_created[month],
-        monthly_counts_of_users_who_have_created_case_contacts[month]
-      ]
-    end
-
-    render json: monthly_line_graph_combined_data
-  end
-
-  def monthly_unique_users_graph_data
-    first_day_of_last_12_months = (12.months.ago.to_date..Date.current).select { |date| date.day == 1 }.map { |date| date.beginning_of_month.strftime("%b %Y") }
-
-    if first_day_of_last_12_months.size > 12
-      first_day_of_last_12_months = first_day_of_last_12_months[1..12]
-    end
-
-    monthly_counts_of_volunteers = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Volunteer"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    monthly_counts_of_supervisors = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "Supervisor"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    monthly_counts_of_casa_admins = LoginActivity.joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'").where(users: {type: "CasaAdmin"}, success: true).group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    monthly_logged_counts_of_volunteers = CaseContact.joins(supervisor_volunteer: :volunteer).group_by_month(:created_at, format: "%b %Y").distinct.count(:creator_id)
-
-    monthly_line_graph_combined_data = first_day_of_last_12_months.map do |month|
-      [
-        month,
-        monthly_counts_of_volunteers[month] || 0,
-        monthly_counts_of_supervisors[month] || 0,
-        monthly_counts_of_casa_admins[month] || 0,
-        monthly_logged_counts_of_volunteers[month] || 0
-      ]
-    end
-
-    render json: monthly_line_graph_combined_data
-  end
-
   private
-
-  def last_month_starts(months_back)
-    (0..months_back - 1).map { |i| (months_back - 1 - i).months.ago.beginning_of_month }
-  end
-
-  def monthly_case_contacts(months_back)
-    months = last_month_starts(months_back)
-    pick = ->(counts) { months.map { |m| counts.find { |k, _| k.year == m.year && k.month == m.month }&.last || 0 } }
-    total = CaseContact.group_by_month(:created_at, last: months_back).count
-    with_notes = CaseContact.where.not(notes: [nil, ""]).group_by_month(:created_at, last: months_back).count
-    loggers = CaseContact.group_by_month(:created_at, last: months_back).distinct.count(:creator_id)
-    {
-      labels: months.map { |m| m.strftime("%b") },
-      series: [
-        {name: "Total contacts", data: pick.call(total)},
-        {name: "With notes", data: pick.call(with_notes)},
-        {name: "Unique loggers", data: pick.call(loggers)}
-      ],
-      distinct_loggers: CaseContact.where(created_at: months.first..).distinct.count(:creator_id)
-    }
-  end
-
-  def monthly_active_users(months_back)
-    months = last_month_starts(months_back)
-    keys = months.map { |m| m.strftime("%b %Y") }
-    by_type = ->(type) {
-      LoginActivity
-        .joins("INNER JOIN users ON users.id = login_activities.user_id AND login_activities.user_type = 'User'")
-        .where(users: {type: type}, success: true)
-        .group_by_month(:created_at, format: "%b %Y").distinct.count(:user_id)
-    }
-    volunteers = by_type.call("Volunteer")
-    supervisors = by_type.call("Supervisor")
-    admins = by_type.call("CasaAdmin")
-    logged = CaseContact.joins(supervisor_volunteer: :volunteer).group_by_month(:created_at, format: "%b %Y").distinct.count(:creator_id)
-    {
-      labels: months.map { |m| m.strftime("%b") },
-      series: [
-        {name: "Volunteers", data: keys.map { |k| volunteers[k] || 0 }},
-        {name: "Supervisors", data: keys.map { |k| supervisors[k] || 0 }},
-        {name: "Admins", data: keys.map { |k| admins[k] || 0 }},
-        {name: "Active loggers", data: keys.map { |k| logged[k] || 0 }}
-      ]
-    }
-  end
-
-  def contact_creation_heatmap(months_back)
-    grid = CaseContact.where(created_at: months_back.months.ago.beginning_of_month..)
-      .group("EXTRACT(DOW FROM created_at)::int")
-      .group("EXTRACT(HOUR FROM created_at)::int").count
-    {grid: grid, max: grid.values.max || 0}
-  end
 
   def each_old_object
     ObjectSpace.each_object do |obj|

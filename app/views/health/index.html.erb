@@ -1,55 +1,26 @@
-<div class="mx-auto max-w-4xl px-4 py-8 sm:px-6">
-  <h1 class="text-2xl font-bold tracking-tight text-slate-900">Health</h1>
-  <p class="mt-1 text-sm text-slate-500">Chapter activity and data quality. Hover a chart for details.</p>
-  <%= metric_range_filter(@range) %>
-
-  <% cc = @case_contacts %>
-  <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-    <h2 class="text-base font-bold text-slate-900">Case contacts logged</h2>
-    <p class="mb-4 mt-1.5 text-sm text-slate-500">Monthly volume, how many carried notes, and how many distinct volunteers logged them.</p>
-    <% if cc[:series].first[:data].sum.zero? %>
-      <%= metric_empty_state("No contacts logged in this range", "Once volunteers log case contacts, the trend and totals appear here.") %>
-    <% else %>
-      <%= metric_tiles([
-            {value: cc[:series][0][:data].sum, label: "Total contacts", sub: "last #{@range} months"},
-            {value: cc[:series][1][:data].sum, label: "With notes", sub: "last #{@range} months"},
-            {value: cc[:distinct_loggers], label: "Unique loggers", sub: "distinct, #{@range} months"}
-          ]) %>
-      <div class="mt-4">
-        <%= metric_line_chart("cc", cc[:labels], cc[:series],
-              title: "Case contacts logged per month",
-              desc: "Line chart of total case contacts, contacts with notes, and unique loggers over the last 12 months.") %>
-      </div>
-      <%= metric_legend(cc[:series]) %>
-      <%= metric_data_table(cc[:labels], cc[:series],
-            caption: "Case contacts logged per month",
-            foot: {label: "#{@range}-month total", cells: [cc[:series][0][:data].sum, cc[:series][1][:data].sum, "#{cc[:distinct_loggers]} †"]},
-            footnote: "† Unique loggers is the distinct number of volunteers over the whole period, not the sum of the monthly counts.") %>
-    <% end %>
-  </section>
-
-  <section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-    <h2 class="text-base font-bold text-slate-900">When contacts are logged</h2>
-    <p class="mb-4 mt-1.5 text-sm text-slate-500">Contacts by day of week and hour of day. Darker cells mean more activity.</p>
-    <% if @contact_heatmap[:max].zero? %>
-      <%= metric_empty_state("No contacts logged in this range", "Once volunteers log case contacts, their timing appears here.") %>
-    <% else %>
-      <%= metric_heatmap(@contact_heatmap[:grid], @contact_heatmap[:max]) %>
-    <% end %>
-  </section>
-
-  <% au = @active_users %>
-  <section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-    <h2 class="text-base font-bold text-slate-900">Monthly active users</h2>
-    <p class="mb-4 mt-1.5 text-sm text-slate-500">Distinct volunteers, supervisors, and admins who signed in each month.</p>
-    <% if au[:series].sum { |ser| ser[:data].sum }.zero? %>
-      <%= metric_empty_state("No sign-in activity in this range", "Active-user counts appear once volunteers, supervisors, or admins sign in during the selected range.") %>
-    <% else %>
-      <%= metric_line_chart("au", au[:labels], au[:series],
-            title: "Monthly active users",
-            desc: "Line chart of active volunteers, supervisors, admins, and loggers per month.") %>
-      <%= metric_legend(au[:series]) %>
-      <%= metric_data_table(au[:labels], au[:series], caption: "Monthly active users") %>
-    <% end %>
-  </section>
-</div>
+<%# Minimal, self-contained ops status page (rendered with layout: false). Deliberately
+    inlines its styles so it still renders if the asset build is broken -- this is a health
+    check. No app chrome, no nav, no cross-org data. %>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>CASA service status</title>
+    <style>
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #f8fafc; color: #0f172a; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+      main { text-align: center; padding: 2rem 2.5rem; }
+      h1 { font-size: 1.25rem; margin: 0 0 .5rem; font-weight: 700; }
+      p { margin: 0; color: #475569; font-size: .875rem; }
+      .dot { display: inline-block; width: .625rem; height: .625rem; border-radius: 9999px; background: #059669; margin-right: .5rem; vertical-align: middle; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1><span class="dot" aria-hidden="true"></span>CASA is running</h1>
+      <% if (deploy = Health.instance.latest_deploy_time) %>
+        <p>Latest deploy <%= time_ago_in_words(deploy) %> ago (<%= deploy.utc.iso8601 %>)</p>
+      <% end %>
+    </main>
+  </body>
+</html>

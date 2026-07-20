@@ -1,4 +1,4 @@
-module HealthHelper
+module MetricsHelper
   SERIES_COLORS = %w[#4f46e5 #059669 #d97706 #e11d48].freeze
   SERIES_DASH = ["", "7 4", "1.5 4", "10 4 1.5 4"].freeze
   SERIES_SHAPE = %i[circle square triangle diamond].freeze
@@ -40,13 +40,13 @@ module HealthHelper
     )
   end
 
-  def metric_range_filter(active)
+  def metric_range_filter(active, base_path)
     presets = {3 => "Last 3 months", 6 => "Last 6 months", 12 => "Last 12 months"}
     links = presets.map do |months, label|
       current = (months == active)
       classes = "rounded-lg border px-3 py-1.5 text-[13px] font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 " +
         (current ? "border-brand-200 bg-brand-50 text-brand-700" : "border-slate-200 bg-white text-slate-600 hover:bg-slate-50")
-      link_to(label, health_index_path(range: months), class: classes, "aria-current": (current ? "page" : nil))
+      link_to(label, "#{base_path}?range=#{months}", class: classes, "aria-current": (current ? "page" : nil))
     end
     tag.div(safe_join([tag.span("Range", class: "mr-1 text-[13px] text-slate-500")] + links),
       class: "mb-5 flex flex-wrap items-center gap-2", role: "group", "aria-label": "Date range")

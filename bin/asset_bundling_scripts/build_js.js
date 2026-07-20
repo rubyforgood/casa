@@ -28,7 +28,7 @@ const watchingConsoleLogger = [{
 
 async function main () {
   const context = await esbuild.context({
-    entryPoints: ['app/javascript/application.js', 'app/javascript/all_casa_admin.js', 'app/javascript/metrics.js'],
+    entryPoints: ['app/javascript/application.js', 'app/javascript/all_casa_admin.js'],
     outdir: 'app/assets/builds',
     bundle: true,
     plugins: watchingConsoleLogger

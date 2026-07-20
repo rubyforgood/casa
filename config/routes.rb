@@ -38,10 +38,7 @@ Rails.application.routes.draw do
 
   resources :health, only: %i[index] do
     collection do
-      get :case_contacts_creation_times_in_last_week
       get :old_objects
-      get :monthly_line_graph_data
-      get :monthly_unique_users_graph_data
     end
   end
 
@@ -202,6 +199,7 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+    resources :metrics, only: :index
   end
 
   resources :all_casa_admins, only: [:new, :create] do

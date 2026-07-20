@@ -26,6 +26,7 @@
       <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
         <% nav_items = [
           ["CASA organizations", "bi-buildings", authenticated_all_casa_admin_root_path, "organizations"],
+          ["Metrics", "bi-graph-up", all_casa_admins_metrics_path, "metrics"],
           ["Patch notes", "bi-journal-text", all_casa_admins_patch_notes_path, "patch_notes"],
           ["Edit profile", "bi-person-gear", edit_all_casa_admins_path, "profile"],
           ["Feature flags", "bi-flag", "/flipper", "flipper"],
