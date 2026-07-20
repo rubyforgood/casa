@@ -450,27 +450,16 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   DataTable stack now that its index is a bespoke table — `src/reimbursements.js` (+ its
   `application.js` require), the `reimbursements#datatable` action, `ReimbursementDatatable`, and
   the `with_datatable` route concern on `resources :reimbursements`).
-- [~] **Sentence-case sweep (in progress).** Proper nouns/acronyms (CASA, IEP, Twilio) excepted;
-  never force-case free-form org data. (See the sentence-case scan rule in `design.md`.)
-  - [x] Batch 1 — case-detail fact labels: casa_cases show/new/index + reports/index (canonical
-    "Transition-aged youth").
-  - [x] Batch 2 — court_dates pages (headings + fact labels + form/action buttons).
-  - [x] Batch 3 — edit-profile shared labels (see the item above).
-  - [x] Batch 4a — casa_admins / other_duties / notes (this session's migrated pages).
-  - [ ] Batch 4b — **volunteers/edit + supervisors/edit** and their partials (`_manage_active`,
-    `_manage_volunteers`/`_volunteer_assignment`, `_manage_cases`, `_manage_supervisor`, `_notes`):
-    Submit, Assign Case/Volunteer, Select a Volunteer, Current Supervisor:, Currently Assigned To,
-    Deactivate Supervisor, Resend Invitation, Change to Admin, Save Note, Make/Resolve Reminder,
-    "Enable Twilio To Send Reactivation Alert (SMS)", etc. Heavy `:js`/spec coupling (the 745-line
-    volunteer-edit spec).
-  - [ ] Batch 4c — learning_hours (`_form`: "Learning Hours Title", "Type of Learning", ...) +
-    the simple settings CRUD forms (`shared/_settings_form` model titles; learning_hour_types,
-    contact_types, casa_org labels like "Enable Twilio").
-  - [ ] Batch 4d — case_contacts index + the multi-step form (`form/details`): field/action Title
-    Case labels, "New Case Contact".
-  - [ ] cases#index action buttons ("New Case", "Case Groups", "New Bulk Court Date") + any other
-    Title Case CTA labels surfaced by a final `grep`. (Skip `layouts/_sidebar` — dead, see
-    dead-code.)
+- [x] **Sentence-case sweep — DONE.** Proper nouns/acronyms (CASA, IEP, Twilio) kept; free-form org
+  data untouched. Done in verified batches, each with its coupled system/view/request specs updated
+  in lockstep (incl. specs that matched old labels by case-sensitive substring, e.g.
+  `fill_in "Court Date"` / `"Password Confirmation"`): 1 case-detail labels · 2 court_dates ·
+  3 edit-profile · 4a casa_admins/other_duties/notes · 4b volunteer/supervisor edit + manage
+  partials · 4c learning hours + ~12 settings CRUD forms · 4d case-contact form + CTAs + dialog
+  titles · 4e/4f remaining headings/buttons/field labels. **Left as data (not headings):** CSV/XLSX
+  export column headers, the emancipation DOCX filename/template, model validation messages, mailer
+  copy, and the notifier "Emancipation Checklist Reminder". Dead Bootstrap shared partials skipped
+  (see dead-code).
 - [ ] **Contact-type default rename (guarded after-party, do once pages are migrated).** For
   existing orgs, rename the contact types + the "Social Services" group whose names **exactly**
   match the old Title Case defaults to the new sentence-case defaults ("Foster Parent" ->
