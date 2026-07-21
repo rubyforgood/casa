@@ -51,17 +51,31 @@
           <div class="grid gap-5 sm:grid-cols-2">
             <%# RELEVANT CASES %>
             <div>
-              <label class="<%= label_class %>" for="case_contact_draft_case_ids">Relevant case(s) <%= req %></label>
-              <div id="draft-case-id-selector">
-                <%= render(Form::MultipleSelectComponent.new(
-                  form: form,
-                  name: :draft_case_ids,
-                  options: @casa_cases.decorate.map { |casa_case| casa_case.hash_for_multi_select },
-                  selected_items: @case_contact.draft_case_ids,
-                  render_option_subtext: current_user.supervisor?,
-                  placeholder_term: "case(s)"
-                )) %>
-              </div>
+              <% if @case_contact.active? %>
+                <%# Editing an existing contact: the case it belongs to is fixed context, shown
+                    read-only so the required case can't be dismissed. On edit @casa_cases is already
+                    scoped to this contact's case (form_controller), and draft_case_ids is submitted
+                    via hidden fields. New contacts still pick case(s) with the multiselect below. %>
+                <span class="<%= label_class %>">Relevant case(s)</span>
+                <div id="draft-case-id-selector" class="flex flex-wrap gap-2">
+                  <% @casa_cases.each do |casa_case| %>
+                    <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700"><i class="bi bi-folder2 text-slate-500" aria-hidden="true"></i> <%= casa_case.case_number %></span>
+                    <%= hidden_field_tag "case_contact[draft_case_ids][]", casa_case.id, id: nil %>
+                  <% end %>
+                </div>
+              <% else %>
+                <label class="<%= label_class %>" for="case_contact_draft_case_ids">Relevant case(s) <%= req %></label>
+                <div id="draft-case-id-selector">
+                  <%= render(Form::MultipleSelectComponent.new(
+                    form: form,
+                    name: :draft_case_ids,
+                    options: @casa_cases.decorate.map { |casa_case| casa_case.hash_for_multi_select },
+                    selected_items: @case_contact.draft_case_ids,
+                    render_option_subtext: current_user.supervisor?,
+                    placeholder_term: "case(s)"
+                  )) %>
+                </div>
+              <% end %>
             </div>
 
             <%# DATE %>

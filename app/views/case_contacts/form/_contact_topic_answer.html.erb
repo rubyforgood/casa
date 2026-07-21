@@ -3,12 +3,16 @@
     data-new-record/child-index, and the hidden id/_destroy fields. The select keeps
     .contact-topic-id-select + the case-contact-form onContactTopicSelect action/target; the
     textarea keeps .contact-topic-answer-input + autosave. Native-select chevron per design.md. %>
-<div class="nested-form-wrapper rounded-xl border border-slate-200 bg-slate-50 p-4"
+<div class="nested-form-wrapper rounded-lg border border-slate-200 p-4"
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
-  <div class="grid gap-4 sm:grid-cols-2">
-    <div>
+  <%# Stacked, not two-column: the topic is a label for the note, so it sits on its own line
+      (with the row's remove control) and the discussion notes get the full width below -- the
+      substance of the entry, not a squeezed half-column. Remove is a ghost action (design.md:
+      ghost recedes for repeated-row actions); keep the "Delete" text + confirm hook. %>
+  <div class="flex items-end gap-3">
+    <div class="min-w-0 flex-1">
       <%= form.label :contact_topic_id, "Discussion topic", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <div class="relative">
         <%= form.select(:contact_topic_id,
@@ -23,22 +27,21 @@
         <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
       </div>
     </div>
-    <div>
-      <%= form.label :value, "Discussion notes", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-      <%= form.text_area(:value,
-        data: {action: "input->autosave#save"},
-        rows: 3,
-        class: "contact-topic-answer-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
-        placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
-      ) %>
-    </div>
-  </div>
-  <div class="mt-3 flex justify-end">
     <button type="button"
       data-action="casa-nested-form#confirmDestroyAndRemove"
-      class="<%= button_classes(:danger_outline) %>">
-      Delete
+      aria-label="Delete this discussion topic"
+      class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
+      <i class="bi bi-trash" aria-hidden="true"></i> Delete
     </button>
+  </div>
+  <div class="mt-3">
+    <%= form.label :value, "Discussion notes", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= form.text_area(:value,
+      data: {action: "input->autosave#save"},
+      rows: 4,
+      class: "contact-topic-answer-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
+      placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
+    ) %>
   </div>
   <%= form.hidden_field(:id, value: form.object.id) %>
   <%= form.hidden_field :_destroy %>

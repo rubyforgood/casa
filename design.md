@@ -281,6 +281,16 @@ relevant-case picking is `Form::MultipleSelectComponent` (TomSelect) and errors 
 `shared/_additional_expense_form`) are restyled in place. Duration is an inline Tailwind twin, like
 learning hours (`Form::HourMinuteDurationComponent` is now dead).
 
+**Relevant case(s) is read-only when editing an active contact** (`@case_contact.active?`): the
+model requires `draft_case_ids`, and on edit the picker only ever offered the one case the contact
+belongs to, so a removable multiselect there just lets the user dismiss a required, fixed parent.
+Render the case number(s) as static chips + hidden `draft_case_ids` fields on edit; keep the
+TomSelect multiselect only for new / draft contacts. In `_contact_topic_answer` the topic + note is
+**stacked**, not a 50/50 grid: the topic select (with a ghost `Delete` beside it) on top, the
+**full-width** notes textarea below — the note is the substance and gets the width. The per-row
+remove is a **ghost** action (recedes for a repeated row, design system), keeping the visible
+`Delete` text + `casa-nested-form#confirmDestroyAndRemove` hook the spec drives.
+
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`
 on the court-date pages, `shared/_edit_form` / `_invite_login` on the casa_admin edit page), do
