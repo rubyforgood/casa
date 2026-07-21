@@ -225,7 +225,7 @@
             </div>
           <% end %>
 
-          <small role="alert" class="block invisible text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
+          <small role="alert" class="hidden text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
         </section>
 
         <% org_driving_reimbursement = current_organization.show_driving_reimbursement %>
@@ -316,7 +316,7 @@
 
               <% if show_additional_expenses %>
                 <%# ADDITIONAL EXPENSES %>
-                <div id="contact-form-expenses" class="space-y-3"
+                <div id="contact-form-expenses"
                   data-controller="casa-nested-form"
                   data-casa-nested-form-route-value="/additional_expenses"
                   data-casa-nested-form-parent-name-value="case_contact"
@@ -337,12 +337,30 @@
 
                   <div data-casa-nested-form-target="target"></div>
 
-                  <div>
+                  <div class="mt-4">
                     <button type="button"
                       class="<%= button_classes(:secondary) %>"
                       data-action="casa-nested-form#addAndCreate">
                       <i class="bi bi-plus-lg" aria-hidden="true"></i> Add another expense
                     </button>
+                  </div>
+
+                  <%# Confirm before deleting a SAVED expense (casa-nested-form opens this via its
+                      dialog target with showModal(); brand-new unsaved rows are removed without a
+                      prompt). Same programmatic pattern as the court-order remove. %>
+                  <div data-controller="modal" class="contents">
+                    <dialog data-modal-target="dialog" data-casa-nested-form-target="confirmDialog"
+                            data-action="click->modal#backdropClose" aria-label="Remove this expense?"
+                            class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
+                      <%= render Dialog::HeaderComponent.new(title: "Remove this expense?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
+                      <%= render Dialog::BodyComponent.new do %>
+                        <p class="text-sm text-slate-600">This permanently removes the saved expense from this contact.</p>
+                      <% end %>
+                      <%= render Dialog::FooterComponent.new do %>
+                        <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+                        <button type="button" data-action="casa-nested-form#confirmRemove" class="<%= button_classes(:danger) %>">Remove expense</button>
+                      <% end %>
+                    </dialog>
                   </div>
                 </div>
               <% end %>
@@ -350,7 +368,7 @@
               <%# Autosave status lives inside the (hidden-until-requested) reimbursement form, so
                   the empty state is just the heading + checkbox and matches the other cards' padding
                   instead of reserving a blank line at the bottom. %>
-              <small role="alert" class="block invisible text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
+              <small role="alert" class="hidden text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
             </div>
           </section>
         <% end %>

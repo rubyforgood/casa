@@ -76,6 +76,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     within "#contact-form-expenses" do
       click_on "Delete", match: :first
     end
+    click_on "Remove expense" # design-system confirmation dialog
 
     expect(page).to have_field(class: "expense-amount-input", count: 2)
 
@@ -134,6 +135,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
       within "#contact-form-expenses" do
         click_on "Delete", match: :first
       end
+      click_on "Remove expense" # design-system confirmation dialog
 
       expect(page).to have_css(".expense-amount-input", count: 1)
       expect(page).to have_css(".expense-describe-input", count: 1)
@@ -145,6 +147,21 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
       expect(CaseContact.active.count).to eq(1)
       expect(AdditionalExpense.count).to eq(1)
       expect(case_contact.reload.additional_expenses.size).to eq(1)
+    end
+
+    it "keeps the expense when the removal is cancelled", :js do
+      subject
+
+      within "#contact-form-expenses" do
+        click_on "Delete", match: :first
+      end
+      click_on "Cancel"
+
+      expect(page).to have_css(".expense-amount-input", count: 2)
+
+      click_on "Submit"
+      expect(page).to have_text(/Case contact .* was successfully updated./)
+      expect(case_contact.reload.additional_expenses.size).to eq(2)
     end
 
     it "can add an expense", :js do

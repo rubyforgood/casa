@@ -306,7 +306,13 @@ per-row Delete: the dropdown was redundant against a fixed topic set, and **unch
 **Collapsible section padding:** a section's autosave status line goes *inside* the collapsible
 body it reports on (the Reimbursement form), so the collapsed/empty state is just heading +
 checkbox and doesn't reserve a blank `invisible` line at the bottom — that reserved line made the
-empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of dead space).
+empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of dead space). The
+autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
+an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
+**Nested expense rows** are `border-t border-slate-200 pt-4` dividers (not grey `bg-slate-50`
+cards) and reuse the standard input style so they match the rest of the form; the wrapper keeps
+`.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the
+design-system confirm dialog (new/unsaved rows remove without a prompt).
 **Structured mailing address:** captured as discrete parts (line 1 / line 2 / city / state / zip),
 not one free-text field. `Address` keeps `content` as the canonical composed one-line string every
 reader still uses (reimbursement table, mileage CSV, case-contact prefill): `Address.compose(...)`
@@ -611,8 +617,9 @@ Shipped instances: the court-report generator (form modal; submit posts via the
 `court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
 action posts via `button_to`, and the trigger, title, message, and labels are locals). A
 confirm can also be opened **programmatically** by a Stimulus controller instead of a trigger
-slot (the court-orders remove and copy-from-sibling, and the case-contact **topic-removal** confirm
-in `contact-topics` — replacing a `window.confirm()`): wrap the `<dialog>` in `<div data-controller="modal"
+slot (the court-orders remove and copy-from-sibling, and the case-contact **topic-removal**
+(`contact-topics`) and **additional-expense removal** (`casa-nested-form`) confirms — each replacing
+a `window.confirm()`): wrap the `<dialog>` in `<div data-controller="modal"
 class="contents">`, mark it `data-modal-target="dialog"` (for the centering rule) and a
 target of the owning controller, call `showModal()` from that controller's action, and wire
 the confirm button to the controller; Cancel / X / backdrop still use `modal#close`. A

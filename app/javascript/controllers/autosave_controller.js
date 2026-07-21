@@ -17,8 +17,9 @@ export default class extends Controller {
   static classes = ['goodAlert', 'badAlert']
 
   connect () {
-    this.visibleClass = 'visible'
-    this.hiddenClass = 'invisible'
+    // display (not visibility) so a hidden status line reserves no space at the card's bottom
+    this.visibleClass = 'block'
+    this.hiddenClass = 'hidden'
     this.save = debounce(this.save, this.delayValue).bind(this)
   }
 
