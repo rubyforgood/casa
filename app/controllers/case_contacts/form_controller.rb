@@ -62,12 +62,9 @@ class CaseContacts::FormController < ApplicationController
     contact_types = get_contact_types.decorate
     @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
-
-    if !@case_contact.active? && @case_contact.contact_topic_answers.empty?
-      if @contact_topics.present?
-        @case_contact.contact_topic_answers.create
-      end
-    end
+    # No pre-built blank answer: the Notes checklist lists every topic and creates an answer
+    # only when a topic is checked (contact-topics controller). A seeded blank row would just
+    # orphan a nil-topic answer.
   end
 
   def get_casa_cases

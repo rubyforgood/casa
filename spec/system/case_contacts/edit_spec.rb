@@ -103,7 +103,6 @@ RSpec.describe "case_contacts/edit", type: :system do
     )
     uncheck contact_types.first.name
     check contact_types.second.name
-    click_on "Add another discussion topic"
     answer_topic contact_topic.question, "Topic 1 Answer."
     fill_in_expenses_page(miles: 50, want_reimbursement: true, address: "123 Form St")
     click_on "Submit"

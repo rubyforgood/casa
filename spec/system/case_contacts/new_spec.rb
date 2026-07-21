@@ -156,12 +156,12 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:autosave_alert_div) { "#contact-form-notes" }
     let(:autosave_alert_css) { 'small[role="alert"]' }
 
-    it "does not show topic questions that are inactive or soft deleted in select" do
+    it "does not show topic questions that are inactive or soft deleted" do
       contact_topics
       subject
 
       within notes_section_selector do
-        expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic", "Select a discussion topic"])
+        expect(page).to have_field("Active Topic", type: :checkbox)
         expect(page).to have_no_text("Inactive Not Soft Deleted")
         expect(page).to have_no_text("Active Soft Deleted")
         expect(page).to have_no_text("Inactive Soft Deleted")

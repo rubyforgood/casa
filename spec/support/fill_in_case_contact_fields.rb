@@ -54,8 +54,7 @@ module FillInCaseContactFields
 
   def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
     within NOTES_ID do
-      Array.wrap(contact_topic_answers_attrs).each_with_index do |attributes, index|
-        click_on "Add another discussion topic" if index > 0
+      Array.wrap(contact_topic_answers_attrs).each do |attributes|
         answer_topic_unscoped attributes[:question], attributes[:answer]
       end
 
@@ -110,11 +109,12 @@ module FillInCaseContactFields
   private
 
   # use when already 'within' notes div
+  # Fixed-topic checklist: check the topic (reveals + creates its answer), then fill its notes.
   def answer_topic_unscoped(question, answer, index: nil)
-    topic_select = index.nil? ? all(TOPIC_SELECT_CLASS).last : all(TOPIC_SELECT_CLASS)[index]
-    answer_field = index.nil? ? all(TOPIC_VALUE_CLASS).last : all(TOPIC_VALUE_CLASS)[index]
-    topic_select.select(question) if question
-    answer_field.fill_in(with: answer) if answer
+    group = find("[data-topic-group]", text: question)
+    checkbox = group.find("input[type='checkbox']")
+    checkbox.check unless checkbox.checked?
+    group.find(TOPIC_VALUE_CLASS).set(answer) if answer
   end
 end
 

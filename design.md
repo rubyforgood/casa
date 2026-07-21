@@ -285,16 +285,18 @@ learning hours (`Form::HourMinuteDurationComponent` is now dead).
 model requires `draft_case_ids`, and on edit the picker only ever offered the one case the contact
 belongs to, so a removable multiselect there just lets the user dismiss a required, fixed parent.
 Render the case number(s) as static chips + hidden `draft_case_ids` fields on edit; keep the
-TomSelect multiselect only for new / draft contacts. In `_contact_topic_answer` each topic is a
-**divider-separated** section (`border-t border-slate-100`) inside the Notes card — **not a nested
-card box** (a card in a card isn't a pattern here). It is **stacked**, not a 50/50 grid: the topic
-select (with a ghost **Remove topic** beside it) on top, the **full-width** notes textarea below —
-the note is the substance and gets the width. The per-row remove is a ghost action (recedes for a
-repeated row) labelled **Remove topic**, *not* "Delete" — "Delete" reads as clearing the field,
-whereas this drops the whole entry; keep the `casa-nested-form#confirmDestroyAndRemove` hook the
-spec drives. (Still open: the per-row topic **dropdown** disables already-used topics, so it reads
-as redundant against the fixed 6-topic set — a fixed-topic questionnaire, textarea per topic, is the
-better navigation but is an autosave/`reject_if`/JS/spec rewrite, tracked separately.)
+TomSelect multiselect only for new / draft contacts. **Notes is a fixed-topic checklist**
+(`_contact_topic_answer`): every org topic is a `border-t`-divided row of a checkbox + the topic
+question, with a full-width notes textarea revealed on check — no dropdown, no nested cards, no
+"Add another" button. The `contact-topics` controller **creates** the answer on check (POST
+`/contact_topic_answers`, storing the returned id) and **destroys** it on uncheck (a confirm if
+notes exist); the 2s autosave then only *updates* the value via that id. Because create/destroy is
+explicit, `CaseContact` rejects id-less topic-answer attrs (`reject_if: id blank`) so a slow
+autosave can't create a duplicate, and `form_controller#prepare_form` must NOT seed a blank answer
+(it would orphan a nil-topic row). Associate each checkbox's label with `for` (not by wrapping),
+or a click double-fires `change` and creates the answer twice. This replaced the old dropdown +
+per-row Delete: the dropdown was redundant against a fixed topic set, and **unchecking is a clearer
+"remove"** than a Delete button (which read as clearing the field).
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`

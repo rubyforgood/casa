@@ -1,48 +1,26 @@
-<%# Nested topic-answer row for the case-contact form. casa-nested-form clones this from the
-    <template>, so every hook must survive cloning: .nested-form-wrapper, the wrapper target,
-    data-new-record/child-index, and the hidden id/_destroy fields. The select keeps
-    .contact-topic-id-select + the case-contact-form onContactTopicSelect action/target; the
-    textarea keeps .contact-topic-answer-input + autosave. Native-select chevron per design.md. %>
-<div class="nested-form-wrapper border-t border-slate-100 pt-4"
-  data-new-record="<%= form.object.new_record? %>"
-  data-casa-nested-form-target="wrapper"
-  data-child-index="<%= form.options[:child_index] %>">
-  <%# Divider-separated (not a nested card): each topic is a border-t section inside the Notes
-      card. Stacked, not two-column -- topic select + a ghost "Remove topic" on top, full-width
-      notes below. "Remove topic" (not "Delete") makes clear it drops the whole entry rather than
-      just clearing the field. Keep the .nested-form-wrapper + confirmDestroyAndRemove hooks. %>
-  <div class="flex items-end gap-3">
-    <div class="min-w-0 flex-1">
-      <%= form.label :contact_topic_id, "Discussion topic", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-      <div class="relative">
-        <%= form.select(:contact_topic_id,
-          select_options,
-          {include_blank: "Select a discussion topic"},
-          class: "contact-topic-id-select block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
-          data: {
-            action: "change->case-contact-form#onContactTopicSelect",
-            case_contact_form_target: "contactTopicSelect"
-          }
-        ) %>
-        <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-      </div>
-    </div>
-    <button type="button"
-      data-action="casa-nested-form#confirmDestroyAndRemove"
-      aria-label="Remove this discussion topic"
-      class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
-      <i class="bi bi-trash" aria-hidden="true"></i> Remove topic
-    </button>
+<%# Checklist item for one contact topic on the case-contact form (casa_app). Every org topic is
+    listed; checking one reveals its notes and creates the ContactTopicAnswer (contact-topics
+    controller -> POST /contact_topic_answers, storing the id); unchecking destroys it. Typing
+    autosaves via that id. Unchecked topics keep their fields `disabled` so no empty answer is
+    submitted (and autosave never has to create -> no duplicate saves). Spec/JS hooks:
+    .contact-topic-answer-input, [data-topic-group] / [data-topic-notes], the hidden id. %>
+<div class="py-4" data-topic-group data-topic-id="<%= topic.id %>">
+  <%# Label associated by `for` (not wrapping) so clicking the checkbox fires change once -- a
+      checkbox wrapped in its label double-fires and would create the answer twice. %>
+  <div class="flex items-start gap-2.5">
+    <input type="checkbox" id="topic_check_<%= topic.id %>" class="<%= check_class %> mt-0.5" data-action="change->contact-topics#toggle"<%= " checked" if answer %>>
+    <label for="topic_check_<%= topic.id %>" class="text-sm font-medium text-slate-800"><%= topic.question %></label>
   </div>
-  <div class="mt-3">
-    <%= form.label :value, "Discussion notes", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+  <div class="mt-3 <%= "hidden" unless answer %>" data-topic-notes>
+    <%= form.hidden_field :contact_topic_id, value: topic.id, disabled: answer.nil? %>
+    <%= form.hidden_field :id, disabled: answer.nil? %>
     <%= form.text_area(:value,
-      data: {action: "input->autosave#save"},
       rows: 4,
+      disabled: answer.nil?,
       class: "contact-topic-answer-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
+      data: {action: "input->autosave#save"},
+      "aria-label": "Notes for #{topic.question}",
       placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
     ) %>
   </div>
-  <%= form.hidden_field(:id, value: form.object.id) %>
-  <%= form.hidden_field :_destroy %>
 </div>

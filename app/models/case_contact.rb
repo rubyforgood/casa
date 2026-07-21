@@ -77,8 +77,11 @@ class CaseContact < ApplicationRecord
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
 
+  # Topic answers are created/destroyed explicitly (POST/DELETE via the contact-topics
+  # controller), so the form only ever *updates* existing rows. Reject attrs without an id so a
+  # slow autosave can't create a duplicate before the new id propagates back to the field.
   accepts_nested_attributes_for :contact_topic_answers, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["contact_topic_id"].blank? && attrs["value"].blank? }  # .notes sent without topic_id, but must have a value.
+    reject_if: proc { |attrs| attrs["id"].blank? }
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
