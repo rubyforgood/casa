@@ -329,15 +329,13 @@
                     <% end %>
                   </template>
 
-                  <div class="space-y-3">
-                    <% if form.object.additional_expenses.any? %>
-                      <%= form.fields_for :additional_expenses do |expense_fields| %>
-                        <%= render "shared/additional_expense_form", form: expense_fields %>
-                      <% end %>
+                  <% if form.object.additional_expenses.any? %>
+                    <%= form.fields_for :additional_expenses do |expense_fields| %>
+                      <%= render "shared/additional_expense_form", form: expense_fields %>
                     <% end %>
+                  <% end %>
 
-                    <div data-casa-nested-form-target="target"></div>
-                  </div>
+                  <div data-casa-nested-form-target="target"></div>
 
                   <div class="mt-4">
                     <button type="button"

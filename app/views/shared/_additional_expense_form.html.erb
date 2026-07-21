@@ -3,35 +3,39 @@
     data-new-record/child-index, and the hidden id/_destroy fields (the _destroy field carries the
     expenseDestroy target the case-contact-form controller flips). .expense-amount-input /
     .expense-describe-input drive the specs; .remove-expense-button + destroyAndRemove drive delete. %>
-<%# Fields laid out inline (amount / details / Delete) in a bordered card, matching the
-    court-order nested-row pattern (casa_cases/_court_order_fields), not a grey box. %>
-<div class="nested-form-wrapper flex flex-col gap-2 rounded-lg border border-slate-200 p-3 sm:flex-row sm:items-start"
+<%# Divider between rows (border-t) with symmetric py-4 so Delete never sits flush against the
+    next line. Stacked: amount, then description, then Delete below. Labels are visible. %>
+<div class="nested-form-wrapper space-y-4 border-t border-slate-200 py-4"
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
-  <div class="sm:w-40">
+  <div>
+    <%= form.label :other_expense_amount, "Other expense amount", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
     <div class="flex">
       <span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm text-slate-500">$</span>
       <%= form.number_field(:other_expense_amount,
         value: number_with_precision(form.object.other_expense_amount, precision: 2),
-        "aria-label": "Other expense amount", placeholder: "0", min: "0", max: 1000, step: 0.01,
+        placeholder: "0", min: "0", max: 1000, step: 0.01,
         class: "expense-amount-input block w-full rounded-r-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"
       ) %>
     </div>
   </div>
-  <div class="min-w-0 flex-1">
+  <div>
+    <%= form.label :other_expenses_describe, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Other expense details <span class="text-rose-600" aria-hidden="true">*</span><% end %>
     <%= form.text_area(:other_expenses_describe,
-      "aria-label": "Other expense details", placeholder: "Describe the expense",
+      placeholder: "Enter other expense details",
       rows: 2,
       class: "expense-describe-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
       data: {action: "input->autosave#save"}
     ) %>
   </div>
-  <button type="button"
-    class="remove-expense-button <%= button_classes(:danger_outline) %> shrink-0"
-    data-action="casa-nested-form#destroyAndRemove">
-    <i class="bi bi-trash" aria-hidden="true"></i> Delete
-  </button>
+  <div class="flex justify-end">
+    <button type="button"
+      class="remove-expense-button <%= button_classes(:danger_outline) %>"
+      data-action="casa-nested-form#destroyAndRemove">
+      Delete
+    </button>
+  </div>
   <%= form.hidden_field :id, value: form.object.id %>
   <%= form.hidden_field :_destroy, data: {case_contact_form_target: "expenseDestroy"} %>
 </div>
