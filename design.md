@@ -289,6 +289,15 @@ partial untouched for the Bootstrap pages.
 
 ### Card / panel
 `rounded-2xl border border-slate-200 bg-white shadow-sm` (pad `p-5`).
+A **content card with a leading icon** (the case-contact card) puts the icon **in the header
+row** next to the title (`card-title flex flex-wrap items-center gap-2` + a 32px `h-8 w-8`
+rounded-xl icon tile), **not** as a full-height gutter beside the whole body. An `items-start`
+icon column indents *every* body line behind it — the case-contact card read as pushed ~48px
+right, with the answers/notes hanging off the icon instead of the card edge. With the icon in
+the header, the body (secondary text, answer list, actions) spans the card's full width,
+left-aligned to the `p-5` edge (measured: body indent 48px -> 0). Decorative status glyphs are
+never data: the transition-aged 🦋/🐛 emoji is dropped from the case-number heading (plain
+number), per the Tables note.
 
 ### Fact / detail list
 Entity facts (the case-details card) are inline `dt` (muted `font-medium text-slate-500`) :

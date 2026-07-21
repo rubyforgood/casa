@@ -4,7 +4,7 @@ RSpec.describe CaseContactsDecorator do
   describe "#display_case_number" do
     context "when the casa case has a case number" do
       context "when transition aged youth is true" do
-        it "returns the casa case number with the corresponding transition aged youth icon" do
+        it "returns the casa case number" do
           org = build(:casa_org)
           admin = create(:casa_admin, casa_org: org)
           case_contact = build(:case_contact)
@@ -19,12 +19,12 @@ RSpec.describe CaseContactsDecorator do
 
           case_contacts = CaseContactsDecorator.decorate({1 => [case_contact]})
 
-          expect(case_contacts.display_case_number(casa_case.id)).to eq("🦋 CINA-1234")
+          expect(case_contacts.display_case_number(casa_case.id)).to eq("CINA-1234")
         end
       end
 
       context "when transition aged youth is false" do
-        it "returns the casa case number with the corresponding transition aged youth icon" do
+        it "returns the casa case number" do
           org = build(:casa_org)
           admin = create(:casa_admin, casa_org: org)
           case_contact = build(:case_contact)
@@ -39,7 +39,7 @@ RSpec.describe CaseContactsDecorator do
 
           case_contacts = CaseContactsDecorator.decorate({1 => [case_contact]})
 
-          expect(case_contacts.display_case_number(casa_case.id)).to eq("🐛 CINA-1234")
+          expect(case_contacts.display_case_number(casa_case.id)).to eq("CINA-1234")
         end
       end
     end

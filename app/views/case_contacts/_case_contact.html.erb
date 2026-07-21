@@ -8,34 +8,34 @@
 <div class="container-fluid mb-1">
   <div class="full-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="p-4 sm:p-5">
-      <div class="flex items-start gap-3">
-        <span class="mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i class="<%= contact.decorate.medium_icon %>" aria-hidden="true"></i></span>
-        <div class="min-w-0 flex-1">
-          <div class="card-title flex flex-wrap items-center gap-2">
-            <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
-            <% unless contact.active? %>
-              <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>
-            <% end %>
-            <% if policy(contact).restore? && contact.deleted? %>
-              <%= link_to "undelete", restore_case_contact_path(contact.id), method: :post, data: {turbo: false}, class: "#{pill} bg-sky-50 text-sky-700 hover:bg-sky-100" %>
-            <% end %>
-          </div>
-          <p class="mt-1 text-sm text-slate-600"><%= contact.decorate.contact_types %></p>
-          <p class="text-sm text-slate-500"><%= contact.decorate.subheading %></p>
-
-          <% answers = contact.contact_topic_answers.reject { _1.value.blank? } %>
-          <% if answers.any? || contact.notes.present? %>
-            <ul class="mt-3 space-y-2">
-              <% answers.each do |answer| %>
-                <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
-              <% end %>
-              <% if contact.notes %>
-                <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional notes") %></li>
-              <% end %>
-            </ul>
-          <% end %>
-        </div>
+      <%# Header (hero) row: the medium-type icon sits inline with the title, so everything
+          below spans the full card width and stays left-aligned to the card edge. A leading
+          icon adorns the header; it is not a gutter that indents the body (industry standard). %>
+      <div class="card-title flex flex-wrap items-center gap-2">
+        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i class="<%= contact.decorate.medium_icon %>" aria-hidden="true"></i></span>
+        <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
+        <% unless contact.active? %>
+          <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>
+        <% end %>
+        <% if policy(contact).restore? && contact.deleted? %>
+          <%= link_to "undelete", restore_case_contact_path(contact.id), method: :post, data: {turbo: false}, class: "#{pill} bg-sky-50 text-sky-700 hover:bg-sky-100" %>
+        <% end %>
       </div>
+
+      <p class="mt-2 text-sm text-slate-600"><%= contact.decorate.contact_types %></p>
+      <p class="text-sm text-slate-500"><%= contact.decorate.subheading %></p>
+
+      <% answers = contact.contact_topic_answers.reject { _1.value.blank? } %>
+      <% if answers.any? || contact.notes.present? %>
+        <ul class="mt-3 space-y-2">
+          <% answers.each do |answer| %>
+            <li><%= render TruncatedTextComponent.new(answer.value, label: answer.contact_topic.question) %></li>
+          <% end %>
+          <% if contact.notes %>
+            <li><%= render TruncatedTextComponent.new(contact.notes, label: "Additional notes") %></li>
+          <% end %>
+        </ul>
+      <% end %>
 
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <% if Pundit.policy(current_user, contact).update? %>
