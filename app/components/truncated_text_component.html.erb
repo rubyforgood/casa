@@ -1,7 +1,10 @@
-<div class="truncation-container" data-controller="truncated-text">
+<%# Label:value detail line for the case-contact card. Body size (text-sm) with a muted
+    font-medium label and a dark regular value (design.md fact/detail-list convention), so a
+    detail line never out-weighs the card's font-semibold title. %>
+<div class="truncation-container text-sm text-slate-800" data-controller="truncated-text">
   <div class="line-clamp-1" data-truncated-text-target="text">
     <% if label %>
-      <span class="font-bold"><%= label %>:</span>
+      <span class="font-medium text-slate-500"><%= label %>:</span>
     <% end %>
     <%= text %>
   </div>
@@ -10,10 +13,11 @@
     href="#"
     data-truncated-text-target="hideButton"
     data-action="truncated-text#toggle:prevent"
-    class="hidden">[hide]</a>
+    class="hidden font-medium text-brand-600 hover:text-brand-700">[hide]</a>
   <a
     role="button"
     href="#"
     data-truncated-text-target="moreButton"
-    data-action="truncated-text#toggle:prevent">[read more]</a>
+    data-action="truncated-text#toggle:prevent"
+    class="font-medium text-brand-600 hover:text-brand-700">[read more]</a>
 </div>

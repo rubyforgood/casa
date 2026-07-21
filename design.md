@@ -298,6 +298,13 @@ the header, the body (secondary text, answer list, actions) spans the card's ful
 left-aligned to the `p-5` edge (measured: body indent 48px -> 0). Decorative status glyphs are
 never data: the transition-aged 🦋/🐛 emoji is dropped from the case-number heading (plain
 number), per the Tables note.
+**Type hierarchy inside a card:** the title is the only `text-base font-semibold` (slate-900)
+element; every supporting / detail line is `text-sm`, and **no body line may out-weigh the
+title**. The `TruncatedTextComponent` answer / notes lines were `text-base font-bold` (bigger
+*and* heavier than the semibold title, so the detail shouted and the title whispered); they now
+follow the fact-list label:value weights — `font-medium text-slate-500` label, regular
+`text-slate-800` value — at `text-sm`, with a `brand-600 font-medium` `[read more]` link. Confirm
+weight/size with computed style (title 16px/600 is the sole anchor), not by eye.
 
 ### Fact / detail list
 Entity facts (the case-details card) are inline `dt` (muted `font-medium text-slate-500`) :
