@@ -83,13 +83,29 @@
             <% end %>
           </div>
           <div class="sm:col-span-2">
-            <%= form.label :address_attributes_content, "Mailing address", class: label_class %>
             <%= form.fields_for :address, (@volunteer.address ? nil : Address.new) do |a| %>
-              <% if can_edit %>
-                <%= a.text_field :content, placeholder: "Mailing address", class: input_class %>
-              <% else %>
-                <%= a.text_field :content, readonly: true, placeholder: "Mailing address", class: readonly_class %>
-              <% end %>
+              <% addr_class = can_edit ? input_class : readonly_class %>
+              <fieldset class="space-y-2.5">
+                <legend class="<%= label_class %>">Mailing address</legend>
+                <%= a.label :line_1, "Address line 1", class: "sr-only" %>
+                <%= a.text_field :line_1, placeholder: "Address line 1", readonly: !can_edit, class: addr_class %>
+                <%= a.label :line_2, "Address line 2", class: "sr-only" %>
+                <%= a.text_field :line_2, placeholder: "Address line 2 (optional)", readonly: !can_edit, class: addr_class %>
+                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
+                  <div class="sm:col-span-3">
+                    <%= a.label :city, "City", class: "sr-only" %>
+                    <%= a.text_field :city, placeholder: "City", readonly: !can_edit, class: addr_class %>
+                  </div>
+                  <div class="sm:col-span-1">
+                    <%= a.label :state, "State", class: "sr-only" %>
+                    <%= a.text_field :state, placeholder: "State", readonly: !can_edit, class: addr_class %>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <%= a.label :zip, "ZIP", class: "sr-only" %>
+                    <%= a.text_field :zip, placeholder: "ZIP", readonly: !can_edit, class: addr_class %>
+                  </div>
+                </div>
+              </fieldset>
             <% end %>
           </div>
         </div>

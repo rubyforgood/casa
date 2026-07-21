@@ -12,7 +12,7 @@ class UserParameters < SimpleDelegator
         :receive_reimbursement_email,
         :type,
         :monthly_learning_hours_report,
-        address_attributes: [:id, :content]
+        address_attributes: [:id, :content, :line_1, :line_2, :city, :state, :zip]
       )
 
     super(params)

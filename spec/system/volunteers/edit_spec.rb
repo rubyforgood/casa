@@ -724,7 +724,7 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer)
 
         expect(page).to have_text "Mailing address"
-        expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_content]"
+        expect(page).to have_selector "input[type=text][id=volunteer_address_attributes_line_1]"
       end
 
       it "updates successfully" do
@@ -735,7 +735,7 @@ RSpec.describe "volunteers/edit", type: :system do
         sign_in admin
         visit edit_volunteer_path(volunteer)
 
-        fill_in "volunteer_address_attributes_content", with: "123 Main St"
+        fill_in "volunteer_address_attributes_line_1", with: "123 Main St"
         click_on "Submit"
         expect(page).to have_text "Volunteer was successfully updated."
         expect(page).to have_selector("input[value='123 Main St']")
