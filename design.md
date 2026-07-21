@@ -50,7 +50,11 @@ constants (e.g. `ContactTypeGroup::DEFAULT_CONTACT_TYPE_GROUPS`, whose names ren
 multiselect chips) are sentence-cased too. Before finishing, **scan the touched views and any
 app-shipped names/defaults for Title Case or ALL-CAPS** and fix them. Proper nouns and
 acronyms (CASA, IEP, Twilio) are the exception, and never force-case free-form org data (an
-org may legitimately name a type "ADHD coach").
+org may legitimately name a type "ADHD coach"). Sentence-casing a **default constant** does
+**not** fix orgs already seeded from the old names — `generate_for_org!` find_or_creates by name
+and never renames — so pair the constant change with a one-time after_party rename that touches
+only case-variants of a shipped default and leaves org-renamed / custom names alone
+(`20260721000000_sentence_case_default_contact_types`).
 
 ### Color
 Brand = indigo. Neutrals = slate. Semantic colors below.
@@ -310,10 +314,13 @@ detail. **Never** give each line its own truncate + `read more`: reading a singl
 several clicks (the recurring "excessive truncation" bug). The `<summary>` swaps Show/Hide via
 `group-open:` and is a `brand-600 font-medium` link with the marker hidden
 (`[&::-webkit-details-marker]:hidden`).
-**Dividers:** `border-b border-slate-100` is a real header token (modal + table-card headers),
-but on a compact content card a rule directly *under the title* over-segments it from its own
-type/date summary — take structure instead from the footer `border-t` and the inset
-(`rounded-xl border bg-slate-50/60`) detail panel.
+**Dividers, not nested cards:** don't box a card's revealed detail in its own `rounded-xl border`
+panel — a card inside a card isn't a pattern in this app. Separate the disclosure with a
+`border-t border-slate-100 pt-3` rule on the `<details>` (as `metric_data_table`'s "View as
+table" does) and render the `dl` unboxed. `border-b` *under the title* likewise over-segments a
+compact card; structure comes from that detail divider and the footer `border-t`. WCAG: the
+native `<details>`/`<summary>` carries its own expanded/collapsed semantics (keyboard + SR), the
+chevron is `aria-hidden`, and the `brand-600` summary + `slate-500` labels clear AA on white.
 
 ### Fact / detail list
 Entity facts (the case-details card) are inline `dt` (muted `font-medium text-slate-500`) :
