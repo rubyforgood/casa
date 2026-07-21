@@ -30,11 +30,12 @@
   <%# hidden! (Tailwind v4 important) so the select-all controller can reliably hide the trigger:
       a plain `hidden` loses to button_classes' `inline-flex` in the cascade. %>
   <div data-controller="select-all modal" data-select-all-hidden-class="hidden!" data-select-all-button-label-value="Manage volunteer">
-    <div class="mb-3 min-h-[2.5rem]">
-      <button type="button" class="<%= button_classes(:secondary) %> hidden!" data-select-all-target="button" data-action="modal#open">
-        <i class="bi bi-people" aria-hidden="true"></i> <span data-select-all-target="buttonLabel"></span>
-      </button>
-    </div>
+    <%# mb-4 on the button (not a reserved-height wrapper) so the space collapses while the
+        button is hidden: the filter's own mb-4 then sets the filter->table gap, matching the
+        cases index. The button pushes the table down only once a row is selected. %>
+    <button type="button" class="<%= button_classes(:secondary) %> mb-4 hidden!" data-select-all-target="button" data-action="modal#open">
+      <i class="bi bi-people" aria-hidden="true"></i> <span data-select-all-target="buttonLabel"></span>
+    </button>
 
     <%= form_with url: bulk_assignment_supervisor_volunteers_path, method: :post, id: "form-bulk-assignment", data: {controller: "disable-form", "disable-form-unallowed-value": ["unselected"].to_json, "disable-form-disabled-class": "opacity-60", "disable-form-enabled-class": "shadow-sm"} do |form| %>
 

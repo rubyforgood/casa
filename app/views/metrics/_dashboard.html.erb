@@ -30,7 +30,7 @@
   <% end %>
 </section>
 
-<section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+<section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
   <h2 class="text-base font-bold text-slate-900">When contacts are logged</h2>
   <p class="mb-4 mt-1.5 text-sm text-slate-500">Contacts by day of week and hour of day. Darker cells mean more activity.</p>
   <% if heatmap[:max].zero? %>
@@ -40,7 +40,7 @@
   <% end %>
 </section>
 
-<section class="mt-5 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+<section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
   <h2 class="text-base font-bold text-slate-900">Monthly active users</h2>
   <p class="mb-4 mt-1.5 text-sm text-slate-500">Distinct volunteers, supervisors, and admins who signed in each month.</p>
   <% if au[:series].sum { |ser| ser[:data].sum }.zero? %>

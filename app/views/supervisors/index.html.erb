@@ -22,7 +22,7 @@
   </div>
 
   <%# Status filter (server-side, submits on change). %>
-  <%= form_with url: supervisors_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "supervisor-filters mb-5" do %>
+  <%= form_with url: supervisors_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "supervisor-filters mb-4" do %>
     <div class="w-full max-w-[10rem]">
       <%= label_tag :status, "Status", class: "mb-1 block text-xs font-medium text-slate-500" %>
       <div class="relative">

@@ -71,6 +71,22 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
 - Radius: controls `rounded-lg`; cards/panels `rounded-2xl`; icon tiles `rounded-xl`.
 - Surfaces: white, `border border-slate-200`, `shadow-sm`.
 - Page background: `bg-slate-50`.
+- **Page vertical rhythm** (index / list pages): content wrapper `px-4 py-6 sm:px-6 lg:px-8`;
+  header block `mb-6` (24px); a plain (borderless) filter bar gets `mb-4` so it sits **16px**
+  above the table — every roster filter converges on this (cases / volunteers / supervisors /
+  reimbursements all measure 16px; `mb-5` or `mb-6` on a *plain* filter is drift). A filter
+  wrapped in its own bordered `rounded-2xl` card (case-contacts) is a *section*, so it keeps the
+  24px (`mb-6`) section gap instead. Stacked sections/cards separate by 24px (`mt-6` / `mb-6`);
+  the metrics dashboard (range filter + three chart cards) is one uniform 24px column, and the
+  range filter carries `mt-6` so it clears the KPI row / subtitle above it (it butted flush at
+  0px before). A **bulk-action trigger** that reveals on selection (the volunteers Manage button)
+  puts `mb-4` **on the button**, **never a reserved `min-h` band** — a reserved band leaves a
+  persistent ~68px empty gap above the table while nothing is selected; let the button push the
+  table down only once a row is picked (the `select-all` controller toggles `hidden!` on the
+  button, which collapses its margin too). Pagination rendered **inside** the table card needs no
+  top margin (the `shared/_pagination` bar owns a `border-t` + `mt-1`); rendered **below** the
+  card, wrap it in `mt-4`. Verify these gaps at the pixel level (filter-bottom -> table-top), not
+  by reading tokens.
 
 ### Iconography
 - **Bootstrap Icons** (`bi-*`), self-hosted: font binaries under `public/vendor/bootstrap-icons/`,

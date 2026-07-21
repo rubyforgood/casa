@@ -49,7 +49,7 @@ module MetricsHelper
       link_to(label, "#{base_path}?range=#{months}", class: classes, "aria-current": (current ? "page" : nil))
     end
     tag.div(safe_join([tag.span("Range", class: "mr-1 text-[13px] text-slate-500")] + links),
-      class: "mb-5 flex flex-wrap items-center gap-2", role: "group", "aria-label": "Date range")
+      class: "mt-6 mb-6 flex flex-wrap items-center gap-2", role: "group", "aria-label": "Date range")
   end
 
   def metric_data_table(labels, series, caption:, foot: nil, footnote: nil)
