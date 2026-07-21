@@ -309,9 +309,12 @@ checkbox and doesn't reserve a blank `invisible` line at the bottom — that res
 empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of dead space). The
 autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
 an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
-**Nested expense rows** are `border-t border-slate-200 pt-4` dividers (not grey `bg-slate-50`
-cards) and reuse the standard input style so they match the rest of the form; the wrapper keeps
-`.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the
+**Nested expense rows** follow the court-order nested-row pattern (`casa_cases/_court_order_fields`):
+a bordered card (`rounded-lg border border-slate-200 p-3`, **no grey `bg-slate-50` fill**) with
+amount / details / trash-`Delete` **inline** (`flex ... sm:flex-row sm:items-start`), rows spaced by
+`space-y-3` — not a grey box and not a bare divider (a divider left the Delete flush against the
+next line). Fields use `aria-label` + placeholder (no stacked labels), like the court-order row. The
+wrapper keeps `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the
 design-system confirm dialog (new/unsaved rows remove without a prompt).
 **Structured mailing address:** captured as discrete parts (line 1 / line 2 / city / state / zip),
 not one free-text field. `Address` keeps `content` as the canonical composed one-line string every
