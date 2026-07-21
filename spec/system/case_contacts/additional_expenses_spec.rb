@@ -74,7 +74,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     fill_expense_fields 2.00, "3rd meal"
 
     within "#contact-form-expenses" do
-      click_on "Delete", match: :first
+      find(".remove-expense-button", match: :first).click
     end
     click_on "Remove expense" # design-system confirmation dialog
 
@@ -133,7 +133,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
       expect(page).to have_css(".expense-describe-input", count: 2)
 
       within "#contact-form-expenses" do
-        click_on "Delete", match: :first
+        find(".remove-expense-button", match: :first).click
       end
       click_on "Remove expense" # design-system confirmation dialog
 
@@ -153,7 +153,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
       subject
 
       within "#contact-form-expenses" do
-        click_on "Delete", match: :first
+        find(".remove-expense-button", match: :first).click
       end
       click_on "Cancel"
 
