@@ -182,7 +182,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
         expect(notes_section).to have_select(class: topic_select_class, count: 2)
 
         accept_confirm do
-          notes_section.find_button(text: "Delete", match: :first).click
+          notes_section.find_button(text: "Remove topic", match: :first).click
         end
 
         expect(notes_section).to have_select(class: topic_select_class, count: 1, visible: :all)

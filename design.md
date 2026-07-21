@@ -285,11 +285,16 @@ learning hours (`Form::HourMinuteDurationComponent` is now dead).
 model requires `draft_case_ids`, and on edit the picker only ever offered the one case the contact
 belongs to, so a removable multiselect there just lets the user dismiss a required, fixed parent.
 Render the case number(s) as static chips + hidden `draft_case_ids` fields on edit; keep the
-TomSelect multiselect only for new / draft contacts. In `_contact_topic_answer` the topic + note is
-**stacked**, not a 50/50 grid: the topic select (with a ghost `Delete` beside it) on top, the
-**full-width** notes textarea below — the note is the substance and gets the width. The per-row
-remove is a **ghost** action (recedes for a repeated row, design system), keeping the visible
-`Delete` text + `casa-nested-form#confirmDestroyAndRemove` hook the spec drives.
+TomSelect multiselect only for new / draft contacts. In `_contact_topic_answer` each topic is a
+**divider-separated** section (`border-t border-slate-100`) inside the Notes card — **not a nested
+card box** (a card in a card isn't a pattern here). It is **stacked**, not a 50/50 grid: the topic
+select (with a ghost **Remove topic** beside it) on top, the **full-width** notes textarea below —
+the note is the substance and gets the width. The per-row remove is a ghost action (recedes for a
+repeated row) labelled **Remove topic**, *not* "Delete" — "Delete" reads as clearing the field,
+whereas this drops the whole entry; keep the `casa-nested-form#confirmDestroyAndRemove` hook the
+spec drives. (Still open: the per-row topic **dropdown** disables already-used topics, so it reads
+as redundant against the fixed 6-topic set — a fixed-topic questionnaire, textarea per topic, is the
+better navigation but is an autosave/`reject_if`/JS/spec rewrite, tracked separately.)
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`

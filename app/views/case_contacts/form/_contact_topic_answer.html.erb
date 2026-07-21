@@ -3,14 +3,14 @@
     data-new-record/child-index, and the hidden id/_destroy fields. The select keeps
     .contact-topic-id-select + the case-contact-form onContactTopicSelect action/target; the
     textarea keeps .contact-topic-answer-input + autosave. Native-select chevron per design.md. %>
-<div class="nested-form-wrapper rounded-lg border border-slate-200 p-4"
+<div class="nested-form-wrapper border-t border-slate-100 pt-4"
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
-  <%# Stacked, not two-column: the topic is a label for the note, so it sits on its own line
-      (with the row's remove control) and the discussion notes get the full width below -- the
-      substance of the entry, not a squeezed half-column. Remove is a ghost action (design.md:
-      ghost recedes for repeated-row actions); keep the "Delete" text + confirm hook. %>
+  <%# Divider-separated (not a nested card): each topic is a border-t section inside the Notes
+      card. Stacked, not two-column -- topic select + a ghost "Remove topic" on top, full-width
+      notes below. "Remove topic" (not "Delete") makes clear it drops the whole entry rather than
+      just clearing the field. Keep the .nested-form-wrapper + confirmDestroyAndRemove hooks. %>
   <div class="flex items-end gap-3">
     <div class="min-w-0 flex-1">
       <%= form.label :contact_topic_id, "Discussion topic", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
@@ -29,9 +29,9 @@
     </div>
     <button type="button"
       data-action="casa-nested-form#confirmDestroyAndRemove"
-      aria-label="Delete this discussion topic"
+      aria-label="Remove this discussion topic"
       class="inline-flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2.5 text-sm font-medium text-slate-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500">
-      <i class="bi bi-trash" aria-hidden="true"></i> Delete
+      <i class="bi bi-trash" aria-hidden="true"></i> Remove topic
     </button>
   </div>
   <div class="mt-3">
