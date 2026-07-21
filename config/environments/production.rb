@@ -1,3 +1,5 @@
+require "active_support/core_ext/integer/time"
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -39,6 +41,9 @@ Rails.application.configure do
   # Enable static file serving from the `/public` folder (turn off if using NGINX/Apache for it).
   config.public_file_server.enabled = ENV["RAILS_SERVE_STATIC_FILES"].present?
 
+  # Cache assets for far-future expiry since they are all digest stamped.
+  config.public_file_server.headers = {"cache-control" => "public, max-age=#{1.year.to_i}"}
+
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.asset_host = "http://assets.example.com"
 
@@ -47,6 +52,9 @@ Rails.application.configure do
 
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :microsoft
+
+  # Assume all access to the app is happening through a SSL-terminating reverse proxy.
+  # config.assume_ssl = true
 
   # Force all access to the app over SSL, use Strict-Transport-Security, and use secure cookies.
   config.force_ssl = true
@@ -58,7 +66,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
   config.logger = ActiveSupport::TaggedLogging.logger($stdout)
 
-  # Change to "debug" to log everything (including potentially personally-identifiable information!)
+  # Change to "debug" to log everything (including potentially personally-identifiable information!).
   config.log_level = ENV.fetch("RAILS_LOG_LEVEL", "info")
 
   # Prevent health checks from clogging up the logs.
@@ -77,6 +85,14 @@ Rails.application.configure do
   config.active_job.queue_adapter = :delayed_job
 
   config.action_mailer.perform_caching = false
+
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = false
+
+  # Ignore bad email addresses and do not raise email delivery errors.
+  # Set this to true and configure the email server for immediate delivery to raise delivery errors.
+  # config.action_mailer.raise_delivery_errors = false
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
