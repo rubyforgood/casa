@@ -297,6 +297,14 @@ autosave can't create a duplicate, and `form_controller#prepare_form` must NOT s
 or a click double-fires `change` and creates the answer twice. This replaced the old dropdown +
 per-row Delete: the dropdown was redundant against a fixed topic set, and **unchecking is a clearer
 "remove"** than a Delete button (which read as clearing the field).
+**Collapsible section padding:** a section's autosave status line goes *inside* the collapsible
+body it reports on (the Reimbursement form), so the collapsed/empty state is just heading +
+checkbox and doesn't reserve a blank `invisible` line at the bottom — that reserved line made the
+empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of dead space).
+`volunteer_address` is a single free-text string (`Address#content`, shared with the volunteer
+profile and reimbursement exports); structured address fields (line 1 / line 2 / city / state /
+zip) are the better/industry-standard form, but that's a cross-cutting Address-model change
+(schema + migration + profile form + exports), **not** a per-card tweak — don't one-off it here.
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`

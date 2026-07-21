@@ -279,9 +279,12 @@
                   </div>
                 </div>
               <% end %>
-            </div>
 
-            <small role="alert" class="block invisible text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
+              <%# Autosave status lives inside the (hidden-until-requested) reimbursement form, so
+                  the empty state is just the heading + checkbox and matches the other cards' padding
+                  instead of reserving a blank line at the bottom. %>
+              <small role="alert" class="block invisible text-sm text-slate-500" data-autosave-target="alert">No changes have been saved.</small>
+            </div>
           </section>
         <% end %>
 
