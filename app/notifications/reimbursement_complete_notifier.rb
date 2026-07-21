@@ -3,12 +3,16 @@
 # ReimbursementCompleteNotifier.with(case_contact: @case_contact).deliver(current_user)
 #
 class ReimbursementCompleteNotifier < BaseNotifier
-  # deliver_by :email do |config|
-  #   config.mailer = "UserMailer"
-  #   ...
-  # end
-  # deliver_by :slack
-  # deliver_by :custom, class: "MyDeliveryMethod"
+  # This notifier is delivered to both the volunteer who submitted the
+  # reimbursement and their supervisor (see ReimbursementsController#change_complete_status).
+  # The email delivery is scoped to volunteer recipients only, since the
+  # supervisor already knows they just marked it complete.
+  deliver_by :email do |config|
+    config.mailer = "VolunteerMailer"
+    config.method = "reimbursement_complete_email"
+    config.args = -> { [recipient, params[:case_contact]] }
+    config.if = -> { recipient.volunteer? && recipient.receive_email_notifications? }
+  end
 
   required_param :case_contact
 

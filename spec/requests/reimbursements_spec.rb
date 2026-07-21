@@ -65,6 +65,15 @@ RSpec.describe ReimbursementsController, type: :request do
         expect(Noticed::Notification.last.recipient).to eq(case_contact.supervisor)
       end
     end
+
+    context "when reimbursement_complete arrives as the string \"1\" instead of a boolean" do
+      # Default Rails checkboxes submit "1"/"0"; the boolean cast must handle this too.
+      it "still sends a notification" do
+        expect do
+          patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: "1"})
+        end.to change(Noticed::Notification, :count).by(1)
+      end
+    end
   end
 
   describe "PATCH /mark_as_needs_review" do
@@ -75,6 +84,21 @@ RSpec.describe ReimbursementsController, type: :request do
       expect(response).to redirect_to(reimbursements_path)
       expect(response).to have_http_status(:redirect)
       expect(case_contact.reload.reimbursement_complete).to be_falsey
+    end
+
+    it "does not send a notification" do
+      expect do
+        patch reimbursement_mark_as_needs_review_url(case_contact, case_contact: {reimbursement_complete: false})
+      end.not_to change(Noticed::Notification, :count)
+    end
+
+    context "when reimbursement_complete arrives as the string \"0\" instead of a boolean" do
+      # Mirror of the "1" case: "0" must cast to false, not a truthy string.
+      it "still withholds the notification" do
+        expect do
+          patch reimbursement_mark_as_needs_review_url(case_contact, case_contact: {reimbursement_complete: "0"})
+        end.not_to change(Noticed::Notification, :count)
+      end
     end
   end
 end

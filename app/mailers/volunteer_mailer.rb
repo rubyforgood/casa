@@ -18,4 +18,11 @@ class VolunteerMailer < UserMailer
     @casa_organization = user.casa_org
     mail(to: @user.email, cc: cc_recipients, subject: "Reminder to input case contacts")
   end
+
+  def reimbursement_complete_email(user, case_contact)
+    @user = user
+    @case_contact = case_contact
+    @casa_organization = @user.casa_org
+    mail(to: @user.email, subject: "Your reimbursement request has been processed")
+  end
 end
