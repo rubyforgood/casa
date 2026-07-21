@@ -48,24 +48,37 @@
 
         <%# DETAILS %>
         <section id="contact-form-details" class="<%= card %> space-y-6">
-          <h2 class="<%= section_title %>">Details</h2>
+          <%# On edit the case is fixed context (not an editable field), so it's a badge beside the
+              heading instead of a form cell; the #draft-case-id-selector id + hidden draft_case_ids
+              are kept for the JS/spec contract. New contacts pick the case with the multiselect. %>
+          <div class="flex flex-wrap items-center gap-x-3 gap-y-2">
+            <h2 class="<%= section_title %>">Details</h2>
+            <% if @case_contact.active? %>
+              <div id="draft-case-id-selector" class="flex flex-wrap items-center gap-2">
+                <% @casa_cases.each do |casa_case| %>
+                  <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700"><i class="bi bi-folder2 text-slate-500" aria-hidden="true"></i> <%= casa_case.case_number %></span>
+                  <%= hidden_field_tag "case_contact[draft_case_ids][]", casa_case.id, id: nil %>
+                <% end %>
+              </div>
+            <% end %>
+          </div>
 
-          <div class="grid gap-5 sm:grid-cols-2">
-            <%# RELEVANT CASES %>
-            <div>
-              <% if @case_contact.active? %>
-                <%# Editing an existing contact: the case it belongs to is fixed context, shown
-                    read-only so the required case can't be dismissed. On edit @casa_cases is already
-                    scoped to this contact's case (form_controller), and draft_case_ids is submitted
-                    via hidden fields. New contacts still pick case(s) with the multiselect below. %>
-                <span class="<%= label_class %>">Relevant case(s)</span>
-                <div id="draft-case-id-selector" class="flex flex-wrap gap-2">
-                  <% @casa_cases.each do |casa_case| %>
-                    <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1 text-sm font-medium text-slate-700"><i class="bi bi-folder2 text-slate-500" aria-hidden="true"></i> <%= casa_case.case_number %></span>
-                    <%= hidden_field_tag "case_contact[draft_case_ids][]", casa_case.id, id: nil %>
-                  <% end %>
-                </div>
-              <% else %>
+          <% min_date = CaseContact::MINIMUM_DATE %>
+          <% current_date = Time.zone.today %>
+          <% if @case_contact.active? %>
+            <%# Editing: the case is context above, so only the date is editable here (left-aligned). %>
+            <div class="sm:max-w-xs">
+              <%= form.label :occurred_at, class: label_class do %>Contact date <%= req %><% end %>
+              <%= form.date_field(:occurred_at,
+                required: true,
+                max: (current_date + 1.day).to_fs(:iso8601),
+                min: min_date.to_fs(:iso8601),
+                class: input_class) %>
+            </div>
+          <% else %>
+            <div class="grid gap-5 sm:grid-cols-2">
+              <%# RELEVANT CASES %>
+              <div>
                 <label class="<%= label_class %>" for="case_contact_draft_case_ids">Relevant case(s) <%= req %></label>
                 <div id="draft-case-id-selector">
                   <%= render(Form::MultipleSelectComponent.new(
@@ -77,21 +90,19 @@
                     placeholder_term: "case(s)"
                   )) %>
                 </div>
-              <% end %>
-            </div>
+              </div>
 
-            <%# DATE %>
-            <div>
-              <% min_date = CaseContact::MINIMUM_DATE %>
-              <% current_date = Time.zone.today %>
-              <%= form.label :occurred_at, class: label_class do %>Contact date <%= req %><% end %>
-              <%= form.date_field(:occurred_at,
-                required: true,
-                max: (current_date + 1.day).to_fs(:iso8601),
-                min: min_date.to_fs(:iso8601),
-                class: input_class) %>
+              <%# DATE %>
+              <div>
+                <%= form.label :occurred_at, class: label_class do %>Contact date <%= req %><% end %>
+                <%= form.date_field(:occurred_at,
+                  required: true,
+                  max: (current_date + 1.day).to_fs(:iso8601),
+                  min: min_date.to_fs(:iso8601),
+                  class: input_class) %>
+              </div>
             </div>
-          </div>
+          <% end %>
 
           <%# CONTACT TYPES %>
           <fieldset class="m-0 border-0 p-0">
@@ -106,8 +117,12 @@
                       <div class="flex items-start gap-2">
                         <%= b.check_box(class: "contact-form-type-checkbox #{check_class} mt-0.5") %>
                         <div class="text-sm leading-5">
-                          <%= b.label(class: "font-medium text-slate-700") %>
-                          <span class="ml-1 text-xs text-slate-500"><%= b.object.last_time_used_with_cases(casa_case_ids) %></span>
+                          <%= b.label(class: "block font-medium text-slate-700") %>
+                          <%# recency hint: only when this type has actually been logged for the case(s) %>
+                          <% last_logged = b.object.last_logged_hint_with_cases(casa_case_ids) %>
+                          <% if last_logged %>
+                            <span class="text-xs text-slate-500"><%= last_logged %></span>
+                          <% end %>
                         </div>
                       </div>
                     <% end %>

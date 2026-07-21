@@ -284,8 +284,14 @@ learning hours (`Form::HourMinuteDurationComponent` is now dead).
 **Relevant case(s) is read-only when editing an active contact** (`@case_contact.active?`): the
 model requires `draft_case_ids`, and on edit the picker only ever offered the one case the contact
 belongs to, so a removable multiselect there just lets the user dismiss a required, fixed parent.
-Render the case number(s) as static chips + hidden `draft_case_ids` fields on edit; keep the
-TomSelect multiselect only for new / draft contacts. **Notes is a fixed-topic checklist**
+On edit, show the case number(s) as a **badge beside the `Details` heading** (fixed context, not a
+faux form field) plus hidden `draft_case_ids`, and left-align the lone date field below it; keep
+the `#draft-case-id-selector` id for the JS/spec contract. Keep the TomSelect multiselect (paired
+with the date in the 2-col grid) only for new / draft contacts. The per-contact-type recency hint
+under each checkbox reads **"Last logged N ago"** and is **omitted when never logged** — a bare,
+unlabeled "never" under every unused type read as a mystery state; `ContactTypeDecorator`
+exposes `#last_logged_hint_with_cases` (nil for never) for the form while `#last_time_used_with_cases`
+still returns "never"/"N ago" for the contact-type multiselect subtext. **Notes is a fixed-topic checklist**
 (`_contact_topic_answer`): every org topic is a `border-t`-divided row of a checkbox + the topic
 question, with a full-width notes textarea revealed on check — no dropdown, no nested cards, no
 "Add another" button. The `contact-topics` controller **creates** the answer on check (POST
