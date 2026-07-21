@@ -300,11 +300,20 @@ never data: the transition-aged 🦋/🐛 emoji is dropped from the case-number 
 number), per the Tables note.
 **Type hierarchy inside a card:** the title is the only `text-base font-semibold` (slate-900)
 element; every supporting / detail line is `text-sm`, and **no body line may out-weigh the
-title**. The `TruncatedTextComponent` answer / notes lines were `text-base font-bold` (bigger
-*and* heavier than the semibold title, so the detail shouted and the title whispered); they now
-follow the fact-list label:value weights — `font-medium text-slate-500` label, regular
-`text-slate-800` value — at `text-sm`, with a `brand-600 font-medium` `[read more]` link. Confirm
-weight/size with computed style (title 16px/600 is the sole anchor), not by eye.
+title** (a detail line once rendered `text-base font-bold` and made the body shout over the
+title). Confirm the title (16px / 600) stays the sole anchor with computed style, not by eye.
+**Progressive disclosure, not per-line truncation:** collapsible detail (the case-contact card's
+topic answers + notes) goes in **one** native `<details>` "Show details" toggle that reveals the
+whole block at full length — a `dl` of `text-xs font-semibold text-slate-500` `dt` +
+`text-sm text-slate-700 whitespace-pre-line` `dd`, matching the new-design table's expandable
+detail. **Never** give each line its own truncate + `read more`: reading a single note then cost
+several clicks (the recurring "excessive truncation" bug). The `<summary>` swaps Show/Hide via
+`group-open:` and is a `brand-600 font-medium` link with the marker hidden
+(`[&::-webkit-details-marker]:hidden`).
+**Dividers:** `border-b border-slate-100` is a real header token (modal + table-card headers),
+but on a compact content card a rule directly *under the title* over-segments it from its own
+type/date summary — take structure instead from the footer `border-t` and the inset
+(`rounded-xl border bg-slate-50/60`) detail panel.
 
 ### Fact / detail list
 Entity facts (the case-details card) are inline `dt` (muted `font-medium text-slate-500`) :
