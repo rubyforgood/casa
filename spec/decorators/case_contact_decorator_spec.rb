@@ -172,7 +172,7 @@ RSpec.describe CaseContactDecorator do
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven | Reimbursement"
+          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven"
         )
       end
     end
@@ -183,8 +183,44 @@ RSpec.describe CaseContactDecorator do
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | 100 miles driven | Reimbursement"
+          "December 1, 2020 | 1 hour 39 minutes | 100 miles driven"
         )
+      end
+    end
+  end
+
+  describe "#reimbursement_status_text" do
+    context "when the reimbursement has not been completed" do
+      let(:case_contact) { build(:case_contact, reimbursement_complete: false) }
+
+      it "returns pending text" do
+        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement Pending")
+      end
+    end
+
+    context "when the reimbursement has been completed" do
+      let(:case_contact) { build(:case_contact, reimbursement_complete: true) }
+
+      it "returns complete text" do
+        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement Complete")
+      end
+    end
+  end
+
+  describe "#reimbursement_status_badge_type" do
+    context "when the reimbursement has not been completed" do
+      let(:case_contact) { build(:case_contact, reimbursement_complete: false) }
+
+      it "returns the warning badge type" do
+        expect(case_contact.decorate.reimbursement_status_badge_type).to eq(:warning)
+      end
+    end
+
+    context "when the reimbursement has been completed" do
+      let(:case_contact) { build(:case_contact, reimbursement_complete: true) }
+
+      it "returns the success badge type" do
+        expect(case_contact.decorate.reimbursement_status_badge_type).to eq(:success)
       end
     end
   end

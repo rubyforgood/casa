@@ -17,6 +17,12 @@
         <% unless contact.active? %>
           <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>
         <% end %>
+        <% if contact.want_driving_reimbursement? %>
+          <%# Reimbursement status (main #7055): rendered as a casadesign pill (amber = pending,
+              emerald = complete), not the Bootstrap BadgeComponent. ml-auto right-aligns it. %>
+          <% reimbursement_pill = (contact.decorate.reimbursement_status_badge_type == :success) ? "bg-emerald-50 text-emerald-700" : "bg-amber-50 text-amber-700" %>
+          <span class="<%= pill %> <%= reimbursement_pill %> ml-auto"><%= contact.decorate.reimbursement_status_text %></span>
+        <% end %>
         <% if policy(contact).restore? && contact.deleted? %>
           <%= link_to "undelete", restore_case_contact_path(contact.id), method: :post, data: {turbo: false}, class: "#{pill} bg-sky-50 text-sky-700 hover:bg-sky-100" %>
         <% end %>

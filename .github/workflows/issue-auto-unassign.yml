@@ -10,7 +10,7 @@ jobs:
     name: Unassign issues
     steps:
       - name: Unassign issues
-        uses: rubyforgood/unassign-issues@v1.3
+        uses: rubyforgood/unassign-issues@f3d8461c2a3ea67cc4a015ca50737a4f865460d7 # v1.3
         id: unassign_issues
         with:
           token: ${{secrets.GITHUB_TOKEN}}
@@ -23,7 +23,7 @@ jobs:
       - name: Print the warned issues
         run: echo "Warned issues = ${{steps.unassign_issues.outputs.warned_issues}}"
       - name: Move unassigned issues from In Progress to To Do
-        uses: bjthompson805/move-issues@v1
+        uses: bjthompson805/move-issues@4d2c991804d44e11541302f32eb71659f3a0435d # v1
         id: move_issues
         with:
           token: ${{secrets.GITHUB_TOKEN}}

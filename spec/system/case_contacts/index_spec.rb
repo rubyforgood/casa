@@ -61,6 +61,44 @@ RSpec.describe "case_contacts/index", type: :system do
       end
     end
 
+    describe "reimbursement status" do
+      it "shows a pending badge when the reimbursement has not been completed" do
+        create(:case_contact, :wants_reimbursement, creator: volunteer, casa_case: casa_case,
+          occurred_at: 2.days.ago, reimbursement_complete: false)
+
+        subject
+
+        within(".full-card", match: :first) do
+          expect(page).to have_text("Reimbursement Pending")
+          expect(page).to have_no_text("Reimbursement Complete")
+        end
+      end
+
+      it "shows a complete badge when the reimbursement has been completed" do
+        create(:case_contact, :wants_reimbursement, creator: volunteer, casa_case: casa_case,
+          occurred_at: 2.days.ago, reimbursement_complete: true)
+
+        subject
+
+        within(".full-card", match: :first) do
+          expect(page).to have_text("Reimbursement Complete")
+          expect(page).to have_no_text("Reimbursement Pending")
+        end
+      end
+
+      it "shows no reimbursement badge when reimbursement was not requested" do
+        create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: 2.days.ago,
+          want_driving_reimbursement: false)
+
+        subject
+
+        within(".full-card", match: :first) do
+          expect(page).to have_no_text("Reimbursement Pending")
+          expect(page).to have_no_text("Reimbursement Complete")
+        end
+      end
+    end
+
     describe "automated filtering case contacts" do
       describe "by date of contact" do
         it "only shows the contacts with the correct date", :js do

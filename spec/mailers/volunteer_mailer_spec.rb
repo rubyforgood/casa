@@ -41,6 +41,41 @@ RSpec.describe VolunteerMailer, type: :mailer do
     end
   end
 
+  describe ".reimbursement_complete_email" do
+    let(:case_contact) { create(:case_contact, :wants_reimbursement, creator: volunteer) }
+    let(:mail) { VolunteerMailer.reimbursement_complete_email(volunteer, case_contact) }
+
+    it "sends an email confirming the reimbursement was processed" do
+      expect(mail.to).to eq([volunteer.email])
+      expect(mail.subject).to eq("Your reimbursement request has been processed")
+      expect(mail.body.encoded).to match("#{case_contact.miles_driven}mi")
+      expect(mail.body.encoded).to match(case_contact.occurred_at_display)
+    end
+
+    context "when the casa org has a mileage rate" do
+      let!(:mileage_rate) { create(:mileage_rate, casa_org: case_contact.casa_case.casa_org, amount: 6.50, effective_date: 3.days.ago) }
+
+      it "includes the reimbursement amount" do
+        # Bare "$" is a regex end-anchor via String#match, not a literal dollar sign.
+        expect(mail.body.encoded).to match(/\$[\d,]+\.\d{2}/)
+      end
+    end
+
+    context "when the casa org has no mileage rate" do
+      it "omits the reimbursement amount rather than rendering a blank or nil value" do
+        expect(mail.body.encoded).not_to match(/\$[\d,]+\.\d{2}/)
+      end
+    end
+
+    describe "the currency pattern itself" do
+      # An unescaped "." would still match a real decimal point, so neither
+      # test above would catch it regressing; guard the escape directly.
+      it "does not match if the decimal point is some other character" do
+        expect("$40X50").not_to match(/\$[\d,]+\.\d{2}/)
+      end
+    end
+  end
+
   describe ".invitation_instructions for a volunteer" do
     let(:mail) { volunteer.invite! }
     let(:expiration_date) { I18n.l(volunteer.invitation_due_at, format: :full, default: nil) }

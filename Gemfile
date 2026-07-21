@@ -11,7 +11,7 @@ gem "authtrail" # Track Devise login activity
 gem "azure-storage-blob", require: false
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
-gem "caxlsx", "~> 4.4" # Excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.5" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.7.1" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
@@ -22,7 +22,7 @@ gem "filterrific" # Filtering and sorting of models
 gem "flipper" # Feature flag management
 gem "flipper-active_record" # Active Record adapter for Flipper
 gem "flipper-ui" # Web UI for managing feature flags
-gem "friendly_id", "~> 5.6.0" # Allows us to use a slug instead of CASA case IDs in their URLs
+gem "friendly_id", "~> 5.7.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
 gem "httparty" # HTTP network requests
 gem "image_processing", "~> 1.14" # Image processing helpers

@@ -23,8 +23,16 @@ class CaseContactDecorator < Draper::Decorator
     object.miles_driven.zero? ? nil : "#{object.miles_driven} miles driven"
   end
 
-  def reimbursement
-    object.want_driving_reimbursement ? "Reimbursement" : nil
+  # Text for the reimbursement status badge shown on the case contact card so
+  # volunteers can see at a glance whether their reimbursement is still pending
+  # or has been completed, without having to ask their supervisor.
+  def reimbursement_status_text
+    object.reimbursement_complete? ? "Reimbursement Complete" : "Reimbursement Pending"
+  end
+
+  # Bootstrap badge color for the reimbursement status.
+  def reimbursement_status_badge_type
+    object.reimbursement_complete? ? :success : :warning
   end
 
   def contact_made
@@ -40,8 +48,7 @@ class CaseContactDecorator < Draper::Decorator
       I18n.l(object.occurred_at, format: :full, default: nil),
       duration_minutes,
       contact_made,
-      miles_traveled,
-      reimbursement
+      miles_traveled
     ].compact.join(" | ")
   end
 
