@@ -9,6 +9,7 @@ import { Controller } from '@hotwired/stimulus'
 // Connects to data-controller="contact-topics"
 export default class extends Controller {
   static values = { route: String, caseContactId: Number }
+  static targets = ['dialog']
 
   connect () {
     this.headers = { 'Content-Type': 'application/json', Accept: 'application/json' }
@@ -28,15 +29,33 @@ export default class extends Controller {
       notes.classList.remove('hidden')
       if (!idField.value) { this.create(group, idField) }
       textarea.focus()
+    } else if (textarea.value.trim() && this.hasDialogTarget) {
+      // Has notes: confirm through the design-system <dialog>, not a browser confirm(). Keep the
+      // topic checked until the user confirms; confirmRemove -> removeTopic does the real removal.
+      e.target.checked = true
+      this.pendingGroup = group
+      this.dialogTarget.showModal()
     } else {
-      if (textarea.value.trim() && !window.confirm('Remove this topic and its notes?')) {
-        e.target.checked = true // cancelled -- leave the topic in place
-        return
-      }
-      if (idField.value) { this.destroy(idField) }
-      notes.classList.add('hidden')
-      fields.forEach(field => { field.disabled = true })
+      this.removeTopic(group)
     }
+  }
+
+  // Confirm button inside the removal dialog.
+  confirmRemove () {
+    if (this.pendingGroup) {
+      this.removeTopic(this.pendingGroup)
+      this.pendingGroup = null
+    }
+    this.dialogTarget.close()
+  }
+
+  removeTopic (group) {
+    const notes = group.querySelector('[data-topic-notes]')
+    const idField = notes.querySelector('input[name*="[id]"]')
+    group.querySelector('input[type="checkbox"]').checked = false
+    if (idField.value) { this.destroy(idField) }
+    notes.classList.add('hidden')
+    notes.querySelectorAll('input, textarea').forEach(field => { field.disabled = true })
   }
 
   create (group, idField) {

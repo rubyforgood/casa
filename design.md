@@ -611,7 +611,8 @@ Shipped instances: the court-report generator (form modal; submit posts via the
 `court-report` controller) and `shared/_confirm_button` (destructive confirm; the danger
 action posts via `button_to`, and the trigger, title, message, and labels are locals). A
 confirm can also be opened **programmatically** by a Stimulus controller instead of a trigger
-slot (the court-orders remove and copy-from-sibling): wrap the `<dialog>` in `<div data-controller="modal"
+slot (the court-orders remove and copy-from-sibling, and the case-contact **topic-removal** confirm
+in `contact-topics` — replacing a `window.confirm()`): wrap the `<dialog>` in `<div data-controller="modal"
 class="contents">`, mark it `data-modal-target="dialog"` (for the centering rule) and a
 target of the owning controller, call `showModal()` from that controller's action, and wire
 the confirm button to the controller; Cancel / X / backdrop still use `modal#close`. A

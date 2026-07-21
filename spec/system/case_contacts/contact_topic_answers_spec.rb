@@ -162,9 +162,9 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
         subject
         fill_in_contact_details
 
-        accept_confirm do
-          notes_section.uncheck(topic_one.question)
-        end
+        notes_section.uncheck(topic_one.question)
+        # design-system confirmation dialog, not a browser confirm()
+        click_on "Remove topic"
 
         expect(notes_section).to have_unchecked_field(topic_one.question, type: :checkbox)
 
@@ -174,6 +174,22 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
         case_contact.reload
         expect(ContactTopicAnswer.count).to eq(1)
         expect(case_contact.contact_topic_answers.size).to eq(1)
+      end
+
+      it "keeps the topic when the removal is cancelled", :js do
+        subject
+        fill_in_contact_details
+
+        notes_section.uncheck(topic_one.question)
+        click_on "Cancel"
+
+        expect(notes_section).to have_checked_field(topic_one.question, type: :checkbox)
+
+        click_on "Submit"
+        expect(page).to have_content(/Case contact .* was successfully updated./)
+
+        case_contact.reload
+        expect(case_contact.contact_topic_answers.size).to eq(2)
       end
     end
 

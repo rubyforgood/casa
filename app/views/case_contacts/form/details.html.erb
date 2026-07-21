@@ -197,6 +197,25 @@
                 <% end %>
               <% end %>
             </div>
+
+            <%# Design-system confirmation for removing a discussion topic that still has notes
+                (replaces the browser confirm()). Same programmatic-open pattern as the court-order
+                remove: contact-topics opens its dialog target with showModal() and removes the
+                pending topic on confirm; the modal controller centers it + handles backdrop/Escape. %>
+            <div data-controller="modal" class="contents">
+              <dialog data-modal-target="dialog" data-contact-topics-target="dialog"
+                      data-action="click->modal#backdropClose" aria-label="Remove this topic?"
+                      class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
+                <%= render Dialog::HeaderComponent.new(title: "Remove this topic?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
+                <%= render Dialog::BodyComponent.new do %>
+                  <p class="text-sm text-slate-600">This removes the topic and the notes you've written for it from this contact.</p>
+                <% end %>
+                <%= render Dialog::FooterComponent.new do %>
+                  <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+                  <button type="button" data-action="contact-topics#confirmRemove" class="<%= button_classes(:danger) %>">Remove topic</button>
+                <% end %>
+              </dialog>
+            </div>
           <% end %>
 
           <% if form.object.notes.present? || @contact_topics.empty? %>
