@@ -65,7 +65,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
 
       check "Request travel or other reimbursement"
-      expect(page).to have_field("case_contact_volunteer_address", disabled: true)
+      expect(page).to have_field("case_contact_volunteer_address_line_1", disabled: true)
       expect(page).to have_text("There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible.")
     end
 

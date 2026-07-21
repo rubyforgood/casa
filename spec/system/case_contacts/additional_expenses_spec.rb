@@ -64,7 +64,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
     fill_in_contact_details
     check "Request travel or other reimbursement"
     fill_in "case_contact_miles_driven", with: 50
-    fill_in "case_contact_volunteer_address", with: "123 Params St"
+    fill_in "case_contact_volunteer_address_line_1", with: "123 Params St"
 
     click_on "Add another expense"
     fill_expense_fields 1.50, "1st meal"

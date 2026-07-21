@@ -301,10 +301,17 @@ per-row Delete: the dropdown was redundant against a fixed topic set, and **unch
 body it reports on (the Reimbursement form), so the collapsed/empty state is just heading +
 checkbox and doesn't reserve a blank `invisible` line at the bottom — that reserved line made the
 empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of dead space).
-`volunteer_address` is a single free-text string (`Address#content`, shared with the volunteer
-profile and reimbursement exports); structured address fields (line 1 / line 2 / city / state /
-zip) are the better/industry-standard form, but that's a cross-cutting Address-model change
-(schema + migration + profile form + exports), **not** a per-card tweak — don't one-off it here.
+**Structured mailing address:** captured as discrete parts (line 1 / line 2 / city / state / zip),
+not one free-text field. `Address` keeps `content` as the canonical composed one-line string every
+reader still uses (reimbursement table, mileage CSV, case-contact prefill): `Address.compose(...)`
+plus a `before_save` that runs only when `structured?`, so legacy content-only rows and the factory
+stay untouched. The reimbursement card reuses the same parts as five virtual attrs on `CaseContact`
+that compose into the `volunteer_address` snapshot (`compose_volunteer_address`, skipped when all
+parts are nil so the legacy single-string path — request specs, factory — still sets it directly;
+a blank submit yields `""` so the reimbursement-wanted validation still fires). Prefill the fields
+from the volunteer's structured Address (`decorate.volunteer_address_parts`) and give each a
+`volunteerAddress` Stimulus target so `clearMileage` empties them all on uncheck. Layout: line 1 /
+line 2 full-width, then city (col-span-3) · state (1) · ZIP (2); sr-only labels + placeholders.
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`

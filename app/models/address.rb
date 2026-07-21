@@ -12,15 +12,21 @@ class Address < ApplicationRecord
     STRUCTURED_FIELDS.any? { |field| self[field].present? }
   end
 
+  # Compose a one-line address string from discrete parts. Shared by Address#content and the
+  # case-contact reimbursement snapshot so both format identically. Blank parts are dropped; a
+  # line_1-only address returns exactly line_1 (which is why the backfill can put content there).
+  def self.compose(line_1: nil, line_2: nil, city: nil, state: nil, zip: nil)
+    region = [city, [state, zip].compact_blank.join(" ")].compact_blank.join(", ")
+    [line_1, line_2, region].compact_blank.join(", ")
+  end
+
   private
 
   # `content` remains the canonical, human-readable one-line address the rest of the app reads
   # (reimbursement table, mileage CSV export, case-contact prefill), so keep it in sync with the
-  # structured parts instead of changing every reader. A line_1-only address composes back to
-  # exactly line_1, which is why the backfill can safely put legacy content into line_1.
+  # structured parts instead of changing every reader.
   def compose_content
-    region = [city, [state, zip].compact_blank.join(" ")].compact_blank.join(", ")
-    self.content = [line_1, line_2, region].compact_blank.join(", ")
+    self.content = self.class.compose(line_1:, line_2:, city:, state:, zip:)
   end
 end
 

@@ -244,7 +244,7 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:reimbursement_section_id) { "#contact-form-reimbursement" }
     let(:reimbursement_checkbox) { "case_contact_want_driving_reimbursement" }
     let(:miles_driven_input) { "case_contact_miles_driven" }
-    let(:volunteer_address_input) { "case_contact_volunteer_address" }
+    let(:volunteer_address_input) { "case_contact_volunteer_address_line_1" }
     let(:add_expense_button_text) { "Add another expense" }
 
     before do

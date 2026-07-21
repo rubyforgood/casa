@@ -224,27 +224,60 @@
 
             <%# DRIVING REIMBURSEMENT (hidden until the checkbox is checked; JS toggles `hidden`) %>
             <div data-case-contact-form-target="reimbursementForm" class="hidden space-y-5">
-              <div class="grid gap-5 sm:grid-cols-2">
-                <div>
+              <% address_parts = @case_contact.decorate.volunteer_address_parts %>
+              <% address_disabled = @case_contact.address_field_disabled? %>
+              <% address_input = "#{input_class} disabled:bg-slate-50 disabled:text-slate-500" %>
+              <div class="space-y-5">
+                <div class="sm:max-w-[12rem]">
                   <%= form.label :miles_driven, class: label_class do %>Total miles driven <%= req %><% end %>
                   <%= form.number_field(:miles_driven,
                     min: "0", max: 10000, placeholder: "0",
                     class: input_class,
                     data: {case_contact_form_target: "milesDriven"}) %>
                 </div>
-                <div>
-                  <%= form.label :volunteer_address, class: label_class do %>Mailing address for reimbursement check <%= req %><% end %>
-                  <%= form.text_area(:volunteer_address,
-                    value: @case_contact.decorate.address_of_volunteer,
-                    disabled: @case_contact.address_field_disabled?,
-                    placeholder: "Enter mailing address",
-                    rows: 3,
-                    class: "#{input_class} disabled:bg-slate-50 disabled:text-slate-500",
-                    data: {case_contact_form_target: "volunteerAddress"}) %>
-                  <% if @case_contact.address_field_disabled? %>
+
+                <%# Structured mailing address for the reimbursement check. The five fields compose
+                    into the volunteer_address snapshot server-side (CaseContact#compose_volunteer_address);
+                    each is a volunteerAddress target so the JS can clear them when reimbursement is unchecked. %>
+                <fieldset class="space-y-2.5">
+                  <legend class="<%= label_class %>">Mailing address for reimbursement check <%= req %></legend>
+                  <%= form.label :volunteer_address_line_1, "Address line 1", class: "sr-only" %>
+                  <%= form.text_field :volunteer_address_line_1,
+                    value: @case_contact.volunteer_address_line_1 || address_parts[:line_1],
+                    disabled: address_disabled, placeholder: "Address line 1",
+                    class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                  <%= form.label :volunteer_address_line_2, "Address line 2", class: "sr-only" %>
+                  <%= form.text_field :volunteer_address_line_2,
+                    value: @case_contact.volunteer_address_line_2 || address_parts[:line_2],
+                    disabled: address_disabled, placeholder: "Address line 2 (optional)",
+                    class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                  <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
+                    <div class="sm:col-span-3">
+                      <%= form.label :volunteer_address_city, "City", class: "sr-only" %>
+                      <%= form.text_field :volunteer_address_city,
+                        value: @case_contact.volunteer_address_city || address_parts[:city],
+                        disabled: address_disabled, placeholder: "City",
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                    </div>
+                    <div class="sm:col-span-1">
+                      <%= form.label :volunteer_address_state, "State", class: "sr-only" %>
+                      <%= form.text_field :volunteer_address_state,
+                        value: @case_contact.volunteer_address_state || address_parts[:state],
+                        disabled: address_disabled, placeholder: "State",
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                    </div>
+                    <div class="sm:col-span-2">
+                      <%= form.label :volunteer_address_zip, "ZIP", class: "sr-only" %>
+                      <%= form.text_field :volunteer_address_zip,
+                        value: @case_contact.volunteer_address_zip || address_parts[:zip],
+                        disabled: address_disabled, placeholder: "ZIP",
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                    </div>
+                  </div>
+                  <% if address_disabled %>
                     <p class="mt-1.5 text-xs text-rose-600"><%= @case_contact.decorate.ambiguous_volunteer_address_message %></p>
                   <% end %>
-                </div>
+                </fieldset>
               </div>
 
               <% if show_additional_expenses %>

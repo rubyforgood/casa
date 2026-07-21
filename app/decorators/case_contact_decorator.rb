@@ -143,6 +143,18 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  # Structured parts to prefill the reimbursement address fields: prefer the volunteer's saved
+  # structured Address; otherwise put the whole known address (snapshot or legacy content) into
+  # line 1 so nothing is lost when it can't be split into parts.
+  def volunteer_address_parts
+    address = volunteer&.address
+    if address&.structured?
+      Address::STRUCTURED_FIELDS.index_with { |field| address.public_send(field) }
+    else
+      {line_1: address_of_volunteer, line_2: nil, city: nil, state: nil, zip: nil}
+    end
+  end
+
   def ambiguous_volunteer_address_message
     "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
   end

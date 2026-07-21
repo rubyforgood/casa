@@ -74,7 +74,7 @@ module FillInCaseContactFields
       return unless want_reimbursement
 
       fill_in "case_contact_miles_driven", with: miles if miles.present?
-      fill_in "case_contact_volunteer_address", with: address if address
+      fill_in "case_contact_volunteer_address_line_1", with: address if address
     end
   end
   alias_method :fill_in_expenses_page, :fill_in_mileage

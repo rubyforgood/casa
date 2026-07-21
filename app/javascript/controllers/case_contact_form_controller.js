@@ -68,7 +68,8 @@ export default class extends Controller {
 
   clearMileage = () => {
     this.milesDrivenTarget.value = 0
-    this.volunteerAddressTarget.value = ''
+    // structured address = several volunteerAddress targets (line 1 / line 2 / city / state / zip)
+    this.volunteerAddressTargets.forEach(el => { el.value = '' })
   }
 
   setReimbursementFormVisibility = () => {

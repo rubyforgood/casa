@@ -4,6 +4,13 @@ class CaseContact < ApplicationRecord
 
   attr_accessor :duration_hours
 
+  # Structured mailing-address parts for the reimbursement check. They compose into the
+  # volunteer_address snapshot string (kept for storage, validation, exports, and readers);
+  # prefilled from the volunteer's structured Address. See #compose_volunteer_address.
+  attr_accessor :volunteer_address_line_1, :volunteer_address_line_2,
+    :volunteer_address_city, :volunteer_address_state, :volunteer_address_zip
+  before_validation :compose_volunteer_address
+
   validates :contact_made, inclusion: {in: [true, false], message: :must_be_true_or_false}
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
@@ -245,6 +252,29 @@ class CaseContact < ApplicationRecord
         errors.add(:base, "The volunteer's address is not valid.")
       end
     end
+  end
+
+  # The reimbursement address as submitted through the structured form fields. All-nil means the
+  # address arrived as the legacy single string (request specs / factory), not the form.
+  def submitted_address_parts
+    {
+      line_1: volunteer_address_line_1,
+      line_2: volunteer_address_line_2,
+      city: volunteer_address_city,
+      state: volunteer_address_state,
+      zip: volunteer_address_zip
+    }
+  end
+
+  # Keep the volunteer_address snapshot string in sync with the structured fields the form posts.
+  # Skip when no structured field was submitted (all nil), so the legacy single-string path
+  # (request specs, factory) still sets volunteer_address directly. A blank submit yields "" so
+  # the reimbursement-wanted validation still fires.
+  def compose_volunteer_address
+    parts = submitted_address_parts
+    return if parts.values.all?(&:nil?)
+
+    self.volunteer_address = Address.compose(**parts)
   end
 
   def supervisor_id

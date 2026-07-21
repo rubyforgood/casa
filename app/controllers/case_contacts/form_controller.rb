@@ -131,7 +131,12 @@ class CaseContacts::FormController < ApplicationController
     return unless case_contact.volunteer_address.present? && !case_contact.address_field_disabled?
 
     address = case_contact.volunteer.address || case_contact.volunteer.build_address
-    address.update(content: case_contact.volunteer_address)
+    parts = case_contact.submitted_address_parts
+    if parts.values.any?(&:present?)
+      address.update(parts)
+    else
+      address.update(content: case_contact.volunteer_address)
+    end
   end
 
   # Makes a copy of the draft for all selected cases not including the first one. The draft becomes the contact for
