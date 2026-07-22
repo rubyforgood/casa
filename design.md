@@ -316,6 +316,14 @@ rose hover) sits at the **top-right** (`flex items-start`) so it takes no extra 
 the fields down — not a grey `bg-slate-50` box or a full-width ghost button. The wrapper keeps
 `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the design-system
 confirm dialog (new/unsaved rows remove without a prompt).
+**Case-contact form actions:** two submit buttons, not a mode checkbox — primary **Submit** (kept
+first in the DOM so Enter submits it and `click_on "Submit"` (Capybara `:smart`) still hits it)
+plus secondary **Submit & add another**, which carries `name="case_contact[metadata][create_another]"`
+so `finish_editing` reopens a fresh form for the same case(s). Since there's no per-contact show
+page, the create-another success flash gets a **trusted action link** via
+`flash[:notice_action] = {"label", "path"}` — the casa_app flash partial renders it as a `link_to`
+inside the notice (not raw HTML; the `:json` cookie serializer drops `html_safe`), pointing at
+`case_contacts_path` so the user can find what they just created. Reusable for any notice.
 **Structured mailing address:** captured as discrete parts (line 1 / line 2 / city / state / zip),
 not one free-text field. `Address` keeps `content` as the canonical composed one-line string every
 reader still uses (reimbursement table, mileage CSV, case-contact prefill): `Address.compose(...)`

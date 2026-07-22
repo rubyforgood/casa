@@ -65,6 +65,19 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
+  it "'Submit & add another' saves, reopens a fresh form for the same case, and links to the list", :js do
+    subject
+    complete_details_page(case_numbers: [case_number], contact_types: %w[School])
+
+    click_on "Submit & add another"
+
+    expect(page).to have_text "Case contact successfully created."
+    expect(page).to have_link "View case contacts", href: case_contacts_path
+    expect(page).to have_current_path(%r{/case_contacts/\d+/form/details}) # reopened a fresh form
+    expect(CaseContact.active.count).to eq 1
+    expect(CaseContact.active.last.metadata["create_another"]).to be true
+  end
+
   context "with invalid inputs" do
     it "re-renders the form with errors, preserving all previously entered selections" do
       subject

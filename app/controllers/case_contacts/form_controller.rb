@@ -115,6 +115,9 @@ class CaseContacts::FormController < ApplicationController
     update_volunteer_address(@case_contact)
     flash[:notice] = message
     if @case_contact.metadata["create_another"]
+      # "Submit & add another" reopens a fresh form, taking the user off the list -- so surface a
+      # link back to the case-contacts list (there's no per-contact show page) where it now appears
+      flash[:notice_action] = {"label" => "View case contacts", "path" => case_contacts_path}
       redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referer: true})
     else
       redirect_back_to_referer(fallback_location: case_contacts_path(success: true))

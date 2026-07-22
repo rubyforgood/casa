@@ -373,20 +373,16 @@
           </section>
         <% end %>
 
-        <%# ACTIONS %>
-        <div id="contact-form-action-buttons" class="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <%= form.fields_for :metadata do |metadata_form| %>
-              <div class="flex items-center gap-2">
-                <%= metadata_form.check_box :create_another, class: check_class %>
-                <%= metadata_form.label :create_another, "Create another", class: "text-sm font-medium text-slate-700" %>
-              </div>
-              <p class="mt-1 pl-6 text-xs text-slate-500">Start a new contact for the same case(s) after submitting.</p>
-            <% end %>
-          </div>
-
+        <%# ACTIONS. Two submit buttons instead of a "create another" mode checkbox: the primary
+            Submit is first so pressing Enter submits normally; "Submit & add another" carries the
+            metadata[create_another] param that finish_editing reads to reopen a fresh form for the
+            same case(s). %>
+        <div id="contact-form-action-buttons" class="flex flex-wrap items-center gap-3">
           <%= button_tag type: "submit", class: button_classes(:primary) do %>
             <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+          <%= button_tag type: "submit", name: "case_contact[metadata][create_another]", value: "true", class: button_classes(:secondary) do %>
+            <i class="bi bi-plus-lg" aria-hidden="true"></i> Submit &amp; add another
           <% end %>
         </div>
       <% end %>
