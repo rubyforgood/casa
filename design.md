@@ -553,6 +553,11 @@ mystery to sighted users and invisible to screen readers, so the helper attaches
 (`CaseContactDecorator#medium_label`) as both a native `title` tooltip and the accessible name
 (`role="img"` + `aria-label`), with the inner `<i>` `aria-hidden`. Icon and label travel together, so
 it stays clear + accessible everywhere the medium appears (card today, a contacts table tomorrow).
+Medium names are **sentence case** ("Voice only", "Text/email") everywhere: `medium_label` (badge) and
+`contact_mediums` (the medium dropdown / radios + the index filter) both derive it via
+`medium_type.tr("-", " ").humanize`, so they don't drift back to Title Case. WCAG: the icon carries a
+text alternative (`aria-label`, not color/shape alone) and brand-600 on brand-50 is **5.6:1** (passes
+1.4.11 non-text contrast); axe is clean on the index + form.
 
 ### Names
 User names render **without honorific prefixes** (Mrs./Mr./…), first + last only, on

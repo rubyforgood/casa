@@ -197,7 +197,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
       subject
 
       fill_in_contact_details(
-        contact_made: false, medium: "In Person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
+        contact_made: false, medium: "In person", occurred_on: 1.day.ago.to_date, hours: 1, minutes: 5
       )
 
       answer_topic contact_topics.first.question, "Topic One answer."

@@ -35,7 +35,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
     complete_details_page(
       case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-      medium: "In Person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
+      medium: "In person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
     )
     click_on "Submit"
     expect(page).to have_text "Case contact successfully created."
@@ -187,7 +187,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
       )
 
       answer_topic "Active Topic", "Hello world"
@@ -418,7 +418,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.today, hours: 1, minutes: 45
       )
 
       click_on "Submit & add another"

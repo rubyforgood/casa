@@ -66,7 +66,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       video_date = I18n.l(video_contact.occurred_at, format: :full)
 
       click_button "Expand / hide"
-      select "In Person", from: "Medium"
+      select "In person", from: "Medium"
 
       expect(page).to have_text(in_person_date)
       expect(page).not_to have_text(video_date)
@@ -96,7 +96,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       video_date = I18n.l(video_contact.occurred_at, format: :full)
 
       click_button "Expand / hide"
-      select "In Person", from: "Medium"
+      select "In person", from: "Medium"
       expect(page).not_to have_text(video_date)
 
       click_link "Reset filters"

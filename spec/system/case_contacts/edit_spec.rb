@@ -38,7 +38,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     it "successfully edits case contact with mileage reimbursement", :js do
       visit edit_case_contact_path(case_contact)
 
-      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
       complete_notes_page
       fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
@@ -62,7 +62,7 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
 
       check "Request travel or other reimbursement"
       expect(page).to have_select("case_contact_reimbursement_volunteer_id")
@@ -128,7 +128,7 @@ RSpec.describe "case_contacts/edit", type: :system do
   it "is successful with mileage reimbursement on", :js do
     visit edit_case_contact_path(case_contact)
 
-    complete_details_page(contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
+    complete_details_page(contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
     complete_notes_page
     fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 

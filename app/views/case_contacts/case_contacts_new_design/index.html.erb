@@ -141,7 +141,7 @@
                   <% else %><span class="text-slate-500">&mdash;</span><% end %>
                 </td>
                 <td class="<%= td %>"><%= contact.decorate.contact_types_comma_separated %></td>
-                <td class="<%= td %> whitespace-nowrap"><%= contact.medium_type&.titleize || tag.span("\u2014", class: "text-slate-500") %></td>
+                <td class="<%= td %> whitespace-nowrap"><%= contact.medium_type&.tr("-", " ")&.humanize || tag.span("\u2014", class: "text-slate-500") %></td>
                 <td class="<%= td %> whitespace-nowrap"><%= render "case_contacts/case_contacts_new_design/creator", contact: contact %></td>
                 <td class="<%= td %> whitespace-nowrap">
                   <% if contact.contact_made %>
@@ -233,7 +233,7 @@
               </div>
               <div>
                 <dt class="text-xs text-slate-500">Medium</dt>
-                <dd class="mt-0.5 text-sm text-slate-700"><%= contact.medium_type&.titleize || "\u2014" %></dd>
+                <dd class="mt-0.5 text-sm text-slate-700"><%= contact.medium_type&.tr("-", " ")&.humanize || "\u2014" %></dd>
               </div>
               <div>
                 <dt class="text-xs text-slate-500">Contacted</dt>

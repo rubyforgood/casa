@@ -186,7 +186,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         it "does not hide menu when filtering by placement filter" do
           click_on "Expand / Hide"
-          select "In Person", from: "Contact medium"
+          select "In person", from: "Contact medium"
 
           expect(page).to have_content "Other filters"
         end

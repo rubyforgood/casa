@@ -8,7 +8,7 @@ module FillInCaseContactFields
   EXPENSE_DESCRIBE_CLASS = ".expense-describe-input"
 
   def fill_in_contact_details(case_numbers: [], contact_types: [], contact_made: true,
-    medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
+    medium: "In person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
     within DETAILS_ID do
       within "#draft-case-id-selector" do
         if case_numbers.nil?
