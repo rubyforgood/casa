@@ -68,13 +68,13 @@ RSpec.describe CaseContact, type: :model do
     it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement"])
+      expect(case_contact.errors[:miles_driven]).to include("must be entered to receive driving reimbursement")
     end
 
     it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement"])
+      expect(case_contact.errors[:miles_driven]).to include("must be entered to receive driving reimbursement")
     end
 
     it "validates that contact_made cannot be null" do
@@ -141,7 +141,7 @@ RSpec.describe CaseContact, type: :model do
     it "validates miles driven if want reimbursement" do
       obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
       expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement")
+      expect(obj.errors.full_messages).to include("Miles driven must be entered to receive driving reimbursement")
     end
   end
 

@@ -48,7 +48,8 @@
         local: true
       ) do |form| %>
 
-        <%= render "shared/form_errors", resource: @case_contact %>
+        <%= render "shared/form_errors", resource: @case_contact,
+          order: %i[draft_case_ids occurred_at case_contact_contact_types contact_made medium_type duration_hours duration_minutes miles_driven] %>
 
         <%# DETAILS %>
         <section id="contact-form-details" class="<%= card %> space-y-6">
@@ -163,7 +164,7 @@
           </fieldset>
 
           <%# DURATION (Tailwind twin of Form::HourMinuteDurationComponent) %>
-          <fieldset class="m-0 border-0 p-0">
+          <fieldset class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :duration_minutes)) %>>
             <legend class="<%= label_class %>">Contact duration</legend>
             <div class="grid grid-cols-2 gap-4">
               <div>
@@ -172,10 +173,10 @@
               </div>
               <div>
                 <%= form.label :duration_minutes, "Minute(s)", class: label_class %>
-                <%= form.number_field :duration_minutes, min: 0, value: duration_minutes(@case_contact), required: true, class: input_class, **field_error_attrs(@case_contact, :duration_minutes) %>
-                <%= field_error(@case_contact, :duration_minutes) %>
+                <%= form.number_field :duration_minutes, min: 0, value: duration_minutes(@case_contact), required: true, class: input_class %>
               </div>
             </div>
+            <%= field_error(@case_contact, :duration_minutes) %>
           </fieldset>
         </section>
 

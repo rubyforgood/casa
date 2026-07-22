@@ -579,7 +579,8 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `{label, path}` link appended to a notice.
 - **Field level.** Every invalid field shows a rose border **and** a visible message, so the error
   is never carried by color alone (WCAG 1.4.1). `field_error(record, attr)` (in
-  `design_system_helper`) renders a rose message + `bi-exclamation-circle` right under the field;
+  `design_system_helper`) renders a secondary-gray message (`text-slate-500`) with a centered rose
+  `bi-exclamation-circle` icon right under the field;
   `field_error_attrs(record, attr)` splats `aria-invalid` + `aria-describedby` onto the input (or,
   via `tag.attributes(...)`, onto a radio/checkbox `<fieldset>`) so assistive tech ties the field to
   its message. The rose border comes from both `.field_with_errors` (Rails' auto-wrap) and
@@ -595,7 +596,8 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `id="error_explanation"` + `role="alert"` + the `alert` class + the lead **"Unable to save"**
   (spec hooks). It lists **every** error so the summary matches the per-field messages: a lone error
   stays inline ("Unable to save: …"), several render as a `list-disc` list (no run-on `to_sentence`,
-  no doubled punctuation). It is the **only** error summary now — the legacy Bootstrap
+  no doubled punctuation). Pass `order:` (attributes in form order) so the list reads top-to-bottom
+  like the page — unlisted attributes and `:base` fall to the end. It is the **only** error summary now — the legacy Bootstrap
   `shared/_error_messages` (bulleted `<ul>`) and the bridge `casa_admins/_errors` were deleted, their
   all-casa / casa-admin pages migrated onto `_form_errors`.
 - **Message copy.** Validation messages are app-shipped copy: sentence case (fix the i18n attribute

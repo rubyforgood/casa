@@ -234,10 +234,12 @@ class CaseContact < ApplicationRecord
     mileage_rate * miles_driven
   end
 
+  # On :miles_driven (not :base) so the field itself is flagged; miles_driven defaults to 0 (a valid
+  # number), so without this the field would carry no error even when reimbursement needs it.
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors.add(:base, "Must enter miles driven to receive driving reimbursement")
+    errors.add(:miles_driven, "must be entered to receive driving reimbursement")
   end
 
   def volunteer_address_when_reimbursement_wanted

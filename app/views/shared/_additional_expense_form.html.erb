@@ -30,13 +30,16 @@
     </div>
   </div>
   <div class="mt-4">
+    <% describe_error_id = "#{form.field_id(:other_expenses_describe)}_error" %>
     <%= form.label :other_expenses_describe, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Other expense details <span class="text-rose-600" aria-hidden="true">*</span><% end %>
     <%= form.text_area(:other_expenses_describe,
       placeholder: "Enter other expense details",
       rows: 2,
       class: "expense-describe-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
-      data: {action: "input->autosave#save"}
+      data: {action: "input->autosave#save"},
+      **field_error_attrs(form.object, :other_expenses_describe, id: describe_error_id)
     ) %>
+    <%= field_error(form.object, :other_expenses_describe, id: describe_error_id) %>
   </div>
   <%= form.hidden_field :id, value: form.object.id %>
   <%= form.hidden_field :_destroy, data: {case_contact_form_target: "expenseDestroy"} %>

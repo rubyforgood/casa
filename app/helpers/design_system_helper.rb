@@ -75,9 +75,9 @@ module DesignSystemHelper
     end
   end
 
-  # Field-level validation (casadesign). Shows WHICH field is invalid, accessibly: a rose message
-  # with a leading icon rendered right under the field, so the error isn't carried by the border
-  # color alone (WCAG 1.4.1). Pair with field_error_attrs to tie the input to the message via
+  # Field-level validation (casadesign). Shows WHICH field is invalid, accessibly: a secondary-gray
+  # message with a rose leading icon (icon + text center-aligned) rendered right under the field, so
+  # the error isn't carried by the border color alone (WCAG 1.4.1). Pair with field_error_attrs to tie the input to the message via
   # aria-describedby + aria-invalid. The shared/_form_errors summary lists the same messages at the
   # top of the form. Renders nothing (nil) when the field is valid.
   #
@@ -86,20 +86,21 @@ module DesignSystemHelper
   #
   # For a radio/checkbox <fieldset>, splat the attrs onto the tag with tag.attributes:
   #   <fieldset <%= tag.attributes(field_error_attrs(@record, :medium_type)) %>>
-  def field_error(record, attribute)
+  def field_error(record, attribute, id: nil)
     return if record.nil? || record.errors[attribute].blank?
-    tag.p id: field_error_id(record, attribute),
-      class: "mt-1.5 flex items-start gap-1.5 text-sm text-rose-600" do
-      tag.i(class: "bi bi-exclamation-circle mt-0.5 shrink-0", aria: {hidden: true}) +
+    tag.p id: id || field_error_id(record, attribute),
+      class: "mt-1.5 flex items-center gap-1.5 text-sm text-slate-500" do
+      tag.i(class: "bi bi-exclamation-circle shrink-0 text-rose-600", aria: {hidden: true}) +
         tag.span(record.errors[attribute].to_sentence)
     end
   end
 
   # aria-* attributes to splat onto the input/select/group for +attribute+ so assistive tech ties it
   # to its field_error message and announces it as invalid. Empty hash (adds nothing) when valid.
-  def field_error_attrs(record, attribute)
+  # Pass +id+ to match a field_error rendered with the same +id+ (e.g. unique per nested row).
+  def field_error_attrs(record, attribute, id: nil)
     return {} if record.nil? || record.errors[attribute].blank?
-    {"aria-invalid": "true", "aria-describedby": field_error_id(record, attribute)}
+    {"aria-invalid": "true", "aria-describedby": id || field_error_id(record, attribute)}
   end
 
   def field_error_id(record, attribute)
