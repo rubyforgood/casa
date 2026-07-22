@@ -12,14 +12,15 @@
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
   <div>
-    <div class="flex items-center justify-between gap-2">
+    <%# label + Remove share the header line; mb-1.5 is the standard label->input gap (label_class token) %>
+    <div class="mb-1.5 flex items-center justify-between gap-2">
       <%= form.label :other_expense_amount, "Other expense amount", class: "text-sm font-medium text-slate-700" %>
       <button type="button"
         class="remove-expense-button text-sm font-medium text-rose-600 hover:text-rose-700 focus-visible:underline focus-visible:outline-none"
         aria-label="Delete expense"
         data-action="casa-nested-form#destroyAndRemove">Remove</button>
     </div>
-    <div class="mt-1.5 flex">
+    <div class="flex">
       <span class="inline-flex items-center rounded-l-lg border border-r-0 border-slate-300 bg-slate-100 px-3 text-sm text-slate-500">$</span>
       <%= form.number_field(:other_expense_amount,
         value: number_with_precision(form.object.other_expense_amount, precision: 2),
