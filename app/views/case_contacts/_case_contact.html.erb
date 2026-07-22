@@ -12,7 +12,7 @@
           below spans the full card width and stays left-aligned to the card edge. A leading
           icon adorns the header; it is not a gutter that indents the body (industry standard). %>
       <div class="card-title flex flex-wrap items-center gap-2">
-        <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600"><i class="<%= contact.decorate.medium_icon %>" aria-hidden="true"></i></span>
+        <%= contact_medium_badge(contact) %>
         <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
         <% unless contact.active? %>
           <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>

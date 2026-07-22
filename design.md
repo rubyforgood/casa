@@ -545,6 +545,15 @@ Deactivated volunteer (slate).
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
 pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 
+### Icon badge (contact medium)
+A case contact's medium (in person / video / voice / text / letter) shows as a brand-tinted icon
+badge (`grid h-8 w-8 place-items-center rounded-xl bg-brand-50 text-brand-600`). Always render it via
+the **`contact_medium_badge(case_contact)`** helper, never a bare `<i>`: an icon-only glyph is a
+mystery to sighted users and invisible to screen readers, so the helper attaches the medium name
+(`CaseContactDecorator#medium_label`) as both a native `title` tooltip and the accessible name
+(`role="img"` + `aria-label`), with the inner `<i>` `aria-hidden`. Icon and label travel together, so
+it stays clear + accessible everywhere the medium appears (card today, a contacts table tomorrow).
+
 ### Names
 User names render **without honorific prefixes** (Mrs./Mr./…), first + last only, on
 **every page**. Use `display_person(user)` (new UI) or `formatted_name(name)` (existing `.display_name`

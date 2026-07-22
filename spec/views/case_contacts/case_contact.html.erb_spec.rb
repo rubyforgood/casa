@@ -34,7 +34,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).to have_text("Some question:")
+        expect(rendered).to have_text("Some question")
         expect(rendered).to have_text("Some answer")
         expect(rendered).not_to have_text("Hidden question")
       end
@@ -49,7 +49,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).not_to have_text("Additional notes:")
+        expect(rendered).not_to have_text("Additional notes")
       end
     end
 
@@ -62,7 +62,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-        expect(rendered).to have_text("Additional notes:")
+        expect(rendered).to have_text("Additional notes")
         expect(rendered).to have_text("This is a note")
       end
     end
@@ -167,6 +167,25 @@ RSpec.describe "case_contacts/case_contact", type: :view do
         render(partial: "case_contacts/case_contact", locals: {contact: case_contact2})
         expect(rendered).not_to have_link("undelete", href: "/case_contacts/#{case_contact2.id}/restore")
       end
+    end
+  end
+
+  describe "contact medium badge" do
+    let(:case_contact) { build_stubbed(:case_contact, medium_type: CaseContact::VIDEO, creator: volunteer) }
+
+    before do
+      enable_pundit(view, admin)
+      allow(view).to receive(:current_user).and_return(admin)
+    end
+
+    it "shows the medium as an accessible, tooltipped badge" do
+      assign :case_contact, case_contact
+      assign :casa_cases, [case_contact.casa_case]
+
+      render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
+
+      expect(rendered).to have_css("span[role='img'][title='Video'][aria-label='Contact medium: Video']")
+      expect(rendered).to have_css("span[role='img'] i.bi-camera-video")
     end
   end
 end

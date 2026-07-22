@@ -14,6 +14,22 @@ module CaseContactsHelper
     }
   end
 
+  # Brand-tinted badge for a case contact's medium (in person / video / voice / text / letter). The
+  # medium name is both a native tooltip and the accessible name (role=img + aria-label), so the
+  # icon isn't a mystery and screen readers announce it. Reused wherever the medium icon appears so
+  # the icon and its label always travel together.
+  def contact_medium_badge(case_contact)
+    decorated = case_contact.decorate
+    label = decorated.medium_label
+    tag.span(
+      tag.i("", class: decorated.medium_icon, aria: {hidden: true}),
+      class: "grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600",
+      role: "img",
+      title: label,
+      aria: {label: "Contact medium: #{label}"}
+    )
+  end
+
   def render_back_link(casa_case)
     return send_home if !current_user || current_user&.volunteer?
 
