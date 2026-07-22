@@ -37,7 +37,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         subject
 
-        card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        card = find(".container-fluid", text: "DRAFT Case Contact")
         expect(card).not_to be_nil
 
         within_element(card) do
@@ -45,7 +45,7 @@ RSpec.describe "case_contacts/index", type: :system do
           click_on "Delete"
         end
 
-        expect(page).to have_no_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        expect(page).to have_no_css(".container-fluid", text: "DRAFT Case Contact")
       end
 
       it "displays the contact type groups" do

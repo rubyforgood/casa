@@ -325,7 +325,10 @@ button then sits at the row's own `py-4` (16px, no extra `mt`) — measure it, d
 **Tailwind v4 `space-y-*` is zero-specificity** (`:where(& > :not(:last-child))`), so a child's own
 `m-0`/`m-*` overrides it and collapses the gap. Reset a `<fieldset>`'s default inline margin with
 `mx-0`, never `m-0`, inside a `space-y` stack -- `m-0` had silently removed the 24px gap after the
-contact-medium / duration fieldsets (measured 0px).
+contact-medium / duration fieldsets (measured 0px). Likewise a **card root's own `mb-*` collapses a
+card stack**: `_case_contact`'s leftover `mb-1` cut the index/drafts `space-y-4` gap from 16px to 4px
+(pixel-measured) until removed -- a card in a `space-y` list carries **no** bottom margin; the stack
+owns the gap (`.container-fluid` stays the inert spec hook, just without the margin).
 Expenses are free-form (arbitrary count), so the notes check-to-add pattern doesn't apply. The wrapper keeps
 `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the design-system
 confirm dialog (new/unsaved rows remove without a prompt).

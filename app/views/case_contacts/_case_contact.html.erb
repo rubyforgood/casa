@@ -1,11 +1,13 @@
 <%# Case-contact card (casa_app). Rendered by case_contacts#index and #drafts (both casa_app),
     so it is rewritten in place rather than twinned. Keeps inert class hooks the specs use
-    (.container-fluid.mb-1 wrapper, .full-card, .card-title) and the reminder JS hooks in
-    _followup. Topic answers + notes live in ONE native <details> "Show details" disclosure
+    (.container-fluid wrapper, .full-card, .card-title) and the reminder JS hooks in
+    _followup. The card sets NO bottom margin -- inter-card spacing comes from the parent's
+    space-y-4 (a child y-margin overrides the zero-specificity space-y and collapses the gap).
+    Topic answers + notes live in ONE native <details> "Show details" disclosure
     (full text, no per-line truncation) so reading a note is one click, not many. Edit/Delete/
     undelete keep data-turbo:false. %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
-<div class="container-fluid mb-1">
+<div class="container-fluid">
   <div class="full-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="p-4 sm:p-5">
       <%# Header (hero) row: the medium-type icon sits inline with the title, so everything
