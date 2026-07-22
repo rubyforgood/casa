@@ -110,10 +110,11 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
-  # Human-readable medium name (matches the form's titleized labels), used as the medium icon's
-  # tooltip + accessible label. Falls back for a contact whose medium is not set.
+  # Human-readable medium name in sentence case (design-system), used as the medium icon's tooltip +
+  # accessible label: "voice-only" -> "Voice only", "text/email" -> "Text/email". Falls back for a
+  # contact whose medium is not set.
   def medium_label
-    object.medium_type.present? ? object.medium_type.titleize : "Medium not set"
+    object.medium_type.present? ? object.medium_type.tr("-", " ").humanize : "Medium not set"
   end
 
   def contact_groups

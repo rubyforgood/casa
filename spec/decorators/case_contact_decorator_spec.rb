@@ -162,6 +162,28 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
+  describe "#medium_label" do
+    {
+      "in-person" => "In person",
+      "text/email" => "Text/email",
+      "video" => "Video",
+      "voice-only" => "Voice only",
+      "letter" => "Letter"
+    }.each do |medium, label|
+      it "maps #{medium} to the sentence-case label #{label}" do
+        case_contact.medium_type = medium
+
+        expect(case_contact.decorate.medium_label).to eq(label)
+      end
+    end
+
+    it "falls back when the medium is not set" do
+      case_contact.medium_type = nil
+
+      expect(case_contact.decorate.medium_label).to eq("Medium not set")
+    end
+  end
+
   describe "#subheading" do
     let(:contact_group) { build_stubbed(:contact_type_group, name: "Group X") }
     let(:contact_type) { build_stubbed(:contact_type, contact_type_group: contact_group, name: "Type X") }
