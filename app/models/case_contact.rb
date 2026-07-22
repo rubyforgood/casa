@@ -8,7 +8,8 @@ class CaseContact < ApplicationRecord
   # volunteer_address snapshot string (kept for storage, validation, exports, and readers);
   # prefilled from the volunteer's structured Address. See #compose_volunteer_address.
   attr_accessor :volunteer_address_line_1, :volunteer_address_line_2,
-    :volunteer_address_city, :volunteer_address_state, :volunteer_address_zip
+    :volunteer_address_city, :volunteer_address_state, :volunteer_address_zip,
+    :reimbursement_volunteer_id
   before_validation :compose_volunteer_address
 
   validates :contact_made, inclusion: {in: [true, false], message: :must_be_true_or_false}
@@ -33,6 +34,7 @@ class CaseContact < ApplicationRecord
   validate :reimbursement_only_when_miles_driven, if: :active_or_details?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_details?
   validate :volunteer_address_is_valid, if: :active_or_details?
+  validate :reimbursement_volunteer_chosen, if: :active_or_details?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -309,15 +311,42 @@ class CaseContact < ApplicationRecord
     !supervisor.blank? && supervisor.active?
   end
 
+  # Disabled only when there is genuinely no volunteer to attribute the address to -- i.e. no
+  # creator-volunteer, no chosen volunteer, and the case has no volunteers to choose from.
   def address_field_disabled?
-    !volunteer
+    volunteer.nil? && !needs_reimbursement_volunteer_choice?
   end
 
+  # The volunteer whose mailing address the reimbursement uses: the creator when they are the
+  # volunteer, else the one explicitly chosen on the form, else the case's sole volunteer.
   def volunteer
-    if creator.is_a?(Volunteer)
-      creator
-    elsif draft_case_ids.first && CasaCase.find(draft_case_ids.first).volunteers.count == 1
-      CasaCase.find(draft_case_ids.first).volunteers.first
+    return creator if creator.is_a?(Volunteer)
+    picked_reimbursement_volunteer || (reimbursement_volunteer_options.first if reimbursement_volunteer_options.one?)
+  end
+
+  # Volunteers assigned to the (draft or active) case -- the choices for whose address to reimburse.
+  def reimbursement_volunteer_options
+    @reimbursement_volunteer_options ||= begin
+      case_id = casa_case_id || draft_case_ids&.first
+      case_id.present? ? (CasaCase.find_by(id: case_id)&.volunteers&.to_a || []) : []
+    end
+  end
+
+  def picked_reimbursement_volunteer
+    return if reimbursement_volunteer_id.blank?
+    reimbursement_volunteer_options.find { |v| v.id == reimbursement_volunteer_id.to_i }
+  end
+
+  # A choice is needed when the editor is not the volunteer and the case has several volunteers, so
+  # the app cannot infer whose address to save.
+  def needs_reimbursement_volunteer_choice?
+    !creator.is_a?(Volunteer) && reimbursement_volunteer_options.size > 1
+  end
+
+  def reimbursement_volunteer_chosen
+    return unless want_driving_reimbursement && needs_reimbursement_volunteer_choice?
+    if picked_reimbursement_volunteer.nil?
+      errors.add(:reimbursement_volunteer_id, "must be chosen so the reimbursement address saves to the right volunteer")
     end
   end
 

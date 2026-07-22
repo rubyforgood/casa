@@ -131,9 +131,10 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update_volunteer_address(case_contact)
-    return unless case_contact.volunteer_address.present? && !case_contact.address_field_disabled?
+    volunteer = case_contact.volunteer
+    return unless volunteer && case_contact.volunteer_address.present?
 
-    address = case_contact.volunteer.address || case_contact.volunteer.build_address
+    address = volunteer.address || volunteer.build_address
     parts = case_contact.submitted_address_parts
     if parts.values.any?(&:present?)
       address.update(parts)

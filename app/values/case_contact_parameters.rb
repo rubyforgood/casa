@@ -18,6 +18,7 @@ class CaseContactParameters < SimpleDelegator
         :volunteer_address_city,
         :volunteer_address_state,
         :volunteer_address_zip,
+        :reimbursement_volunteer_id,
         contact_type_ids: [],
         draft_case_ids: [],
         metadata: %i[create_another],

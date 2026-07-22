@@ -54,7 +54,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.contact_made).to be true
     end
 
-    it "does not allow volunteer address edit for case contact with ambiguous volunteer" do
+    it "offers a volunteer picker for a case contact with multiple volunteers" do
       create(:case_assignment, casa_case:, volunteer: build(:volunteer, casa_org: organization))
       case_contact.update!(creator: admin)
       expect(casa_case.volunteers).not_to include case_contact.creator
@@ -65,8 +65,9 @@ RSpec.describe "case_contacts/edit", type: :system do
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
 
       check "Request travel or other reimbursement"
-      expect(page).to have_field("case_contact_volunteer_address_line_1", disabled: true)
-      expect(page).to have_text("There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible.")
+      expect(page).to have_select("case_contact_reimbursement_volunteer_id")
+      expect(page).to have_field("case_contact_volunteer_address_line_1", disabled: false)
+      expect(page).to have_no_text("This is not currently possible")
     end
 
     context "when user is part of a different organization" do

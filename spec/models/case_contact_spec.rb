@@ -654,12 +654,24 @@ RSpec.describe CaseContact, type: :model do
           ]
         }
 
-        it "volunteer is nil" do
-          expect(case_contact.volunteer).to be_nil
+        it "needs the editor to choose which volunteer" do
+          expect(case_contact.needs_reimbursement_volunteer_choice?).to be true
         end
 
-        it "disbales address field" do
-          expect(case_contact.address_field_disabled?).to be true
+        it "offers the picker instead of disabling the address field" do
+          expect(case_contact.address_field_disabled?).to be false
+        end
+
+        it "resolves the volunteer to the one chosen on the form" do
+          expect(case_contact.volunteer).to be_nil
+          case_contact.reimbursement_volunteer_id = other_volunteer.id
+          expect(case_contact.volunteer).to eq other_volunteer
+        end
+
+        it "requires a choice when reimbursement is wanted" do
+          case_contact.want_driving_reimbursement = true
+          case_contact.valid?
+          expect(case_contact.errors[:reimbursement_volunteer_id]).to be_present
         end
       end
     end

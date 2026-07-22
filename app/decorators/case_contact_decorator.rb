@@ -155,8 +155,19 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  # Structured address parts for a SPECIFIC volunteer -- prefills the reimbursement address when the
+  # editor picks one from the case's volunteers.
+  def address_parts_for(some_volunteer)
+    address = some_volunteer&.address
+    if address&.structured?
+      Address::STRUCTURED_FIELDS.index_with { |field| address.public_send(field) }
+    else
+      {line_1: address&.content, line_2: nil, city: nil, state: nil, zip: nil}
+    end
+  end
+
   def ambiguous_volunteer_address_message
-    "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
+    "No volunteer is assigned to this case, so a reimbursement mailing address can't be set."
   end
 
   def form_title

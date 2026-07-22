@@ -72,6 +72,23 @@ export default class extends Controller {
     this.volunteerAddressTargets.forEach(el => { el.value = '' })
   }
 
+  // When the case has multiple volunteers, the editor picks whose address to reimburse; fill the
+  // address fields from the selected option's saved address (data-address JSON), keyed off each
+  // input's id (case_contact_volunteer_address_<field>). Empty parts clear the field.
+  pickReimbursementVolunteer = (e) => {
+    const option = e.target.selectedOptions[0]
+    let parts = {}
+    try {
+      parts = JSON.parse(option?.dataset.address || '{}')
+    } catch {
+      parts = {}
+    }
+    this.volunteerAddressTargets.forEach(el => {
+      const field = el.id.replace('case_contact_volunteer_address_', '')
+      el.value = parts[field] || ''
+    })
+  }
+
   setReimbursementFormVisibility = () => {
     // Toggles Tailwind's `hidden` (display:none). The case-contact form is casadesign
     // (Tailwind) now; Bootstrap's `d-none` is not defined there. This controller is used

@@ -271,8 +271,10 @@
 
             <%# DRIVING REIMBURSEMENT (hidden until the checkbox is checked; JS toggles `hidden`) %>
             <div data-case-contact-form-target="reimbursementForm" class="hidden space-y-5">
-              <% address_parts = @case_contact.decorate.volunteer_address_parts %>
+              <% decorated = @case_contact.decorate %>
+              <% address_parts = decorated.volunteer_address_parts %>
               <% address_disabled = @case_contact.address_field_disabled? %>
+              <% needs_volunteer_choice = @case_contact.needs_reimbursement_volunteer_choice? %>
               <% address_input = "#{input_class} disabled:bg-slate-50 disabled:text-slate-500" %>
               <div class="space-y-5">
                 <%# half width, aligning with the details section's 2-col grid rhythm %>
@@ -293,6 +295,27 @@
                     each is a volunteerAddress target so the JS can clear them when reimbursement is unchecked. %>
                 <fieldset class="space-y-2.5">
                   <legend class="<%= label_class %>">Mailing address for reimbursement check <%= req %></legend>
+                  <% if needs_volunteer_choice %>
+                    <%# Several volunteers on this case and the editor is not one of them, so ask whose
+                        address to reimburse; picking one prefills the fields from that volunteer's saved
+                        address (case-contact-form#pickReimbursementVolunteer). %>
+                    <div>
+                      <label class="<%= label_class %>" for="case_contact_reimbursement_volunteer_id">Reimburse which volunteer? <%= req %></label>
+                      <div class="relative">
+                        <select name="case_contact[reimbursement_volunteer_id]" id="case_contact_reimbursement_volunteer_id"
+                          class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"
+                          data-action="change->case-contact-form#pickReimbursementVolunteer"
+                          <%= tag.attributes(field_error_attrs(@case_contact, :reimbursement_volunteer_id)) %>>
+                          <option value="">Select a volunteer</option>
+                          <% @case_contact.reimbursement_volunteer_options.each do |v| %>
+                            <option value="<%= v.id %>" data-address="<%= decorated.address_parts_for(v).to_json %>" <%= "selected" if @case_contact.reimbursement_volunteer_id.to_s == v.id.to_s %>><%= display_person(v) %></option>
+                          <% end %>
+                        </select>
+                        <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+                      </div>
+                      <%= field_error(@case_contact, :reimbursement_volunteer_id) %>
+                    </div>
+                  <% end %>
                   <div>
                     <%= form.label :volunteer_address_line_1, "Address line 1", class: label_class %>
                     <%= form.text_field :volunteer_address_line_1,

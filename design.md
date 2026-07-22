@@ -601,7 +601,10 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `[aria-invalid="true"]` (`tailwind.css`, `#f43f5e`, 3.67:1 AA). Attribute errors show at the field;
   even cross-field rules flag at the field -- the reimbursement mileage / mailing-address checks add
   their error to a representative attribute (`:miles_driven` / `:volunteer_address`), not `:base`, so
-  the field (or fieldset) is marked, not only the summary. **Native HTML5
+  the field (or fieldset) is marked, not only the summary. When a case has several volunteers and the
+  editor isn't one of them, the mailing address can't be inferred, so the form shows a **volunteer
+  picker** (`reimbursement_volunteer_id`) above the address fields instead of disabling them; choosing
+  one prefills + saves that volunteer's address (`case-contact-form#pickReimbursementVolunteer`). **Native HTML5
   validation is disabled app-wide** so this (and the summary) can show — otherwise the browser's native bubbles
   (`required`, `type`, `min`) fire first, block the submit, and can't be styled. A global handler in
   `application.js` sets `form.noValidate` on every form on load / `turbo:load` / `turbo:frame-load`
