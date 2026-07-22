@@ -310,10 +310,12 @@ empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of de
 autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
 an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
 **Nested expense rows** are separated by a **divider** (`border-t border-slate-200 py-4`); the
-fields **stack with visible labels** (amount, then required description) in a left column
-(`flex-1 space-y-4`), and a compact **trash delete icon** (`.remove-expense-button`, `h-8 w-8`,
-rose hover) sits at the **top-right** (`flex items-start`) so it takes no extra row and doesn't push
-the fields down — not a grey `bg-slate-50` box or a full-width ghost button. The wrapper keeps
+fields **stack with visible labels** and are **full width** (amount, then required description,
+`space-y-4`), with a small **"Remove" text action** (`.remove-expense-button`, rose) on the amount
+label's line (`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the
+fields (a side icon narrowed them; a bottom ghost button added a row + whitespace; a grey
+`bg-slate-50` box read as a nested card). Expenses are free-form (arbitrary count), so the notes
+check-to-add pattern doesn't apply. The wrapper keeps
 `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the design-system
 confirm dialog (new/unsaved rows remove without a prompt).
 **Case-contact form actions:** two submit buttons, not a mode checkbox — primary **Submit** (kept
@@ -336,8 +338,10 @@ from the volunteer's structured Address (`decorate.volunteer_address_parts`) and
 `volunteerAddress` Stimulus target so `clearMileage` empties them all on uncheck. Layout (all three
 structured-address forms): line 1 / line 2 full-width, then a `sm:grid-cols-6` row of city
 (`col-span-3`, ½) · state (`col-span-2`, ⅓) · ZIP (`col-span-1`, ⅙) — state wider than ZIP because
-a state name is longer; stacks full-width on mobile. sr-only labels + placeholders. Miles driven is
-a `sm:max-w-[12rem]` short field (its narrow width signals a short numeric entry). The whole
+a state name is longer; stacks full-width on mobile. Every part has a **visible label** (persistent —
+not placeholder-only, since a placeholder vanishes on input); line 2 keeps an "Apartment, suite,
+unit" placeholder hint. Miles driven sits in a **half-width** `sm:grid-cols-2` cell (aligns with the
+details section's 2-col grid rhythm rather than an arbitrary max-width). The whole
 case-contact form (details/notes/reimbursement/expenses) passes the axe (WCAG 2 A/AA) spec.
 
 ### Sharing a partial with Bootstrap

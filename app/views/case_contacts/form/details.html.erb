@@ -262,12 +262,15 @@
               <% address_disabled = @case_contact.address_field_disabled? %>
               <% address_input = "#{input_class} disabled:bg-slate-50 disabled:text-slate-500" %>
               <div class="space-y-5">
-                <div class="sm:max-w-[12rem]">
-                  <%= form.label :miles_driven, class: label_class do %>Total miles driven <%= req %><% end %>
-                  <%= form.number_field(:miles_driven,
-                    min: "0", max: 10000, placeholder: "0",
-                    class: input_class,
-                    data: {case_contact_form_target: "milesDriven"}) %>
+                <%# half width, aligning with the details section's 2-col grid rhythm %>
+                <div class="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <%= form.label :miles_driven, class: label_class do %>Total miles driven <%= req %><% end %>
+                    <%= form.number_field(:miles_driven,
+                      min: "0", max: 10000, placeholder: "0",
+                      class: input_class,
+                      data: {case_contact_form_target: "milesDriven"}) %>
+                  </div>
                 </div>
 
                 <%# Structured mailing address for the reimbursement check. The five fields compose
@@ -275,36 +278,40 @@
                     each is a volunteerAddress target so the JS can clear them when reimbursement is unchecked. %>
                 <fieldset class="space-y-2.5">
                   <legend class="<%= label_class %>">Mailing address for reimbursement check <%= req %></legend>
-                  <%= form.label :volunteer_address_line_1, "Address line 1", class: "sr-only" %>
-                  <%= form.text_field :volunteer_address_line_1,
-                    value: @case_contact.volunteer_address_line_1 || address_parts[:line_1],
-                    disabled: address_disabled, placeholder: "Address line 1",
-                    class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
-                  <%= form.label :volunteer_address_line_2, "Address line 2", class: "sr-only" %>
-                  <%= form.text_field :volunteer_address_line_2,
-                    value: @case_contact.volunteer_address_line_2 || address_parts[:line_2],
-                    disabled: address_disabled, placeholder: "Address line 2 (optional)",
-                    class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                  <div>
+                    <%= form.label :volunteer_address_line_1, "Address line 1", class: label_class %>
+                    <%= form.text_field :volunteer_address_line_1,
+                      value: @case_contact.volunteer_address_line_1 || address_parts[:line_1],
+                      disabled: address_disabled,
+                      class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                  </div>
+                  <div>
+                    <%= form.label :volunteer_address_line_2, "Address line 2", class: label_class %>
+                    <%= form.text_field :volunteer_address_line_2,
+                      value: @case_contact.volunteer_address_line_2 || address_parts[:line_2],
+                      disabled: address_disabled, placeholder: "Apartment, suite, unit, etc.",
+                      class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                  </div>
                   <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
                     <div class="sm:col-span-3">
-                      <%= form.label :volunteer_address_city, "City", class: "sr-only" %>
+                      <%= form.label :volunteer_address_city, "City", class: label_class %>
                       <%= form.text_field :volunteer_address_city,
                         value: @case_contact.volunteer_address_city || address_parts[:city],
-                        disabled: address_disabled, placeholder: "City",
+                        disabled: address_disabled,
                         class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
                     </div>
                     <div class="sm:col-span-2">
-                      <%= form.label :volunteer_address_state, "State", class: "sr-only" %>
+                      <%= form.label :volunteer_address_state, "State", class: label_class %>
                       <%= form.text_field :volunteer_address_state,
                         value: @case_contact.volunteer_address_state || address_parts[:state],
-                        disabled: address_disabled, placeholder: "State",
+                        disabled: address_disabled,
                         class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
                     </div>
                     <div class="sm:col-span-1">
-                      <%= form.label :volunteer_address_zip, "ZIP", class: "sr-only" %>
+                      <%= form.label :volunteer_address_zip, "ZIP", class: label_class %>
                       <%= form.text_field :volunteer_address_zip,
                         value: @case_contact.volunteer_address_zip || address_parts[:zip],
-                        disabled: address_disabled, placeholder: "ZIP",
+                        disabled: address_disabled,
                         class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
                     </div>
                   </div>

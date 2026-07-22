@@ -36,22 +36,26 @@
             <%= form.fields_for :address, address do |address_form| %>
               <fieldset class="space-y-2.5">
                 <legend class="<%= label_class %>">Mailing address</legend>
-                <%= address_form.label :line_1, "Address line 1", class: "sr-only" %>
-                <%= address_form.text_field :line_1, placeholder: "Address line 1", class: input_class %>
-                <%= address_form.label :line_2, "Address line 2", class: "sr-only" %>
-                <%= address_form.text_field :line_2, placeholder: "Address line 2 (optional)", class: input_class %>
+                <div>
+                  <%= address_form.label :line_1, "Address line 1", class: label_class %>
+                  <%= address_form.text_field :line_1, class: input_class %>
+                </div>
+                <div>
+                  <%= address_form.label :line_2, "Address line 2", class: label_class %>
+                  <%= address_form.text_field :line_2, placeholder: "Apartment, suite, unit, etc.", class: input_class %>
+                </div>
                 <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
                   <div class="sm:col-span-3">
-                    <%= address_form.label :city, "City", class: "sr-only" %>
-                    <%= address_form.text_field :city, placeholder: "City", class: input_class %>
+                    <%= address_form.label :city, "City", class: label_class %>
+                    <%= address_form.text_field :city, class: input_class %>
                   </div>
                   <div class="sm:col-span-2">
-                    <%= address_form.label :state, "State", class: "sr-only" %>
-                    <%= address_form.text_field :state, placeholder: "State", class: input_class %>
+                    <%= address_form.label :state, "State", class: label_class %>
+                    <%= address_form.text_field :state, class: input_class %>
                   </div>
                   <div class="sm:col-span-1">
-                    <%= address_form.label :zip, "ZIP", class: "sr-only" %>
-                    <%= address_form.text_field :zip, placeholder: "ZIP", class: input_class %>
+                    <%= address_form.label :zip, "ZIP", class: label_class %>
+                    <%= address_form.text_field :zip, class: input_class %>
                   </div>
                 </div>
               </fieldset>
