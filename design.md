@@ -310,12 +310,15 @@ empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of de
 autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
 an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
 **Nested expense rows** are separated by a **divider** (`border-t border-slate-200 py-4`); the
-fields **stack with visible labels** and are **full width** (amount, then required description,
-`space-y-4`), with a small **"Remove" text action** (`.remove-expense-button`, rose) on the amount
-label's line (`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the
-fields (a side icon narrowed them; a bottom ghost button added a row + whitespace; a grey
-`bg-slate-50` box read as a nested card). Expenses are free-form (arbitrary count), so the notes
-check-to-add pattern doesn't apply. The wrapper keeps
+fields **stack with visible labels** and are **full width** (amount, then required description),
+with a small **"Remove" text action** (`.remove-expense-button`, rose) on the amount label's line
+(`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the fields (a side
+icon narrowed them; a bottom ghost button added a row + whitespace; a grey `bg-slate-50` box read as
+a nested card). **Space the two groups with `mt-4` on the description, NOT `space-y-4` on the row:**
+the trailing hidden `id`/`_destroy` inputs make `space-y` put a bottom margin on the description
+group, which doubled the gap down to the Add button (measured 48px). The **Add another expense**
+button then sits at the row's own `py-4` (16px, no extra `mt`) — measure it, don't eyeball.
+Expenses are free-form (arbitrary count), so the notes check-to-add pattern doesn't apply. The wrapper keeps
 `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the design-system
 confirm dialog (new/unsaved rows remove without a prompt).
 **Case-contact form actions:** two submit buttons, not a mode checkbox — primary **Submit** (kept
