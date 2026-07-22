@@ -115,7 +115,7 @@
           <% end %>
 
           <%# CONTACT TYPES %>
-          <fieldset class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :case_contact_contact_types)) %>>
+          <fieldset class="mx-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :case_contact_contact_types)) %>>
             <legend class="<%= label_class %>">Contact type(s) <%= req %></legend>
             <% casa_case_ids = @casa_cases.pluck(:id) %>
             <div id="contact-form-types" class="space-y-4">
@@ -150,7 +150,7 @@
           </div>
 
           <%# MEDIUM %>
-          <fieldset id="contact-medium" class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :medium_type)) %>>
+          <fieldset id="contact-medium" class="mx-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :medium_type)) %>>
             <legend class="<%= label_class %>">Contact medium <%= req %></legend>
             <div class="space-y-2">
               <%= form.collection_radio_buttons(:medium_type, contact_mediums, "value", "label") do |b| %>
@@ -164,7 +164,7 @@
           </fieldset>
 
           <%# DURATION (Tailwind twin of Form::HourMinuteDurationComponent) %>
-          <fieldset class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :duration_minutes)) %>>
+          <fieldset class="mx-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :duration_minutes)) %>>
             <legend class="<%= label_class %>">Contact duration</legend>
             <div class="grid grid-cols-2 gap-4">
               <div>

@@ -322,6 +322,10 @@ a nested card). **Space the two groups with `mt-4` on the description, NOT `spac
 the trailing hidden `id`/`_destroy` inputs make `space-y` put a bottom margin on the description
 group, which doubled the gap down to the Add button (measured 48px). The **Add another expense**
 button then sits at the row's own `py-4` (16px, no extra `mt`) — measure it, don't eyeball.
+**Tailwind v4 `space-y-*` is zero-specificity** (`:where(& > :not(:last-child))`), so a child's own
+`m-0`/`m-*` overrides it and collapses the gap. Reset a `<fieldset>`'s default inline margin with
+`mx-0`, never `m-0`, inside a `space-y` stack -- `m-0` had silently removed the 24px gap after the
+contact-medium / duration fieldsets (measured 0px).
 Expenses are free-form (arbitrary count), so the notes check-to-add pattern doesn't apply. The wrapper keeps
 `.nested-form-wrapper` + its data hooks. Deleting a **saved** expense goes through the design-system
 confirm dialog (new/unsaved rows remove without a prompt).
