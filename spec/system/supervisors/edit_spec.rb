@@ -178,24 +178,14 @@ RSpec.describe "supervisors/edit", type: :system do
         @supervisor.reload
       end
 
-      it "sends a confirmation email to the supervisor and displays current email" do
-        expect(page).to have_text "Supervisor was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: @old_email)
-        expect(@supervisor.unconfirmed_email).to eq("new_supervisor_email@example.com")
-
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
-      end
-
-      it "correctly updates the supervisor email once confirmed" do
-        @supervisor.confirm
-        @supervisor.reload
-        visit edit_supervisor_path(@supervisor)
-
+      it "updates the email immediately without requiring confirmation" do
+        expect(page).to have_text "Supervisor was successfully updated."
         expect(page).to have_field("Email", with: "new_supervisor_email@example.com")
+        expect(@supervisor.email).to eq("new_supervisor_email@example.com")
+        expect(@supervisor.unconfirmed_email).to be_nil
         expect(@supervisor.old_emails).to match([@old_email])
+
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
     end
 
