@@ -7,12 +7,20 @@ class AdditionalExpense < ApplicationRecord
   has_one :contact_creator_casa_org, through: :contact_creator, source: :casa_org
 
   validates :other_expenses_describe, presence: true, if: :describe_required?
+  validates :other_expense_amount, presence: true, if: :amount_required?
 
   alias_attribute :amount, :other_expense_amount
   alias_attribute :describe, :other_expenses_describe
 
+  # Amount and description are a pair: an amount needs a description, and a description needs an
+  # amount -- so a started expense requires both (fill it in, or leave the whole row blank to drop
+  # it). A brand-new blank row still saves, so "Add another expense" can create it, then fill.
   def describe_required?
     other_expense_amount&.positive?
+  end
+
+  def amount_required?
+    other_expenses_describe.present?
   end
 end
 

@@ -11,12 +11,13 @@
   data-new-record="<%= form.object.new_record? %>"
   data-casa-nested-form-target="wrapper"
   data-child-index="<%= form.options[:child_index] %>">
+  <% amount_error_id = "#{form.field_id(:other_expense_amount)}_error" %>
   <div>
     <%# label + Remove share the header line; mb-1.5 is the standard label->input gap (label_class token) %>
     <div class="mb-1.5 flex items-center justify-between gap-2">
-      <%= form.label :other_expense_amount, "Other expense amount", class: "text-sm font-medium text-slate-700" %>
+      <%= form.label :other_expense_amount, class: "text-sm font-medium text-slate-700" do %>Other expense amount <span class="text-rose-600" aria-hidden="true">*</span><% end %>
       <button type="button"
-        class="remove-expense-button text-sm font-medium text-rose-600 hover:text-rose-700 focus-visible:underline focus-visible:outline-none"
+        class="remove-expense-button rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
         aria-label="Delete expense"
         data-action="casa-nested-form#destroyAndRemove">Remove</button>
     </div>
@@ -25,9 +26,11 @@
       <%= form.number_field(:other_expense_amount,
         value: number_with_precision(form.object.other_expense_amount, precision: 2),
         placeholder: "0", min: "0", max: 1000, step: 0.01,
-        class: "expense-amount-input block w-full rounded-r-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"
+        class: "expense-amount-input block w-full rounded-r-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
+        **field_error_attrs(form.object, :other_expense_amount, id: amount_error_id)
       ) %>
     </div>
+    <%= field_error(form.object, :other_expense_amount, id: amount_error_id) %>
   </div>
   <div class="mt-4">
     <% describe_error_id = "#{form.field_id(:other_expenses_describe)}_error" %>

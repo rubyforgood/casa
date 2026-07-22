@@ -91,7 +91,7 @@ module DesignSystemHelper
     tag.p id: id || field_error_id(record, attribute),
       class: "mt-1.5 flex items-center gap-1.5 text-sm text-slate-500" do
       tag.i(class: "bi bi-exclamation-circle shrink-0 text-rose-600", aria: {hidden: true}) +
-        tag.span(record.errors[attribute].to_sentence)
+        tag.span(record.errors[attribute].to_sentence.upcase_first)
     end
   end
 

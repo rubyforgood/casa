@@ -310,8 +310,9 @@ empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of de
 autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
 an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
 **Nested expense rows** are separated by a **divider** (`border-t border-slate-200 py-4`); the
-fields **stack with visible labels** and are **full width** (amount, then required description),
-with a small **"Remove" text action** (`.remove-expense-button`, rose) on the amount label's line
+fields **stack with visible labels** and are **full width** (amount, then description -- both required
+once either is filled, so an expense is "fill it in or remove it"), with a small **"Remove" action**
+(`.remove-expense-button`, the **tertiary ghost** -- slate, not the old rose that read as too jarring) on the amount label's line
 (`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the fields (a side
 icon narrowed them; a bottom ghost button added a row + whitespace; a grey `bg-slate-50` box read as
 a nested card). **Space the two groups with `mt-4` on the description, NOT `space-y-4` on the row:**
@@ -579,7 +580,7 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `{label, path}` link appended to a notice.
 - **Field level.** Every invalid field shows a rose border **and** a visible message, so the error
   is never carried by color alone (WCAG 1.4.1). `field_error(record, attr)` (in
-  `design_system_helper`) renders a secondary-gray message (`text-slate-500`) with a centered rose
+  `design_system_helper`) renders a secondary-gray, sentence-case message (`text-slate-500`) with a centered rose
   `bi-exclamation-circle` icon right under the field;
   `field_error_attrs(record, attr)` splats `aria-invalid` + `aria-describedby` onto the input (or,
   via `tag.attributes(...)`, onto a radio/checkbox `<fieldset>`) so assistive tech ties the field to

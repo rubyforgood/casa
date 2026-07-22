@@ -16,5 +16,11 @@ RSpec.describe AdditionalExpense, type: :model do
       expense.update(amount: 1)
       expect(expense).to be_invalid
     end
+
+    it "requires an amount when a description is given" do
+      expense = build(:additional_expense, amount: nil, describe: "coffee", case_contact:)
+      expect(expense).to be_invalid
+      expect(expense.errors[:other_expense_amount]).to include("can't be blank")
+    end
   end
 end
