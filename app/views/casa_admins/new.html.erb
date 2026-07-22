@@ -21,7 +21,7 @@
 
     <section class="<%= card %>">
       <%= form_with model: @casa_admin, url: casa_admins_path do |form| %>
-        <%= render "casa_admins/errors", resource: @casa_admin %>
+        <%= render "shared/form_errors", resource: @casa_admin %>
         <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
             <%= form.label :email, "Email", class: label_class %>

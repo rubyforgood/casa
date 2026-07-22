@@ -1,10 +1,9 @@
-<%# Tailwind form-error summary for casadesign pages. The legacy shared/_error_messages
-    stays for Bootstrap pages. %>
+<%# Form-error summary for casadesign pages -- the shared design-system alert card (alert_classes,
+    danger variant + leading icon), matching the flash banners. One sentence via to_sentence, no
+    bulleted list. Keeps id="error_explanation" + the `alert` class (spec hooks). %>
 <% if resource.errors.any? %>
-  <div id="error_explanation" role="alert" class="flex items-center gap-3 rounded-xl border border-rose-200 bg-rose-50 p-4">
-    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600">
-      <i class="bi bi-exclamation-triangle" aria-hidden="true"></i>
-    </span>
-    <p class="text-sm text-rose-800"><span class="font-semibold">Unable to save:</span> <%= resource.errors.full_messages.to_sentence %></p>
+  <div id="error_explanation" role="alert" class="alert <%= alert_classes(:danger) %>">
+    <i class="bi <%= alert_icon(:danger) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
+    <p><span class="font-semibold">Unable to save:</span> <%= resource.errors.full_messages.to_sentence %></p>
   </div>
 <% end %>

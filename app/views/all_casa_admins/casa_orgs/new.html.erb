@@ -8,7 +8,7 @@
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Create a new CASA Organization</h1>
     <div class="<%= card %>">
       <%= form_with model: selected_organization, url: all_casa_admins_casa_orgs_path, method: :post, local: true, class: "space-y-5" do |form| %>
-        <%= render "shared/error_messages", resource: selected_organization %>
+        <%= render "shared/form_errors", resource: selected_organization %>
         <div>
           <%= form.label :name, "Name", class: label_class %>
           <%= form.text_field :name, class: input_class, required: true %>

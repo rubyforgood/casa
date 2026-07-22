@@ -563,16 +563,28 @@ with no return is a flow trap).
 3. **No results** (filters/search): centered search icon + message tied to the active
    filters + a "Clear filters" action.
 
-### Form errors
-Two layers, both design-system-styled:
-- **Field level.** An invalid input / select / textarea shows a rose border. Rails wraps
-  invalid fields in `.field_with_errors`, so `tailwind.css` colors those `border-rose-500`
-  (`#f43f5e`, 3.67:1 against white, AA for a UI border) on casa_app. No per-field markup.
-- **Summary.** A single-line `role="alert"` card above the form:
-  `rounded-xl border border-rose-200 bg-rose-50 p-4` with a rose danger **icon tile** and one
-  sentence, **"Unable to save:"** followed by the messages joined with `to_sentence` (no
-  bulleted list). Use the `shared/_form_errors` partial on Tailwind pages; the legacy
-  `shared/_error_messages` stays for Bootstrap pages.
+### Alerts, flashes & form errors
+**One alert card for everything** — flash banners and the form-error summary share a single token
+so they read as the same component, colored by severity. `alert_classes(:success | :warning |
+:danger | :info)` (in `design_system_helper`, sibling of `button_classes`) returns the card
+(`flex items-start gap-2.5 rounded-lg border px-4 py-3 text-sm` + a semantic border/bg/text) and
+`alert_icon(variant)` the leading `bi-*` (check-circle / exclamation-triangle / info-circle). Full
+class strings are written out so the Tailwind scanner compiles them. Colors follow the table
+(emerald success, amber warning, rose danger, brand info).
+- **Flash banners.** One partial, `shared/_flashes`, rendered by **every** layout (`casa_app`,
+  `casa_auth`, `all_casa_admin`) via `render "shared/flashes", wrapper_class: <layout padding>` — no
+  more per-layout copies that drift. `notice` → success, every other key → warning. Keeps the
+  `alert` + `<type>` classes (`.notice` SweetAlert specs, `.alert` not-authorized redirect), the
+  `header-flash` container (all-casa spec), the a11y `role`, and the `notice_action` trusted
+  `{label, path}` link appended to a notice.
+- **Field level.** An invalid input / select / textarea shows a rose border. Rails wraps invalid
+  fields in `.field_with_errors`, so `tailwind.css` colors those `border-rose-500` (`#f43f5e`,
+  3.67:1 against white, AA for a UI border) on casa_app. No per-field markup.
+- **Summary.** `shared/_form_errors` — the **same alert card** (`alert_classes(:danger)` + icon),
+  `id="error_explanation"` + `role="alert"` + the `alert` class (spec hooks), one sentence
+  **"Unable to save:"** + `to_sentence` (no bulleted list). It is the **only** error summary now —
+  the legacy Bootstrap `shared/_error_messages` (bulleted `<ul>`) and the bridge `casa_admins/_errors`
+  were deleted, their all-casa / casa-admin pages migrated onto `_form_errors`.
 
 ### Dropdown / popover
 Menus (the header account menu, the cases-page "More" actions menu) are a native

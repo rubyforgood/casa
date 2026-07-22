@@ -60,14 +60,7 @@
       </header>
 
       <main id="main-content" class="flex-1">
-        <% if flash.any? { |_, message| message.present? } %>
-          <div class="header-flash space-y-2 px-4 pt-4 sm:px-6 lg:px-8">
-            <% flash.each do |type, message| %>
-              <% next if message.blank? %>
-              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
-            <% end %>
-          </div>
-        <% end %>
+        <%= render "shared/flashes", wrapper_class: "px-4 pt-4 sm:px-6 lg:px-8" %>
         <%= yield %>
       </main>
 

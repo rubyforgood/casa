@@ -25,7 +25,7 @@
       <p class="mt-1 truncate text-sm text-slate-500"><% if @casa_admin.display_name.present? %><span class="font-medium text-slate-800"><%= formatted_name(@casa_admin.display_name) %></span> &middot; <% end %><%= @casa_admin.email %></p>
     </div>
 
-    <%= render "casa_admins/errors", resource: @casa_admin %>
+    <%= render "shared/form_errors", resource: @casa_admin %>
 
     <%# Profile %>
     <section class="<%= card %>">

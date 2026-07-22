@@ -41,15 +41,7 @@
           <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-sm font-bold text-white">CV</span>
           <span class="text-base font-semibold tracking-tight text-slate-900">CASA Volunteer Tracker</span>
         </div>
-        <% if flash.any? { |_, message| message.present? } %>
-          <div class="mb-6 space-y-2">
-            <% flash.each do |type, message| %>
-              <% next if message.blank? %>
-              <% flash_classes = ["alert", type.to_s].uniq.join(" ") %>
-              <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= flash_classes %> rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
-            <% end %>
-          </div>
-        <% end %>
+        <%= render "shared/flashes", wrapper_class: "mb-6" %>
         <%= yield %>
       </div>
     </main>

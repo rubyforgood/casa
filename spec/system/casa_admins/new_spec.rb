@@ -13,14 +13,14 @@ RSpec.describe "casa_admins/new", type: :system do
     expect(page).to have_content "Create new CASA admin"
 
     click_button "Submit"
-    expect(page).to have_content "2 errors prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Unable to save"
     expect(page).to have_content "Email can't be blank"
     expect(page).to have_content "Display name can't be blank"
 
     fill_in "Email", with: "invalid email"
     fill_in "Display name", with: "Freddy"
     click_button "Submit"
-    expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Unable to save"
     expect(page).to have_content "Email is invalid"
 
     fill_in "Email", with: "valid@example.com"

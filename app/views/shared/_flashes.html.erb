@@ -1,0 +1,19 @@
+<%# Unified flash/alert banners for every casadesign layout (casa_app, casa_auth, all_casa_admin).
+    One design-system alert card per message (alert_classes + a leading severity icon): notice =
+    success (emerald), every other key = warning (amber). Keeps the `alert` + `<type>` classes
+    (SweetAlert-notifier `.notice` specs + the not-authorized `.alert` redirect) and the
+    `header-flash` container (all-casa spec). `notice_action` is a trusted {label, path} link
+    appended to a notice (not rendered as its own row; the :json cookie serializer drops html_safe).
+    Locals: wrapper_class -- positioning/padding supplied by the host layout. %>
+<% if flash.any? { |_, message| message.present? } %>
+  <div class="header-flash space-y-2 <%= local_assigns[:wrapper_class] %>">
+    <% flash.each do |type, message| %>
+      <% next if message.blank? || type.to_s == "notice_action" %>
+      <% variant = (type.to_s == "notice") ? :success : :warning %>
+      <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= ["alert", type.to_s].uniq.join(" ") %> <%= alert_classes(variant) %>">
+        <i class="bi <%= alert_icon(variant) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
+        <div><%= message %><% if type.to_s == "notice" && flash[:notice_action].present? %> <%= link_to flash[:notice_action]["label"], flash[:notice_action]["path"], class: "font-semibold underline underline-offset-2 hover:no-underline" %><% end %></div>
+      </div>
+    <% end %>
+  </div>
+<% end %>
