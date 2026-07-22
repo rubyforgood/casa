@@ -31,6 +31,31 @@ RSpec.describe "Accessibility (axe)", type: :system do
     it("org settings", :js) { expect_axe_clean edit_casa_org_path(organization) }
   end
 
+  context "case contact form (details step)" do
+    let(:organization) { create(:casa_org, :all_reimbursements_enabled) }
+    let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
+    let!(:contact_topic) { create(:contact_topic, casa_org: organization) }
+    let(:contact_type) { create(:contact_type, casa_org: organization) }
+    let(:case_contact) do
+      create(:case_contact, :wants_reimbursement, creator: volunteer,
+        casa_case: volunteer.casa_cases.first, contact_types: [contact_type])
+    end
+    let!(:expense) { create(:additional_expense, case_contact: case_contact) }
+
+    before do
+      allow(Flipper).to receive(:enabled?).and_call_original
+      allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
+      sign_in volunteer
+    end
+
+    it("details / notes / reimbursement + expenses", :js) do
+      visit case_contact_form_path(case_contact_id: case_contact.id, id: :details)
+      check "Request travel or other reimbursement"
+      expect(page).to have_field("case_contact_volunteer_address_line_1") # reimbursement revealed
+      expect(page).to be_axe_clean
+    end
+  end
+
   context "signed out" do
     it("sign in", :js) { expect_axe_clean new_user_session_path }
   end

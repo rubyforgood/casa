@@ -333,8 +333,12 @@ that compose into the `volunteer_address` snapshot (`compose_volunteer_address`,
 parts are nil so the legacy single-string path — request specs, factory — still sets it directly;
 a blank submit yields `""` so the reimbursement-wanted validation still fires). Prefill the fields
 from the volunteer's structured Address (`decorate.volunteer_address_parts`) and give each a
-`volunteerAddress` Stimulus target so `clearMileage` empties them all on uncheck. Layout: line 1 /
-line 2 full-width, then city (col-span-3) · state (1) · ZIP (2); sr-only labels + placeholders.
+`volunteerAddress` Stimulus target so `clearMileage` empties them all on uncheck. Layout (all three
+structured-address forms): line 1 / line 2 full-width, then a `sm:grid-cols-6` row of city
+(`col-span-3`, ½) · state (`col-span-2`, ⅓) · ZIP (`col-span-1`, ⅙) — state wider than ZIP because
+a state name is longer; stacks full-width on mobile. sr-only labels + placeholders. Miles driven is
+a `sm:max-w-[12rem]` short field (its narrow width signals a short numeric entry). The whole
+case-contact form (details/notes/reimbursement/expenses) passes the axe (WCAG 2 A/AA) spec.
 
 ### Sharing a partial with Bootstrap
 When a partial is still rendered by legacy Bootstrap pages (e.g. `shared/_court_order_list`

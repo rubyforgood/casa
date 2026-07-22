@@ -187,7 +187,7 @@
                 to reveal + record notes. No dropdown and no add/remove -- the topic list IS the
                 navigation, and unchecking removes a topic. Each item is the _contact_topic_answer
                 partial; the contact-topics controller creates/destroys the answer on toggle. %>
-            <p class="text-sm text-slate-500">Check the topics you discussed and add notes for the court report.</p>
+            <p class="text-sm text-slate-500">Check each topic you discussed, then write your notes in the field that appears. Unchecking a topic removes it and its notes.</p>
             <% answers_by_topic = form.object.contact_topic_answers.index_by(&:contact_topic_id) %>
             <div class="divide-y divide-slate-100">
               <% @contact_topics.each do |topic| %>
@@ -293,14 +293,14 @@
                         disabled: address_disabled, placeholder: "City",
                         class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
                     </div>
-                    <div class="sm:col-span-1">
+                    <div class="sm:col-span-2">
                       <%= form.label :volunteer_address_state, "State", class: "sr-only" %>
                       <%= form.text_field :volunteer_address_state,
                         value: @case_contact.volunteer_address_state || address_parts[:state],
                         disabled: address_disabled, placeholder: "State",
                         class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
                     </div>
-                    <div class="sm:col-span-2">
+                    <div class="sm:col-span-1">
                       <%= form.label :volunteer_address_zip, "ZIP", class: "sr-only" %>
                       <%= form.text_field :volunteer_address_zip,
                         value: @case_contact.volunteer_address_zip || address_parts[:zip],
