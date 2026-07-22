@@ -49,6 +49,7 @@ en:
           one: CASA case
           other: CASA cases
         occurred_at: Date
+        volunteer_address: Mailing address
       case_contact/additional_expenses:
         other_expense_amount: Other expense amount
         other_expenses_describe: Other expense details

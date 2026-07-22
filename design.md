@@ -589,7 +589,9 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   via `tag.attributes(...)`, onto a radio/checkbox `<fieldset>`) so assistive tech ties the field to
   its message. The rose border comes from both `.field_with_errors` (Rails' auto-wrap) and
   `[aria-invalid="true"]` (`tailwind.css`, `#f43f5e`, 3.67:1 AA). Attribute errors show at the field;
-  cross-field / `:base` errors (e.g. the reimbursement rules) live in the summary. **Native HTML5
+  even cross-field rules flag at the field -- the reimbursement mileage / mailing-address checks add
+  their error to a representative attribute (`:miles_driven` / `:volunteer_address`), not `:base`, so
+  the field (or fieldset) is marked, not only the summary. **Native HTML5
   validation is disabled app-wide** so this (and the summary) can show — otherwise the browser's native bubbles
   (`required`, `type`, `min`) fire first, block the submit, and can't be styled. A global handler in
   `application.js` sets `form.noValidate` on every form on load / `turbo:load` / `turbo:frame-load`

@@ -49,7 +49,7 @@
       ) do |form| %>
 
         <%= render "shared/form_errors", resource: @case_contact,
-          order: %i[draft_case_ids occurred_at case_contact_contact_types contact_made medium_type duration_hours duration_minutes miles_driven] %>
+          order: %i[draft_case_ids occurred_at case_contact_contact_types contact_made medium_type duration_hours duration_minutes miles_driven volunteer_address] %>
 
         <%# DETAILS %>
         <section id="contact-form-details" class="<%= card %> space-y-6">
@@ -298,7 +298,8 @@
                     <%= form.text_field :volunteer_address_line_1,
                       value: @case_contact.volunteer_address_line_1 || address_parts[:line_1],
                       disabled: address_disabled,
-                      class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                      class: address_input, data: {case_contact_form_target: "volunteerAddress"},
+                      **field_error_attrs(@case_contact, :volunteer_address) %>
                   </div>
                   <div>
                     <%= form.label :volunteer_address_line_2, "Address line 2", class: label_class %>
@@ -313,26 +314,30 @@
                       <%= form.text_field :volunteer_address_city,
                         value: @case_contact.volunteer_address_city || address_parts[:city],
                         disabled: address_disabled,
-                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"},
+                        **field_error_attrs(@case_contact, :volunteer_address) %>
                     </div>
                     <div class="sm:col-span-2">
                       <%= form.label :volunteer_address_state, "State", class: label_class %>
                       <%= form.text_field :volunteer_address_state,
                         value: @case_contact.volunteer_address_state || address_parts[:state],
                         disabled: address_disabled,
-                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"},
+                        **field_error_attrs(@case_contact, :volunteer_address) %>
                     </div>
                     <div class="sm:col-span-1">
                       <%= form.label :volunteer_address_zip, "ZIP", class: label_class %>
                       <%= form.text_field :volunteer_address_zip,
                         value: @case_contact.volunteer_address_zip || address_parts[:zip],
                         disabled: address_disabled,
-                        class: address_input, data: {case_contact_form_target: "volunteerAddress"} %>
+                        class: address_input, data: {case_contact_form_target: "volunteerAddress"},
+                        **field_error_attrs(@case_contact, :volunteer_address) %>
                     </div>
                   </div>
                   <% if address_disabled %>
                     <p class="mt-1.5 text-xs text-rose-600"><%= @case_contact.decorate.ambiguous_volunteer_address_message %></p>
                   <% end %>
+                  <%= field_error(@case_contact, :volunteer_address) %>
                 </fieldset>
               </div>
 

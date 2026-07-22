@@ -242,16 +242,18 @@ class CaseContact < ApplicationRecord
     errors.add(:miles_driven, "must be entered to receive driving reimbursement")
   end
 
+  # On :volunteer_address (not :base) so the mailing-address fieldset is flagged at field level, not
+  # only in the summary. want_driving_reimbursement is required for the mailing address.
   def volunteer_address_when_reimbursement_wanted
     if want_driving_reimbursement && volunteer_address&.empty?
-      errors.add(:base, "Must enter a valid mailing address for the reimbursement")
+      errors.add(:volunteer_address, "must be entered for reimbursement")
     end
   end
 
   def volunteer_address_is_valid
     if volunteer_address&.present?
       if Address.new(user_id: creator.id, content: volunteer_address).invalid?
-        errors.add(:base, "The volunteer's address is not valid")
+        errors.add(:volunteer_address, "is not valid")
       end
     end
   end

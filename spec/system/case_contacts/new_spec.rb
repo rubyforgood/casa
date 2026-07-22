@@ -341,7 +341,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Must enter a valid mailing address for the reimbursement")
+      expect(page).to have_text("Mailing address must be entered for reimbursement")
 
       expect(CaseContact.active.count).to eq(0)
     end
