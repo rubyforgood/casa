@@ -35,11 +35,15 @@
       data-autosave-delay-value="2000"
       data-autosave-good-alert-class="text-slate-500"
       data-autosave-bad-alert-class="text-rose-600">
+      <%# novalidate: skip the browser's native validation bubbles so an invalid submit reaches the
+          server and renders the design-system validation instead (the _form_errors summary + the
+          .field_with_errors rose borders). Native bubbles can't be styled. %>
       <%= form_with(
         model: @case_contact,
         url: wizard_path(nil, case_contact_id: @case_contact.id),
         id: "case-contact-form",
         class: "space-y-6",
+        novalidate: true,
         data: {controller: "case-contact-form", "autosave-target": "form"},
         local: true
       ) do |form| %>

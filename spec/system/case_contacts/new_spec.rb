@@ -421,8 +421,7 @@ RSpec.describe "case_contacts/new", type: :system do
         medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
       )
 
-      check "Create another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       expect(page).to have_text "Case contact successfully created."
       expect(page).to have_text "Record new case contact"
@@ -454,8 +453,7 @@ RSpec.describe "case_contacts/new", type: :system do
       fill_in_contact_details contact_types: %w[School]
 
       # goes through CaseContactsController#new, but should not set a referring location
-      check "Create another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       fill_in_contact_details contact_types: %w[School]
 
@@ -483,10 +481,8 @@ RSpec.describe "case_contacts/new", type: :system do
         complete_details_page(case_numbers: [])
         expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
 
-        check "Create another"
-
         expect {
-          click_on "Submit"
+          click_on "Submit & add another"
           expect(page).to have_text "Case contacts successfully created."
         }.to change(CaseContact.active, :count).by(2)
 

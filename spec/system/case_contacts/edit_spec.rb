@@ -167,9 +167,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       case_contact_draft_ids = case_contact.draft_case_ids
       visit edit_case_contact_path(case_contact)
 
-      check "Create another"
-
-      click_on "Submit"
+      click_on "Submit & add another"
 
       expect(page).to have_text("successfully updated")
       expect(page).to have_text "Record new case contact"

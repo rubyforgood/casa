@@ -579,7 +579,11 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `{label, path}` link appended to a notice.
 - **Field level.** An invalid input / select / textarea shows a rose border. Rails wraps invalid
   fields in `.field_with_errors`, so `tailwind.css` colors those `border-rose-500` (`#f43f5e`,
-  3.67:1 against white, AA for a UI border) on casa_app. No per-field markup.
+  3.67:1 against white, AA for a UI border) on casa_app. No per-field markup. **The form must be
+  `novalidate`** for this (and the summary) to show — otherwise the browser's native HTML5
+  validation bubbles (`required`, `type`, `min`) fire first and block the submit, and native
+  bubbles can't be styled. `form_with(..., novalidate: true)` on each casadesign form; the
+  server-side validations then render the design-system errors on re-render.
 - **Summary.** `shared/_form_errors` — the **same alert card** (`alert_classes(:danger)` + icon),
   `id="error_explanation"` + `role="alert"` + the `alert` class (spec hooks), one sentence
   **"Unable to save:"** + `to_sentence` (no bulleted list). It is the **only** error summary now —
