@@ -127,13 +127,18 @@
 .ts-wrapper.ts-flip-up .ts-dropdown { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 0.25rem; }
 
 /* ------------------------------------------------------------------
-   Form validation. Rails wraps invalid fields in `.field_with_errors`; give them a
-   rose border so the error state reads on the field itself (paired with the
-   shared/_form_errors summary card). rose-500 is 3.67:1 on white (AA UI border).
+   Form validation. Rails wraps invalid fields in `.field_with_errors`, and the
+   field_error helper adds aria-invalid to the input/select/group; give both a rose
+   border so the error state reads on the field itself (paired with the visible
+   field_error message + the shared/_form_errors summary -- never color alone).
+   rose-500 is 3.67:1 on white (AA UI border).
 ------------------------------------------------------------------ */
 .field_with_errors input,
 .field_with_errors select,
-.field_with_errors textarea { border-color: #f43f5e; }
+.field_with_errors textarea,
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] { border-color: #f43f5e; }
 
 /* ------------------------------------------------------------------
    Native <dialog> modals (the `modal` Stimulus controller). Tailwind's reset

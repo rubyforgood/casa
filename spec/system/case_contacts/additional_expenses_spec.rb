@@ -97,7 +97,7 @@ RSpec.describe "CaseContact AdditionalExpenses Form", :flipper, type: :system do
 
     click_on "Submit"
 
-    expect(page).to have_text("Other Expense Details can't be blank")
+    expect(page).to have_text("Other expense details can't be blank")
 
     expect(CaseContact.active.count).to eq(0)
     expect(AdditionalExpense.count).to eq(1)

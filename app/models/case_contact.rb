@@ -19,7 +19,7 @@ class CaseContact < ApplicationRecord
   MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
     greater_than_or_equal_to: MINIMUM_DATE,
-    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}",
     allow_nil: true
   }
   # NOTE: 'extra' day is a temporary fix for user selecting current date, but this validation failing
@@ -237,19 +237,19 @@ class CaseContact < ApplicationRecord
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors.add(:base, "Must enter miles driven to receive driving reimbursement.")
+    errors.add(:base, "Must enter miles driven to receive driving reimbursement")
   end
 
   def volunteer_address_when_reimbursement_wanted
     if want_driving_reimbursement && volunteer_address&.empty?
-      errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+      errors.add(:base, "Must enter a valid mailing address for the reimbursement")
     end
   end
 
   def volunteer_address_is_valid
     if volunteer_address&.present?
       if Address.new(user_id: creator.id, content: volunteer_address).invalid?
-        errors.add(:base, "The volunteer's address is not valid.")
+        errors.add(:base, "The volunteer's address is not valid")
       end
     end
   end

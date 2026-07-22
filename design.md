@@ -577,20 +577,31 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `alert` + `<type>` classes (`.notice` SweetAlert specs, `.alert` not-authorized redirect), the
   `header-flash` container (all-casa spec), the a11y `role`, and the `notice_action` trusted
   `{label, path}` link appended to a notice.
-- **Field level.** An invalid input / select / textarea shows a rose border. Rails wraps invalid
-  fields in `.field_with_errors`, so `tailwind.css` colors those `border-rose-500` (`#f43f5e`,
-  3.67:1 against white, AA for a UI border) on casa_app. No per-field markup. **Native HTML5 validation is
-  disabled app-wide** so this (and the summary) can show — otherwise the browser's native bubbles
+- **Field level.** Every invalid field shows a rose border **and** a visible message, so the error
+  is never carried by color alone (WCAG 1.4.1). `field_error(record, attr)` (in
+  `design_system_helper`) renders a rose message + `bi-exclamation-circle` right under the field;
+  `field_error_attrs(record, attr)` splats `aria-invalid` + `aria-describedby` onto the input (or,
+  via `tag.attributes(...)`, onto a radio/checkbox `<fieldset>`) so assistive tech ties the field to
+  its message. The rose border comes from both `.field_with_errors` (Rails' auto-wrap) and
+  `[aria-invalid="true"]` (`tailwind.css`, `#f43f5e`, 3.67:1 AA). Attribute errors show at the field;
+  cross-field / `:base` errors (e.g. the reimbursement rules) live in the summary. **Native HTML5
+  validation is disabled app-wide** so this (and the summary) can show — otherwise the browser's native bubbles
   (`required`, `type`, `min`) fire first, block the submit, and can't be styled. A global handler in
   `application.js` sets `form.noValidate` on every form on load / `turbo:load` / `turbo:frame-load`
   (Turbo Drive is off, so it runs on each full page load); opt a form back in with
   `data-native-validation`. An invalid submit then reaches the server and re-renders the
   design-system errors. (The case-contact form also sets `novalidate` explicitly, server-rendered.)
 - **Summary.** `shared/_form_errors` — the **same alert card** (`alert_classes(:danger)` + icon),
-  `id="error_explanation"` + `role="alert"` + the `alert` class (spec hooks), one sentence
-  **"Unable to save:"** + `to_sentence` (no bulleted list). It is the **only** error summary now —
-  the legacy Bootstrap `shared/_error_messages` (bulleted `<ul>`) and the bridge `casa_admins/_errors`
-  were deleted, their all-casa / casa-admin pages migrated onto `_form_errors`.
+  `id="error_explanation"` + `role="alert"` + the `alert` class + the lead **"Unable to save"**
+  (spec hooks). It lists **every** error so the summary matches the per-field messages: a lone error
+  stays inline ("Unable to save: …"), several render as a `list-disc` list (no run-on `to_sentence`,
+  no doubled punctuation). It is the **only** error summary now — the legacy Bootstrap
+  `shared/_error_messages` (bulleted `<ul>`) and the bridge `casa_admins/_errors` were deleted, their
+  all-casa / casa-admin pages migrated onto `_form_errors`.
+- **Message copy.** Validation messages are app-shipped copy: sentence case (fix the i18n attribute
+  labels — e.g. `case_contact.case_contact_contact_types` is "Contact type", not "Contact Type") and
+  **no trailing period** (a `:base` sentence like "Must enter miles driven…" ends without ".", so it
+  reads cleanly as a list item and never doubles into "…reimbursement., and …").
 
 ### Dropdown / popover
 Menus (the header account menu, the cases-page "More" actions menu) are a native

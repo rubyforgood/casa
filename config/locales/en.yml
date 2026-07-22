@@ -37,8 +37,8 @@ en:
         other_expenses_describe: Description
       case_contact:
         case_contact_contact_types:
-          one: Contact Type
-          other: Contact Types
+          one: Contact type
+          other: Contact types
         contact_types:
           one: Contact Type
           other: Contact Types
@@ -46,12 +46,12 @@ en:
           one: Discussion Topic
           other: Discussion Topics
         draft_case_ids:
-          one: CASA Case
-          other: CASA Cases
+          one: CASA case
+          other: CASA cases
         occurred_at: Date
       case_contact/additional_expenses:
-        other_expense_amount: Other Expense Amount
-        other_expenses_describe: Other Expense Details
+        other_expense_amount: Other expense amount
+        other_expenses_describe: Other expense details
       case_contact/contact_topic_answers:
         contact_topic: Discussion Topic
         value: Discussion Notes

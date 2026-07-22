@@ -57,7 +57,7 @@ RSpec.describe CaseContact, type: :model do
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989"])
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is positive" do
@@ -68,13 +68,13 @@ RSpec.describe CaseContact, type: :model do
     it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement"])
     end
 
     it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement"])
     end
 
     it "validates that contact_made cannot be null" do
@@ -123,7 +123,7 @@ RSpec.describe CaseContact, type: :model do
     it "requires a case to be selected" do
       case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [])
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors.full_messages).to include("CASA Case must be selected")
+      expect(case_contact.errors.full_messages).to include("CASA case must be selected")
     end
 
     it "requires occurred at" do
@@ -141,7 +141,7 @@ RSpec.describe CaseContact, type: :model do
     it "validates miles driven if want reimbursement" do
       obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
       expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
+      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement")
     end
   end
 

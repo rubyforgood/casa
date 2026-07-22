@@ -1,9 +1,22 @@
 <%# Form-error summary for casadesign pages -- the shared design-system alert card (alert_classes,
-    danger variant + leading icon), matching the flash banners. One sentence via to_sentence, no
-    bulleted list. Keeps id="error_explanation" + the `alert` class (spec hooks). %>
+    danger variant + leading icon), matching the flash banners. Lists every error so the summary
+    lines up with the per-field messages (field_error helper); a lone error stays inline, several
+    render as a list (no run-on to_sentence, no doubled punctuation). Keeps id="error_explanation",
+    the `alert` class, and "Unable to save" (spec hooks). %>
 <% if resource.errors.any? %>
   <div id="error_explanation" role="alert" class="alert <%= alert_classes(:danger) %>">
     <i class="bi <%= alert_icon(:danger) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
-    <p><span class="font-semibold">Unable to save:</span> <%= resource.errors.full_messages.to_sentence %></p>
+    <div class="min-w-0">
+      <% if resource.errors.count == 1 %>
+        <p><span class="font-semibold">Unable to save:</span> <%= resource.errors.full_messages.first %></p>
+      <% else %>
+        <p class="font-semibold">Unable to save. Please fix the following:</p>
+        <ul class="mt-1.5 list-disc space-y-1 pl-5">
+          <% resource.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
   </div>
 <% end %>

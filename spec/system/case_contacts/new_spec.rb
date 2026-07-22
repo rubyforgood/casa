@@ -107,7 +107,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Contact Type must be selected")
+      expect(page).to have_text("Contact type must be selected")
       expect(CaseContact.active.count).to eq(0)
 
       check contact_types.first.name

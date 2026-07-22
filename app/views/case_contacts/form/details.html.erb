@@ -77,7 +77,9 @@
                 required: true,
                 max: (current_date + 1.day).to_fs(:iso8601),
                 min: min_date.to_fs(:iso8601),
-                class: input_class) %>
+                class: input_class,
+                **field_error_attrs(@case_contact, :occurred_at)) %>
+              <%= field_error(@case_contact, :occurred_at) %>
             </div>
           <% else %>
             <div class="grid gap-5 sm:grid-cols-2">
@@ -94,6 +96,7 @@
                     placeholder_term: "case(s)"
                   )) %>
                 </div>
+                <%= field_error(@case_contact, :draft_case_ids) %>
               </div>
 
               <%# DATE %>
@@ -103,13 +106,15 @@
                   required: true,
                   max: (current_date + 1.day).to_fs(:iso8601),
                   min: min_date.to_fs(:iso8601),
-                  class: input_class) %>
+                  class: input_class,
+                  **field_error_attrs(@case_contact, :occurred_at)) %>
+                <%= field_error(@case_contact, :occurred_at) %>
               </div>
             </div>
           <% end %>
 
           <%# CONTACT TYPES %>
-          <fieldset class="m-0 border-0 p-0">
+          <fieldset class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :case_contact_contact_types)) %>>
             <legend class="<%= label_class %>">Contact type(s) <%= req %></legend>
             <% casa_case_ids = @casa_cases.pluck(:id) %>
             <div id="contact-form-types" class="space-y-4">
@@ -134,6 +139,7 @@
                 </div>
               <% end %>
             </div>
+            <%= field_error(@case_contact, :case_contact_contact_types) %>
           </fieldset>
 
           <%# CONTACT MADE %>
@@ -143,7 +149,7 @@
           </div>
 
           <%# MEDIUM %>
-          <fieldset id="contact-medium" class="m-0 border-0 p-0">
+          <fieldset id="contact-medium" class="m-0 border-0 p-0" <%= tag.attributes(field_error_attrs(@case_contact, :medium_type)) %>>
             <legend class="<%= label_class %>">Contact medium <%= req %></legend>
             <div class="space-y-2">
               <%= form.collection_radio_buttons(:medium_type, contact_mediums, "value", "label") do |b| %>
@@ -153,6 +159,7 @@
                 </div>
               <% end %>
             </div>
+            <%= field_error(@case_contact, :medium_type) %>
           </fieldset>
 
           <%# DURATION (Tailwind twin of Form::HourMinuteDurationComponent) %>
@@ -165,7 +172,8 @@
               </div>
               <div>
                 <%= form.label :duration_minutes, "Minute(s)", class: label_class %>
-                <%= form.number_field :duration_minutes, min: 0, value: duration_minutes(@case_contact), required: true, class: input_class %>
+                <%= form.number_field :duration_minutes, min: 0, value: duration_minutes(@case_contact), required: true, class: input_class, **field_error_attrs(@case_contact, :duration_minutes) %>
+                <%= field_error(@case_contact, :duration_minutes) %>
               </div>
             </div>
           </fieldset>
@@ -273,7 +281,9 @@
                     <%= form.number_field(:miles_driven,
                       min: "0", max: 10000, placeholder: "0",
                       class: input_class,
-                      data: {case_contact_form_target: "milesDriven"}) %>
+                      data: {case_contact_form_target: "milesDriven"},
+                      **field_error_attrs(@case_contact, :miles_driven)) %>
+                    <%= field_error(@case_contact, :miles_driven) %>
                   </div>
                 </div>
 
