@@ -6,21 +6,20 @@ class AdditionalExpense < ApplicationRecord
   has_one :contact_creator, through: :case_contact, source: :creator
   has_one :contact_creator_casa_org, through: :contact_creator, source: :casa_org
 
-  validates :other_expenses_describe, presence: true, if: :describe_required?
-  validates :other_expense_amount, presence: true, if: :amount_required?
+  validates :other_expense_amount, presence: true, numericality: {greater_than: 0, allow_nil: true}, if: :require_complete?
+  validates :other_expenses_describe, presence: true, if: :require_complete?
 
   alias_attribute :amount, :other_expense_amount
   alias_attribute :describe, :other_expenses_describe
 
-  # Amount and description are a pair: an amount needs a description, and a description needs an
-  # amount -- so a started expense requires both (fill it in, or leave the whole row blank to drop
-  # it). A brand-new blank row still saves, so "Add another expense" can create it, then fill.
-  def describe_required?
-    other_expense_amount&.positive?
-  end
-
-  def amount_required?
-    other_expenses_describe.present?
+  # A submitted expense must be complete: a positive amount AND a description. Enforced only once the
+  # contact is being submitted (details/active). While it is still a "started" draft -- autosave, and
+  # the blank row that "Add another expense" creates up front -- an incomplete row is allowed, so it
+  # can be created then filled. On submit an incomplete or empty row blocks the form (fill it in or
+  # remove it); we deliberately do NOT silently drop a blank row (the volunteer may have just
+  # forgotten to finish it).
+  def require_complete?
+    case_contact&.active_or_details?
   end
 end
 

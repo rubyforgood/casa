@@ -310,8 +310,11 @@ empty reimbursement card look over-padded vs the others (same `p-6`, ~40px of de
 autosave status is also toggled by **display** (`hidden` ⇄ `block`, not `invisible`/visibility), so
 an idle card reserves no line and Notes/Reimbursement match the Details card's bottom padding.
 **Nested expense rows** are separated by a **divider** (`border-t border-slate-200 py-4`); the
-fields **stack with visible labels** and are **full width** (amount, then description -- both required
-once either is filled, so an expense is "fill it in or remove it"), with a small **"Remove" action**
+fields **stack with visible labels** and are **full width** (amount, then description -- **both
+required on submit**: a positive amount + a description, enforced only once the contact is being
+submitted (`active_or_details?`) so the blank "Add another expense" row and draft autosaves are not
+blocked. An incomplete or empty row blocks submit -- fill it in or **remove** it; a blank row is
+never silently dropped (the volunteer may have just forgotten it)), with a small **"Remove" action**
 (`.remove-expense-button`, the **tertiary ghost** -- slate, not the old rose that read as too jarring) on the amount label's line
 (`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the fields (a side
 icon narrowed them; a bottom ghost button added a row + whitespace; a grey `bg-slate-50` box read as
