@@ -586,7 +586,13 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   `header-flash` container (all-casa spec), the a11y `role`, and the `notice_action` trusted
   `{label, path}` link appended to a notice.
 - **Field level.** Every invalid field shows a rose border **and** a visible message, so the error
-  is never carried by color alone (WCAG 1.4.1). `field_error(record, attr)` (in
+  is never carried by color alone (WCAG 1.4.1). **This is automatic app-wide:** a global
+  `field_error_proc` (`config/initializers/field_error_proc.rb`) wraps each invalid field (keeping the
+  `.field_with_errors` rose border) and, for a text-like control (input / select / textarea; not
+  radio / checkbox / hidden), adds `aria-invalid` + the secondary-gray message beneath it -- skipping
+  any control that already has `aria-describedby` (placed by hand below), so nothing doubles, and new
+  forms get it for free. For hand-placed cases (radio/checkbox groups, a composed fieldset, custom
+  placement) `field_error(record, attr)` (in
   `design_system_helper`) renders a secondary-gray, sentence-case message (`text-slate-500`) with a centered rose
   `bi-exclamation-circle` icon right under the field;
   `field_error_attrs(record, attr)` splats `aria-invalid` + `aria-describedby` onto the input (or,
