@@ -47,7 +47,7 @@ jobs:
             test_reports/**/rspec*.xml
       - name: Set job status
         if: ${{ steps.test_summary.outputs.failed > 0 }}
-        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        uses: actions/github-script@3a2844b7e9c422d3c10d287c895573f7108da1b3 # v9
         with:
           script: |
             core.setFailed('There are test failures')
