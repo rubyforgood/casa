@@ -87,6 +87,12 @@
 }
 .ts-wrapper.single .ts-control > .item,
 .ts-wrapper.single .ts-control > input { align-self: center; }
+/* Keep the selected item + search input on ONE line (never wrap to a 2nd line, which grows the field):
+   the item truncates and the input shrinks instead of forcing an overflow. TomSelect's default
+   input `min-width: 7rem !important` is what wraps a name + input in a narrow field. */
+.ts-wrapper.single .ts-control { flex-wrap: nowrap; }
+.ts-wrapper.single .ts-control > input { min-width: 0 !important; }
+.ts-wrapper.single .ts-control > .item { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 /* legible placeholder, matching the design-system inputs (slate-400) */
 .ts-wrapper .ts-control input::placeholder { color: #94a3b8; opacity: 1; }
 /* clear_button plugin: the bundled plugin CSS positions the x and toggles its opacity on

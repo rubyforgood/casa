@@ -295,6 +295,10 @@ for a short, fixed list (the 3-option status filter stays native).
   center` on the item/input) -- otherwise the selected item stretches to the full content box and the
   text rides high (uneven top/bottom). Size the wrapper to fit icon + placeholder + insets (~`w-48`,
   192px), not wider.
+- **One line, always** (single-select): `flex-wrap: nowrap` + input `min-width: 0 !important` + item
+  `overflow:hidden; text-overflow:ellipsis; white-space:nowrap`. TomSelect's default input
+  `min-width: 7rem` otherwise wraps a selected name + the input onto a 2nd line in a narrow field
+  (growing the field's height), which also pushes the caret in -- abnormal for a single-select.
 
 ### Nested sub-form (repeatable rows)
 The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the
