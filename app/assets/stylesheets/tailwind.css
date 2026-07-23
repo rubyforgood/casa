@@ -77,9 +77,13 @@
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
 /* Single-select: vertically center the selected item + the search/placeholder input. Without this the
    item stretches to the full content box and the text rides high (uneven top/bottom). */
-.ts-wrapper.single .ts-control {
-  align-items: center;
-  padding-left: 2rem !important; /* room for the leading search icon */
+.ts-wrapper.single .ts-control { align-items: center; }
+/* The magnifier is a RESTING affordance: shown ONLY when the field is empty AND not focused. The
+   moment the user focuses (types) or a value is selected, it's a plain field -- no icon, caret/text at
+   the normal left. Keeping a leading icon on focus/has-items pushed the caret in and left the icon
+   lingering after a pick, which isn't standard type-ahead behavior. */
+.ts-wrapper.single:not(.focus):not(.has-items) .ts-control {
+  padding-left: 2rem !important;
   background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzY0NzQ4YiI+PHBhdGggZD0iTTExLjc0MiAxMC4zNDRhNi41IDYuNSAwIDEgMC0xLjM5NyAxLjM5OGgtLjAwMXEuMDQ0LjA2LjA5OC4xMTVsMy44NSAzLjg1YTEgMSAwIDAgMCAxLjQxNS0xLjQxNWwtMy44NS0zLjg1YTEgMSAwIDAgMC0uMTE1LS4wOTh6TTEyIDYuNWE1LjUgNS41IDAgMSAxLTExIDAgNS41IDUuNSAwIDAgMSAxMSAwIi8+PC9zdmc+");
   background-repeat: no-repeat;
   background-position: left 0.625rem center;
