@@ -4,7 +4,7 @@ RSpec.describe "sessions/new", type: :system do
   context "when guest" do
     it "renders sign in page with no flash messages" do
       visit "/"
-      expect(page).to have_text "Login"
+      expect(page).to have_text "Log in"
       expect(page).not_to have_text "sign in before continuing"
     end
 
@@ -14,12 +14,12 @@ RSpec.describe "sessions/new", type: :system do
       end
 
       it "allows #{user_type} to click email link" do
-        expect(page).to have_text "Want to use the CASA Volunteer Tracking App?"
+        expect(page).to have_text "Want to use the CASA volunteer tracking app?"
         expect(page).to have_link("casa@rubyforgood.org", href: "mailto:casa@rubyforgood.org?Subject=CASA%20Interest")
       end
 
       it "renders sign in page with no flash messages" do
-        expect(page).to have_text "Login"
+        expect(page).to have_text "Log in"
         expect(page).not_to have_text "sign in before continuing"
       end
 
@@ -30,9 +30,7 @@ RSpec.describe "sessions/new", type: :system do
           visit "/users/sign_in"
           fill_in "Email", with: user.email
           fill_in "Password", with: "12345678"
-          within ".actions" do
-            find("#log-in").click
-          end
+          click_on "Sign in"
         end
 
         it "allows them to sign in" do
@@ -53,14 +51,12 @@ RSpec.describe "sessions/new", type: :system do
       user = build_stubbed(:all_casa_admin)
 
       visit "/users/sign_in"
-      expect(page).to have_text "Log In"
+      expect(page).to have_text "Welcome back"
       expect(page).not_to have_text "sign in before continuing"
 
       fill_in "Email", with: user.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        find("#log-in").click
-      end
+      click_on "Sign in"
 
       expect(page).to have_text(/invalid email or password/i)
     end

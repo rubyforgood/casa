@@ -35,28 +35,6 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
-  describe "POST /datatable" do
-    let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
-
-    before do
-      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", to_json: data.to_json
-    end
-
-    it "is successful" do
-      sign_in admin
-
-      post datatable_volunteers_path
-      expect(response).to be_successful
-    end
-
-    it "renders json data" do
-      sign_in admin
-
-      post datatable_volunteers_path
-      expect(response.body).to eq data.to_json
-    end
-  end
-
   describe "GET /new" do
     it "renders a successful response for admin user" do
       sign_in admin
@@ -106,7 +84,11 @@ RSpec.describe "/volunteers", type: :request do
 
       page = Nokogiri::HTML(subject.body)
       names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text)
-      expect(supervisors.map(&:display_name)).to match_array(names)
+      # Options render the honorific-free name (formatted_name / NamePresentation.strip_honorific), so
+      # compare against the stripped names. Faker::Name sometimes yields a "Rev."/"Dr." prefix, which
+      # made the raw-display_name assertion flaky (passed or failed depending on the seed).
+      expected = supervisors.map { |s| NamePresentation.strip_honorific(s.display_name) }
+      expect(expected).to match_array(names)
     end
   end
 

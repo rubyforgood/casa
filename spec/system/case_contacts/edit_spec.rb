@@ -38,7 +38,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     it "successfully edits case contact with mileage reimbursement", :js do
       visit edit_case_contact_path(case_contact)
 
-      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
       complete_notes_page
       fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
@@ -54,7 +54,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(case_contact.contact_made).to be true
     end
 
-    it "does not allow volunteer address edit for case contact with ambiguous volunteer" do
+    it "offers a volunteer picker for a case contact with multiple volunteers" do
       create(:case_assignment, casa_case:, volunteer: build(:volunteer, casa_org: organization))
       case_contact.update!(creator: admin)
       expect(casa_case.volunteers).not_to include case_contact.creator
@@ -62,11 +62,12 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       visit edit_case_contact_path(case_contact)
 
-      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
+      complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: "04/04/2020")
 
       check "Request travel or other reimbursement"
-      expect(page).to have_field("case_contact_volunteer_address", disabled: true)
-      expect(page).to have_text("There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible.")
+      expect(page).to have_select("case_contact_reimbursement_volunteer_id")
+      expect(page).to have_field("case_contact_volunteer_address_line_1", disabled: false)
+      expect(page).to have_no_text("This is not currently possible")
     end
 
     context "when user is part of a different organization" do
@@ -75,7 +76,7 @@ RSpec.describe "case_contacts/edit", type: :system do
 
       it "fails across organizations" do
         visit edit_case_contact_path(case_contact)
-        expect(page).to have_current_path supervisors_path, ignore_query: true
+        expect(page).to have_current_path root_path, ignore_query: true
       end
     end
   end
@@ -103,7 +104,6 @@ RSpec.describe "case_contacts/edit", type: :system do
     )
     uncheck contact_types.first.name
     check contact_types.second.name
-    click_on "Add Another Discussion Topic"
     answer_topic contact_topic.question, "Topic 1 Answer."
     fill_in_expenses_page(miles: 50, want_reimbursement: true, address: "123 Form St")
     click_on "Submit"
@@ -128,7 +128,7 @@ RSpec.describe "case_contacts/edit", type: :system do
   it "is successful with mileage reimbursement on", :js do
     visit edit_case_contact_path(case_contact)
 
-    complete_details_page(contact_made: true, medium: "In Person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
+    complete_details_page(contact_made: true, medium: "In person", hours: 1, minutes: 45, occurred_on: Date.new(2020, 4, 4))
     complete_notes_page
     fill_in_expenses_page(miles: 10, want_reimbursement: true, address: "123 str")
 
@@ -155,7 +155,7 @@ RSpec.describe "case_contacts/edit", type: :system do
     complete_details_page(contact_made: true)
     expect(case_contact.reload.notes).to eq "Hello from the other side"
 
-    fill_in "Additional Notes", with: "Hello world"
+    fill_in "Additional notes", with: "Hello world"
 
     within autosave_alert_div do
       find(autosave_alert_css, text: autosave_alert_text)
@@ -163,17 +163,15 @@ RSpec.describe "case_contacts/edit", type: :system do
     expect(case_contact.reload.notes).to eq "Hello world"
   end
 
-  context "when 'Create Another' option is checked" do
+  context "when 'Create another' option is checked" do
     it "creates a duplicate case contact for the second contact", :js do
       case_contact_draft_ids = case_contact.draft_case_ids
       visit edit_case_contact_path(case_contact)
 
-      check "Create Another"
-
-      click_on "Submit"
+      click_on "Submit & add another"
 
       expect(page).to have_text("successfully updated")
-      expect(page).to have_text "New Case Contact"
+      expect(page).to have_text "Record new case contact"
       expect(page).to have_text casa_case.case_number
 
       expect(CaseContact.started.count).to eq(1)

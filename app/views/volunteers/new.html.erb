@@ -1,11 +1,52 @@
-<div class="col-md-6">
-  <div class="title mb-30 mt-30">
-    <h1>Create New Volunteer</h1>
-  </div>
-</div>
+<% content_for :page_title, "New volunteer" %>
+<%# volunteers#new on the casa_app shell. Self-contained (the old volunteers/_form was used
+    only here). There is no UI sign-up (ADR 0002) — admins/supervisors invite; on save the
+    volunteer is emailed an invitation. Field labels + the "Create volunteer" button are
+    spec-locked (invite_spec / new_spec). %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
-<div class="card card-container">
-  <div class="card-body">
-    <%= render 'form', volunteer: @volunteer %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <div>
+      <%= link_to volunteers_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteers
+      <% end %>
+    </div>
+
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">New volunteer</h1>
+      <p class="mt-1 text-sm text-slate-500">They&rsquo;ll get an email invitation to set a password and join.</p>
+    </div>
+
+    <section class="<%= card %>">
+      <%= form_with model: @volunteer, url: volunteers_path, id: "new_volunteer" do |form| %>
+        <%= render "shared/form_errors", resource: @volunteer %>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :email, "Email", class: label_class %>
+            <%= form.email_field :email, placeholder: "Email", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :display_name, "Display name", class: label_class %>
+            <%= form.text_field :display_name, placeholder: "Display name", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <%= form.date_field :date_of_birth, value: @volunteer.date_of_birth, class: input_class %>
+          </div>
+        </div>
+        <div class="actions mt-5">
+          <%= form.button type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Create volunteer
+          <% end %>
+        </div>
+      <% end %>
+    </section>
   </div>
 </div>

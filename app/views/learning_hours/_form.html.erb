@@ -1,71 +1,69 @@
-<%= form_with(model: learning_hour,
-              url: learning_hour.persisted? ? learning_hour_path(learning_hour) : learning_hours_path,
-              local: true,
-              html: { id: "learning-hours-form"}) do |form| %>
+<%# Learning-hours new/edit form (casa_app). The Hour(s)/Minute(s) duration inputs are a
+    Tailwind twin of Form::HourMinuteDurationComponent (left untouched — it is still used by the
+    Bootstrap case-contacts form). Field labels + submit-button labels are spec-locked (queued
+    for the sentence-case sweep). Duration fields default to 0 so leaving one blank submits 0. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
-  <div class="mt-2">
-    <%= render "/shared/error_messages", resource: learning_hour %>
-  </div>
-
+<%= form_with model: learning_hour, url: learning_hour.persisted? ? learning_hour_path(learning_hour) : learning_hours_path, html: {id: "learning-hours-form"} do |form| %>
+  <%= render "shared/form_errors", resource: learning_hour %>
   <%= form.hidden_field :user_id, value: current_user.id %>
 
-  <div class="field-card mt-3">
-    <div class="input-style-1">
-      <%= form.label :name, "Learning Hours Title" %>
-      <%= form.text_field :name,
-                          placeholder: "-- Enter a title --",
-                          value: learning_hour.name,
-                          class:"mr-5",
-                          required: true %>
+  <section class="<%= card %> mt-4 space-y-5">
+    <div>
+      <%= form.label :name, "Learning hours title", class: label_class %>
+      <%= form.text_field :name, placeholder: "-- Enter a title --", value: learning_hour.name, required: true, class: input_class %>
     </div>
-    <div class="select-style-1">
-      <%= form.label :learning_hour_type_id, "Type of Learning" %>
-      <div class="select-position">
-        <%= form.collection_select :learning_hour_type_id,
-          LearningHourType.for_organization(current_user.casa_org).active,
-                                   :id,
-                                   :name,
-                                   prompt: "Select learning type",
-                                   value: learning_hour.learning_hour_type_id %>
+
+    <div>
+      <%= form.label :learning_hour_type_id, "Type of learning", class: label_class %>
+      <div class="relative">
+        <%= form.collection_select :learning_hour_type_id, LearningHourType.for_organization(current_user.casa_org).active, :id, :name, {prompt: "Select learning type"}, {class: select_class} %>
+        <i class="<%= chevron %>" aria-hidden="true"></i>
       </div>
     </div>
+
     <% if current_user.casa_org.learning_topic_active %>
-      <div class="select-style-1">
-        <%= form.label :learning_hour_topic_id, "Learning Topic" %>
-        <div class="select-position">
-          <%= form.collection_select :learning_hour_topic_id,
-            LearningHourTopic.for_organization(current_user.casa_org),
-                                    :id,
-                                    :name,
-                                    prompt: "Select learning topic",
-                                    value: learning_hour.learning_hour_topic_id %>
+      <div>
+        <%= form.label :learning_hour_topic_id, "Learning topic", class: label_class %>
+        <div class="relative">
+          <%= form.collection_select :learning_hour_topic_id, LearningHourTopic.for_organization(current_user.casa_org), :id, :name, {prompt: "Select learning topic"}, {class: select_class} %>
+          <i class="<%= chevron %>" aria-hidden="true"></i>
         </div>
       </div>
     <% end %>
+
+    <fieldset class="m-0 border-0 p-0">
+      <legend class="<%= label_class %>">Learning duration</legend>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <%= form.label :duration_hours, "Hour(s)", class: label_class %>
+          <%= form.number_field :duration_hours, min: 0, value: (learning_hour.duration_hours || 0), required: true, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :duration_minutes, "Minute(s)", class: label_class %>
+          <%= form.number_field :duration_minutes, min: 0, value: (learning_hour.duration_minutes || 0), required: true, class: input_class %>
+        </div>
       </div>
-  <div class="field-card duration mt-4">
-    <h5 class="mb-3">Learning Duration</h5>
-    <%= render(Form::HourMinuteDurationComponent.new(form: form, hour_value: learning_hour.duration_hours, minute_value: learning_hour.duration_minutes)) %>
-  </div>
-  <div class="field-card mt-4">
-    <h5 class="mb-3"><%= form.label :occurred_at, "Occurred On" %>:</h5>
-    <% occurred_at = learning_hour.occurred_at || Date.today %>
-    <div class="input-style-1">
-      <%= form.date_field :occurred_at,
-                          value: occurred_at.to_date,
-                          class: "form-control label-font-weight" %>
+    </fieldset>
+
+    <div>
+      <% occurred_at = learning_hour.occurred_at || Date.today %>
+      <%= form.label :occurred_at, "Occurred on", class: label_class %>
+      <%= form.date_field :occurred_at, value: occurred_at.to_date, class: input_class %>
     </div>
-  </div>
-  <div class="actions mt-3">
-    <%= button_tag(
-      type: "submit",
-      class: "main-btn primary-btn btn-hover btn-sm wide_button"
-    ) do %>
-      <% if learning_hour.persisted? %>
-        <i class="lni lni-save mr-10"></i> Update Learning Hours Entry
-      <% else %>
-        <i class="lni lni-check-box mr-10"></i> Create New Learning Hours Entry
+
+    <div class="actions">
+      <%= form.button type: "submit", class: button_classes(:primary) do %>
+        <% if learning_hour.persisted? %>
+          <i class="bi bi-save" aria-hidden="true"></i> Update learning hours entry
+        <% else %>
+          <i class="bi bi-check-lg" aria-hidden="true"></i> Create new learning hours entry
+        <% end %>
       <% end %>
-    <% end %>
-  </div>
+    </div>
+  </section>
 <% end %>

@@ -1,0 +1,21 @@
+<%# One court order entry (casa_app / Tailwind). Preserves the nested-form + court-order-form
+    Stimulus hooks (.nested-form-wrapper, .court-order-text-entry, .implementation-status,
+    data-type, data-new-record, the remove data-action, the hidden _destroy) so the shared
+    court-order-form controller keeps working. Mirrors shared/_court_order_form (Bootstrap,
+    still used by the legacy court-date pages). %>
+<div class="court-order-entry nested-form-wrapper flex flex-col gap-2 rounded-lg border border-slate-200 p-3 sm:flex-row sm:items-start"
+     data-new-record="<%= f.object.new_record? %>" data-type="COURT_ORDER">
+  <div class="min-w-0 flex-1">
+    <%= f.text_area :text, rows: 2, "aria-label": "Court order text", placeholder: "Describe the court order",
+          class: "court-order-text-entry block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  </div>
+  <div class="relative sm:w-52">
+    <%= f.select :implementation_status, court_order_select_options, {include_blank: "Set implementation status"},
+          {"aria-label": "Implementation status", class: "implementation-status block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none"} %>
+    <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+  </div>
+  <button type="button" class="<%= button_classes(:danger_outline) %> shrink-0" data-action="click->court-order-form#remove">
+    <i class="bi bi-trash" aria-hidden="true"></i> Delete
+  </button>
+  <%= f.hidden_field :_destroy %>
+</div>

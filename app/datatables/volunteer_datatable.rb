@@ -10,6 +10,21 @@ class VolunteerDatatable < ApplicationDatatable
     hours_spent_in_days
   ]
 
+  # Server-side entry point for the migrated (bespoke Pagy) index. Reuses the same
+  # filter/search/order SQL as the DataTables JSON path; the controller maps plain GET
+  # params into the DataTables param shape. Preloads languages for the extra-languages column.
+  def index_relation
+    filtered_records.includes(:languages)
+  end
+
+  # Count for the migrated index's Pagy bar. filtered_records carries a custom SELECT
+  # (COALESCE aliases) and an ORDER by one of those aliases, neither of which AR's COUNT
+  # can wrap, so strip them and count distinct volunteers (distinct guards the
+  # extra-languages join fan-out).
+  def index_count
+    index_relation.except(:select, :order, :includes).distinct.count("users.id")
+  end
+
   private
 
   def data
@@ -18,7 +33,7 @@ class VolunteerDatatable < ApplicationDatatable
         active: volunteer.active?,
         casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
         contacts_made_in_past_days: volunteer.contacts_made_in_past_days,
-        display_name: volunteer.display_name,
+        display_name: NamePresentation.strip_honorific(volunteer.display_name),
         email: volunteer.email,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
@@ -27,7 +42,7 @@ class VolunteerDatatable < ApplicationDatatable
           case_id: volunteer.most_recent_attempt_case_id,
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
-        supervisor: {id: volunteer.supervisor_id, name: volunteer.supervisor_name},
+        supervisor: {id: volunteer.supervisor_id, name: NamePresentation.strip_honorific(volunteer.supervisor_name)},
         hours_spent_in_days: volunteer.hours_spent_in_days(30),
         extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} }
       }

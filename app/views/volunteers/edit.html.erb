@@ -1,44 +1,177 @@
-<%= link_to 'Back', volunteers_path, class: "my-2" %>
+<% content_for :page_title, "Edit volunteer" %>
+<%# volunteers#edit on the casa_app (Tailwind) shell. Self-contained: the shared Bootstrap
+    user-edit partials (shared/_edit_form, _invite_login, _error_messages) stay on the
+    supervisor/admin edit pages; this page rebuilds every section in Tailwind. Title Case
+    action labels asserted by the 745-line system spec (Submit, Assign case, Resend
+    Invitation, Current supervisor:, ...) are kept verbatim and queued for the cross-cutting
+    sentence-case sweep. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% section_title = "text-base font-semibold text-slate-900" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% readonly_class = "block w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-500 shadow-sm" %>
+<% can_edit = policy(@volunteer).update_user_setting? %>
 
-<div class="row">
-  <div class="col-sm-12 form-header">
-    <h1>Editing Volunteer</h1>
-    <%= render "volunteer_reminder_form", volunteer: @volunteer %>
-  </div>
-  <div class="col-sm-12 form-header">
-    <%= link_to impersonate_volunteer_path(@volunteer),
-      class: "main-btn primary-btn btn-hover casa-case-button btn-sm my-3" do %>
-        <i class="lni lni-user mr-10"></i> Impersonate
-    <% end %>
-  </div>
-</div>
-<div class="card card-container">
-  <div class="card-body">
-    <%= form_with(model: @volunteer, url: volunteer_path(@volunteer), method: :patch) do |form| %>
-      <%= render "/shared/error_messages", resource: @volunteer %>
-
-      <%= render "/shared/edit_form", resource: @volunteer, f: form %>
-
-      <%= render "/shared/invite_login", resource: @volunteer %>
-
-      <p>
-        <%= render "manage_active", user: @volunteer %>
-      </p>
-
-      <div class="actions">
-        <%= button_tag(
-          type: "submit",
-          class: "main-btn primary-btn btn-hover btn-sm my-1"
-        ) do %>
-          <i class="lni lni-checkmark-circle mr-5"></i> Submit
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl space-y-6">
+    <%# Back to the originating case, or to the volunteers roster %>
+    <div>
+      <% if params[:from_case_id].present? && (from_case = current_organization.casa_cases.find_by(id: params[:from_case_id])) %>
+        <%= link_to casa_case_path(from_case), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+          <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to case <%= from_case.case_number %>
         <% end %>
+      <% else %>
+        <%= link_to volunteers_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+          <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteers
+        <% end %>
+      <% end %>
+    </div>
+
+    <%# Header. A fill-then-save page keeps its primary CTA (Submit) at the form bottom, so
+        Impersonate is a secondary action here. %>
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div class="min-w-0">
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit volunteer</h1>
+        <p class="mt-1 truncate text-sm text-slate-500"><span class="font-medium text-slate-800"><%= formatted_name(@volunteer.display_name) %></span> · <%= @volunteer.email %></p>
       </div>
-    <% end %>
+      <% if policy(@volunteer).impersonate? %>
+        <%= link_to impersonate_volunteer_path(@volunteer), class: button_classes(:secondary) do %>
+          <i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate
+        <% end %>
+      <% end %>
+    </div>
+
+    <%= render "volunteer_reminder_form", volunteer: @volunteer %>
+
+    <%= render "shared/form_errors", resource: @volunteer %>
+
+    <%# Profile %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Profile</h2>
+      <%= form_with model: @volunteer, url: volunteer_path(@volunteer), method: :patch do |form| %>
+        <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :email, "Email", class: label_class %>
+            <% if can_edit %>
+              <%= form.email_field :email, placeholder: "Email", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @volunteer.email %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div>
+            <%= form.label :display_name, "Display name", class: label_class %>
+            <% if can_edit %>
+              <%= form.text_field :display_name, placeholder: "Display name", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= formatted_name(@volunteer.display_name) %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div>
+            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <% if can_edit %>
+              <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @volunteer.phone_number %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <% if can_edit %>
+              <%= form.date_field :date_of_birth, value: @volunteer.date_of_birth, class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @volunteer.decorate.formatted_date_of_birth %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= form.fields_for :address, (@volunteer.address ? nil : Address.new) do |a| %>
+              <% addr_class = can_edit ? input_class : readonly_class %>
+              <fieldset class="space-y-2.5">
+                <legend class="<%= label_class %>">Mailing address</legend>
+                <div>
+                  <%= a.label :line_1, "Address line 1", class: label_class %>
+                  <%= a.text_field :line_1, readonly: !can_edit, class: addr_class %>
+                </div>
+                <div>
+                  <%= a.label :line_2, "Address line 2", class: label_class %>
+                  <%= a.text_field :line_2, placeholder: "Apartment, suite, unit, etc.", readonly: !can_edit, class: addr_class %>
+                </div>
+                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
+                  <div class="sm:col-span-3">
+                    <%= a.label :city, "City", class: label_class %>
+                    <%= a.text_field :city, readonly: !can_edit, class: addr_class %>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <%= a.label :state, "State", class: label_class %>
+                    <%= a.text_field :state, readonly: !can_edit, class: addr_class %>
+                  </div>
+                  <div class="sm:col-span-1">
+                    <%= a.label :zip, "ZIP", class: label_class %>
+                    <%= a.text_field :zip, readonly: !can_edit, class: addr_class %>
+                  </div>
+                </div>
+              </fieldset>
+            <% end %>
+          </div>
+        </div>
+
+        <label class="mt-4 inline-flex items-center gap-2 text-sm text-slate-700">
+          <%= form.check_box :receive_reimbursement_email, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+          Email reimbursement requests
+        </label>
+
+        <div class="actions mt-5">
+          <%= form.button type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+          <% end %>
+        </div>
+      <% end %>
+    </section>
+
+    <%# Account %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Account</h2>
+      <dl class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-slate-500">CASA organization</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.casa_org&.name %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Added to system</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.decorate.formatted_created_at %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation email sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.decorate.formatted_invitation_sent_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation accepted</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.decorate.formatted_invitation_accepted_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Last logged in</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.decorate.formatted_current_sign_in_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Password reset last sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.decorate.formatted_reset_password_sent_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Will receive reimbursement request emails</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.receive_reimbursement_email ? "Yes" : "No" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Learning hours this year</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @volunteer.learning_hours_spent_in_one_year %></dd>
+        </div>
+      </dl>
+    </section>
+
+    <%= render "manage_active", user: @volunteer %>
+
+    <%= render "manage_cases" %>
+
+    <%= render "manage_supervisor" %>
+
+    <%= render "notes" %>
   </div>
 </div>
-
-<%= render 'notes' %>
-
-<%= render 'manage_cases' %>
-
-<%= render 'manage_supervisor' %>

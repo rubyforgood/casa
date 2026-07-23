@@ -62,3 +62,6 @@ npm-debug.log
 # In case we want to keep something in the compiled assets directory
 !/app/assets/builds/.keep
 .aider*
+
+# Personal AI working notes (Claude Code local memory)
+CLAUDE.local.md

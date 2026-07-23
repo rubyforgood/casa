@@ -1,41 +1,34 @@
-<div class="mb-3">
-  <h4>
-    1.
-    <%= link_to "/casa_cases.csv", format: :csv, download: "casa_cases.csv" do %>
-      Download and reference example Case CSV file
-      <i class="lni lni-download"></i>
+<%# Case import panel (casa_app). Cases have no phone numbers, so no SMS opt-in; the button is
+    enabled on file-select by an inline script (src/import.js only wires volunteer/supervisor). %>
+<% file_input = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-4 file:border-0 file:border-r file:border-slate-200 file:bg-slate-50 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<div class="space-y-5">
+  <div>
+    <h2 class="text-base font-semibold text-slate-900">1. Download the example CSV</h2>
+    <%= link_to "/casa_cases.csv", format: :csv, download: "casa_cases.csv", class: "mt-1 inline-flex items-center gap-1.5 text-sm font-medium text-brand-600 hover:text-brand-700" do %>
+      <i class="bi bi-download" aria-hidden="true"></i> Download and reference example Case CSV file
     <% end %>
-  </h4>
-</div>
+  </div>
+  <div>
+    <h2 class="text-base font-semibold text-slate-900">2. Upload your CSV file</h2>
+    <%= form_with(url: imports_path, local: true, class: "mt-2 space-y-4") do |f| %>
+      <%= f.hidden_field :import_type, value: "casa_case" %>
+      <ul class="list-disc space-y-1 pl-5 text-sm text-slate-600">
+        <li>Click the choose file button, navigate to the saved file, and select it.</li>
+        <li><strong>Do not</strong> change any of the values in the first line of the example CSV file.</li>
+        <li>Then click "Import cases CSV" to import your cases.</li>
+      </ul>
+      <%= f.file_field :file, id: "case-file", accept: "text/csv", class: file_input %>
+      <div>
+        <%= button_tag id: "case-import-button", disabled: true, data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
+          <i class="bi bi-upload" aria-hidden="true"></i> Import cases CSV
+        <% end %>
+      </div>
 
-<div class="mb-3">
-  <h4>
-    2. Upload your CSV file
-    <i class="lni lni-upload" aria-hidden="true"></i>
-  </h4>
-  <%= form_with(url: imports_path, local: :true) do |f| %>
-    <%= f.hidden_field :import_type, value: "casa_case" %>
-    <ul style="list-style-type: disc;" class="mx-4">
-      <li>Click the choose file button and navigate to the saved file and select it.</li>
-      <li><strong>Do not</strong> change any of the values in the first line of the example csv file.</li>
-      <li>Then click the "Import Cases CSV" button to import your cases.</li>
-    </ul>
-    <%= f.file_field :file,
-                     id: 'case-file',
-                     accept: 'text/csv',
-                     class: 'form-control mt-4',
-                     type: 'file',
-                     style: "margin: auto;" %>
-
-    <%= button_tag id: "case-import-button", class: "main-btn primary-btn btn-hover pull-right",
-                   disabled: true, data: {disable_with: "<i class='fa fa-spinner fa-spin'></i> Importing File"} do %>
-      <i class="lni lni-upload"></i> Import Cases CSV
+      <script type="text/javascript">
+        document.getElementById('case-file').addEventListener('change', function (event) {
+          document.getElementById('case-import-button').disabled = (event.target.value === '')
+        })
+      </script>
     <% end %>
-
-    <script type="text/javascript">
-      document.getElementById('case-file').addEventListener('change', function (event) {
-        document.getElementById('case-import-button').disabled = (event.target.value == '')
-      })
-    </script>
-  <% end %>
+  </div>
 </div>

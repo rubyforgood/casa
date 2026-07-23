@@ -1,5 +1,33 @@
 class Address < ApplicationRecord
   belongs_to :user
+
+  STRUCTURED_FIELDS = %i[line_1 line_2 city state zip].freeze
+
+  before_save :compose_content, if: :structured?
+
+  # True once the address has been captured as discrete parts (line 1 / city / state / zip)
+  # rather than only the legacy single `content` string. Legacy rows (only `content` set) are
+  # left untouched so their display value is preserved and existing specs/factories still work.
+  def structured?
+    STRUCTURED_FIELDS.any? { |field| self[field].present? }
+  end
+
+  # Compose a one-line address string from discrete parts. Shared by Address#content and the
+  # case-contact reimbursement snapshot so both format identically. Blank parts are dropped; a
+  # line_1-only address returns exactly line_1 (which is why the backfill can put content there).
+  def self.compose(line_1: nil, line_2: nil, city: nil, state: nil, zip: nil)
+    region = [city, [state, zip].compact_blank.join(" ")].compact_blank.join(", ")
+    [line_1, line_2, region].compact_blank.join(", ")
+  end
+
+  private
+
+  # `content` remains the canonical, human-readable one-line address the rest of the app reads
+  # (reimbursement table, mileage CSV export, case-contact prefill), so keep it in sync with the
+  # structured parts instead of changing every reader.
+  def compose_content
+    self.content = self.class.compose(line_1:, line_2:, city:, state:, zip:)
+  end
 end
 
 # == Schema Information
@@ -7,7 +35,12 @@ end
 # Table name: addresses
 #
 #  id         :bigint           not null, primary key
+#  city       :string
 #  content    :string
+#  line_1     :string
+#  line_2     :string
+#  state      :string
+#  zip        :string
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #  user_id    :bigint           not null

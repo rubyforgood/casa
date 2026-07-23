@@ -1,0 +1,9 @@
+<%# Org announcement banner for the casa_app (Tailwind) shell. Uses the same
+    @active_banner + dismiss controller as the legacy layout. %>
+<% if @active_banner %>
+  <div data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>" class="flex items-start gap-3 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
+    <i class="bi bi-megaphone mt-0.5 shrink-0 text-amber-500" aria-hidden="true"></i>
+    <div class="min-w-0 flex-1"><%= @active_banner.content %></div>
+    <a href="#" data-action="click->dismiss#dismiss" class="shrink-0 font-medium text-amber-700 hover:text-amber-900 focus-visible:outline-none focus-visible:underline">Dismiss</a>
+  </div>
+<% end %>

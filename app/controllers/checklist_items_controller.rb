@@ -1,4 +1,6 @@
 class ChecklistItemsController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :authorize_checklist_item
   before_action :set_hearing_type
   before_action :set_checklist_item, except: [:new, :create]

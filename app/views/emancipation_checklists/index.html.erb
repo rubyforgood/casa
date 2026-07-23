@@ -1,41 +1,42 @@
-<div class="pt-30">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-30">
-        <h1>Emancipation Checklists</h1>
-      </div>
-    </div>
-  </div>
-</div>
+<% content_for :page_title, "Emancipation checklists" %>
+<%# emancipation_checklists#index on casa_app. Lists transitioning cases (the controller redirects
+    to the single case when there is exactly one). Plain Tailwind table — the id
+    all-case-emancipations is dropped so the global src/emancipations.js DataTable no-ops. %>
+<% card = "rounded-2xl border border-slate-200 bg-white shadow-sm" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
+<% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 
-<!-- ========== tables-wrapper start ========== -->
-<div class="tables-wrapper">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card-style mb-30">
-        <div class="table-wrapper table-responsive">
-          <table class="table" id="all-case-emancipations">
-            <thead>
-            <tr>
-              <th><h6>Case Number</h6></th>
-              <th><h6>Checklist</h6></th>
-            </tr>
-            <!-- end table row-->
-            </thead>
-            <tbody>
-            <% @casa_transitioning_cases.each do |casa_case| %>
-              <tr class="<%= casa_case.decorate.inactive_class %>">
-                <td><%= link_to(casa_case.case_number, casa_case, title: "Details") %></td>
-                <td><%= link_to "Checklist", casa_case_emancipation_path(casa_case) %></td>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation checklists</h1>
+
+    <% if @casa_transitioning_cases.any? %>
+      <div class="<%= card %> overflow-hidden">
+        <div class="overflow-x-auto">
+          <table class="min-w-full divide-y divide-slate-200">
+            <thead class="bg-slate-50">
+              <tr>
+                <th scope="col" class="<%= th %>">Case number</th>
+                <th scope="col" class="<%= th %>">Checklist</th>
               </tr>
-            <% end %>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <% @casa_transitioning_cases.each do |casa_case| %>
+                <tr>
+                  <td class="<%= td %>"><%= link_to casa_case.case_number, casa_case, title: "Details", class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+                  <td class="<%= td %>"><%= link_to "Checklist", casa_case_emancipation_path(casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+                </tr>
+              <% end %>
             </tbody>
           </table>
-          <!-- end table -->
         </div>
       </div>
-      <!-- end card -->
-    </div>
-    <!-- end col -->
+    <% else %>
+      <div class="<%= card %> px-6 py-16 text-center">
+        <div class="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-slate-100 text-slate-400"><i class="bi bi-mortarboard text-xl" aria-hidden="true"></i></div>
+        <h2 class="text-base font-semibold text-slate-900">No transitioning cases</h2>
+        <p class="mt-1 text-sm text-slate-500">Cases marked as transition-age will appear here for emancipation tracking.</p>
+      </div>
+    <% end %>
   </div>
 </div>

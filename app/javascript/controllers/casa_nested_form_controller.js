@@ -25,6 +25,8 @@ export default class extends NestedForm {
     }
   }
 
+  static targets = ['confirmDialog']
+
   connect () {
     super.connect()
 
@@ -144,8 +146,31 @@ export default class extends NestedForm {
     this.dispatchChangeEvent('remove')
   }
 
-  /* Destroys a record when removing the item (before submission). */
+  /* Delete button: a saved (autosaved) expense confirms through the design-system dialog before
+     the API delete; brand-new, unsaved rows are removed without a prompt. */
   destroyAndRemove (e) {
+    const wrapper = e.target.closest(this.wrapperSelectorValue)
+    const recordId = this.getRecordId(wrapper)
+    if (wrapper.dataset.newRecord === 'false' && recordId.length > 0 && this.hasConfirmDialogTarget) {
+      e.preventDefault()
+      this.pendingEvent = e
+      this.confirmDialogTarget.showModal()
+    } else {
+      this.performDestroyAndRemove(e)
+    }
+  }
+
+  /* Confirm button inside the removal dialog. */
+  confirmRemove () {
+    this.confirmDialogTarget.close()
+    if (this.pendingEvent) {
+      this.performDestroyAndRemove(this.pendingEvent)
+      this.pendingEvent = null
+    }
+  }
+
+  /* Destroys a record when removing the item (before submission). */
+  performDestroyAndRemove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
     const recordId = this.getRecordId(wrapper)
     if (wrapper.dataset.newRecord === 'false' && (recordId.length > 0)) {
@@ -182,13 +207,6 @@ export default class extends NestedForm {
         }
       )
       this.remove(e) // treat as typical removal
-    }
-  }
-
-  confirmDestroyAndRemove (e) {
-    const text = 'Are you sure you want to remove this item?'
-    if (window.confirm(text)) {
-      this.destroyAndRemove(e)
     }
   }
 }

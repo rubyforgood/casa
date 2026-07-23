@@ -39,7 +39,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "edits case", :js do
       visit casa_case_path(casa_case.id)
-      click_on "Edit Case Details"
+      click_on "Edit case details"
       select "Submitted", from: "casa_case_court_report_status"
 
       find(".ts-control").click
@@ -66,14 +66,14 @@ RSpec.describe "Edit CASA Case", type: :system do
       page.find('button[data-action="court-order-form#add"]').click
       find("#court-orders-list-container").first("textarea").send_keys("Court Order Text One")
 
-      within ".top-page-actions" do
-        click_on "Update CASA Case"
+      within ".actions-cc" do
+        click_on "Save changes"
       end
       expect(page).to have_text("Submitted")
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
-      expect(page).to have_text("Youth's Date in Care")
+      expect(page).to have_text("Youth's date in care")
       expect(page).to have_text("Court Order Text One")
       expect(page).not_to have_text("Deactivate Case")
 
@@ -94,7 +94,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
       expect(page).to have_text("Reactivate CASA Case")
-      expect(page).not_to have_text("Court Date")
+      expect(page).not_to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
     end
@@ -112,7 +112,7 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
       expect(page).to have_text("Deactivate CASA Case")
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
     end
@@ -121,8 +121,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "is able to assign volunteers if in the same organization", :js do
         visit edit_casa_case_path(casa_case)
 
-        expect(page).to have_content("Manage Volunteers")
-        expect(page).to have_css("#volunteer-assignment")
+        expect(page).to have_content("Assign a volunteer to this case")
       end
 
       it "errors if trying to assign volunteers for another organization" do
@@ -160,14 +159,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         court_orders_text = casa_case.case_court_orders.map(&:text)
@@ -180,15 +177,13 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         current_orders.each do |orders|
@@ -199,14 +194,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         expect(selected_case.case_court_orders.count).to be > 0
@@ -230,7 +223,7 @@ RSpec.describe "Edit CASA Case", type: :system do
     it "edits case", :js do
       stub_twilio
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
+      expect(page).to have_text("Court report status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
 
@@ -239,13 +232,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
-      expect(page).to have_text("Set Implementation Status")
+      expect(page).to have_text("Set implementation status")
 
       find(".ts-control").click
 
       select_all_el = page.find("span[data-test=select-all-input]")
-      # uncheck all contact type options
-      select_all_el.click
+      # contact types load blank (nothing selected) by default
       within ".ts-dropdown-content" do
         expect(page).not_to have_css(".form-check-input--checked")
         expect(page).to have_css(".form-check-input--unchecked", count: 2)
@@ -257,23 +249,23 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_css("input.form-check-input--checked", count: 2)
       end
       # since all contact type options checked, don't need to select one
-      within ".top-page-actions" do
-        click_on "Update CASA Case"
+      within ".actions-cc" do
+        click_on "Save changes"
       end
       has_checked_field? "Youth"
       has_no_checked_field? "Supervisor"
 
-      expect(page).to have_text("Court Date")
+      expect(page).to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date", with: "#{next_year}-09-08")
-      expect(page).to have_text("Youth's Date in Care")
+      expect(page).to have_text("Youth's date in care")
       expect(page).to have_text("Court Order Text One")
       expect(page).to have_text("Partially implemented")
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_text("Court Report Status: Submitted")
+      expect(page).to have_text("Court report status: Submitted")
       expect(page).not_to have_text("8-SEP-#{next_year}")
     end
 
@@ -282,9 +274,9 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
 
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
-      expect(page).not_to have_text("Court Date")
+      expect(page).not_to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
-      expect(page).not_to have_text("Youth's Date in Care")
+      expect(page).not_to have_text("Youth's date in care")
       expect(page).not_to have_text("Day")
       expect(page).not_to have_text("Month")
       expect(page).not_to have_text("Year")
@@ -310,11 +302,11 @@ RSpec.describe "Edit CASA Case", type: :system do
       def sign_in_and_assign_volunteer
         sign_in supervisor1
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
 
         select volunteer.display_name, from: "case_assignment[volunteer_id]"
 
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
       end
 
       before do
@@ -328,17 +320,17 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           expect(casa_case.case_assignments.count).to eq 1
 
-          unassign_button = page.find("button.btn-outline-danger")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
-          assign_badge = page.find("span.bg-success")
-          expect(assign_badge.text).to eq "ASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Assigned"
         end
 
         it "shows an assignment start date and no assignment end date" do
           sign_in_and_assign_volunteer
-          assignment_start = page.find("td[data-test=assignment-start]").text
-          assignment_end = page.find("td[data-test=assignment-end]").text
+          assignment_start = page.find("[data-test='assignment-start']").text
+          assignment_end = page.find("[data-test='assignment-end']").text
 
           expect(assignment_start).to eq("August 29, 2020")
           expect(assignment_end).to be_empty
@@ -348,18 +340,18 @@ RSpec.describe "Edit CASA Case", type: :system do
       context "when a volunteer is unassigned from a case" do
         it "marks the volunteer as unassigned and shows assignment start/end dates", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button.btn-outline-danger")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
-          click_on "Unassign Volunteer"
+          click_on "Unassign volunteer"
 
-          assign_badge = page.find("span.bg-danger")
-          expect(assign_badge.text).to eq "UNASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Unassigned"
 
           expected_start_and_end_date = "August 29, 2020"
 
-          assignment_start = page.find("td[data-test=assignment-start]").text
-          assignment_end = page.find("td[data-test=assignment-end]").text
+          assignment_start = page.find("[data-test='assignment-start']").text
+          assignment_end = page.find("[data-test='assignment-end']").text
 
           expect(assignment_start).to eq(expected_start_and_end_date)
           expect(assignment_end).to eq(expected_start_and_end_date)
@@ -371,13 +363,13 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         it "unassigns volunteer", :js do
           sign_in_and_assign_volunteer
-          unassign_button = page.find("button.btn-outline-danger")
-          expect(unassign_button.text).to eq "Unassign Volunteer"
+          unassign_button = page.find("button", text: "Unassign volunteer")
+          expect(unassign_button.text).to eq "Unassign volunteer"
 
-          click_on "Unassign Volunteer"
+          click_on "Unassign volunteer"
 
-          assign_badge = page.find("span.bg-danger")
-          expect(assign_badge.text).to eq "UNASSIGNED"
+          assign_badge = page.find("[data-test='assignment-status']")
+          expect(assign_badge.text).to eq "Unassigned"
         end
       end
 
@@ -403,17 +395,17 @@ RSpec.describe "Edit CASA Case", type: :system do
         sign_in supervisor
         visit edit_casa_case_path(casa_case.id)
 
-        select volunteer_1.display_name, from: "Select a Volunteer"
-        click_on "Assign Volunteer"
+        select volunteer_1.display_name, from: "Select a volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_1.display_name)
 
         # Attempt to assign a second volunteer without selecting one
-        click_on "Assign Volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Unable to assign volunteer to case: Volunteer must exist. Volunteer can't be blank.")
 
-        select volunteer_2.display_name, from: "Select a Volunteer"
-        click_on "Assign Volunteer"
+        select volunteer_2.display_name, from: "Select a volunteer"
+        click_on "Assign volunteer"
         expect(page).to have_text("Volunteer assigned to case")
         expect(page).to have_text(volunteer_2.display_name)
       end
@@ -427,7 +419,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         select_element = find("#case_assignment_casa_case_id")
 
         # Check if the default option exists and has the expected text
-        expect(select_element).to have_selector("option[value='']", text: "Please Select Volunteer")
+        expect(select_element).to have_selector("option[value='']", text: "Please select a volunteer")
       end
     end
 
@@ -443,11 +435,11 @@ RSpec.describe "Edit CASA Case", type: :system do
         find('button[data-action="click->court-order-form#remove"]').click
         expect(page).to have_text("Are you sure you want to remove this court order? Doing so will delete all records of it unless it was included in a previous court report.")
 
-        find("button.swal2-confirm").click
+        click_on "Yes, remove"
         expect(page).not_to have_text(text)
 
         within ".actions-cc" do
-          click_on "Update CASA Case"
+          click_on "Save changes"
         end
         expect(page).not_to have_text(text)
       end
@@ -474,8 +466,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "is able to assign volunteers", :js do
         visit edit_casa_case_path(casa_case)
 
-        expect(page).to have_content("Manage Volunteers")
-        expect(page).to have_css("#volunteer-assignment")
+        expect(page).to have_content("Assign a volunteer to this case")
       end
     end
   end
@@ -543,26 +534,26 @@ RSpec.describe "Edit CASA Case", type: :system do
 
     it "edits case" do
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Not submitted")
+      expect(page).to have_text("Court report status: Not submitted")
       visit edit_casa_case_path(casa_case)
       select "Submitted", from: "casa_case_court_report_status"
       within ".actions-cc" do
-        click_on "Update CASA Case"
+        click_on "Save changes"
       end
 
       expect(page).not_to have_field("Court Report Due Date")
-      expect(page).not_to have_text("Youth's Date in Care")
+      expect(page).not_to have_text("Youth's date in care")
       expect(page).not_to have_text("Deactivate Case")
 
       expect(page).to have_css('button[data-action="court-order-form#add"]')
 
       visit casa_case_path(casa_case)
-      expect(page).to have_text("Court Report Status: Submitted")
+      expect(page).to have_text("Court report status: Submitted")
     end
 
     it "adds a standard court order", :js do
       visit edit_casa_case_path(casa_case)
-      select("Family therapy", from: "Court Order Type")
+      select("Family therapy", from: "Court order type")
       click_button("Add a court order")
 
       textarea = all("textarea.court-order-text-entry").last
@@ -610,14 +601,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "copies all court orders from selected case", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         court_orders_text = casa_case.case_court_orders.map(&:text)
@@ -630,15 +619,13 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not overwrite existing court orders", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         current_orders.each do |orders|
@@ -649,14 +636,12 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       it "does not move court orders from one case to another", :js do
         visit casa_case_path(casa_case.id)
-        click_on "Edit Case Details"
+        click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
         click_on "Copy"
-        within ".swal2-popup" do
-          expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
-          click_on "Copy"
-        end
+        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
         expect(selected_case.case_court_orders.count).to be > 0

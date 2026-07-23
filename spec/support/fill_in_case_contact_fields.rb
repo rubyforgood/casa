@@ -8,7 +8,7 @@ module FillInCaseContactFields
   EXPENSE_DESCRIBE_CLASS = ".expense-describe-input"
 
   def fill_in_contact_details(case_numbers: [], contact_types: [], contact_made: true,
-    medium: "In Person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
+    medium: "In person", occurred_on: Time.zone.today, hours: nil, minutes: nil)
     within DETAILS_ID do
       within "#draft-case-id-selector" do
         if case_numbers.nil?
@@ -54,13 +54,12 @@ module FillInCaseContactFields
 
   def fill_in_notes(notes: nil, contact_topic_answers_attrs: [])
     within NOTES_ID do
-      Array.wrap(contact_topic_answers_attrs).each_with_index do |attributes, index|
-        click_on "Add Another Discussion Topic" if index > 0
+      Array.wrap(contact_topic_answers_attrs).each do |attributes|
         answer_topic_unscoped attributes[:question], attributes[:answer]
       end
 
       if notes.present?
-        fill_in "Additional Notes", with: notes
+        fill_in "Additional notes", with: notes
       end
     end
   end
@@ -75,7 +74,7 @@ module FillInCaseContactFields
       return unless want_reimbursement
 
       fill_in "case_contact_miles_driven", with: miles if miles.present?
-      fill_in "case_contact_volunteer_address", with: address if address
+      fill_in "case_contact_volunteer_address_line_1", with: address if address
     end
   end
   alias_method :fill_in_expenses_page, :fill_in_mileage
@@ -110,11 +109,12 @@ module FillInCaseContactFields
   private
 
   # use when already 'within' notes div
+  # Fixed-topic checklist: check the topic (reveals + creates its answer), then fill its notes.
   def answer_topic_unscoped(question, answer, index: nil)
-    topic_select = index.nil? ? all(TOPIC_SELECT_CLASS).last : all(TOPIC_SELECT_CLASS)[index]
-    answer_field = index.nil? ? all(TOPIC_VALUE_CLASS).last : all(TOPIC_VALUE_CLASS)[index]
-    topic_select.select(question) if question
-    answer_field.fill_in(with: answer) if answer
+    group = find("[data-topic-group]", text: question)
+    checkbox = group.find("input[type='checkbox']")
+    checkbox.check unless checkbox.checked?
+    group.find(TOPIC_VALUE_CLASS).set(answer) if answer
   end
 end
 

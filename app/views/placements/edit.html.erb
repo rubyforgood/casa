@@ -1,11 +1,7 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Editing Placement</h1>
-      </div>
-    </div>
+<% content_for :page_title, "Editing placement" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Editing placement</h1>
+    <%= render "form", casa_case: @casa_case, placement: @placement %>
   </div>
 </div>
-
-<%= render 'form', casa_case: @casa_case, placement: @placement %>

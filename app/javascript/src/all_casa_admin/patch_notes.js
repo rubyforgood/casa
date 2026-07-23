@@ -6,6 +6,14 @@ const patchNoteFunctions = {} // A hack to be able to alphabetize functions
 
 let pageNotifier
 
+// Design-system button classes (mirror the Ruby button_classes helper) for the buttons this
+// script injects into cloned / edited patch notes. Already compiled by Tailwind via button_classes
+// usage across the app.
+const BTN_BASE = 'inline-flex h-10 items-center justify-center gap-2 rounded-lg px-4 text-sm shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-60'
+const BTN_PRIMARY = `${BTN_BASE} bg-brand-600 font-semibold text-white hover:bg-brand-700 focus-visible:ring-brand-500`
+const BTN_SECONDARY = `${BTN_BASE} border border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 focus-visible:ring-brand-500`
+const BTN_DANGER_OUTLINE = `${BTN_BASE} border border-rose-200 bg-white font-medium text-rose-700 hover:bg-rose-50 focus-visible:ring-rose-500`
+
 // Inserts a patch note display after the create patch note form in the patch note list and styles it as new
 //  @param    {number} patchNoteGroupId  The id of the group allowed to view the patch note
 //  @param    {jQuery} patchNoteList     A jQuery object representing the patch note list
@@ -37,12 +45,8 @@ patchNoteFunctions.addPatchNoteUI = function (patchNoteGroupId, patchNoteId, pat
   newPatchNoteUIFormInputs.dropdownType.children().removeAttr('selected')
   newPatchNoteUIFormInputs.dropdownType.children(`option[value="${patchNoteTypeId}"]`).attr('selected', true)
   newPatchNoteUIFormInputs.buttonControls.parent().html(`
-    <button type="button" class="main-btn primary-btn btn-hovert button-edit">
-      <i class="lni lni-pencil-alt mr-10"></i>Edit
-    </button>
-    <button type="button" class="main-btn danger-btn btn-hover button-delete">
-      <i class="lni lni-trash-can mr-10"></i>Delete
-    </button>
+    <button type="button" class="${BTN_SECONDARY} button-edit"><i class="bi bi-pencil"></i> Edit</button>
+    <button type="button" class="${BTN_DANGER_OUTLINE} button-delete"><i class="bi bi-trash"></i> Delete</button>
   `)
 
   newPatchNoteForm.after(newPatchNoteUI)
@@ -160,15 +164,11 @@ patchNoteFunctions.enablePatchNoteFormEditMode = function (patchNoteFormInputs) 
   const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-edit')
   const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-delete')
 
-  buttonLeft.html('<i class="fas fa-save"></i> Save')
-  buttonLeft.removeClass('button-edit')
-  buttonLeft.addClass('button-save')
+  buttonLeft.attr('class', `${BTN_PRIMARY} button-save`)
+  buttonLeft.html('<i class="bi bi-check-lg"></i> Save')
 
-  buttonRight.html('<i class="fa-solid fa-xmark"></i> Cancel')
-  buttonRight.removeClass('button-delete')
-  buttonRight.removeClass('btn-danger')
-  buttonRight.addClass('button-cancel')
-  buttonRight.addClass('btn-secondary')
+  buttonRight.attr('class', `${BTN_SECONDARY} button-cancel`)
+  buttonRight.html('<i class="bi bi-x-lg"></i> Cancel')
 
   patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
 }
@@ -190,15 +190,11 @@ patchNoteFunctions.exitPatchNoteFormEditMode = function (patchNoteFormInputs) {
   const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-save')
   const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-cancel')
 
-  buttonLeft.html('<i class="fa-solid fa-pen-to-square"></i> Edit')
-  buttonLeft.removeClass('button-save')
-  buttonLeft.addClass('button-edit')
+  buttonLeft.attr('class', `${BTN_SECONDARY} button-edit`)
+  buttonLeft.html('<i class="bi bi-pencil"></i> Edit')
 
-  buttonRight.html('<i class="fa-solid fa-trash-can"></i> Delete')
-  buttonRight.removeClass('btn-secondary')
-  buttonRight.removeClass('button-cancel')
-  buttonRight.addClass('btn-danger')
-  buttonRight.addClass('button-delete')
+  buttonRight.attr('class', `${BTN_DANGER_OUTLINE} button-delete`)
+  buttonRight.html('<i class="bi bi-trash"></i> Delete')
 
   patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
 }
@@ -329,7 +325,7 @@ patchNoteFunctions.onDeletePatchNote = function () {
         patchNoteFormContainer.parent().remove()
       }).fail(function () {
         patchNoteFunctions.enablePatchNoteForm(formInputs)
-        deleteButton.html('<i class="fa-solid fa-trash-can"></i> Delete')
+        deleteButton.html('<i class="bi bi-trash"></i> Delete')
       })
 
       break
@@ -378,15 +374,11 @@ patchNoteFunctions.onSavePatchNote = function () {
     const buttonLeft = patchNoteFormInputs.buttonControls.siblings('.button-save')
     const buttonRight = patchNoteFormInputs.buttonControls.siblings('.button-cancel')
 
-    buttonLeft.html('<i class="fa-solid fa-pen-to-square"></i> Edit')
-    buttonLeft.removeClass('button-save')
-    buttonLeft.addClass('button-edit')
+    buttonLeft.attr('class', `${BTN_SECONDARY} button-edit`)
+    buttonLeft.html('<i class="bi bi-pencil"></i> Edit')
 
-    buttonRight.html('<i class="fa-solid fa-trash-can"></i> Delete')
-    buttonRight.removeClass('btn-secondary')
-    buttonRight.removeClass('button-cancel')
-    buttonRight.addClass('btn-danger')
-    buttonRight.addClass('button-delete')
+    buttonRight.attr('class', `${BTN_DANGER_OUTLINE} button-delete`)
+    buttonRight.html('<i class="bi bi-trash"></i> Delete')
 
     patchNoteFunctions.initPatchNoteForm(patchNoteFormInputs.noteTextArea.parent())
   }).fail(function (err) {

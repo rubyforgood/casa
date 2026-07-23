@@ -1,6 +1,12 @@
 require "rails_helper"
 
 RSpec.describe "casa_cases/index", type: :view do
+  before do
+    stub_template "casa_cases/_filter.html.erb" => ""
+    stub_template "shared/_pagination.html.erb" => ""
+    assign :pagy, Pagy.new(count: 1)
+  end
+
   context "when accessed by a volunteer" do
     it "can not see the Assigned To column" do
       user = create(:volunteer, display_name: "Bob Loblaw")
@@ -31,7 +37,7 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).to have_link "New Case"
+      expect(rendered).to have_link "New case"
     end
   end
 
@@ -47,7 +53,7 @@ RSpec.describe "casa_cases/index", type: :view do
 
       render template: "casa_cases/index"
 
-      expect(rendered).not_to have_link "New Case"
+      expect(rendered).not_to have_link "New case"
     end
   end
 end

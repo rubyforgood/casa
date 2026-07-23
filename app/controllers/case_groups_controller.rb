@@ -1,5 +1,7 @@
 class CaseGroupsController < ApplicationController
+  layout "casa_app"
   before_action :require_organization!
+  before_action -> { @active_nav = "cases" }
   before_action :set_case_group, only: %i[edit update destroy]
 
   def index

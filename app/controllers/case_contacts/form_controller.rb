@@ -1,8 +1,13 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
+  # The wizard renders on the casadesign (Tailwind) shell. layout applies to the HTML
+  # render_wizard/render step paths; the autosave JSON responses skip it.
+  layout "casa_app"
+
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
+  before_action :set_active_nav, only: [:show, :update]
   after_action :verify_authorized
 
   steps :details
@@ -42,6 +47,10 @@ class CaseContacts::FormController < ApplicationController
 
   private
 
+  def set_active_nav
+    @active_nav = "contacts"
+  end
+
   def set_case_contact
     @case_contact = CaseContact
       .includes(:creator, :contact_topic_answers)
@@ -53,12 +62,9 @@ class CaseContacts::FormController < ApplicationController
     contact_types = get_contact_types.decorate
     @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
-
-    if !@case_contact.active? && @case_contact.contact_topic_answers.empty?
-      if @contact_topics.present?
-        @case_contact.contact_topic_answers.create
-      end
-    end
+    # No pre-built blank answer: the Notes checklist lists every topic and creates an answer
+    # only when a topic is checked (contact-topics controller). A seeded blank row would just
+    # orphan a nil-topic answer.
   end
 
   def get_casa_cases
@@ -109,6 +115,9 @@ class CaseContacts::FormController < ApplicationController
     update_volunteer_address(@case_contact)
     flash[:notice] = message
     if @case_contact.metadata["create_another"]
+      # "Submit & add another" reopens a fresh form, taking the user off the list -- so surface a
+      # link back to the case-contacts list (there's no per-contact show page) where it now appears
+      flash[:notice_action] = {"label" => "View case contacts", "path" => case_contacts_path}
       redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referer: true})
     else
       redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
@@ -122,10 +131,16 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update_volunteer_address(case_contact)
-    return unless case_contact.volunteer_address.present? && !case_contact.address_field_disabled?
+    volunteer = case_contact.volunteer
+    return unless volunteer && case_contact.volunteer_address.present?
 
-    address = case_contact.volunteer.address || case_contact.volunteer.build_address
-    address.update(content: case_contact.volunteer_address)
+    address = volunteer.address || volunteer.build_address
+    parts = case_contact.submitted_address_parts
+    if parts.values.any?(&:present?)
+      address.update(parts)
+    else
+      address.update(content: case_contact.volunteer_address)
+    end
   end
 
   # Makes a copy of the draft for all selected cases not including the first one. The draft becomes the contact for

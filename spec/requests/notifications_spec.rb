@@ -30,7 +30,7 @@ RSpec.describe "/notifications", type: :request do
 
             queryable_html = Nokogiri.HTML5(response.body)
 
-            expect(queryable_html.css("h3").text).not_to include("Patch Notes")
+            expect(queryable_html.css("h3").text).not_to include("Patch notes")
           end
         end
       end
@@ -68,7 +68,7 @@ RSpec.describe "/notifications", type: :request do
 
             queryable_html = Nokogiri.HTML5(response.body)
 
-            expect(queryable_html.css("h3").text).not_to include("Patch Notes")
+            expect(queryable_html.css("h3").text).not_to include("Patch notes")
           end
         end
 

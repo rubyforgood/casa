@@ -13,8 +13,10 @@ RSpec.describe "reimbursements/index", type: :view do
 
     case_contact = create :case_contact, :wants_reimbursement, creator: volunteer, contact_made: true, occurred_at: 6.days.ago
     assign :reimbursements, [case_contact]
-    assign :grouped_reimbursements, []
-    assign :volunteers_for_filter, []
+    assign :pagy, Pagy.new(count: 1, page: 1)
+    assign :volunteers_for_filter, {volunteer.id => volunteer.display_name}
+    assign :complete_status, false
+    assign :occurred_at_filter_start_date, 1.year.ago.to_date
     render template: "reimbursements/index"
 
     expect(rendered).not_to have_css("span.translation_missing")

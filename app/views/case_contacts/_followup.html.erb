@@ -1,15 +1,15 @@
+<%# Reminder controls on a case-contact card (casa_app). Preserves the reminder JS hooks:
+    .followup-button + #followup-button-<id> (case_contact.js binds a SweetAlert prompt that
+    POSTs to /case_contacts/<id>/followups) and #resolve. data-turbo:false so the legacy jQuery
+    handlers run. %>
 <div>
   <% if followup %>
-    <%= button_to resolve_followup_path(followup), method: :patch, class: "main-btn btn-sm success-btn btn-hover", id:"resolve", data: { turbo: false } do %>
-      <i class="bi bi-calendar"></i>Resolve Reminder
+    <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", form_class: "contents", data: {turbo: false}, class: button_classes(:success) do %>
+      <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
     <% end %>
   <% else %>
-    <button type="button"
-            class="followup-button main-btn btn-sm primary-btn-outline btn-hover"
-            id="followup-button-<%= contact.id %>"
-            data-turbo="false">
-      <i class="lni lni-calendar mr-5"></i>
-      Make Reminder
+    <button type="button" class="followup-button <%= button_classes(:secondary) %>" id="followup-button-<%= contact.id %>" data-turbo="false">
+      <i class="bi bi-calendar-plus" aria-hidden="true"></i> Make reminder
     </button>
   <% end %>
 </div>

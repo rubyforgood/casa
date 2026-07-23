@@ -1,38 +1,26 @@
-<div class="nested-form-wrapper mb-2"
-  data-new-record="<%= form.object.new_record? %>"
-  data-casa-nested-form-target="wrapper"
-  data-child-index="<%= form.options[:child_index] %>">
-  <div class="row gy-3">
-    <div class="col-12 col-md-4">
-      <%= form.label :contact_topic_id, "Discussion Topic", class: "form-label" %>
-      <%= form.select(:contact_topic_id,
-        select_options,
-        {include_blank: "Select a discussion topic"},
-        class: ["form-select", "contact-topic-id-select"],
-        data: {
-          action: "change->case-contact-form#onContactTopicSelect",
-          case_contact_form_target: "contactTopicSelect"
-        }
-      ) %>
-    </div>
-    <div class="col-12 col-md">
-      <%= form.label :value, "Discussion Notes", class: "form-label" %>
-      <%= form.text_area(
-        :value,
-        data: { action: "input->autosave#save" },
-        rows: 3,
-        class: ["form-control", "contact-topic-answer-input"],
-        placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
-      ) %>
-    </div>
-    <div class="col-12 col-lg-auto d-flex align-items-end justify-content-end">
-      <button type="button"
-        data-action="casa-nested-form#confirmDestroyAndRemove"
-        class="btn btn-sm danger-btn-outline btn-hover">
-        Delete
-      </button>
-    </div>
+<%# Checklist item for one contact topic on the case-contact form (casa_app). Every org topic is
+    listed; checking one reveals its notes and creates the ContactTopicAnswer (contact-topics
+    controller -> POST /contact_topic_answers, storing the id); unchecking destroys it. Typing
+    autosaves via that id. Unchecked topics keep their fields `disabled` so no empty answer is
+    submitted (and autosave never has to create -> no duplicate saves). Spec/JS hooks:
+    .contact-topic-answer-input, [data-topic-group] / [data-topic-notes], the hidden id. %>
+<div class="py-4" data-topic-group data-topic-id="<%= topic.id %>">
+  <%# Label associated by `for` (not wrapping) so clicking the checkbox fires change once -- a
+      checkbox wrapped in its label double-fires and would create the answer twice. %>
+  <div class="flex items-start gap-2.5">
+    <input type="checkbox" id="topic_check_<%= topic.id %>" class="<%= check_class %> mt-0.5" data-action="change->contact-topics#toggle"<%= " checked" if answer %>>
+    <label for="topic_check_<%= topic.id %>" class="text-sm font-medium text-slate-800"><%= topic.question %></label>
   </div>
-  <%= form.hidden_field(:id, value: form.object.id) %>
-  <%= form.hidden_field :_destroy %>
+  <div class="mt-3 <%= "hidden" unless answer %>" data-topic-notes>
+    <%= form.hidden_field :contact_topic_id, value: topic.id, disabled: answer.nil? %>
+    <%= form.hidden_field :id, disabled: answer.nil? %>
+    <%= form.text_area(:value,
+      rows: 4,
+      disabled: answer.nil?,
+      class: "contact-topic-answer-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
+      data: {action: "input->autosave#save"},
+      "aria-label": "Notes for #{topic.question}",
+      placeholder: "Enter discussion notes here to be included in the court report. Refer to individuals by role, not by name."
+    ) %>
+  </div>
 </div>

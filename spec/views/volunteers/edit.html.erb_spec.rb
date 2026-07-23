@@ -144,12 +144,14 @@ RSpec.describe "volunteers/edit", type: :view do
 
     render template: "volunteers/edit"
 
-    expect(rendered).to have_text("Added to system ")
-    expect(rendered).to have_text("Invitation email sent \n  never")
+    expect(rendered).to have_text("Added to system")
+    expect(rendered).to have_text("Invitation email sent")
     expect(rendered).to have_text("Last logged in")
-    expect(rendered).to have_text("Invitation accepted \n  never")
-    expect(rendered).to have_text("Password reset last sent \n  never")
-    expect(rendered).to have_text("Learning Hours This Year\n    0h 0min")
+    expect(rendered).to have_text("Invitation accepted")
+    expect(rendered).to have_text("Password reset last sent")
+    expect(rendered).to have_text("Learning hours this year")
+    expect(rendered).to have_text("never")
+    expect(rendered).to have_text("0h 0min")
   end
 
   context "the user has requested to reset their password" do
@@ -168,7 +170,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
         render template: "volunteers/edit"
 
-        expect(rendered).to have_content("Resend Invitation")
+        expect(rendered).to have_content("Resend invitation")
       end
 
       it "allows a supervisor to resend invitation to a volunteer" do
@@ -184,7 +186,7 @@ RSpec.describe "volunteers/edit", type: :view do
 
         render template: "volunteers/edit"
 
-        expect(rendered).to have_content("Resend Invitation")
+        expect(rendered).to have_content("Resend invitation")
       end
     end
   end

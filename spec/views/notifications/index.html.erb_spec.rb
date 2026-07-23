@@ -39,8 +39,8 @@ RSpec.describe "notifications/index", type: :view do
       it "has all notifications created after and including the deploy date above the patch note" do
         render template: "notifications/index"
 
-        notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
-        patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
+        notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
+        patch_note_index = notifications_html.index { |node| node.text.include?("Patch notes") }
 
         aggregate_failures do
           expect(notifications_html[0].text).to match(/User \d+ has flagged a Case Contact that needs follow up/)
@@ -53,8 +53,8 @@ RSpec.describe "notifications/index", type: :view do
       it "has all notifications created before the deploy date below the patch note" do
         render template: "notifications/index"
 
-        notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
-        patch_note_index = notifications_html.index { |node| node.text.include?("Patch Notes") }
+        notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
+        patch_note_index = notifications_html.index { |node| node.text.include?("Patch notes") }
 
         expect(patch_note_index).to eq(3)
         expect(notifications_html[patch_note_index + 1].text).to match(/Volunteer User \d+'s request for reimbursement for 0mi on .* has been processed and is en route./)
@@ -107,14 +107,14 @@ RSpec.describe "notifications/index", type: :view do
     it "shows the correct number of notifications" do
       render template: "notifications/index"
 
-      expect(rendered).to have_css(".list-group-item", count: 4)
+      expect(rendered).to have_css("[data-notification-list-item]", count: 4)
     end
 
     it "does not display patch notes" do
       render template: "notifications/index"
 
-      notifications_html = Nokogiri::HTML5(rendered).css(".list-group-item")
-      view_patch_notes = notifications_html.select { |node| node.text.include?("Patch Notes") }
+      notifications_html = Nokogiri::HTML5(rendered).css("[data-notification-list-item]")
+      view_patch_notes = notifications_html.select { |node| node.text.include?("Patch notes") }
 
       expect(PatchNote.all.size).to eql(2)
       expect(view_patch_notes).to be_empty

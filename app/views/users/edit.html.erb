@@ -1,167 +1,183 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-lg-12">
-      <div class="title mb-30">
-        <h1>Edit Profile</h1>
-      </div>
+<% content_for :page_title, "Edit profile" %>
+
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% btn_primary = button_classes(:primary) %>
+<% disclosure_trigger = "flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500" %>
+<% checkbox_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 focus:ring-offset-0" %>
+<% address = current_user.address || Address.new %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit profile</h1>
+      <p class="mt-1 text-sm text-slate-500">Manage your personal details, security, and how we reach you.</p>
     </div>
-    <div class="col-lg-12">
-      <div class="card-style mb-30">
-        <div class="card-body">
-          <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>
-            <div class="mb-30">
-              <%= render "/shared/error_messages", resource: @user %>
-            </div>
 
-            <div class="input-style-1">
-              <%= form.label :display_name, "Display name" %>
-              <%= form.text_field :display_name, class: "form-control" %>
-            </div>
+    <%= render "shared/form_errors", resource: @user %>
 
-            <div class="input-style-1">
-              <%= form.label :phone_number, "Phone number" %>
-              <%= form.text_field :phone_number, class: "form-control" %>
-            </div>
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-base font-semibold text-slate-900">Your details</h2>
+      <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>
+        <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= form.label :display_name, "Display name", class: label_class %>
+            <%= form.text_field :display_name, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <%= form.text_field :phone_number, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <%= form.date_field :date_of_birth, value: @user.date_of_birth, class: input_class %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= form.fields_for :address, address do |address_form| %>
+              <fieldset class="space-y-2.5">
+                <legend class="<%= label_class %>">Mailing address</legend>
+                <div>
+                  <%= address_form.label :line_1, "Address line 1", class: label_class %>
+                  <%= address_form.text_field :line_1, class: input_class %>
+                </div>
+                <div>
+                  <%= address_form.label :line_2, "Address line 2", class: label_class %>
+                  <%= address_form.text_field :line_2, placeholder: "Apartment, suite, unit, etc.", class: input_class %>
+                </div>
+                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
+                  <div class="sm:col-span-3">
+                    <%= address_form.label :city, "City", class: label_class %>
+                    <%= address_form.text_field :city, class: input_class %>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <%= address_form.label :state, "State", class: label_class %>
+                    <%= address_form.text_field :state, class: input_class %>
+                  </div>
+                  <div class="sm:col-span-1">
+                    <%= address_form.label :zip, "ZIP", class: label_class %>
+                    <%= address_form.text_field :zip, class: input_class %>
+                  </div>
+                </div>
+              </fieldset>
+            <% end %>
+          </div>
+        </div>
 
-            <div class="input-style-1">
-              <%= form.label :date_of_birth, "Date of birth" %>
-              <%= form.date_field :date_of_birth,
-                                  value: @user.date_of_birth,
-                                  class: "form-control label-font-weight" %>
-            </div>
+        <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
 
-            <% if current_user.address %>
-              <% address = current_user.address %>
+        <div class="mt-5 flex flex-wrap items-center gap-3">
+          <%= form.button "Update profile", type: "submit", class: btn_primary %>
+          <% if policy(CasaAdmin).see_deactivate_option? %>
+            <% deactivate_class = "inline-flex items-center justify-center gap-2 rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-medium text-rose-700 shadow-sm hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500" %>
+            <% if @active_casa_admins.length > 1 %>
+              <%= link_to "Deactivate", deactivate_casa_admin_path(current_user), method: :patch, class: deactivate_class, data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
             <% else %>
-              <% address = Address.new %>
+              <%= link_to "Deactivate", "#", class: deactivate_class, data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
             <% end %>
-
-            <div class="input-style-1">
-              <%= form.fields_for :address, address do |f| %>
-                <%= f.label :content, "Address" %>
-                <%= f.text_field :content, class: "form-control" %>
-              <% end %>
-            </div>
-
-            <%= form.hidden_field :casa_org_id, value: current_user.casa_org_id %>
-
-            <%= render "edit_profile", resource: current_user %>
-
-            <br>
-          <div class="actions" id="accordionExample">
-
-              <%= form.button "Update Profile", type: "submit", class: "main-btn primary-btn btn-hover mb-3" %>
-              <button class="main-btn primary-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                Change Password
-              </button>
-
-              <button class="main-btn primary-btn btn-hover accordion mb-3" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                Change Email
-              </button>
-
-            <% if policy(CasaAdmin).see_deactivate_option? %>
-              <% if @active_casa_admins.length > 1 %>
-                <%= link_to "Deactivate",
-                            deactivate_casa_admin_path(current_user),
-                            method: :patch,
-                            class: "btn btn-outline-danger mb-3",
-                            data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
-              <% else %>
-                <%= link_to "Deactivate",
-                            "#",
-                            class: "main-btn danger-btn-outline btn-hover mb-3",
-                            data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
-              <% end %>
-            <% end %>
-          </div>
           <% end %>
-          <div class="accordionGroup">
-            <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <br>
-              <%= form_with(model: @user, scope: :user, url: {action: "update_password"}, method: :patch) do |f| %>
-                <div class="input-style-1">
-                  <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control" %>
-                </div>
-                <div class="input-style-1">
-                  <%= f.label :password, "New Password" %><br>
-                  <%= f.password_field :password, autocomplete: "off", class: "form-control password-new",
-        minlength: User.password_length.min %>
-                </div>
-                <div class="input-style-1">
-                  <%= f.label :password_confirmation, "New Password Confirmation" %><br>
-                  <%= f.password_field :password_confirmation, class: "form-control password-confirmation",
-        minlength: User.password_length.min %>
-                </div>
-                <div class="actions mb-10">
-                  <%= f.submit "Update Password", class: "btn btn-danger submit-password" %>
-                </div>
-              <% end %>
-            </div>
-            <div id="collapseTwo" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
-              <br>
-              <%= form_with(model: @user, scope: :user, url: {action: "update_email"}, method: :patch) do |f| %>
-                <div class="input-style-1">
-                  <%= f.label :current_password, "Current Password" %><br>
-                  <%= f.password_field :current_password, autocomplete: "off", class: "form-control", id: "current_password_email", required: true %>
-                </div>
-                <div class="input-style-1">
-                  <%= f.label :email, "New Email" %><br>
-                  <%= f.text_field :email, type: "email", class: "form-control email-new", autocomplete: "off", value: nil, required: true %>
-                </div>
-                <div class="actions mb-10">
-                  <%= f.submit "Update Email", class: "btn btn-danger submit-email" %>
-                </div>
-              <% end %>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-<div>
-  <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>
-    <div class="title mb-30">
-      <h2>Communication Preferences</h2>
-    </div>
-
-    <div class="card-style">
-      <p>Tell us how you'd like to receive notifications.</p>
-      <div class="form-check checkbox-style mb-20">
-        <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications form-check-input" %>
-        <%= form.label :receive_email_notifications, "Email Me", class: "form-check-label" %>
-      </div>
-
-      <% if @user.casa_org.twilio_enabled? %>
-        <div class="form-check checkbox-style mb-20">
-            <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input" %>
-            <%= form.label :receive_sms_notifications, "Text Me", class: "form-check-label" %>
-        </div>
-        <div class="ps-4 pb-4">
-          <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type),
-    :id, :name) do |event| %>
-            <div class="form-check checkbox-style mb-20">
-              <%= event.check_box(class: "form-check-input form-check-input", id: "toggle-sms-notification-event") %>
-              <%= event.label(class: "form-check-label") %>
-            </div>
-          <% end %>
-        </div>
-      <% else %>
-        <div class="form-check checkbox-style mb-20">
-            <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications form-check-input", disabled: true %>
-            <%= form.label :receive_sms_notifications, "Enable Twilio For Text Messaging", class: "form-check-label" %>
         </div>
       <% end %>
+    </section>
 
-      <div class="actions mb-10">
-        <%= form.submit "Save Preferences", class: "main-btn primary-btn btn-hover mb-3 save-preference" %>
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-base font-semibold text-slate-900">Account</h2>
+      <div class="mt-4">
+        <%= render "edit_profile", resource: current_user %>
       </div>
-    </div>
-  <% end %>
-</div>
+    </section>
 
-<% if current_user.volunteer? %>
-    <%= render partial: "languages", locals: { volunteer: current_user } %>
-<% end %>
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-base font-semibold text-slate-900">Security</h2>
+      <div class="mt-4 space-y-3">
+        <div data-controller="disclosure" class="rounded-xl border border-slate-200">
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-password-panel" class="<%= disclosure_trigger %>">
+            <span class="flex items-center gap-2.5"><i class="bi bi-key text-base text-slate-400" aria-hidden="true"></i> Change password</span>
+            <i class="bi bi-chevron-down text-slate-400" aria-hidden="true"></i>
+          </button>
+          <div id="change-password-panel" data-disclosure-target="panel" class="hidden border-t border-slate-100 p-4">
+            <%= form_with(model: @user, scope: :user, url: {action: "update_password"}, method: :patch) do |f| %>
+              <div class="space-y-4">
+                <div>
+                  <%= f.label :current_password, "Current password", class: label_class %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: input_class %>
+                </div>
+                <div>
+                  <%= f.label :password, "New password", class: label_class %>
+                  <%= f.password_field :password, autocomplete: "off", class: "#{input_class} password-new", minlength: User.password_length.min %>
+                </div>
+                <div>
+                  <%= f.label :password_confirmation, "New password confirmation", class: label_class %>
+                  <%= f.password_field :password_confirmation, class: "#{input_class} password-confirmation", minlength: User.password_length.min %>
+                </div>
+                <%= f.submit "Update password", class: "#{btn_primary} submit-password" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <div data-controller="disclosure" class="rounded-xl border border-slate-200">
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-email-panel" class="<%= disclosure_trigger %>">
+            <span class="flex items-center gap-2.5"><i class="bi bi-envelope text-base text-slate-400" aria-hidden="true"></i> Change email</span>
+            <i class="bi bi-chevron-down text-slate-400" aria-hidden="true"></i>
+          </button>
+          <div id="change-email-panel" data-disclosure-target="panel" class="hidden border-t border-slate-100 p-4">
+            <%= form_with(model: @user, scope: :user, url: {action: "update_email"}, method: :patch) do |f| %>
+              <div class="space-y-4">
+                <div>
+                  <%= f.label :current_password, "Current password", class: label_class %>
+                  <%= f.password_field :current_password, autocomplete: "off", class: input_class, id: "current_password_email", required: true %>
+                </div>
+                <div>
+                  <%= f.label :email, "New email", class: label_class %>
+                  <%= f.text_field :email, type: "email", class: "#{input_class} email-new", autocomplete: "off", value: nil, required: true %>
+                </div>
+                <%= f.submit "Update email", class: "#{btn_primary} submit-email" %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <h2 class="text-base font-semibold text-slate-900">Communication preferences</h2>
+      <p class="mt-1 text-sm text-slate-500">Tell us how you'd like to receive notifications.</p>
+      <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>
+        <div class="mt-4 space-y-3">
+          <label class="flex items-center gap-3 text-sm text-slate-700">
+            <%= form.check_box :receive_email_notifications, class: "toggle-email-notifications #{checkbox_class}" %>
+            Email me
+          </label>
+
+          <% if @user.casa_org.twilio_enabled? %>
+            <label class="flex items-center gap-3 text-sm text-slate-700">
+              <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications #{checkbox_class}" %>
+              Text me
+            </label>
+            <div class="mt-1 space-y-2 border-l-2 border-slate-100 pl-4">
+              <%= form.collection_check_boxes("sms_notification_event_ids", SmsNotificationEvent.where(user_type: @user.type), :id, :name) do |event| %>
+                <label class="flex items-center gap-3 text-sm text-slate-700">
+                  <%= event.check_box(class: checkbox_class, id: "toggle-sms-notification-event") %>
+                  <%= event.text %>
+                </label>
+              <% end %>
+            </div>
+          <% else %>
+            <label class="flex items-center gap-3 text-sm text-slate-500">
+              <%= form.check_box :receive_sms_notifications, class: "toggle-sms-notifications #{checkbox_class}", disabled: true %>
+              Enable Twilio for text messaging
+            </label>
+          <% end %>
+        </div>
+
+        <div class="mt-5">
+          <%= form.submit "Save preferences", class: "#{btn_primary} save-preference" %>
+        </div>
+      <% end %>
+    </section>
+
+    <% if current_user.volunteer? %>
+      <%= render partial: "languages", locals: {volunteer: current_user} %>
+    <% end %>
+  </div>
+</div>

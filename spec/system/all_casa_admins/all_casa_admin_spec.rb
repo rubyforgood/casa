@@ -18,8 +18,8 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_current_path "/all_casa_admins/sign_in", ignore_query: true
     expect(page).to have_text "You need to sign in before continuing."
     visit "/"
-    expect(page).to have_current_path "/supervisors", ignore_query: true
-    expect(page).to have_text "Sign Out"
+    expect(page).to have_current_path "/", ignore_query: true
+    expect(page).to have_text "Sign out"
   end
 
   it "login and create new CasaOrg and new CasaAdmin for CasaOrg" do
@@ -29,14 +29,14 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     visit "/"
     expect(page).to have_text "All CASA Admin"
     expect(page).to have_text "New CASA Organization"
-    expect(page).to have_text "New All CASA Admin"
+    expect(page).to have_text "New all CASA admin"
     expect(page).to have_text "CASA Organizations"
 
     # left sidebar
-    expect(page).to have_text "Patch Notes"
-    expect(page).to have_text "Edit Profile"
-    expect(page).to have_text "Feature Flags"
-    expect(page).to have_text "Log Out"
+    expect(page).to have_text "Patch notes"
+    expect(page).to have_text "Edit profile"
+    expect(page).to have_text "Feature flags"
+    expect(page).to have_text "Log out"
 
     # footer
     expect(page).to have_link("Ruby For Good", href: "https://rubyforgood.org/")
@@ -71,14 +71,14 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_content "New CASA Admin for Cool Org Name"
 
     click_button "Submit"
-    expect(page).to have_content "2 errors prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Unable to save"
     expect(page).to have_content "Email can't be blank"
     expect(page).to have_content "Display name can't be blank"
 
     fill_in "Email", with: "invalid email"
     fill_in "Display name", with: "Freddy"
     click_button "Submit"
-    expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+    expect(page).to have_content "Unable to save"
     expect(page).to have_content "Email is invalid"
 
     fill_in "Email", with: "valid@example.com"
@@ -105,26 +105,26 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
 
     # validate email uniqueness
     fill_in "all_casa_admin_email", with: other_admin.email
-    click_on "Update Profile"
+    click_on "Update profile"
     expect(page).to have_text "already been taken"
 
     # update email
     fill_in "all_casa_admin_email", with: "newemail@example.com"
-    click_on "Update Profile"
+    click_on "Update profile"
     expect(page).to have_text "successfully updated"
     expect(ActionMailer::Base.deliveries.last.body.encoded).to match(">Your CASA account's email has been updated to newemail@example.com")
 
     # change password
-    click_on "Change Password"
+    click_on "Change password"
     fill_in "all_casa_admin_password", with: "newpassword"
     fill_in "all_casa_admin_password_confirmation", with: "badmatch"
-    click_on "Update Password"
+    click_on "Update password"
     expect(page).to have_text "confirmation doesn't match"
 
-    click_on "Change Password"
+    click_on "Change password"
     fill_in "all_casa_admin_password", with: "newpassword"
     fill_in "all_casa_admin_password_confirmation", with: "newpassword"
-    click_on "Update Password"
+    click_on "Update password"
     expect(page).to have_text "Password was successfully updated."
     expect(ActionMailer::Base.deliveries.last.body.encoded).to match("Your CASA password has been changed.")
   end
@@ -136,7 +136,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     # Invitation is valid within 1 week
     travel 2.days
     visit accept_all_casa_admin_invitation_path(invitation_token: raw_token)
-    expect(page).to have_text "Set my password"
+    expect(page).to have_text "Set your password"
 
     # Invitation expires after 1 week
     travel 8.days

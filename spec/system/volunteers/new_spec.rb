@@ -12,7 +12,7 @@ RSpec.describe "volunteers/new", type: :system do
       fill_in "Display name", with: "New Volunteer Display Name 2"
       fill_in "Date of birth", with: Date.new(2000, 1, 2)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       visit volunteers_path
       expect(page).to have_text("New Volunteer Display Name 2")
@@ -37,7 +37,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       sign_in volunteer
       visit new_learning_hour_path
-      expect(page).to have_text("Learning Topic")
+      expect(page).to have_text("Learning topic")
     end
 
     it "does not display learning hour topic when disabled", :js do
@@ -46,7 +46,7 @@ RSpec.describe "volunteers/new", type: :system do
 
       sign_in volunteer
       visit new_learning_hour_path
-      expect(page).not_to have_text("Learning Topic")
+      expect(page).not_to have_text("Learning topic")
     end
   end
 end

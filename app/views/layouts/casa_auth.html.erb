@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} · CASA Volunteer Tracker" : "CASA Volunteer Tracker" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+</head>
+<body class="h-full bg-white font-sans text-slate-800 antialiased">
+  <div class="flex min-h-full flex-col lg:flex-row">
+
+    <aside class="relative hidden overflow-hidden bg-gradient-to-br from-brand-700 via-brand-600 to-indigo-500 text-white lg:flex lg:w-1/2 lg:flex-col lg:justify-between lg:p-14">
+      <div class="pointer-events-none absolute -right-24 -top-24 h-96 w-96 rounded-full bg-white/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -bottom-32 -left-16 h-96 w-96 rounded-full bg-indigo-300/20 blur-3xl"></div>
+
+      <div class="relative flex items-center gap-3">
+        <span class="grid h-10 w-10 place-items-center rounded-xl bg-white/15 text-sm font-bold ring-1 ring-white/25 backdrop-blur">CV</span>
+        <span class="text-base font-semibold tracking-tight">CASA Volunteer Tracker</span>
+      </div>
+
+      <div class="relative max-w-md">
+        <h1 class="text-4xl font-bold leading-tight tracking-tight">Advocating for every child in care.</h1>
+        <p class="mt-5 text-lg leading-relaxed text-white/80">Track volunteers, log case contacts, and keep your chapter moving — all in one calm, organized place.</p>
+        <ul class="mt-8 space-y-3 text-white/90">
+          <li class="flex items-center gap-3"><svg class="h-5 w-5 flex-none text-white/70" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd" /></svg> Manage volunteers &amp; case assignments</li>
+          <li class="flex items-center gap-3"><svg class="h-5 w-5 flex-none text-white/70" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd" /></svg> Log and review case contacts</li>
+          <li class="flex items-center gap-3"><svg class="h-5 w-5 flex-none text-white/70" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.7 5.3a1 1 0 010 1.4l-7.5 7.5a1 1 0 01-1.4 0L3.3 10.7a1 1 0 111.4-1.4l3.3 3.3 6.8-6.8a1 1 0 011.4 0z" clip-rule="evenodd" /></svg> Court reports, ready in minutes</li>
+        </ul>
+      </div>
+
+      <p class="relative text-sm text-white/80">© <%= Date.current.year %> CASA · Built with care by Ruby for Good</p>
+    </aside>
+
+    <main class="flex flex-1 items-center justify-center px-6 py-12 sm:px-10">
+      <div class="w-full max-w-sm">
+        <div class="mb-10 flex items-center gap-3 lg:hidden">
+          <span class="grid h-10 w-10 place-items-center rounded-xl bg-brand-600 text-sm font-bold text-white">CV</span>
+          <span class="text-base font-semibold tracking-tight text-slate-900">CASA Volunteer Tracker</span>
+        </div>
+        <%= render "shared/flashes", wrapper_class: "mb-6" %>
+        <%= yield %>
+      </div>
+    </main>
+
+  </div>
+</body>
+</html>

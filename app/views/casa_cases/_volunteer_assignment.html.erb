@@ -1,86 +1,108 @@
-<% content_for :table_title do %>
-  <div class="title-wrapper pt-30">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="title mb-30">
-          <h3>Assigned Volunteers</h3>
-        </div>
-      </div>
-    </div>
+<%# Volunteer assignments for a CASA case (casa_app / Tailwind). Self-contained: a
+    stacked-card list of current assignments + an "assign a volunteer" form. Does not
+    use the shared Bootstrap `manage_volunteers` partial (still used by supervisors/edit).
+    A card list (not a wide table) because the edit column is narrow and each row has many
+    fields, so a `<dl>` of labeled fields reads better than a cramped 7-column table. %>
+<% assignments = @casa_case.case_assignments %>
+<% available_volunteers = @casa_case.unassigned_volunteers %>
+<% pill_base = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
+<div id="volunteer-assignment" class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="border-b border-slate-100 p-4">
+    <h2 class="text-base font-semibold text-slate-900">Volunteers</h2>
   </div>
-<% end %>
-<% content_for :table_body do %>
-  <tbody>
-    <% @casa_case.case_assignments.each do |assignment| %>
-      <tr>
-        <td data-test="volunteer-name">
-          <%= link_to assignment.volunteer.display_name, edit_volunteer_path(assignment.volunteer) %>
-        </td>
-        <td data-test="volunteer-email"><%= assignment&.volunteer&.email %></td>
-        <td data-test="assigned">
-          <% if assignment.active? %>
-            <%= render BadgeComponent.new(text: "Assigned", type: :success, margin: false) %>
-          <% else %>
-            <%= render BadgeComponent.new(text: assignment.volunteer.active? ? "Unassigned" : "Deactivated volunteer",
-                                          type: :danger,
-                                          margin: false) %>
-          <% end %>
-        </td>
-        <td data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></td>
-        <td data-test="assignment-end">
-          <% unless assignment.active? %>
-            <%= I18n.l(assignment.updated_at, format: :full, default: nil) %>
-          <% end %>
-        </td>
-        <td>
-          <div class="form-check form-switch">
-            <%= form_with model: assignment, url: reimbursement_case_assignment_path(assignment), method: :patch do |form| %>
-              <%= form.check_box :allow_reimbursement, { class: "form-check-input", role: "switch", onchange: "this.form.submit();" } %>
+
+  <% if assignments.any? %>
+    <ul class="divide-y divide-slate-100">
+      <% assignments.each do |assignment| %>
+        <% volunteer = assignment.volunteer %>
+        <li class="p-4">
+          <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
+            <div class="min-w-0">
+              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id),
+                    class: "text-sm font-medium #{name_link_class}", data: {test: "volunteer-name"} %>
+              <p class="truncate text-sm text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
+            </div>
+            <% if assignment.active? %>
+              <span class="<%= pill_base %> bg-emerald-50 text-emerald-700" data-test="assignment-status">
+                <i class="bi bi-check-circle" aria-hidden="true"></i> Assigned
+              </span>
+            <% elsif volunteer.active? %>
+              <span class="<%= pill_base %> bg-rose-50 text-rose-700" data-test="assignment-status">
+                <i class="bi bi-exclamation-circle" aria-hidden="true"></i> Unassigned
+              </span>
+            <% else %>
+              <span class="<%= pill_base %> bg-slate-100 text-slate-600" data-test="assignment-status">
+                <i class="bi bi-dash-circle" aria-hidden="true"></i> Deactivated volunteer
+              </span>
             <% end %>
           </div>
 
-        </td>
-        <td data-test="action">
-          <% if policy(assignment).unassign? %>
-            <%= button_to("Unassign Volunteer",
-                        unassign_case_assignment_path(assignment),
-                        method: :patch,
-                        class: "btn btn-outline-danger text-wrap") %>
-          <% else %>
-            <% if !assignment.volunteer.active? && policy(assignment.volunteer).activate? %>
-              <%= link_to "Activate Volunteer",
-                        activate_volunteer_path(assignment.volunteer,
-                                                redirect_to_path: 'casa_case',
-                                                casa_case_id: @casa_case.id
-                        ),
-                        method: :patch,
-                        class: "btn btn-outline-success" %>
+          <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-500">
+            <div class="flex gap-1">
+              <dt>Assigned:</dt>
+              <dd class="font-medium text-slate-700" data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></dd>
+            </div>
+            <div class="flex gap-1">
+              <dt>Unassigned:</dt>
+              <dd class="font-medium text-slate-700" data-test="assignment-end"><% unless assignment.active? %><%= I18n.l(assignment.updated_at, format: :full, default: nil) %><% end %></dd>
+            </div>
+          </dl>
+
+          <div class="mt-3 flex flex-wrap items-center gap-3">
+            <%= form_with model: assignment, url: reimbursement_case_assignment_path(assignment), method: :patch do |rf| %>
+              <label class="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-600">
+                <%= rf.check_box :allow_reimbursement, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", onchange: "this.form.submit();" %>
+                Enable reimbursement
+              </label>
             <% end %>
-            <% if assignment.hide_old_contacts? %>
-              <%= button_to("Show Old Contacts",
-                        show_hide_contacts_case_assignment_path(assignment),
-                        method: :patch,
-                        class: "btn btn-outline-warning text-wrap") %>
-            <% else %>
-              <%= button_to("Hide Old Contacts",
-                        show_hide_contacts_case_assignment_path(assignment),
-                        method: :patch,
-                        class: "btn btn-outline-secondary text-wrap") %>
-            <% end %>
-          <% end %>
-        </td>
-      </tr>
+
+            <div class="ml-auto flex flex-wrap items-center gap-2">
+              <% if policy(assignment).unassign? %>
+                <%= button_to "Unassign volunteer", unassign_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:danger_outline) %>
+              <% else %>
+                <% if !volunteer.active? && policy(volunteer).activate? %>
+                  <%= button_to "Activate volunteer", activate_volunteer_path(volunteer, redirect_to_path: "casa_case", casa_case_id: @casa_case.id), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                <% end %>
+                <% if assignment.hide_old_contacts? %>
+                  <%= button_to "Show old contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                <% else %>
+                  <%= button_to "Hide old contacts", show_hide_contacts_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="px-4 py-8 text-center">
+      <p class="text-sm text-slate-500">No volunteers are assigned to this case yet.</p>
+    </div>
+  <% end %>
+
+  <div class="border-t border-slate-100 bg-slate-50 p-4">
+    <h3 class="text-sm font-semibold text-slate-900">Assign a volunteer to this case</h3>
+    <%= form_with model: CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
+      <fieldset class="m-0 border-0 p-0" <%= "disabled" unless available_volunteers.any? %>>
+        <div class="mt-2 flex flex-wrap items-end gap-3">
+          <div class="min-w-0 flex-1">
+            <label for="case_assignment_casa_case_id" class="sr-only">Select a volunteer</label>
+            <div class="relative">
+              <select id="case_assignment_casa_case_id" name="case_assignment[volunteer_id]" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500">
+                <option value="">Please select a volunteer</option>
+                <% available_volunteers.each do |v| %>
+                  <option value="<%= v.id %>"><%= formatted_name(v.display_name) %></option>
+                <% end %>
+              </select>
+              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
+            </div>
+          </div>
+          <%= button_tag "Assign volunteer", type: "submit", class: button_classes(:primary) %>
+        </div>
+      </fieldset>
     <% end %>
-  </tbody>
-<% end %>
-<%=
-  render(
-  "shared/manage_volunteers",
-  assignable_obj: CaseAssignment,
-  assign_action: case_assignments_path(casa_case_id: @casa_case.id),
-  available_volunteers: @casa_case.unassigned_volunteers,
-  select_id: 'case_assignment_casa_case_id',
-  select_name: 'case_assignment[volunteer_id]',
-  show_assigned_volunteers: @casa_case.volunteers.present?
-  )
-%>
+    <% unless available_volunteers.any? %>
+      <p class="mt-2 text-sm text-slate-500">There are no active, unassigned volunteers available.</p>
+    <% end %>
+  </div>
+</div>

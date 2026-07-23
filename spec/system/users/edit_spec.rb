@@ -9,14 +9,14 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345"
-      fill_in "New Password", with: "123456789"
-      fill_in "New Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
-      expect(page).to have_content "1 error prohibited this password change from being saved:"
+      click_on "Update password"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -27,14 +27,14 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123"
-      fill_in "New Password Confirmation", with: "1234"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123"
+      fill_in "New password confirmation", with: "1234"
 
-      click_on "Update Password"
-      expect(page).to have_content "2 errors prohibited this password change from being saved:"
+      click_on "Update password"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
@@ -63,13 +63,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123456789"
-      fill_in "New Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
+      click_on "Update password"
 
       expect(page).to have_text("Password was successfully updated.")
     end
@@ -81,13 +81,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123456789"
-      fill_in "Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
+      click_on "Update password"
 
       page.has_content?("Password was successfully updated.")
 
@@ -104,13 +104,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Email"
-      expect(page).to have_field("New Email", disabled: false)
+      click_on "Change email"
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_volunteer@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_volunteer@example.com"
+      click_on "Update email"
 
       expect(page).to have_content "Click the link in your new email to finalize the email transfer"
 
@@ -127,13 +127,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      click_on "Change Email"
+      click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_volunteer@example.com"
+      fill_in "New email", with: "new_volunteer@example.com"
 
-      click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      click_on "Update email"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -163,8 +163,8 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -177,8 +177,8 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Volunteer from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 
@@ -244,7 +244,7 @@ RSpec.describe "users/edit", type: :system do
       sign_in volunteer
       visit edit_users_path
 
-      expect(page).to have_field("Enable Twilio For Text Messaging", type: "checkbox", disabled: true)
+      expect(page).to have_field("Enable Twilio for text messaging", type: "checkbox", disabled: true)
     end
   end
 
@@ -256,13 +256,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in supervisor
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123456789"
-      fill_in "Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
+      click_on "Update password"
 
       page.has_content?("Password was successfully updated.")
 
@@ -279,13 +279,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in supervisor
       visit edit_users_path
 
-      click_on "Change Email"
-      expect(page).to have_field("New Email", disabled: false)
+      click_on "Change email"
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_supervisor@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_supervisor@example.com"
+      click_on "Update email"
 
       expect(page).to have_content "Click the link in your new email to finalize the email transfer"
 
@@ -302,13 +302,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in supervisor
       visit edit_users_path
 
-      click_on "Change Email"
+      click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_supervisor@example"
+      fill_in "New email", with: "new_supervisor@example"
 
-      click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      click_on "Update email"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -337,8 +337,8 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -351,8 +351,8 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 
@@ -364,8 +364,8 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
-      click_on "Update Profile"
-      expect(page).to have_content "1 error prohibited this Supervisor from being saved:"
+      click_on "Update profile"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Date of birth must be in the past.")
     end
   end
@@ -379,7 +379,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       fill_in "Display name", with: ""
-      click_on "Update Profile"
+      click_on "Update profile"
       expect(page).to have_text("Display name can't be blank")
     end
 
@@ -392,7 +392,7 @@ RSpec.describe "users/edit", type: :system do
         visit edit_users_path
 
         fill_in "Phone number", with: "+141632489"
-        click_on("Update Profile")
+        click_on("Update profile")
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end
 
@@ -404,7 +404,7 @@ RSpec.describe "users/edit", type: :system do
         visit edit_users_path
 
         fill_in "Phone number", with: "+141632180923"
-        click_on("Update Profile")
+        click_on("Update profile")
 
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end
@@ -417,7 +417,7 @@ RSpec.describe "users/edit", type: :system do
         visit edit_users_path
 
         fill_in("Phone number", with: "+141632u809o")
-        click_on("Update Profile")
+        click_on("Update profile")
 
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end
@@ -430,7 +430,7 @@ RSpec.describe "users/edit", type: :system do
         visit edit_users_path
 
         fill_in("Phone number", with: "+24163218092")
-        click_on("Update Profile")
+        click_on("Update profile")
         expect(page).to have_text "Phone number must be 10 digits or 12 digits including country code (+1)"
       end
     end
@@ -442,13 +442,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
-      click_on "Change Email"
-      expect(page).to have_field("New Email", disabled: false)
+      click_on "Change email"
+      expect(page).to have_field("New email", disabled: false)
 
       fill_in "current_password_email", with: "12345678"
 
-      fill_in "New Email", with: "new_admin@example.com"
-      click_on "Update Email"
+      fill_in "New email", with: "new_admin@example.com"
+      click_on "Update email"
 
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
@@ -463,13 +463,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
-      click_on "Change Email"
+      click_on "Change email"
 
       fill_in "current_password_email", with: "12345"
-      fill_in "New Email", with: "new_admin@example.com"
+      fill_in "New email", with: "new_admin@example.com"
 
-      click_on "Update Email"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      click_on "Update email"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
     end
 
@@ -480,14 +480,14 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123"
-      fill_in "Password Confirmation", with: "1234"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123"
+      fill_in "New password confirmation", with: "1234"
 
-      click_on "Update Password"
-      expect(page).to have_content "2 errors prohibited this password change from being saved:"
+      click_on "Update password"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Password confirmation doesn't match Password")
       expect(page).to have_text("Password is too short (minimum is #{User.password_length.min} characters)")
     end
@@ -499,13 +499,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123456789"
-      fill_in "Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
+      click_on "Update password"
 
       expect(page).to have_text("Password was successfully updated.")
     end
@@ -534,13 +534,13 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
-      click_on "Change Password"
+      click_on "Change password"
 
-      fill_in "Current Password", with: "12345678"
-      fill_in "New Password", with: "123456789"
-      fill_in "Password Confirmation", with: "123456789"
+      fill_in "Current password", with: "12345678"
+      fill_in "New password", with: "123456789"
+      fill_in "New password confirmation", with: "123456789"
 
-      click_on "Update Password"
+      click_on "Update password"
 
       page.has_content?("Password was successfully updated.")
 
@@ -558,8 +558,8 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       uncheck "user_receive_email_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("At least one communication preference must be selected.")
     end
 
@@ -572,8 +572,8 @@ RSpec.describe "users/edit", type: :system do
 
       uncheck "user_receive_email_notifications"
       check "user_receive_sms_notifications"
-      click_on "Save Preferences"
-      expect(page).to have_content "1 error prohibited this Casa admin from being saved:"
+      click_on "Save preferences"
+      expect(page).to have_content "Unable to save"
       expect(page).to have_text("Must add a valid phone number to receive SMS notifications.")
     end
 
@@ -585,7 +585,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       fill_in "Date of birth", with: 8.days.from_now.strftime("%Y/%m/%d")
-      click_on "Update Profile"
+      click_on "Update profile"
       expect(page).to have_text("Date of birth must be in the past.")
     end
   end

@@ -18,14 +18,14 @@ RSpec.describe "casa_cases/new", type: :system do
         visit root_path
 
         click_on "Cases"
-        click_on "New Case"
+        click_on "New case"
 
         travel_to Time.zone.local(2020, 12, 1) do
           court_date = 21.days.from_now
           fourteen_years = (Date.today.year - 14).to_s
           fill_in "Case number", with: case_number
 
-          fill_in "Court Date", with: court_date
+          fill_in "Next court date", with: court_date
 
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select fourteen_years, from: "casa_case_birth_month_year_youth_1i"
@@ -35,8 +35,7 @@ RSpec.describe "casa_cases/new", type: :system do
           find(".ts-control").click
 
           select_all_el = page.find("span[data-test=select-all-input]")
-          # uncheck all contact type options
-          select_all_el.click
+          # contact types load blank (nothing selected) by default
           within ".ts-dropdown-content" do
             expect(page).not_to have_css(".form-check-input--checked")
             expect(page).to have_css(".form-check-input--unchecked", count: 2)
@@ -50,15 +49,15 @@ RSpec.describe "casa_cases/new", type: :system do
 
           select "Test User", from: "casa_case[case_assignments_attributes][0][volunteer_id]"
 
-          within ".top-page-actions" do
-            click_on "Create CASA Case"
+          within ".actions-cc" do
+            click_on "Create case"
           end
 
           expect(page).to have_content(case_number)
           expect(page).to have_content(I18n.l(court_date, format: :day_and_date))
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
-          expect(page).to have_content("Transition Aged Youth: Yes")
+          expect(page).to have_content("Transition-aged youth: Yes")
           expect(page).to have_content(volunteer_display_name)
         end
       end
@@ -76,20 +75,24 @@ RSpec.describe "casa_cases/new", type: :system do
         visit new_casa_case_path
 
         fill_in "Case number", with: case_number
-        fill_in "Next Court Date", with: DateTime.now.next_month
+        fill_in "Next court date", with: DateTime.now.next_month
         five_years = (Date.today.year - 5).to_s
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
 
+        find(".ts-control").click
+        find("span[data-test=select-all-input]").click
+        find("h1", text: "New case").click
+
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
-        expect(page).to have_content("Next Court Date: ")
+        expect(page).to have_content("Next court date: ")
         expect(page).not_to have_content("Court Report Due Date:")
-        expect(page).to have_content("Transition Aged Youth: No")
+        expect(page).to have_content("Transition-aged youth: No")
       end
     end
 
@@ -103,7 +106,7 @@ RSpec.describe "casa_cases/new", type: :system do
         check "casa_case_empty_court_date"
 
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(find("#casa_case_empty_court_date")).to be_checked
@@ -130,15 +133,19 @@ RSpec.describe "casa_cases/new", type: :system do
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
 
+          find(".ts-control").click
+          find("span[data-test=select-all-input]").click
+          find("h1", text: "New case").click
+
           within ".actions-cc" do
-            click_on "Create CASA Case"
+            click_on "Create case"
           end
 
           expect(page).to have_content(case_number)
           expect(page).to have_content("CASA case was successfully created.")
-          expect(page).to have_content("Next Court Date:")
+          expect(page).to have_content("Next court date:")
           expect(page).not_to have_content("Court Report Due Date:")
-          expect(page).to have_content("Transition Aged Youth: No")
+          expect(page).to have_content("Transition-aged youth: No")
         end
       end
 
@@ -158,10 +165,12 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-          # 2/14/2025 - by default, all contact types are selected on page load so don't need to manually select
+          find(".ts-control").click
+          find("span[data-test=select-all-input]").click
+          find("h1", text: "New case").click
 
           within ".actions-cc" do
-            click_on "Create CASA Case"
+            click_on "Create case"
           end
 
           selected_contact_type = find(".ts-control .item").text
@@ -185,7 +194,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
         fill_in "Case number", with: case_number
         within ".actions-cc" do
-          click_on "Create CASA Case"
+          click_on "Create case"
         end
 
         expect(page).to have_current_path(casa_cases_path, ignore_query: true)

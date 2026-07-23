@@ -1,10 +1,86 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>New CASA Case</h1>
+<% content_for :page_title, "New case" %>
+<% btn_primary = button_classes(:primary) %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl">
+    <%= form_with model: @casa_case, local: true do |form| %>
+      <div class="mb-6">
+        <p class="text-sm font-medium text-brand-600"><%= link_to "Cases", casa_cases_path, class: "hover:text-brand-700" %></p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">New case</h1>
       </div>
-    </div>
+
+      <%= render "shared/form_errors", resource: @casa_case %>
+
+      <div class="mt-4 space-y-6">
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+          <div class="mb-6">
+            <%= form.label :case_number, "Case number", class: label_class %>
+            <%= form.text_field :case_number, required: true, class: input_class %>
+          </div>
+
+          <h2 class="mb-3 text-sm font-semibold text-slate-900">Court details</h2>
+
+          <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+            <%= render "casa_cases/month_year_select", form: form, method: :birth_month_year_youth,
+                  label: "Youth's birth month and year", disabled: !policy(@casa_case).update_birth_month_year_youth? %>
+
+            <% if policy(@casa_case).update_date_in_care_youth? %>
+              <%= render "casa_cases/month_year_select", form: form, method: :date_in_care, label: "Youth's date in care" %>
+            <% end %>
+
+            <% if policy(@casa_case).update_court_date? %>
+              <div>
+                <%= form.fields_for :court_dates, @casa_case.court_dates.new do |cdf| %>
+                  <%= cdf.label :date, "Next court date", class: label_class %>
+                  <%= cdf.date_field :date, class: input_class, hidden: @empty_court_date %>
+                <% end %>
+                <label class="mt-2 inline-flex items-center gap-2 text-sm text-slate-700">
+                  <%= form.check_box :empty_court_date, {checked: @empty_court_date, class: "toggle-court-date-input h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"} %>
+                  I don't know the court date yet
+                </label>
+              </div>
+            <% end %>
+
+            <div>
+              <%= form.label :court_report_status, "Court report status", class: label_class %>
+              <div class="relative">
+                <%= form.select :court_report_status,
+                      CasaCase.court_report_statuses&.map { |status| [status.first.humanize, status.first] },
+                      {}, class: select_class %>
+                <i class="<%= chevron_class %>" aria-hidden="true"></i>
+              </div>
+            </div>
+
+            <% if Pundit.policy(current_user, @casa_case).update_contact_types? %>
+              <div class="sm:col-span-2">
+                <label class="<%= label_class %>" for="casa_case_contact_type_ids">Contact types</label>
+                <%= render "case_contacts/form/contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: [@casa_case], render_option_subtext: false %>
+              </div>
+            <% end %>
+
+            <div>
+              <%= form.fields_for :case_assignments, @casa_case.case_assignments.new do |caf| %>
+                <%= caf.label :volunteer_id, "Assign a volunteer", class: label_class %>
+                <div class="relative">
+                  <%= caf.select :volunteer_id,
+                        @casa_case.unassigned_volunteers.map { |v| [formatted_name(v.display_name), v.id] },
+                        {prompt: "Please select a volunteer"}, {class: select_class} %>
+                  <i class="<%= chevron_class %>" aria-hidden="true"></i>
+                </div>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div class="actions-cc flex items-center gap-3">
+          <%= button_tag "Create case", type: "submit", class: btn_primary %>
+          <%= link_to "Cancel", casa_cases_path, class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
-<%= render 'form', casa_case: @casa_case %>

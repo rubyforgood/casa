@@ -9,13 +9,17 @@ class CaseContactsController < ApplicationController
   after_action :verify_authorized, except: %i[leave]
 
   def index
+    @active_nav = "contacts"
     load_case_contacts
+    render :index, layout: "casa_app" unless performed?
   end
 
   def drafts
     authorize CaseContact
+    @active_nav = "contacts"
 
     @case_contacts = current_organization.case_contacts.not_active
+    render layout: "casa_app"
   end
 
   def new

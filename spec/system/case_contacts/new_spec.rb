@@ -19,7 +19,7 @@ RSpec.describe "case_contacts/new", type: :system do
   it "page load creates a case_contact with status: 'started' & draft_case_ids: [casa_case.id]" do
     subject
 
-    expect(page).to have_content("New Case Contact")
+    expect(page).to have_content("Record new case contact")
 
     expect(CaseContact.started.count).to eq(1)
     case_contact = CaseContact.started.last
@@ -30,12 +30,12 @@ RSpec.describe "case_contacts/new", type: :system do
   it "saves entered details and updates status to 'active'", :js do
     subject
 
-    expect(page).to have_text "New Case Contact"
+    expect(page).to have_text "Record new case contact"
     case_contact = CaseContact.started.last
 
     complete_details_page(
       case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-      medium: "In Person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
+      medium: "In person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
     )
     click_on "Submit"
     expect(page).to have_text "Case contact successfully created."
@@ -63,6 +63,19 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(case_contact.status).to eq "active"
       expect(case_contact.metadata).to be_present
     end
+  end
+
+  it "'Submit & add another' saves, reopens a fresh form for the same case, and links to the list", :js do
+    subject
+    complete_details_page(case_numbers: [case_number], contact_types: %w[School])
+
+    click_on "Submit & add another"
+
+    expect(page).to have_text "Case contact successfully created."
+    expect(page).to have_link "View case contacts", href: case_contacts_path
+    expect(page).to have_current_path(%r{/case_contacts/\d+/form/details}) # reopened a fresh form
+    expect(CaseContact.active.count).to eq 1
+    expect(CaseContact.active.last.metadata["create_another"]).to be true
   end
 
   context "with invalid inputs" do
@@ -94,7 +107,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Contact Type must be selected")
+      expect(page).to have_text("Contact type must be selected")
       expect(CaseContact.active.count).to eq(0)
 
       check contact_types.first.name
@@ -156,12 +169,12 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:autosave_alert_div) { "#contact-form-notes" }
     let(:autosave_alert_css) { 'small[role="alert"]' }
 
-    it "does not show topic questions that are inactive or soft deleted in select" do
+    it "does not show topic questions that are inactive or soft deleted" do
       contact_topics
       subject
 
       within notes_section_selector do
-        expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic", "Select a discussion topic"])
+        expect(page).to have_field("Active Topic", type: :checkbox)
         expect(page).to have_no_text("Inactive Not Soft Deleted")
         expect(page).to have_no_text("Active Soft Deleted")
         expect(page).to have_no_text("Inactive Soft Deleted")
@@ -174,7 +187,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
       )
 
       answer_topic "Active Topic", "Hello world"
@@ -192,7 +205,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         fill_in_contact_details contact_types: %w[School]
 
-        fill_in "Additional Notes", with: "This is the note"
+        fill_in "Additional notes", with: "This is the note"
 
         click_on "Submit"
 
@@ -219,7 +232,7 @@ RSpec.describe "case_contacts/new", type: :system do
         it "shows the admin the contact topics link" do
           subject
 
-          expect(page).to have_link("Manage Case Contact Topics")
+          expect(page).to have_link("Manage case contact topics")
           expect(CaseContact.active.count).to eq(0)
         end
       end
@@ -244,8 +257,8 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:reimbursement_section_id) { "#contact-form-reimbursement" }
     let(:reimbursement_checkbox) { "case_contact_want_driving_reimbursement" }
     let(:miles_driven_input) { "case_contact_miles_driven" }
-    let(:volunteer_address_input) { "case_contact_volunteer_address" }
-    let(:add_expense_button_text) { "Add Another Expense" }
+    let(:volunteer_address_input) { "case_contact_volunteer_address_line_1" }
+    let(:add_expense_button_text) { "Add another expense" }
 
     before do
       allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
@@ -328,7 +341,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Must enter a valid mailing address for the reimbursement")
+      expect(page).to have_text("Mailing address must be entered for reimbursement")
 
       expect(CaseContact.active.count).to eq(0)
     end
@@ -399,20 +412,19 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
-  context "when 'Create Another' is checked" do
+  context "when 'Create another' is checked" do
     it "redirects to the new CaseContact form with the same case selected", :js do
       subject
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.today, hours: 1, minutes: 45
       )
 
-      check "Create Another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       expect(page).to have_text "Case contact successfully created."
-      expect(page).to have_text "New Case Contact"
+      expect(page).to have_text "Record new case contact"
       expect(page).to have_text case_number
 
       expect(CaseContact.active.count).to eq(1)
@@ -437,19 +449,18 @@ RSpec.describe "case_contacts/new", type: :system do
     it "does not reset referring location", :js do
       visit casa_case_path casa_case
       # referrer will be set by CaseContactsController#new to casa_case_path(casa_case)
-      click_on "New Case Contact"
+      click_on "New case contact"
       fill_in_contact_details contact_types: %w[School]
 
       # goes through CaseContactsController#new, but should not set a referring location
-      check "Create Another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       fill_in_contact_details contact_types: %w[School]
 
       click_on "Submit"
       # update should redirect to the original referrer, casa_case_path(casa_case)
-      expect(page).to have_text "CASA Case Details"
-      expect(page).to have_text "Case number: #{case_number}"
+      expect(page).to have_text "Case details"
+      expect(page).to have_text "Case #{case_number}"
     end
 
     context "when multiple cases selected" do
@@ -462,7 +473,7 @@ RSpec.describe "case_contacts/new", type: :system do
       it "redirects to the new CaseContact form with the same cases selected", :js do
         expect {
           visit new_case_contact_path(casa_case, {draft_case_ids:})
-          expect(page).to have_content("Record New Case Contact")
+          expect(page).to have_content("Record new case contact")
         }.to change(CaseContact.started, :count).by(1)
         this_case_contact = CaseContact.started.last
 
@@ -470,14 +481,12 @@ RSpec.describe "case_contacts/new", type: :system do
         complete_details_page(case_numbers: [])
         expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
 
-        check "Create Another"
-
         expect {
-          click_on "Submit"
+          click_on "Submit & add another"
           expect(page).to have_text "Case contacts successfully created."
         }.to change(CaseContact.active, :count).by(2)
 
-        expect(page).to have_text "New Case Contact"
+        expect(page).to have_text "Record new case contact"
         expect(this_case_contact.reload.status).to eq "active"
         next_case_contact = CaseContact.not_active.last
         expect(next_case_contact).to be_present
@@ -517,10 +526,14 @@ RSpec.describe "case_contacts/new", type: :system do
   context "when volunteer has one case" do
     let(:first_case) { volunteer.casa_cases.first }
 
-    it "selects the only case" do
+    # Asserts the sole case is pre-selected in the relevant-cases control (TomSelect). The
+    # legacy sidebar listed each case number, so the old non-JS text match happened to pass;
+    # the casa_app sidebar has one "My Cases" link, so we assert the actual widget selection
+    # like the multi-case sibling below. The server-side default is covered by the first spec.
+    it "selects the only case", :js do
       subject
 
-      expect(page).to have_text(first_case.case_number)
+      expect(page).to have_select("case_contact_draft_case_ids", selected: [first_case.case_number])
       expect(volunteer.casa_cases.size).to eq 1
     end
   end

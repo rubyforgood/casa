@@ -1,6 +1,18 @@
 import { Controller } from '@hotwired/stimulus'
 import TomSelect from 'tom-select'
 
+// Open the dropdown above the control when there isn't room below, so a field
+// near the bottom of the page keeps its menu on-screen. `this` is the TomSelect
+// instance when these run.
+function onDropdownOpen (dropdown) {
+  const rect = this.control.getBoundingClientRect()
+  const needed = dropdown.offsetHeight || 240
+  this.wrapper.classList.toggle('ts-flip-up', window.innerHeight - rect.bottom < needed && rect.top > needed)
+}
+function onDropdownClose () {
+  this.wrapper.classList.remove('ts-flip-up')
+}
+
 export default class extends Controller {
   static targets = ['select', 'option', 'item', 'hiddenItem', 'selectAllOption']
   static values = {
@@ -29,7 +41,9 @@ export default class extends Controller {
         remove_button: {
           title: 'Remove this item'
         }
-      }
+      },
+      onDropdownOpen,
+      onDropdownClose
     })
   }
 
@@ -55,7 +69,9 @@ export default class extends Controller {
     let initItems = this.selectedItemsValue
     if (showAllOptionCheck) {
       const emptyItem = [' ']
-      initItems = hasInitialItems ? emptyItem.concat(this.selectedItemsValue) : orderedOptionVals
+      // Load blank (placeholder) when nothing is pre-selected; the dropdown's
+      // "Select/Unselect all" still selects everything on demand.
+      initItems = hasInitialItems ? emptyItem.concat(this.selectedItemsValue) : []
     }
 
     const dropdownOptions = showAllOptionCheck
@@ -64,6 +80,8 @@ export default class extends Controller {
 
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, {
+      onDropdownOpen,
+      onDropdownClose,
       onItemRemove: function (value) {
         if (value === ' ') {
           this.clear()

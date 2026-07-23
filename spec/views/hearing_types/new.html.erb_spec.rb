@@ -11,7 +11,7 @@ RSpec.describe "hearing_types/new", type: :view do
   end
 
   it "shows new hearing type form" do
-    expect(rendered).to have_text("New Hearing Type")
+    expect(rendered).to have_text("New hearing type")
     expect(rendered).to have_selector("input", id: "hearing_type_name")
     expect(rendered).to have_selector("input", id: "hearing_type_active")
     expect(rendered).to have_selector(:link_or_button, "Submit")

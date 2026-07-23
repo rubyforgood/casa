@@ -1,93 +1,77 @@
-<div class="pt-30">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="mb-30">
-        <h1>New Fund Request</h1>
+<% content_for :page_title, "New fund request" %>
+<%# fund_requests#new on casa_app. Reached from the case-show More menu; back-link returns to the
+    case. Only submitter_email is required (model validation); the * / ** are footnote markers
+    explained below. Field labels keep the substrings the system spec fills in by. %>
+<% btn_primary = button_classes(:primary) %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl">
+    <%= form_with model: @fund_request, url: casa_case_fund_request_path(@casa_case), method: :post, local: true do |form| %>
+      <div class="mb-6">
+        <p class="text-sm font-medium text-brand-600"><%= link_to @casa_case.case_number, casa_case_path(@casa_case), class: "hover:text-brand-700" %></p>
+        <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">New fund request</h1>
       </div>
-    </div>
+
+      <%= render "shared/form_errors", resource: @fund_request %>
+
+      <div class="mt-4 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :submitter_email, "Your email", class: label_class %>
+            <%= form.email_field :submitter_email, value: @fund_request.submitter_email.presence || current_user.email, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :youth_name, "Name or case number of youth", class: label_class %>
+            <%= form.text_field :youth_name, value: @fund_request.youth_name.presence || @casa_case&.case_number, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :payment_amount, "Amount of payment *", class: label_class %>
+            <%= form.text_field :payment_amount, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :deadline, "Deadline / date needed", class: label_class %>
+            <%= form.text_field :deadline, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :payee_name, "Name of payee **", class: label_class %>
+            <%= form.text_field :payee_name, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :requested_by_and_relationship, "Requested by & relationship to youth", class: label_class %>
+            <%= form.text_field :requested_by_and_relationship, value: @fund_request.requested_by_and_relationship.presence || "#{formatted_name(current_user.display_name)} CASA Volunteer", class: input_class %>
+          </div>
+        </div>
+
+        <div class="mt-5 space-y-5">
+          <div>
+            <%= form.label :request_purpose, "Request is for...", class: label_class %>
+            <%= form.text_area :request_purpose, rows: 3, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :other_funding_source_sought, "Other source of funding available/sought, please include status of these requests, if applicable.", class: label_class %>
+            <%= form.text_area :other_funding_source_sought, rows: 3, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :impact, "How will this funding positively impact the personal goals or aspirations of the youth? If this is for emergency funding, please share any support that is or can be in place to maintain stability or alleviate the emergency moving forward. If funding is for a program or a service, please describe how this will support the youth in the short or long-term.", class: label_class %>
+            <%= form.text_area :impact, rows: 4, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :extra_information, "Please use this space if it is necessary/helpful to provide additional information that will assist us in understanding the need and making a decision.", class: label_class %>
+            <%= form.text_area :extra_information, rows: 4, class: input_class %>
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <%= button_tag type: "submit", class: btn_primary do %><i class="bi bi-send" aria-hidden="true"></i> Submit fund request<% end %>
+        </div>
+      </div>
+
+      <div class="mt-4 space-y-2 text-xs leading-relaxed text-slate-500">
+        <p>* Please provide all documentation available for the requested expense (brochure, receipt, estimate, invoice, proof of online enrollment information, etc.). If additional funds have been secured, please provide evidence of the funding commitment (an email, a partial payment on a bill, etc).</p>
+        <p>** Payment will be made directly to the vendor for all services. If the payment must be made directly to the youth, please be sure to include why this is the preferred method of payment.</p>
+      </div>
+    <% end %>
   </div>
 </div>
-
-<!-- ========== card start ========== -->
-<div class="card-style mb-50">
-  <%= form_with(model: @fund_request, local: true, url: casa_case_fund_request_path(@casa_case), method: :post) do |form| %>
-
-    <% if @fund_request.errors.any? %>
-      <% @fund_request.errors.full_messages.each do |msg| %>
-        <p><%= msg %></p>
-      <% end %>
-    <% end %>
-
-    <div class="input-style-1">
-    <%= form.label :submitter_email, "Your email" %>
-      <%= form.email_field :submitter_email, class: "form-control", required: false, value: current_user.email %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :youth_name, "Name or case number of youth" %>
-      <%= form.text_field :youth_name, class: "form-control", required: false, value: @casa_case&.case_number %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :payment_amount, "Amount of payment*" %>
-      <%= form.text_field :payment_amount, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :deadline, "Deadline / date needed" %>
-      <%= form.text_field :deadline, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :request_purpose, "Request is for..." %>
-      <%= form.text_area :request_purpose, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :payee_name, "Name of payee**" %>
-      <%= form.text_field :payee_name, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :requested_by_and_relationship, "Requested by & relationship to youth" %>
-      <%= form.text_field :requested_by_and_relationship, class: "form-control", required: false,
-value: "#{current_user.display_name} CASA Volunteer" %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :other_funding_source_sought,
-        "Other source of funding available/sought please include status of these requests, if applicable." %>
-      <%= form.text_area :other_funding_source_sought, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :impact, "How will this funding positively impact the personal goals or aspirations of
-the youth? If this is for emergency funding, please share any support that is
-or can be in place to maintain stability or alleviate the emergency moving
-forward. If funding is for a program or a service, please describe how this will
-support the youth in the short or long-term." %>
-      <%= form.text_area :impact, class: "form-control", required: false %>
-    </div>
-
-    <div class="input-style-1">
-      <%= form.label :extra_information,
-        "Please use this space if it is necessary/helpful to provide additional
-      information that will assist us in understanding the need and making a decision." %>
-      <%= form.text_area :extra_information, class: "form-control", required: false %>
-    </div>
-
-    <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover", required: false) do %>
-      <i class="lni lni-checkmark-circle mr-10"></i> Submit Fund Request
-    <% end %>
-  <% end %>
-  <br>
-  * Please provide all documentation available for the requested expense (brochure,
-  receipt, estimate, invoice, proof of online enrollment information, etc.). If
-  additional funds have been secured, please provide evidence of the funding
-  commitment (an email, a partial payment on a bill, etc).
-  <br>
-  **Payment will be made directly to the vendor for all services. If the payment
-  must be made directly to the youth, please be sure to include why this is the
-  preferred method of payment.
-</div>
-<!-- card end -->

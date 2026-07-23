@@ -1,4 +1,6 @@
 class UsersController < ApplicationController
+  layout "casa_app"
+
   before_action :get_user
   before_action :authorize_user_with_policy
   before_action :set_active_casa_admins
@@ -126,9 +128,9 @@ class UsersController < ApplicationController
 
   def user_params
     if !current_user.casa_admin?
-      params.require(:user).permit(:display_name, :phone_number, :date_of_birth, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+      params.require(:user).permit(:display_name, :phone_number, :date_of_birth, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content, :line_1, :line_2, :city, :state, :zip])
     else
-      params.require(:user).permit(:email, :display_name, :phone_number, :date_of_birth, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content])
+      params.require(:user).permit(:email, :display_name, :phone_number, :date_of_birth, :receive_sms_notifications, :receive_email_notifications, sms_notification_event_ids: [], address_attributes: [:id, :content, :line_1, :line_2, :city, :state, :zip])
     end
   end
 

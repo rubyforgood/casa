@@ -1,4 +1,6 @@
 class ContactTopicsController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :set_contact_topic, only: %i[edit update soft_delete]
   after_action :verify_authorized
 

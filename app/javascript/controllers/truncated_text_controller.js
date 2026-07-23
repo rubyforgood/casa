@@ -5,8 +5,8 @@ export default class extends Controller {
   static targets = ['moreButton', 'hideButton', 'text']
 
   toggle () {
-    this.hideButtonTarget.classList.toggle('d-none')
-    this.moreButtonTarget.classList.toggle('d-none')
+    this.hideButtonTarget.classList.toggle('hidden')
+    this.moreButtonTarget.classList.toggle('hidden')
     this.textTarget.classList.toggle('line-clamp-1')
   }
 }

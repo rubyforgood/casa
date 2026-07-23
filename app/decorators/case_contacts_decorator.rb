@@ -3,7 +3,7 @@ class CaseContactsDecorator < Draper::CollectionDecorator
     casa_case = casa_cases[casa_case_id]
 
     if casa_cases[casa_case&.id]&.case_number.present?
-      "#{casa_case.decorate.transition_aged_youth_icon} #{casa_case.case_number}"
+      casa_case.case_number
     else
       ""
     end

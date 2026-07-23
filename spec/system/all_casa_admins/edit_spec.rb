@@ -10,11 +10,11 @@ RSpec.describe "AllCasaAdmin edit page", type: :system do
     visit edit_all_casa_admins_path
   end
 
-  it "shows the password section only after clicking 'Change Password'", :aggregate_failures, :js do
+  it "shows the password section only after clicking 'Change password'", :aggregate_failures, :js do
     expect_password_section_hidden
 
-    # Click the Change Password button
-    click_button "Change Password"
+    # Click the Change password button
+    click_button "Change password"
 
     # Password section should now be visible
     expect_password_section_visible
@@ -23,13 +23,13 @@ RSpec.describe "AllCasaAdmin edit page", type: :system do
   private
 
   def expect_password_section_hidden
-    expect(page).to have_selector("#collapseOne.collapse:not(.show)", visible: :all)
+    expect(page).to have_selector("#collapseOne.hidden", visible: :all)
   end
 
   def expect_password_section_visible
-    expect(page).to have_selector("#collapseOne.collapse.show")
+    expect(page).to have_selector("#collapseOne:not(.hidden)")
     expect(page).to have_field("all_casa_admin[password]")
     expect(page).to have_field("all_casa_admin[password_confirmation]")
-    expect(page).to have_button("Update Password")
+    expect(page).to have_button("Update password")
   end
 end

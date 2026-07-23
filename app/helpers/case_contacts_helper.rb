@@ -8,9 +8,11 @@ module CaseContactsHelper
     case_contact.duration_minutes.to_i.remainder(60)
   end
 
+  # Sentence-case medium labels (design-system), matching CaseContactDecorator#medium_label:
+  # "voice-only" -> "Voice only", "text/email" -> "Text/email".
   def contact_mediums
     CaseContact::CONTACT_MEDIUMS.map { |contact_medium|
-      OpenStruct.new(value: contact_medium, label: contact_medium.titleize)
+      OpenStruct.new(value: contact_medium, label: contact_medium.tr("-", " ").humanize)
     }
   end
 

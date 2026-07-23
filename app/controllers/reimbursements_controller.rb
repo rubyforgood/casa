@@ -5,24 +5,15 @@ class ReimbursementsController < ApplicationController
   def index
     authorize :reimbursement
 
+    @active_nav = "reimbursements"
     @complete_status = params[:status] == "complete"
-    @datatable_url = datatable_reimbursements_path(format: :json, status: params[:status])
-    @volunteers_for_filter = volunteers_for_filter(
-      fetch_filtered_reimbursements(@complete_status)
-    )
-    @occurred_at_filter_start_date = (Time.now - 1.year).strftime("%Y/%m/%d")
-    # @grouped_reimbursements = @reimbursements.group_by { |cc| "#{cc.occurred_at}-#{cc.creator_id}" }
-  end
-
-  def datatable
-    authorize :reimbursement
-
-    @complete_status = params[:status] == "complete"
-    datatable = ReimbursementDatatable.new(
-      fetch_filtered_reimbursements(@complete_status), params
-    )
-
-    render json: datatable
+    # Volunteer options come from the status-scoped set (before the volunteer/occurred-at
+    # filters) so selecting a volunteer does not collapse the dropdown to that one option.
+    scoped = status_scoped_reimbursements(@complete_status)
+    @volunteers_for_filter = volunteers_for_filter(scoped)
+    @occurred_at_filter_start_date = 1.year.ago.to_date
+    @pagy, @reimbursements = pagy(apply_filters_to_query(scoped).order(occurred_at: :desc))
+    render :index, layout: "casa_app"
   end
 
   def change_complete_status
@@ -47,7 +38,7 @@ class ReimbursementsController < ApplicationController
   private
 
   def apply_filters_to_query(query)
-    query = query.where(creator_id: params[:volunteers]) if params[:volunteers]
+    query = query.where(creator_id: params[:volunteers]) if params[:volunteers].present?
 
     apply_occurred_at_filters(query)
   end
@@ -81,17 +72,15 @@ class ReimbursementsController < ApplicationController
     policy_scope(case_contacts, policy_scope_class: ReimbursementPolicy::Scope)
   end
 
-  def fetch_filtered_reimbursements(complete_only)
-    apply_filters_to_query(
-      fetch_reimbursements
-        .want_driving_reimbursement(true)
-        .created_max_ago(1.year.ago)
-        .filter_by_reimbursement_status(complete_only)
-    )
+  def status_scoped_reimbursements(complete_only)
+    fetch_reimbursements
+      .want_driving_reimbursement(true)
+      .created_max_ago(1.year.ago)
+      .filter_by_reimbursement_status(complete_only)
   end
 
   def get_normalised_time_for_occurred_at_filter(key)
-    normalised_date = Date.strptime(params[:occurred_at][key], "%Y/%m/%d")
+    normalised_date = Date.parse(params[:occurred_at][key])
     normalised_time = DateTime.new(normalised_date.year, normalised_date.month, normalised_date.day)
 
     return normalised_time if key == :start

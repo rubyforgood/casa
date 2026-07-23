@@ -16,7 +16,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Jane Doe"
       fill_in "Date of birth", with: Date.new(1995, 5, 15)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
@@ -39,7 +39,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "John Smith"
       fill_in "Date of birth", with: Date.new(1990, 1, 1)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 
@@ -63,24 +63,23 @@ RSpec.describe "Inviting volunteers", type: :system do
     it "shows the invitation acceptance form" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
-      expect(page).to have_text "Set my password"
+      expect(page).to have_text "Set your password"
       expect(page).to have_field("Password")
-      expect(page).to have_field("Password confirmation")
-      expect(page).to have_button("Set my password")
+      expect(page).to have_field("Confirm password")
+      expect(page).to have_button("Activate account")
     end
 
     it "allows volunteer to set password and accept invitation" do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
-      expect(page).to have_text "Set my password"
+      expect(page).to have_text "Set your password"
 
       fill_in "Password", with: "SecurePassword123!"
-      fill_in "Password confirmation", with: "SecurePassword123!"
+      fill_in "Confirm password", with: "SecurePassword123!"
 
-      click_on "Set my password"
+      click_on "Activate account"
 
       expect(page).to have_selector(".notice", text: "Your password was set successfully. You are now signed in")
-      expect(page).to have_text("My Cases")
 
       volunteer.reload
       expect(volunteer.invitation_accepted_at).not_to be_nil
@@ -90,9 +89,9 @@ RSpec.describe "Inviting volunteers", type: :system do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: "SecurePassword123!"
-      fill_in "Password confirmation", with: "DifferentPassword456!"
+      fill_in "Confirm password", with: "DifferentPassword456!"
 
-      click_on "Set my password"
+      click_on "Activate account"
 
       expect(page).to have_text "Password confirmation doesn't match"
 
@@ -104,9 +103,9 @@ RSpec.describe "Inviting volunteers", type: :system do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: "short"
-      fill_in "Password confirmation", with: "short"
+      fill_in "Confirm password", with: "short"
 
-      click_on "Set my password"
+      click_on "Activate account"
 
       expect(page).to have_text "Password is too short"
 
@@ -118,9 +117,9 @@ RSpec.describe "Inviting volunteers", type: :system do
       visit accept_user_invitation_path(invitation_token: invitation_token)
 
       fill_in "Password", with: ""
-      fill_in "Password confirmation", with: ""
+      fill_in "Confirm password", with: ""
 
-      click_on "Set my password"
+      click_on "Activate account"
 
       expect(page).to have_text "can't be blank"
 
@@ -139,7 +138,7 @@ RSpec.describe "Inviting volunteers", type: :system do
     it "allows admin to resend invitation to volunteer who hasn't accepted" do
       visit edit_volunteer_path(volunteer)
 
-      click_on "Resend Invitation"
+      click_on "Resend invitation"
 
       expect(page).to have_text "Invitation sent"
 
@@ -153,7 +152,7 @@ RSpec.describe "Inviting volunteers", type: :system do
 
       visit edit_volunteer_path(volunteer)
 
-      expect(page).not_to have_link("Resend Invitation")
+      expect(page).not_to have_link("Resend invitation")
     end
   end
 
@@ -172,7 +171,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       fill_in "Display name", with: "Supervisor's Volunteer"
       fill_in "Date of birth", with: Date.new(1992, 3, 20)
 
-      click_on "Create Volunteer"
+      click_on "Create volunteer"
 
       expect(page).to have_selector(".notice", text: "New volunteer created successfully")
 

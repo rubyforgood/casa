@@ -1,22 +1,30 @@
 class CasaCasesController < ApplicationController
   before_action :set_casa_case, only: %i[show edit update deactivate reactivate copy_court_orders]
   before_action :set_contact_types, only: %i[new edit update create deactivate reactivate]
+  before_action -> { @active_nav = "cases" }, only: %i[edit update deactivate reactivate]
   before_action :require_organization!
   after_action :verify_authorized
 
+  SORT_COLUMNS = %w[case_number next_court_date status transition assigned].freeze
+
   def index
     authorize CasaCase
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :casa_case_emancipation_categories)
-    @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
-    @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
-    @duties = OtherDuty.where(creator_id: current_user.id)
+    @active_nav = "cases"
+    @sort = SORT_COLUMNS.include?(params[:sort]) ? params[:sort] : "case_number"
+    @direction = (params[:direction] == "desc") ? "desc" : "asc"
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :court_dates)
+    scope = policy_scope(org_cases)
+    scope = filter_casa_cases(scope) if policy(CasaCase).can_see_filters?
+    @pagy, @casa_cases = pagy(order_casa_cases(scope))
+    render :index, layout: "casa_app"
   end
 
   def show
     authorize @casa_case
+    @active_nav = "cases"
 
     respond_to do |format|
-      format.html {}
+      format.html { render layout: "casa_app" }
       format.csv do
         case_contacts = @casa_case.decorate.case_contacts_ordered_by_occurred_at
         csv = CaseContactsExportCsvService.new(case_contacts, CaseContactReport::COLUMNS).perform
@@ -32,11 +40,14 @@ class CasaCasesController < ApplicationController
   def new
     @casa_case = CasaCase.new(casa_org: current_organization)
     authorize @casa_case
+    @active_nav = "cases"
+    render layout: "casa_app"
   end
 
   def edit
     @siblings_casa_cases = CasaCasePolicy::Scope.new(current_user, @casa_case).sibling_cases
     authorize @casa_case
+    render layout: "casa_app"
   end
 
   def create
@@ -58,8 +69,9 @@ class CasaCasesController < ApplicationController
     else
       set_contact_types
       @empty_court_date = court_date_unknown?
+      @active_nav = "cases"
       respond_to do |format|
-        format.html { render :new, status: :unprocessable_content }
+        format.html { render :new, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -79,7 +91,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -101,7 +113,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -123,7 +135,7 @@ class CasaCasesController < ApplicationController
       end
     else
       respond_to do |format|
-        format.html { render :edit, status: :unprocessable_content }
+        format.html { render :edit, status: :unprocessable_content, layout: "casa_app" }
         format.json { render json: @casa_case.errors.full_messages, status: :unprocessable_content }
       end
     end
@@ -136,9 +148,71 @@ class CasaCasesController < ApplicationController
       dup_court_order.save
       @casa_case.case_court_orders.append dup_court_order
     end
+    flash[:notice] = "Court orders have been copied."
   end
 
   private
+
+  # Orders the cases index by the whitelisted ?sort= column and ?direction=. Derived
+  # columns (next court date, assigned volunteer) use correlated subqueries; a secondary
+  # sort by case number keeps pagination stable.
+  def order_casa_cases(scope)
+    today = ActiveRecord::Base.connection.quote(Date.current)
+    clause =
+      case @sort
+      when "status" then "casa_cases.active"
+      when "transition" then "casa_cases.birth_month_year_youth"
+      when "next_court_date"
+        "(SELECT MIN(court_dates.date) FROM court_dates WHERE court_dates.casa_case_id = casa_cases.id AND court_dates.date >= #{today})"
+      when "assigned"
+        "(SELECT MIN(users.display_name) FROM case_assignments JOIN users ON users.id = case_assignments.volunteer_id WHERE case_assignments.casa_case_id = casa_cases.id AND case_assignments.active)"
+      else "casa_cases.case_number"
+      end
+    # Re-derive the direction as a local literal so the SQL string is built only from a fixed
+    # allow-list (clause is a case of literals; direction is one of two) -- also clears brakeman.
+    direction = (@direction == "desc") ? "DESC" : "ASC"
+    scope = scope.order(Arel.sql("#{clause} #{direction} NULLS LAST"))
+    scope = scope.order(case_number: :asc) unless @sort == "case_number"
+    scope
+  end
+
+  # Server-side filtering for the cases index (admins/supervisors). Params come from the
+  # filter bar selects; volunteers never reach this. Status defaults to active.
+  def filter_casa_cases(scope)
+    if params[:search].present?
+      term = "%#{ActiveRecord::Base.sanitize_sql_like(params[:search].strip)}%"
+      scope = scope.where(
+        "casa_cases.case_number ILIKE :term OR EXISTS (SELECT 1 FROM case_assignments ca " \
+        "JOIN users u ON u.id = ca.volunteer_id WHERE ca.casa_case_id = casa_cases.id AND ca.active " \
+        "AND u.display_name ILIKE :term)",
+        term: term
+      )
+    end
+
+    scope = case params[:status]
+    when "inactive" then scope.inactive
+    when "all" then scope
+    else scope.active
+    end
+
+    case params[:assigned]
+    when "assigned" then scope = scope.where(id: CaseAssignment.active.select(:casa_case_id))
+    when "unassigned" then scope = scope.where.not(id: CaseAssignment.active.select(:casa_case_id))
+    end
+
+    case params[:transition]
+    when "yes" then scope = scope.is_transitioned
+    when "no" then scope = scope.where.not(id: current_user.casa_org.casa_cases.is_transitioned.select(:id))
+    end
+
+    case params[:prefix]
+    when "CINA" then scope = scope.where("case_number ILIKE ?", "CINA%")
+    when "TPR" then scope = scope.where("case_number ILIKE ?", "TPR%")
+    when "None" then scope = scope.where.not("case_number ILIKE ? OR case_number ILIKE ?", "CINA%", "TPR%")
+    end
+
+    scope
+  end
 
   # Use callbacks to share common setup or constraints between actions.
   def set_casa_case

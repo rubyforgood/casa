@@ -1,14 +1,91 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Editing&nbsp;<%= link_to(@casa_case.case_number, @casa_case) %></h1>
-      </div>
+<% content_for :page_title, "Edit case #{@casa_case.case_number}" %>
+<% btn_primary = button_classes(:primary) %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl">
+    <div class="mb-6">
+      <p class="text-sm font-medium text-brand-600"><%= link_to "Cases", casa_cases_path, class: "hover:text-brand-700" %> / <%= link_to @casa_case.case_number, @casa_case, class: "hover:text-brand-700" %></p>
+      <h1 class="mt-1 text-2xl font-bold tracking-tight text-slate-900">Edit case</h1>
     </div>
+
+    <% if @casa_case.active? %>
+      <%= form_with model: @casa_case, local: true, data: {controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"} do |form| %>
+        <%= render "shared/form_errors", resource: @casa_case %>
+        <div class="mt-4 space-y-6">
+          <div class="<%= card %>">
+            <% if @casa_case.new_record? || policy(@casa_case).update_case_number? %>
+              <div class="mb-6">
+                <%= form.label :case_number, "Case number", class: label_class %>
+                <%= form.text_field :case_number, required: true, class: input_class %>
+              </div>
+            <% end %>
+            <h2 class="mb-3 text-sm font-semibold text-slate-900">Court details</h2>
+            <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+              <%= render "casa_cases/month_year_select", form: form, method: :birth_month_year_youth, label: "Youth's birth month and year", disabled: !policy(@casa_case).update_birth_month_year_youth? %>
+              <% if policy(@casa_case).update_date_in_care_youth? %>
+                <%= render "casa_cases/month_year_select", form: form, method: :date_in_care, label: "Youth's date in care" %>
+              <% end %>
+              <div>
+                <%= form.label :court_report_status, "Court report status", class: label_class %>
+                <div class="relative">
+                  <%= form.select :court_report_status, CasaCase.court_report_statuses&.map { |s| [s.first.humanize, s.first] }, {}, class: select_class %>
+                  <i class="<%= chevron_class %>" aria-hidden="true"></i>
+                </div>
+              </div>
+              <% if Pundit.policy(current_user, @casa_case).update_contact_types? %>
+                <div class="sm:col-span-2">
+                  <label class="<%= label_class %>" for="casa_case_contact_type_ids">Contact types</label>
+                  <%= render "case_contacts/form/contact_types", form: form, options: @contact_types, selected_items: @selected_contact_type_ids, casa_cases: [@casa_case] %>
+                </div>
+              <% end %>
+            </div>
+          </div>
+
+          <% if policy(@casa_case).update_court_orders? %>
+            <div class="<%= card %>">
+              <%= render partial: "casa_cases/court_orders", locals: {casa_case: @casa_case, siblings_casa_cases: @siblings_casa_cases, form: form, resource: "casa_case"} %>
+            </div>
+          <% end %>
+
+          <div class="<%= card %>">
+            <%= render "court_dates", casa_case: @casa_case %>
+          </div>
+
+          <div class="actions-cc flex items-center gap-3">
+            <%= button_tag "Save changes", type: "submit", class: btn_primary %>
+            <%= link_to "Cancel", @casa_case, class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+          </div>
+        </div>
+      <% end %>
+
+      <%# Deactivate is a separate PATCH action, so it lives outside the edit form (a
+          button_to nested in the form would submit the outer form instead). %>
+      <% if policy(@casa_case).update_case_status? %>
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-white p-5 shadow-sm">
+          <div>
+            <p class="text-sm font-semibold text-slate-900">Deactivate this case</p>
+            <p class="mt-0.5 text-sm text-slate-500">Deactivating unassigns all volunteers. You can reactivate it later.</p>
+          </div>
+          <%= render "shared/confirm_button",
+                url: deactivate_casa_case_path(@casa_case), method: :patch,
+                title: "Deactivate this case?",
+                message: "Deactivating a CASA case unassigns any volunteers currently assigned to it.",
+                confirm_label: "Yes, deactivate",
+                trigger_label: "Deactivate CASA Case",
+                trigger_class: button_classes(:danger_outline) %>
+        </div>
+      <% end %>
+
+      <% if Pundit.policy(current_user, @casa_case).assign_volunteers? %>
+        <%= render "volunteer_assignment" %>
+      <% end %>
+    <% else %>
+      <%= render "inactive_case", casa_case: @casa_case %>
+    <% end %>
   </div>
 </div>
-<% if @casa_case.active %>
-  <%= render 'form', casa_case: @casa_case %>
-<% else %>
-  <%= render 'inactive_case', casa_case: @casa_case %>
-<% end %>

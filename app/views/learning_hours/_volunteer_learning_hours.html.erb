@@ -1,10 +1,12 @@
-<div class="row my-3">
-  <div class="col-sm-12 dashboard-table-header">
-    <h1>Learning Hours</h1>
-    <%= link_to new_learning_hour_path, class: "btn-sm main-btn primary-btn btn-hover" do %>
-      <i class="lni lni-check-box mr-10"></i>Record Learning Hours
+<%# Volunteer's own learning-hours index (casa_app). Header + Record CTA + entries table. %>
+<% content_for :page_title, "Learning hours" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
+    <%= link_to new_learning_hour_path, class: button_classes(:primary) do %>
+      <i class="bi bi-plus-lg" aria-hidden="true"></i> Record learning hours
     <% end %>
   </div>
-</div>
 
-<%= render "learning_hours_table", learning_hours: %>
+  <%= render "learning_hours_table", learning_hours: learning_hours %>
+</div>

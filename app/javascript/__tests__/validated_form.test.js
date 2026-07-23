@@ -21,11 +21,11 @@ describe('NonDrivingContactMediumWarning', () => {
     <input type="hidden" name="case_contact[medium_type]" value="" autocomplete="off">
     <div class="form-check radio-style mb-20">
       <input class="form-check-input" type="radio" value="in-person" name="case_contact[medium_type]" id="case_contact_medium_type_in-person">
-      <label class="form-check-label" for="case_contact_medium_type_in-person">In Person</label>
+      <label class="form-check-label" for="case_contact_medium_type_in-person">In person</label>
     </div>
     <div class="form-check radio-style mb-20">
       <input class="form-check-input" type="radio" value="text/email" checked="checked" name="case_contact[medium_type]" id="case_contact_medium_type_textemail">
-      <label class="form-check-label" for="case_contact_medium_type_textemail">Text/Email</label>
+      <label class="form-check-label" for="case_contact_medium_type_textemail">Text/email</label>
     </div>
 
     <div class="form-check radio-style mb-20">
@@ -35,7 +35,7 @@ describe('NonDrivingContactMediumWarning', () => {
 
     <div class="form-check radio-style mb-20">
       <input class="form-check-input" type="radio" value="voice-only" name="case_contact[medium_type]" id="case_contact_medium_type_voice-only">
-      <label class="form-check-label" for="case_contact_medium_type_voice-only">Voice Only</label>
+      <label class="form-check-label" for="case_contact_medium_type_voice-only">Voice only</label>
     </div>
 
     <div class="form-check radio-style mb-20">

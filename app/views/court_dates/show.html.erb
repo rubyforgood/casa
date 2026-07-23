@@ -1,75 +1,72 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Court Date</h1>
-        <time datetime="<%= @court_date.date %>" class="d-inline-block h4"><%= @court_date.decorate.formatted_date %></time>
+<% content_for :page_title, "Court date" %>
+<%# court_dates#show on casa_app. The <dt><h6>Label:</h6></dt><dd> structure + "Court orders:"
+    h6/<p> are preserved verbatim (view + system specs assert them by xpath / substring); the
+    Title-Case-with-colon fact labels ride the deferred sentence-case sweep. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label = "text-sm font-medium text-slate-500" %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
+<% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Court date</h1>
+        <time datetime="<%= @court_date.date %>" class="mt-1 block text-sm text-slate-500"><%= @court_date.decorate.formatted_date %></time>
       </div>
+      <%= link_to edit_casa_case_court_date_path(@casa_case, @court_date), class: button_classes(:primary) do %>
+        <i class="bi bi-pencil" aria-hidden="true"></i> Edit
+      <% end %>
     </div>
-    <div class="col-md-6">
-      <div class="breadcrumb-wrapper mb-30">
-        <%= link_to edit_casa_case_court_date_path(@casa_case, @court_date), class: "btn-sm main-btn primary-btn btn-hover" do %>
-          <i class="lni lni-pencil-alt mr-10"></i>
-          Edit
+
+    <div class="<%= card %>">
+      <dl>
+        <dt><h6 class="<%= label %>">Case number:</h6></dt>
+        <dd class="mb-4 mt-1 text-sm"><%= link_to @casa_case.case_number, casa_case_path(@casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></dd>
+        <dt><h6 class="<%= label %>">Court report due date:</h6></dt>
+        <dd class="mb-4 mt-1 text-sm text-slate-800"><%= I18n.l(@court_date.court_report_due_date, format: :full, default: "None") %></dd>
+        <dt><h6 class="<%= label %>">Judge:</h6></dt>
+        <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.judge&.name || "None" %></dd>
+        <dt><h6 class="<%= label %>">Hearing type:</h6></dt>
+        <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.hearing_type&.name || "None" %></dd>
+      </dl>
+
+      <h6 class="<%= label %> mb-2">Court orders:</h6>
+      <% if @court_date.case_court_orders.any? %>
+        <div class="overflow-hidden rounded-xl border border-slate-200">
+          <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-slate-200">
+              <thead class="bg-slate-50">
+                <tr>
+                  <th scope="col" class="<%= th %>">Case order text</th>
+                  <th scope="col" class="<%= th %> text-center">Implementation status</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100">
+                <% @court_date.case_court_orders.each do |court_order| %>
+                  <tr>
+                    <td class="<%= td %>"><%= court_order.text %></td>
+                    <td class="<%= td %> text-center"><%= court_order.implementation_status&.humanize %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      <% else %>
+        <p class="text-sm text-slate-500">There are no court orders associated with this court date.</p>
+      <% end %>
+
+      <div class="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-5">
+        <%= link_to casa_case_court_date_path(@casa_case, @court_date, format: :docx), class: button_classes(:secondary) do %>
+          <i class="bi bi-download" aria-hidden="true"></i> Download report (.docx)
+        <% end %>
+        <% if policy(:court_date).destroy? && @court_date.date > Time.now %>
+          <%= link_to casa_case_court_date_path(@casa_case, @court_date), method: :delete, data: {confirm: "Are you sure?"}, class: "#{button_classes(:danger_outline)} sm:ms-auto" do %>
+            <i class="bi bi-trash" aria-hidden="true"></i> Delete future court date
+          <% end %>
         <% end %>
       </div>
-    </div>
-  </div>
-</div>
-<div class="col-lg-12">
-  <div class="card-style mb-30">
-    <dl>
-      <dt>
-        <h6>Case Number:</h6>
-      </dt>
-      <dd class="mb-3"><%= link_to "#{@casa_case.case_number}", casa_case_path(@casa_case) %></dd>
-      <dt>
-        <h6>Court Report Due Date:</h6>
-      </dt>
-      <dd class="mb-3"><%= I18n.l(@court_date.court_report_due_date, format: :full, default: "None") %></dd>
-      <dt>
-        <h6>Judge:</h6>
-      </dt>
-      <dd class="mb-3"><%= @court_date.judge&.name || "None" %></dd>
-      <dt>
-        <h6>Hearing Type:</h6>
-      </dt>
-      <dd class="mb-3"><%= @court_date.hearing_type&.name || "None" %></dd>
-    </dl>
-    <h6>Court Orders:</h6>
-    <% if @court_date.case_court_orders.any? %>
-      <div class="table-wrapper table-responsive">
-        <table class="table striped-table">
-          <thead>
-            <th>Case Order Text</th>
-            <th class="text-center">Implementation Status</th>
-          </thead>
-          <tbody>
-            <% @court_date.case_court_orders.each do |court_order| %>
-              <tr>
-                <td class="min-width"><%= court_order.text %></td>
-                <td class="text-center"><%= court_order.implementation_status&.humanize %></td>
-              </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    <% else %>
-      <p>
-        There are no court orders associated with this court date.
-      </p>
-    <% end %>
-    <div class="d-flex">
-      <%= link_to casa_case_court_date_path(@casa_case, @court_date, format: :docx), class: "btn-sm main-btn primary-btn btn-hover" do %>
-        <i class="lni lni-download mr-10"></i>
-        Download Report (.docx)
-      <% end %>
-      <% if policy(:court_date).destroy? && @court_date.date > Time.now %>
-        <%= link_to [@casa_case, @court_date], method: :delete, data: { confirm: 'Are you sure?' },class: "btn-sm main-btn danger-btn-outline btn-hover ms-auto" do %>
-          <i class="lni lni-trash-can mr-10"></i>
-          Delete Future Court Date
-        <% end %>
-      <% end %>
     </div>
   </div>
 </div>

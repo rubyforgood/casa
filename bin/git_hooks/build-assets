@@ -14,4 +14,4 @@ if ! [ -x "$(command -v npm)" ]; then
 fi
 
 npm run build
-npm run build:css
+npm run build:tailwind

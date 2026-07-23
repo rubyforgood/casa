@@ -1,11 +1,7 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>New Court Date</h1>
-      </div>
-    </div>
+<% content_for :page_title, "New court date" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New court date</h1>
+    <%= render "form", casa_case: @casa_case, court_date: @court_date %>
   </div>
 </div>
-
-<%= render 'form', casa_case: @casa_case, court_date: @court_date %>

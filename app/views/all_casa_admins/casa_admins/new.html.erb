@@ -1,11 +1,9 @@
-<div class="col-md-6">
-  <div class="title mb-30 mt-30">
-    <h1>New CASA Admin for <%= selected_organization.name %></h1>
-  </div>
-</div>
-
-<div class="card card-container">
-  <div class="card-body">
-    <%= render "form", casa_org: selected_organization, casa_admin: @casa_admin %>
+<% content_for :page_title, "New CASA Admin" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New CASA Admin for <%= selected_organization.name %></h1>
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <%= render "form", casa_org: selected_organization, casa_admin: @casa_admin %>
+    </div>
   </div>
 </div>

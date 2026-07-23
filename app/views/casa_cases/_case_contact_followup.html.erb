@@ -1,0 +1,12 @@
+<%# Follow-up control for a case contact on the Tailwind case-show card. Keeps the
+    .followup-button class + followup-button-<id> id so the existing jQuery handler
+    (src/case_contact.js) binds the "Make reminder" prompt (by class/id, not text). %>
+<% if followup %>
+  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:success) do %>
+    <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
+  <% end %>
+<% else %>
+  <button type="button" id="followup-button-<%= contact.id %>" data-turbo="false" class="followup-button <%= button_classes(:secondary) %>">
+    <i class="bi bi-calendar-plus" aria-hidden="true"></i> Make reminder
+  </button>
+<% end %>

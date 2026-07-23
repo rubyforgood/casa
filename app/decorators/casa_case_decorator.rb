@@ -50,7 +50,7 @@ class CasaCaseDecorator < Draper::Decorator
 
   def duration_in_care
     return nil unless object.date_in_care
-    "(#{time_ago_in_words(object.date_in_care)} ago)"
+    "In care for #{time_ago_in_words(object.date_in_care)}"
   end
 
   def calendar_next_court_date
@@ -69,6 +69,12 @@ class CasaCaseDecorator < Draper::Decorator
 
   def formatted_updated_at
     I18n.l(object.updated_at, format: :standard, default: nil)
+  end
+
+  def formatted_next_court_date
+    upcoming = object.court_dates.select { |court_date| court_date.date.to_date >= Date.current }.min_by(&:date)
+    return nil unless upcoming
+    I18n.l(upcoming.date, format: :full, default: nil)
   end
 
   def inactive_class

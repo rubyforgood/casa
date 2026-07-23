@@ -14,10 +14,10 @@ RSpec.describe "Learning Hours Index", type: :system do
 
     it "displays the volunteer learning hours" do
       visit learning_hours_path
-      expect(page).to have_content("Learning Hours")
+      expect(page).to have_content("Learning hours")
       expect(page).to have_content("Title")
-      expect(page).to have_content("Time Spent")
-      expect(page).to have_link("Record Learning Hours", href: new_learning_hour_path)
+      expect(page).to have_content("Time spent")
+      expect(page).to have_link("Record learning hours", href: new_learning_hour_path)
     end
   end
 
@@ -29,11 +29,11 @@ RSpec.describe "Learning Hours Index", type: :system do
       visit learning_hours_path
     end
 
-    it "displays a list of volunteers and the learning hours they completed", :js do
-      expect(page).to have_content("Learning Hours")
+    it "displays a list of volunteers and the learning hours they completed" do
+      expect(page).to have_content("Learning hours")
       expect(page).to have_content("Volunteer")
       expect(page).to have_content(volunteer.display_name)
-      expect(page).to have_content("Time Completed")
+      expect(page).to have_content("Time completed")
       expect(page).to have_content("#{volunteer.learning_hours.sum(:duration_hours)} hours")
     end
 
@@ -61,9 +61,8 @@ RSpec.describe "Learning Hours Index", type: :system do
       end
     end
 
-    it "shows pagination", :js do
-      expect(page).to have_content("Previous")
-      expect(page).to have_content("Next")
+    it "shows the paginated roster summary" do
+      expect(page).to have_content("Showing")
     end
   end
 end

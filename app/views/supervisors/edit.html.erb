@@ -1,94 +1,133 @@
-<div class="col-md-6">
-  <div class="title mb-30 mt-30">
-    <h1>Editing Supervisor</h1>
-  </div>
-</div>
-<div class="card-style">
-  <div class="card-body">
-    <%= form_with(model: @supervisor, as: :supervisor, url: supervisor_path(@supervisor), method: :patch) do |form| %>
-      <%= render "/shared/error_messages", resource: @supervisor %>
-      <%= render "/shared/edit_form", resource: @supervisor, f: form %>
-      <p>
-        <%= render "/shared/invite_login", resource: @supervisor %>
-      </p>
+<% content_for :page_title, "Edit supervisor" %>
+<%# supervisors#edit on the casa_app (Tailwind) shell. Self-contained: the shared Bootstrap
+    user-edit partials (shared/_edit_form, _invite_login) stay on the casa_admin edit page;
+    this page rebuilds every section in Tailwind. supervisors/_manage_active and
+    supervisors/_manage_volunteers are supervisor-specific twins (the shared Bootstrap
+    manage_volunteers partial is left untouched). Title Case action labels asserted by the
+    system spec (Submit, Deactivate supervisor, Activate supervisor, Resend invitation, Change
+    to Admin, Assign volunteer, Select a volunteer, Include/Hide unassigned, Currently Assigned
+    To, ...) are kept verbatim and queued for the cross-cutting sentence-case sweep. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% section_title = "text-base font-semibold text-slate-900" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% readonly_class = "block w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-500 shadow-sm" %>
+<% can_edit = policy(@supervisor).update_user_setting? %>
 
-      <div>
-        <% if current_user.casa_admin? || current_user.supervisor? %>
-          <div class="form-group">
-            <%= form.label :monthly_learning_hours_report, "Receive Monthly Learning Hours Report" %>
-            <%= form.check_box :monthly_learning_hours_report %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl space-y-6">
+    <div>
+      <%= link_to supervisors_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to supervisors
+      <% end %>
+    </div>
+
+    <div class="min-w-0">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit supervisor</h1>
+      <p class="mt-1 truncate text-sm text-slate-500"><span class="font-medium text-slate-800"><%= formatted_name(@supervisor.display_name) %></span> · <%= @supervisor.email %></p>
+    </div>
+
+    <%= render "shared/form_errors", resource: @supervisor %>
+
+    <%# Profile %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Profile</h2>
+      <%= form_with model: @supervisor, as: :supervisor, url: supervisor_path(@supervisor), method: :patch do |form| %>
+        <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :email, "Email", class: label_class %>
+            <% if can_edit %>
+              <%= form.email_field :email, placeholder: "Email", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @supervisor.email %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
           </div>
-        <% end %>
-      </div>
+          <div>
+            <%= form.label :display_name, "Display name", class: label_class %>
+            <% if can_edit %>
+              <%= form.text_field :display_name, placeholder: "Display name", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= formatted_name(@supervisor.display_name) %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div>
+            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <% if can_edit %>
+              <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @supervisor.phone_number %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <% if can_edit %>
+              <%= form.date_field :date_of_birth, value: @supervisor.date_of_birth, class: input_class %>
+            <% else %>
+              <input type="text" value="<%= @supervisor.decorate.formatted_date_of_birth %>" autocomplete="off" readonly class="<%= readonly_class %>">
+            <% end %>
+          </div>
+        </div>
 
-      <p>
-        <%= render "manage_active", user: @supervisor %>
-      </p>
-      <div class="actions">
-        <% if policy(@supervisor).update_supervisor_email? || policy(@supervisor).update_supervisor_name? %>
-          <div class="actions mb-10">
-            <%= button_tag(
-            type: "submit",
-            class: "btn-sm main-btn primary-btn btn-hover"
-          ) do %>
-              <i class="lni lni-checkmark-circle mr-10"></i> Submit
+        <div class="mt-4 space-y-3">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <%= form.check_box :receive_reimbursement_email, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", disabled: !can_edit %>
+            Email reimbursement requests
+          </label>
+          <% if current_user.casa_admin? || current_user.supervisor? %>
+            <label class="flex items-center gap-2 text-sm text-slate-700">
+              <%= form.check_box :monthly_learning_hours_report, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", disabled: !can_edit %>
+              Receive monthly learning hours report
+            </label>
+          <% end %>
+        </div>
+
+        <% if can_edit %>
+          <div class="actions mt-5">
+            <%= form.button type: "submit", class: button_classes(:primary) do %>
+              <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
             <% end %>
           </div>
         <% end %>
-      </div>
-    <br>
-    <% end %>
+      <% end %>
+    </section>
+
+    <%# Account %>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Account</h2>
+      <dl class="mt-4 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
+        <div>
+          <dt class="text-sm font-medium text-slate-500">CASA organization</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.casa_org&.name %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Added to system</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.decorate.formatted_created_at %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation email sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.decorate.formatted_invitation_sent_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Invitation accepted</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.decorate.formatted_invitation_accepted_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Last logged in</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.decorate.formatted_current_sign_in_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Password reset last sent</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.decorate.formatted_reset_password_sent_at || "never" %></dd>
+        </div>
+        <div>
+          <dt class="text-sm font-medium text-slate-500">Will receive reimbursement request emails</dt>
+          <dd class="mt-0.5 text-sm text-slate-800"><%= @supervisor.receive_reimbursement_email ? "Yes" : "No" %></dd>
+        </div>
+      </dl>
+    </section>
+
+    <%= render "manage_active", user: @supervisor %>
+
+    <%= render "manage_volunteers" %>
   </div>
 </div>
-<% button_text = @all_volunteers_ever_assigned.nil? ? "Include unassigned" : "Hide unassigned" %>
-<% volunteer_title = @unassigned_volunteer_count == 0 ? "Assigned Volunteers" : "All Volunteers" %>
-<% content_for :table_title do %>
-  <h3><%= volunteer_title %></h3>
-  <% if @supervisor_has_unassigned_volunteers %>
-    <%= button_to button_text,
-                  edit_supervisor_path(@supervisor),
-                  params: { include_unassigned: @all_volunteers_ever_assigned.nil? },
-                  method: :get,
-                  class: "main-btn primary-btn-outline btn-hover my-3" %>
-  <% end %>
-<% end %>
-<% content_for :table_body do %>
-  <tbody>
-    <% (@all_volunteers_ever_assigned || @supervisor.volunteers).each do |volunteer| %>
-      <tr>
-        <td><%= link_to volunteer.display_name, edit_volunteer_path(volunteer) %></td>
-        <td><%= volunteer.email %></td>
-        <% if button_text == "Hide unassigned" %>
-          <td>
-            <%= volunteer.has_supervisor? ? volunteer.supervisor.display_name : "No One" %>
-          </td>
-        <% end %>
-        <td>
-          <% if volunteer.supervised_by?(@supervisor) %>
-            <div class="action">
-              <%= button_to "Unassign",
-                            unassign_supervisor_volunteer_path(volunteer),
-                            method: :patch,
-                            class: "text-danger" %>
-              <i class="lni lni-ban text-danger"></i>
-            </div>
-          <% else %>
-            Unassigned
-          <% end %>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-<% end %>
-<%=
-  render(
-  "shared/manage_volunteers",
-  assignable_obj: SupervisorVolunteer,
-  assign_action: supervisor_volunteers_path(supervisor_id: @supervisor.id),
-  available_volunteers: @available_volunteers,
-  select_id: 'supervisor_volunteer_volunteer_id',
-  select_name: 'supervisor_volunteer[volunteer_id]',
-  show_assigned_volunteers: @supervisor_has_unassigned_volunteers || @supervisor.volunteers.any?,
-  button_text: button_text
-  )
-%>

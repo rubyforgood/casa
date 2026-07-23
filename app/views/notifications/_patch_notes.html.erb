@@ -1,23 +1,21 @@
-<div id="patch-note-notification" class="list-group-item">
-  <div class="d-flex flex-row">
-    <div class="d-flex-shrink-0">
-      <i class='fas fa-bell'></i>
+<div data-notification-list-item class="flex items-start gap-3.5 px-4 py-3.5">
+  <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
+    <i class="bi bi-stars text-sm" aria-hidden="true"></i>
+  </span>
+  <div class="min-w-0 flex-1">
+    <div class="flex items-baseline justify-between gap-3">
+      <p class="text-sm font-semibold text-slate-900">Patch notes</p>
+      <span class="shrink-0 text-xs text-slate-500"><%= time_ago_in_words(deploy_time) %> ago</span>
     </div>
-    <div class="ml-2 flex-grow-1">
-      <div class="d-flex justify-content-between">
-        <h4 class="mb-1">Patch Notes</h4>
-        <small><%= time_ago_in_words(deploy_time) %> ago</small>
+    <% patch_notes.each do |type, notes_per_type| %>
+      <div class="mt-2">
+        <h3 class="text-xs font-semibold text-slate-500"><%= type %></h3>
+        <ul class="mt-1 list-disc space-y-1 pl-5 text-sm text-slate-600 marker:text-slate-300">
+          <% notes_per_type.each do |note_text| %>
+            <li><%= simple_format note_text %></li>
+          <% end %>
+        </ul>
       </div>
-      <% patch_notes.each do |type, notes_per_type| %>
-        <div class="my-1">
-          <h5 class="ml-4 fw-bold"><%= type %></h5>
-          <ul>
-            <% notes_per_type.each do |note_text| %>
-              <li><%= simple_format note_text %></li>
-            <% end %>
-          </ul>
-        </div>
-      <% end %>
-    </div>
+    <% end %>
   </div>
 </div>

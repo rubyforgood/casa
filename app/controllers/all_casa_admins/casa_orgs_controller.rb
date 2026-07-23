@@ -1,4 +1,6 @@
 class AllCasaAdmins::CasaOrgsController < AllCasaAdminsController
+  before_action -> { @active_nav = "organizations" }
+
   def show
     @casa_org = CasaOrg.find(params[:id])
     @casa_org_metrics = AllCasaAdmins::CasaOrgMetrics.new(@casa_org).metrics

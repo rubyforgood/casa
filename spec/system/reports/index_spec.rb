@@ -21,16 +21,16 @@ RSpec.describe "reports", :js, type: :system do
       instance_exec(&setup_action) if setup_action
       visit reports_path
       instance_exec(&filter_action)
-      click_on "Download Report"
-      expect(page).to have_text("Downloading Report")
+      click_on "Download report"
+      expect(page).to have_text("Downloading report")
     end
   end
 
   shared_examples "empty select downloads report" do |select_id, description|
     it "renders the #{description} select with no options and downloads the report" do
       expect(page).to have_select(select_id, options: [])
-      click_on "Download Report"
-      expect(page).to have_text("Downloading Report")
+      click_on "Download report"
+      expect(page).to have_text("Downloading report")
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe "reports", :js, type: :system do
     end
 
     it "redirects to root", :aggregate_failures do
-      expect(page).not_to have_text "Case Contacts Report"
+      expect(page).not_to have_text "Case contacts report"
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
   end
@@ -65,37 +65,37 @@ RSpec.describe "reports", :js, type: :system do
       end
 
       it "renders form elements", :aggregate_failures do
-        expect(page).to have_text "Case Contacts Report"
+        expect(page).to have_text "Case contacts report"
         expect(page).to have_field("report_start_date", with: 6.months.ago.strftime("%Y-%m-%d"))
         expect(page).to have_field("report_end_date", with: Date.today)
-        expect(page).to have_text "Assigned To"
+        expect(page).to have_text "Assigned to"
         expect(page).to have_text "Volunteers"
-        expect(page).to have_text "Contact Type"
-        expect(page).to have_text "Contact Type Group"
-        expect(page).to have_text "Want Driving Reimbursement"
-        expect(page).to have_text "Contact Made"
-        expect(page).to have_text "Transition Aged Youth"
+        expect(page).to have_text "Contact type"
+        expect(page).to have_text "Contact type group"
+        expect(page).to have_text "Want driving reimbursement"
+        expect(page).to have_text "Contact made"
+        expect(page).to have_text "Transition-aged youth"
         expect(page).to have_field("Both", count: 3)
         expect(page).to have_field("Yes", count: 3)
         expect(page).to have_field("No", count: 3)
       end
 
       it "downloads case contacts report with default filters" do
-        click_on "Download Report"
-        expect(page).to have_text("Downloading Report")
+        click_on "Download report"
+        expect(page).to have_text("Downloading report")
       end
 
-      include_examples "downloads report button", "Mileage Report", "Downloading Mileage Report"
-      include_examples "downloads report button", "Missing Data Report", "Downloading Missing Data Report"
-      include_examples "downloads report button", "Learning Hours Report", "Downloading Learning Hours Report"
-      include_examples "downloads report button", "Export Volunteers Emails", "Downloading Export Volunteers Emails"
-      include_examples "downloads report button", "Followups Report", "Downloading Followups Report"
-      include_examples "downloads report button", "Placements Report", "Downloading Placements Report"
+      include_examples "downloads report button", "Mileage report", "Downloading mileage report"
+      include_examples "downloads report button", "Missing data report", "Downloading missing data report"
+      include_examples "downloads report button", "Learning hours report", "Downloading learning hours report"
+      include_examples "downloads report button", "Export volunteers emails", "Downloading export volunteers emails"
+      include_examples "downloads report button", "Followups report", "Downloading followups report"
+      include_examples "downloads report button", "Placements report", "Downloading placements report"
 
       shared_examples "case contacts report with filter" do |filter_type|
         it "downloads case contacts report with #{filter_type}" do
-          click_on "Download Report"
-          expect(page).to have_text("Downloading Report")
+          click_on "Download report"
+          expect(page).to have_text("Downloading report")
         end
       end
 

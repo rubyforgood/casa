@@ -43,10 +43,21 @@ RSpec.describe CaseContact, type: :model do
       expect(case_contact.errors[:occurred_at]).to eq(["can't be in the future"])
     end
 
+    it "evaluates the future cutoff at validation time, not class-load time" do
+      # Regression guard: the cutoff is a lambda, so it tracks the current clock. With the old
+      # class-load-time value, a date "future" relative to a travelled clock would pass.
+      travel_to Time.zone.local(2020, 6, 15) do
+        expect(build_stubbed(:case_contact, occurred_at: Time.zone.local(2020, 6, 15))).to be_valid
+        future = build_stubbed(:case_contact, occurred_at: Time.zone.local(2020, 6, 20))
+        expect(future).not_to be_valid
+        expect(future.errors[:occurred_at]).to eq(["can't be in the future"])
+      end
+    end
+
     it "verifies occurred at is not before 1/1/1989" do
       case_contact = build_stubbed(:case_contact, occurred_at: "1984-01-01".to_date)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989."])
+      expect(case_contact.errors[:occurred_at]).to eq(["can't be prior to 01/01/1989"])
     end
 
     it "validates want_driving_reimbursement can be true when miles_driven is positive" do
@@ -57,13 +68,13 @@ RSpec.describe CaseContact, type: :model do
     it "validates want_driving_reimbursement cannot be true when miles_driven is nil" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: nil)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+      expect(case_contact.errors[:miles_driven]).to include("must be entered to receive driving reimbursement")
     end
 
     it "validates want_driving_reimbursement cannot be true when miles_driven is not positive" do
       case_contact = build_stubbed(:case_contact, want_driving_reimbursement: true, miles_driven: 0)
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors[:base]).to eq(["Must enter miles driven to receive driving reimbursement."])
+      expect(case_contact.errors[:miles_driven]).to include("must be entered to receive driving reimbursement")
     end
 
     it "validates that contact_made cannot be null" do
@@ -112,7 +123,7 @@ RSpec.describe CaseContact, type: :model do
     it "requires a case to be selected" do
       case_contact = build_stubbed(:case_contact, :details_status, draft_case_ids: [])
       expect(case_contact).not_to be_valid
-      expect(case_contact.errors.full_messages).to include("CASA Case must be selected")
+      expect(case_contact.errors.full_messages).to include("CASA case must be selected")
     end
 
     it "requires occurred at" do
@@ -130,7 +141,7 @@ RSpec.describe CaseContact, type: :model do
     it "validates miles driven if want reimbursement" do
       obj = build_stubbed(:case_contact, :details_status, want_driving_reimbursement: true)
       expect(obj).not_to be_valid
-      expect(obj.errors.full_messages).to include("Must enter miles driven to receive driving reimbursement.")
+      expect(obj.errors.full_messages).to include("Miles driven must be entered to receive driving reimbursement")
     end
   end
 
@@ -643,12 +654,24 @@ RSpec.describe CaseContact, type: :model do
           ]
         }
 
-        it "volunteer is nil" do
-          expect(case_contact.volunteer).to be_nil
+        it "needs the editor to choose which volunteer" do
+          expect(case_contact.needs_reimbursement_volunteer_choice?).to be true
         end
 
-        it "disbales address field" do
-          expect(case_contact.address_field_disabled?).to be true
+        it "offers the picker instead of disabling the address field" do
+          expect(case_contact.address_field_disabled?).to be false
+        end
+
+        it "resolves the volunteer to the one chosen on the form" do
+          expect(case_contact.volunteer).to be_nil
+          case_contact.reimbursement_volunteer_id = other_volunteer.id
+          expect(case_contact.volunteer).to eq other_volunteer
+        end
+
+        it "requires a choice when reimbursement is wanted" do
+          case_contact.want_driving_reimbursement = true
+          case_contact.valid?
+          expect(case_contact.errors[:reimbursement_volunteer_id]).to be_present
         end
       end
     end

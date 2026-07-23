@@ -4,6 +4,8 @@ class ReportsController < ApplicationController
 
   def index
     authorize :application, :see_reports_page?
+    @active_nav = "reports"
+    render layout: "casa_app"
   end
 
   def export_emails

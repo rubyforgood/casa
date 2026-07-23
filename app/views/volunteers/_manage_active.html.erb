@@ -1,39 +1,51 @@
-<div class="field form-group">
-  <% if user.active? %>
-    Volunteer is <%= render BadgeComponent.new(text: "Active", type: :success) %><br>
-    <% if policy(user).deactivate? %>
-      <%= link_to deactivate_volunteer_path(user),
-                  method: :patch,
-                  class: "main-btn danger-btn-outline btn-hover btn-sm my-1",
-                  data: {confirm: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"} do %>
-        <i class="lni lni-bulb mr-10"></i> Deactivate volunteer
-      <% end %>
+<%# Status + activation controls (casa_app twin; supervisors/_manage_active is a separate file
+    and stays Bootstrap). Deactivate keeps the UJS data-confirm (native window.confirm) that the
+    :js spec drives with accept_confirm/dismiss_confirm — deliberately not the Dialog confirm,
+    which those Capybara helpers can't operate. Title Case labels are spec-locked. %>
+<% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
+<section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+  <h2 class="text-base font-semibold text-slate-900">Status</h2>
+
+  <div class="mt-4">
+    <% if user.active? %>
+      <p class="flex flex-wrap items-center gap-2 text-sm text-slate-600">Volunteer is
+        <span class="<%= pill %> bg-emerald-50 text-emerald-700"><i class="bi bi-check-circle" aria-hidden="true"></i> Active</span>
+      </p>
+    <% else %>
+      <div role="alert" class="rounded-xl border border-rose-200 bg-rose-50 px-4 py-3 text-sm text-rose-800">
+        Volunteer was deactivated on: <%= user.decorate.formatted_updated_at %>
+      </div>
     <% end %>
-  <% else %>
-    <div class="alert alert-danger">
-      Volunteer was deactivated on: <%= user.decorate.formatted_updated_at %>
+
+    <div class="mt-4 flex flex-wrap gap-2">
+      <% if user.active? %>
+        <% if policy(user).deactivate? %>
+          <%= link_to deactivate_volunteer_path(user), method: :patch, class: button_classes(:danger_outline),
+                data: {confirm: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"} do %>
+            <i class="bi bi-slash-circle" aria-hidden="true"></i> Deactivate volunteer
+          <% end %>
+        <% end %>
+      <% else %>
+        <% if policy(user).activate? %>
+          <%= link_to activate_volunteer_path(user), method: :patch, class: button_classes(:success) do %>
+            <i class="bi bi-check-circle" aria-hidden="true"></i> Activate volunteer
+          <% end %>
+        <% end %>
+      <% end %>
+
+      <% if (current_user.supervisor? || current_user.casa_admin?) && user.invitation_accepted_at.nil? %>
+        <%= link_to resend_invitation_volunteer_path(user), class: button_classes(:secondary) do %>
+          <i class="bi bi-send" aria-hidden="true"></i> Resend invitation (email)
+        <% end %>
+      <% end %>
+
+      <% if current_user.casa_admin? %>
+        <%= link_to send_reactivation_alert_volunteer_path(user),
+              id: (current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"),
+              class: button_classes(:secondary) do %>
+          <i class="bi bi-bell" aria-hidden="true"></i> <%= current_user.casa_org.twilio_enabled? ? "Send reactivation alert (SMS)" : "Enable Twilio to send reactivation alert (SMS)" %>
+        <% end %>
+      <% end %>
     </div>
-    <% if policy(user).activate? %>
-      <%= link_to activate_volunteer_path(user),
-                  method: :patch,
-                  class: "main-btn success-btn-outline btn-hover btn-sm my-1" do %>
-        <i class="lni lni-bulb mr-10"></i> Activate volunteer
-      <% end %>
-    <% end %>
-  <% end %>
-  <% if (current_user.supervisor? ||
-      current_user.casa_admin?) &&
-      user.invitation_accepted_at.nil? %>
-    <%= link_to resend_invitation_volunteer_path(user),
-                class: "main-btn danger-btn-outline btn-hover btn-sm my-1" do %>
-      <i class="lni lni-telegram-original mr-10"></i> Resend Invitation (Email)
-    <% end %>
-  <% end %>
-  <% if current_user.casa_admin? %>
-    <%= link_to send_reactivation_alert_volunteer_path(user),
-               id: "#{current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"}",
-               class: "main-btn danger-btn-outline btn-hover btn-sm my-1" do %>
-      <i class="lni lni-alarm mr-10"></i><%= current_user.casa_org.twilio_enabled? ? "Send Reactivation Alert (SMS)" : "Enable Twilio To Send Reactivation Alert (SMS)" %>
-    <% end %>
-  <% end %>
-</div>
+  </div>
+</section>

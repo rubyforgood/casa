@@ -1,30 +1,39 @@
-<div class="title-wrapper pt-30">
-  <div class="row">
-    <div class="col-md-6">
-      <div class="title mb-30">
-        <h1>Notifications</h1>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="list-group">
-  <% notifications_after_and_including_deploy(@notifications).each do | notification | %>
-    <%= render NotificationComponent.new(notification: notification) %>
-  <% end %>
-  <% unless (@deploy_time.nil? or @patch_notes.empty?) %>
-    <%= render partial: "patch_notes", locals: {deploy_time: @deploy_time, patch_notes: patch_notes_as_hash_keyed_by_type_name(@patch_notes)} %>
-  <% end %>
-  <% notifications_before_deploy(@notifications).each do | notification | %>
-    <%= render NotificationComponent.new(notification: notification) %>
-  <% end %>
+<% content_for :page_title, "Notifications" %>
 
-  <% if @notifications.empty? and (@patch_notes.empty? or @deploy_time.nil?) %>
-    <div class="card-style my-4">
-      <div class="card-body">
-        You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.
-      </div>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Notifications</h1>
+      <p class="mt-1 text-sm text-slate-500">Follow-up requests, reminders, and product updates.</p>
     </div>
-  <% end %>
+
+    <% has_notifications = @notifications.any? %>
+    <% has_patch_notes = !(@deploy_time.nil? || @patch_notes.empty?) %>
+
+    <% if has_notifications || has_patch_notes %>
+      <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-sm">
+        <div class="divide-y divide-slate-100">
+          <% notifications_after_and_including_deploy(@notifications).each do |notification| %>
+            <%= render NotificationComponent.new(notification: notification) %>
+          <% end %>
+          <% if has_patch_notes %>
+            <%= render partial: "patch_notes", locals: {deploy_time: @deploy_time, patch_notes: patch_notes_as_hash_keyed_by_type_name(@patch_notes)} %>
+          <% end %>
+          <% notifications_before_deploy(@notifications).each do |notification| %>
+            <%= render NotificationComponent.new(notification: notification) %>
+          <% end %>
+        </div>
+      </div>
+    <% else %>
+      <div class="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+        <div class="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-slate-100 text-slate-400">
+          <i class="bi bi-bell-slash text-2xl" aria-hidden="true"></i>
+        </div>
+        <h2 class="mt-4 text-base font-semibold text-slate-900">You're all caught up</h2>
+        <p class="mx-auto mt-1 max-w-sm text-sm text-slate-500">You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.</p>
+      </div>
+    <% end %>
+  </div>
 </div>
 
 <% @notifications.each do |notification| %>

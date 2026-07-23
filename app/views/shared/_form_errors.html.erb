@@ -1,0 +1,32 @@
+<%# Form-error summary for casadesign pages -- the shared design-system alert card (alert_classes,
+    danger variant + leading icon), matching the flash banners. Lists every error so the summary
+    lines up with the per-field messages (field_error helper); a lone error stays inline, several
+    render as a list (no run-on to_sentence, no doubled punctuation). Pass `order:` (an array of
+    attributes in the order they appear on the form) to sort the list to match the page; unlisted
+    attributes and :base fall to the end. Keeps id="error_explanation", the `alert` class, and
+    "Unable to save" (spec hooks). %>
+<% if resource.errors.any? %>
+  <%
+    order = local_assigns[:order]
+    error_objects = resource.errors.objects
+    if order.present?
+      error_objects = error_objects.each_with_index.sort_by { |err, i| [order.index(err.attribute) || order.size, i] }.map(&:first)
+    end
+    messages = error_objects.map(&:full_message)
+  %>
+  <div id="error_explanation" role="alert" class="alert <%= alert_classes(:danger) %>">
+    <i class="bi <%= alert_icon(:danger) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
+    <div class="min-w-0">
+      <% if messages.one? %>
+        <p><span class="font-semibold">Unable to save:</span> <%= messages.first %></p>
+      <% else %>
+        <p class="font-semibold">Unable to save. Please fix the following:</p>
+        <ul class="mt-1.5 list-disc space-y-1 pl-5">
+          <% messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+    </div>
+  </div>
+<% end %>

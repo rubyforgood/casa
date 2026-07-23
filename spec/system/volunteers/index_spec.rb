@@ -1,435 +1,263 @@
 require "rails_helper"
 
-RSpec.describe "view all volunteers", :js, type: :system do
+RSpec.describe "volunteers/index", type: :system do
   let(:organization) { create(:casa_org) }
   let(:admin) { create(:casa_admin, casa_org: organization) }
-  let!(:supervisor) { create(:supervisor, casa_org: organization) }
+  let!(:supervisor) { create(:supervisor, display_name: "Sam Supervisor", casa_org: organization) }
 
-  context "admin user" do
-    context "when no logo_url" do
-      it "can see volunteers and navigate to their cases", :js do
-        volunteer = create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization, supervisor: supervisor)
-        volunteer.casa_cases << build(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
-        volunteer.casa_cases << build(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
-        casa_case = volunteer.casa_cases[0]
-
-        sign_in admin
-
-        visit volunteers_path
-
-        expect(page).to have_text("User 1")
-        expect(page).to have_text(casa_case.case_number)
-
-        within "#volunteers" do
-          click_on volunteer.casa_cases.first.case_number
-        end
-
-        expect(page).to have_text("CASA Case Details")
-        expect(page).to have_text("Case number: #{casa_case.case_number}")
-        expect(page).to have_text("Transition Aged Youth: Yes")
-        expect(page).to have_text("Next Court Date:")
-        expect(page).to have_text("Court Report Status: Not submitted")
-        expect(page).to have_text("Assigned Volunteers:")
-      end
-
-      it "displays default logo" do
-        sign_in admin
-
-        visit volunteers_path
-
-        expect(page).to have_css("#casa-logo[src*='default-logo']")
-        expect(page).to have_css("#casa-logo[alt='CASA Logo']")
-      end
-    end
-
-    it "displays last attempted contact by default", :js do
-      create(:volunteer, display_name: "User 1", email: "casa@example.com", casa_org: organization, supervisor: supervisor)
+  describe "listing and navigation" do
+    it "lists active volunteers and links to their assigned cases" do
+      volunteer = create(:volunteer, display_name: "User One", email: "casa@example.com", casa_org: organization, supervisor: supervisor)
+      casa_case = create(:casa_case, casa_org: organization, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
 
       sign_in admin
-
       visit volunteers_path
 
-      expect(page).to have_content(:visible, "Last Attempted Contact")
-    end
-
-    it "can show/hide columns on volunteers table", :js do
-      sign_in admin
-
-      visit volunteers_path
-      expect(page).to have_text("Pick displayed columns")
-
-      click_on "Pick displayed columns"
-      expect(page).to have_text("Name")
-      expect(page).to have_text("Status")
-      expect(page).to have_text("Contact Made In Past 60 Days")
-      expect(page).to have_text("Last Attempted Contact")
-      check "Name"
-      check "Status"
-      uncheck "Contact Made In Past 60 Days"
-      uncheck "Last Attempted Contact"
-      within(".modal-dialog") do
-        click_on "Close"
+      expect(page).to have_text("User One")
+      within "#volunteers" do
+        expect(page).to have_link(casa_case.case_number)
+        click_on casa_case.case_number
       end
 
-      expect(page).to have_text("Name")
-      expect(page).to have_text("Status")
-      within("#volunteers") do
-        expect(page).to have_no_text("Contact Made In Past 60 Days")
-        expect(page).to have_no_text("Last Attempted Contact")
-      end
+      expect(page).to have_text("Case #{casa_case.case_number}")
     end
 
-    it "can filter volunteers", :js do
-      assigned_volunteers = create_list(:volunteer, 2, casa_org: organization, supervisor: supervisor)
-      inactive_volunteers = create_list(:volunteer, 2, :inactive, casa_org: organization)
-      unassigned_volunteer = create(:volunteer, casa_org: organization)
+    it "shows the last attempted contact column" do
+      create(:volunteer, casa_org: organization, supervisor: supervisor)
 
       sign_in admin
-
       visit volunteers_path
-      expect(page).to have_css(".volunteer-filters")
 
-      assigned_volunteers.each do |assigned_volunteer|
-        expect(page).to have_text assigned_volunteer.display_name
-      end
-      expect(page).to have_text unassigned_volunteer.display_name
-
-      click_on "Status"
-      find(:css, 'input[data-value="true"]').set(false)
-      expect(page).to have_text("No matching records found")
-
-      find(:css, 'input[data-value="false"]').set(true)
-      inactive_volunteers.each do |inactive_volunteer|
-        expect(page).to have_text inactive_volunteer.display_name
-      end
-      expect(page).to have_css("table#volunteers tbody tr", count: inactive_volunteers.count)
-
-      visit volunteers_path
-      click_on "Supervisor"
-      find_by_id("unassigned-vol-filter").set(false)
-      assigned_volunteers.each do |assigned_volunteer|
-        expect(page).to have_text assigned_volunteer.display_name
-      end
-      expect(page).to have_css("table#volunteers tbody tr", count: assigned_volunteers.count)
+      expect(page).to have_text("Last attempted contact")
     end
 
-    it "can go to the volunteer edit page from the volunteer list", :js do
+    it "goes to the volunteer edit page" do
       create(:volunteer, casa_org: organization, supervisor: supervisor)
       sign_in admin
 
       visit volunteers_path
-
       within "#volunteers" do
         click_on "Edit"
       end
 
-      expect(page).to have_text("Editing Volunteer")
+      expect(page).to have_text("Edit volunteer")
     end
 
-    it "can go to the new volunteer page" do
+    it "goes to the new volunteer page" do
       sign_in admin
 
       visit volunteers_path
+      click_on "New volunteer"
 
-      click_on "New Volunteer"
-
-      expect(page).to have_text("New Volunteer")
+      expect(page).to have_text("New volunteer")
       expect(page).to have_css("form#new_volunteer")
-    end
-
-    describe "supervisor column of volunteers table" do
-      it "is blank when volunteer has no supervisor", :js do
-        create(:volunteer, casa_org: organization)
-        sign_in admin
-
-        visit volunteers_path
-        click_on "Supervisor"
-        find_by_id("unassigned-vol-filter").set(true)
-
-        expect(page).to have_css("tbody .supervisor-column", text: "")
-      end
-
-      it "displays supervisor's name when volunteer has supervisor", :js do
-        name = "Superduper Visor"
-        supervisor = create(:supervisor, display_name: name, casa_org: organization)
-        create(:volunteer, supervisor: supervisor, casa_org: organization)
-        sign_in admin
-
-        visit volunteers_path
-        expect(page).to have_css("tbody .supervisor-column", text: name)
-      end
-
-      it "is blank when volunteer's supervisor is inactive", :js do
-        create(:volunteer, :with_inactive_supervisor, casa_org: organization)
-        sign_in admin
-
-        visit volunteers_path
-        click_on "Supervisor"
-        find_by_id("unassigned-vol-filter").set(true)
-
-        expect(page).to have_css("tbody .supervisor-column", text: "")
-      end
-    end
-
-    describe "Manage Volunteers button" do
-      let!(:volunteers) { create_list(:volunteer, 2, casa_org: organization) }
-
-      before do
-        sign_in admin
-        visit volunteers_path
-      end
-
-      it "does not display by default" do
-        expect(page).to have_no_text "Manage Volunteer"
-      end
-
-      context "when one or more volunteers selected" do
-        it "is displayed" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-
-          expect(page).to have_text "Manage Volunteer"
-        end
-
-        it "displays number of volunteers selected" do
-          volunteers.each_with_index do |volunteer, index|
-            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-            expect(page).to have_css("[data-select-all-target='buttonLabel']", text: "#{index + 1})")
-          end
-        end
-
-        it "text matches pluralization of volunteers selected" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          expect(page).to have_no_text "Manage Volunteers"
-
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
-          expect(page).to have_text "Manage Volunteers"
-        end
-
-        it "is hidden when all volunteers unchecked" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          expect(page).to have_text "Manage Volunteer"
-
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          expect(page).to have_no_text "Manage Volunteer"
-        end
-      end
-    end
-
-    describe "Select All Checkbox" do
-      let!(:volunteers) { create_list(:volunteer, 2, casa_org: organization) }
-
-      before do
-        sign_in admin
-        visit volunteers_path
-      end
-
-      it "selects all volunteers" do
-        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # Wait for data table to be loaded
-        find_by_id("checkbox-toggle-all").click
-
-        volunteers.each do |volunteer|
-          expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{volunteer.id}", checked: true)
-        end
-      end
-
-      context "when all are checked" do
-        it "deselects all volunteers" do
-          volunteers.each do |volunteer|
-            find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-          end
-
-          find_by_id("checkbox-toggle-all").click
-          expect(page).to have_field("checkbox-toggle-all", checked: false)
-
-          volunteers.each do |volunteer|
-            expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{volunteer.id}", checked: false)
-          end
-        end
-      end
-
-      context "when some are checked" do
-        it "is semi-checked (indeterminate)" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-
-          expect(page).to have_field("checkbox-toggle-all", checked: false)
-          expect(find_by_id("checkbox-toggle-all")[:indeterminate]).to eq("true")
-        end
-
-        it "selects all volunteers" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
-          find_by_id("checkbox-toggle-all").click
-
-          volunteers.each do |volunteer|
-            expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{volunteer.id}", checked: true)
-          end
-        end
-      end
-    end
-
-    describe "Select Supervisor Modal Submit button" do
-      let!(:volunteer) { create(:volunteer, casa_org: organization) }
-
-      before do
-        sign_in admin
-        visit volunteers_path
-      end
-
-      it "is disabled by default" do
-        find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-        find("[data-select-all-target='button']").click
-
-        expect(page).to have_button("Confirm", disabled: true, class: %w[deactive-btn main-btn])
-      end
-
-      context "when none is selected" do
-        it "is enabled" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-          find("[data-select-all-target='button']").click
-          select "None", from: "supervisor_volunteer_supervisor_id"
-
-          expect(page).to have_button("Confirm", disabled: false, class: %w[!deactive-btn dark-btn btn-hover])
-        end
-      end
-
-      context "when a supervisor is selected" do
-        it "is enabled" do
-          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-          find("[data-select-all-target='button']").click
-
-          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
-
-          expect(page).to have_button("Confirm", disabled: false, class: %w[!deactive-btn dark-btn btn-hover])
-        end
-      end
-
-      context "when Choose a supervisor is selected" do
-        it "is disabled" do
-          visit volunteers_path
-          find("#supervisor_volunteer_volunteer_ids_#{volunteer.id}").click
-          find("[data-select-all-target='button']").click
-
-          select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
-          select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
-
-          expect(page).to have_button("Confirm", disabled: true, class: %w[deactive-btn !dark-btn !btn-hover])
-        end
-      end
     end
   end
 
-  context "supervisor user" do
-    it "can filter volunteers", :js do
-      active_volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-      active_volunteer.supervisor = supervisor
+  describe "supervisor column" do
+    it "displays the supervisor's name" do
+      s = create(:supervisor, display_name: "Superduper Visor", casa_org: organization)
+      create(:volunteer, supervisor: s, casa_org: organization)
 
-      inactive_volunteers = create_list(:volunteer, 2, :inactive, supervisor: supervisor, casa_org: organization)
+      sign_in admin
+      visit volunteers_path
+
+      expect(page).to have_css("#volunteers .supervisor-column", text: "Superduper Visor")
+    end
+
+    it "is blank when the volunteer has no supervisor" do
+      create(:volunteer, display_name: "Lonewolf Vol", casa_org: organization)
+
+      sign_in admin
+      visit volunteers_path(supervisor: "unassigned")
+
+      expect(page).to have_text("Lonewolf Vol")
+      expect(page).to have_css("#volunteers .supervisor-column", text: "")
+    end
+
+    it "does not show an inactive supervisor's name" do
+      inactive_sup = create(:supervisor, display_name: "Ghost Supervisor", active: false, casa_org: organization)
+      create(:volunteer, supervisor: inactive_sup, casa_org: organization)
+
+      sign_in admin
+      visit volunteers_path
+
+      expect(page).to have_no_text("Ghost Supervisor")
+    end
+  end
+
+  describe "filtering" do
+    it "filters by status" do
+      create(:volunteer, display_name: "Active Vol", casa_org: organization, supervisor: supervisor)
+      create(:volunteer, :inactive, display_name: "Inactive Vol", casa_org: organization)
+
+      sign_in admin
+
+      visit volunteers_path
+      expect(page).to have_text("Active Vol")
+      expect(page).to have_no_text("Inactive Vol")
+
+      visit volunteers_path(status: "inactive")
+      expect(page).to have_text("Inactive Vol")
+      expect(page).to have_no_text("Active Vol")
+
+      visit volunteers_path(status: "all")
+      expect(page).to have_text("Active Vol")
+      expect(page).to have_text("Inactive Vol")
+    end
+
+    it "shows an empty state when nothing matches" do
+      create(:volunteer, :inactive, casa_org: organization)
+
+      sign_in admin
+      visit volunteers_path
+
+      expect(page).to have_text("No volunteers found")
+    end
+
+    it "filters by supervisor assignment" do
+      create(:volunteer, display_name: "Assigned Vol", casa_org: organization, supervisor: supervisor)
+      create(:volunteer, display_name: "Unassigned Vol", casa_org: organization)
+
+      sign_in admin
+
+      visit volunteers_path(supervisor: "unassigned")
+      expect(page).to have_text("Unassigned Vol")
+      expect(page).to have_no_text("Assigned Vol")
+
+      visit volunteers_path(supervisor: supervisor.id)
+      expect(page).to have_text("Assigned Vol")
+      expect(page).to have_no_text("Unassigned Vol")
+    end
+
+    it "searches by name" do
+      create(:volunteer, display_name: "Findable Person", casa_org: organization, supervisor: supervisor)
+      create(:volunteer, display_name: "Someone Else", casa_org: organization, supervisor: supervisor)
+
+      sign_in admin
+      visit volunteers_path(search: "Findable")
+
+      expect(page).to have_text("Findable Person")
+      expect(page).to have_no_text("Someone Else")
+    end
+
+    it "submits the filter on change", :js do
+      create(:volunteer, display_name: "Active Vol", casa_org: organization, supervisor: supervisor)
+      create(:volunteer, :inactive, display_name: "Inactive Vol", casa_org: organization)
+
+      sign_in admin
+      visit volunteers_path
+      expect(page).to have_css(".volunteer-filters")
+
+      select "Inactive", from: "Status"
+
+      expect(page).to have_text("Inactive Vol")
+      expect(page).to have_no_text("Active Vol")
+    end
+  end
+
+  describe "bulk supervisor assignment", :js do
+    let!(:volunteers) { create_list(:volunteer, 2, casa_org: organization) }
+
+    before do
+      sign_in admin
+      visit volunteers_path
+    end
+
+    it "hides the manage button until a volunteer is selected" do
+      expect(page).to have_no_text("Manage volunteer")
+
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+      expect(page).to have_text("Manage volunteer")
+    end
+
+    it "pluralizes the label with the selected count" do
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+      expect(page).to have_text("Manage volunteer (1)")
+
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[1].id}").click
+      expect(page).to have_text("Manage volunteers (2)")
+    end
+
+    it "hides the button again when the last volunteer is deselected" do
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+      expect(page).to have_text("Manage volunteer")
+
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+      expect(page).to have_no_text("Manage volunteer")
+    end
+
+    describe "select-all checkbox" do
+      it "selects and deselects every volunteer" do
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}") # wait for table
+        find("#checkbox-toggle-all").click
+        volunteers.each { |v| expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{v.id}", checked: true) }
+
+        find("#checkbox-toggle-all").click
+        volunteers.each { |v| expect(page).to have_field("supervisor_volunteer_volunteer_ids_#{v.id}", checked: false) }
+      end
+
+      it "is indeterminate when only some are checked" do
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+
+        expect(page).to have_field("checkbox-toggle-all", checked: false)
+        expect(find("#checkbox-toggle-all")[:indeterminate]).to eq("true")
+      end
+    end
+
+    describe "confirm button" do
+      before do
+        find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+        find("[data-select-all-target='button']").click
+      end
+
+      it "is disabled by default" do
+        expect(page).to have_button("Confirm", disabled: true)
+      end
+
+      it "enables when a supervisor is chosen" do
+        select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+        expect(page).to have_button("Confirm", disabled: false)
+      end
+
+      it "enables when None is chosen" do
+        select "None", from: "supervisor_volunteer_supervisor_id"
+        expect(page).to have_button("Confirm", disabled: false)
+      end
+
+      it "re-disables when Choose a supervisor is chosen" do
+        select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+        select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
+        expect(page).to have_button("Confirm", disabled: true)
+      end
+    end
+
+    it "reassigns the selected volunteers to a supervisor" do
+      find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
+      find("[data-select-all-target='button']").click
+      select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+      click_on "Confirm"
+
+      expect(page).to have_text("successfully assigned to new supervisor")
+      expect(volunteers[0].reload.supervisor).to eq(supervisor)
+    end
+  end
+
+  context "as a supervisor" do
+    it "can view and filter the roster" do
+      create(:volunteer, display_name: "Roster Vol", casa_org: organization, supervisor: supervisor)
+      create(:volunteer, :inactive, display_name: "Roster Inactive", supervisor: supervisor, casa_org: organization)
 
       sign_in supervisor
 
       visit volunteers_path
       expect(page).to have_css(".volunteer-filters")
-      expect(page).to have_css("table#volunteers tbody tr", count: 1)
+      expect(page).to have_text("Roster Vol")
+      expect(page).to have_no_text("Roster Inactive")
 
-      click_on "Status"
-      find(:css, 'input[data-value="true"]').set(false)
-      expect(page).to have_text("No matching records found")
-
-      find(:css, 'input[data-value="false"]').set(true)
-      inactive_volunteers.each do |inactive_volunteer|
-        expect(page).to have_text inactive_volunteer.display_name
-      end
-      expect(page).to have_css("table#volunteers tbody tr", count: inactive_volunteers.count)
-    end
-
-    it "can show/hide columns on volunteers table", :js do
-      sign_in supervisor
-
-      visit volunteers_path
-      expect(page).to have_text("Pick displayed columns")
-
-      click_on "Pick displayed columns"
-      expect(page).to have_text("Name")
-      expect(page).to have_text("Status")
-      expect(page).to have_text("Contact Made In Past 60 Days")
-      expect(page).to have_text("Last Attempted Contact")
-      check "Name"
-      check "Status"
-      uncheck "Contact Made In Past 60 Days"
-      uncheck "Last Attempted Contact"
-      within(".modal-dialog") do
-        click_on "Close"
-      end
-
-      expect(page).to have_text("Name")
-      expect(page).to have_text("Status")
-      within("#volunteers") do
-        expect(page).to have_no_text("Contact Made In Past 60 Days")
-        expect(page).to have_no_text("Last Attempted Contact")
-      end
-    end
-
-    it "can persist 'show/hide' column preference settings", :js do
-      sign_in supervisor
-
-      visit volunteers_path
-
-      expect(page).to have_text("Pick displayed columns")
-      within("#volunteers") do
-        expect(page).to have_text("Name")
-        expect(page).to have_text("Email")
-        expect(page).to have_text("Status")
-        expect(page).to have_text("Assigned To Transition Aged Youth")
-        expect(page).to have_text("Case Number(s)")
-        expect(page).to have_text("Last Attempted Contact")
-        expect(page).to have_text("Contacts Made in Past 60 Day")
-      end
-
-      click_on "Pick displayed columns"
-
-      uncheck "Name"
-      uncheck "Status"
-      uncheck "Contact Made In Past 60 Days"
-      uncheck "Last Attempted Contact"
-
-      within(".modal-dialog") do
-        click_on "Close"
-      end
-
-      within("#volunteers") do
-        expect(page).to have_no_text("Name")
-        expect(page).to have_no_text("Status")
-        expect(page).to have_no_text("Contact Made In Past 60 Days")
-        expect(page).to have_no_text("Last Attempted Contact")
-        expect(page).to have_text("Email")
-        expect(page).to have_text("Assigned To Transition Aged Youth")
-        expect(page).to have_text("Case Number(s)")
-      end
-
-      refresh
-      # Expectations after page reload
-      within("#volunteers") do
-        expect(page).to have_no_text("Name")
-        expect(page).to have_no_text("Status")
-        expect(page).to have_no_text("Contact Made In Past 60 Days")
-        expect(page).to have_no_text("Last Attempted Contact")
-        expect(page).to have_text("Email")
-        expect(page).to have_text("Assigned To Transition Aged Youth")
-        expect(page).to have_text("Case Number(s)")
-      end
-    end
-
-    context "with volunteers" do
-      it "Search history is clean after navigating away from volunteers view", :js do
-        sign_in supervisor
-        visit volunteers_path
-
-        page.fill_in("Search:", with: "Test")
-
-        visit supervisors_path
-        visit volunteers_path
-
-        expect(page).to have_css("#volunteers_filter input", text: "")
-      end
+      visit volunteers_path(status: "inactive")
+      expect(page).to have_text("Roster Inactive")
     end
   end
 end

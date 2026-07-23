@@ -15,39 +15,41 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       sign_in admin
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_text("Assigned Volunteers:\nAndy Dwyer")
+      expect(page).to have_text("Assigned volunteers\nAndy Dwyer")
       expect(page).to have_link("Andy Dwyer")
 
       click_on "Andy Dwyer"
 
-      expect(page).to have_text("Editing Volunteer")
+      expect(page).to have_text("Edit volunteer")
     end
 
-    it "sends reminder to volunteer" do
+    it "sends reminder to volunteer", :js do
       sign_in admin
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_button("Send Reminder")
+      expect(page).to have_button("Send reminder")
+      click_on "Send reminder"
       expect(page).to have_text("Send CC to Supervisor and Admin")
 
-      click_on "Send Reminder"
+      click_on "Yes, send reminder"
 
-      expect(page).to have_current_path(edit_volunteer_path(volunteer))
+      expect(page).to have_current_path(casa_case_path(casa_case.id))
       expect(page).to have_text("Reminder sent to volunteer")
     end
   end
 
   context "user is a supervisor" do
-    it "sends reminder to volunteer" do
+    it "sends reminder to volunteer", :js do
       sign_in supervisor
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_button("Send Reminder")
+      expect(page).to have_button("Send reminder")
+      click_on "Send reminder"
       expect(page).to have_text(/Send CC to Supervisor and Admin$/)
 
-      click_on "Send Reminder"
+      click_on "Yes, send reminder"
 
-      expect(page).to have_current_path(edit_volunteer_path(volunteer))
+      expect(page).to have_current_path(casa_case_path(casa_case.id))
       expect(page).to have_text("Reminder sent to volunteer")
     end
   end
@@ -57,7 +59,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       sign_in volunteer
       visit casa_case_path(casa_case.id)
 
-      expect(page).to have_text("Assigned Volunteers:\nAndy Dwyer")
+      expect(page).to have_text("Assigned volunteers\nAndy Dwyer")
       expect(page).to have_no_link("Andy Dwyer", href: volunteer_path(volunteer.id))
     end
   end

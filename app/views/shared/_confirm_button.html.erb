@@ -1,0 +1,35 @@
+<%# Destructive action gated behind an on-brand confirmation dialog (native <dialog> +
+    the `modal` Stimulus controller: focus-trapped, Escape-to-close). The trigger opens the
+    dialog; confirming submits the real request via button_to. Replaces native `confirm()`
+    and SweetAlert for deletes as pages migrate.
+
+    Locals:
+      url            destructive action path (required)
+      message        dialog body text (required)
+      method         HTTP method (default :delete)
+      title          dialog heading (default "Are you sure?")
+      confirm_label  confirm button text (default "Delete")
+      trigger_icon   bi-* class for the trigger (optional)
+      trigger_label  trigger text (optional; omit for an icon-only trigger)
+      trigger_class  classes for the trigger button (optional)
+      aria_label     accessible name for an icon-only trigger (optional)
+      wrapper_class  Dialog wrapper layout (optional; pass "contents" to drop it into a
+                     dropdown menu so the trigger renders as a full-width menu item) %>
+<% method = local_assigns.fetch(:method, :delete) %>
+<% title = local_assigns.fetch(:title, "Are you sure?") %>
+<% confirm_label = local_assigns.fetch(:confirm_label, "Delete") %>
+<%= render Dialog::GroupComponent.new(label: title, wrapper_class: local_assigns.fetch(:wrapper_class, "inline-flex")) do |dialog| %>
+  <% dialog.with_trigger do %>
+    <%= tag.button type: "button", data: {action: "modal#open"}, class: local_assigns[:trigger_class], "aria-label": local_assigns[:aria_label] do %>
+      <% if local_assigns[:trigger_icon] %><i class="<%= trigger_icon %>" aria-hidden="true"></i><% end %><% if local_assigns[:trigger_label] %> <%= trigger_label %><% end %>
+    <% end %>
+  <% end %>
+  <%= render Dialog::HeaderComponent.new(title: title, icon: "bi bi-exclamation-triangle", variant: :danger) %>
+  <%= render Dialog::BodyComponent.new do %>
+    <p class="text-sm text-slate-600"><%= message %></p>
+  <% end %>
+  <%= render Dialog::FooterComponent.new do %>
+    <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+    <%= button_to confirm_label, url, method: method, form_class: "contents", class: button_classes(:danger) %>
+  <% end %>
+<% end %>

@@ -4,6 +4,14 @@ class CaseContact < ApplicationRecord
 
   attr_accessor :duration_hours
 
+  # Structured mailing-address parts for the reimbursement check. They compose into the
+  # volunteer_address snapshot string (kept for storage, validation, exports, and readers);
+  # prefilled from the volunteer's structured Address. See #compose_volunteer_address.
+  attr_accessor :volunteer_address_line_1, :volunteer_address_line_2,
+    :volunteer_address_city, :volunteer_address_state, :volunteer_address_zip,
+    :reimbursement_volunteer_id
+  before_validation :compose_volunteer_address
+
   validates :contact_made, inclusion: {in: [true, false], message: :must_be_true_or_false}
   validates :miles_driven, numericality: {greater_than_or_equal_to: 0, less_than: 10000}
   validates :medium_type, presence: true, if: :active_or_details?
@@ -12,18 +20,21 @@ class CaseContact < ApplicationRecord
   MINIMUM_DATE = "1989-01-01".to_date
   validates :occurred_at, comparison: {
     greater_than_or_equal_to: MINIMUM_DATE,
-    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}.",
+    message: "can't be prior to #{I18n.l(MINIMUM_DATE)}",
     allow_nil: true
   }
   # NOTE: 'extra' day is a temporary fix for user selecting current date, but this validation failing
+  # NOTE: a lambda so the cutoff is evaluated per-validation, not frozen at class-load time (which
+  # made specs flaky when the class first loaded under travel_to a past date).
   validates :occurred_at, comparison: {
-    less_than: Time.zone.tomorrow + 1.day,
+    less_than: -> { Time.zone.tomorrow + 1.day },
     message: :cant_be_future,
     allow_nil: true
   }
   validate :reimbursement_only_when_miles_driven, if: :active_or_details?
   validate :volunteer_address_when_reimbursement_wanted, if: :active_or_details?
   validate :volunteer_address_is_valid, if: :active_or_details?
+  validate :reimbursement_volunteer_chosen, if: :active_or_details?
 
   belongs_to :creator, class_name: "User"
   has_one :supervisor_volunteer, -> {
@@ -75,8 +86,11 @@ class CaseContact < ApplicationRecord
 
   accepts_nested_attributes_for :additional_expenses, reject_if: :all_blank, allow_destroy: true
 
+  # Topic answers are created/destroyed explicitly (POST/DELETE via the contact-topics
+  # controller), so the form only ever *updates* existing rows. Reject attrs without an id so a
+  # slow autosave can't create a duplicate before the new id propagates back to the field.
   accepts_nested_attributes_for :contact_topic_answers, allow_destroy: true,
-    reject_if: proc { |attrs| attrs["contact_topic_id"].blank? && attrs["value"].blank? }  # .notes sent without topic_id, but must have a value.
+    reject_if: proc { |attrs| attrs["id"].blank? }
 
   scope :supervisors, ->(supervisor_ids = nil) {
     joins(:supervisor_volunteer).where(supervisor_volunteers: {supervisor_id: supervisor_ids}) if supervisor_ids.present?
@@ -222,24 +236,51 @@ class CaseContact < ApplicationRecord
     mileage_rate * miles_driven
   end
 
+  # On :miles_driven (not :base) so the field itself is flagged; miles_driven defaults to 0 (a valid
+  # number), so without this the field would carry no error even when reimbursement needs it.
   def reimbursement_only_when_miles_driven
     return if miles_driven&.positive? || !want_driving_reimbursement
 
-    errors.add(:base, "Must enter miles driven to receive driving reimbursement.")
+    errors.add(:miles_driven, "must be entered to receive driving reimbursement")
   end
 
+  # On :volunteer_address (not :base) so the mailing-address fieldset is flagged at field level, not
+  # only in the summary. want_driving_reimbursement is required for the mailing address.
   def volunteer_address_when_reimbursement_wanted
     if want_driving_reimbursement && volunteer_address&.empty?
-      errors.add(:base, "Must enter a valid mailing address for the reimbursement.")
+      errors.add(:volunteer_address, "must be entered for reimbursement")
     end
   end
 
   def volunteer_address_is_valid
     if volunteer_address&.present?
       if Address.new(user_id: creator.id, content: volunteer_address).invalid?
-        errors.add(:base, "The volunteer's address is not valid.")
+        errors.add(:volunteer_address, "is not valid")
       end
     end
+  end
+
+  # The reimbursement address as submitted through the structured form fields. All-nil means the
+  # address arrived as the legacy single string (request specs / factory), not the form.
+  def submitted_address_parts
+    {
+      line_1: volunteer_address_line_1,
+      line_2: volunteer_address_line_2,
+      city: volunteer_address_city,
+      state: volunteer_address_state,
+      zip: volunteer_address_zip
+    }
+  end
+
+  # Keep the volunteer_address snapshot string in sync with the structured fields the form posts.
+  # Skip when no structured field was submitted (all nil), so the legacy single-string path
+  # (request specs, factory) still sets volunteer_address directly. A blank submit yields "" so
+  # the reimbursement-wanted validation still fires.
+  def compose_volunteer_address
+    parts = submitted_address_parts
+    return if parts.values.all?(&:nil?)
+
+    self.volunteer_address = Address.compose(**parts)
   end
 
   def supervisor_id
@@ -270,15 +311,42 @@ class CaseContact < ApplicationRecord
     !supervisor.blank? && supervisor.active?
   end
 
+  # Disabled only when there is genuinely no volunteer to attribute the address to -- i.e. no
+  # creator-volunteer, no chosen volunteer, and the case has no volunteers to choose from.
   def address_field_disabled?
-    !volunteer
+    volunteer.nil? && !needs_reimbursement_volunteer_choice?
   end
 
+  # The volunteer whose mailing address the reimbursement uses: the creator when they are the
+  # volunteer, else the one explicitly chosen on the form, else the case's sole volunteer.
   def volunteer
-    if creator.is_a?(Volunteer)
-      creator
-    elsif draft_case_ids.first && CasaCase.find(draft_case_ids.first).volunteers.count == 1
-      CasaCase.find(draft_case_ids.first).volunteers.first
+    return creator if creator.is_a?(Volunteer)
+    picked_reimbursement_volunteer || (reimbursement_volunteer_options.first if reimbursement_volunteer_options.one?)
+  end
+
+  # Volunteers assigned to the (draft or active) case -- the choices for whose address to reimburse.
+  def reimbursement_volunteer_options
+    @reimbursement_volunteer_options ||= begin
+      case_id = casa_case_id || draft_case_ids&.first
+      case_id.present? ? (CasaCase.find_by(id: case_id)&.volunteers&.to_a || []) : []
+    end
+  end
+
+  def picked_reimbursement_volunteer
+    return if reimbursement_volunteer_id.blank?
+    reimbursement_volunteer_options.find { |v| v.id == reimbursement_volunteer_id.to_i }
+  end
+
+  # A choice is needed when the editor is not the volunteer and the case has several volunteers, so
+  # the app cannot infer whose address to save.
+  def needs_reimbursement_volunteer_choice?
+    !creator.is_a?(Volunteer) && reimbursement_volunteer_options.size > 1
+  end
+
+  def reimbursement_volunteer_chosen
+    return unless want_driving_reimbursement && needs_reimbursement_volunteer_choice?
+    if picked_reimbursement_volunteer.nil?
+      errors.add(:reimbursement_volunteer_id, "must be chosen so the reimbursement address saves to the right volunteer")
     end
   end
 

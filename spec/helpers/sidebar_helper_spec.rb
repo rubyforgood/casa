@@ -43,7 +43,7 @@ RSpec.describe SidebarHelper, type: :helper do
         it "renders the sidebar menu item as an active link" do
           helper.request.path = "/all_casa_admins/patch_notes"
 
-          menu_item = helper.menu_item(label: "Patch Notes", path: all_casa_admins_patch_notes_path, visible: true)
+          menu_item = helper.menu_item(label: "Patch notes", path: all_casa_admins_patch_notes_path, visible: true)
 
           expect(menu_item).to match "class=\"list-group-item active\""
         end

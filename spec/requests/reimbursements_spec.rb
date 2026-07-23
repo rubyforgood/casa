@@ -15,7 +15,7 @@ RSpec.describe ReimbursementsController, type: :request do
         :want_driving_reimbursement,
         :created_max_ago,
         :filter_by_reimbursement_status
-      ).and_return([])
+      ).and_return(CaseContact.none)
       allow(ReimbursementPolicy::Scope).to receive(:new)
         .with(admin, CaseContact.joins(:casa_case))
         .and_return(double(resolve: contact_relation))

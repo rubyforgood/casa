@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} · CASA Volunteer Tracker" : "CASA Volunteer Tracker" %></title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+
+  <%# window.timeout (minutes) drives src/session_timeout_poller.js; @timeout_duration =
+      current_user.timeout_in (set in ApplicationController). Must precede the deferred bundle. %>
+  <% if @timeout_duration %><script>window.timeout = <%= @timeout_duration.in_minutes.to_i.to_json %>;</script><% end %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+</head>
+<body class="h-full bg-slate-50 font-sans text-slate-800 antialiased">
+  <% initials = avatar_initials(display_person(current_user)) %>
+  <% unread = current_user.notifications.unread.count %>
+  <% role_badge_class = {"Volunteer" => "bg-sky-50 text-sky-700", "Supervisor" => "bg-violet-50 text-violet-700", "Casa Admin" => "bg-amber-50 text-amber-700"}[current_role] || "bg-slate-100 text-slate-600" %>
+
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-brand-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white">Skip to main content</a>
+
+  <div class="flex min-h-full" data-controller="nav-drawer" data-action="keydown.esc@window->nav-drawer#close">
+    <div id="nav-backdrop" data-nav-drawer-target="backdrop" data-action="click->nav-drawer#close" class="fixed inset-0 z-30 hidden bg-slate-900/50 lg:hidden" aria-hidden="true"></div>
+
+    <aside id="app-sidebar" data-nav-drawer-target="sidebar" aria-label="Primary" class="fixed inset-y-0 left-0 z-40 flex w-64 shrink-0 -translate-x-full flex-col border-r border-slate-200 bg-white transition-transform duration-200 motion-reduce:transition-none lg:static lg:translate-x-0">
+      <div class="flex items-center px-5 py-5">
+        <span class="truncate text-[15px] font-bold tracking-tight text-slate-900"><%= current_organization&.name.presence || "CASA Tracker" %></span>
+      </div>
+
+      <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
+        <% nav_items = [
+          ["Dashboard", "bi-grid-1x2", authenticated_user_root_path, "dashboard", true],
+          ["Volunteers", "bi-people", volunteers_path, "volunteers", policy(Volunteer).index?],
+          ["Supervisors", "bi-diagram-3", supervisors_path, "supervisors", policy(Supervisor).index?],
+          [cases_index_title, "bi-folder2", casa_cases_path, "cases", true],
+          ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
+          ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
+          ["Other duties", "bi-list-task", other_duties_path, "other_duties", policy(OtherDuty).index?],
+          ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?],
+          ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
+          ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],
+          ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?],
+          ["Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?]
+        ] %>
+        <% nav_items.each do |title, icon, path, key, allowed| %>
+          <% next unless allowed %>
+          <% active = (@active_nav == key) %>
+          <%= link_to path, "aria-current": (active ? "page" : nil), class: "flex items-center gap-3 rounded-lg px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 #{active ? "bg-brand-50 font-semibold text-brand-700" : "text-slate-600 hover:bg-slate-100"}" do %>
+            <i class="bi <%= icon %> text-base" aria-hidden="true"></i> <%= title %>
+          <% end %>
+        <% end %>
+      </nav>
+    </aside>
+
+    <div class="flex min-w-0 flex-1 flex-col">
+      <%= render "layouts/impersonation_banner" %>
+      <%# relative z-[25] keeps the top bar (and its account/notification dropdowns) above page
+          content: the account menu is an absolute panel inside this header, and relying on the
+          header's backdrop-blur stacking context alone let any page element with its own stacking
+          context (a positioned z-* toolbar, a transform/hover-lift card, a native control) tie it
+          and win by DOM order — painting a page button over the open dropdown. 25 sits above all
+          page content (which tops out at z-20) yet BELOW the mobile nav scrim (z-30) so the drawer
+          still dims the header, and below the sidebar drawer (z-40) and native <dialog> modals. %>
+      <header class="relative z-[25] flex items-center gap-3 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6">
+        <button type="button" id="nav-toggle" data-nav-drawer-target="button" data-action="click->nav-drawer#toggle" aria-label="Open navigation menu" aria-controls="app-sidebar" aria-expanded="false" class="grid h-9 w-9 place-items-center rounded-lg text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden">
+          <i class="bi bi-list text-xl" aria-hidden="true"></i>
+        </button>
+        <span class="text-base font-bold tracking-tight text-slate-900 lg:hidden"><%= current_organization&.name.presence || "CASA" %></span>
+        <div class="ml-auto flex items-center gap-1.5">
+          <%= link_to notifications_path, "aria-label": "Notifications#{unread.positive? ? " (#{unread} unread)" : ""}", class: "relative grid h-9 w-9 place-items-center rounded-lg text-slate-500 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+            <i class="bi bi-bell text-lg" aria-hidden="true"></i>
+            <% if unread.positive? %>
+              <span class="absolute right-1 top-1 grid h-4 min-w-[1rem] place-items-center rounded-full bg-rose-500 px-1 text-[10px] font-semibold text-white" aria-hidden="true"><%= unread %></span>
+            <% end %>
+          <% end %>
+          <details class="relative" data-controller="dropdown">
+            <summary aria-label="Account menu" class="flex cursor-pointer list-none items-center gap-1.5 rounded-lg p-0.5 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 [&::-webkit-details-marker]:hidden">
+              <span class="grid h-9 w-9 place-items-center rounded-full bg-emerald-100 text-sm font-semibold text-emerald-700"><%= initials %></span>
+              <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
+            </summary>
+            <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+              <div class="border-b border-slate-100 px-4 py-3">
+                <div class="text-sm font-semibold text-slate-800"><%= display_person(current_user) %></div>
+                <div class="truncate text-xs text-slate-500"><%= current_user.email %></div>
+                <span class="mt-1.5 inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium <%= role_badge_class %>"><%= current_role %></span>
+              </div>
+              <%= link_to "Edit profile", edit_users_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
+              <%= link_to "Messages", notifications_path, class: "block px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" %>
+              <%= link_to "Sign out", destroy_user_session_path, class: "block px-4 py-2 text-sm text-rose-600 hover:bg-rose-50 focus-visible:bg-rose-50 focus-visible:outline-none" %>
+            </div>
+          </details>
+        </div>
+      </header>
+
+      <main id="main-content" class="flex-1">
+        <%= render "layouts/casa_banner" %>
+        <%= render "shared/flashes", wrapper_class: "px-4 pt-4 sm:px-6 lg:px-8" %>
+        <%= yield %>
+      </main>
+    </div>
+  </div>
+</body>
+</html>

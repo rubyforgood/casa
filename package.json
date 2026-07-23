@@ -8,8 +8,8 @@
     "toc": "markdown-toc -i README.md",
     "build": "./bin/asset_bundling_scripts/build_js.js",
     "build:dev": "./bin/asset_bundling_scripts/build_js.js --watch",
-    "build:css": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules",
-    "build:css:dev": "sass app/assets/stylesheets/application.scss app/assets/builds/application.css --load-path=node_modules --watch"
+    "build:tailwind": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --minify",
+    "build:tailwind:dev": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --watch"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",
@@ -25,18 +25,13 @@
     "add-to-calendar-button": "^2.14.0",
     "bootstrap": "5.3.6",
     "bootstrap-datepicker": "^1.10.1",
-    "bootstrap-scss": "^5.3.8",
-    "chart.js": "^4.5.1",
-    "chartjs-adapter-luxon": "^1.3.1",
     "datatables.net-dt": "^1.13.11",
     "esbuild": "^0.28.0",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.8",
     "jstz": "^2.1.1",
     "lodash": "^4.18.1",
-    "luxon": "^3.6.1",
     "popper.js": "^1.16.1",
-    "sass": "1.77.6",
     "select2": "^4.1.0",
     "select2-bootstrap-5-theme": "^1.3.0",
     "strftime": "^0.10.3",
@@ -47,12 +42,14 @@
   "version": "0.1.0",
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
+    "@tailwindcss/cli": "^4.3.2",
     "faker": "^5.5.3",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "markdown-toc": "^1.2.0",
     "standard": "^17.1.2",
-    "start-server-and-test": "^2.1.5"
+    "start-server-and-test": "^2.1.5",
+    "tailwindcss": "^4.3.2"
   },
   "standard": {
     "globals": [
@@ -61,7 +58,8 @@
       "Turbo"
     ],
     "ignore": [
-      "app/assets/builds/**/*"
+      "app/assets/builds/**/*",
+      "app/javascript/controllers/index.js"
     ]
   },
   "engines": {

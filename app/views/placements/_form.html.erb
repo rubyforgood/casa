@@ -1,29 +1,20 @@
-<div class="card-style mb-30">
-  <div class="alert-box danger-alert">
-    <%= render "/shared/error_messages", resource: placement %>
-  </div>
-  <%= form_with(model: placement, url: [casa_case, placement], local: true,
-                data: { controller: "placement-form", nested_form_wrapper_selector_value: ".nested-form-wrapper" }) do |form| %>
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <h6><strong>Case Number:</strong> <%= link_to casa_case.case_number, casa_case %></h6>
-      </div>
-      <div class="col-md-6">
-        <div class="breadcrumb-wrapper">
-          <span class="top-page-actions ml-5">
-            <%= button_tag(type: "submit", class: "btn-sm main-btn primary-btn btn-hover") do %>
-              <% if placement.persisted? %>
-                <i class="lni lni-pencil-alt"></i> Update
-              <% else %>
-                <i class="lni lni-plus"></i> Create
-              <% end %>
-            <% end %>
-          </span>
-        </div>
-      </div>
-    </div>
-    <div class="row align-items-center">
-      <%= render 'placements/fields', placement: placement, form: form, casa_case: casa_case %>
+<%# casa_app placement new/edit form card. Locals: casa_case, placement. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<div class="<%= card %>">
+  <%= form_with(model: placement, url: [casa_case, placement], local: true, class: "space-y-5") do |form| %>
+    <%= render "shared/form_errors", resource: placement %>
+    <h6 class="text-sm text-slate-500">
+      Case number: <%= link_to casa_case.case_number, casa_case, class: "font-medium text-brand-600 hover:text-brand-700" %>
+    </h6>
+    <%= render "placements/fields", placement: placement, form: form, casa_case: casa_case %>
+    <div>
+      <%= button_tag type: "submit", class: button_classes(:primary) do %>
+        <% if placement.persisted? %>
+          <i class="bi bi-check-lg" aria-hidden="true"></i> Update
+        <% else %>
+          <i class="bi bi-plus-lg" aria-hidden="true"></i> Create
+        <% end %>
+      <% end %>
     </div>
   <% end %>
 </div>

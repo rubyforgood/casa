@@ -10,10 +10,6 @@ class ReimbursementPolicy < ApplicationPolicy
     (is_admin? || is_supervisor?) && reimbursement_enabled?
   end
 
-  def datatable?
-    (is_admin? || is_supervisor?) && reimbursement_enabled?
-  end
-
   def change_complete_status?
     index? && reimbursement_enabled?
   end

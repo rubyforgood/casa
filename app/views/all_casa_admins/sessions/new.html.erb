@@ -1,38 +1,38 @@
-<div class="signin-wrapper">
-  <div class="form-wrapper">
-    <div class="col-md-12 vertically-center">
-      <div class="container">
-        <div class="row">
-          <div class="col-md-6">
-            <h2 class="mb-15">All CASA Log In</h2>
-            <br>
-            <%= render "layouts/flash_messages" %>
-            <%= form_with(model: resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-              <div class="input-style-1">
-                <%= f.label :email %>
-                <%= f.email_field :email, autofocus: true, autocomplete: "email", class: "form-control", required: true %>
-              </div>
+<% content_for :page_title, "All CASA sign in" %>
+<%# All-CASA-admin sign in on the casa_auth split-screen shell, matching devise/sessions/new.
+    Spec-locked: the "All CASA Log In" heading, the Email/Password labels, the .actions wrapper
+    around "Log in", and the flash (sign-out lands here with "Signed out successfully"). %>
+<% label = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% submit = "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
 
-              <div class="input-style-1">
-                <%= f.label :password %>
-                <%= f.password_field :password, autocomplete: "current-password", class: "form-control", required: true %>
-              </div>
-
-              <div class="input-style-1">
-                <%= link_to "Forgot your password?", new_password_path(resource_name), class: "hover-underline" %>
-              </div>
-
-              <div class="actions mb-30">
-                <%= f.submit "Log in", class: "main-btn primary-btn btn-hover w-100 text-center" %>
-              </div>
-            <% end %>
-
-            <p class="text-sm mb-25">
-              Not able to sign in? You might be looking for the <a href="/">CASA user sign in page</a>.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">All CASA log in</h2>
+  <p class="mt-2 text-sm text-slate-500">Sign in to the all-CASA admin console.</p>
 </div>
+
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="mb-5 rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+<% end %>
+
+<%= form_with(model: resource, as: resource_name, url: session_path(resource_name), class: "space-y-5") do |f| %>
+  <div>
+    <%= f.label :email, "Email", class: label %>
+    <%= f.email_field :email, autofocus: true, autocomplete: "email", required: true, placeholder: "you@example.com", class: input %>
+  </div>
+  <div>
+    <div class="mb-1.5 flex items-center justify-between">
+      <%= f.label :password, "Password", class: "block text-sm font-medium text-slate-700" %>
+      <%= link_to "Forgot your password?", new_password_path(resource_name), class: "text-sm font-medium text-brand-600 hover:text-brand-700" %>
+    </div>
+    <%= f.password_field :password, autocomplete: "current-password", required: true, placeholder: "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", class: input %>
+  </div>
+  <div class="actions">
+    <%= f.submit "Log in", class: submit %>
+  </div>
+<% end %>
+
+<p class="mt-8 text-center text-sm text-slate-500">
+  Not able to sign in? You might be looking for the <%= link_to "CASA user sign in page", "/", class: "font-medium text-brand-600 hover:text-brand-700" %>.
+</p>

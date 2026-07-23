@@ -26,7 +26,7 @@ RSpec.describe "LearningHours::Volunteers #show", type: :system do
     end
 
     it "displays the volunteer's name" do
-      expect(page).to have_content("#{volunteer.display_name}'s Learning Hours")
+      expect(page).to have_content("#{volunteer.display_name}'s learning hours")
     end
 
     it "displays the volunteer's first learning hours", :js do

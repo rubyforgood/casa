@@ -4,17 +4,13 @@ Rails.application.routes.draw do
   mount Rswag::Ui::Engine => "/api-docs"
   mount Rswag::Api::Engine => "/api-docs"
 
-  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions"}
-  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords", invitations: "users/invitations"}
+  devise_for :all_casa_admins, path: "all_casa_admins", controllers: {sessions: "all_casa_admins/sessions", passwords: "all_casa_admins/passwords", invitations: "all_casa_admins/invitations"}
+  devise_for :users, controllers: {sessions: "users/sessions", passwords: "users/passwords", invitations: "users/invitations", confirmations: "users/confirmations"}
   authenticate :all_casa_admins do
     mount PgHero::Engine, at: "pg_dashboard", constraints: lambda { |request|
       admin = request.env["warden"].user(:all_casa_admin)
       admin.present? && (admin.role == "All Casa Admin" || admin.casa_admin?)
     }
-  end
-
-  concern :with_datatable do
-    post "datatable", on: :collection
   end
 
   authenticated :all_casa_admin do
@@ -42,10 +38,7 @@ Rails.application.routes.draw do
 
   resources :health, only: %i[index] do
     collection do
-      get :case_contacts_creation_times_in_last_week
       get :old_objects
-      get :monthly_line_graph_data
-      get :monthly_unique_users_graph_data
     end
   end
 
@@ -85,8 +78,7 @@ Rails.application.routes.draw do
 
   # Feature flag for new case contact table design
   get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index"
-  post "case_contacts/new_design/datatable", to: "case_contacts/case_contacts_new_design#datatable", as: "datatable_case_contacts_new_design"
-  resources :case_contacts, except: %i[create update show], concerns: %i[with_datatable] do
+  resources :case_contacts, except: %i[create update show] do
     member do
       post :restore
     end
@@ -99,6 +91,7 @@ Rails.application.routes.draw do
   resources :contact_topic_answers, only: %i[create destroy]
 
   resources :reports, only: %i[index]
+  resources :analytics, only: %i[index]
   get :export_emails, to: "reports#export_emails"
 
   resources :case_court_reports, only: %i[index show] do
@@ -106,7 +99,7 @@ Rails.application.routes.draw do
       post :generate
     end
   end
-  resources :reimbursements, only: %i[index], concerns: %i[with_datatable] do
+  resources :reimbursements, only: %i[index] do
     patch :mark_as_complete, to: "reimbursements#change_complete_status"
     patch :mark_as_needs_review, to: "reimbursements#change_complete_status"
   end
@@ -156,7 +149,7 @@ Rails.application.routes.draw do
     resources :volunteers, only: :show
   end
 
-  resources :supervisors, except: %i[destroy show], concerns: %i[with_datatable] do
+  resources :supervisors, except: %i[destroy show] do
     member do
       patch :activate
       patch :deactivate
@@ -172,7 +165,7 @@ Rails.application.routes.draw do
       patch :unassign
     end
   end
-  resources :volunteers, except: %i[destroy], concerns: %i[with_datatable] do
+  resources :volunteers, except: %i[destroy] do
     post :stop_impersonating, on: :collection
     member do
       patch :activate
@@ -207,6 +200,7 @@ Rails.application.routes.draw do
     end
 
     resources :patch_notes, only: %i[create destroy index update]
+    resources :metrics, only: :index
   end
 
   resources :all_casa_admins, only: [:new, :create] do

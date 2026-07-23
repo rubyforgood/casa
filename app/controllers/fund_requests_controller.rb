@@ -1,5 +1,8 @@
 class FundRequestsController < ApplicationController
+  layout "casa_app"
+
   before_action :verify_casa_case
+  before_action -> { @active_nav = "cases" }
   after_action :verify_authorized
 
   def new
@@ -13,7 +16,7 @@ class FundRequestsController < ApplicationController
 
     if @fund_request.save
       FundRequestMailer.send_request(nil, @fund_request).deliver
-      redirect_to casa_case_path(@casa_case), notice: "Fund Request was sent for case #{@casa_case.case_number}"
+      redirect_to casa_case_path(@casa_case), notice: "Fund request was sent for case #{@casa_case.case_number}"
     else
       render :new, status: :unprocessable_content
     end

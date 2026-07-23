@@ -1,0 +1,12 @@
+# App files intentionally without a 1:1 spec (checked by `rake test_checker` / the spec_checker CI job).
+# Devise controller subclasses are thin overrides; the casa_app helpers/services/concern below are
+# exercised indirectly by view / system / decorator specs rather than a dedicated unit spec.
+controllers/all_casa_admins/invitations_controller.rb
+controllers/all_casa_admins/passwords_controller.rb
+controllers/users/confirmations_controller.rb
+helpers/metrics_helper.rb
+helpers/table_helper.rb
+models/concerns/name_presentation.rb
+services/admin_dashboard.rb
+services/volunteer_dashboard.rb
+

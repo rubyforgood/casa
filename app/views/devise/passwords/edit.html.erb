@@ -1,55 +1,40 @@
-<div class="row">
-  <div class="col-lg-9 col-md-12 vertically-center">
-    <div class="container">
-      <div class="row">
-        <div class="offset-xl-2 col-xl-8 col-lg-12 col-sm-8 col-md-8 pb-4">
-          <h2 class="my-4">Change your password</h2>
+<% content_for :page_title, "Choose a new password" %>
+<% field = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm transition placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
-              <%= form_with(model: resource, as: resource_name, url: password_path(resource_name), method: :put) do |f| %>
-                <%= render "/shared/error_messages", resource: resource %>
-                <%= f.hidden_field :reset_password_token %>
-
-                <div class="input-style-1">
-                  <%= f.label :password, "New password" %>
-                  <% if @minimum_password_length %>
-                    <em>(<%= @minimum_password_length %> characters minimum)</em>
-                  <% end %>
-                  <%= f.password_field :password,
-                    autofocus: true,
-                    autocomplete: "new-password",
-                    class: "password-new",
-                    placeholder: "New Password",
-                    required: true,
-                    minlength: @minimum_password_length %>
-                </div>
-
-                <div class="input-style-1">
-                  <%= f.label :password_confirmation, "Confirm new password" %>
-                  <%= f.password_field :password_confirmation,
-                    autocomplete: "new-password",
-                    class: "password-confirmation",
-                    placeholder: "Confirm Password",
-                    required: true,
-                    minlength: @minimum_password_length %>
-                </div>
-
-                <div class="actions my-2">
-                  <%= button_tag(
-                    type: "submit",
-                    class: "main-btn primary-btn btn-hover btn-sm submit-password"
-                  ) do %>
-                    <i class="lni lni-save mr-10"></i>Change my password
-                  <% end %>
-                </div>
-              <% end %>
-
-          <%= render "devise/shared/links" %>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="col-lg-7 d-none d-lg-block">
-    <aside class="display-image"></aside>
-  </div>
+<div class="mb-8">
+  <h2 class="text-2xl font-bold tracking-tight text-slate-900">Choose a new password</h2>
+  <p class="mt-2 text-sm text-slate-500">Pick a new password for your account.</p>
 </div>
+
+<% flash.each do |type, message| %>
+  <% next if message.blank? %>
+  <div class="mb-5 rounded-lg border px-4 py-3 text-sm <%= type.to_s == "notice" ? "border-emerald-200 bg-emerald-50 text-emerald-700" : "border-amber-200 bg-amber-50 text-amber-800" %>"><%= message %></div>
+<% end %>
+
+<% if resource.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+    <ul class="list-inside list-disc space-y-1">
+      <% resource.errors.full_messages.each do |msg| %><li><%= msg %></li><% end %>
+    </ul>
+  </div>
+<% end %>
+
+<%= form_with(model: resource, as: resource_name, url: password_path(resource_name), method: :put, class: "space-y-5") do |f| %>
+  <%= f.hidden_field :reset_password_token %>
+  <div>
+    <%= f.label :password, "New password", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.password_field :password, autofocus: true, autocomplete: "new-password", required: true, minlength: @minimum_password_length, placeholder: "••••••••", class: field %>
+    <% if @minimum_password_length %>
+      <p class="mt-1.5 text-xs text-slate-500"><%= @minimum_password_length %> characters minimum</p>
+    <% end %>
+  </div>
+  <div>
+    <%= f.label :password_confirmation, "Confirm new password", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+    <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, minlength: @minimum_password_length, placeholder: "••••••••", class: field %>
+  </div>
+  <%= f.submit "Update password", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+<% end %>
+
+<p class="mt-8 text-center text-sm text-slate-500">
+  <%= link_to "← Back to sign in", new_session_path(resource_name), class: "font-medium text-brand-600 hover:text-brand-700" %>
+</p>

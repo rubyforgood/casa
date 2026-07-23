@@ -7,7 +7,9 @@ class CaseCourtReportsController < ApplicationController
 
   def index
     authorize CaseCourtReport
+    @active_nav = "court_reports"
     assigned_cases.select(:id, :case_number, :birth_month_year_youth)
+    render layout: "casa_app"
   end
 
   def show

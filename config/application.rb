@@ -34,5 +34,8 @@ module Casa
 
     # to use ViewComponent previews
     config.view_component.previews.paths << "#{Rails.root.join("spec/components/previews")}"
+    # Render previews in a shell that loads the JS bundle (Stimulus) + tailwind, so previews
+    # are interactive and their behaviour is system-spec'able.
+    config.view_component.previews.default_layout = "component_preview"
   end
 end

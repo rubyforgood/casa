@@ -1,6 +1,8 @@
 class CasaAdminsController < ApplicationController
   include SmsBodyHelper
 
+  layout "casa_app"
+
   before_action :set_admin, except: [:index, :new, :create]
   before_action :require_organization!
   after_action :verify_authorized

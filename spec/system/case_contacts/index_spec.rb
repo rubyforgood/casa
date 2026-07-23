@@ -37,7 +37,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         subject
 
-        card = find(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        card = find(".container-fluid", text: "DRAFT Case Contact")
         expect(card).not_to be_nil
 
         within_element(card) do
@@ -45,7 +45,7 @@ RSpec.describe "case_contacts/index", type: :system do
           click_on "Delete"
         end
 
-        expect(page).to have_no_css(".container-fluid.mb-1", text: "DRAFT Case Contact")
+        expect(page).to have_no_css(".container-fluid", text: "DRAFT Case Contact")
       end
 
       it "displays the contact type groups" do
@@ -186,7 +186,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         it "does not hide menu when filtering by placement filter" do
           click_on "Expand / Hide"
-          select "In Person", from: "Contact medium"
+          select "In person", from: "Contact medium"
 
           expect(page).to have_content "Other filters"
         end
@@ -203,8 +203,7 @@ RSpec.describe "case_contacts/index", type: :system do
           subject
 
           within ".card-title" do
-            title = find("strong.text-primary")
-            expect(title).to have_content(contact_group_text)
+            expect(page).to have_content(contact_group_text)
           end
         end
       end
@@ -221,53 +220,36 @@ RSpec.describe "case_contacts/index", type: :system do
       create(:case_assignment, volunteer: volunteer, casa_case: another_case)
       create(:case_contact, creator: volunteer, casa_case: another_case, notes: "Case 2 Notes", occurred_at: today)
 
-      # showing all cases
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on "All"
-      end
-      expect(page).to have_text("Case 1 Notes")
-      expect(page).to have_text("Case 2 Notes")
+      # showing all cases -> both case sections render (case number is the section heading)
+      visit case_contacts_path
+      expect(page).to have_content(case_number)
+      expect(page).to have_content(another_case_number)
 
-      # showing case 1
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on case_number
-      end
-      expect(page).to have_text("Case 1 Notes")
-      expect(page).to have_no_text("Case 2 Notes")
+      # showing case 1 only
+      visit case_contacts_path(casa_case_id: casa_case.id)
+      expect(page).to have_content(case_number)
+      expect(page).to have_no_content(another_case_number)
 
-      # showing case 2
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on another_case_number
-      end
-      expect(page).to have_text("Case 2 Notes")
-      expect(page).to have_no_text("Case 1 Notes")
+      # showing case 2 only
+      visit case_contacts_path(casa_case_id: another_case.id)
+      expect(page).to have_content(another_case_number)
+      expect(page).to have_no_content(case_number)
 
-      # filtering to only show case 2
+      # a date range that keeps case 2's contact (today) and drops case 1's (day before yesterday)
       click_on "Expand / Hide"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
-      expect(page).to have_text("Case 2 Notes")
-      expect(page).to have_no_text("Case 1 Notes")
+      expect(page).to have_content(another_case_number)
+      expect(page).to have_no_content(case_number)
 
-      visit root_path
-      click_on "Case Contacts"
-      within "#ddmenu_case-contacts" do
-        click_on case_number
-      end
+      # case 1 + a date range that excludes its only contact -> no contact cards render
+      visit case_contacts_path(casa_case_id: casa_case.id)
       click_on "Expand / Hide"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
-      # no contacts because we're only showing case 1 and that occurred before the filter dates
-      expect(page).to have_no_text("Case 1 Notes")
-      expect(page).to have_no_text("Case 2 Notes")
+      expect(page).to have_no_css(".full-card")
     end
 
     describe "contact notes" do
@@ -282,21 +264,19 @@ RSpec.describe "case_contacts/index", type: :system do
 
       before { sign_in user }
 
-      it "show topic answers and allows expanding to show full answer", :js do
+      it "reveals topic answers and notes in one expandable details section", :js do
         subject
 
-        expect(page).to have_text contact_topics.first.question
+        # the topic's help text (details) is never rendered
         expect(page).to have_no_text contact_topics.first.details
+        # answers stay collapsed behind a single toggle until the card is expanded
+        expect(page).to have_no_content(contact_topic_answer.value)
 
-        within(".truncation-container", match: :first) do
-          expect(page).to have_content(contact_topic.question)
-          # capybara has trouble with css `overflow: hidden` truncated text. just test class is applied/not
-          expect(page).to have_css(".line-clamp-1", text: contact_topic_answer.value)
-          click_on "read more"
-          expect(page).to have_no_css(".line-clamp-1")
-          expect(page).to have_content(contact_topic_answer.value)
-          expect(page).to have_no_content contact_topics.first.details
-        end
+        find("summary", text: "Show details", match: :first).click
+
+        expect(page).to have_content(contact_topic.question)
+        expect(page).to have_content(contact_topic_answer.value)
+        expect(page).to have_no_content contact_topics.first.details
       end
     end
   end
@@ -304,7 +284,7 @@ RSpec.describe "case_contacts/index", type: :system do
   context "without case contacts" do
     it "shows helper text" do
       subject
-      expect(page).to have_text("You have no case contacts for this case. Please click New Case Contact button above to create a case contact for your youth!")
+      expect(page).to have_text("You have no case contacts for this case. Please click New case contact button above to create a case contact for your youth!")
     end
   end
 end

@@ -17,7 +17,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       find("#all-casa-log-out").click
       expect(page).not_to have_text "sign in before continuing"
       expect(page).to have_text "Signed out successfully"
-      expect(page).to have_text "All CASA Log In"
+      expect(page).to have_text "All CASA log in"
     end
 
     it "allows access to flipper" do
@@ -29,7 +29,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
   context "when unauthenticated" do
     it "shows sign in page" do
       visit "/all_casa_admins/sign_in"
-      expect(page).to have_text "All CASA Log In"
+      expect(page).to have_text "All CASA log in"
     end
 
     it "allows sign in" do
@@ -37,9 +37,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
       fill_in "Email", with: all_casa_admin.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        click_on "Log in"
-      end
+      click_on "Log in"
 
       expect(page).to have_text "All CASA Admin"
     end
@@ -49,9 +47,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
       fill_in "Email", with: volunteer.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        click_on "Log in"
-      end
+      click_on "Log in"
 
       expect(page).to have_text(/invalid email or password/i)
     end

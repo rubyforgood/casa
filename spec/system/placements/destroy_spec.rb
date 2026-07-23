@@ -16,7 +16,7 @@ RSpec.describe "placements/destroy", type: :system do
   end
 
   it "does not delete on modal close" do
-    expect(page).to have_text("Delete Placement?")
+    expect(page).to have_text("Delete placement?")
     click_on "Close"
 
     expect(page).to have_text("Reunification")
@@ -24,7 +24,7 @@ RSpec.describe "placements/destroy", type: :system do
   end
 
   it "deletes placement" do
-    expect(page).to have_text("Delete Placement?")
+    expect(page).to have_text("Delete placement?")
     click_on "Confirm"
 
     expect(page).to have_text("Placement was successfully deleted.")

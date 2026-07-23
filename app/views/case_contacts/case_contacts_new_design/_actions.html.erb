@@ -1,0 +1,62 @@
+<%# Per-row actions for the case-contacts (new design) casa_app page. One source of truth for
+    both twins: layout: :row renders compact icon buttons for the desktop table cell,
+    layout: :bar renders labeled buttons for the mobile card footer. Inline (not a dropdown) so
+    nothing is clipped by the table's overflow-x-auto; the delete confirm + set-reminder note are
+    the native Dialog:: suite (top layer, never clipped). Gating mirrors the _case_contact card —
+    Edit + reminders require update?, Delete requires destroy?. followups#create and
+    case_contacts#destroy both redirect back, so the actions stay on this list. Duplicate Dialog
+    instances across the desktop/mobile twins are safe (each is scoped by its own modal controller). %>
+<% row = layout == :row %>
+<% ghost = "grid h-8 w-8 place-items-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+<% ghost_danger = "grid h-8 w-8 place-items-center rounded-lg text-slate-500 transition-colors hover:bg-rose-50 hover:text-rose-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500" %>
+<% requested_followup = contact.requested_followup %>
+
+<% if policy(contact).update? %>
+  <% if row %>
+    <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: ghost, "aria-label": "Edit contact", title: "Edit" do %><i class="bi bi-pencil" aria-hidden="true"></i><% end %>
+  <% else %>
+    <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
+  <% end %>
+
+  <% if requested_followup %>
+    <% if row %>
+      <%= button_to resolve_followup_path(requested_followup), method: :patch, form_class: "inline-flex", data: {turbo: false}, class: ghost, "aria-label": "Resolve reminder", title: "Resolve reminder" do %><i class="bi bi-calendar-check" aria-hidden="true"></i><% end %>
+    <% else %>
+      <%= button_to resolve_followup_path(requested_followup), method: :patch, form_class: "inline-flex", data: {turbo: false}, class: button_classes(:success) do %><i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder<% end %>
+    <% end %>
+  <% else %>
+    <%= render Dialog::GroupComponent.new(label: "Set a reminder") do |dialog| %>
+      <% dialog.with_trigger do %>
+        <% if row %>
+          <%= tag.button type: "button", data: {action: "modal#open"}, class: ghost, "aria-label": "Set reminder", title: "Set reminder" do %><i class="bi bi-calendar-plus" aria-hidden="true"></i><% end %>
+        <% else %>
+          <%= tag.button type: "button", data: {action: "modal#open"}, class: button_classes(:secondary) do %><i class="bi bi-calendar-plus" aria-hidden="true"></i> Set reminder<% end %>
+        <% end %>
+      <% end %>
+      <%= form_with url: case_contact_followups_path(contact), method: :post, data: {turbo: false} do |f| %>
+        <%= render Dialog::HeaderComponent.new(title: "Set a reminder", icon: "bi bi-calendar-plus") %>
+        <%= render Dialog::BodyComponent.new do %>
+          <p class="text-sm text-slate-600">Optional: add a note about what follow-up is needed.</p>
+          <%= f.label :note, "Note", class: "sr-only" %>
+          <%= f.text_area :note, rows: 3, class: "mt-3 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+        <% end %>
+        <%= render Dialog::FooterComponent.new do %>
+          <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+          <%= f.submit "Save reminder", class: button_classes(:primary) %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>
+
+<% if policy(contact).destroy? %>
+  <%= render "shared/confirm_button",
+        url: case_contact_path(contact),
+        title: "Delete this contact?",
+        message: "This case contact will be permanently deleted. This can't be undone.",
+        confirm_label: "Yes, delete",
+        trigger_icon: "bi bi-trash",
+        trigger_label: (row ? nil : "Delete"),
+        aria_label: (row ? "Delete contact" : nil),
+        trigger_class: (row ? ghost_danger : button_classes(:danger_outline)) %>
+<% end %>

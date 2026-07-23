@@ -1,0 +1,192 @@
+@import "tailwindcss";
+@import "tom-select/dist/css/tom-select.css";
+@import "trix/dist/trix.css";
+
+/* Self-hosted fonts + icons (vendored under app/assets/stylesheets/vendor/,
+   binaries in public/vendor/) -- replaces the Google Fonts + jsdelivr CDN links. */
+@import "./vendor/figtree.css";
+@import "./vendor/bootstrap-icons.css";
+
+/* Where Tailwind should look for class names (paths are relative to this file). */
+@source "../../components/**/*.{erb,rb}";
+@source "../../views/**/*.erb";
+@source "../../helpers/**/*.rb";
+@source "../../javascript/**/*.js";
+
+/* ------------------------------------------------------------------
+   CASA design system (Tailwind v4 CSS-first config).
+   A calm, professional indigo palette + Figtree — the visual direction
+   for the casadesign redesign.
+------------------------------------------------------------------ */
+@theme {
+  --font-sans: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+
+  --color-brand-50:  #eef2ff;
+  --color-brand-100: #e0e7ff;
+  --color-brand-200: #c7d2fe;
+  --color-brand-300: #a5b4fc;
+  --color-brand-400: #818cf8;
+  --color-brand-500: #6366f1;
+  --color-brand-600: #4f46e5;
+  --color-brand-700: #4338ca;
+  --color-brand-800: #3730a3;
+  --color-brand-900: #312e81;
+}
+
+/* ------------------------------------------------------------------
+   TomSelect (the `multiple-select` Stimulus controller) restyled to the
+   design system. tom-select.css above provides the structure; these rules
+   theme it to match our inputs (slate border, rounded-lg, brand focus +
+   brand-50 pills). Only loaded on casa_app; Bootstrap pages keep the
+   tom-select.bootstrap5 theme from the retired Bootstrap bundle.
+------------------------------------------------------------------ */
+.ts-wrapper { font-size: 0.875rem; position: relative; width: 100%; }
+.ts-control {
+  border-radius: 0.5rem;
+  border: 1px solid #cbd5e1; /* slate-300 */
+  padding: 0.375rem 2rem 0.375rem 0.625rem !important; /* right room for the chevron */
+  min-height: 2.625rem; /* match the text-input height so it reads as one control */
+  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  background-color: #fff;
+  gap: 0.375rem;
+}
+.ts-wrapper.focus .ts-control {
+  border-color: #6366f1; /* brand-500 */
+  box-shadow: 0 0 0 2px rgb(99 102 241 / 0.3);
+}
+/* Chevron: the Bootstrap-Icons `chevron-down` shape as an inline base64 SVG, sized (text-xs)
+   and placed (right-3) to match the single-select chevrons. Needs `z-index` because
+   TomSelect's opaque `.ts-control` paints over a plain `::after` (that stacking, not a
+   missing rule, is why every earlier chevron was invisible). base64 is minifier- and
+   parser-safe; a raw `data:` URI and a `content` glyph escape both broke in the build, and
+   the injected icon-font element never painted. Pixel-verified to match the single-selects
+   (identical 8x4 dark extent), not just checked by computed style. */
+.ts-wrapper::after {
+  content: "";
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  width: 0.75rem;
+  height: 0.75rem;
+  transform: translateY(-50%);
+  z-index: 2;
+  background: center / contain no-repeat url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzY0NzQ4YiI+PHBhdGggZmlsbC1ydWxlPSJldmVub2RkIiBkPSJNMS42NDYgNC42NDZhLjUuNSAwIDAgMSAuNzA4IDBMOCAxMC4yOTNsNS42NDYtNS42NDdhLjUuNSAwIDAgMSAuNzA4LjcwOGwtNiA2YS41LjUgMCAwIDEtLjcwOCAwbC02LTZhLjUuNSAwIDAgMSAwLS43MDh6Ii8+PC9zdmc+");
+  pointer-events: none;
+}
+.ts-wrapper.dropdown-active::after { transform: translateY(-50%) rotate(180deg); }
+.ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
+/* Single-select: vertically center the selected item + the search/placeholder input. Without this the
+   item stretches to the full content box and the text rides high (uneven top/bottom). */
+.ts-wrapper.single .ts-control { align-items: center; padding-left: 0.875rem !important; } /* px-3.5, matches the design-system inputs' left padding (icon state overrides below) */
+/* The magnifier is a RESTING affordance: shown ONLY when the field is empty AND not focused. The
+   moment the user focuses (types) or a value is selected, it's a plain field -- no icon, caret/text at
+   the normal left. Keeping a leading icon on focus/has-items pushed the caret in and left the icon
+   lingering after a pick, which isn't standard type-ahead behavior. */
+.ts-wrapper.single:not(.focus):not(.has-items) .ts-control {
+  padding-left: 2rem !important;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzY0NzQ4YiI+PHBhdGggZD0iTTExLjc0MiAxMC4zNDRhNi41IDYuNSAwIDEgMC0xLjM5NyAxLjM5OGgtLjAwMXEuMDQ0LjA2LjA5OC4xMTVsMy44NSAzLjg1YTEgMSAwIDAgMCAxLjQxNS0xLjQxNWwtMy44NS0zLjg1YTEgMSAwIDAgMC0uMTE1LS4wOTh6TTEyIDYuNWE1LjUgNS41IDAgMSAxLTExIDAgNS41IDUuNSAwIDAgMSAxMSAwIi8+PC9zdmc+");
+  background-repeat: no-repeat;
+  background-position: left 0.625rem center;
+  background-size: 1rem 1rem;
+}
+.ts-wrapper.single .ts-control > .item,
+.ts-wrapper.single .ts-control > input { align-self: center; }
+/* Keep the selected item + search input on ONE line (never wrap to a 2nd line, which grows the field):
+   the item truncates and the input shrinks instead of forcing an overflow. TomSelect's default
+   input `min-width: 7rem !important` is what wraps a name + input in a narrow field. */
+.ts-wrapper.single .ts-control { flex-wrap: nowrap; }
+.ts-wrapper.single .ts-control > input { min-width: 0 !important; }
+.ts-wrapper.single .ts-control > .item { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+/* legible placeholder, matching the design-system inputs (slate-400) */
+.ts-wrapper .ts-control input::placeholder { color: #94a3b8; opacity: 1; }
+/* clear_button plugin: the bundled plugin CSS positions the x and toggles its opacity on
+   hover/focus-with-selection. We (a) hide the chevron underneath while the x shows so the two never
+   overlap, (b) restyle the x for casa, and (c) hide the blank placeholder option from the menu (it
+   exists only to default the native <select> to empty). */
+.ts-wrapper.has-items.focus::after, .ts-wrapper.has-items:hover::after { opacity: 0; }
+.ts-wrapper .clear-button { color: #94a3b8 !important; font-size: 1.125rem; z-index: 2; }
+.ts-wrapper .clear-button:hover { color: #475569 !important; }
+.ts-dropdown .option[data-value=""] { display: none; }
+/* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
+   (grey), so match that specificity and use !important where tom-select does. */
+.ts-wrapper.multi .ts-control > .item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.125rem;
+  margin: 0 0.25rem 0.25rem 0;
+  border-radius: 9999px;
+  border: none;
+  background-color: #e0e7ff !important; /* brand-100 - reads clearly as selected */
+  color: #4338ca !important; /* brand-700 (6.4:1 on brand-100, AA) */
+  padding: 0.1875rem 0.5rem !important; /* beat the plugin's padding-right:0 !important */
+  font-weight: 500;
+}
+/* the item template hardcodes .active, so keep it the same light brand-100 tint */
+.ts-wrapper.multi .ts-control > .item.active { background-color: #e0e7ff !important; }
+/* "select all" sentinel item (value " ") is a hidden placeholder chip. */
+.ts-control > .item[data-value=" "] { display: none !important; }
+.ts-wrapper.multi .ts-control > .item .remove {
+  border-left: none !important; /* drop tom-select's grey divider */
+  margin-left: 0 !important;
+  padding: 0 0.125rem !important;
+  color: #6366f1; /* brand-500 */
+}
+.ts-wrapper.multi .ts-control > .item .remove:hover { background: transparent !important; color: #3730a3; }
+/* The rich MultipleSelectComponent's remove button uses a LineIcons X that isn't
+   loaded on casa_app; draw a plain × instead. Scoped so the basic multiselect's
+   default × (case groups) is untouched. */
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a {
+  color: #4338ca !important; /* brand-700; override the template's text-white so the × shows */
+  border: none !important;
+  background: transparent !important;
+  margin-left: 0.125rem;
+  padding: 0 0.125rem;
+}
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a > i { display: none; }
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a::after { content: "\00d7"; font-size: 0.95rem; line-height: 1; }
+[data-multiple-select-with-options-value="true"] .ts-control > .item > a:hover { color: #312e81 !important; }
+.ts-control input::placeholder { color: #64748b; } /* slate-500 */
+.ts-dropdown {
+  border-radius: 0.5rem;
+  border: 1px solid #e2e8f0; /* slate-200 */
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+  margin-top: 0.25rem;
+}
+.ts-dropdown .option { padding: 0.5rem 0.75rem; color: #334155; } /* slate-700 */
+.ts-dropdown .active { background-color: #eef2ff; color: #4338ca; } /* brand-50 / brand-700 */
+/* Flip the menu above the control when there isn't room below (set by the
+   multiple-select controller's onDropdownOpen). */
+.ts-wrapper.ts-flip-up .ts-dropdown { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 0.25rem; }
+
+/* ------------------------------------------------------------------
+   Form validation. Rails wraps invalid fields in `.field_with_errors`, and the
+   field_error helper adds aria-invalid to the input/select/group; give both a rose
+   border so the error state reads on the field itself (paired with the visible
+   field_error message + the shared/_form_errors summary -- never color alone).
+   rose-500 is 3.67:1 on white (AA UI border).
+------------------------------------------------------------------ */
+.field_with_errors input,
+.field_with_errors select,
+.field_with_errors textarea,
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] { border-color: #f43f5e; }
+
+/* ------------------------------------------------------------------
+   Native <dialog> modals (the `modal` Stimulus controller). Tailwind's reset
+   zeroes the `margin: auto` the UA uses to center a modal dialog, which pins it
+   to the top-left. Position it explicitly: horizontally centered and sitting
+   about a third of the way down, capped so tall modals stay on screen.
+------------------------------------------------------------------ */
+dialog[data-modal-target="dialog"] {
+  position: fixed;
+  left: 50%;
+  top: 24vh;
+  transform: translateX(-50%);
+  margin: 0;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+@media (max-width: 640px) {
+  dialog[data-modal-target="dialog"] { top: 18vh; }
+}

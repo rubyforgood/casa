@@ -1,4 +1,7 @@
 class OtherDutiesController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "other_duties" }
+
   before_action :set_other_duty, except: [:new, :create, :index]
   before_action :convert_duration_minutes, only: [:update, :create]
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
