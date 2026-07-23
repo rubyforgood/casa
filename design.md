@@ -293,8 +293,8 @@ for a short, fixed list (the 3-option status filter stays native).
   placeholder makes it obviously a type-ahead. The magnifier is a **resting affordance only** -- scoped
   to `.ts-wrapper.single:not(.focus):not(.has-items) .ts-control` (+ `padding-left: 2rem`). The moment
   the user focuses (types) or a value is selected it's a plain field: **no icon, caret/text at the
-  normal left** (~10px). A persistent leading icon pushed the caret in on focus and lingered after a
-  pick -- not standard type-ahead behavior.
+  normal left** (`px-3.5` / 14px, matching the design-system text inputs). A persistent leading icon
+  pushed the caret in on focus and lingered after a pick -- not standard type-ahead behavior.
   **Vertically center the content** (`align-items: center` on the single `.ts-control`; `align-self:
   center` on the item/input) -- otherwise the selected item stretches to the full content box and the
   text rides high (uneven top/bottom). Size the wrapper to fit icon + placeholder + insets (~`w-48`,

@@ -77,7 +77,7 @@
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
 /* Single-select: vertically center the selected item + the search/placeholder input. Without this the
    item stretches to the full content box and the text rides high (uneven top/bottom). */
-.ts-wrapper.single .ts-control { align-items: center; }
+.ts-wrapper.single .ts-control { align-items: center; padding-left: 0.875rem !important; } /* px-3.5, matches the design-system inputs' left padding (icon state overrides below) */
 /* The magnifier is a RESTING affordance: shown ONLY when the field is empty AND not focused. The
    moment the user focuses (types) or a value is selected, it's a plain field -- no icon, caret/text at
    the normal left. Keeping a leading icon on focus/has-items pushed the caret in and left the icon
