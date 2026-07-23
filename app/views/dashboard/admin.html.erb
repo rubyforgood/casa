@@ -65,7 +65,7 @@
             <li class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-100 bg-rose-50/40 px-4 py-3">
               <div class="flex items-center gap-3">
                 <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-person-dash" aria-hidden="true"></i></span>
-                <div class="font-semibold text-slate-800"><%= link_to casa_case.case_number, casa_case_path(casa_case), class: "hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></div>
+                <div class="font-semibold text-slate-800"><%= link_to casa_case.case_number, casa_case_path(casa_case), class: record_link_class %></div>
               </div>
               <%= link_to casa_case_path(casa_case), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
                 <i class="bi bi-person-plus" aria-hidden="true"></i> Assign a volunteer

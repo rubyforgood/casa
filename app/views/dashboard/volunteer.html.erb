@@ -58,7 +58,7 @@
               <div class="flex items-center gap-3">
                 <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
                 <div>
-                  <div class="font-semibold text-slate-800"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></div>
+                  <div class="font-semibold text-slate-800"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: record_link_class %></div>
                   <div class="text-xs text-slate-500"><%= row.last_contact_label %></div>
                 </div>
               </div>
@@ -87,7 +87,7 @@
           <tbody class="divide-y divide-slate-50">
             <% @dashboard.rows.each do |row| %>
               <tr class="hover:bg-slate-50/70">
-                <td class="px-4 py-3 align-top"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium text-slate-800 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
+                <td class="px-4 py-3 align-top"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium #{record_link_class}" %></td>
                 <td class="px-4 py-3 align-top">
                   <% if row.needs_contact? %>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700"><i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i> Needs a contact</span>
@@ -106,7 +106,7 @@
         <% @dashboard.rows.each do |row| %>
           <div class="p-4">
             <div class="flex items-center justify-between gap-3">
-              <%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium text-slate-800 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %>
+              <%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium #{record_link_class}" %>
               <% if row.needs_contact? %>
                 <span class="inline-flex flex-none items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700"><i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i> Needs a contact</span>
               <% else %>

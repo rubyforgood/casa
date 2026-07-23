@@ -14,6 +14,15 @@ module DesignSystemHelper
       "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm"
   end
 
+  # Class for a record/entity link (case number, court date): brand-colored so it reads as a record
+  # link, distinct from the dark person-name links. Brand color is the cue in a links-only cell, plus
+  # hover underline + a focus ring (2.4.7). If a record link sits INLINE within body text, also add a
+  # persistent `underline` (WCAG 1.4.1 -- brand-on-text is under 3:1). Callers add the font size/weight.
+  def record_link_class
+    "text-brand-600 hover:text-brand-700 hover:underline " \
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm"
+  end
+
   # A person's display name (honorific-free) with an email fallback. Prefer this for
   # new UI where you have the user object.
   def display_person(user)
