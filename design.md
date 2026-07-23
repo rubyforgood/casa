@@ -425,7 +425,22 @@ had crept into the reimbursements / settings / court-date / placements / all-CAS
 every `<th>` on this one token, matching what `sortable_header` emits). Header and body cells share the same `px-4 py-3` padding (so columns line up), and every `<th>`
 is `align-top` — a column whose header wraps to two lines then anchors all headers to one top line
 instead of vertically-centring the single-line neighbours (the browser `vertical-align: middle`
-default, which reads as stray space). `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
+default, which reads as stray space).
+
+**Body cells, action buttons, and checkboxes all top-align to the row's first line -- never the
+`vertical-align: middle` default** (which floats them centered whenever any cell in the row wraps to
+two lines -- a recurring bug). Give every body `<td>` `align-top` (bake it into the shared `td` token)
+**including the trailing actions cell**: a hardcoded action `<td>` (e.g. `px-4 py-3 text-right`) that
+omits it leaves Edit/Delete floating centered while the data top-aligns -- the cases-index "button in
+the wrong spot" bug, which had also drifted into the supervisors / casa_admins / other_duties /
+org-settings / dashboard tables. A checkbox **alone** in a cell (bulk-select) gets the align-top cell
+**plus `mt-0.5`** so its 16px box sits on the adjacent column's first text line (measured: checkbox
+center == the name's first-line center, not just top==top). A checkbox **with its label in the same
+cell** instead lives in `<label class="inline-flex items-center gap-2">`, which self-aligns (no nudge).
+The **select-all header** is a *bare* checkbox (`aria-label` + `title` "Select all", `mt-0.5`) --
+industry standard (Gmail/GitHub/Linear); never visible column-header text, which widens the narrow
+column (put persistent bulk-action text in a toolbar above the table instead). Pixel-verify the
+checkbox/button center against the first line, not computed style. `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
 Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
 submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial

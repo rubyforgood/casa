@@ -50,7 +50,7 @@
                       <td class="<%= td %> whitespace-nowrap"><%= duty.duration_in_minutes %></td>
                       <td class="<%= td %> max-w-md"><%= duty.truncate_notes %></td>
                       <% if current_user.volunteer? %>
-                        <td class="px-4 py-3 text-right whitespace-nowrap"><%= link_to edit_other_duty_path(duty), class: ghost do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %></td>
+                        <td class="px-4 py-3 text-right whitespace-nowrap align-top"><%= link_to edit_other_duty_path(duty), class: ghost do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %></td>
                       <% end %>
                     </tr>
                   <% end %>

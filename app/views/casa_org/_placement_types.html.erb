@@ -18,7 +18,7 @@
         <% placement_types.each do |placement_type| %>
           <tr id="placement_type-<%= placement_type.id %>">
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= placement_type.name %></td>
-            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_placement_type_path(placement_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-right align-top text-sm"><%= link_to "Edit", edit_placement_type_path(placement_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

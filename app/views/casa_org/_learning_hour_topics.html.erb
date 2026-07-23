@@ -18,7 +18,7 @@
         <% @learning_hour_topics.each do |learning_hour_topic| %>
           <tr id="learning_hour_topic-<%= learning_hour_topic.id %>">
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= learning_hour_topic.name %></td>
-            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_learning_hour_topic_path(learning_hour_topic), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-right align-top text-sm"><%= link_to "Edit", edit_learning_hour_topic_path(learning_hour_topic), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

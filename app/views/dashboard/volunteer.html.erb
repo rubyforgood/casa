@@ -87,16 +87,16 @@
           <tbody class="divide-y divide-slate-50">
             <% @dashboard.rows.each do |row| %>
               <tr class="hover:bg-slate-50/70">
-                <td class="px-4 py-3"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium text-slate-800 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3 align-top"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium text-slate-800 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
+                <td class="px-4 py-3 align-top">
                   <% if row.needs_contact? %>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-rose-50 px-2.5 py-1 text-xs font-medium text-rose-700"><i class="bi bi-exclamation-circle-fill" aria-hidden="true"></i> Needs a contact</span>
                   <% else %>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> On track</span>
                   <% end %>
                 </td>
-                <td class="px-4 py-3 text-slate-600"><%= row.last_contact_label %></td>
-                <td class="px-4 py-3 text-right"><%= link_to "Log contact", new_case_contact_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
+                <td class="px-4 py-3 align-top text-slate-600"><%= row.last_contact_label %></td>
+                <td class="px-4 py-3 align-top text-right"><%= link_to "Log contact", new_case_contact_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
               </tr>
             <% end %>
           </tbody>

@@ -121,7 +121,7 @@
           <tbody class="divide-y divide-slate-50">
             <% @dashboard.rows.each do |row| %>
               <tr class="hover:bg-slate-50/70">
-                <td class="px-4 py-3">
+                <td class="px-4 py-3 align-top">
                   <div class="flex items-center gap-3">
                     <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold <%= avatar_classes[row.avatar_color] %>" aria-hidden="true"><%= avatar_initials(display_person(row.volunteer)) %></span>
                     <div>
@@ -130,8 +130,8 @@
                     </div>
                   </div>
                 </td>
-                <td class="px-4 py-3 text-center text-slate-700"><%= row.cases_count %></td>
-                <td class="px-4 py-3">
+                <td class="px-4 py-3 align-top text-center text-slate-700"><%= row.cases_count %></td>
+                <td class="px-4 py-3 align-top">
                   <% if row.status == :on_track %>
                     <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-xs font-medium text-emerald-700"><i class="bi bi-check-circle-fill" aria-hidden="true"></i> On track</span>
                   <% elsif row.status == :follow_up %>
@@ -141,14 +141,14 @@
                   <% end %>
                   <div class="mt-1 text-xs text-slate-500"><%= row.last_contact_label %></div>
                 </td>
-                <td class="px-4 py-3 text-slate-600">
+                <td class="px-4 py-3 align-top text-slate-600">
                   <% if row.cases_count.positive? %>
                     <%= pluralize(row.contacts_recent, "contact") %> · <%= row.hours_label %>
                   <% else %>
                     <span class="text-slate-400" aria-hidden="true">—</span><span class="sr-only">No recent activity</span>
                   <% end %>
                 </td>
-                <td class="px-4 py-3 text-right">
+                <td class="px-4 py-3 align-top text-right">
                   <%= link_to edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: "inline-grid h-8 w-8 place-items-center rounded-lg text-slate-400 hover:bg-slate-100 hover:text-slate-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
                     <i class="bi bi-chevron-right" aria-hidden="true"></i>
                   <% end %>

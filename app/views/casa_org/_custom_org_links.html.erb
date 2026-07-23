@@ -27,7 +27,7 @@
               <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= custom_link.text %></td>
               <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= truncate(custom_link.url, length: 90) %></td>
               <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= custom_link.active ? "Yes" : "No" %></td>
-              <td class="px-4 py-3 text-right text-sm">
+              <td class="px-4 py-3 text-right align-top text-sm">
                 <div class="flex items-center justify-end gap-3">
                   <%= link_to "Edit", edit_custom_org_link_path(custom_link), class: "font-medium text-brand-600 hover:text-brand-700" %>
                   <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>

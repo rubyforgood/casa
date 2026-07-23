@@ -22,7 +22,7 @@
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_type.name %></td>
             <td class="px-4 py-3 text-sm text-slate-500 align-top"><%= contact_type.contact_type_group.name %></td>
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_type.active? ? "Yes" : "No" %></td>
-            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_contact_type_path(contact_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-right align-top text-sm"><%= link_to "Edit", edit_contact_type_path(contact_type), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

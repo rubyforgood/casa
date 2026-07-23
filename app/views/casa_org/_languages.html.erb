@@ -25,7 +25,7 @@
         <% languages.each do |lang| %>
           <tr id="language-<%= lang.id %>">
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= lang.name %></td>
-            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_language_path(lang), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-right align-top text-sm"><%= link_to "Edit", edit_language_path(lang), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>

@@ -23,7 +23,7 @@
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_topic.question %></td>
             <td class="whitespace-pre-line px-4 py-3 text-sm text-slate-500"><%= contact_topic.details %></td>
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= contact_topic.active ? "Yes" : "No" %></td>
-            <td class="px-4 py-3 text-right text-sm">
+            <td class="px-4 py-3 text-right align-top text-sm">
               <div class="flex items-center justify-end gap-3">
                 <%= link_to "Edit", edit_contact_topic_path(contact_topic), class: "font-medium text-brand-600 hover:text-brand-700" %>
                 <%= render "shared/confirm_button", url: soft_delete_contact_topic_path(contact_topic), method: :delete, title: "Delete contact topic?", message: "This topic and its related questions will be deleted and will no longer be presented while filling out case contacts. This will not affect case contacts that have already been created.", confirm_label: "Delete court report topic", trigger_label: "Delete", trigger_class: "font-medium text-rose-600 hover:text-rose-700" %>

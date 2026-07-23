@@ -74,7 +74,7 @@
                     <% end %>
                   </div>
                 </td>
-                <td class="px-4 py-3 text-right whitespace-nowrap">
+                <td class="px-4 py-3 text-right whitespace-nowrap align-top">
                   <%= link_to edit_supervisor_path(supervisor), "aria-label": "Edit #{formatted_name(supervisor.display_name)}", class: ghost do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
                 </td>
               </tr>
@@ -171,7 +171,7 @@
                       <span class="text-slate-500">Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %></span>
                     <% end %>
                   </td>
-                  <td class="px-4 py-3 text-right whitespace-nowrap">
+                  <td class="px-4 py-3 text-right whitespace-nowrap align-top">
                     <div class="flex items-center justify-end gap-1">
                       <%= link_to casa_case_path(casa_case), class: ghost do %><i class="bi bi-eye" aria-hidden="true"></i> Detail view<% end %>
                       <%= link_to edit_casa_case_path(casa_case), "aria-label": "Edit #{casa_case.case_number}", class: ghost do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>

@@ -20,7 +20,7 @@
           <tr id="group-<%= group.id %>">
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= group.name %></td>
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= group.active? ? "Yes" : "No" %></td>
-            <td class="px-4 py-3 text-right text-sm"><%= link_to "Edit", edit_contact_type_group_path(group), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
+            <td class="px-4 py-3 text-right align-top text-sm"><%= link_to "Edit", edit_contact_type_group_path(group), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
           </tr>
         <% end %>
       </tbody>
