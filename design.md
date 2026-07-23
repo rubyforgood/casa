@@ -420,7 +420,8 @@ a uniform height (a taller last row reads as a bug).
 
 ### Tables (bespoke) + pagination
 Hand-built Tailwind (dashboard tables + cases index), not DataTables. `overflow-hidden
-rounded-2xl` card (+ `py-2` inset), full-bleed table, `thead th` = `text-xs font-semibold
+rounded-2xl` card (+ `pt-2` inset -- top only; a bottom inset would stack under an in-card pagination
+footer and unbalance it, so use `pt-2`, not `py-2`, on a footered table card), full-bleed table, `thead th` = `text-xs font-semibold
 text-slate-600` — **never an `uppercase`/`tracking-wide` transform** (column headers are sentence
 case like every other label; an ALL-CAPS `text-slate-500` eyebrow header is a recurring drift — it
 had crept into the reimbursements / settings / court-date / placements / all-CASA tables — converge
@@ -455,7 +456,10 @@ compact `border-t` + `px-4` + `py-3`, "Showing X–Y of Z" left, page controls r
 footer. On responsive pages whose desktop table card is `hidden md:block`, ALSO render a `md:hidden`
 copy below the mobile card list (a card-list page like case-contacts renders it below the list). NOT a
 detached below-card bar (external gap + divider + padding reads as too much scroll); verified in-card,
-one visible nav, on learning-hours / reimbursements / volunteers / cases. Don't render
+one visible nav, on learning-hours / reimbursements / volunteers / cases. **The card holding an
+in-card footer uses `pt-2` (top inset only), NOT `py-2`:** a bottom card inset stacks under the
+footer's `pb-3` and pushes the numbers closer to the divider than to the card edge; `pt-2` keeps the
+footer symmetric (verified 13px above == 13px below the numbers). Don't render
 decorative emoji as data (e.g. the 🦋/🐛 transition-aged icons) — use a plain label or pill.
 Verify a column's data source before carrying one forward: the legacy cases index kept
 Hearing Type / Judge columns that had rendered blank for every case since a 2023 migration
