@@ -37,7 +37,7 @@
                   <td class="<%= td %>"><%= number_to_currency(mileage_rate.amount) %></td>
                   <td class="<%= td %>"><%= mileage_rate.is_active? ? "Yes" : "No" %></td>
                   <td class="<%= td %> text-right">
-                    <%= link_to "Edit", edit_mileage_rate_path(mileage_rate), class: "font-medium text-brand-600 hover:text-brand-700" %>
+                    <%= link_to edit_mileage_rate_path(mileage_rate), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
                   </td>
                 </tr>
               <% end %>

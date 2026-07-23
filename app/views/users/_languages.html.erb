@@ -17,7 +17,7 @@
           <tr>
             <td class="px-4 py-2.5 text-slate-700"><%= lang.name %></td>
             <td class="px-4 py-2.5">
-              <%= link_to "Delete", remove_language_users_path(language_id: lang.id), method: :delete, class: "text-sm font-medium text-rose-600 hover:text-rose-700 focus-visible:underline focus-visible:outline-none" %>
+              <%= link_to remove_language_users_path(language_id: lang.id), method: :delete, class: ghost_class(:danger) do %><i class="bi bi-trash" aria-hidden="true"></i> Delete<% end %>
             </td>
           </tr>
         <% end %>
