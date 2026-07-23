@@ -95,6 +95,7 @@
         </tbody>
       </table>
     </div>
+    <%= render "shared/pagination", pagy: @pagy %>
   </div>
 
   <%# Mobile: stacked cards (below md) %>
@@ -153,6 +154,6 @@
   </div>
 
   <% if @casa_cases.any? %>
-    <%= render "shared/pagination", pagy: @pagy %>
+    <div class="md:hidden"><%= render "shared/pagination", pagy: @pagy %></div>
   <% end %>
 </div>

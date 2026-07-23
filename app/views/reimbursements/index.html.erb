@@ -89,6 +89,7 @@
             </tbody>
           </table>
         </div>
+        <%= render "shared/pagination", pagy: @pagy %>
       </div>
 
       <div class="space-y-3 md:hidden">
@@ -111,7 +112,7 @@
         <% end %>
       </div>
 
-      <%= render "shared/pagination", pagy: @pagy %>
+      <div class="md:hidden"><%= render "shared/pagination", pagy: @pagy %></div>
     <% else %>
       <div class="<%= card %> px-6 py-16 text-center">
         <div class="mx-auto mb-4 grid h-12 w-12 place-items-center rounded-full bg-slate-100 text-slate-400"><i class="bi bi-cash-coin text-xl" aria-hidden="true"></i></div>

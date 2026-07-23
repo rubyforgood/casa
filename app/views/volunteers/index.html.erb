@@ -115,6 +115,7 @@
             </tbody>
           </table>
         </div>
+        <%= render "shared/pagination", pagy: @pagy %>
       </div>
 
       <%# Mobile cards (below md) — read-only info; bulk assignment is a desktop tool %>
@@ -177,6 +178,6 @@
   </div>
 
   <% if @volunteers.any? %>
-    <%= render "shared/pagination", pagy: @pagy %>
+    <div class="md:hidden"><%= render "shared/pagination", pagy: @pagy %></div>
   <% end %>
 </div>

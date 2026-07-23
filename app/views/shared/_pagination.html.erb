@@ -1,12 +1,12 @@
-<%# Tailwind pagination bar for bespoke tables/lists. Pass the Pagy instance as `pagy`.
-    Renders as a footer bar directly BELOW the content (not inside the card) so it works the same for
-    a full-width table, a responsive table + mobile card list, or a plain card list: results summary
-    left, page controls right, a top divider + consistent spacing, edge-aligned to the content.
-    Render it bare (no wrapper) -- the partial owns its own spacing. %>
+<%# Tailwind pagination footer for bespoke tables/lists. Pass the Pagy instance as `pagy`.
+    Industry-standard table footer: render it as the LAST child INSIDE the table card -- a `border-t`
+    divider + `px-4` aligned with the cells, compact (`pt-3`, no extra gap). On responsive pages whose
+    desktop table card is `hidden md:block`, also render a `md:hidden` copy below the mobile card list.
+    Results summary left, page controls right. %>
 <% if pagy.count.positive? %>
   <% link = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-slate-200 bg-white px-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
   <% disabled = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-transparent px-2 text-slate-300" %>
-  <nav class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-4 text-sm" aria-label="Pagination">
+  <nav class="mt-1 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 pt-3 text-sm" aria-label="Pagination">
     <p class="text-slate-500">Showing <span class="font-medium text-slate-700"><%= pagy.from %></span>&ndash;<span class="font-medium text-slate-700"><%= pagy.to %></span> of <span class="font-medium text-slate-700"><%= pagy.count %></span></p>
     <% if pagy.pages > 1 %>
       <div class="flex items-center gap-1">
