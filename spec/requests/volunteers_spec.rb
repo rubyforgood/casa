@@ -84,7 +84,11 @@ RSpec.describe "/volunteers", type: :request do
 
       page = Nokogiri::HTML(subject.body)
       names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text)
-      expect(supervisors.map(&:display_name)).to match_array(names)
+      # Options render the honorific-free name (formatted_name / NamePresentation.strip_honorific), so
+      # compare against the stripped names. Faker::Name sometimes yields a "Rev."/"Dr." prefix, which
+      # made the raw-display_name assertion flaky (passed or failed depending on the seed).
+      expected = supervisors.map { |s| NamePresentation.strip_honorific(s.display_name) }
+      expect(expected).to match_array(names)
     end
   end
 
