@@ -105,7 +105,7 @@
               <tr class="border-b border-slate-100">
                 <th class="<%= th %>">Volunteer</th>
                 <th class="<%= th %>">Assigned cases</th>
-                <th class="<%= th %>">Assign supervisor</th>
+                <th class="px-4 py-3 text-right text-xs font-semibold text-slate-600 whitespace-nowrap align-top">Assign supervisor</th>
               </tr>
             </thead>
             <tbody class="divide-y divide-slate-50">
@@ -113,9 +113,9 @@
                 <tr class="hover:bg-slate-50/70">
                   <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: "font-medium #{name_link_class}" %></td>
                   <td class="<%= td %>"><%= safe_join(volunteer.casa_cases.map { |cc| link_to(cc.case_number, casa_case_path(cc), class: "text-brand-600 hover:text-brand-700 hover:underline") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %></td>
-                  <td class="<%= td %>">
+                  <td class="<%= td %> text-right">
                     <% if @active_supervisors.any? %>
-                      <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center gap-2" do |form| %>
+                      <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center justify-end gap-2" do |form| %>
                         <div class="relative">
                           <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" class="<%= select_class %>">
                             <% @active_supervisors.each do |s| %><option value="<%= s.id %>"><%= formatted_name(s.display_name) %></option><% end %>
@@ -123,7 +123,7 @@
                           <i class="<%= chevron %>" aria-hidden="true"></i>
                         </div>
                         <%= form.hidden_field :volunteer_id, value: volunteer.id %>
-                        <%= button_tag "Assign", type: "submit", class: button_classes(:primary) %>
+                        <%= button_tag type: "submit", class: ghost do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
                       <% end %>
                     <% else %>
                       <span class="text-slate-500">No supervisors to assign</span>

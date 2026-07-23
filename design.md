@@ -156,7 +156,12 @@ already handles it.
   links. Not part of `button_classes` (it is a low-emphasis action, not a CTA). Neutral ink stays at or above AA
   (slate-600 is about 7:1; never `slate-400` under visible text). Leading icon via `gap-1.5` plus a `bi-*` glyph.
   Right-aligned in a table's trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the
-  card edge rather than skewing the button's own padding.
+  card edge rather than skewing the button's own padding. **Every table row action is this ghost** --
+  Edit / Delete / Detail view AND a form-submit control like the volunteers-without-supervisors
+  "Assign supervisor" button -- **never a `button_classes(:primary/:secondary)` CTA**: a filled CTA
+  over-emphasizes a repeated per-row action and breaks table-to-table consistency. Right-align the
+  whole trailing column (`text-right` cell + `flex items-center justify-end` when it holds more than
+  one control, e.g. a `<select>` + Assign).
 
 **Audit before shipping:** grep the views you touched for clickable elements (`link_to` /
 `button_tag` / `button_to` / `<button` / `<a`) carrying a hand-rolled button shape
