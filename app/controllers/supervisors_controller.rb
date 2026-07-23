@@ -18,6 +18,9 @@ class SupervisorsController < ApplicationController
     supervisors = supervisors.where(active: true) if @status == "active"
     supervisors = supervisors.where(active: false) if @status == "inactive"
     @supervisors = supervisors.order(:display_name)
+    # Active supervisors for the inline "assign supervisor" control in the volunteers-without-
+    # supervisors table (independent of the roster status filter above).
+    @active_supervisors = current_organization.supervisors.active.order(:display_name)
     @casa_cases = current_organization.casa_cases.missing_court_dates
     render :index, layout: "casa_app"
   end
