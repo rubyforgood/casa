@@ -47,8 +47,11 @@
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-slate-100">
-                <th class="px-3 py-3">
-                  <input type="checkbox" id="checkbox-toggle-all" aria-label="Select all volunteers" class="<%= checkbox_class %>" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
+                <th class="px-3 py-3 align-top">
+                  <label class="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold text-slate-600">
+                    <input type="checkbox" id="checkbox-toggle-all" class="<%= checkbox_class %>" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
+                    Select all
+                  </label>
                 </th>
                 <%= sortable_header("Name", "display_name", sort: @sort, direction: @direction) %>
                 <%= sortable_header("Email", "email", sort: @sort, direction: @direction) %>
@@ -67,7 +70,7 @@
               <% if @volunteers.any? %>
                 <% @volunteers.each do |volunteer| %>
                   <tr class="hover:bg-slate-50/70">
-                    <td class="px-3 py-3"><input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_<%= volunteer.id %>" value="<%= volunteer.id %>" aria-label="Select <%= formatted_name(volunteer.display_name) %>" class="<%= checkbox_class %>" data-select-all-target="checkbox" data-action="select-all#toggleSingle"></td>
+                    <td class="px-3 py-3 align-top"><input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_<%= volunteer.id %>" value="<%= volunteer.id %>" aria-label="Select <%= formatted_name(volunteer.display_name) %>" class="<%= checkbox_class %>" data-select-all-target="checkbox" data-action="select-all#toggleSingle"></td>
                     <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline" %></td>
                     <td class="<%= td %> text-slate-600"><%= volunteer.email %></td>
                     <td class="supervisor-column <%= td %>"><% if volunteer.supervisor_name.present? %><span class="font-medium text-slate-800"><%= formatted_name(volunteer.supervisor_name) %></span><% end %></td>
