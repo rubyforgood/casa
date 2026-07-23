@@ -30,7 +30,7 @@
               <td class="px-4 py-3 text-right align-top text-sm">
                 <div class="flex items-center justify-end gap-3">
                   <%= link_to edit_custom_org_link_path(custom_link), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
-                  <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_icon: "bi bi-trash", trigger_class: ghost_class(:danger) %>
+                  <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_icon: "bi bi-trash", trigger_class: ghost_class %>
                 </div>
               </td>
             </tr>
@@ -59,7 +59,7 @@
           </dl>
           <div class="mt-3 flex items-center gap-4 border-t border-slate-100 pt-3 text-sm">
             <%= link_to edit_custom_org_link_path(custom_link), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
-            <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_icon: "bi bi-trash", trigger_class: ghost_class(:danger) %>
+            <%= render "shared/confirm_button", url: custom_org_link_path(custom_link), title: "Delete custom link?", message: "This custom link will be removed from your organization.", confirm_label: "Delete", trigger_label: "Delete", trigger_icon: "bi bi-trash", trigger_class: ghost_class %>
           </div>
         </div>
       <% end %>

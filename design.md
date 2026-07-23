@@ -151,9 +151,13 @@ not** re-equalize sizes with `border border-transparent` on the filled variants;
 fragile compensation pinned to the secondary's exact border width, and the height token
 already handles it.
 
-- Tertiary (ghost): the **`ghost_class(:neutral | :danger)`** helper (design_system_helper.rb) --
-  `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium` plus slate ink
-  (`:neutral`) or rose ink (`:danger`, for destructive actions). No border, fill, or shadow: the
+- Tertiary (ghost): the **`ghost_class`** helper (design_system_helper.rb) --
+  `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600`. **One
+  slate ink** -- destructive row actions (Delete) use this SAME slate ghost, **never rose**: rose read
+  as too jarring for a repeated per-row control (the remove-expense decision, below), so the danger is
+  carried by the `bi-trash` icon + "Delete" label + the confirm dialog, not the button color. A
+  prominent destructive CTA (a card footer, not a row) is `button_classes(:danger_outline)` instead.
+  No border, fill, or shadow: the
   lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
   in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
   CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat
@@ -163,8 +167,8 @@ already handles it.
   `gap-1.5` plus a `bi-*` glyph (`bi-pencil` Edit, `bi-trash` Delete). Right-aligned in a table's
   trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the card edge
   rather than skewing the button's own padding. **Every table row action is this ghost** -- Edit
-  (`ghost_class`) / Delete (`ghost_class(:danger)`, passed as the confirm dialog's `trigger_class` with
-  `trigger_icon: "bi bi-trash"`) / Detail view / Impersonate AND a form-submit control like the
+  (`ghost_class`) / Delete (`ghost_class` too, passed as the confirm dialog's `trigger_class` with
+  `trigger_icon: "bi bi-trash"` -- slate, **not** rose) / Detail view / Impersonate AND a form-submit control like the
   volunteers-without-supervisors "Assign supervisor" button -- **never a
   `button_classes(:primary/:secondary)` CTA**: a filled CTA over-emphasizes a repeated per-row action
   and breaks table-to-table consistency. Right-align the whole trailing column (`text-right` cell +
