@@ -15,7 +15,10 @@ export default class extends Controller {
   connect () {
     const options = {
       maxItems: 1,
-      allowEmptyOption: true,
+      // With a placeholder (a blank-load picker) the empty <option> must NOT become a selected item --
+      // TomSelect would then hide the input (and its placeholder) off-screen and show the empty item.
+      // Court-report (no placeholder) keeps the default so its prompt option works.
+      allowEmptyOption: !this.placeholderValue,
       dropdownParent: this.dropdownParentValue || null,
       plugins: { clear_button: { title: 'Clear selection' } }
     }
