@@ -6,10 +6,15 @@ import TomSelect from 'tom-select'
 // so supervisors/admins can find a case by volunteer. Connects to
 // data-controller="searchable-select".
 export default class extends Controller {
+  // Pass data-searchable-select-dropdown-parent-value="body" when the <select> is inside an overflow
+  // container (e.g. a table with overflow-x-auto) so the menu renders on <body> and isn't clipped.
+  static values = { dropdownParent: String }
+
   connect () {
     this.select = new TomSelect(this.element, {
       maxItems: 1,
-      allowEmptyOption: true
+      allowEmptyOption: true,
+      dropdownParent: this.dropdownParentValue || null
     })
   }
 

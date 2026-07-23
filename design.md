@@ -262,6 +262,19 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 
+### Searchable single-select
+For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
+in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
+the `searchable-select` Stimulus controller (TomSelect single-select). A native dropdown is fine only
+for a short, fixed list (the 3-option status filter stays native).
+- **Inside an overflow container** (a table with `overflow-x-auto`, a card with `overflow-hidden`),
+  pass **`data-searchable-select-dropdown-parent-value="body"`** so the menu renders on `<body>` and
+  isn't clipped. Verify the open menu isn't clipped (it should sit just below/above the control).
+- **Fallback class stays minimal** (`block w-full`): the theme owns the border/padding/shadow on
+  `.ts-control`, and TomSelect copies the `<select>`'s classes onto `.ts-wrapper`, so a bordered class
+  **double-borders** the control (measured: `.ts-control` 1px + `.ts-wrapper` 1px). Drop the manual
+  chevron too -- the `.ts-wrapper::after` caret handles it.
+
 ### Nested sub-form (repeatable rows)
 The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the
 pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that clones a

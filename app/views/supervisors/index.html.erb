@@ -10,7 +10,7 @@
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
-<% select_class = "min-w-[9rem] appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% ts_select_class = "block w-full" %>
 <% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -117,11 +117,10 @@
                   <td class="<%= td %> text-right">
                     <% if @active_supervisors.any? %>
                       <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center justify-end gap-2" do |form| %>
-                        <div class="relative">
-                          <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" class="<%= select_class %>">
+                        <div class="w-52 text-left">
+                          <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" data-controller="searchable-select" data-searchable-select-dropdown-parent-value="body" class="<%= ts_select_class %>">
                             <% @active_supervisors.each do |s| %><option value="<%= s.id %>"><%= formatted_name(s.display_name) %></option><% end %>
                           </select>
-                          <i class="<%= chevron %>" aria-hidden="true"></i>
                         </div>
                         <%= form.hidden_field :volunteer_id, value: volunteer.id %>
                         <%= button_tag type: "submit", class: ghost_class do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
