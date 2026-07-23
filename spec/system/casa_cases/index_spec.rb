@@ -26,5 +26,4 @@ RSpec.describe "casa_cases/index", type: :system do
     expect(page).to have_select("Status")
     expect(page).to have_select("Case number prefix")
   end
-
 end

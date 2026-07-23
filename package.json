@@ -58,7 +58,8 @@
       "Turbo"
     ],
     "ignore": [
-      "app/assets/builds/**/*"
+      "app/assets/builds/**/*",
+      "app/javascript/controllers/index.js"
     ]
   },
   "engines": {

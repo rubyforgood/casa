@@ -168,7 +168,10 @@ class CasaCasesController < ApplicationController
         "(SELECT MIN(users.display_name) FROM case_assignments JOIN users ON users.id = case_assignments.volunteer_id WHERE case_assignments.casa_case_id = casa_cases.id AND case_assignments.active)"
       else "casa_cases.case_number"
       end
-    scope = scope.order(Arel.sql("#{clause} #{@direction} NULLS LAST"))
+    # Re-derive the direction as a local literal so the SQL string is built only from a fixed
+    # allow-list (clause is a case of literals; direction is one of two) -- also clears brakeman.
+    direction = (@direction == "desc") ? "DESC" : "ASC"
+    scope = scope.order(Arel.sql("#{clause} #{direction} NULLS LAST"))
     scope = scope.order(case_number: :asc) unless @sort == "case_number"
     scope
   end
