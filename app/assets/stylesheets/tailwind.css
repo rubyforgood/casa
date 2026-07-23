@@ -75,6 +75,20 @@
 }
 .ts-wrapper.dropdown-active::after { transform: translateY(-50%) rotate(180deg); }
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
+/* Single-select: vertically center the selected item + the search/placeholder input. Without this the
+   item stretches to the full content box and the text rides high (uneven top/bottom). */
+.ts-wrapper.single .ts-control {
+  align-items: center;
+  padding-left: 2rem !important; /* room for the leading search icon */
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iIzY0NzQ4YiI+PHBhdGggZD0iTTExLjc0MiAxMC4zNDRhNi41IDYuNSAwIDEgMC0xLjM5NyAxLjM5OGgtLjAwMXEuMDQ0LjA2LjA5OC4xMTVsMy44NSAzLjg1YTEgMSAwIDAgMCAxLjQxNS0xLjQxNWwtMy44NS0zLjg1YTEgMSAwIDAgMC0uMTE1LS4wOTh6TTEyIDYuNWE1LjUgNS41IDAgMSAxLTExIDAgNS41IDUuNSAwIDAgMSAxMSAwIi8+PC9zdmc+");
+  background-repeat: no-repeat;
+  background-position: left 0.625rem center;
+  background-size: 1rem 1rem;
+}
+.ts-wrapper.single .ts-control > .item,
+.ts-wrapper.single .ts-control > input { align-self: center; }
+/* legible placeholder, matching the design-system inputs (slate-400) */
+.ts-wrapper .ts-control input::placeholder { color: #94a3b8; opacity: 1; }
 /* clear_button plugin: the bundled plugin CSS positions the x and toggles its opacity on
    hover/focus-with-selection. We (a) hide the chevron underneath while the x shows so the two never
    overlap, (b) restyle the x for casa, and (c) hide the blank placeholder option from the menu (it

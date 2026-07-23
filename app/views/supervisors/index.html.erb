@@ -117,8 +117,8 @@
                   <td class="<%= td %> text-right">
                     <% if @active_supervisors.any? %>
                       <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center justify-end gap-2" do |form| %>
-                        <div class="w-52 text-left">
-                          <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" data-controller="searchable-select" data-searchable-select-dropdown-parent-value="body" data-searchable-select-placeholder-value="Search supervisors…" data-searchable-select-toggle-submit-value="true" class="<%= ts_select_class %>">
+                        <div class="w-48 text-left">
+                          <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" data-controller="searchable-select" data-searchable-select-dropdown-parent-value="body" data-searchable-select-placeholder-value="Search supervisors" data-searchable-select-toggle-submit-value="true" class="<%= ts_select_class %>">
                             <option value=""></option>
                             <% @active_supervisors.each do |s| %><option value="<%= s.id %>"><%= formatted_name(s.display_name) %></option><% end %>
                           </select>
