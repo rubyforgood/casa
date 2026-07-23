@@ -23,7 +23,7 @@
     <div data-controller="disclosure" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
       <div class="flex items-center justify-between gap-3">
         <h2 class="text-base font-semibold text-slate-900">Filter by</h2>
-        <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= expand_filters? %>" aria-controls="filter-card-body" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+        <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= expand_filters? %>" aria-controls="filter-card-body" class="<%= ghost_class %>">
           Expand / Hide <i class="bi bi-chevron-down text-xs" aria-hidden="true"></i>
         </button>
       </div>

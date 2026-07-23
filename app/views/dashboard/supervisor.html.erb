@@ -88,7 +88,7 @@
                 <%= link_to edit_volunteer_path(row.volunteer), class: "inline-flex items-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
                   <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
                 <% end %>
-                <%= link_to "View", edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: "rounded-lg px-2 py-1.5 text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+                <%= link_to edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: ghost_class do %><i class="bi bi-eye" aria-hidden="true"></i> View<% end %>
               </div>
             </li>
           <% end %>

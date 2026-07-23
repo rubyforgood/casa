@@ -28,7 +28,7 @@
         <h2 class="text-base font-semibold text-slate-900">Filter by</h2>
         <div class="flex items-center gap-2">
           <%= link_to "Reset filters", case_contacts_new_design_path, class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
-          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= filters_active %>" aria-controls="cc-filter-panel" class="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-sm font-medium text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500">
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= filters_active %>" aria-controls="cc-filter-panel" class="<%= ghost_class %>">
             Expand / hide <i class="bi bi-chevron-down text-xs" aria-hidden="true"></i>
           </button>
         </div>
