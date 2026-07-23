@@ -151,23 +151,31 @@ not** re-equalize sizes with `border border-transparent` on the filled variants;
 fragile compensation pinned to the secondary's exact border width, and the height token
 already handles it.
 
-- Tertiary (ghost): `rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900`.
-  No border, fill, or shadow: the lowest-emphasis action, for repeated row / toolbar actions so they recede from brand
-  links. Not part of `button_classes` (it is a low-emphasis action, not a CTA). Neutral ink stays at or above AA
-  (slate-600 is about 7:1; never `slate-400` under visible text). Leading icon via `gap-1.5` plus a `bi-*` glyph.
-  Right-aligned in a table's trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the
-  card edge rather than skewing the button's own padding. **Every table row action is this ghost** --
-  Edit / Delete / Detail view AND a form-submit control like the volunteers-without-supervisors
-  "Assign supervisor" button -- **never a `button_classes(:primary/:secondary)` CTA**: a filled CTA
-  over-emphasizes a repeated per-row action and breaks table-to-table consistency. Right-align the
-  whole trailing column (`text-right` cell + `flex items-center justify-end` when it holds more than
-  one control, e.g. a `<select>` + Assign).
+- Tertiary (ghost): the **`ghost_class(:neutral | :danger)`** helper (design_system_helper.rb) --
+  `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium` plus slate ink
+  (`:neutral`) or rose ink (`:danger`, for destructive actions). No border, fill, or shadow: the
+  lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
+  in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
+  CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat
+  at `px-2.5 py-1.5`, and the casa_org settings tables used bare `text-brand-600` / `text-rose-600`
+  text links instead of the ghost. **Call the helper; never hand-write the string.** Neutral ink stays
+  at or above AA (slate-600 is about 7:1; never `slate-400` under visible text). Leading icon via
+  `gap-1.5` plus a `bi-*` glyph (`bi-pencil` Edit, `bi-trash` Delete). Right-aligned in a table's
+  trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the card edge
+  rather than skewing the button's own padding. **Every table row action is this ghost** -- Edit
+  (`ghost_class`) / Delete (`ghost_class(:danger)`, passed as the confirm dialog's `trigger_class` with
+  `trigger_icon: "bi bi-trash"`) / Detail view / Impersonate AND a form-submit control like the
+  volunteers-without-supervisors "Assign supervisor" button -- **never a
+  `button_classes(:primary/:secondary)` CTA**: a filled CTA over-emphasizes a repeated per-row action
+  and breaks table-to-table consistency. Right-align the whole trailing column (`text-right` cell +
+  `flex items-center justify-end` when it holds more than one control, e.g. a `<select>` + Assign).
 
 **Audit before shipping:** grep the views you touched for clickable elements (`link_to` /
 `button_tag` / `button_to` / `<button` / `<a`) carrying a hand-rolled button shape
 (`inline-flex` + `rounded-lg` + `px-`/`py-` + `bg-`/`border-`) and convert them to
 `button_classes`. A bespoke string at `py-1.5` next to a 40px token is the recurring drift
-bug; the only non-`button_classes` clickable is the documented tertiary ghost.
+bug; the only non-`button_classes` clickable is the tertiary ghost, which has its own `ghost_class`
+helper (call it -- do not re-derive the string).
 
 ### Inputs
 `block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`

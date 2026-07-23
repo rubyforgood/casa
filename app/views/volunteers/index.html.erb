@@ -10,7 +10,6 @@
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <% pill = "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium" %>
-<% ghost = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
 <% checkbox_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -95,9 +94,9 @@
                     <td class="<%= td %>"><% langs = volunteer.languages.map(&:name) %><%= langs.any? ? langs.join(", ") : tag.span("\u2014", class: "text-slate-500") %></td>
                     <td class="px-3 py-3 text-right whitespace-nowrap align-top">
                       <div class="flex items-center justify-end gap-1">
-                        <%= link_to edit_volunteer_path(volunteer), class: ghost, "aria-label": "Edit #{formatted_name(volunteer.display_name)}" do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
+                        <%= link_to edit_volunteer_path(volunteer), class: ghost_class, "aria-label": "Edit #{formatted_name(volunteer.display_name)}" do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
                         <% if policy(volunteer).impersonate? %>
-                          <%= link_to impersonate_volunteer_path(volunteer), class: ghost, "aria-label": "Impersonate #{formatted_name(volunteer.display_name)}" do %><i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate<% end %>
+                          <%= link_to impersonate_volunteer_path(volunteer), class: ghost_class, "aria-label": "Impersonate #{formatted_name(volunteer.display_name)}" do %><i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate<% end %>
                         <% end %>
                       </div>
                     </td>
@@ -134,9 +133,9 @@
                 <div><dt class="text-xs text-slate-500">Cases</dt><dd class="mt-0.5 text-sm text-slate-700"><%= safe_join(volunteer.casa_cases.map { |cc| link_to cc.case_number, casa_case_path(cc), class: "text-brand-600 hover:text-brand-700" }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %></dd></div>
               </dl>
               <div class="mt-3 flex flex-wrap items-center gap-1">
-                <%= link_to edit_volunteer_path(volunteer), class: ghost do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
+                <%= link_to edit_volunteer_path(volunteer), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
                 <% if policy(volunteer).impersonate? %>
-                  <%= link_to impersonate_volunteer_path(volunteer), class: ghost do %><i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate<% end %>
+                  <%= link_to impersonate_volunteer_path(volunteer), class: ghost_class do %><i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate<% end %>
                 <% end %>
               </div>
             </div>
