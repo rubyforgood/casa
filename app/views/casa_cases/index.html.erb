@@ -11,6 +11,9 @@
       <% if current_user.volunteer? %>My <%= "Case".pluralize(@pagy.count) %><% else %><%= "Case".pluralize(@pagy.count) %><% end %>
     </h1>
     <div class="flex flex-wrap items-center gap-2">
+      <% if policy(:application).see_emancipation_checklist? %>
+        <%= link_to emancipation_checklists_path, class: btn_secondary do %><i class="bi bi-clipboard-check" aria-hidden="true"></i> Emancipation checklists<% end %>
+      <% end %>
       <% if policy(:dashboard).see_volunteers_section? %>
         <%= link_to new_casa_case_path, class: btn_primary do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New case<% end %>
       <% end %>

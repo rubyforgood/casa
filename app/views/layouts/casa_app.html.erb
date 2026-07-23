@@ -36,6 +36,7 @@
           [cases_index_title, "bi-folder2", casa_cases_path, "cases", true],
           ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
           ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
+          ["Other duties", "bi-list-task", other_duties_path, "other_duties", policy(OtherDuty).index?],
           ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?],
           ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
           ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],

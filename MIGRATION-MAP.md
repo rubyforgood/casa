@@ -70,12 +70,14 @@ the `*_reports` CSV exporters, case_contacts/followups (redirect / JSON / CSV on
   casa_app pages for inbound nav links found **6 orphaned pages** (migrated, but linked nowhere):
   - **FIXED** — Mileage rates, Banners, Imports, Manage admins: now linked from **Settings →
     Administration** (all return 200).
-  - **Still orphaned** — `other_duties` (a conditional volunteer feature; only its *enable* toggle is on
-    Settings, no link to the pages) and `emancipation_checklists#index` (an index-only page). Both need a
-    home or retirement — placement TBD.
-  - Everything else is reachable (sidebar / the Settings inline CRUD / case-child pages such as fund
-    requests via the case show). **My earlier "all migrated" checked Tailwind-on-a-shell, not
-    navigability — that was the miss.**
+  - **FIXED** — `other_duties`: now a **sidebar item** (gated by `policy(OtherDuty).index?`, which
+    includes the org's `other_duties_enabled` toggle; the controller sets `@active_nav`).
+    `emancipation_checklists#index`: a **volunteer-only link in the Cases header**
+    (`see_emancipation_checklist?` is volunteers-only, so it can't sit in the admin/supervisor More menu).
+    Both reachable + role-gated (verified).
+  - **All 6 orphans are now linked.** Everything else was already reachable (sidebar / the Settings
+    inline CRUD / case-child pages such as fund requests via the case show). **My earlier "all migrated"
+    checked Tailwind-on-a-shell, not navigability — the sweep + these fixes close that gap.**
 - **Dead legacy files — DELETED** (verified 0 references across views / rb / js / specs; superseded by
   `Dialog::` and the casa_app twins): `shared/_court_order_form`, `shared/_court_order_list`,
   `casa_cases/_thank_you_modal`, `case_contacts/_confirm_note_content_dialog`, `layouts/_mobile_navbar`,

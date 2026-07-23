@@ -1,5 +1,6 @@
 class OtherDutiesController < ApplicationController
   layout "casa_app"
+  before_action -> { @active_nav = "other_duties" }
 
   before_action :set_other_duty, except: [:new, :create, :index]
   before_action :convert_duration_minutes, only: [:update, :create]
