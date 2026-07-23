@@ -28,7 +28,7 @@
               <tr id="admin-<%= admin.id %>" class="hover:bg-slate-50/70">
                 <td class="<%= td %>">
                   <div class="flex flex-wrap items-center gap-2">
-                    <%= link_to admin.email, edit_casa_admin_path(admin), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
+                    <%= link_to admin.email, edit_casa_admin_path(admin), class: "font-medium #{name_link_class}" %>
                     <% unless admin.active? %>
                       <span class="<%= pill %> bg-slate-100 text-slate-600"><i class="bi bi-dash-circle" aria-hidden="true"></i> Deactivated</span>
                     <% end %>

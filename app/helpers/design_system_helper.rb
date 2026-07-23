@@ -5,6 +5,15 @@ module DesignSystemHelper
     NamePresentation.strip_honorific(name.to_s)
   end
 
+  # Class for a clickable person name (or other dark in-text link): dark identifying text with a
+  # PERSISTENT underline so it's discoverably a link -- NOT brand color (that's for entity/record-nav
+  # links like a case number). Underline is a non-color cue (WCAG 1.4.1), slate-800 on white is 14.7:1
+  # (1.4.3), + a focus ring (2.4.7). Callers add the font size/weight (font-medium, text-sm, ...).
+  def name_link_class
+    "text-slate-800 underline underline-offset-2 hover:text-brand-700 " \
+      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm"
+  end
+
   # A person's display name (honorific-free) with an email fallback. Prefer this for
   # new UI where you have the user object.
   def display_person(user)

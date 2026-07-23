@@ -29,7 +29,7 @@
         <li class="p-4 sm:px-6">
           <div class="flex flex-wrap items-start justify-between gap-x-3 gap-y-2">
             <div class="min-w-0">
-              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer), class: "text-sm font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
+              <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer), class: "text-sm font-medium #{name_link_class}" %>
               <p class="truncate text-sm text-slate-500"><%= volunteer.email %></p>
             </div>
             <% if volunteer.supervised_by?(@supervisor) %>

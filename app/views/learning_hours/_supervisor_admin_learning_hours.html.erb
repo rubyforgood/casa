@@ -20,7 +20,7 @@
           <% if @learning_hours.any? %>
             <% @learning_hours.each do |row| %>
               <tr class="hover:bg-slate-50/70">
-                <td class="<%= td %>"><%= link_to formatted_name(row.display_name), learning_hours_volunteer_path(row.user_id), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline" %></td>
+                <td class="<%= td %>"><%= link_to formatted_name(row.display_name), learning_hours_volunteer_path(row.user_id), class: "font-medium #{name_link_class}" %></td>
                 <td class="<%= td %>"><%= format_time(row.total_time_spent) %></td>
               </tr>
             <% end %>

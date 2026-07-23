@@ -26,7 +26,7 @@
         <% duties = group[:other_duties].decorate %>
         <section>
           <% unless current_user.id == group[:volunteer].id %>
-            <h2 class="mb-3 text-lg font-semibold text-slate-900"><%= link_to formatted_name(group[:volunteer].display_name), volunteer_path(group[:volunteer]), class: "hover:text-brand-700 hover:underline" %></h2>
+            <h2 class="mb-3 text-lg font-semibold text-slate-900"><%= link_to formatted_name(group[:volunteer].display_name), volunteer_path(group[:volunteer]), class: name_link_class %></h2>
           <% end %>
 
           <%# Desktop table (md+) %>

@@ -11,10 +11,6 @@
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 <% ghost = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
-<%# Clickable person name: dark identifying text (not a brand link) with a PERSISTENT underline so
-    it's discoverably clickable; underline is a non-color cue (WCAG 1.4.1), slate-800 on white is
-    14.7:1 (1.4.3), + a focus ring (2.4.7). %>
-<% name_link = "font-medium text-slate-800 underline underline-offset-2 hover:text-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 rounded-sm" %>
 <% select_class = "min-w-[9rem] appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
@@ -58,7 +54,7 @@
               <tr id="supervisor-<%= supervisor.id %>-information" class="hover:bg-slate-50/70">
                 <td class="<%= td %>">
                   <div class="flex flex-wrap items-center gap-2">
-                    <%= link_to formatted_name(supervisor.display_name).presence || supervisor.email, edit_supervisor_path(supervisor), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
+                    <%= link_to formatted_name(supervisor.display_name).presence || supervisor.email, edit_supervisor_path(supervisor), class: "font-medium #{name_link_class}" %>
                     <% unless supervisor.active? %>
                       <span class="<%= pill %> bg-slate-100 text-slate-600"><i class="bi bi-dash-circle" aria-hidden="true"></i> Inactive</span>
                     <% end %>
@@ -115,7 +111,7 @@
             <tbody class="divide-y divide-slate-50">
               <% @available_volunteers.each do |volunteer| %>
                 <tr class="hover:bg-slate-50/70">
-                  <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: name_link %></td>
+                  <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: "font-medium #{name_link_class}" %></td>
                   <td class="<%= td %>"><%= safe_join(volunteer.casa_cases.map { |cc| link_to(cc.case_number, casa_case_path(cc), class: "text-brand-600 hover:text-brand-700 hover:underline") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %></td>
                   <td class="<%= td %>">
                     <% if @active_supervisors.any? %>
@@ -187,7 +183,7 @@
                       <% if current_user.volunteer? %>
                         <%= safe_join(casa_case.assigned_volunteers.map { |vol| tag.span(formatted_name(vol.display_name), class: "font-medium text-slate-800") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
                       <% else %>
-                        <%= safe_join(casa_case.assigned_volunteers.map { |vol| link_to(formatted_name(vol.display_name), edit_volunteer_path(vol), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
+                        <%= safe_join(casa_case.assigned_volunteers.map { |vol| link_to(formatted_name(vol.display_name), edit_volunteer_path(vol), class: "font-medium #{name_link_class}") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
                       <% end %>
                     <% else %>
                       <span class="text-slate-500">Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %></span>
@@ -249,7 +245,7 @@
                       <% if current_user.volunteer? %>
                         <%= safe_join(casa_case.assigned_volunteers.map { |vol| tag.span(formatted_name(vol.display_name), class: "font-medium text-slate-800") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
                       <% else %>
-                        <%= safe_join(casa_case.assigned_volunteers.map { |vol| link_to(formatted_name(vol.display_name), edit_volunteer_path(vol), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
+                        <%= safe_join(casa_case.assigned_volunteers.map { |vol| link_to(formatted_name(vol.display_name), edit_volunteer_path(vol), class: "font-medium #{name_link_class}") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %>
                       <% end %>
                     <% else %>
                       <span class="text-slate-500">Case was deactivated on: <%= I18n.l(casa_case.updated_at, format: :standard, default: nil) %></span>

@@ -164,7 +164,7 @@
               <% if current_user.volunteer? %>
                 <span class="text-sm font-medium text-slate-800"><%= formatted_name(volunteer.display_name) %></span>
               <% else %>
-                <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id), class: "text-sm font-medium text-slate-800 hover:text-brand-700 hover:underline" %>
+                <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id), class: "text-sm font-medium #{name_link_class}" %>
                 <%= render "casa_cases/volunteer_reminder_form", volunteer: volunteer %>
               <% end %>
             </li>

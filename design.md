@@ -607,8 +607,9 @@ than a generic hyperlink. When it does link to that person's record, keep it dar
 **persistent** underline (`underline underline-offset-2 hover:text-brand-700`, NOT `hover:underline`)
 so it's discoverably clickable: a name that only underlines on hover reads as plain text and users
 don't know to click it. The underline is a non-color cue (WCAG 1.4.1), slate-800 on white is 14.7:1
-(1.4.3), + a focus ring (2.4.7). Dark + underline stays distinct from the brand-colored record-nav
-links used for a case number or court date. Prefer not to send the user out of the current flow via a name;
+(1.4.3), + a focus ring (2.4.7). Use the **`name_link_class`** helper (callers prepend the font
+size/weight, e.g. `"font-medium #{name_link_class}"`) so every clickable name matches app-wide. Dark +
+underline stays distinct from the brand-colored record-nav links used for a case number or court date. Prefer not to send the user out of the current flow via a name;
 if a name must link away, its destination needs a clear path back (an unmigrated edit page
 with no return is a flow trap).
 
