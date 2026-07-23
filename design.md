@@ -276,8 +276,12 @@ for a short, fixed list (the 3-option status filter stays native).
   chevron too -- the `.ts-wrapper::after` caret handles it.
 - **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
   (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
-  native `<select>` to empty; it's hidden from the menu via `.ts-dropdown .option[data-value=""]`, so it's
-  not a selectable row).
+  native `<select>` to empty for submit + no-JS). **A placeholder picker MUST also set
+  `allowEmptyOption: false`** (the controller keys this off `placeholder-value`): otherwise TomSelect
+  treats the blank option as a *selected item*, hides the input + its placeholder off-screen
+  (`left:-10000px`) and shows an empty item -- the field then reads as blank with the caret pushed ~1/3
+  in. With it false the empty option is neither an item (input stays on-screen showing the placeholder,
+  caret right after the icon) nor a menu row.
 - **Disable the submit until a choice is made** (it now loads blank): pass **`toggle-submit-value="true"`**
   -- the controller disables the closest form's `[type=submit]` until an option is picked and re-disables
   on clear. Add `disabled:opacity-50 disabled:cursor-not-allowed` to that button.
