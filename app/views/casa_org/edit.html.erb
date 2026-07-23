@@ -18,6 +18,30 @@
       <p class="mt-1 text-sm text-slate-500">Organization profile, features, and admin settings.</p>
     </div>
 
+    <%# Admin sub-pages that live on their own routes (were reachable via the old Bootstrap navbar's
+        admin menu; the redesign left them unlinked). Surfaced here since Settings is admin-only. %>
+    <section class="<%= card %>">
+      <h2 id="administration" class="<%= section_title %>">Administration</h2>
+      <p class="mt-1 text-sm text-slate-500">Manage admins, rates, banners, and bulk imports for this organization.</p>
+      <div class="mt-4 grid gap-2 sm:grid-cols-2">
+        <% [
+             ["Manage admins", "Invite and edit CASA admins", "bi-person-badge", casa_admins_path],
+             ["Mileage rates", "Reimbursement rate history", "bi-cash-coin", mileage_rates_path],
+             ["Banners", "Org-wide announcement banners", "bi-megaphone", banners_path],
+             ["Imports", "Bulk-import volunteers, supervisors, and cases", "bi-upload", imports_path]
+           ].each do |label, desc, icon, path| %>
+          <%= link_to path, class: "group flex items-start gap-3 rounded-lg border border-slate-200 p-3 transition-colors hover:border-brand-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+            <i class="bi <%= icon %> mt-0.5 text-lg text-slate-500 group-hover:text-brand-600" aria-hidden="true"></i>
+            <span class="min-w-0 flex-1">
+              <span class="block text-sm font-medium text-slate-800"><%= label %></span>
+              <span class="block text-xs text-slate-500"><%= desc %></span>
+            </span>
+            <i class="bi bi-chevron-right text-sm text-slate-400 group-hover:text-slate-600" aria-hidden="true"></i>
+          <% end %>
+        <% end %>
+      </div>
+    </section>
+
     <section class="<%= card %>">
       <%= form_with model: current_organization, local: true, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: current_organization %>

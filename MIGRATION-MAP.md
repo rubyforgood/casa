@@ -66,6 +66,16 @@ the `*_reports` CSV exporters, case_contacts/followups (redirect / JSON / CSV on
 
 ## Loose ends (not blocking — tracked)
 
+- **Reachability — a real gap I initially missed** (page-level migration != reachable): a full sweep of
+  casa_app pages for inbound nav links found **6 orphaned pages** (migrated, but linked nowhere):
+  - **FIXED** — Mileage rates, Banners, Imports, Manage admins: now linked from **Settings →
+    Administration** (all return 200).
+  - **Still orphaned** — `other_duties` (a conditional volunteer feature; only its *enable* toggle is on
+    Settings, no link to the pages) and `emancipation_checklists#index` (an index-only page). Both need a
+    home or retirement — placement TBD.
+  - Everything else is reachable (sidebar / the Settings inline CRUD / case-child pages such as fund
+    requests via the case show). **My earlier "all migrated" checked Tailwind-on-a-shell, not
+    navigability — that was the miss.**
 - **Dead legacy files — DELETED** (verified 0 references across views / rb / js / specs; superseded by
   `Dialog::` and the casa_app twins): `shared/_court_order_form`, `shared/_court_order_list`,
   `casa_cases/_thank_you_modal`, `case_contacts/_confirm_note_content_dialog`, `layouts/_mobile_navbar`,
