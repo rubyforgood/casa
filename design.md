@@ -87,9 +87,9 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   puts `mb-4` **on the button**, **never a reserved `min-h` band** — a reserved band leaves a
   persistent ~68px empty gap above the table while nothing is selected; let the button push the
   table down only once a row is picked (the `select-all` controller toggles `hidden!` on the
-  button, which collapses its margin too). Pagination rendered **inside** the table card needs no
-  top margin (the `shared/_pagination` bar owns a `border-t` + `mt-1`); rendered **below** the
-  card, wrap it in `mt-4`. Verify these gaps at the pixel level (filter-bottom -> table-top), not
+  button, which collapses its margin too). Pagination is **always** `shared/_pagination` rendered **bare, directly below** the content (never
+  inside the table card -- responsive pages hide the desktop card on mobile): the partial owns its
+  `mt-4` gap + `border-t` divider + `pt-4`, edge-aligned, so drop any `mt-*` wrapper around it. Verify these gaps at the pixel level (filter-bottom -> table-top), not
   by reading tokens.
 
 ### Iconography
@@ -447,9 +447,13 @@ column (put persistent bulk-action text in a toolbar above the table instead). P
 checkbox/button center against the first line, not computed style. `divide-y divide-slate-50`, `hover:bg-slate-50/70`.
 Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
-submit on change (`auto-submit` controller). Pagination: the `shared/_pagination` partial
-renders a Pagy instance as a bottom bar — "Showing X–Y of Z" left, page controls right
-(`nav` + `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params. Don't render
+submit on change (`auto-submit` controller). Pagination: **always** render `shared/_pagination` **bare** (no wrapper) directly below the content;
+it is a footer bar that owns its spacing (`mt-4` gap + `border-t` + `pt-4`, edge-aligned to the
+content) — "Showing X–Y of Z" left, page controls right (`nav` + `aria-label`, `aria-current`,
+`rel=prev/next`), preserving filter params. NOT inside the table card (responsive pages hide it on
+mobile) and NOT wrapped in ad-hoc `mt-*` — so every page (full table, responsive table + mobile list,
+card list) matches; verified identical (16px gap, edge-aligned) on volunteers / reimbursements /
+learning-hours. Don't render
 decorative emoji as data (e.g. the 🦋/🐛 transition-aged icons) — use a plain label or pill.
 Verify a column's data source before carrying one forward: the legacy cases index kept
 Hearing Type / Judge columns that had rendered blank for every case since a 2023 migration

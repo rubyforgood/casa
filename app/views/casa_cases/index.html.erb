@@ -153,8 +153,6 @@
   </div>
 
   <% if @casa_cases.any? %>
-    <div class="mt-4">
-      <%= render "shared/pagination", pagy: @pagy %>
-    </div>
+    <%= render "shared/pagination", pagy: @pagy %>
   <% end %>
 </div>
