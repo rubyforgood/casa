@@ -88,7 +88,7 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   persistent ~68px empty gap above the table while nothing is selected; let the button push the
   table down only once a row is picked (the `select-all` controller toggles `hidden!` on the
   button, which collapses its margin too). Pagination is the `shared/_pagination` **footer rendered INSIDE the table card** (its last child) -- a
-  compact `border-t` + `px-4` + `pt-3`, the industry-standard table footer (like learning-hours). On
+  compact `border-t` + `px-4` + `py-3`, the industry-standard table footer (like learning-hours). On
   responsive pages whose desktop card is `hidden md:block`, ALSO render a `md:hidden` copy below the
   mobile card list. Never a detached below-card bar -- an external `mt-4` gap + divider + padding reads
   as too much scroll. Verify these gaps at the pixel level (filter-bottom -> table-top), not
@@ -450,7 +450,7 @@ checkbox/button center against the first line, not computed style. `divide-y div
 Keep the `thead` even when empty and put an empty-state row in the `tbody`. Filtering /
 sort / pagination are **server-side** (params + Pagy); the filter bar is plain selects that
 submit on change (`auto-submit` controller). Pagination: render `shared/_pagination` as a **footer INSIDE the table card** (its last child) —
-compact `border-t` + `px-4` + `pt-3`, "Showing X–Y of Z" left, page controls right (`nav` +
+compact `border-t` + `px-4` + `py-3`, "Showing X–Y of Z" left, page controls right (`nav` +
 `aria-label`, `aria-current`, `rel=prev/next`), preserving filter params — the industry-standard table
 footer. On responsive pages whose desktop table card is `hidden md:block`, ALSO render a `md:hidden`
 copy below the mobile card list (a card-list page like case-contacts renders it below the list). NOT a

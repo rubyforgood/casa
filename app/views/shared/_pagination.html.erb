@@ -6,7 +6,7 @@
 <% if pagy.count.positive? %>
   <% link = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-slate-200 bg-white px-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
   <% disabled = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-transparent px-2 text-slate-300" %>
-  <nav class="mt-1 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 pt-3 text-sm" aria-label="Pagination">
+  <nav class="mt-1 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-3 text-sm" aria-label="Pagination">
     <p class="text-slate-500">Showing <span class="font-medium text-slate-700"><%= pagy.from %></span>&ndash;<span class="font-medium text-slate-700"><%= pagy.to %></span> of <span class="font-medium text-slate-700"><%= pagy.count %></span></p>
     <% if pagy.pages > 1 %>
       <div class="flex items-center gap-1">
