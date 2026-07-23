@@ -552,9 +552,17 @@ pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 A case contact's medium (in person / video / voice / text / letter) shows as a brand-tinted icon
 badge (`grid h-8 w-8 place-items-center rounded-xl bg-brand-50 text-brand-600`). Always render it via
 the **`contact_medium_badge(case_contact)`** helper, never a bare `<i>`: an icon-only glyph is a
-mystery to sighted users and invisible to screen readers, so the helper attaches the medium name
-(`CaseContactDecorator#medium_label`) as both a native `title` tooltip and the accessible name
-(`role="img"` + `aria-label`), with the inner `<i>` `aria-hidden`. Icon and label travel together, so
+mystery to sighted users and invisible to screen readers, so the helper renders the medium name
+(`CaseContactDecorator#medium_label`) two ways: a **CSS hover tooltip** for sighted users (a
+`.badge-tip` label below the badge, revealed by `.group:hover > .badge-tip`) and the accessible name
+(`role="img"` + `aria-label`, inner `<i>` `aria-hidden`) for AT. The native `title` tooltip was
+dropped -- too easy to miss (browser delay, only fires on the 32px glyph, never on touch, reported
+twice). **Do not use Tailwind's `group-hover:*` for it:** v4 gates `hover:`/`group-hover:` behind
+`@media (hover: hover)`, so the tooltip vanishes on hybrid / touch-screen laptops driven by a mouse
+(they report `hover: none`). The hand-written `.badge-tip` rule (`tailwind.css`, un-gated) shows on any
+hovering pointer. The visible label is `aria-hidden` (redundant with the accessible name, so AT isn't
+double-announced); AT + touch get the medium via the `aria-label`. Pixel-verified by forcing `:hover`
+(opacity 0 -> 1) and confirming the label isn't clipped by the card's `overflow-hidden`. Icon and label travel together, so
 it stays clear + accessible everywhere the medium appears (card today, a contacts table tomorrow).
 Medium names are **sentence case** ("Voice only", "Text/email") everywhere: `medium_label` (badge) and
 `contact_mediums` (the medium dropdown / radios + the index filter) both derive it via

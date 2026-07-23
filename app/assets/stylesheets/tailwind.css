@@ -158,3 +158,15 @@ dialog[data-modal-target="dialog"] {
 @media (max-width: 640px) {
   dialog[data-modal-target="dialog"] { top: 18vh; }
 }
+
+/* ------------------------------------------------------------------
+   Icon-badge hover tooltip (contact_medium_badge). Deliberately NOT gated on
+   @media (hover: hover) the way Tailwind's group-hover:* is: a hover-gated rule
+   is hidden on hybrid / touch-screen laptops driven by a mouse (they report
+   hover: none), which is likely why the tooltip couldn't be seen. Plain `:hover`
+   fires for ANY hovering pointer, so the label shows on every mouse. The accessible
+   name (role=img + aria-label) still covers AT + touch. Verified by forcing :hover
+   (opacity 0 -> 1); the label stays inside the card so overflow-hidden won't clip it.
+------------------------------------------------------------------ */
+.badge-tip { opacity: 0; transition: opacity 100ms ease; }
+.group:hover > .badge-tip { opacity: 1; }

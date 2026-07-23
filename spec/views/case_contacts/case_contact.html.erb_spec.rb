@@ -184,8 +184,12 @@ RSpec.describe "case_contacts/case_contact", type: :view do
 
       render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-      expect(rendered).to have_css("span[role='img'][title='Video'][aria-label='Contact medium: Video']")
+      # accessible name for AT (role=img + aria-label); the native title tooltip is gone
+      expect(rendered).to have_css("span[role='img'][aria-label='Contact medium: Video']")
+      expect(rendered).not_to have_css("span[role='img'][title]")
       expect(rendered).to have_css("span[role='img'] i.bi-camera-video")
+      # visible hover tooltip carrying the medium name, aria-hidden so AT isn't double-announced
+      expect(rendered).to have_css("span.group span[aria-hidden='true']", text: "Video", visible: :all)
     end
   end
 end

@@ -17,19 +17,32 @@ module CaseContactsHelper
   end
 
   # Brand-tinted badge for a case contact's medium (in person / video / voice / text / letter). The
-  # medium name is both a native tooltip and the accessible name (role=img + aria-label), so the
-  # icon isn't a mystery and screen readers announce it. Reused wherever the medium icon appears so
-  # the icon and its label always travel together.
+  # medium name is exposed as a CSS hover tooltip (sighted users) plus the accessible name (role=img
+  # + aria-label, for AT), so the icon isn't a mystery and screen readers announce it. Reused
+  # wherever the medium icon appears so the icon and its label always travel together.
   def contact_medium_badge(case_contact)
     decorated = case_contact.decorate
     label = decorated.medium_label
-    tag.span(
-      tag.i("", class: decorated.medium_icon, aria: {hidden: true}),
-      class: "grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-brand-50 text-brand-600",
-      role: "img",
-      title: label,
-      aria: {label: "Contact medium: #{label}"}
-    )
+    # Icon-only badge showing the contact medium. The name is exposed two ways: the accessible
+    # name (role=img + aria-label) for AT, and a CSS hover tooltip for sighted users. The native
+    # `title` tooltip was dropped -- browser delay + fires only on the 32px glyph + never on
+    # touch made it too easy to miss (reported twice). The visible label is aria-hidden so AT is
+    # not double-announced, and it stays hoverable (no pointer-events-none) per WCAG 1.4.13.
+    tag.span(class: "group relative inline-flex shrink-0") do
+      safe_join([
+        tag.span(
+          tag.i("", class: decorated.medium_icon, aria: {hidden: true}),
+          class: "grid h-8 w-8 place-items-center rounded-xl bg-brand-50 text-brand-600",
+          role: "img",
+          aria: {label: "Contact medium: #{label}"}
+        ),
+        tag.span(
+          label,
+          class: "badge-tip absolute left-0 top-full z-20 mt-1.5 whitespace-nowrap rounded-md bg-slate-900 px-2 py-1 text-xs font-medium text-white shadow-lg",
+          aria: {hidden: true}
+        )
+      ])
+    end
   end
 
   def render_back_link(casa_case)
