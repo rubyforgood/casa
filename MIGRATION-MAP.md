@@ -1,6 +1,8 @@
 # Migration map — legacy Bootstrap → casadesign (Tailwind v4)
 
-**Status: every user-facing page is migrated.** This map was built by inspecting the code (commit
+**Status: every user-facing page is migrated _and reachable_.** (A reachability sweep found 6 pages that
+were migrated but linked nowhere in the nav — all are now wired up; see *Reachability* under Loose ends.)
+This map was built by inspecting the code (commit
 `cbff2ed4e`), not by trusting the design.md checklist: each page-rendering controller resolves to a
 Tailwind shell (class-level `layout "casa_app"`, an inline `render …, layout: "casa_app"`, or an
 inherited/own Tailwind layout), and a scan for Bootstrap markers (`btn btn-`, `col-*`, `card-body`,
