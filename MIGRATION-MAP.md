@@ -66,10 +66,18 @@ the `*_reports` CSV exporters, case_contacts/followups (redirect / JSON / CSV on
 
 ## Loose ends (not blocking — tracked)
 
-- **Dead legacy files to delete** (0 render references; superseded by `Dialog::` / casa_app twins):
-  `shared/_court_order_form`, `shared/_court_order_list`, `casa_cases/_thank_you_modal`,
-  `case_contacts/_confirm_note_content_dialog`, `shared/_emancipation_link`, `layouts/_mobile_navbar`,
-  `layouts/footers/_logged_in`, `devise/shared/_links`, `all_casa_admins/shared/_links`.
+- **Dead legacy files — DELETED** (verified 0 references across views / rb / js / specs; superseded by
+  `Dialog::` and the casa_app twins): `shared/_court_order_form`, `shared/_court_order_list`,
+  `casa_cases/_thank_you_modal`, `case_contacts/_confirm_note_content_dialog`, `layouts/_mobile_navbar`,
+  `devise/shared/_links`, `all_casa_admins/shared/_links`.
+- **Correction — NOT dead, still to migrate**: `shared/_emancipation_link` is **live** (rendered from
+  `CasaCaseDecorator`, the emancipation badge on the cases pages) but still **legacy-styled**
+  (`main-btn primary-btn btn-sm`) — a genuine migration item (convert to `button_classes`/`ghost`),
+  not a deletion. So the migration is page-complete but this one decorator-rendered **element** remains
+  legacy.
+- **App-dead but spec-tested**: `layouts/footers/_logged_in` (+ `_not_logged_in`) render in no layout,
+  but `spec/views/layouts/footer.html.erb_spec.rb` still covers them — deleting them means removing that
+  spec too (separate decision).
 - **Mailers are intentionally NOT part of the UI redesign** — emails use inline CSS (ADR 0007):
   volunteer / supervisor / casa_admin / user / fund_request / learning_hours mailers + the devise mailer.
 - **`[~]` help-link destination** — the one open item on the design.md checklist (app-shell leaf).
