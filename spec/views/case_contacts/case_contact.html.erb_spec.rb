@@ -170,7 +170,7 @@ RSpec.describe "case_contacts/case_contact", type: :view do
     end
   end
 
-  describe "contact medium badge" do
+  describe "contact medium" do
     let(:case_contact) { build_stubbed(:case_contact, medium_type: CaseContact::VIDEO, creator: volunteer) }
 
     before do
@@ -178,18 +178,14 @@ RSpec.describe "case_contacts/case_contact", type: :view do
       allow(view).to receive(:current_user).and_return(admin)
     end
 
-    it "shows the medium as an accessible, tooltipped badge" do
+    it "shows the medium as plain text in the meta line, not an icon badge" do
       assign :case_contact, case_contact
       assign :casa_cases, [case_contact.casa_case]
 
       render(partial: "case_contacts/case_contact", locals: {contact: case_contact})
 
-      # accessible name for AT (role=img + aria-label); the native title tooltip is gone
-      expect(rendered).to have_css("span[role='img'][aria-label='Contact medium: Video']")
-      expect(rendered).not_to have_css("span[role='img'][title]")
-      expect(rendered).to have_css("span[role='img'] i.bi-camera-video")
-      # visible hover tooltip carrying the medium name, aria-hidden so AT isn't double-announced
-      expect(rendered).to have_css("span.group span[aria-hidden='true']", text: "Video", visible: :all)
+      expect(rendered).to have_text("Video")
+      expect(rendered).to have_no_css("[role='img']")
     end
   end
 end

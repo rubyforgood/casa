@@ -190,19 +190,20 @@ RSpec.describe CaseContactDecorator do
 
     context "when all information is available" do
       it "returns a properly formatted string" do
-        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update(occurred_at: "2020-12-01", medium_type: "in-person", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven"
+          "December 1, 2020 | In person | 1 hour 39 minutes | No Contact Made | 100 miles driven"
         )
       end
     end
 
     context "when some information is missing" do
-      it "returns a properly formatted string without extra pipes" do
+      it "omits missing facts (medium, contact made) without extra pipes" do
         case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
+        case_contact.medium_type = nil
 
         expect(case_contact.decorate.subheading).to eq(
           "December 1, 2020 | 1 hour 39 minutes | 100 miles driven"

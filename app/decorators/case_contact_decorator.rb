@@ -46,6 +46,9 @@ class CaseContactDecorator < Draper::Decorator
   def subheading
     [
       I18n.l(object.occurred_at, format: :full, default: nil),
+      # Medium (how the contact happened) reads as plain text alongside the other facts rather than
+      # as an ambiguous icon; omitted when unset, like the conditional facts below it.
+      (medium_label if object.medium_type.present?),
       duration_minutes,
       contact_made,
       miles_traveled

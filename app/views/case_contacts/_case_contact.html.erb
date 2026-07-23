@@ -10,11 +10,9 @@
 <div class="container-fluid">
   <div class="full-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
     <div class="p-4 sm:p-5">
-      <%# Header (hero) row: the medium-type icon sits inline with the title, so everything
-          below spans the full card width and stays left-aligned to the card edge. A leading
-          icon adorns the header; it is not a gutter that indents the body (industry standard). %>
+      <%# Header row: contact groups as the title + status pills. The medium (how the contact
+          happened) is a plain-text fact in the meta line below (subheading), not an icon. %>
       <div class="card-title flex flex-wrap items-center gap-2">
-        <%= contact_medium_badge(contact) %>
         <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
         <% unless contact.active? %>
           <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>

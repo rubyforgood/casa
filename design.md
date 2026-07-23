@@ -548,27 +548,22 @@ Deactivated volunteer (slate).
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
 pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
 
-### Icon badge (contact medium)
-A case contact's medium (in person / video / voice / text / letter) shows as a brand-tinted icon
-badge (`grid h-8 w-8 place-items-center rounded-xl bg-brand-50 text-brand-600`). Always render it via
-the **`contact_medium_badge(case_contact)`** helper, never a bare `<i>`: an icon-only glyph is a
-mystery to sighted users and invisible to screen readers, so the helper renders the medium name
-(`CaseContactDecorator#medium_label`) two ways: a **CSS hover tooltip** for sighted users (a
-`.badge-tip` label below the badge, revealed by `.group:hover > .badge-tip`) and the accessible name
-(`role="img"` + `aria-label`, inner `<i>` `aria-hidden`) for AT. The native `title` tooltip was
-dropped -- too easy to miss (browser delay, only fires on the 32px glyph, never on touch, reported
-twice). **Do not use Tailwind's `group-hover:*` for it:** v4 gates `hover:`/`group-hover:` behind
-`@media (hover: hover)`, so the tooltip vanishes on hybrid / touch-screen laptops driven by a mouse
-(they report `hover: none`). The hand-written `.badge-tip` rule (`tailwind.css`, un-gated) shows on any
-hovering pointer. The visible label is `aria-hidden` (redundant with the accessible name, so AT isn't
-double-announced); AT + touch get the medium via the `aria-label`. Pixel-verified by forcing `:hover`
-(opacity 0 -> 1) and confirming the label isn't clipped by the card's `overflow-hidden`. Icon and label travel together, so
-it stays clear + accessible everywhere the medium appears (card today, a contacts table tomorrow).
-Medium names are **sentence case** ("Voice only", "Text/email") everywhere: `medium_label` (badge) and
+### Contact medium (card meta line)
+A case contact's medium (in person / video / voice / text / letter) is **how** the contact happened --
+a fact peer to date, duration, and miles. Show it as **plain text in the card meta line**
+(`CaseContactDecorator#subheading`, e.g. "July 21, 2026 | In person | 30 minutes"), NOT as an icon.
+An icon-only medium is a poor signifier: the glyphs are ambiguous (an envelope is text OR a letter?),
+undiscoverable behind a hover, invisible on touch, and read as decoration -- reviewers couldn't tell
+what it meant. Plain text beside the other facts is self-evident, needs no hover, and works everywhere;
+`subheading` omits the medium when unset, like the other conditional facts. Both the index card
+(`case_contacts/_case_contact`) and the case-show card (`casa_cases/_case_contact_card`) render
+`subheading`, so they stay in sync. (History: this replaced a hover-tooltip icon badge. If a future
+compact view really wants an at-a-glance glyph, pair the icon WITH its visible text label -- never
+icon-alone -- and note that Tailwind v4 gates `hover:`/`group-hover:` behind `@media (hover: hover)`,
+so a hover-only reveal silently fails on touch / hybrid-pointer devices.)
+Medium names are **sentence case** ("Voice only", "Text/email") everywhere: `medium_label` and
 `contact_mediums` (the medium dropdown / radios + the index filter) both derive it via
-`medium_type.tr("-", " ").humanize`, so they don't drift back to Title Case. WCAG: the icon carries a
-text alternative (`aria-label`, not color/shape alone) and brand-600 on brand-50 is **5.6:1** (passes
-1.4.11 non-text contrast); axe is clean on the index + form.
+`medium_type.tr("-", " ").humanize`, so they don't drift back to Title Case.
 
 ### Names
 User names render **without honorific prefixes** (Mrs./Mr./…), first + last only, on
