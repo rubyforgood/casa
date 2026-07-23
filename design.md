@@ -274,6 +274,17 @@ for a short, fixed list (the 3-option status filter stays native).
   `.ts-control`, and TomSelect copies the `<select>`'s classes onto `.ts-wrapper`, so a bordered class
   **double-borders** the control (measured: `.ts-control` 1px + `.ts-wrapper` 1px). Drop the manual
   chevron too -- the `.ts-wrapper::after` caret handles it.
+- **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
+  (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
+  native `<select>` to empty; it's hidden from the menu via `.ts-dropdown .option[data-value=""]`, so it's
+  not a selectable row).
+- **Disable the submit until a choice is made** (it now loads blank): pass **`toggle-submit-value="true"`**
+  -- the controller disables the closest form's `[type=submit]` until an option is picked and re-disables
+  on clear. Add `disabled:opacity-50 disabled:cursor-not-allowed` to that button.
+- **Clear (x)**: the `clear_button` plugin shows an x on focus/hover once a value is set. casa doesn't load
+  the bundled bootstrap clear-button theme, so **hide the chevron while the x shows**
+  (`.ts-wrapper.has-items.focus::after` / `:hover::after { opacity: 0 }`) -- the x sits where the chevron
+  was, so they never overlap (idle: chevron shown, x hidden; focus/hover: x shown, chevron hidden).
 
 ### Nested sub-form (repeatable rows)
 The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the

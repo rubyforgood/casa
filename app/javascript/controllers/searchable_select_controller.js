@@ -6,16 +6,31 @@ import TomSelect from 'tom-select'
 // so supervisors/admins can find a case by volunteer. Connects to
 // data-controller="searchable-select".
 export default class extends Controller {
-  // Pass data-searchable-select-dropdown-parent-value="body" when the <select> is inside an overflow
-  // container (e.g. a table with overflow-x-auto) so the menu renders on <body> and isn't clipped.
-  static values = { dropdownParent: String }
+  // Values:
+  //   dropdown-parent-value="body" -> render the menu on <body> (escape an overflow container)
+  //   placeholder-value="..."      -> empty-state text shown when nothing is selected
+  //   toggle-submit-value          -> disable the form's submit button until an option is picked
+  static values = { dropdownParent: String, placeholder: String, toggleSubmit: Boolean }
 
   connect () {
-    this.select = new TomSelect(this.element, {
+    const options = {
       maxItems: 1,
       allowEmptyOption: true,
-      dropdownParent: this.dropdownParentValue || null
-    })
+      dropdownParent: this.dropdownParentValue || null,
+      plugins: { clear_button: { title: 'Clear selection' } }
+    }
+    if (this.placeholderValue) options.placeholder = this.placeholderValue
+    this.select = new TomSelect(this.element, options)
+
+    if (this.toggleSubmitValue) {
+      this.submitButton = this.element.closest('form')?.querySelector('[type="submit"]')
+      this.toggleSubmit()
+      this.select.on('change', () => this.toggleSubmit())
+    }
+  }
+
+  toggleSubmit () {
+    if (this.submitButton) this.submitButton.disabled = !this.element.value
   }
 
   disconnect () {

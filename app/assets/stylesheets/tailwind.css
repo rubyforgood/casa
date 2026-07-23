@@ -75,6 +75,14 @@
 }
 .ts-wrapper.dropdown-active::after { transform: translateY(-50%) rotate(180deg); }
 .ts-wrapper .ts-control { padding-right: 2rem !important; } /* keep room for the chevron */
+/* clear_button plugin: the bundled plugin CSS positions the x and toggles its opacity on
+   hover/focus-with-selection. We (a) hide the chevron underneath while the x shows so the two never
+   overlap, (b) restyle the x for casa, and (c) hide the blank placeholder option from the menu (it
+   exists only to default the native <select> to empty). */
+.ts-wrapper.has-items.focus::after, .ts-wrapper.has-items:hover::after { opacity: 0; }
+.ts-wrapper .clear-button { color: #94a3b8 !important; font-size: 1.125rem; z-index: 2; }
+.ts-wrapper .clear-button:hover { color: #475569 !important; }
+.ts-dropdown .option[data-value=""] { display: none; }
 /* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
    (grey), so match that specificity and use !important where tom-select does. */
 .ts-wrapper.multi .ts-control > .item {
