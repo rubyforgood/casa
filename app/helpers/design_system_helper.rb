@@ -69,6 +69,25 @@ module DesignSystemHelper
     "#{base} #{variant_classes}"
   end
 
+  # Tertiary "ghost" button: the lowest-emphasis action, for REPEATED row / toolbar actions (Edit,
+  # Delete, Detail view, an inline Assign submit) so they recede from brand links and never compete
+  # with a page's primary CTA. Deliberately NOT a button_classes variant -- no fill/border/shadow and
+  # shorter than the 40px CTA token. Single source of truth so table row actions stay identical
+  # app-wide (they used to be copy-pasted inline strings + ad hoc colored text links, which drifted).
+  # Full literal strings per variant so Tailwind's scanner compiles them.
+  #   :neutral  slate ink -- Edit / Detail view / Impersonate / neutral row actions
+  #   :danger   rose ink  -- Delete / destructive row actions (pair with a confirm dialog)
+  def ghost_class(variant = :neutral)
+    base = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
+    variant_classes =
+      case variant
+      when :neutral then "text-slate-600 hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-brand-500"
+      when :danger then "text-rose-600 hover:bg-rose-50 hover:text-rose-700 focus-visible:ring-rose-500"
+      else raise ArgumentError, "unknown ghost variant: #{variant.inspect}"
+      end
+    "#{base} #{variant_classes}"
+  end
+
   # Design-system alert/banner card, shared by flash messages (shared/_flashes) and the form-error
   # summary (shared/_form_errors). One shape (rounded-lg border + a leading severity icon), colored
   # by semantic variant. Full class strings written out so the Tailwind scanner compiles them.
