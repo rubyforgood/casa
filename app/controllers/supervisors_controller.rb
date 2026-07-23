@@ -124,7 +124,7 @@ class SupervisorsController < ApplicationController
   end
 
   def available_volunteers
-    @available_volunteers = Volunteer.with_no_supervisor(current_user.casa_org)
+    @available_volunteers = Volunteer.with_no_supervisor(current_user.casa_org).includes(:casa_cases)
   end
 
   def supervisor_values

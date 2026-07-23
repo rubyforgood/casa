@@ -103,7 +103,8 @@
             <thead>
               <tr class="border-b border-slate-100">
                 <th class="<%= th %>">Volunteer</th>
-                <th class="<%= th %>">Assigned cases</th>
+                <th class="<%= th %>">Cases</th>
+                <th class="<%= th %>">Volunteer since</th>
                 <th class="px-4 py-3 text-right text-xs font-semibold text-slate-600 whitespace-nowrap align-top">Assign supervisor</th>
               </tr>
             </thead>
@@ -111,7 +112,8 @@
               <% @available_volunteers.each do |volunteer| %>
                 <tr class="hover:bg-slate-50/70">
                   <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: "font-medium #{name_link_class}" %></td>
-                  <td class="<%= td %>"><%= safe_join(volunteer.casa_cases.map { |cc| link_to(cc.case_number, casa_case_path(cc), class: "text-brand-600 hover:text-brand-700 hover:underline") }, ", ").presence || tag.span("\u2014", class: "text-slate-500") %></td>
+                  <td class="<%= td %>"><% case_count = volunteer.casa_cases.size %><%= case_count.positive? ? pluralize(case_count, "case") : tag.span("\u2014", class: "text-slate-500") %></td>
+                  <td class="<%= td %>"><%= I18n.l(volunteer.created_at, format: :full) %></td>
                   <td class="<%= td %> text-right">
                     <% if @active_supervisors.any? %>
                       <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center justify-end gap-2" do |form| %>
