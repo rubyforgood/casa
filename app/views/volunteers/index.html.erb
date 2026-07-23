@@ -47,11 +47,11 @@
           <table class="w-full text-sm">
             <thead>
               <tr class="border-b border-slate-100">
+                <%# Bare, labeled select-all (industry standard for a bulk table: Gmail/GitHub/etc.).
+                    aria-label + title give it a name without widening this narrow column. mt-0.5
+                    drops the box onto the header text line. %>
                 <th class="px-3 py-3 align-top">
-                  <label class="inline-flex cursor-pointer items-center gap-2 whitespace-nowrap text-xs font-semibold text-slate-600">
-                    <input type="checkbox" id="checkbox-toggle-all" class="<%= checkbox_class %>" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
-                    Select all
-                  </label>
+                  <input type="checkbox" id="checkbox-toggle-all" aria-label="Select all" title="Select all" class="<%= checkbox_class %> mt-0.5" data-select-all-target="checkboxAll" data-action="select-all#toggleAll">
                 </th>
                 <%= sortable_header("Name", "display_name", sort: @sort, direction: @direction) %>
                 <%= sortable_header("Email", "email", sort: @sort, direction: @direction) %>
@@ -70,7 +70,7 @@
               <% if @volunteers.any? %>
                 <% @volunteers.each do |volunteer| %>
                   <tr class="hover:bg-slate-50/70">
-                    <td class="px-3 py-3 align-top"><input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_<%= volunteer.id %>" value="<%= volunteer.id %>" aria-label="Select <%= formatted_name(volunteer.display_name) %>" class="<%= checkbox_class %>" data-select-all-target="checkbox" data-action="select-all#toggleSingle"></td>
+                    <td class="px-3 py-3 align-top"><input type="checkbox" name="supervisor_volunteer[volunteer_ids][]" id="supervisor_volunteer_volunteer_ids_<%= volunteer.id %>" value="<%= volunteer.id %>" aria-label="Select <%= formatted_name(volunteer.display_name) %>" class="<%= checkbox_class %> mt-0.5" data-select-all-target="checkbox" data-action="select-all#toggleSingle"></td>
                     <td class="<%= td %>"><%= link_to formatted_name(volunteer.display_name).presence || volunteer.email, edit_volunteer_path(volunteer), class: "font-medium text-slate-800 hover:text-brand-700 hover:underline" %></td>
                     <td class="<%= td %> text-slate-600"><%= volunteer.email %></td>
                     <td class="supervisor-column <%= td %>"><% if volunteer.supervisor_name.present? %><span class="font-medium text-slate-800"><%= formatted_name(volunteer.supervisor_name) %></span><% end %></td>
@@ -93,7 +93,7 @@
                     <td class="<%= td %>"><%= volunteer.contacts_made_in_past_days || 0 %></td>
                     <td class="<%= td %>"><%= volunteer.hours_spent_in_days(30).presence || tag.span("\u2014", class: "text-slate-500") %></td>
                     <td class="<%= td %>"><% langs = volunteer.languages.map(&:name) %><%= langs.any? ? langs.join(", ") : tag.span("\u2014", class: "text-slate-500") %></td>
-                    <td class="px-3 py-3 text-right whitespace-nowrap">
+                    <td class="px-3 py-3 text-right whitespace-nowrap align-top">
                       <div class="flex items-center justify-end gap-1">
                         <%= link_to edit_volunteer_path(volunteer), class: ghost, "aria-label": "Edit #{formatted_name(volunteer.display_name)}" do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
                         <% if policy(volunteer).impersonate? %>
