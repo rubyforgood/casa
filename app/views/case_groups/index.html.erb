@@ -52,7 +52,7 @@
                         title: "Delete case group?",
                         message: "\"#{case_group.name}\" will be deleted. The cases in it are not affected.",
                         trigger_icon: "bi bi-trash", trigger_label: "Delete",
-                        trigger_class: ghost_class %>
+                        trigger_class: ghost_class(:danger) %>
                 </div>
               </td>
             </tr>
@@ -77,7 +77,7 @@
                     message: "\"#{case_group.name}\" will be deleted. The cases in it are not affected.",
                     trigger_icon: "bi bi-trash",
                     aria_label: "Delete #{case_group.name}",
-                    trigger_class: ghost_class %>
+                    trigger_class: ghost_class(:danger) %>
             </div>
           </div>
           <dl class="mt-3 space-y-2 text-sm">

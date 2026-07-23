@@ -151,13 +151,16 @@ not** re-equalize sizes with `border border-transparent` on the filled variants;
 fragile compensation pinned to the secondary's exact border width, and the height token
 already handles it.
 
-- Tertiary (ghost): the **`ghost_class`** helper (design_system_helper.rb) --
-  `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600`. **One
-  slate ink** -- destructive row actions (Delete) use this SAME slate ghost, **never rose**: rose read
-  as too jarring for a repeated per-row control (the remove-expense decision, below), so the danger is
-  carried by the `bi-trash` icon + "Delete" label + the confirm dialog, not the button color. A
-  prominent destructive CTA (a card footer, not a row) is `button_classes(:danger_outline)` instead.
-  No border, fill, or shadow: the
+- Tertiary (ghost): the **`ghost_class(:neutral | :danger)`** helper (design_system_helper.rb) --
+  `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600`. **Both
+  variants are slate at rest** (no jarring wall of colored text in a table); they differ ONLY on
+  hover/focus: `:neutral` hovers gray (Edit / Detail view / View / Impersonate / Assign / filters),
+  `:danger` hovers **rose** (every Delete / Remove / destructive action -- the destructive hover must
+  be identical everywhere, never gray in one table and rose in another). Slate-at-rest + rose-on-hover
+  is the **industry-standard destructive affordance** (GitHub, Gmail, Linear): it reveals danger at the
+  point of action without an always-on red. Reinforced by the `bi-trash` icon + "Delete" label +
+  confirm dialog. A prominent destructive CTA (a card footer, not a repeated row) is
+  `button_classes(:danger_outline)`/`(:danger)` instead. No border, fill, or shadow: the
   lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
   in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
   CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat
@@ -167,8 +170,8 @@ already handles it.
   `gap-1.5` plus a `bi-*` glyph (`bi-pencil` Edit, `bi-trash` Delete). Right-aligned in a table's
   trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the card edge
   rather than skewing the button's own padding. **Every table row action is this ghost** -- Edit
-  (`ghost_class`) / Delete (`ghost_class` too, passed as the confirm dialog's `trigger_class` with
-  `trigger_icon: "bi bi-trash"` -- slate, **not** rose) / Detail view / Impersonate AND a form-submit control like the
+  (`ghost_class`) / Delete (`ghost_class(:danger)`, passed as the confirm dialog's `trigger_class` with
+  `trigger_icon: "bi bi-trash"` -- slate at rest, rose on hover) / Detail view / Impersonate AND a form-submit control like the
   volunteers-without-supervisors "Assign supervisor" button -- **never a
   `button_classes(:primary/:secondary)` CTA**: a filled CTA over-emphasizes a repeated per-row action
   and breaks table-to-table consistency. Right-align the whole trailing column (`text-right` cell +
@@ -334,7 +337,7 @@ required on submit**: a positive amount + a description, enforced only once the 
 submitted (`active_or_details?`) so the blank "Add another expense" row and draft autosaves are not
 blocked. An incomplete or empty row blocks submit -- fill it in or **remove** it; a blank row is
 never silently dropped (the volunteer may have just forgotten it)), with a small **"Remove" action**
-(`.remove-expense-button`, the **tertiary ghost** -- slate, not the old rose that read as too jarring) on the amount label's line
+(`.remove-expense-button`, the **destructive tertiary ghost** `ghost_class(:danger)` -- slate at rest, rose on hover; the old *always*-rose read as too jarring) on the amount label's line
 (`flex justify-between`) — top-right, so it adds no extra row and doesn't narrow the fields (a side
 icon narrowed them; a bottom ghost button added a row + whitespace; a grey `bg-slate-50` box read as
 a nested card). **Space the two groups with `mt-4` on the description, NOT `space-y-4` on the row:**

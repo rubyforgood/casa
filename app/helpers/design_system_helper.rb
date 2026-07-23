@@ -75,14 +75,24 @@ module DesignSystemHelper
   # shorter than the 40px CTA token. Single source of truth so table row actions stay identical
   # app-wide (they used to be copy-pasted inline strings + ad hoc colored text links, which drifted).
   #
-  # ONE ink: slate. Destructive row actions (Delete) use this SAME slate ghost -- NOT rose. Rose read
-  # as too jarring for a repeated per-row control (see design.md, the remove-expense decision); the
-  # danger is carried by the bi-trash icon + "Delete" label + the confirm dialog, never the button
-  # color. A PROMINENT destructive CTA (a card footer, not a row) is button_classes(:danger_outline).
-  # Literal string so Tailwind's scanner compiles it.
-  def ghost_class
-    "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 " \
-      "hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"
+  # Both variants are SLATE at rest (no jarring wall of colored text in a table -- design.md line 333);
+  # they differ ONLY on hover/focus:
+  #   :neutral -- gray hover. Edit / Detail view / View / Impersonate / Assign / filter toggles.
+  #   :danger  -- ROSE hover. Delete / Remove / every destructive row action. Slate-at-rest + rose-on-
+  #               hover is the industry-standard destructive affordance (GitHub, Gmail, Linear, ...):
+  #               it reveals the danger at the point of action without an always-on red, and keeps the
+  #               destructive hover identical everywhere. A PROMINENT destructive CTA (a card footer,
+  #               not a repeated row) is button_classes(:danger_outline)/(:danger) instead.
+  # Full literal strings so Tailwind's scanner compiles them.
+  def ghost_class(variant = :neutral)
+    base = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 focus-visible:outline-none focus-visible:ring-2"
+    hover =
+      case variant
+      when :neutral then "hover:bg-slate-100 hover:text-slate-900 focus-visible:ring-brand-500"
+      when :danger then "hover:bg-rose-50 hover:text-rose-700 focus-visible:ring-rose-500"
+      else raise ArgumentError, "unknown ghost variant: #{variant.inspect}"
+      end
+    "#{base} #{hover}"
   end
 
   # Design-system alert/banner card, shared by flash messages (shared/_flashes) and the form-error

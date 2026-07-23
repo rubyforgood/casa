@@ -17,7 +17,7 @@
     <div class="mb-1.5 flex items-center justify-between gap-2">
       <%= form.label :other_expense_amount, class: "text-sm font-medium text-slate-700" do %>Other expense amount <span class="text-rose-600" aria-hidden="true">*</span><% end %>
       <button type="button"
-        class="remove-expense-button <%= ghost_class %>"
+        class="remove-expense-button <%= ghost_class(:danger) %>"
         aria-label="Delete expense"
         data-action="casa-nested-form#destroyAndRemove">Remove</button>
     </div>
