@@ -1,19 +1,14 @@
 <% content_for :page_title, "CASA admins" %>
-<%# casa_admins#index on casa_app. Bespoke Tailwind roster (email + Edit); no DataTable. The
-    `#admins` spec hook lives on the wrapper div. "Deactivated" tag + the "New admin" CTA are
-    spec-locked. %>
+<%# casa_admins#index on casa_app, inside the shared settings frame (casa_org/_settings_frame): the
+    persistent settings rail + this roster in the right pane. The `#admins` spec hook lives on the
+    wrapper div. "Deactivated" tag + the "New admin" CTA are spec-locked. %>
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 
-<div class="px-4 py-6 sm:px-6 lg:px-8">
-  <div class="mb-4">
-    <%= link_to edit_casa_org_path(current_organization), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-      <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to settings
-    <% end %>
-  </div>
-  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">CASA admins</h1>
+<%= render layout: "casa_org/settings_frame", locals: {active: "manage-admins"} do %>
+  <div class="flex flex-wrap items-end justify-between gap-3">
+    <h2 class="text-xl font-bold tracking-tight text-slate-900">CASA admins</h2>
     <%= link_to new_casa_admin_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New admin<% end %>
   </div>
 
@@ -59,4 +54,4 @@
       </table>
     </div>
   </div>
-</div>
+<% end %>

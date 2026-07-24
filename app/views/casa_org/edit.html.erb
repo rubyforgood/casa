@@ -1,19 +1,17 @@
 <% content_for :page_title, "Organization settings" %>
 <%# casa_org#edit (organization settings) on the casa_app shell, as a master-detail settings area:
-    a grouped sub-nav (settings_nav controller) selects one section at a time. Progressive
+    the shared settings rail (settings_nav controller) selects one section at a time. Progressive
     enhancement -- with JS off, every section stays visible (a plain scroll); the controller
     collapses to a single desktop panel / mobile accordion and honors the URL hash, so deep links
     (e.g. the case-contact form -> #case-contact-topics) still open the right section. The
-    Administration group is direct links to standalone admin pages (not an in-page panel), shown in
-    the rail on desktop and a link block on mobile. Section anchor ids + entity partials unchanged. %>
+    Administration group is direct links to standalone admin pages (which share the settings frame
+    via casa_org/_settings_frame). Section anchor ids + entity partials unchanged. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% file_class = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-3 file:border-0 file:bg-slate-100 file:px-3.5 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
-<% rail_link = "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500" %>
-<% group_label = "px-3 pb-1 text-xs font-semibold text-slate-400" %>
 <% mobile_group = "px-1 pb-1 text-xs font-semibold text-slate-400 lg:hidden" %>
 <% acc_btn = "flex w-full items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden" %>
 <% admin_pages = [["Manage admins", "bi-person-badge", casa_admins_path], ["Mileage rates", "bi-cash-coin", mileage_rates_path], ["Banners", "bi-megaphone", banners_path], ["Imports", "bi-upload", imports_path]] %>
@@ -26,36 +24,7 @@
     </div>
 
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start" data-controller="settings-nav">
-      <nav class="hidden shrink-0 space-y-5 text-sm lg:sticky lg:top-6 lg:block lg:w-48" aria-label="Settings sections">
-        <div>
-          <p class="<%= group_label %>">Organization</p>
-          <%= link_to "#organization-details", data: {settings_nav_target: "link", key: "organization-details", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-building" aria-hidden="true"></i> Details<% end %>
-          <%= link_to "#languages", data: {settings_nav_target: "link", key: "languages", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-translate" aria-hidden="true"></i> Languages<% end %>
-          <%= link_to "#custom-org-links", data: {settings_nav_target: "link", key: "custom-org-links", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-link-45deg" aria-hidden="true"></i> Custom links<% end %>
-        </div>
-        <div>
-          <p class="<%= group_label %>">Case setup</p>
-          <%= link_to "#contact-types", data: {settings_nav_target: "link", key: "contact-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-tags" aria-hidden="true"></i> Contact types<% end %>
-          <%= link_to "#case-contact-topics", data: {settings_nav_target: "link", key: "case-contact-topics", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-chat-square-dots" aria-hidden="true"></i> Contact topics<% end %>
-          <%= link_to "#placement-types", data: {settings_nav_target: "link", key: "placement-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-house-door" aria-hidden="true"></i> Placement types<% end %>
-        </div>
-        <div>
-          <p class="<%= group_label %>">Court</p>
-          <%= link_to "#hearing-types", data: {settings_nav_target: "link", key: "hearing-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-bank" aria-hidden="true"></i> Hearing types<% end %>
-          <%= link_to "#judges", data: {settings_nav_target: "link", key: "judges", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-person-badge" aria-hidden="true"></i> Judges<% end %>
-          <%= link_to "#sent-emails", data: {settings_nav_target: "link", key: "sent-emails", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-envelope" aria-hidden="true"></i> Sent emails<% end %>
-        </div>
-        <div>
-          <p class="<%= group_label %>">Volunteer setup</p>
-          <%= link_to "#learning-hours", data: {settings_nav_target: "link", key: "learning-hours", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-mortarboard" aria-hidden="true"></i> Learning hours<% end %>
-        </div>
-        <div>
-          <p class="<%= group_label %>">Administration</p>
-          <% admin_pages.each do |label, icon, path| %>
-            <%= link_to path, class: rail_link do %><i class="bi <%= icon %>" aria-hidden="true"></i> <%= label %><% end %>
-          <% end %>
-        </div>
-      </nav>
+      <%= render "casa_org/settings_rail", panels: true %>
 
       <div class="min-w-0 flex-1 space-y-4 lg:space-y-6">
         <p class="<%= mobile_group %>">Organization</p>
@@ -259,8 +228,8 @@
           </div>
         </section>
 
-        <%# Administration = direct links to standalone admin pages. On mobile the rail is hidden, so
-            these render as a tappable link block here (lg:hidden); on desktop the rail carries them. %>
+        <%# Administration = direct links to standalone admin pages (which share the settings frame).
+            On mobile the rail is hidden, so they render as a tappable link block here (lg:hidden). %>
         <p class="<%= mobile_group %>">Administration</p>
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:hidden">
           <% admin_pages.each_with_index do |(label, icon, path), i| %>
