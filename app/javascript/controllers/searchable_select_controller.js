@@ -40,7 +40,6 @@ export default class extends Controller {
       event.stopPropagation()
       const error = this.errorElement()
       if (error) error.classList.remove('hidden')
-      if (this.select) this.select.focus()
     }
   }
 

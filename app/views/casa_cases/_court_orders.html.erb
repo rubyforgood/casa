@@ -32,7 +32,7 @@
         </div>
         <%= button_tag "Copy", type: "button", id: "copy-court-button", data: {action: "copy-court-orders#open"}, class: button_classes(:secondary) %>
       </div>
-      <p data-copy-court-orders-target="error" role="alert" class="mt-2 hidden text-sm font-medium text-rose-600">Choose a case to copy orders from.</p>
+      <p data-copy-court-orders-target="error" role="alert" class="mt-1.5 hidden text-sm text-slate-500"><i class="bi bi-exclamation-circle text-rose-600" aria-hidden="true"></i> Choose a case to copy orders from.</p>
 
       <div data-controller="modal" class="contents">
         <dialog data-modal-target="dialog" data-copy-court-orders-target="dialog" data-action="click->modal#backdropClose"

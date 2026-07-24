@@ -127,7 +127,7 @@
                           <%= form.hidden_field :volunteer_id, value: volunteer.id %>
                           <%= button_tag type: "submit", class: ghost_class do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
                         </div>
-                        <p data-searchable-select-error role="alert" class="hidden text-xs font-medium text-rose-600">Choose a supervisor.</p>
+                        <p data-searchable-select-error role="alert" class="mt-1.5 hidden text-sm text-slate-500"><i class="bi bi-exclamation-circle text-rose-600" aria-hidden="true"></i> Choose a supervisor.</p>
                       <% end %>
                     <% else %>
                       <span class="text-slate-500">No supervisors to assign</span>
