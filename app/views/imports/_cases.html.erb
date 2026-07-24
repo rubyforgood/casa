@@ -19,16 +19,24 @@
       </ul>
       <%= f.file_field :file, id: "case-file", accept: "text/csv", class: file_input %>
       <div>
-        <%= button_tag id: "case-import-button", disabled: true, "aria-describedby": "case-import-hint", data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
+        <%= button_tag id: "case-import-button", data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
           <i class="bi bi-upload" aria-hidden="true"></i> Import cases CSV
         <% end %>
-        <p id="case-import-hint" class="mt-2 text-sm text-slate-500">Choose a CSV file above to enable the import button.</p>
+        <p id="case-import-error" role="alert" class="mt-2 hidden text-sm font-medium text-rose-600">Please choose a CSV file to import.</p>
       </div>
 
       <script type="text/javascript">
-        document.getElementById('case-file').addEventListener('change', function (event) {
-          document.getElementById('case-import-button').disabled = (event.target.value === '')
-        })
+        (function () {
+          var input = document.getElementById('case-file')
+          var error = document.getElementById('case-import-error')
+          var form = input && input.form
+          if (input) { input.addEventListener('change', function () { if (error && input.value !== '') error.classList.add('hidden') }) }
+          if (form) {
+            form.addEventListener('submit', function (event) {
+              if (input.value === '') { event.preventDefault(); event.stopPropagation(); if (error) { error.classList.remove('hidden') } input.focus() }
+            })
+          }
+        })()
       </script>
     <% end %>
   </div>

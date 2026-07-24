@@ -889,7 +889,7 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 
 ## Key patterns
 - **Settings (master-detail)** (`casa_org#edit` is the reference): a `max-w-7xl` two-pane — a
-  sticky grouped **sub-nav rail** (`hidden lg:block lg:w-48`; quiet slate-400 group labels; active
+  sticky grouped **sub-nav rail** (`hidden lg:block lg:w-48`; **text-only** (icons are noise in a dense grouped list, and a repeated one reads as clutter; the primary sidebar keeps its icons); quiet slate-400 group labels; active
   item `bg-brand-50 text-brand-700`) beside a content column that shows **one section at a time**.
   The `settings-nav` Stimulus controller drives it as **progressive enhancement**: with JS off every
   `[data-settings-nav-target="section"]` stays visible (a plain scroll — so no-JS users and rack_test

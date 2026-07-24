@@ -22,7 +22,7 @@ RSpec.describe "imports/index", type: :system do
         visit imports_path(:volunteer)
 
         expect(page).to have_content("Import volunteers")
-        expect(page).to have_button("volunteer-import-button", disabled: true)
+        expect(page).to have_button("volunteer-import-button", disabled: false)
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
@@ -84,7 +84,7 @@ RSpec.describe "imports/index", type: :system do
         click_on "supervisor-tab"
 
         expect(page).to have_content("Import supervisors")
-        expect(page).to have_button("supervisor-import-button", disabled: true)
+        expect(page).to have_button("supervisor-import-button", disabled: false)
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
@@ -137,6 +137,22 @@ RSpec.describe "imports/index", type: :system do
         click_button "sms-opt-in-continue-button"
 
         expect(page).to have_text("CSV import error")
+      end
+    end
+
+    context "with no file chosen", :js do
+      it "stays on the page and shows a validation error (button not disabled)" do
+        admin = create(:casa_admin)
+
+        sign_in admin
+        visit imports_path(:volunteer)
+
+        expect(page).to have_button("volunteer-import-button", disabled: false)
+        click_button "volunteer-import-button"
+
+        expect(page).to have_text("Please choose a CSV file to import")
+        expect(page).to have_content("Import volunteers")
+        expect(page).to have_button("volunteer-import-button", disabled: false)
       end
     end
   end
