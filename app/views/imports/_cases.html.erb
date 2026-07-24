@@ -19,9 +19,10 @@
       </ul>
       <%= f.file_field :file, id: "case-file", accept: "text/csv", class: file_input %>
       <div>
-        <%= button_tag id: "case-import-button", disabled: true, data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
+        <%= button_tag id: "case-import-button", disabled: true, "aria-describedby": "case-import-hint", data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>
           <i class="bi bi-upload" aria-hidden="true"></i> Import cases CSV
         <% end %>
+        <p id="case-import-hint" class="mt-2 text-sm text-slate-500">Choose a CSV file above to enable the import button.</p>
       </div>
 
       <script type="text/javascript">
