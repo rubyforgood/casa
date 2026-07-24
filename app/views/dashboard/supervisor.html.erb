@@ -14,13 +14,13 @@
 } %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
-  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+  <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
     <div>
       <h1 class="text-2xl font-bold tracking-tight text-slate-900">Dashboard</h1>
       <p class="mt-1 text-sm text-slate-500"><%= @dashboard.rows.any? ? "Track volunteer progress at a glance." : "Let's get your volunteers set up." %></p>
     </div>
     <% if @dashboard.rows.any? %>
-      <%= link_to volunteers_path, class: "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-700 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+      <%= link_to volunteers_path, class: button_classes(:secondary) do %>
         Manage all volunteers <i class="bi bi-arrow-right" aria-hidden="true"></i>
       <% end %>
     <% end %>
@@ -32,10 +32,10 @@
       <h2 class="mt-5 text-xl font-bold tracking-tight text-slate-900">No volunteers assigned to you yet</h2>
       <p class="mx-auto mt-2 max-w-md text-sm text-slate-500">Once volunteers are assigned to you, this is where you'll track their case-contact activity, follow-ups, and hours — so you can see who needs support at a glance.</p>
       <div class="mt-6 flex flex-wrap items-center justify-center gap-3">
-        <%= link_to new_volunteer_path, class: "inline-flex items-center gap-2 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-brand-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2" do %>
+        <%= link_to new_volunteer_path, class: button_classes(:primary) do %>
           <i class="bi bi-plus-lg" aria-hidden="true"></i> Invite a volunteer
         <% end %>
-        <%= link_to volunteers_path, class: "inline-flex items-center gap-2 rounded-lg border border-slate-200 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+        <%= link_to volunteers_path, class: button_classes(:secondary) do %>
           <i class="bi bi-person-plus" aria-hidden="true"></i> Assign existing volunteers
         <% end %>
       </div>
