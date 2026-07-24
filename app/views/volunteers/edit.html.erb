@@ -34,14 +34,15 @@
         <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit volunteer</h1>
         <p class="mt-1 truncate text-sm text-slate-500"><span class="font-medium text-slate-800"><%= formatted_name(@volunteer.display_name) %></span> · <%= @volunteer.email %></p>
       </div>
-      <% if policy(@volunteer).impersonate? %>
-        <%= link_to impersonate_volunteer_path(@volunteer), class: button_classes(:secondary) do %>
-          <i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate
+      <div class="flex flex-wrap items-center gap-2">
+        <% if policy(@volunteer).impersonate? %>
+          <%= link_to impersonate_volunteer_path(@volunteer), class: button_classes(:secondary) do %>
+            <i class="bi bi-person-badge" aria-hidden="true"></i> Impersonate
+          <% end %>
         <% end %>
-      <% end %>
+        <%= render "volunteer_reminder_form", volunteer: @volunteer %>
+      </div>
     </div>
-
-    <%= render "volunteer_reminder_form", volunteer: @volunteer %>
 
     <%= render "shared/form_errors", resource: @volunteer %>
 

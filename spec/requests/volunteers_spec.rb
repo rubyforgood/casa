@@ -517,4 +517,57 @@ RSpec.describe "/volunteers", type: :request do
       expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
     end
   end
+
+  describe "PATCH /reminder" do
+    let(:organization) { create(:casa_org) }
+
+    context "as a supervisor" do
+      before { sign_in create(:supervisor, casa_org: organization) }
+
+      it "emails only the volunteer when CC is not checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        expect {
+          patch reminder_volunteer_path(volunteer)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(ActionMailer::Base.deliveries.last.cc).to be_empty
+      end
+
+      it "ccs the volunteer's supervisor when CC is checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        expect(ActionMailer::Base.deliveries.last.cc).to include(volunteer.supervisor.email)
+      end
+
+      it "sends no CC when the volunteer has no supervisor" do
+        volunteer = create(:volunteer, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        expect(ActionMailer::Base.deliveries.last.cc).to be_empty
+      end
+    end
+
+    context "as an admin" do
+      let(:admin) { create(:casa_admin, casa_org: organization) }
+      before { sign_in admin }
+
+      it "emails the volunteer" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        expect {
+          patch reminder_volunteer_path(volunteer)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      it "ccs the volunteer's supervisor and the admin when CC is checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        cc = ActionMailer::Base.deliveries.last.cc
+        expect(cc).to include(volunteer.supervisor.email)
+        expect(cc).to include(admin.email)
+      end
+    end
+  end
 end

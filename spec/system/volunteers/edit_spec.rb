@@ -466,8 +466,8 @@ RSpec.describe "volunteers/edit", type: :system do
     end
   end
 
-  describe "send reminder as a supervisor" do
-    it "emails the volunteer" do
+  describe "send reminder", :js do
+    it "as a supervisor opens the modal and sends the reminder" do
       organization = create(:casa_org)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
       supervisor = create(:supervisor, casa_org: organization)
@@ -476,53 +476,14 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_button("Send reminder")
+      click_on "Send reminder"
       expect(page).to have_text("Send CC to Supervisor")
-      uncheck "with_cc"
-      click_on "Send reminder"
+      click_on "Yes, send reminder"
 
-      expect(page).to have_content("Reminder sent to volunteer")
-
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
+      expect(page).to have_text("Reminder sent to volunteer")
     end
 
-    it "emails volunteer and cc's the supervisor" do
-      organization = create(:casa_org)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-      supervisor = create(:supervisor, casa_org: organization)
-
-      sign_in supervisor
-      visit edit_volunteer_path(volunteer)
-
-      check "with_cc"
-      click_on "Send reminder"
-
-      expect(page).to have_content("Reminder sent to volunteer")
-
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
-    end
-
-    it "emails the volunteer without a supervisor" do
-      organization = create(:casa_org)
-      volunteer_without_supervisor = create(:volunteer)
-      supervisor = create(:supervisor, casa_org: organization)
-
-      sign_in supervisor
-      visit edit_volunteer_path(volunteer_without_supervisor)
-
-      check "with_cc"
-      click_on "Send reminder"
-
-      expect(page).to have_content("Reminder sent to volunteer")
-
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.first.cc).to be_empty
-    end
-  end
-
-  describe "send reminder as admin" do
-    it "emails the volunteer" do
+    it "as an admin offers the supervisor-and-admin CC option" do
       organization = create(:casa_org)
       admin = create(:casa_admin, casa_org_id: organization.id)
       volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
@@ -530,31 +491,11 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in admin
       visit edit_volunteer_path(volunteer)
 
-      expect(page).to have_button("Send reminder")
+      click_on "Send reminder"
       expect(page).to have_text("Send CC to Supervisor and Admin")
+      click_on "Yes, send reminder"
 
-      click_on "Send reminder"
-
-      expect(page).to have_content("Reminder sent to volunteer")
-
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-    end
-
-    it "emails the volunteer and cc's their supervisor and admin" do
-      organization = create(:casa_org)
-      admin = create(:casa_admin, casa_org_id: organization.id)
-      volunteer = create(:volunteer, :with_assigned_supervisor, casa_org_id: organization.id)
-
-      sign_in admin
-      visit edit_volunteer_path(volunteer)
-      check "with_cc"
-      click_on "Send reminder"
-
-      expect(page).to have_content("Reminder sent to volunteer")
-
-      expect(ActionMailer::Base.deliveries.count).to eq(1)
-      expect(ActionMailer::Base.deliveries.first.cc).to include(volunteer.supervisor.email)
-      expect(ActionMailer::Base.deliveries.first.cc).to include(admin.email)
+      expect(page).to have_text("Reminder sent to volunteer")
     end
   end
 
