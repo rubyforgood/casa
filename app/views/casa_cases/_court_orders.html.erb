@@ -20,7 +20,7 @@
         <div class="min-w-0 flex-1">
           <label for="casa_case_siblings_casa_cases" class="mb-1.5 block text-sm font-medium text-slate-700">Copy all orders from case</label>
           <div class="relative">
-            <select id="casa_case_siblings_casa_cases" data-copy-court-orders-target="select" data-action="copy-court-orders#toggle"
+            <select id="casa_case_siblings_casa_cases" data-copy-court-orders-target="select" data-action="copy-court-orders#clearError"
                     class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
               <option value="">Select a case</option>
               <% siblings_casa_cases.each do |scc| %>
@@ -30,8 +30,9 @@
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
           </div>
         </div>
-        <%= button_tag "Copy", type: "button", id: "copy-court-button", disabled: true, data: {copy_court_orders_target: "button", action: "copy-court-orders#open"}, class: button_classes(:secondary) %>
+        <%= button_tag "Copy", type: "button", id: "copy-court-button", data: {action: "copy-court-orders#open"}, class: button_classes(:secondary) %>
       </div>
+      <p data-copy-court-orders-target="error" role="alert" class="mt-2 hidden text-sm font-medium text-rose-600">Choose a case to copy orders from.</p>
 
       <div data-controller="modal" class="contents">
         <dialog data-modal-target="dialog" data-copy-court-orders-target="dialog" data-action="click->modal#backdropClose"

@@ -11,12 +11,21 @@
     <span>Opt into SMS notifications</span>
   </label>
   <div class="mt-3">
-    <%= form.submit "Continue import", id: "sms-opt-in-continue-button", disabled: true, class: button_classes(:primary) %>
+    <%= form.submit "Continue import", id: "sms-opt-in-continue-button", class: button_classes(:primary) %>
+    <p id="sms-opt-in-error" role="alert" class="mt-2 hidden text-sm font-medium text-rose-600">Please confirm the numbers have opted in before continuing.</p>
   </div>
 
   <script type="text/javascript">
-    document.getElementById('sms-opt-in-checkbox').addEventListener('change', function (event) {
-      document.getElementById('sms-opt-in-continue-button').disabled = !event.target.checked
-    })
+    (function () {
+      var checkbox = document.getElementById('sms-opt-in-checkbox')
+      var error = document.getElementById('sms-opt-in-error')
+      var button = document.getElementById('sms-opt-in-continue-button')
+      if (checkbox && error) { checkbox.addEventListener('change', function () { if (checkbox.checked) { error.classList.add('hidden') } }) }
+      if (button) {
+        button.addEventListener('click', function (event) {
+          if (checkbox && !checkbox.checked) { event.preventDefault(); if (error) { error.classList.remove('hidden') } checkbox.focus() }
+        })
+      }
+    })()
   </script>
 </div>

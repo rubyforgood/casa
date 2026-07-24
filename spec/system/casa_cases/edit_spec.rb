@@ -136,9 +136,11 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
 
-      it "copy button should be disabled when no case is selected", :js do
+      it "shows a validation error when Copy is clicked with no case selected", :js do
         visit edit_casa_case_path(casa_case)
-        expect(page).to have_button("copy-court-button", disabled: true)
+        expect(page).to have_button("copy-court-button", disabled: false)
+        click_on "Copy"
+        expect(page).to have_text("Choose a case to copy orders from")
       end
 
       it "copy button should be enabled when a case is selected", :js do
@@ -569,9 +571,11 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "Copy all court orders from a case" do
-      it "copy button should be disabled when no case is selected", :js do
+      it "shows a validation error when Copy is clicked with no case selected", :js do
         visit edit_casa_case_path(casa_case)
-        expect(page).to have_button("copy-court-button", disabled: true)
+        expect(page).to have_button("copy-court-button", disabled: false)
+        click_on "Copy"
+        expect(page).to have_text("Choose a case to copy orders from")
       end
 
       it "copy button should be enabled when a case is selected", :js do
