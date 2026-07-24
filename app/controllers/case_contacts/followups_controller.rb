@@ -4,7 +4,7 @@ class CaseContacts::FollowupsController < ApplicationController
   def create
     authorize Followup
     case_contact = CaseContact.find(params[:case_contact_id])
-    note = simple_followup_params[:note]
+    note = simple_followup_params[:note].presence
     FollowupService.create_followup(case_contact, current_user, note)
 
     respond_to do |format|

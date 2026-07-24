@@ -13,71 +13,43 @@ RSpec.describe "followups/create", :js, type: :system do
       click_button "Make reminder"
     end
 
-    it "displays correct prompt" do
-      expect(page).to have_content("Optional: Add a note about what followup is needed.")
+    it "opens the reminder dialog" do
+      expect(page).to have_text("Optional: add a note about what followup is needed")
     end
 
-    context "when confirming the Swal alert" do
-      it "creates a followup with a note when the note textarea is filled" do
-        find(".swal2-textarea").set(note)
-
-        click_button "Confirm"
+    context "when confirming" do
+      it "creates a followup with the note when it is filled in" do
+        within("dialog[open]") do
+          fill_in "note", with: note
+          click_button "Confirm"
+        end
 
         expect(page).to have_button("Resolve reminder")
-
-        case_contact.followups.reload
-
-        expect(case_contact.followups.count).to eq(1)
+        expect(case_contact.followups.reload.count).to eq(1)
         expect(case_contact.followups.last.note).to eq(note)
       end
 
-      it "creates a followup without a note when the note textarea is empty" do
-        click_button "Confirm"
+      it "creates a followup with no note when it is left empty" do
+        within("dialog[open]") { click_button "Confirm" }
 
         expect(page).to have_button("Resolve reminder")
-
-        case_contact.followups.reload
-
-        expect(case_contact.followups.count).to eq(1)
+        expect(case_contact.followups.reload.count).to eq(1)
         expect(case_contact.followups.last.note).to be_nil
       end
     end
 
-    context "when cancelling the Swal alert" do
-      it "does nothing when there is text in the note textarea" do
-        find(".swal2-textarea").set(note)
-
-        click_button "Cancel"
-
-        expect(page).not_to have_text(note)
-
-        expect(case_contact.followups.reload.count).to be_zero
-      end
-
-      it "does nothing when there is no text in the note textarea" do
-        click_button "Cancel"
-
-        expect(page).not_to have_text(note)
-
-        expect(case_contact.followups.reload.count).to be_zero
-      end
-    end
-
-    context "when closing the Swal alert" do
-      it "does nothing when there is text in the note textarea" do
-        find(".swal2-textarea").set(note)
-
-        find(".swal2-close").click
-
-        expect(page).not_to have_text(note)
+    context "when dismissing" do
+      it "creates no followup on Cancel" do
+        within("dialog[open]") do
+          fill_in "note", with: note
+          click_button "Cancel"
+        end
 
         expect(case_contact.followups.reload.count).to be_zero
       end
 
-      it "does nothing when there is no text in the note textarea" do
-        find(".swal2-close").click
-
-        expect(page).not_to have_text(note)
+      it "creates no followup when closed" do
+        find("dialog[open] button[aria-label='Close']").click
 
         expect(case_contact.followups.reload.count).to be_zero
       end
