@@ -900,8 +900,12 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   `#case-contact-topics`). Mobile is a grouped accordion (the rail's clusters repeat as `lg:hidden`
   labels); tapping a section opens its card(s) in place, one at a time. Section **order is by task
   frequency + setup flow, not alphabetical**. Each entity partial still renders its own card and the
-  partials/tables/anchor ids are unchanged; the locked "Editing CASA Organization" / "Manage …"
-  headings stay.
+  partials/tables/anchor ids are unchanged; the page heading is
+  **"Settings"** (matching the sidebar nav label -- the app-wide convention is h1 == nav label), the
+  "Manage …" section headings stay, and the **Court** group splits into Hearing types / Judges / Sent
+  emails. The **Administration** links **stack in one column** (the panel is narrower than full width)
+  and each admin sub-page (admins, mileage rates, banners, imports) carries a **"Back to settings"**
+  link, so there is always a path back to the hub.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.
