@@ -1,16 +1,14 @@
-/* eslint-env jest */
+/* eslint-env jest, browser */
 /**
  * @jest-environment jsdom
  */
 import { Application } from '@hotwired/stimulus'
 import AddToCalendarController from '../controllers/add_to_calendar_controller'
 
-// The web component itself is browser-only; stub it out so importing the
-// controller has no side effects and createElement makes an inert element.
-jest.mock('add-to-calendar-button', () => ({}))
-
 describe('add_to_calendar_controller', () => {
   let application
+  let capturedIcs
+  let clicked
 
   const mount = async (html) => {
     document.body.innerHTML = html
@@ -19,32 +17,42 @@ describe('add_to_calendar_controller', () => {
     await new Promise((resolve) => setTimeout(resolve, 0))
   }
 
+  beforeEach(() => {
+    capturedIcs = null
+    clicked = false
+    const RealBlob = global.Blob
+    jest.spyOn(global, 'Blob').mockImplementation((parts, opts) => {
+      capturedIcs = parts[0]
+      return new RealBlob(parts, opts)
+    })
+    global.URL.createObjectURL = jest.fn(() => 'blob:mock')
+    global.URL.revokeObjectURL = jest.fn()
+    jest.spyOn(HTMLAnchorElement.prototype, 'click').mockImplementation(() => { clicked = true })
+  })
+
   afterEach(() => {
     if (application) application.stop()
     document.body.innerHTML = ''
+    jest.restoreAllMocks()
   })
 
-  test('replaces its content with a configured add-to-calendar-button', async () => {
+  test('downloads an .ics event built from the court-date values', async () => {
     await mount(`
-      <div data-controller="add-to-calendar"
-           data-add-to-calendar-title-value="Court Hearing"
-           data-add-to-calendar-start-value="2025-11-15"
-           data-add-to-calendar-end-value="2025-11-15"
-           data-add-to-calendar-tooltip-value="Add to calendar">stale content</div>
+      <button data-controller='add-to-calendar'
+              data-action='add-to-calendar#download'
+              data-add-to-calendar-title-value='Court Date CINA-1'
+              data-add-to-calendar-start-value='2025-11-15'
+              data-add-to-calendar-end-value='2025-11-15'>Add to calendar</button>
     `)
 
-    const host = document.querySelector('[data-controller="add-to-calendar"]')
-    const button = host.querySelector('add-to-calendar-button')
+    document.querySelector('button').click()
 
-    expect(button).not.toBeNull()
-    expect(host.textContent).not.toContain('stale content')
-    expect(button.getAttribute('name')).toBe('Court Hearing')
-    expect(button.getAttribute('startDate')).toBe('2025-11-15')
-    expect(button.getAttribute('endDate')).toBe('2025-11-15')
-    expect(button.getAttribute('description')).toBe('Court Hearing')
-    expect(button.getAttribute('options')).toBe("'Apple','Google','iCal','Microsoft365','Outlook.com','Yahoo'")
-    expect(button.getAttribute('timeZone')).toBe('currentBrowser')
-    expect(button.getAttribute('lightMode')).toBe('bodyScheme')
-    expect(button.title).toBe('Add to calendar')
+    expect(clicked).toBe(true)
+    expect(global.URL.createObjectURL).toHaveBeenCalled()
+    expect(capturedIcs).toContain('BEGIN:VCALENDAR')
+    expect(capturedIcs).toContain('SUMMARY:Court Date CINA-1')
+    expect(capturedIcs).toContain('DTSTART;VALUE=DATE:20251115')
+    expect(capturedIcs).toContain('DTEND;VALUE=DATE:20251116')
+    expect(capturedIcs).toContain('END:VEVENT')
   })
 })

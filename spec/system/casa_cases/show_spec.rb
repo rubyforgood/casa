@@ -94,7 +94,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court orders" do
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     it "can see next court date", :js do
@@ -112,7 +112,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see Add to Calendar buttons", :js do
-      expect(page).to have_content("Add to Calendar")
+      expect(page).to have_content("Add to calendar")
     end
 
     context "court report download link visibility" do
@@ -150,7 +150,7 @@ RSpec.describe "casa_cases/show", type: :system do
       end
 
       it "can not see Add to Calendar buttons", :js do
-        expect(page).not_to have_content("Add to Calendar")
+        expect(page).not_to have_content("Add to calendar")
       end
     end
 
@@ -193,7 +193,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court orders" do
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     context "court report download link visibility" do
@@ -249,7 +249,7 @@ RSpec.describe "casa_cases/show", type: :system do
     it "can see court orders" do
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     context "when old case contacts are hidden" do
@@ -279,7 +279,7 @@ RSpec.describe "casa_cases/show", type: :system do
     end
   end
 
-  context "court order - implementation status symbol" do
+  context "court order - implementation status pill" do
     let(:user) { admin }
 
     it "when implemented" do
@@ -289,7 +289,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("✅")
+      expect(page).to have_content("Implemented")
     end
 
     it "when not implemented" do
@@ -299,7 +299,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content("Not implemented")
     end
 
     it "when partial implemented" do
@@ -309,7 +309,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("🕗")
+      expect(page).to have_content("Partially implemented")
     end
 
     it "when not specified" do
@@ -319,7 +319,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content("Not specified")
     end
   end
 end

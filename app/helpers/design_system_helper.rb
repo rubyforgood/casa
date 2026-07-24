@@ -150,4 +150,27 @@ module DesignSystemHelper
   def field_error_id(record, attribute)
     "#{record.model_name.param_key}_#{attribute}_error"
   end
+
+  # Court-order implementation status. Presentation lives here (a design-system
+  # status pill, design.md), not on the CaseCourtOrder model.
+  def court_order_status_label(court_order)
+    case court_order.implementation_status
+    when "implemented" then "Implemented"
+    when "partially_implemented" then "Partially implemented"
+    when "unimplemented" then "Not implemented"
+    else "Not specified"
+    end
+  end
+
+  def court_order_status_pill(court_order)
+    variant, icon = case court_order.implementation_status
+    when "implemented" then ["bg-emerald-50 text-emerald-700", "bi-check-circle"]
+    when "partially_implemented" then ["bg-amber-50 text-amber-700", "bi-clock"]
+    when "unimplemented" then ["bg-rose-50 text-rose-700", "bi-x-circle"]
+    else ["bg-slate-100 text-slate-600", "bi-dash-circle"]
+    end
+    tag.span class: "inline-flex shrink-0 items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium #{variant}" do
+      tag.i(class: "bi #{icon}", aria: {hidden: true}) + court_order_status_label(court_order)
+    end
+  end
 end

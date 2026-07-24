@@ -85,11 +85,9 @@
           <dd class="inline text-slate-800">
             <%= I18n.l(@casa_case.next_court_date&.date, format: :day_and_date, default: "None set") %>
             <% if (cal = @casa_case.decorate.calendar_next_court_date) %>
-              <span class="ml-1 inline-block align-middle" data-controller="add-to-calendar"
-                    data-add-to-calendar-title-value="Next Court Date for <%= @casa_case.case_number %>"
-                    data-add-to-calendar-start-value="<%= cal[:start] %>"
-                    data-add-to-calendar-end-value="<%= cal[:end] %>"
-                    data-add-to-calendar-tooltip-value="Add next court date to calendar"></span>
+              <%= button_tag type: "button", class: "#{ghost_class} ml-1 align-middle", title: "Add next court date to calendar", data: {controller: "add-to-calendar", action: "add-to-calendar#download", add_to_calendar_title_value: "Next Court Date for #{@casa_case.case_number}", add_to_calendar_start_value: cal[:start], add_to_calendar_end_value: cal[:end]} do %>
+                <i class="bi bi-calendar-plus" aria-hidden="true"></i> Add to calendar
+              <% end %>
             <% end %>
           </dd>
         </div>
@@ -107,11 +105,11 @@
       <% if @casa_case.case_court_orders.exists? %>
         <div class="mt-6 border-t border-slate-100 pt-4">
           <h3 class="text-sm font-semibold text-slate-900">Court orders</h3>
-          <ul class="mt-2 space-y-1.5">
+          <ul class="mt-2 space-y-2">
             <% @casa_case.case_court_orders.each do |court_order| %>
-              <li class="flex items-start gap-2 text-sm text-slate-700">
-                <span aria-hidden="true"><%= court_order.implementation_status_symbol %></span>
-                <span><%= court_order.text %></span>
+              <li class="flex items-start gap-2 text-sm">
+                <%= court_order_status_pill(court_order) %>
+                <span class="text-slate-700"><%= court_order.text %></span>
               </li>
             <% end %>
           </ul>
@@ -142,11 +140,9 @@
                   <%= link_to "Attached report", rails_blob_path(report, disposition: "attachment"), class: "text-xs text-slate-500 hover:text-slate-700" %>
                 <% end %>
               </div>
-              <span data-controller="add-to-calendar"
-                    data-add-to-calendar-title-value="Court Date <%= @casa_case.case_number %>"
-                    data-add-to-calendar-start-value="<%= pcd.date.strftime("%Y-%m-%d") %>"
-                    data-add-to-calendar-end-value="<%= pcd.date.strftime("%Y-%m-%d") %>"
-                    data-add-to-calendar-tooltip-value="Add court date to calendar"></span>
+              <%= button_tag type: "button", class: ghost_class, title: "Add court date to calendar", data: {controller: "add-to-calendar", action: "add-to-calendar#download", add_to_calendar_title_value: "Court Date #{@casa_case.case_number}", add_to_calendar_start_value: pcd.date.strftime("%Y-%m-%d"), add_to_calendar_end_value: pcd.date.strftime("%Y-%m-%d")} do %>
+                <i class="bi bi-calendar-plus" aria-hidden="true"></i> Add to calendar
+              <% end %>
             </li>
           <% end %>
         </ul>

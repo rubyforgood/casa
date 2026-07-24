@@ -171,7 +171,7 @@ already handles it.
   trailing actions cell, give that cell extra end padding (`pr-6`) so the control clears the card edge
   rather than skewing the button's own padding. **Every table row action is this ghost** -- Edit
   (`ghost_class`) / Delete (`ghost_class(:danger)`, passed as the confirm dialog's `trigger_class` with
-  `trigger_icon: "bi bi-trash"` -- slate at rest, rose on hover) / Detail view / Impersonate AND a form-submit control like the
+  `trigger_icon: "bi bi-trash"` -- slate at rest, rose on hover) / Detail view / Impersonate / the per-court-date **Add to calendar** control (a `ghost_class` button whose `add-to-calendar` Stimulus controller builds and downloads an `.ics`, replacing the third-party `<add-to-calendar-button>` web component) AND a form-submit control like the
   volunteers-without-supervisors "Assign supervisor" button -- **never a
   `button_classes(:primary/:secondary)` CTA**: a filled CTA over-emphasizes a repeated per-row action
   and breaks table-to-table consistency. Right-align the whole trailing column (`text-right` cell +
@@ -182,7 +182,7 @@ already handles it.
 (`inline-flex` + `rounded-lg` + `px-`/`py-` + `bg-`/`border-`) and convert them to
 `button_classes`. A bespoke string at `py-1.5` next to a 40px token is the recurring drift
 bug; the only non-`button_classes` clickable is the tertiary ghost, which has its own `ghost_class`
-helper (call it -- do not re-derive the string).
+helper (call it -- do not re-derive the string). **This grep is necessary but not sufficient:** a status glyph emitted by a Ruby **model/decorator/helper method** (e.g. a court order's ✅/❌ from an `implementation_status_symbol`) or a **third-party web component / legacy CSS-class widget** (e.g. `<add-to-calendar-button>` / `.cal-btn`) is not a class-string button, so the grep cannot see it -- also scan Ruby methods that emit glyphs and non-`button_classes` interactive widgets, and pixel-check the rendered page.
 
 ### Inputs
 `block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
@@ -631,9 +631,15 @@ Base: `inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-me
 - Needs follow-up: `bg-rose-50 text-rose-700` + exclamation icon
 - Neutral / deactivated: `bg-slate-100 text-slate-600` + minus icon (**slate-600**, not
   slate-500: on the slate-100 tint slate-500 is only 4.34:1, below AA; slate-600 is 6.92:1)
+- In progress / partial: `bg-amber-50 text-amber-700` + clock icon
 
 Volunteer assignment reuses these three: Assigned (emerald), Unassigned (rose),
-Deactivated volunteer (slate).
+Deactivated volunteer (slate). Court-order implementation status uses the
+`court_order_status_pill` helper (presentation lives in the helper, NOT the model):
+Implemented (emerald + check), Partially implemented (amber + clock), Not implemented
+(rose + x-circle), Not specified (slate + minus) -- **never OS emoji** (it replaced a
+model `implementation_status_symbol` that returned literal ✅/🕗/❌, which render
+inconsistently across platforms and are invisible to a class-string button audit).
 
 ### Person avatar (initials)
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color

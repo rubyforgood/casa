@@ -15,9 +15,9 @@
       <li class="flex flex-wrap items-center gap-x-3 gap-y-1 py-2.5">
         <%= link_to pcd.decorate.court_date_info, casa_case_court_date_path(casa_case, pcd),
               class: "text-sm font-medium text-brand-600 hover:text-brand-700" %>
-        <%= render "calendar_button", id: "court-date-#{pcd.id}", title: "Court Date #{pcd.casa_case.case_number}",
-              date: {start: pcd.date.strftime("%Y-%m-%d"), end: pcd.date.strftime("%Y-%m-%d")},
-              tooltip: "Add court date to calendar" %>
+        <%= button_tag type: "button", class: ghost_class, title: "Add court date to calendar", data: {controller: "add-to-calendar", action: "add-to-calendar#download", add_to_calendar_title_value: "Court Date #{pcd.casa_case.case_number}", add_to_calendar_start_value: pcd.date.strftime("%Y-%m-%d"), add_to_calendar_end_value: pcd.date.strftime("%Y-%m-%d")} do %>
+          <i class="bi bi-calendar-plus" aria-hidden="true"></i> Add to calendar
+        <% end %>
         <% if report = pcd.latest_associated_report %>
           <%= link_to rails_blob_path(report, disposition: "attachment"), class: "text-xs font-medium text-slate-500 hover:text-slate-700" do %>
             (Attached Report)
