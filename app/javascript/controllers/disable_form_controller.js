@@ -1,29 +1,24 @@
 import { Controller } from '@hotwired/stimulus'
 
+// Guards a form submit: if a watched input still holds an unallowed value (e.g. an unselected
+// dropdown prompt), block the submit and reveal an inline error + focus the input -- instead of
+// leaving a disabled submit button with no explanation.
 export default class extends Controller {
-  static targets = ['submitButton', 'input']
-  static values = {
-    unallowed: { type: Array }
+  static targets = ['input', 'error']
+  static values = { unallowed: { type: Array, default: [] } }
+
+  guard (event) {
+    const invalidInput = this.inputTargets.find((input) => this.unallowedValue.includes(input.value))
+    if (invalidInput) {
+      event.preventDefault()
+      event.stopPropagation()
+      if (this.hasErrorTarget) this.errorTarget.classList.remove('hidden')
+      invalidInput.focus()
+    }
   }
 
-  static classes = ['disabled', 'enabled']
-
-  validate () {
-    let invalid = false
-    this.inputTargets.forEach(input => {
-      if (this.unallowedValue.includes(input.value)) {
-        invalid = true
-      }
-    })
-
-    if (invalid) {
-      this.submitButtonTarget.disabled = true
-      this.submitButtonTarget.classList.add(this.disabledClass)
-      this.submitButtonTarget.classList.remove(...this.enabledClasses)
-    } else {
-      this.submitButtonTarget.disabled = false
-      this.submitButtonTarget.classList.remove(this.disabledClass)
-      this.submitButtonTarget.classList.add(...this.enabledClasses)
-    }
+  clearError () {
+    const invalidInput = this.inputTargets.find((input) => this.unallowedValue.includes(input.value))
+    if (!invalidInput && this.hasErrorTarget) this.errorTarget.classList.add('hidden')
   }
 }

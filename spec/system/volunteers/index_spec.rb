@@ -212,24 +212,14 @@ RSpec.describe "volunteers/index", type: :system do
         find("[data-select-all-target='button']").click
       end
 
-      it "is disabled by default" do
-        expect(page).to have_button("Confirm", disabled: true)
-      end
-
-      it "enables when a supervisor is chosen" do
-        select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+      it "is enabled" do
         expect(page).to have_button("Confirm", disabled: false)
       end
 
-      it "enables when None is chosen" do
-        select "None", from: "supervisor_volunteer_supervisor_id"
+      it "shows a validation error when confirmed without choosing a supervisor" do
+        click_on "Confirm"
+        expect(page).to have_text("Please choose a supervisor")
         expect(page).to have_button("Confirm", disabled: false)
-      end
-
-      it "re-disables when Choose a supervisor is chosen" do
-        select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
-        select "Choose a supervisor", from: "supervisor_volunteer_supervisor_id"
-        expect(page).to have_button("Confirm", disabled: true)
       end
     end
 

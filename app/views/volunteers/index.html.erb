@@ -36,7 +36,7 @@
       <i class="bi bi-people" aria-hidden="true"></i> <span data-select-all-target="buttonLabel"></span>
     </button>
 
-    <%= form_with url: bulk_assignment_supervisor_volunteers_path, method: :post, id: "form-bulk-assignment", data: {controller: "disable-form", "disable-form-unallowed-value": ["unselected"].to_json, "disable-form-disabled-class": "opacity-60", "disable-form-enabled-class": "shadow-sm"} do |form| %>
+    <%= form_with url: bulk_assignment_supervisor_volunteers_path, method: :post, id: "form-bulk-assignment", data: {controller: "disable-form", action: "submit->disable-form#guard", "disable-form-unallowed-value": ["unselected"].to_json} do |form| %>
 
       <%# Desktop table (md+). #volunteers lives on the wrapper (not the <table>) so the legacy
           dashboard.js `$('table#volunteers').DataTable(...)` no longer matches and no jQuery
@@ -158,7 +158,7 @@
         <div class="px-5 py-4">
           <label for="supervisor_volunteer_supervisor_id" class="mb-1.5 block text-sm font-medium text-slate-700">Choose a supervisor to reassign the selected volunteers.</label>
           <div class="relative">
-            <select name="supervisor_volunteer[supervisor_id]" id="supervisor_volunteer_supervisor_id" required data-disable-form-target="input" data-action="disable-form#validate" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
+            <select name="supervisor_volunteer[supervisor_id]" id="supervisor_volunteer_supervisor_id" required data-disable-form-target="input" data-action="disable-form#clearError" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
               <option value="unselected">Choose a supervisor</option>
               <option value="">None</option>
               <% @supervisors.each do |supervisor| %>
@@ -167,10 +167,11 @@
             </select>
             <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
           </div>
+          <p data-disable-form-target="error" role="alert" class="mt-2 hidden text-sm font-medium text-rose-600">Please choose a supervisor (or None) to continue.</p>
         </div>
         <div class="flex items-center justify-end gap-2 border-t border-slate-100 px-5 py-4">
           <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
-          <%= form.button "Confirm", type: :submit, disabled: true, data: {"disable-form-target": "submitButton"}, class: button_classes(:primary) %>
+          <%= form.button "Confirm", type: :submit, class: button_classes(:primary) %>
         </div>
       </dialog>
     <% end %>
