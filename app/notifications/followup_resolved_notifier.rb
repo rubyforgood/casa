@@ -3,6 +3,13 @@
 # FollowupResolvedNotifier.with(followup: @followup).deliver(current_user)
 #
 class FollowupResolvedNotifier < BaseNotifier
+  deliver_by :email do |config|
+    config.mailer = "UserMailer"
+    config.method = "followup_resolved"
+    config.args = -> { [recipient, params[:followup]] }
+    config.if = -> { recipient.receive_email_notifications? }
+  end
+
   # deliver_by :email do |config|
   #   config.mailer = "UserMailer"
   #   ...

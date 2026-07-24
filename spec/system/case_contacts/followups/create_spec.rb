@@ -25,6 +25,8 @@ RSpec.describe "followups/create", :js, type: :system do
         end
 
         expect(page).to have_button("Resolve reminder")
+        expect(page).to have_text("Follow-up requested")
+        expect(page).to have_text(note)
         expect(case_contact.followups.reload.count).to eq(1)
         expect(case_contact.followups.last.note).to eq(note)
       end

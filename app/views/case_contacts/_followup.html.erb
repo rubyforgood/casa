@@ -4,7 +4,7 @@
     handlers run. %>
 <div>
   <% if followup %>
-    <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", form_class: "contents", data: {turbo: false}, class: button_classes(:success) do %>
+    <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", form_class: "contents", data: {turbo: false}, class: button_classes(:secondary) do %>
       <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
     <% end %>
   <% else %>

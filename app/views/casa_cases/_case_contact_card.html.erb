@@ -40,6 +40,16 @@
     </div>
   </div>
 
+  <% if (requested_followup = contact.requested_followup) %>
+    <div class="mt-4 <%= alert_classes(:warning) %>">
+      <i class="bi bi-calendar-check mt-0.5 shrink-0 text-amber-600" aria-hidden="true"></i>
+      <div class="min-w-0">
+        <p class="font-medium">Follow-up requested<% if requested_followup.creator %> by <%= formatted_name(requested_followup.creator.display_name) %><% end %> · <%= requested_followup.created_at.strftime("%b %-d, %Y") %></p>
+        <% if requested_followup.note.present? %><p class="mt-0.5 whitespace-pre-line"><%= requested_followup.note %></p><% end %>
+      </div>
+    </div>
+  <% end %>
+
   <div class="mt-4 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 pt-3">
     <p class="text-xs text-slate-500">
       Created by

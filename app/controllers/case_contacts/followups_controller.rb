@@ -33,9 +33,10 @@ class CaseContacts::FollowupsController < ApplicationController
   end
 
   def create_notification
-    return if current_user == @followup.creator
+    recipients = [@followup.case_contact.creator, @followup.creator].compact.uniq(&:id).reject { |user| user.id == current_user.id }
+    return if recipients.empty?
     FollowupResolvedNotifier
       .with(followup: @followup, created_by: current_user)
-      .deliver(@followup.creator)
+      .deliver(recipients)
   end
 end

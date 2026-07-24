@@ -3,7 +3,7 @@
     create the follow-up with an optional note. Replaced a SweetAlert2 popup; the modal UI is
     covered by followups/create_spec (:js). %>
 <% if followup %>
-  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:success) do %>
+  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:secondary) do %>
     <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
   <% end %>
 <% else %>

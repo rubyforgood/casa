@@ -140,7 +140,7 @@ ended up mismatched). Variants:
 - `:secondary` (outlined): `border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50`
 - `:danger` (filled rose): `bg-rose-600 text-white font-semibold hover:bg-rose-700`
 - `:danger_outline` (outlined rose): `border border-rose-200 bg-white text-rose-700 font-medium hover:bg-rose-50`
-- `:success` (filled emerald, for positive / resolve actions): `bg-emerald-700 text-white font-semibold hover:bg-emerald-800` (emerald-700, not 600: white on 600 is 3.77:1, below AA)
+- `:success` (filled emerald, for a **prominent** positive action, e.g. reactivating a deactivated user): `bg-emerald-700 text-white font-semibold hover:bg-emerald-800` (emerald-700, not 600: white on 600 is 3.77:1, below AA). A **repeated per-row/card "resolve"** (e.g. resolving a followup reminder) recedes to `:secondary` -- a filled emerald over-emphasizes a low-frequency action next to its neutral row-mates.
 
 Every variant shares a base of `inline-flex h-10 items-center justify-center gap-2 rounded-lg
 px-4 text-sm shadow-sm` plus a `focus-visible` brand ring and `disabled:` states. The fixed
@@ -586,7 +586,11 @@ top layer and escapes the clip. Render the actions once as an `_actions` partial
 (desktop icon buttons) / `:bar` (the mobile card's labeled buttons); duplicate Dialog instances
 across the two twins are safe (each is scoped by its own `modal` controller). A row-level state
 indicator (the amber `bell-fill` "Reminder set") lives in a data cell, independent of the
-permission-gated action. Set/Resolve reminder and delete return via `redirect_back_or_to` /
+permission-gated action. On the **case-show contact card** the pending follow-up also surfaces as an
+`alert_classes(:warning)` callout (the note + who set it + when) so the reminder's content is visible
+where you act, not just a state flag; creating or resolving it emails **both** the volunteer (the
+contact's creator) and the setter via Noticed `deliver_by :email` -> `UserMailer`, gated on
+`receive_email_notifications`. Set/Resolve reminder and delete return via `redirect_back_or_to` /
 `redirect_to request.referer`, so the action stays on the list rather than jumping to the case page.
 
 ### Charts (data viz)
