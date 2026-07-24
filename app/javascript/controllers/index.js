@@ -79,6 +79,9 @@ application.register("searchable-select", SearchableSelectController)
 import SelectAllController from "./select_all_controller"
 application.register("select-all", SelectAllController)
 
+import SettingsNavController from "./settings_nav_controller"
+application.register("settings-nav", SettingsNavController)
+
 import SidebarController from "./sidebar_controller"
 application.register("sidebar", SidebarController)
 

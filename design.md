@@ -888,6 +888,20 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   Keep page-content z-index ≤ 20; verify overlays with `elementFromPoint`, not by eye.
 
 ## Key patterns
+- **Settings (master-detail)** (`casa_org#edit` is the reference): a `max-w-7xl` two-pane — a
+  sticky grouped **sub-nav rail** (`hidden lg:block lg:w-48`; quiet slate-400 group labels; active
+  item `bg-brand-50 text-brand-700`) beside a content column that shows **one section at a time**.
+  The `settings-nav` Stimulus controller drives it as **progressive enhancement**: with JS off every
+  `[data-settings-nav-target="section"]` stays visible (a plain scroll — so no-JS users and rack_test
+  view/request specs see everything); on connect it collapses to one panel, hiding inactive sections
+  on desktop (`lg:hidden` on the section) and collapsing their body on mobile (`hidden` on
+  `[data-settings-nav-body]`, leaving the `lg:hidden` accordion header tappable). It defaults to the
+  first section and honors the URL hash, so deep links keep working (the case-contact form links to
+  `#case-contact-topics`). Mobile is a grouped accordion (the rail's clusters repeat as `lg:hidden`
+  labels); tapping a section opens its card(s) in place, one at a time. Section **order is by task
+  frequency + setup flow, not alphabetical**. Each entity partial still renders its own card and the
+  partials/tables/anchor ids are unchanged; the locked "Editing CASA Organization" / "Manage …"
+  headings stay.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.

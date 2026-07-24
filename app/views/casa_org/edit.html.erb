@@ -1,166 +1,273 @@
 <% content_for :page_title, "Organization settings" %>
-<%# casa_org#edit (organization settings) on the casa_app shell. The org profile form (with the
-    Twilio credentials revealed by the `twilio` Stimulus controller — replacing the jQuery +
-    Bootstrap-collapse toggle) followed by the admin entity lists. The anchor ids on the section
-    headings are deep-link targets (e.g. the case-contact form links to #case-contact-topics), so
-    keep them. %>
+<%# casa_org#edit (organization settings) on the casa_app shell, as a master-detail settings area:
+    a grouped sub-nav (settings_nav controller) selects one section at a time. Progressive
+    enhancement -- with JS off, every section stays visible (a plain scroll); the controller
+    collapses to a single desktop panel / mobile accordion and honors the URL hash, so deep links
+    (e.g. the case-contact form -> #case-contact-topics) still open the right section. The section
+    anchor ids and the entity partials/tables are unchanged. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% file_class = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-3 file:border-0 file:bg-slate-100 file:px-3.5 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% rail_link = "flex items-center gap-2.5 rounded-lg px-3 py-1.5 text-slate-600 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500" %>
+<% group_label = "px-3 pb-1 text-xs font-semibold text-slate-400" %>
+<% mobile_group = "px-1 pb-1 text-xs font-semibold text-slate-400 lg:hidden" %>
+<% acc_btn = "flex w-full items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-4xl space-y-8">
-    <div>
-      <h1 id="organization-details" class="text-2xl font-bold tracking-tight text-slate-900">Editing CASA Organization</h1>
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Editing CASA Organization</h1>
       <p class="mt-1 text-sm text-slate-500">Organization profile, features, and admin settings.</p>
     </div>
 
-    <%# Admin sub-pages that live on their own routes (were reachable via the old Bootstrap navbar's
-        admin menu; the redesign left them unlinked). Surfaced here since Settings is admin-only. %>
-    <section class="<%= card %>">
-      <h2 id="administration" class="<%= section_title %>">Administration</h2>
-      <p class="mt-1 text-sm text-slate-500">Manage admins, rates, banners, and bulk imports for this organization.</p>
-      <div class="mt-4 grid gap-2 sm:grid-cols-2">
-        <% [
-             ["Manage admins", "Invite and edit CASA admins", "bi-person-badge", casa_admins_path],
-             ["Mileage rates", "Reimbursement rate history", "bi-cash-coin", mileage_rates_path],
-             ["Banners", "Org-wide announcement banners", "bi-megaphone", banners_path],
-             ["Imports", "Bulk-import volunteers, supervisors, and cases", "bi-upload", imports_path]
-           ].each do |label, desc, icon, path| %>
-          <%= link_to path, class: "group flex items-start gap-3 rounded-lg border border-slate-200 p-3 transition-colors hover:border-brand-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
-            <i class="bi <%= icon %> mt-0.5 text-lg text-slate-500 group-hover:text-brand-600" aria-hidden="true"></i>
-            <span class="min-w-0 flex-1">
-              <span class="block text-sm font-medium text-slate-800"><%= label %></span>
-              <span class="block text-xs text-slate-500"><%= desc %></span>
-            </span>
-            <i class="bi bi-chevron-right text-sm text-slate-400 group-hover:text-slate-600" aria-hidden="true"></i>
-          <% end %>
-        <% end %>
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-start" data-controller="settings-nav">
+      <nav class="hidden shrink-0 space-y-5 text-sm lg:sticky lg:top-6 lg:block lg:w-48" aria-label="Settings sections">
+        <div>
+          <p class="<%= group_label %>">Organization</p>
+          <%= link_to "#organization-details", data: {settings_nav_target: "link", key: "organization-details", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-building" aria-hidden="true"></i> Details<% end %>
+          <%= link_to "#languages", data: {settings_nav_target: "link", key: "languages", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-translate" aria-hidden="true"></i> Languages<% end %>
+          <%= link_to "#custom-org-links", data: {settings_nav_target: "link", key: "custom-org-links", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-link-45deg" aria-hidden="true"></i> Custom links<% end %>
+        </div>
+        <div>
+          <p class="<%= group_label %>">Case setup</p>
+          <%= link_to "#contact-types", data: {settings_nav_target: "link", key: "contact-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-tags" aria-hidden="true"></i> Contact types<% end %>
+          <%= link_to "#case-contact-topics", data: {settings_nav_target: "link", key: "case-contact-topics", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-chat-square-dots" aria-hidden="true"></i> Contact topics<% end %>
+          <%= link_to "#placement-types", data: {settings_nav_target: "link", key: "placement-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-house-door" aria-hidden="true"></i> Placement types<% end %>
+        </div>
+        <div>
+          <p class="<%= group_label %>">Court</p>
+          <%= link_to "#court-details", data: {settings_nav_target: "link", key: "court-details", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-bank" aria-hidden="true"></i> Court details<% end %>
+        </div>
+        <div>
+          <p class="<%= group_label %>">Volunteer setup</p>
+          <%= link_to "#learning-hours", data: {settings_nav_target: "link", key: "learning-hours", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-mortarboard" aria-hidden="true"></i> Learning hours<% end %>
+        </div>
+        <div>
+          <p class="<%= group_label %>">Administration</p>
+          <%= link_to "#administration", data: {settings_nav_target: "link", key: "administration", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-shield-lock" aria-hidden="true"></i> Admin pages<% end %>
+        </div>
+      </nav>
+
+      <div class="min-w-0 flex-1 space-y-4 lg:space-y-6">
+        <p class="<%= mobile_group %>">Organization</p>
+
+        <section data-settings-nav-target="section" data-key="organization-details" id="organization-details" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="organization-details" data-action="settings-nav#toggle" aria-controls="organization-details-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Details</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="organization-details-body" data-settings-nav-body class="space-y-4">
+            <section class="<%= card %>">
+              <%= form_with model: current_organization, local: true, class: "space-y-5" do |form| %>
+                <%= render "shared/form_errors", resource: current_organization %>
+
+                <div>
+                  <%= form.label :name, "Name", class: label_class %>
+                  <%= form.text_field :name, required: true, class: input_class %>
+                </div>
+                <div>
+                  <%= form.label :display_name, "Display name", class: label_class %>
+                  <%= form.text_field :display_name, class: input_class %>
+                </div>
+                <div>
+                  <%= form.label :address, "Address", class: label_class %>
+                  <%= form.text_field :address, class: input_class %>
+                </div>
+                <div>
+                  <%= form.label :logo, "Logo", class: label_class %>
+                  <%= form.file_field :logo, accept: ".png,.gif,.jpg,.jpeg,.webp,.svg", class: file_class %>
+                </div>
+                <div>
+                  <%= form.label :court_report_template, "Court report template", class: label_class %>
+                  <div class="flex flex-wrap items-center gap-3">
+                    <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
+                    <% if current_organization.court_report_template.attached? %>
+                      <% ActiveStorage::Current.url_options = {host: request.base_url} %>
+                      <%= link_to "Download current template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-5">
+                  <h2 class="mb-3 text-base font-semibold text-slate-900">Organization features</h2>
+                  <div class="space-y-3">
+                    <label class="flex items-start gap-2 text-sm text-slate-700">
+                      <%= form.check_box :show_driving_reimbursement, class: check_class %>
+                      <span>Show driving reimbursement</span>
+                    </label>
+                    <label class="flex items-start gap-2 text-sm text-slate-700">
+                      <%= form.check_box :learning_topic_active, class: check_class %>
+                      <span>Enable learning topic</span>
+                    </label>
+                    <label class="flex items-start gap-2 text-sm text-slate-700">
+                      <%= form.check_box :other_duties_enabled, class: check_class %>
+                      <span>Enable other duties</span>
+                    </label>
+                    <% if Flipper.enabled?(:show_additional_expenses) %>
+                      <label class="flex items-start gap-2 text-sm text-slate-700">
+                        <%= form.check_box :additional_expenses_enabled, class: check_class %>
+                        <span>Volunteers can add other expenses</span>
+                      </label>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-5" data-controller="twilio">
+                  <% twilio_on = current_organization.twilio_enabled %>
+                  <label class="flex items-start gap-2 text-sm text-slate-700">
+                    <%= form.check_box :twilio_enabled, class: check_class, data: {twilio_target: "checkbox", action: "change->twilio#toggle"} %>
+                    <span>Enable Twilio</span>
+                  </label>
+                  <div data-twilio-target="panel" class="mt-4 space-y-4 <%= "hidden" unless twilio_on %>">
+                    <div>
+                      <%= form.label :twilio_phone_number, "Twilio phone number", class: label_class %>
+                      <%= form.text_field :twilio_phone_number, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+                    </div>
+                    <div>
+                      <%= form.label :twilio_account_sid, "Twilio account SID", class: label_class %>
+                      <%= form.text_field :twilio_account_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+                    </div>
+                    <div>
+                      <%= form.label :twilio_api_key_sid, "Twilio API key SID", class: label_class %>
+                      <%= form.text_field :twilio_api_key_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+                    </div>
+                    <div>
+                      <%= form.label :twilio_api_key_secret, "Twilio API key secret", class: label_class %>
+                      <%= form.text_field :twilio_api_key_secret, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="border-t border-slate-100 pt-5">
+                  <%= button_tag type: "submit", class: button_classes(:primary) do %>
+                    <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
+                  <% end %>
+                </div>
+              <% end %>
+            </section>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="languages" id="languages" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="languages" data-action="settings-nav#toggle" aria-controls="languages-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Languages</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="languages-body" data-settings-nav-body>
+            <%= render "languages", languages: current_organization.languages %>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="custom-org-links" id="custom-org-links" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="custom-org-links" data-action="settings-nav#toggle" aria-controls="custom-org-links-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Custom links</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="custom-org-links-body" data-settings-nav-body>
+            <%= render "custom_org_links" %>
+          </div>
+        </section>
+
+        <p class="<%= mobile_group %>">Case setup</p>
+
+        <section data-settings-nav-target="section" data-key="contact-types" id="contact-types" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="contact-types" data-action="settings-nav#toggle" aria-controls="contact-types-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Contact types</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="contact-types-body" data-settings-nav-body class="space-y-4">
+            <h2 class="<%= section_title %> hidden lg:block">Manage contact types</h2>
+            <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
+            <%= render "contact_types", contact_types: @contact_types %>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="case-contact-topics" id="case-contact-topics" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="case-contact-topics" data-action="settings-nav#toggle" aria-controls="case-contact-topics-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Contact topics</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="case-contact-topics-body" data-settings-nav-body class="space-y-4">
+            <h2 class="<%= section_title %> hidden lg:block">Manage case contact topics</h2>
+            <%= render "contact_topics" %>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="placement-types" id="placement-types" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="placement-types" data-action="settings-nav#toggle" aria-controls="placement-types-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Placement types</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="placement-types-body" data-settings-nav-body class="space-y-4">
+            <h2 class="<%= section_title %> hidden lg:block">Manage case placement types</h2>
+            <%= render "placement_types", placement_types: @placement_types %>
+          </div>
+        </section>
+
+        <p class="<%= mobile_group %>">Court</p>
+
+        <section data-settings-nav-target="section" data-key="court-details" id="court-details" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="court-details" data-action="settings-nav#toggle" aria-controls="court-details-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Court details</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="court-details-body" data-settings-nav-body class="space-y-4">
+            <h2 class="<%= section_title %> hidden lg:block">Manage court details</h2>
+            <%= render "hearing_types" %>
+            <%= render "judges" %>
+            <%= render "sent_emails" %>
+          </div>
+        </section>
+
+        <p class="<%= mobile_group %>">Volunteer setup</p>
+
+        <section data-settings-nav-target="section" data-key="learning-hours" id="learning-hours" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="learning-hours" data-action="settings-nav#toggle" aria-controls="learning-hours-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Learning hours</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="learning-hours-body" data-settings-nav-body class="space-y-4">
+            <h2 class="<%= section_title %> hidden lg:block">Manage learning hours</h2>
+            <%= render "learning_hour_types" %>
+            <%= render "learning_hour_topics" %>
+          </div>
+        </section>
+
+        <p class="<%= mobile_group %>">Administration</p>
+
+        <section data-settings-nav-target="section" data-key="administration" id="administration" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="administration" data-action="settings-nav#toggle" aria-controls="administration-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Admin pages</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="administration-body" data-settings-nav-body>
+            <section class="<%= card %>">
+              <h2 class="<%= section_title %>">Administration</h2>
+              <p class="mt-1 text-sm text-slate-500">Manage admins, rates, banners, and bulk imports for this organization.</p>
+              <div class="mt-4 grid gap-2 sm:grid-cols-2">
+                <% [
+                     ["Manage admins", "Invite and edit CASA admins", "bi-person-badge", casa_admins_path],
+                     ["Mileage rates", "Reimbursement rate history", "bi-cash-coin", mileage_rates_path],
+                     ["Banners", "Org-wide announcement banners", "bi-megaphone", banners_path],
+                     ["Imports", "Bulk-import volunteers, supervisors, and cases", "bi-upload", imports_path]
+                   ].each do |label, desc, icon, path| %>
+                  <%= link_to path, class: "group flex items-start gap-3 rounded-lg border border-slate-200 p-3 transition-colors hover:border-brand-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
+                    <i class="bi <%= icon %> mt-0.5 text-lg text-slate-500 group-hover:text-brand-600" aria-hidden="true"></i>
+                    <span class="min-w-0 flex-1">
+                      <span class="block text-sm font-medium text-slate-800"><%= label %></span>
+                      <span class="block text-xs text-slate-500"><%= desc %></span>
+                    </span>
+                    <i class="bi bi-chevron-right text-sm text-slate-400 group-hover:text-slate-600" aria-hidden="true"></i>
+                  <% end %>
+                <% end %>
+              </div>
+            </section>
+          </div>
+        </section>
       </div>
-    </section>
-
-    <section class="<%= card %>">
-      <%= form_with model: current_organization, local: true, class: "space-y-5" do |form| %>
-        <%= render "shared/form_errors", resource: current_organization %>
-
-        <div>
-          <%= form.label :name, "Name", class: label_class %>
-          <%= form.text_field :name, required: true, class: input_class %>
-        </div>
-        <div>
-          <%= form.label :display_name, "Display name", class: label_class %>
-          <%= form.text_field :display_name, class: input_class %>
-        </div>
-        <div>
-          <%= form.label :address, "Address", class: label_class %>
-          <%= form.text_field :address, class: input_class %>
-        </div>
-        <div>
-          <%= form.label :logo, "Logo", class: label_class %>
-          <%= form.file_field :logo, accept: ".png,.gif,.jpg,.jpeg,.webp,.svg", class: file_class %>
-        </div>
-        <div>
-          <%= form.label :court_report_template, "Court report template", class: label_class %>
-          <div class="flex flex-wrap items-center gap-3">
-            <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
-            <% if current_organization.court_report_template.attached? %>
-              <% ActiveStorage::Current.url_options = {host: request.base_url} %>
-              <%= link_to "Download current template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="border-t border-slate-100 pt-5">
-          <h2 class="mb-3 text-base font-semibold text-slate-900">Organization features</h2>
-          <div class="space-y-3">
-            <label class="flex items-start gap-2 text-sm text-slate-700">
-              <%= form.check_box :show_driving_reimbursement, class: check_class %>
-              <span>Show driving reimbursement</span>
-            </label>
-            <label class="flex items-start gap-2 text-sm text-slate-700">
-              <%= form.check_box :learning_topic_active, class: check_class %>
-              <span>Enable learning topic</span>
-            </label>
-            <label class="flex items-start gap-2 text-sm text-slate-700">
-              <%= form.check_box :other_duties_enabled, class: check_class %>
-              <span>Enable other duties</span>
-            </label>
-            <% if Flipper.enabled?(:show_additional_expenses) %>
-              <label class="flex items-start gap-2 text-sm text-slate-700">
-                <%= form.check_box :additional_expenses_enabled, class: check_class %>
-                <span>Volunteers can add other expenses</span>
-              </label>
-            <% end %>
-          </div>
-        </div>
-
-        <div class="border-t border-slate-100 pt-5" data-controller="twilio">
-          <% twilio_on = current_organization.twilio_enabled %>
-          <label class="flex items-start gap-2 text-sm text-slate-700">
-            <%= form.check_box :twilio_enabled, class: check_class, data: {twilio_target: "checkbox", action: "change->twilio#toggle"} %>
-            <span>Enable Twilio</span>
-          </label>
-          <div data-twilio-target="panel" class="mt-4 space-y-4 <%= "hidden" unless twilio_on %>">
-            <div>
-              <%= form.label :twilio_phone_number, "Twilio phone number", class: label_class %>
-              <%= form.text_field :twilio_phone_number, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
-            </div>
-            <div>
-              <%= form.label :twilio_account_sid, "Twilio account SID", class: label_class %>
-              <%= form.text_field :twilio_account_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
-            </div>
-            <div>
-              <%= form.label :twilio_api_key_sid, "Twilio API key SID", class: label_class %>
-              <%= form.text_field :twilio_api_key_sid, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
-            </div>
-            <div>
-              <%= form.label :twilio_api_key_secret, "Twilio API key secret", class: label_class %>
-              <%= form.text_field :twilio_api_key_secret, required: twilio_on, disabled: !twilio_on, data: {twilio_target: "field"}, class: input_class %>
-            </div>
-          </div>
-        </div>
-
-        <div class="border-t border-slate-100 pt-5">
-          <%= button_tag type: "submit", class: button_classes(:primary) do %>
-            <i class="bi bi-check-lg" aria-hidden="true"></i> Submit
-          <% end %>
-        </div>
-      <% end %>
-    </section>
-
-    <%= render "languages", languages: current_organization.languages %>
-    <%= render "custom_org_links" %>
-
-    <section class="space-y-4">
-      <h2 id="contact-types" class="<%= section_title %>">Manage contact types</h2>
-      <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
-      <%= render "contact_types", contact_types: @contact_types %>
-    </section>
-
-    <section class="space-y-4">
-      <h2 id="court-details" class="<%= section_title %>">Manage court details</h2>
-      <%= render "hearing_types" %>
-      <%= render "judges" %>
-      <%= render "sent_emails" %>
-    </section>
-
-    <section class="space-y-4">
-      <h2 id="learning-hours" class="<%= section_title %>">Manage learning hours</h2>
-      <%= render "learning_hour_types" %>
-      <%= render "learning_hour_topics" %>
-    </section>
-
-    <section class="space-y-4">
-      <h2 id="case-contact-topics" class="<%= section_title %>">Manage case contact topics</h2>
-      <%= render "contact_topics" %>
-    </section>
-
-    <section class="space-y-4">
-      <h2 id="placement-types" class="<%= section_title %>">Manage case placement types</h2>
-      <%= render "placement_types", placement_types: @placement_types %>
-    </section>
+    </div>
   </div>
 </div>
