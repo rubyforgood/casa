@@ -116,15 +116,18 @@
                   <td class="<%= td %>"><%= I18n.l(volunteer.created_at, format: :full) %></td>
                   <td class="<%= td %> text-right">
                     <% if @active_supervisors.any? %>
-                      <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex items-center justify-end gap-2" do |form| %>
-                        <div class="w-48 text-left">
-                          <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" data-controller="searchable-select" data-searchable-select-dropdown-parent-value="body" data-searchable-select-placeholder-value="Search supervisors" data-searchable-select-toggle-submit-value="true" class="<%= ts_select_class %>">
-                            <option value=""></option>
-                            <% @active_supervisors.each do |s| %><option value="<%= s.id %>"><%= formatted_name(s.display_name) %></option><% end %>
-                          </select>
+                      <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(volunteer_id: volunteer.id), class: "flex flex-col items-end gap-1" do |form| %>
+                        <div class="flex items-center justify-end gap-2">
+                          <div class="w-48 text-left">
+                            <select name="supervisor_volunteer[supervisor_id]" aria-label="Supervisor for <%= formatted_name(volunteer.display_name) %>" data-controller="searchable-select" data-searchable-select-dropdown-parent-value="body" data-searchable-select-placeholder-value="Search supervisors" data-searchable-select-toggle-submit-value="true" class="<%= ts_select_class %>">
+                              <option value=""></option>
+                              <% @active_supervisors.each do |s| %><option value="<%= s.id %>"><%= formatted_name(s.display_name) %></option><% end %>
+                            </select>
+                          </div>
+                          <%= form.hidden_field :volunteer_id, value: volunteer.id %>
+                          <%= button_tag type: "submit", class: ghost_class do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
                         </div>
-                        <%= form.hidden_field :volunteer_id, value: volunteer.id %>
-                        <%= button_tag type: "submit", class: "#{ghost_class} disabled:opacity-50 disabled:cursor-not-allowed" do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
+                        <p data-searchable-select-error role="alert" class="hidden text-xs font-medium text-rose-600">Choose a supervisor.</p>
                       <% end %>
                     <% else %>
                       <span class="text-slate-500">No supervisors to assign</span>

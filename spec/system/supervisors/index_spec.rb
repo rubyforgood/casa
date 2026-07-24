@@ -155,6 +155,16 @@ RSpec.describe "supervisors/index", type: :system do
       expect(page).to have_current_path(edit_volunteer_path(volunteer))
     end
 
+    it "shows a validation error when Assign is clicked with no supervisor chosen", :js do
+      create(:supervisor, display_name: "Sam Super", casa_org: organization)
+      create(:volunteer, display_name: "Val Unassigned", casa_org: organization)
+
+      visit supervisors_path
+
+      within(find("tr", text: "Val Unassigned")) { click_on "Assign" }
+      expect(page).to have_text("Choose a supervisor")
+    end
+
     it "shows an empty message when every volunteer has a supervisor" do
       create(:volunteer, :with_assigned_supervisor, casa_org: organization)
 

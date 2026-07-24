@@ -1,15 +1,16 @@
 import { Controller } from '@hotwired/stimulus'
 import TomSelect from 'tom-select'
 
-// Single-select, searchable TomSelect for a native <select> (the court-report case picker).
-// The default text search covers the option labels, which embed the assigned volunteer names,
-// so supervisors/admins can find a case by volunteer. Connects to
+// Single-select, searchable TomSelect for a native <select> (the court-report case picker + the
+// supervisors-index per-row assign). The default text search covers the option labels, which embed
+// the assigned volunteer names, so supervisors/admins can find a case by volunteer. Connects to
 // data-controller="searchable-select".
 export default class extends Controller {
   // Values:
   //   dropdown-parent-value="body" -> render the menu on <body> (escape an overflow container)
   //   placeholder-value="..."      -> empty-state text shown when nothing is selected
-  //   toggle-submit-value          -> disable the form's submit button until an option is picked
+  //   toggle-submit-value          -> validate on submit: if nothing is picked, block the submit,
+  //                                   reveal the form's [data-searchable-select-error], and refocus
   static values = { dropdownParent: String, placeholder: String, toggleSubmit: Boolean }
 
   connect () {
@@ -26,17 +27,34 @@ export default class extends Controller {
     this.select = new TomSelect(this.element, options)
 
     if (this.toggleSubmitValue) {
-      this.submitButton = this.element.closest('form')?.querySelector('[type="submit"]')
-      this.toggleSubmit()
-      this.select.on('change', () => this.toggleSubmit())
+      this.form = this.element.closest('form')
+      this.guard = this.guard.bind(this)
+      if (this.form) this.form.addEventListener('submit', this.guard)
+      this.select.on('change', () => { if (this.element.value) this.hideError() })
     }
   }
 
-  toggleSubmit () {
-    if (this.submitButton) this.submitButton.disabled = !this.element.value
+  guard (event) {
+    if (!this.element.value) {
+      event.preventDefault()
+      event.stopPropagation()
+      const error = this.errorElement()
+      if (error) error.classList.remove('hidden')
+      if (this.select) this.select.focus()
+    }
+  }
+
+  hideError () {
+    const error = this.errorElement()
+    if (error) error.classList.add('hidden')
+  }
+
+  errorElement () {
+    return this.form ? this.form.querySelector('[data-searchable-select-error]') : null
   }
 
   disconnect () {
+    if (this.form && this.guard) this.form.removeEventListener('submit', this.guard)
     if (this.select) {
       this.select.destroy()
       this.select = null
