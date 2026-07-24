@@ -17,7 +17,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
       visit case_contacts_path
       click_button "Resolve reminder"
-      has_button?("Make reminder")
+      has_button?("Set reminder")
     end
 
     it "lists my notifications" do
@@ -64,10 +64,10 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     context "when followup has a note" do
       before do
-        click_button "Make reminder"
-        find(".swal2-textarea").set(note)
+        click_button "Set reminder"
+        fill_in("note", with: note)
 
-        click_button "Confirm"
+        click_button "Save reminder"
       end
 
       it "lists followup notifications, showing their note" do
@@ -88,8 +88,8 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     context "when followup doesn't have a note" do
       before do
-        click_button "Make reminder"
-        click_button "Confirm"
+        click_button "Set reminder"
+        click_button "Save reminder"
       end
 
       it "lists followup notifications, showing the information in a single line when there are no notes" do
@@ -111,11 +111,11 @@ RSpec.describe "notifications/index", :js, type: :system do
       let(:new_notification_message) { "#{created_by_name} has flagged a Case Contact that needs follow up." }
 
       before do
-        click_button "Make reminder"
+        click_button "Set reminder"
       end
 
       it "lists followup notifications showing admin current name" do
-        click_button "Confirm"
+        click_button "Save reminder"
 
         within("#resolve", wait: 5) do
           expect(page).to have_content "Resolve reminder"

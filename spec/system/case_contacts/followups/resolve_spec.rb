@@ -5,7 +5,7 @@ RSpec.shared_examples "change status of followup to resolved" do
     visit casa_case_path(case_contact.casa_case)
 
     click_button "Resolve reminder"
-    expect(page).to have_button("Make reminder")
+    expect(page).to have_button("Set reminder")
 
     expect(case_contact.followups.count).to eq(1)
     expect(case_contact.followups.first.resolved?).to be_truthy
@@ -39,7 +39,7 @@ RSpec.describe "followups/resolve", type: :system do
       visit casa_case_path(case_contact.casa_case)
 
       click_button "Resolve reminder"
-      expect(page).to have_button("Make reminder")
+      expect(page).to have_button("Set reminder")
     end
   end
 
@@ -53,7 +53,7 @@ RSpec.describe "followups/resolve", type: :system do
       visit casa_case_path(case_contact.casa_case)
 
       click_button "Resolve reminder"
-      expect(page).to have_button("Make reminder")
+      expect(page).to have_button("Set reminder")
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy
@@ -73,7 +73,7 @@ RSpec.describe "followups/resolve", type: :system do
       visit case_contacts_path
 
       click_button "Resolve reminder"
-      expect(page).to have_button("Make reminder")
+      expect(page).to have_button("Set reminder")
 
       expect(case_contact.followups.count).to eq(1)
       expect(case_contact.followups.first.resolved?).to be_truthy

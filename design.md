@@ -586,7 +586,7 @@ top layer and escapes the clip. Render the actions once as an `_actions` partial
 (desktop icon buttons) / `:bar` (the mobile card's labeled buttons); duplicate Dialog instances
 across the two twins are safe (each is scoped by its own `modal` controller). A row-level state
 indicator (the amber `bell-fill` "Reminder set") lives in a data cell, independent of the
-permission-gated action. The card reminder **control** ("Make reminder" -> Dialog / "Resolve reminder" -> `:secondary`, never
+permission-gated action. The card reminder **control** ("Set reminder" -> Dialog / "Resolve reminder" -> `:secondary`, never
 filled `:success`) and the pending-follow-up **indicator** (an amber `alert_classes(:warning)` callout
 with the note + who set it + when) are **shared partials** -- `case_contacts/_reminder_control` and
 `case_contacts/_reminder_indicator` -- reused by the **case-show contact card** and the **case-contacts
