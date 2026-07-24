@@ -5,7 +5,15 @@
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <div class="px-4 py-6 sm:px-6 lg:px-8">
-  <h1 class="mb-6 text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
+  <h1 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
+
+  <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 max-w-sm" do %>
+    <div class="relative">
+      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500" aria-hidden="true"></i>
+      <%= search_field_tag :search, params[:search], placeholder: "Search volunteers", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
+    </div>
+    <noscript><%= submit_tag "Search", class: "#{button_classes(:primary)} mt-2" %></noscript>
+  <% end %>
 
   <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white pt-2 shadow-sm">
     <div class="overflow-x-auto">

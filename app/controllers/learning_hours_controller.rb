@@ -15,6 +15,10 @@ class LearningHoursController < ApplicationController
       # Supervisor/admin roster: rows are one per volunteer (an array for supervisors, a
       # relation for admins). Paginate uniformly as an array with Pagy.
       rows = rows.to_a
+      if params[:search].present?
+        query = params[:search].strip.downcase
+        rows = rows.select { |row| row.display_name.to_s.downcase.include?(query) }
+      end
       per_page = 25
       page = params[:page].to_i.clamp(1, [(rows.size.to_f / per_page).ceil, 1].max)
       @pagy = Pagy.new(count: rows.size, page: page, limit: per_page)
