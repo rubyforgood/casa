@@ -68,7 +68,7 @@
         <div class="mt-5 flex flex-wrap items-center gap-3">
           <%= form.button "Update profile", type: "submit", class: btn_primary %>
           <% if policy(CasaAdmin).see_deactivate_option? %>
-            <% deactivate_class = "inline-flex items-center justify-center gap-2 rounded-lg border border-rose-200 bg-white px-4 py-2.5 text-sm font-medium text-rose-700 shadow-sm hover:bg-rose-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-rose-500" %>
+            <% deactivate_class = button_classes(:danger_outline) %>
             <% if @active_casa_admins.length > 1 %>
               <%= link_to "Deactivate", deactivate_casa_admin_path(current_user), method: :patch, class: deactivate_class, data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} %>
             <% else %>

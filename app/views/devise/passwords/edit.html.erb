@@ -32,7 +32,7 @@
     <%= f.label :password_confirmation, "Confirm new password", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
     <%= f.password_field :password_confirmation, autocomplete: "new-password", required: true, minlength: @minimum_password_length, placeholder: "••••••••", class: field %>
   </div>
-  <%= f.submit "Update password", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+  <%= f.submit "Update password", class: "#{button_classes(:primary)} w-full" %>
 <% end %>
 
 <p class="mt-8 text-center text-sm text-slate-500">

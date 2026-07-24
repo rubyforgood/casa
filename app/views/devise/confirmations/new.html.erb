@@ -26,7 +26,7 @@
     <%= f.label :email, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
     <%= f.email_field :email, autofocus: true, autocomplete: "email", placeholder: "you@example.com", class: field %>
   </div>
-  <%= f.submit "Resend confirmation instructions", class: "w-full cursor-pointer rounded-lg bg-brand-600 px-4 py-2.5 text-center text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:ring-offset-2" %>
+  <%= f.submit "Resend confirmation instructions", class: "#{button_classes(:primary)} w-full" %>
 <% end %>
 
 <p class="mt-8 text-center text-sm text-slate-500">

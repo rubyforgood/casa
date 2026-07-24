@@ -76,7 +76,7 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
 - Surfaces: white, `border border-slate-200`, `shadow-sm`.
 - Page background: `bg-slate-50`.
 - **Page vertical rhythm** (index / list pages): content wrapper `px-4 py-6 sm:px-6 lg:px-8`;
-  header block `mb-6` (24px); a plain (borderless) filter bar gets `mb-4` so it sits **16px**
+  header block `mb-6` (24px); the header **row** is `flex flex-wrap items-{end|start} justify-between gap-3`: **`items-end`** for an **h1-only** header (the 40px CTA aligns to the h1 baseline) and **`items-start`** when the h1 carries a **subtitle** (CTA top-aligns to the title so the subtitle can't push it down -- measured, `items-end`+subtitle drops the 40px CTA ~16px too low to the subtitle baseline, which was the dashboards' bug: `ctaTop==h1Top` after the fix, matching reimbursements). h1-only volunteers/supervisors/cases use `items-end`; subtitle pages reimbursements/placements/banners/dashboards use `items-start`. a plain (borderless) filter bar gets `mb-4` so it sits **16px**
   above the table — every roster filter converges on this (cases / volunteers / supervisors /
   reimbursements all measure 16px; `mb-5` or `mb-6` on a *plain* filter is drift). A filter
   wrapped in its own bordered `rounded-2xl` card (case-contacts) is a *section*, so it keeps the
