@@ -3,8 +3,9 @@
     a grouped sub-nav (settings_nav controller) selects one section at a time. Progressive
     enhancement -- with JS off, every section stays visible (a plain scroll); the controller
     collapses to a single desktop panel / mobile accordion and honors the URL hash, so deep links
-    (e.g. the case-contact form -> #case-contact-topics) still open the right section. The section
-    anchor ids and the entity partials/tables are unchanged. %>
+    (e.g. the case-contact form -> #case-contact-topics) still open the right section. The
+    Administration group is direct links to standalone admin pages (not an in-page panel), shown in
+    the rail on desktop and a link block on mobile. Section anchor ids + entity partials unchanged. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
@@ -15,6 +16,7 @@
 <% group_label = "px-3 pb-1 text-xs font-semibold text-slate-400" %>
 <% mobile_group = "px-1 pb-1 text-xs font-semibold text-slate-400 lg:hidden" %>
 <% acc_btn = "flex w-full items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden" %>
+<% admin_pages = [["Manage admins", "bi-person-badge", casa_admins_path], ["Mileage rates", "bi-cash-coin", mileage_rates_path], ["Banners", "bi-megaphone", banners_path], ["Imports", "bi-upload", imports_path]] %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-7xl">
@@ -49,7 +51,9 @@
         </div>
         <div>
           <p class="<%= group_label %>">Administration</p>
-          <%= link_to "#administration", data: {settings_nav_target: "link", key: "administration", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-shield-lock" aria-hidden="true"></i> Admin pages<% end %>
+          <% admin_pages.each do |label, icon, path| %>
+            <%= link_to path, class: rail_link do %><i class="bi <%= icon %>" aria-hidden="true"></i> <%= label %><% end %>
+          <% end %>
         </div>
       </nav>
 
@@ -255,37 +259,18 @@
           </div>
         </section>
 
+        <%# Administration = direct links to standalone admin pages. On mobile the rail is hidden, so
+            these render as a tappable link block here (lg:hidden); on desktop the rail carries them. %>
         <p class="<%= mobile_group %>">Administration</p>
-
-        <section data-settings-nav-target="section" data-key="administration" id="administration" class="space-y-4">
-          <button type="button" data-settings-nav-acc data-key="administration" data-action="settings-nav#toggle" aria-controls="administration-body" aria-expanded="false" class="<%= acc_btn %>">
-            <span class="text-base font-bold tracking-tight text-slate-900">Admin pages</span>
-            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
-          </button>
-          <div id="administration-body" data-settings-nav-body>
-            <section class="<%= card %>">
-              <h2 class="<%= section_title %>">Administration</h2>
-              <p class="mt-1 text-sm text-slate-500">Manage admins, rates, banners, and bulk imports for this organization.</p>
-              <div class="mt-4 grid gap-2">
-                <% [
-                     ["Manage admins", "Invite and edit CASA admins", "bi-person-badge", casa_admins_path],
-                     ["Mileage rates", "Reimbursement rate history", "bi-cash-coin", mileage_rates_path],
-                     ["Banners", "Org-wide announcement banners", "bi-megaphone", banners_path],
-                     ["Imports", "Bulk-import volunteers, supervisors, and cases", "bi-upload", imports_path]
-                   ].each do |label, desc, icon, path| %>
-                  <%= link_to path, class: "group flex items-start gap-3 rounded-lg border border-slate-200 p-3 transition-colors hover:border-brand-300 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %>
-                    <i class="bi <%= icon %> mt-0.5 text-lg text-slate-500 group-hover:text-brand-600" aria-hidden="true"></i>
-                    <span class="min-w-0 flex-1">
-                      <span class="block text-sm font-medium text-slate-800"><%= label %></span>
-                      <span class="block text-xs text-slate-500"><%= desc %></span>
-                    </span>
-                    <i class="bi bi-chevron-right text-sm text-slate-400 group-hover:text-slate-600" aria-hidden="true"></i>
-                  <% end %>
-                <% end %>
-              </div>
-            </section>
-          </div>
-        </section>
+        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:hidden">
+          <% admin_pages.each_with_index do |(label, icon, path), i| %>
+            <%= link_to path, class: "flex items-center gap-3 px-5 py-4 hover:bg-slate-50 #{"border-t border-slate-100" unless i.zero?}" do %>
+              <i class="bi <%= icon %> text-lg text-slate-500" aria-hidden="true"></i>
+              <span class="flex-1 font-medium text-slate-800"><%= label %></span>
+              <i class="bi bi-chevron-right text-sm text-slate-400" aria-hidden="true"></i>
+            <% end %>
+          <% end %>
+        </div>
       </div>
     </div>
   </div>

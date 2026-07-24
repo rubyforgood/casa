@@ -903,9 +903,10 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   partials/tables/anchor ids are unchanged; the page heading is
   **"Settings"** (matching the sidebar nav label -- the app-wide convention is h1 == nav label), the
   "Manage …" section headings stay, and the **Court** group splits into Hearing types / Judges / Sent
-  emails. The **Administration** links **stack in one column** (the panel is narrower than full width)
-  and each admin sub-page (admins, mileage rates, banners, imports) carries a **"Back to settings"**
-  link, so there is always a path back to the hub.
+  emails. The **Administration** group is **direct links** to the standalone admin pages (admins,
+  mileage rates, banners, imports) -- not an in-page panel -- shown in the rail on desktop and a
+  tappable link block on mobile, so each page is one click away (no panel-of-cards detour); each of
+  those pages carries a **"Back to settings"** link back to the hub.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.

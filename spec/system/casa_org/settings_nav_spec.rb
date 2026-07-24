@@ -24,4 +24,13 @@ RSpec.describe "casa_org/edit settings navigation", :js, type: :system do
     expect(page).to have_css("#case-contact-topics-body", visible: :visible)
     expect(page).to have_css("#organization-details-body", visible: :hidden)
   end
+
+  it "links directly to the standalone admin pages (no intermediate panel)" do
+    visit edit_casa_org_path(organization)
+
+    expect(page).to have_link("Manage admins", href: casa_admins_path)
+    expect(page).to have_link("Mileage rates", href: mileage_rates_path)
+    expect(page).to have_link("Banners", href: banners_path)
+    expect(page).to have_link("Imports", href: imports_path)
+  end
 end
