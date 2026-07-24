@@ -586,11 +586,14 @@ top layer and escapes the clip. Render the actions once as an `_actions` partial
 (desktop icon buttons) / `:bar` (the mobile card's labeled buttons); duplicate Dialog instances
 across the two twins are safe (each is scoped by its own `modal` controller). A row-level state
 indicator (the amber `bell-fill` "Reminder set") lives in a data cell, independent of the
-permission-gated action. On the **case-show contact card** the pending follow-up also surfaces as an
-`alert_classes(:warning)` callout (the note + who set it + when) so the reminder's content is visible
-where you act, not just a state flag; creating or resolving it emails **both** the volunteer (the
-contact's creator) and the setter via Noticed `deliver_by :email` -> `UserMailer`, gated on
-`receive_email_notifications`. Set/Resolve reminder and delete return via `redirect_back_or_to` /
+permission-gated action. The card reminder **control** ("Make reminder" -> Dialog / "Resolve reminder" -> `:secondary`, never
+filled `:success`) and the pending-follow-up **indicator** (an amber `alert_classes(:warning)` callout
+with the note + who set it + when) are **shared partials** -- `case_contacts/_reminder_control` and
+`case_contacts/_reminder_indicator` -- reused by the **case-show contact card** and the **case-contacts
+index card**, so a reminder behaves identically everywhere (do not re-inline a per-page variant or a
+SweetAlert prompt). Creating or resolving one emails **both** the volunteer (the contact's creator)
+and the setter via Noticed `deliver_by :email` -> `UserMailer`, gated on `receive_email_notifications`;
+the new-design table keeps its own compact `:row`/`:bar` Dialog + bell indicator. Set/Resolve reminder and delete return via `redirect_back_or_to` /
 `redirect_to request.referer`, so the action stays on the list rather than jumping to the case page.
 
 ### Charts (data viz)

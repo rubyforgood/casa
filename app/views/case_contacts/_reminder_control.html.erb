@@ -1,7 +1,9 @@
-<%# Follow-up control on the Tailwind case-show card: "Resolve reminder" (button_to) when a
-    follow-up is requested, else a "Make reminder" trigger that opens a design-system Dialog to
-    create the follow-up with an optional note. Replaced a SweetAlert2 popup; the modal UI is
-    covered by followups/create_spec (:js). %>
+<%# Shared reminder control for a case-contact card (case-show + case-contacts index): a
+    "Resolve reminder" button_to when a follow-up is requested, else a "Make reminder" trigger
+    opening a design-system Dialog to create the follow-up with an optional note. Creating or
+    resolving it emails BOTH the volunteer (contact creator) and the setter -- see FollowupService
+    / CaseContacts::FollowupsController. Replaced a SweetAlert2 popup; UI covered by
+    followups/create_spec (:js). Locals: contact, followup. %>
 <% if followup %>
   <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:secondary) do %>
     <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
