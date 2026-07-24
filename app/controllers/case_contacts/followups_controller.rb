@@ -8,7 +8,7 @@ class CaseContacts::FollowupsController < ApplicationController
     FollowupService.create_followup(case_contact, current_user, note)
 
     respond_to do |format|
-      format.html { redirect_back_or_to casa_case_path(case_contact.casa_case) }
+      format.html { redirect_back_or_to(case_contact.casa_case ? casa_case_path(case_contact.casa_case) : case_contacts_path) }
       format.json { head :no_content }
     end
   end
@@ -21,7 +21,7 @@ class CaseContacts::FollowupsController < ApplicationController
     create_notification
 
     respond_to do |format|
-      format.html { redirect_back_or_to casa_case_path(@followup.case_contact.casa_case) }
+      format.html { redirect_back_or_to(@followup.case_contact.casa_case ? casa_case_path(@followup.case_contact.casa_case) : case_contacts_path) }
       format.json { head :no_content }
     end
   end
