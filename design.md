@@ -758,6 +758,15 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   labels — e.g. `case_contact.case_contact_contact_types` is "Contact type", not "Contact Type") and
   **no trailing period** (a `:base` sentence like "Must enter miles driven…" ends without ".", so it
   reads cleanly as a list item and never doubles into "…reimbursement., and …").
+- **Enabled + validate, not disabled-until-input.** A submit that would otherwise sit *disabled*
+  until a field/select is filled instead stays **enabled**; an invalid submit is blocked client-side
+  (`preventDefault` + `stopPropagation`) and shows an inline field-error (`bi-exclamation-circle` rose
+  icon + slate-500 text, matching `field_error`, toggled with a `hidden` class) and focuses the field
+  -- so the user can always click and learn why. Used by the CSV imports, the SMS opt-in "Continue",
+  copy-court-orders, volunteers bulk-assign, and the supervisor-assign row. Disabling a button
+  *during* submission (reports, court-report generate) is the correct, kept use of `disabled`. For a
+  TomSelect field the guard must **not** call `.focus()` on failure -- that re-opens the dropdown over
+  the error.
 
 ### Dropdown / popover
 Menus (the header account menu, the cases-page "More" actions menu) are a native
