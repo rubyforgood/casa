@@ -23,7 +23,7 @@ RSpec.describe "casa_org/edit", type: :view do
   it "has casa org edit page text" do
     render template: "casa_org/edit"
 
-    expect(rendered).to have_text "Editing CASA Organization"
+    expect(rendered).to have_text "Settings"
     expect(rendered).not_to have_text "sign in before continuing"
     expect(rendered).to have_selector("input[required=required]", id: "casa_org_name")
   end
@@ -36,11 +36,8 @@ RSpec.describe "casa_org/edit", type: :view do
 
     expect(rendered).to have_text("Test Question")
     expect(rendered).to have_text("Test details")
-    expect(rendered).to have_table("contact-topics",
-      with_rows:
-      [
-        ["Test Question", "Test details", "Edit"]
-      ])
+    expect(rendered).to have_css("#contact-topics [id='contact_topic-#{contact_topic.id}']", text: "Test Question")
+    expect(rendered).to have_link("Edit", href: edit_contact_topic_path(contact_topic))
   end
 
   it "has contact types content" do

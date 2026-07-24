@@ -10,11 +10,11 @@ RSpec.describe "casa_org/edit settings navigation", :js, type: :system do
     visit edit_casa_org_path(organization)
 
     expect(page).to have_css("#organization-details-body", visible: :visible)
-    expect(page).to have_css("#court-details-body", visible: :hidden)
+    expect(page).to have_css("#hearing-types-body", visible: :hidden)
 
-    click_link "Court details"
+    click_link "Hearing types"
 
-    expect(page).to have_css("#court-details-body", visible: :visible)
+    expect(page).to have_css("#hearing-types-body", visible: :visible)
     expect(page).to have_css("#organization-details-body", visible: :hidden)
   end
 

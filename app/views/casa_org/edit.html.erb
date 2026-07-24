@@ -19,8 +19,8 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-7xl">
     <div class="mb-6">
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Editing CASA Organization</h1>
-      <p class="mt-1 text-sm text-slate-500">Organization profile, features, and admin settings.</p>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Settings</h1>
+      <p class="mt-1 text-sm text-slate-500">Organization profile, case setup, court details, and administration.</p>
     </div>
 
     <div class="flex flex-col gap-8 lg:flex-row lg:items-start" data-controller="settings-nav">
@@ -39,7 +39,9 @@
         </div>
         <div>
           <p class="<%= group_label %>">Court</p>
-          <%= link_to "#court-details", data: {settings_nav_target: "link", key: "court-details", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-bank" aria-hidden="true"></i> Court details<% end %>
+          <%= link_to "#hearing-types", data: {settings_nav_target: "link", key: "hearing-types", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-bank" aria-hidden="true"></i> Hearing types<% end %>
+          <%= link_to "#judges", data: {settings_nav_target: "link", key: "judges", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-person-badge" aria-hidden="true"></i> Judges<% end %>
+          <%= link_to "#sent-emails", data: {settings_nav_target: "link", key: "sent-emails", action: "settings-nav#navigate"}, class: rail_link do %><i class="bi bi-envelope" aria-hidden="true"></i> Sent emails<% end %>
         </div>
         <div>
           <p class="<%= group_label %>">Volunteer setup</p>
@@ -209,15 +211,32 @@
 
         <p class="<%= mobile_group %>">Court</p>
 
-        <section data-settings-nav-target="section" data-key="court-details" id="court-details" class="space-y-4">
-          <button type="button" data-settings-nav-acc data-key="court-details" data-action="settings-nav#toggle" aria-controls="court-details-body" aria-expanded="false" class="<%= acc_btn %>">
-            <span class="text-base font-bold tracking-tight text-slate-900">Court details</span>
+        <section data-settings-nav-target="section" data-key="hearing-types" id="hearing-types" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="hearing-types" data-action="settings-nav#toggle" aria-controls="hearing-types-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Hearing types</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="court-details-body" data-settings-nav-body class="space-y-4">
-            <h2 class="<%= section_title %> hidden lg:block">Manage court details</h2>
+          <div id="hearing-types-body" data-settings-nav-body>
             <%= render "hearing_types" %>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="judges" id="judges" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="judges" data-action="settings-nav#toggle" aria-controls="judges-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Judges</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="judges-body" data-settings-nav-body>
             <%= render "judges" %>
+          </div>
+        </section>
+
+        <section data-settings-nav-target="section" data-key="sent-emails" id="sent-emails" class="space-y-4">
+          <button type="button" data-settings-nav-acc data-key="sent-emails" data-action="settings-nav#toggle" aria-controls="sent-emails-body" aria-expanded="false" class="<%= acc_btn %>">
+            <span class="text-base font-bold tracking-tight text-slate-900">Sent emails</span>
+            <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
+          </button>
+          <div id="sent-emails-body" data-settings-nav-body>
             <%= render "sent_emails" %>
           </div>
         </section>
