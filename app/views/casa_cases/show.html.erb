@@ -107,9 +107,9 @@
           <h3 class="text-sm font-semibold text-slate-900">Court orders</h3>
           <ul class="mt-2 space-y-2">
             <% @casa_case.case_court_orders.each do |court_order| %>
-              <li class="flex items-start gap-2 text-sm">
+              <li class="flex items-start justify-between gap-3 text-sm">
+                <span class="min-w-0 flex-1 text-slate-700"><%= court_order.text %></span>
                 <%= court_order_status_pill(court_order) %>
-                <span class="text-slate-700"><%= court_order.text %></span>
               </li>
             <% end %>
           </ul>

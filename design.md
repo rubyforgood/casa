@@ -639,7 +639,7 @@ Deactivated volunteer (slate). Court-order implementation status uses the
 Implemented (emerald + check), Partially implemented (amber + clock), Not implemented
 (rose + x-circle), Not specified (slate + minus) -- **never OS emoji** (it replaced a
 model `implementation_status_symbol` that returned literal ✅/🕗/❌, which render
-inconsistently across platforms and are invisible to a class-string button audit).
+inconsistently across platforms and are invisible to a class-string button audit). Render it **right-aligned** (`flex items-start justify-between`, text in a `flex-1 min-w-0` left column, pill `shrink-0` on the right), NOT as a leading marker: a variable-width badge leading each row makes the text start at a ragged left edge.
 
 ### Person avatar (initials)
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
