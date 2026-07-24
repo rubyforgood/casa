@@ -591,7 +591,9 @@ filled `:success`) and the pending-follow-up **indicator** (an amber `alert_clas
 with the note + who set it + when) are **shared partials** -- `case_contacts/_reminder_control` and
 `case_contacts/_reminder_indicator` -- reused by the **case-show contact card** and the **case-contacts
 index card**, so a reminder behaves identically everywhere (do not re-inline a per-page variant or a
-SweetAlert prompt). Creating or resolving one emails **both** the volunteer (the contact's creator)
+SweetAlert prompt). The control renders **only for `active?` (finalized) contacts** -- a case contact stays a
+draft with a nil `casa_case` until finalized, so a reminder on a draft would 500 on the redirect
+(`casa_case_path(nil)`); it is gated at each card's render site. Creating or resolving one emails **both** the volunteer (the contact's creator)
 and the setter via Noticed `deliver_by :email` -> `UserMailer`, gated on `receive_email_notifications`;
 the new-design table keeps its own compact `:row`/`:bar` Dialog + bell indicator. Set/Resolve reminder and delete return via `redirect_back_or_to` /
 `redirect_to request.referer`, so the action stays on the list rather than jumping to the case page.

@@ -64,7 +64,9 @@
 
       <div class="mt-4 flex flex-wrap items-center gap-2">
         <% if Pundit.policy(current_user, contact).update? %>
-          <%= render "case_contacts/reminder_control", contact: contact, followup: contact.requested_followup %>
+          <% if contact.active? %>
+            <%= render "case_contacts/reminder_control", contact: contact, followup: contact.requested_followup %>
+          <% end %>
           <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %>
             <i class="bi bi-pencil" aria-hidden="true"></i> Edit
           <% end %>
