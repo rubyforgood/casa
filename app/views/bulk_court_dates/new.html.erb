@@ -8,7 +8,12 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-3xl space-y-6">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">New bulk court date</h1>
+    <div>
+      <%= link_to casa_cases_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to cases
+      <% end %>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">New bulk court date</h1>
+    </div>
     <div class="<%= card %>">
       <%= form_with(model: @court_date, url: bulk_court_dates_path, method: :post, local: true,
             data: {controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"}, class: "space-y-6") do |form| %>
