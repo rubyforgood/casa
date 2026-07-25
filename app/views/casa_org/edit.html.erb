@@ -6,14 +6,19 @@
     (e.g. the case-contact form -> #case-contact-topics) still open the right section. The
     Administration group is direct links to standalone admin pages (which share the settings frame
     via casa_org/_settings_frame). Section anchor ids + entity partials unchanged. %>
-<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% card = "p-5 sm:p-6 lg:rounded-2xl lg:border lg:border-slate-200 lg:bg-white lg:shadow-sm" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% file_class = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-3 file:border-0 file:bg-slate-100 file:px-3.5 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 <% mobile_group = "px-1 pb-1 text-xs font-semibold text-slate-400 lg:hidden" %>
-<% acc_btn = "flex w-full items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 text-left shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 lg:hidden" %>
+<%# On mobile each section is ONE card: `sec` supplies the card chrome, `acc_btn` is its header row,
+    `panel_body` adds the divider under the header, and the inner panels (the `card` local + the
+    section partials) drop their card chrome below lg so they read as the card body, not a 2nd card. %>
+<% acc_btn = "flex w-full items-center justify-between gap-3 px-5 py-4 text-left hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 lg:hidden" %>
+<% sec = "overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none" %>
+<% panel_body = "border-t border-slate-100 lg:border-t-0 lg:space-y-6" %>
 <% admin_pages = [["Manage admins", "bi-person-badge", casa_admins_path], ["Mileage rates", "bi-cash-coin", mileage_rates_path], ["Banners", "bi-megaphone", banners_path], ["Imports", "bi-upload", imports_path]] %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -29,12 +34,12 @@
       <div class="min-w-0 flex-1 space-y-4 lg:space-y-6">
         <p class="<%= mobile_group %>">Organization</p>
 
-        <section data-settings-nav-target="section" data-key="organization-details" id="organization-details" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="organization-details" id="organization-details" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="organization-details" data-action="settings-nav#toggle" aria-controls="organization-details-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Details</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="organization-details-body" data-settings-nav-body class="space-y-4">
+          <div id="organization-details-body" data-settings-nav-body class="<%= panel_body %>">
             <section class="<%= card %>">
               <%= form_with model: current_organization, local: true, class: "space-y-5" do |form| %>
                 <%= render "shared/form_errors", resource: current_organization %>
@@ -126,57 +131,57 @@
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="languages" id="languages" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="languages" id="languages" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="languages" data-action="settings-nav#toggle" aria-controls="languages-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Languages</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="languages-body" data-settings-nav-body>
+          <div id="languages-body" data-settings-nav-body class="<%= panel_body %>">
             <%= render "languages", languages: current_organization.languages %>
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="custom-org-links" id="custom-org-links" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="custom-org-links" id="custom-org-links" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="custom-org-links" data-action="settings-nav#toggle" aria-controls="custom-org-links-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Custom links</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="custom-org-links-body" data-settings-nav-body>
+          <div id="custom-org-links-body" data-settings-nav-body class="<%= panel_body %>">
             <%= render "custom_org_links" %>
           </div>
         </section>
 
         <p class="<%= mobile_group %>">Case setup</p>
 
-        <section data-settings-nav-target="section" data-key="contact-types" id="contact-types" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="contact-types" id="contact-types" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="contact-types" data-action="settings-nav#toggle" aria-controls="contact-types-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Contact types</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="contact-types-body" data-settings-nav-body class="space-y-4">
+          <div id="contact-types-body" data-settings-nav-body class="<%= panel_body %>">
             <h2 class="<%= section_title %> hidden lg:block">Manage contact types</h2>
             <%= render "contact_type_groups", contact_type_groups: @contact_type_groups %>
             <%= render "contact_types", contact_types: @contact_types %>
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="case-contact-topics" id="case-contact-topics" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="case-contact-topics" id="case-contact-topics" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="case-contact-topics" data-action="settings-nav#toggle" aria-controls="case-contact-topics-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Contact topics</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="case-contact-topics-body" data-settings-nav-body class="space-y-4">
+          <div id="case-contact-topics-body" data-settings-nav-body class="<%= panel_body %>">
             <h2 class="<%= section_title %> hidden lg:block">Manage case contact topics</h2>
             <%= render "contact_topics" %>
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="placement-types" id="placement-types" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="placement-types" id="placement-types" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="placement-types" data-action="settings-nav#toggle" aria-controls="placement-types-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Placement types</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="placement-types-body" data-settings-nav-body class="space-y-4">
+          <div id="placement-types-body" data-settings-nav-body class="<%= panel_body %>">
             <h2 class="<%= section_title %> hidden lg:block">Manage case placement types</h2>
             <%= render "placement_types", placement_types: @placement_types %>
           </div>
@@ -184,44 +189,44 @@
 
         <p class="<%= mobile_group %>">Court</p>
 
-        <section data-settings-nav-target="section" data-key="hearing-types" id="hearing-types" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="hearing-types" id="hearing-types" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="hearing-types" data-action="settings-nav#toggle" aria-controls="hearing-types-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Hearing types</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="hearing-types-body" data-settings-nav-body>
+          <div id="hearing-types-body" data-settings-nav-body class="<%= panel_body %>">
             <%= render "hearing_types" %>
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="judges" id="judges" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="judges" id="judges" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="judges" data-action="settings-nav#toggle" aria-controls="judges-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Judges</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="judges-body" data-settings-nav-body>
+          <div id="judges-body" data-settings-nav-body class="<%= panel_body %>">
             <%= render "judges" %>
           </div>
         </section>
 
-        <section data-settings-nav-target="section" data-key="sent-emails" id="sent-emails" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="sent-emails" id="sent-emails" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="sent-emails" data-action="settings-nav#toggle" aria-controls="sent-emails-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Sent emails</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="sent-emails-body" data-settings-nav-body>
+          <div id="sent-emails-body" data-settings-nav-body class="<%= panel_body %>">
             <%= render "sent_emails" %>
           </div>
         </section>
 
         <p class="<%= mobile_group %>">Volunteer setup</p>
 
-        <section data-settings-nav-target="section" data-key="learning-hours" id="learning-hours" class="space-y-4">
+        <section data-settings-nav-target="section" data-key="learning-hours" id="learning-hours" class="<%= sec %>">
           <button type="button" data-settings-nav-acc data-key="learning-hours" data-action="settings-nav#toggle" aria-controls="learning-hours-body" aria-expanded="false" class="<%= acc_btn %>">
             <span class="text-base font-bold tracking-tight text-slate-900">Learning hours</span>
             <i data-settings-nav-chevron class="bi bi-chevron-down text-slate-400 transition-transform duration-200" aria-hidden="true"></i>
           </button>
-          <div id="learning-hours-body" data-settings-nav-body class="space-y-4">
+          <div id="learning-hours-body" data-settings-nav-body class="<%= panel_body %>">
             <h2 class="<%= section_title %> hidden lg:block">Manage learning hours</h2>
             <%= render "learning_hour_types" %>
             <%= render "learning_hour_topics" %>

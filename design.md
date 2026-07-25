@@ -908,13 +908,23 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   The `settings-nav` Stimulus controller drives it as **progressive enhancement**: with JS off every
   `[data-settings-nav-target="section"]` stays visible (a plain scroll — so no-JS users and rack_test
   view/request specs see everything); on connect it collapses to one panel, hiding inactive sections
-  on desktop (`lg:hidden` on the section) and collapsing their body on mobile (`hidden` on
-  `[data-settings-nav-body]`, leaving the `lg:hidden` accordion header tappable). It defaults to the
-  first section and honors the URL hash, so deep links keep working (the case-contact form links to
-  `#case-contact-topics`). Mobile is a grouped accordion (the rail's clusters repeat as `lg:hidden`
-  labels); tapping a section opens its card(s) in place, one at a time. Section **order is by task
-  frequency + setup flow, not alphabetical**. Each entity partial still renders its own card and the
-  partials/tables/anchor ids are unchanged; the page heading is
+  on desktop (`lg:hidden` on the section, always one panel) while the mobile accordion is a
+  **separate concern on a different class** -- the body toggles `max-lg:hidden` (hidden only below lg)
+  with its own openKey -- so a mobile collapse never blanks the desktop panel and vice-versa. It
+  defaults the desktop panel to the first section (or the URL hash, so deep links keep working -- the
+  case-contact form links to `#case-contact-topics`); the mobile accordion starts collapsed. Mobile is
+  a grouped accordion (the rail's clusters repeat as `lg:hidden` labels): each section is **one card**
+  whose header (title + chevron) toggles the body **open or closed** -- zero or one open, and tapping
+  the open header collapses it (the earlier controller could only open, never close). Section **order is by task
+  frequency + setup flow, not alphabetical**. **One card per section, responsively:** the `<section>` carries the card chrome on mobile
+  (`sec` = overflow-hidden rounded/border/shadow, reset to transparent below `lg`), `acc_btn` is a
+  flush header row (not its own card), a `panel_body` adds the under-header divider, and the inner
+  panels -- the `card` local and every entity partial -- drop their card chrome below `lg`
+  (`p-5 sm:p-6 lg:rounded-2xl lg:border lg:bg-white lg:shadow-sm`) so they read as the card body, not
+  a second nested card. Each single-section partial's title `<h3>` is `hidden lg:block` (the accordion
+  header is the title on mobile; the `<h3>` is the panel title on desktop; multi-card sections keep
+  their sub-headings). Verify by geometry: on mobile the `<section>` owns the border/radius and the
+  inner panel has none; on desktop it flips. Tables/anchor ids are unchanged; the page heading is
   **"Settings"** (matching the sidebar nav label -- the app-wide convention is h1 == nav label), the
   "Manage …" section headings stay, and the **Court** group splits into Hearing types / Judges / Sent
   emails. The **Administration** group is **direct links** to the standalone admin pages (admins,
