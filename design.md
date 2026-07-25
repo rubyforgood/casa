@@ -490,7 +490,12 @@ had crept into the reimbursements / settings / court-date / placements / all-CAS
 every `<th>` on this one token, matching what `sortable_header` emits). Header and body cells share the same `px-4 py-3` padding (so columns line up), and every `<th>`
 is `align-top` — a column whose header wraps to two lines then anchors all headers to one top line
 instead of vertically-centring the single-line neighbours (the browser `vertical-align: middle`
-default, which reads as stray space).
+default, which reads as stray space). The **`sortable_header` sort caret** must likewise pin to the
+header's *first line*: the header link is `inline-flex items-start` and the caret rides in a
+one-line-tall `h-4 items-center` box (`sort_caret`). Plain `items-center` on the link re-centres the
+caret on a *wrapped* label, so single- vs. two-line columns leave the row of carets jagged (measured:
+the caret dropped 8px on wrapped headers at 1024px; after the fix every column's caret shares one
+`svgTop` — verify by geometry, not by eye).
 
 **Body cells, action buttons, and checkboxes all top-align to the row's first line -- never the
 `vertical-align: middle` default** (which floats them centered whenever any cell in the row wraps to
