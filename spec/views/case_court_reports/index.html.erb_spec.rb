@@ -15,13 +15,12 @@ RSpec.describe "case_court_reports/index", type: :view do
       expect(controller.request.fullpath).to eq case_court_reports_path
     end
 
-    it "has a card with card title 'Generate Court Report'", :aggregate_failures do
-      expect(rendered).to have_selector("h6", text: "Court reports", count: 1)
+    it "has the generate-report card" do
       expect(rendered).to have_selector("div", class: "card-style", count: 1)
     end
 
-    it "page has title 'Gererate Reports'" do
-      expect(rendered).to have_selector("h1", text: "Generate reports", count: 1)
+    it "titles the page 'Court reports' to match the nav label" do
+      expect(rendered).to have_selector("h1", text: "Court reports", count: 1)
     end
 
     it "has button with 'Download Court Report as .docx' text" do

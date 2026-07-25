@@ -1,4 +1,4 @@
-<% content_for :page_title, "Reimbursement queue" %>
+<% content_for :page_title, "Reimbursements" %>
 <%# reimbursements#index on the casa_app shell. Bespoke Tailwind table (server-side volunteer +
     occurred-at filters via the auto-submit controller + Pagy) replacing the retired jQuery
     serverSide DataTable. Mark-complete stays a per-row PATCH form (the checkbox auto-submits).
@@ -16,7 +16,7 @@
   <div class="mx-auto max-w-6xl">
     <div class="mb-6 flex flex-wrap items-start justify-between gap-3">
       <div>
-        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reimbursement queue</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reimbursements</h1>
         <p class="mt-1 text-sm text-slate-500">Review volunteer travel reimbursement requests and mark them complete.</p>
       </div>
       <%= form_with url: mileage_reports_path(format: :csv), method: :get do %>
@@ -62,9 +62,9 @@
     <% if @reimbursements.any? %>
       <div class="<%= card %> hidden overflow-hidden pt-2 md:block">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-              <tr>
+          <table class="min-w-full">
+            <thead>
+              <tr class="border-b border-slate-100">
                 <th scope="col" class="<%= th %>">Volunteer</th>
                 <th scope="col" class="<%= th %>">Case number</th>
                 <th scope="col" class="<%= th %>">Contact types</th>

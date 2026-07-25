@@ -487,7 +487,7 @@ footer and unbalance it, so use `pt-2`, not `py-2`, on a footered table card), f
 text-slate-600` — **never an `uppercase`/`tracking-wide` transform** (column headers are sentence
 case like every other label; an ALL-CAPS `text-slate-500` eyebrow header is a recurring drift — it
 had crept into the reimbursements / settings / court-date / placements / all-CASA tables — converge
-every `<th>` on this one token, matching what `sortable_header` emits). Header and body cells share the same `px-4 py-3` padding (so columns line up), and every `<th>`
+every `<th>` on this one token, matching what `sortable_header` emits). The `thead` itself is **unfilled** -- a `border-b border-slate-100` under the header row is the only separator, **never a `bg-slate-50` fill**, which clashes with the card's white `pt-2` inset and leaves a white strip above the grey header (a reimbursements-table drift). Header and body cells share the same `px-4 py-3` padding (so columns line up), and every `<th>`
 is `align-top` — a column whose header wraps to two lines then anchors all headers to one top line
 instead of vertically-centring the single-line neighbours (the browser `vertical-align: middle`
 default, which reads as stray space). The **`sortable_header` sort caret** must likewise pin to the
