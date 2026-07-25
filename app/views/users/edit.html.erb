@@ -10,7 +10,10 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-3xl space-y-6">
     <div>
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit profile</h1>
+      <%= link_to authenticated_user_root_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to dashboard
+      <% end %>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Edit profile</h1>
       <p class="mt-1 text-sm text-slate-500">Manage your personal details, security, and how we reach you.</p>
     </div>
 
