@@ -927,11 +927,19 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   hover:text-slate-700` + `bi-chevron-left`). Top-level destinations (Dashboard, Cases, Settings, etc.)
   don't need one. Add a back affordance to every new sub-page -- it's a recurring gap (bulk court
   dates, case groups, and the emancipation-checklists index were dead-ends until audited).
-  **Placement:** when the header also has action buttons (a title + actions row), the back link
-  goes on its **own row above** that `flex ... justify-between` row -- never inside the title's flex
-  column, or the buttons top-align to the back link and the title drops below them (a `casa_cases#show`
-  regression, caught by geometry: h1 and buttons must share the same `top`). Lifted out, the title and
-  buttons share the row and top-align.
+  **Spacing/placement (verified 8px gap, pixel-identical across pages).** The back link + title are
+  one header block with an **8px gap** below the link -- `mt-2` on the title when they share a wrapper,
+  `mb-2` when the link is its own block. Never leave the link as a **bare child of a `space-y-*`
+  container**: the 6-unit rhythm (24px) then lands between the link and the title and shoves everything
+  down (the `casa_cases#show` regression measured 32px vs. the correct 9px). Three shapes:
+  - **h1-only:** one `<div>` = back link + `<h1 class="mt-2 ...">` (+ optional subtitle).
+  - **title + actions, no subtitle** (`casa_cases#show`, `learning_hours#show`): the back link +
+    `<h1 class="mt-2 ...">` are the **left column** of a `flex items-end justify-between` row; the
+    actions are the right column and **bottom-align to the title** (matches the index-page headers).
+  - **title + actions, with a subtitle** (`case_groups#index`): the back link is a `mb-2` block
+    **above** a `flex items-start justify-between` row, so the actions top-align with the title, not
+    the bottom of the (tall) subtitle -- putting the link inside the left column with `items-end` here
+    would sink the buttons to the subtitle's bottom.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.

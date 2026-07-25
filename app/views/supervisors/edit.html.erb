@@ -16,14 +16,11 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-4xl space-y-6">
-    <div>
+    <div class="min-w-0">
       <%= link_to supervisors_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
         <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to supervisors
       <% end %>
-    </div>
-
-    <div class="min-w-0">
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Edit supervisor</h1>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Edit supervisor</h1>
       <p class="mt-1 truncate text-sm text-slate-500"><span class="font-medium text-slate-800"><%= formatted_name(@supervisor.display_name) %></span> · <%= @supervisor.email %></p>
     </div>
 

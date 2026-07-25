@@ -3,14 +3,13 @@
 <% content_for :page_title, @learning_hour.name %>
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-3xl space-y-6">
-    <div>
-      <%= link_to learning_hours_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to learning hours
-      <% end %>
-    </div>
-
-    <div class="flex flex-wrap items-start justify-between gap-3">
-      <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= @learning_hour.name %></h1>
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <%= link_to learning_hours_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+          <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to learning hours
+        <% end %>
+        <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= @learning_hour.name %></h1>
+      </div>
       <div class="flex items-center gap-2">
         <%= link_to edit_learning_hour_path(@learning_hour), class: button_classes(:secondary) do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
         <%= button_to learning_hour_path(@learning_hour), method: :delete, form_class: "contents", class: button_classes(:danger_outline), data: {confirm: "Are you sure to delete this learning record?"} do %><i class="bi bi-trash" aria-hidden="true"></i> Delete<% end %>
