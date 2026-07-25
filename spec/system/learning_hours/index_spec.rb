@@ -68,8 +68,10 @@ RSpec.describe "Learning Hours Index", type: :system do
     it "filters the roster by volunteer name" do
       visit learning_hours_path(search: volunteer.display_name)
 
-      expect(page).to have_content(volunteer.display_name)
-      expect(page).not_to have_content(zero_hour_volunteer.display_name)
+      within("table") do
+        expect(page).to have_content(volunteer.display_name)
+        expect(page).not_to have_content(zero_hour_volunteer.display_name)
+      end
     end
   end
 end

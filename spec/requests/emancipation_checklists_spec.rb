@@ -34,6 +34,13 @@ RSpec.describe "/emancipation_checklists", type: :request do
           get emancipation_checklists_path
           expect(response).to be_successful
         end
+
+        it "filters the list to the searched case number" do
+          get emancipation_checklists_path(search: casa_case_a.case_number)
+          expect(response).to be_successful
+          expect(response.body).to include(casa_case_emancipation_path(casa_case_a))
+          expect(response.body).not_to include(casa_case_emancipation_path(casa_case_b))
+        end
       end
     end
   end

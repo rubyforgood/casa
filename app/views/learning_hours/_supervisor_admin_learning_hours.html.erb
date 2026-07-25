@@ -8,10 +8,12 @@
   <h1 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
 
   <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 max-w-sm" do %>
-    <div class="relative">
-      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500" aria-hidden="true"></i>
-      <%= search_field_tag :search, params[:search], placeholder: "Search volunteers", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 pr-3 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
-    </div>
+    <select name="search" aria-label="Search volunteers" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
+      <option value=""></option>
+      <% @roster_names.each do |name| %>
+        <option value="<%= name %>" <%= "selected" if name == params[:search] %>><%= formatted_name(name) %></option>
+      <% end %>
+    </select>
     <noscript><%= submit_tag "Search", class: "#{button_classes(:primary)} mt-2" %></noscript>
   <% end %>
 

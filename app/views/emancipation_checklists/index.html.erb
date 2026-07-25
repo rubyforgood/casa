@@ -10,6 +10,18 @@
   <div class="mx-auto max-w-3xl space-y-6">
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation checklists</h1>
 
+    <% if @transitioning_case_numbers.any? %>
+      <%= form_with url: emancipation_checklists_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "max-w-sm" do %>
+        <select name="search" aria-label="Search cases" data-controller="searchable-select" data-searchable-select-placeholder-value="Search case number" class="block w-full">
+          <option value=""></option>
+          <% @transitioning_case_numbers.each do |cn| %>
+            <option value="<%= cn %>" <%= "selected" if cn == params[:search] %>><%= cn %></option>
+          <% end %>
+        </select>
+        <noscript><%= submit_tag "Search", class: "#{button_classes(:primary)} mt-2" %></noscript>
+      <% end %>
+    <% end %>
+
     <% if @casa_transitioning_cases.any? %>
       <div class="<%= card %> overflow-hidden">
         <div class="overflow-x-auto">

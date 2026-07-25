@@ -15,6 +15,7 @@ class LearningHoursController < ApplicationController
       # Supervisor/admin roster: rows are one per volunteer (an array for supervisors, a
       # relation for admins). Paginate uniformly as an array with Pagy.
       rows = rows.to_a
+      @roster_names = rows.map(&:display_name).compact.uniq.sort
       if params[:search].present?
         query = params[:search].strip.downcase
         rows = rows.select { |row| row.display_name.to_s.downcase.include?(query) }
