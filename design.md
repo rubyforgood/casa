@@ -920,6 +920,13 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   the one rail used by both edit (`panels: true`, JS panel-switch) and the admin pages (`panels:
   false`, hash-nav to a section). On mobile the rail is hidden, so a **"Back to settings"** link is
   the return path.
+- **Back navigation on sub-pages.** Every casa_app page reached *from* another page (a form, detail,
+  or action destination -- not a sidebar/top-level nav item) has a way back: either a **breadcrumb**
+  (a brand-600 parent link at the top -- "Cases", "Cases / CINA-1", or a bare "Case number: ->case")
+  or the **chevron** "Back to X" (`inline-flex items-center gap-1 text-sm font-medium text-slate-500
+  hover:text-slate-700` + `bi-chevron-left`). Top-level destinations (Dashboard, Cases, Settings, etc.)
+  don't need one. Add a back affordance to every new sub-page -- it's a recurring gap (bulk court
+  dates, case groups, and the emancipation-checklists index were dead-ends until audited).
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.

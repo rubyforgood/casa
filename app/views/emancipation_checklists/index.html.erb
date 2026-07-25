@@ -8,7 +8,12 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-3xl space-y-6">
-    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation checklists</h1>
+    <div>
+      <%= link_to casa_cases_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to cases
+      <% end %>
+      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Emancipation checklists</h1>
+    </div>
 
     <% if @transitioning_case_numbers.any? %>
       <%= form_with url: emancipation_checklists_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "max-w-sm" do %>
