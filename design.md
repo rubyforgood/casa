@@ -927,6 +927,11 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   hover:text-slate-700` + `bi-chevron-left`). Top-level destinations (Dashboard, Cases, Settings, etc.)
   don't need one. Add a back affordance to every new sub-page -- it's a recurring gap (bulk court
   dates, case groups, and the emancipation-checklists index were dead-ends until audited).
+  **Placement:** when the header also has action buttons (a title + actions row), the back link
+  goes on its **own row above** that `flex ... justify-between` row -- never inside the title's flex
+  column, or the buttons top-align to the back link and the title drops below them (a `casa_cases#show`
+  regression, caught by geometry: h1 and buttons must share the same `top`). Lifted out, the title and
+  buttons share the row and top-align.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.
