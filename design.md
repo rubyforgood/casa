@@ -928,8 +928,10 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   **"Settings"** (matching the sidebar nav label -- the app-wide convention is h1 == nav label), the
   "Manage …" section headings stay, and the **Court** group splits into Hearing types / Judges / Sent
   emails. The **Administration** group is **direct links** to the standalone admin pages (admins,
-  mileage rates, banners, imports) -- not an in-page panel -- shown in the rail on desktop and a
-  tappable link block on mobile, so each page is one click away (no panel-of-cards detour). Those
+  mileage rates, banners, imports) -- not an in-page panel -- shown in the rail on desktop and, on
+  mobile, **tappable text-only cards that match the section headers** (same card chrome + bold label;
+  a `chevron-right` for navigate vs the sections' `chevron-down` for expand -- no leading icons, since
+  the rest of the settings nav is text-only), so each page is one click away (no panel-of-cards detour). Those
   standalone pages **share the settings frame**: `casa_org/_settings_frame` renders the same header +
   persistent rail (their item highlighted) + content at `max-w-7xl`, and `casa_org/_settings_rail` is
   the one rail used by both edit (`panels: true`, JS panel-switch) and the admin pages (`panels:

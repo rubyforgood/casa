@@ -19,7 +19,7 @@
 <% acc_btn = "flex w-full items-center justify-between gap-3 px-5 py-4 text-left hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 lg:hidden" %>
 <% sec = "overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:overflow-visible lg:rounded-none lg:border-0 lg:bg-transparent lg:shadow-none" %>
 <% panel_body = "border-t border-slate-100 lg:border-t-0 lg:space-y-6" %>
-<% admin_pages = [["Manage admins", "bi-person-badge", casa_admins_path], ["Mileage rates", "bi-cash-coin", mileage_rates_path], ["Banners", "bi-megaphone", banners_path], ["Imports", "bi-upload", imports_path]] %>
+<% admin_pages = [["Manage admins", casa_admins_path], ["Mileage rates", mileage_rates_path], ["Banners", banners_path], ["Imports", imports_path]] %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-7xl">
@@ -234,17 +234,15 @@
         </section>
 
         <%# Administration = direct links to standalone admin pages (which share the settings frame).
-            On mobile the rail is hidden, so they render as a tappable link block here (lg:hidden). %>
+            On mobile the rail is hidden, so each renders as a tappable card matching the section
+            headers -- text-only, with a chevron-right (navigate) vs the sections' chevron-down (expand). %>
         <p class="<%= mobile_group %>">Administration</p>
-        <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm lg:hidden">
-          <% admin_pages.each_with_index do |(label, icon, path), i| %>
-            <%= link_to path, class: "flex items-center gap-3 px-5 py-4 hover:bg-slate-50 #{"border-t border-slate-100" unless i.zero?}" do %>
-              <i class="bi <%= icon %> text-lg text-slate-500" aria-hidden="true"></i>
-              <span class="flex-1 font-medium text-slate-800"><%= label %></span>
-              <i class="bi bi-chevron-right text-sm text-slate-400" aria-hidden="true"></i>
-            <% end %>
+        <% admin_pages.each do |label, path| %>
+          <%= link_to path, class: "flex items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white px-5 py-4 shadow-sm hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 lg:hidden" do %>
+            <span class="text-base font-bold tracking-tight text-slate-900"><%= label %></span>
+            <i class="bi bi-chevron-right text-slate-400" aria-hidden="true"></i>
           <% end %>
-        </div>
+        <% end %>
       </div>
     </div>
   </div>
