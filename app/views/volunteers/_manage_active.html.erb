@@ -17,7 +17,7 @@
       </div>
     <% end %>
 
-    <div class="mt-4 flex flex-wrap gap-2">
+    <div class="mt-4 flex flex-wrap items-center gap-2">
       <% if user.active? %>
         <% if policy(user).deactivate? %>
           <%= link_to deactivate_volunteer_path(user), method: :patch, class: button_classes(:danger_outline),
@@ -40,17 +40,15 @@
       <% end %>
 
       <% if current_user.casa_admin? %>
-        <% if current_user.casa_org.twilio_enabled? %>
-          <%= link_to send_reactivation_alert_volunteer_path(user), id: "twilio_enabled", class: button_classes(:secondary) do %>
-            <i class="bi bi-bell" aria-hidden="true"></i> Send reactivation alert (SMS)
-          <% end %>
-        <% else %>
-          <%# Twilio off: the SMS action is unavailable -- a disabled button + tooltip states the
-              prerequisite, rather than a long "Enable Twilio to..." label (a button label is the action,
-              not a config hint). %>
-          <button type="button" id="twilio_disabled" disabled title="Enable Twilio in your organization settings to send SMS alerts" class="<%= button_classes(:secondary) %>">
-            <i class="bi bi-bell-slash" aria-hidden="true"></i> Send reactivation alert (SMS)
-          </button>
+        <%# Same button in both states (matches the other two, stays aligned); the label is the action,
+            not a config hint. Twilio off -> a bell-slash icon + tooltip; clicking flashes the
+            "Twilio is disabled" notice from the controller. %>
+        <% twilio_on = current_user.casa_org.twilio_enabled? %>
+        <%= link_to send_reactivation_alert_volunteer_path(user),
+              id: (twilio_on ? "twilio_enabled" : "twilio_disabled"),
+              title: (twilio_on ? nil : "Enable Twilio in your organization settings to send SMS alerts"),
+              class: button_classes(:secondary) do %>
+          <i class="bi <%= twilio_on ? "bi-bell" : "bi-bell-slash" %>" aria-hidden="true"></i> Send reactivation alert (SMS)
         <% end %>
       <% end %>
     </div>

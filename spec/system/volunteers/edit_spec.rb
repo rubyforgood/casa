@@ -452,7 +452,7 @@ RSpec.describe "volunteers/edit", type: :system do
     end
 
     context "admin's organization does not have twilio enabled" do
-      it "displays a disabed (SMS) button with appropriate message" do
+      it "shows the SMS button with a Twilio-enable hint" do
         org_twilio = create(:casa_org, twilio_enabled: false)
         admin_twilio = create(:casa_admin, casa_org: org_twilio)
         volunteer_twilio = create(:volunteer, casa_org: org_twilio)
@@ -461,7 +461,7 @@ RSpec.describe "volunteers/edit", type: :system do
         visit edit_volunteer_path(volunteer_twilio)
 
         expect(page).to have_content("Send reactivation alert (SMS)")
-        expect(page).to have_selector("#twilio_disabled[disabled]")
+        expect(page).to have_selector("#twilio_disabled")
         expect(page).to have_selector("#twilio_disabled[title*='Enable Twilio']")
       end
     end

@@ -152,11 +152,16 @@ fragile compensation pinned to the secondary's exact border width, and the heigh
 already handles it.
 
 **Feature-gated action** (an action that needs an org setting, e.g. "Send reactivation alert (SMS)"
-which requires Twilio): render the action's real label as a **`disabled` button with a `title`
-tooltip** stating the prerequisite ("Enable Twilio in your organization settings...") + a struck icon
-(`bi-bell-slash`). Never make the label the config hint ("Enable Twilio to send reactivation alert
-(SMS)" as a live button both mislabels the action and clicks through to a no-op). The button stays the
-same width/shape as its enabled twin so the toolbar doesn't reflow when the setting flips.
+which requires Twilio): keep it a **real, clickable button in both states** -- the *same*
+`link_to`/element/variant as its enabled twin, only swapping in a struck icon (`bi-bell-slash`) and a
+`title` tooltip stating the prerequisite ("Enable Twilio in your organization settings..."). Do **not**
+render a `disabled` button: a disabled control sitting among live siblings reads as broken, gives no
+feedback on click, and won't line up (a `disabled <button>` next to `link_to` `<a>` siblings landed
+~4px low). Clicking when the feature is off is not a silent no-op -- the controller flashes its
+"<feature> is disabled" notice, which is the feedback. The label is always the action, never the config
+hint ("Enable Twilio to send reactivation alert (SMS)" both mislabels the action and buries the hint in
+the toolbar). Because it's the same element in both states, the toolbar doesn't reflow when the setting
+flips. The row itself is `flex flex-wrap items-center gap-2` so equal-height buttons align on one line.
 
 **Assigned-entity rows** (a volunteer's cases / supervisor, a supervisor's volunteers): one row per
 entity = **identifying label + inline status badges on the left, the Unassign/Remove action on the
