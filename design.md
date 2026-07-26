@@ -151,6 +151,20 @@ not** re-equalize sizes with `border border-transparent` on the filled variants;
 fragile compensation pinned to the secondary's exact border width, and the height token
 already handles it.
 
+**Feature-gated action** (an action that needs an org setting, e.g. "Send reactivation alert (SMS)"
+which requires Twilio): render the action's real label as a **`disabled` button with a `title`
+tooltip** stating the prerequisite ("Enable Twilio in your organization settings...") + a struck icon
+(`bi-bell-slash`). Never make the label the config hint ("Enable Twilio to send reactivation alert
+(SMS)" as a live button both mislabels the action and clicks through to a no-op). The button stays the
+same width/shape as its enabled twin so the toolbar doesn't reflow when the setting flips.
+
+**Assigned-entity rows** (a volunteer's cases / supervisor, a supervisor's volunteers): one row per
+entity = **identifying label + inline status badges on the left, the Unassign/Remove action on the
+right** (`flex items-center justify-between`), never the action stacked *below* the badges. The
+standard "list item with a trailing action" (GitHub collaborators, Slack members): each entity reads
+as one scannable line. The action matches its context per the destructive-button rule (here it sits
+alone, so `:danger_outline`).
+
 - Tertiary (ghost): the **`ghost_class(:neutral | :danger)`** helper (design_system_helper.rb) --
   `inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600`. **Both
   variants are slate at rest** (no jarring wall of colored text in a table); they differ ONLY on

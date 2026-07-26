@@ -460,8 +460,9 @@ RSpec.describe "volunteers/edit", type: :system do
         sign_in admin_twilio
         visit edit_volunteer_path(volunteer_twilio)
 
-        expect(page).to have_content("Enable Twilio to send reactivation alert (SMS)")
-        expect(page).to have_selector("#twilio_disabled")
+        expect(page).to have_content("Send reactivation alert (SMS)")
+        expect(page).to have_selector("#twilio_disabled[disabled]")
+        expect(page).to have_selector("#twilio_disabled[title*='Enable Twilio']")
       end
     end
   end

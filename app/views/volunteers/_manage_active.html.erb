@@ -40,10 +40,17 @@
       <% end %>
 
       <% if current_user.casa_admin? %>
-        <%= link_to send_reactivation_alert_volunteer_path(user),
-              id: (current_user.casa_org.twilio_enabled? ? "twilio_enabled" : "twilio_disabled"),
-              class: button_classes(:secondary) do %>
-          <i class="bi bi-bell" aria-hidden="true"></i> <%= current_user.casa_org.twilio_enabled? ? "Send reactivation alert (SMS)" : "Enable Twilio to send reactivation alert (SMS)" %>
+        <% if current_user.casa_org.twilio_enabled? %>
+          <%= link_to send_reactivation_alert_volunteer_path(user), id: "twilio_enabled", class: button_classes(:secondary) do %>
+            <i class="bi bi-bell" aria-hidden="true"></i> Send reactivation alert (SMS)
+          <% end %>
+        <% else %>
+          <%# Twilio off: the SMS action is unavailable -- a disabled button + tooltip states the
+              prerequisite, rather than a long "Enable Twilio to..." label (a button label is the action,
+              not a config hint). %>
+          <button type="button" id="twilio_disabled" disabled title="Enable Twilio in your organization settings to send SMS alerts" class="<%= button_classes(:secondary) %>">
+            <i class="bi bi-bell-slash" aria-hidden="true"></i> Send reactivation alert (SMS)
+          </button>
         <% end %>
       <% end %>
     </div>

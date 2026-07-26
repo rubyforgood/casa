@@ -8,8 +8,9 @@
 
   <% if @volunteer.has_supervisor? %>
     <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-      <p class="text-sm text-slate-600">Current supervisor:
-        <span class="font-medium text-slate-800"><%= formatted_name(@volunteer.supervisor.display_name) %></span>
+      <p class="flex items-center gap-2 text-sm text-slate-600">
+        <i class="bi bi-person-circle text-base text-slate-400" aria-hidden="true"></i>
+        Current supervisor: <span class="font-medium text-slate-800"><%= formatted_name(@volunteer.supervisor.display_name) %></span>
       </p>
       <%= button_to unassign_supervisor_volunteer_path(@volunteer), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
         <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign from supervisor
