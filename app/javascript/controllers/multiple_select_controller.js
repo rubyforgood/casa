@@ -19,6 +19,7 @@ export default class extends Controller {
     options: Array,
     selectedItems: Array,
     withOptions: Boolean,
+    placeholder: String,
     placeholderTerm: {
       type: String,
       default: 'contact(s)'
@@ -35,8 +36,7 @@ export default class extends Controller {
   }
 
   createBasicMultiSelect () {
-    /* eslint-disable no-new */
-    new TomSelect(this.selectTarget, {
+    const settings = {
       plugins: {
         remove_button: {
           title: 'Remove this item'
@@ -44,7 +44,11 @@ export default class extends Controller {
       },
       onDropdownOpen,
       onDropdownClose
-    })
+    }
+    // A blank-load filter shows a placeholder ("All supervisors", ...) until an item is picked.
+    if (this.placeholderValue) settings.placeholder = this.placeholderValue
+    /* eslint-disable no-new */
+    new TomSelect(this.selectTarget, settings)
   }
 
   createMultiSelectWithOptionGroups () {

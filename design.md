@@ -162,6 +162,15 @@ recurring bug -- it read as 3-4 competing CTAs on the volunteer / supervisor / c
 **dialog keeps its own primary confirm** ("Yes, send reminder" / "Yes, copy"): that's the dialog's
 local primary, visible only while the modal is open, so it doesn't count against the page.
 
+**Left-aligning / splitting button content.** `button_classes` bakes in `justify-center`, and in
+Tailwind v4 appending `justify-start` / `justify-between` does **not** reliably override it (utility
+cascade order -- measured: label stayed centered). To left-align a label, or split it (label left,
+trailing icon hard right) inside a `button_classes` button, wrap the label in a **`flex-1`** span: it
+fills the free space, so `justify-center` has nothing left to center. The reports one-click exports use
+this -- a leading report icon + label in a `flex-1` span, `bi-download` on the right (verified 17px
+label/icon insets, not centered). Keep every child `pointer-events-none` if a click handler reads
+`event.target` as the button (as `src/reports.js` does).
+
 **Feature-gated action** (an action that needs an org setting, e.g. "Send reactivation alert (SMS)"
 which requires Twilio): keep it a **real, clickable button in both states** -- the *same*
 `link_to`/element/variant as its enabled twin, only swapping in a struck icon (`bi-bell-slash`) and a
@@ -281,7 +290,9 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   <term>`), **never pre-selected with every option**. `show_all_option` still offers
   `Select/Unselect all` in the menu. (Contact types is required, so blank plus the "at least
   one contact type" validation is the correct required-field UX; it is not a reason to
-  default-select everything.)
+  default-select everything.) The **basic** `multiple-select` controller takes an optional
+  **`data-multiple-select-placeholder-value`** (e.g. the report filters' `All supervisors` /
+  `All contact types`, one filter per line) -- a blank filter means "no filter / all".
 - **Chevron**: the Bootstrap-Icons `chevron-down` shape as a `.ts-wrapper::after` **base64-SVG**,
   sized (`text-xs`) and placed (`right-3`) to **match the single-select chevrons**, with
   **`z-index: 2`**. The z-index is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is

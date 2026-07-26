@@ -28,7 +28,7 @@ RSpec.describe "reports", :js, type: :system do
 
   shared_examples "empty select downloads report" do |select_id, description|
     it "renders the #{description} select with no options and downloads the report" do
-      expect(page).to have_select(select_id, options: [])
+      expect(page).to have_select(select_id, options: [], visible: :all)
       click_on "Download report"
       expect(page).to have_text("Downloading report")
     end
@@ -205,11 +205,6 @@ RSpec.describe "reports", :js, type: :system do
   end
 
   private
-
-  def select_report_filter_option(select_id, option)
-    expect(page).to have_select(select_id, with_options: [option])
-    find("##{select_id}").select(option)
-  end
 
   def set_report_date_range(start_date:, end_date:)
     fill_in "report_start_date", with: start_date

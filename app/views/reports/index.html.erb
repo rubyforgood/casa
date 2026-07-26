@@ -1,18 +1,18 @@
 <% content_for :page_title, "Reports" %>
-<%# reports#index (the reports hub) on the casa_app shell. Quick one-click CSV exports + a
-    filterable Case Contacts Report builder. The submit buttons keep `.report-form-submit` +
-    `data-disable-with` — src/reports.js intercepts the click, swaps the label to the disable-with
-    text, and native-submits the form (so the CSV download bypasses Turbo); the leading icons are
-    pointer-events-none so `event.target` is always the button. The four filter selects stay
-    NATIVE `<select multiple>` with their spec-locked ids (multiple-select-field1..4) — select2
-    is dropped (it would hide the native select and break `select .. from:` / `have_select`).
-    The column filter is a native <details> (was a Bootstrap modal). Several headings/labels +
-    button names are Title Case and spec-locked; kept verbatim, queued for the sentence-case sweep. %>
+<%# reports#index (the reports hub) on the casa_app shell. A list of one-click CSV exports + a
+    filterable Case Contacts Report builder. Export/submit buttons keep `.report-form-submit` +
+    `data-disable-with` — src/reports.js intercepts the click, swaps the whole button to the
+    disable-with text, and native-submits the form (so the CSV download bypasses Turbo); EVERY icon
+    inside these buttons is pointer-events-none so `event.target` is always the button. The four
+    filter selects are TomSelect multi-select type-aheads (`multiple-select` controller), each on its
+    own line; they keep their spec-locked ids (multiple-select-field1..4) and specs drive them via the
+    .ts-control (see spec/system/reports). The column filter is a native <details>. Several
+    headings/labels + button names are Title Case and spec-locked; kept verbatim, queued for the
+    sentence-case sweep. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% section_title = "text-lg font-semibold text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-<% multiselect_class = "block w-full rounded-lg border border-slate-300 bg-white p-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% radio_class = "h-4 w-4 border-slate-300 text-brand-600 focus:ring-brand-500" %>
 <% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
@@ -37,8 +37,11 @@
         ] %>
         <% exports.each do |label, feedback, url, icon| %>
           <%= form_with url: url, method: :get do %>
+            <%# flex-1 on the label makes it fill the row so the download icon sits hard right and the
+                label reads from the left -- button_classes bakes in justify-center, which flex-1 makes moot. %>
             <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:secondary)} w-full", data: {disable_with: feedback} do %>
-              <i class="bi <%= icon %> pointer-events-none" aria-hidden="true"></i> <%= label %>
+              <span class="pointer-events-none flex flex-1 items-center gap-2 text-left"><i class="bi <%= icon %>" aria-hidden="true"></i> <%= label %></span>
+              <i class="bi bi-download pointer-events-none text-slate-400" aria-hidden="true"></i>
             <% end %>
           <% end %>
         <% end %>
@@ -62,25 +65,24 @@
         </div>
 
         <% if current_user&.casa_admin? || current_user&.supervisor? %>
-          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div>
+          <div class="space-y-4">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All supervisors">
               <%= f.label :supervisor_ids, "Assigned to", class: label_class, for: "multiple-select-field1" %>
-              <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, size: 4, class: multiselect_class} %>
+              <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All volunteers">
               <%= f.label :creator_ids, "Volunteers", class: label_class, for: "multiple-select-field2" %>
-              <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, size: 4, class: multiselect_class} %>
+              <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All contact types">
               <%= f.label :contact_type_ids, "Contact type", class: label_class, for: "multiple-select-field3" %>
-              <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, size: 4, class: multiselect_class} %>
+              <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All contact type groups">
               <%= f.label :contact_type_group_ids, "Contact type group", class: label_class, for: "multiple-select-field4" %>
-              <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, size: 4, class: multiselect_class} %>
+              <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
           </div>
-          <p class="text-xs text-slate-500">Hold Ctrl (Cmd on Mac) to select more than one.</p>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <% [["want_driving_reimbursement", "Want driving reimbursement"], ["contact_made", "Contact made"], ["has_transitioned", "Transition-aged youth"]].each do |field, heading| %>

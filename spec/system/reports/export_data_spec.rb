@@ -22,7 +22,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     end_date = 10.days.ago
     fill_in "report_start_date", with: start_date
     fill_in "report_end_date", with: end_date
-    select court.name, from: "multiple-select-field3"
+    select_report_filter_option("multiple-select-field3", court.name)
     click_button "Download report"
     wait_for_download
 
@@ -46,7 +46,7 @@ RSpec.describe "case_contact_reports/index", type: :system do
     excluded_by_contact_type_group = create(:case_contact, occurred_at: Date.yesterday, contact_types: [school], notes: "Excluded by Contact Type")
 
     visit reports_path
-    select contact_type_group.name, from: "multiple-select-field4"
+    select_report_filter_option("multiple-select-field4", contact_type_group.name)
     click_button "Download report"
     wait_for_download
 
