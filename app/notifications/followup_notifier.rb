@@ -35,6 +35,10 @@ class FollowupNotifier < BaseNotifier
     followup ? edit_case_contact_path(followup.case_contact_id) : case_contacts_path
   end
 
+  def renderable?
+    params[:followup].present?
+  end
+
   private
 
   def sms_notifications?

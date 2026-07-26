@@ -66,4 +66,20 @@ RSpec.describe FollowupNotifier, type: :model do
       end
     end
   end
+
+  describe "renderable?" do
+    it "is true when the followup still exists" do
+      followup = create(:followup, :without_note)
+
+      notifier = FollowupNotifier.with(followup: followup, created_by: created_by)
+
+      expect(notifier).to be_renderable
+    end
+
+    it "is false when the followup is gone" do
+      notifier = FollowupNotifier.with(followup: nil, created_by: created_by)
+
+      expect(notifier).not_to be_renderable
+    end
+  end
 end

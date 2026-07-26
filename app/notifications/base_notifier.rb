@@ -17,6 +17,13 @@ class BaseNotifier < Noticed::Event
     record.read?
   end
 
+  # Whether this notification can still be rendered. Override in notifiers whose target record may
+  # have been deleted (a stale GlobalID resolves to nil) -- orphaned notifications are hidden from the
+  # index + unread badge instead of rendering an empty, contextless item.
+  def renderable?
+    true
+  end
+
   def created_at
     record.created_at
   end

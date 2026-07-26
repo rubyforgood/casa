@@ -9,7 +9,12 @@ class NotificationsController < ApplicationController
     authorize Noticed::Notification, policy_class: NotificationPolicy
 
     @deploy_time = Health.instance.latest_deploy_time
-    @notifications = current_user.notifications.includes([:event]).newest_first
+    notifications = current_user.notifications.includes([:event]).newest_first
+    # Hide notifications whose target record is gone (e.g. a deleted followup); they would otherwise
+    # render as an empty item. renderable? is a Ruby check, so drop them by id to keep a relation for
+    # the date-split helpers.
+    hidden_ids = notifications.reject { |notification| notification.event&.renderable? }.map(&:id)
+    @notifications = hidden_ids.any? ? notifications.where.not(id: hidden_ids) : notifications
     @patch_notes = PatchNote.notes_available_for_user(current_user)
   end
 
