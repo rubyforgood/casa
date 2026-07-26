@@ -2,9 +2,9 @@
 
 # Helper methods for case court reports system specs (casa_app: Dialog + TomSelect).
 module CaseCourtReportHelpers
-  # Clicks the "Download court report as a .docx" trigger and confirms the dialog is open.
+  # Clicks the "Generate report" trigger and confirms the dialog is open.
   def open_court_report_modal
-    click_on "Download court report as a .docx"
+    click_on "Generate report"
     expect(page).to have_selector("#generate-docx-report-modal", visible: :visible)
   end
 

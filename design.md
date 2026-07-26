@@ -171,6 +171,15 @@ this -- a leading report icon + label in a `flex-1` span, `bi-download` on the r
 label/icon insets, not centered). Keep every child `pointer-events-none` if a click handler reads
 `event.target` as the button (as `src/reports.js` does).
 
+**Concise CTA labels.** A button label is the *action*, not a restatement of context the page already
+supplies -- drop the page title and the file format. The Court reports page's primary CTA is
+**"Generate report"** (the h1 + card already say "court report" and ".docx"; the Word icon signals the
+format), not "Download court report as a .docx". Bonus: that trigger opens a config dialog, so
+"Download" was also inaccurate -- the download happens after "Generate". If the trigger and the dialog's
+confirm would collide (both "Generate report"), the dialog's `id` sits on the `<dialog>` so scoped
+specs (`within "#modal-id"`) still hit the confirm, and the trigger keeps a fuller dialog title
+("Generate court report").
+
 **Feature-gated action** (an action that needs an org setting, e.g. "Send reactivation alert (SMS)"
 which requires Twilio): keep it a **real, clickable button in both states** -- the *same*
 `link_to`/element/variant as its enabled twin, only swapping in a struck icon (`bi-bell-slash`) and a

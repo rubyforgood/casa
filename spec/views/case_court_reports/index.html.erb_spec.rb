@@ -23,8 +23,8 @@ RSpec.describe "case_court_reports/index", type: :view do
       expect(rendered).to have_selector("h1", text: "Court reports", count: 1)
     end
 
-    it "has button with 'Download Court Report as .docx' text" do
-      expect(rendered).to have_selector("button", text: /Download court report as a \.docx/i, count: 1)
+    it "has a concise 'Generate report' trigger button" do
+      expect(rendered).to have_selector("button[data-action='modal#open']", text: "Generate report", count: 1)
     end
   end
 end
