@@ -930,18 +930,22 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 - **Sidebar** (256px, `border-r border-slate-200 bg-white`): org **name only** in the
   header (no logo/brand mark — not a value-add at this size, and avoids image/variant
   infrastructure), then nav links (active = `bg-brand-50 text-brand-700`, idle =
-  `text-slate-600 hover:bg-slate-100`). Nav visibility follows Pundit policies.
-  Collapses to an off-canvas drawer below `lg`.
+  `text-slate-600 hover:bg-slate-100`). Nav visibility follows Pundit policies. On desktop the aside is
+  **`lg:sticky lg:top-0 lg:h-screen`** (exactly viewport height, stays put as the page scrolls); below
+  `lg` it collapses to an off-canvas drawer. That viewport height is what lets a **bottom-pinned item**
+  (Settings, via `mt-auto`) sit at the bottom of the *screen* -- a plain `lg:static` column grows with
+  the page, so `mt-auto` would strand Settings below the fold (only reachable after scrolling to the
+  page end).
 - **Sidebar nav order** (**not** alphabetical -- alphabetical is arbitrary vs. how people work):
-  **Dashboard first, Settings pinned to the bottom** (`mt-auto` + its own divider), the middle
-  **grouped by domain, ordered by frequency** -- Overview / Records (Volunteers, Supervisors, Cases) /
+  **Dashboard first (ungrouped), Settings pinned to the bottom** (`mt-auto` + its own divider), the
+  middle **grouped by domain, ordered by frequency** -- Records (Volunteers, Supervisors, Cases) /
   Activity (Case contacts, Learning hours, Other duties, Reimbursements) / Reporting (Reports,
-  Analytics, Court reports). Groups are separated by a **thin divider** (`border-t border-slate-200`),
-  **not** section labels: at ~12 items in 4 small groups, dividers convey the grouping without the
-  extra text weight (uppercase section labels earn their keep only on long, dense navs / settings
-  consoles). Each group is a `role="group"` with an **`aria-label`** (screen-reader grouping with no
-  visible heading); a group whose every item is policy-gated out **renders nothing -- no orphan
-  divider**. Built from a `nav_groups` array + the `layouts/_nav_link` partial in `layouts/casa_app`.
+  Analytics, Court reports). Each middle group wears an **uppercase section label** (`text-xs
+  font-semibold uppercase tracking-wide text-slate-400`, `mt-4` above); the label does the separating,
+  so there are **no between-group dividers** -- the only divider sits above the pinned Settings. Each
+  group is a `role="group"` with an **`aria-label`** (the visible label is `aria-hidden` so it isn't
+  announced twice); a group whose every item is policy-gated out **renders nothing -- no orphan
+  label**. Built from a `nav_groups` array + the `layouts/_nav_link` partial in `layouts/casa_app`.
 - **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): mobile nav
   toggle, notifications, and the avatar **account menu** — the single place for identity
   + account actions (no duplicate identity block in the sidebar). Its header shows name,
