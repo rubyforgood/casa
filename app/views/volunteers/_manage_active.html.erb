@@ -20,7 +20,7 @@
     <div class="mt-4 flex flex-wrap gap-2">
       <% if user.active? %>
         <% if policy(user).deactivate? %>
-          <%= link_to deactivate_volunteer_path(user), method: :patch, class: button_classes(:danger_outline),
+          <%= link_to deactivate_volunteer_path(user), method: :patch, class: ghost_class(:danger),
                 data: {confirm: "WARNING: Marking a volunteer inactive will make them unable to login. Are you sure you want to do this?"} do %>
             <i class="bi bi-slash-circle" aria-hidden="true"></i> Deactivate volunteer
           <% end %>

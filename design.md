@@ -139,7 +139,7 @@ ended up mismatched). Variants:
 - `:primary` (filled brand): `bg-brand-600 text-white font-semibold hover:bg-brand-700`
 - `:secondary` (outlined): `border border-slate-200 bg-white text-slate-700 font-medium hover:bg-slate-50`
 - `:danger` (filled rose): `bg-rose-600 text-white font-semibold hover:bg-rose-700`
-- `:danger_outline` (outlined rose): `border border-rose-200 bg-white text-rose-700 font-medium hover:bg-rose-50`
+- `:danger_outline` (outlined rose): `border border-rose-200 bg-white text-rose-700 font-medium hover:bg-rose-50` -- **retired for resting destructive buttons** (they read as an always-on red); use `ghost_class(:danger)` instead (see Tertiary below)
 - `:success` (filled emerald, for a **prominent** positive action, e.g. reactivating a deactivated user): `bg-emerald-700 text-white font-semibold hover:bg-emerald-800` (emerald-700, not 600: white on 600 is 3.77:1, below AA). A **repeated per-row/card "resolve"** (e.g. resolving a followup reminder) recedes to `:secondary` -- a filled emerald over-emphasizes a low-frequency action next to its neutral row-mates.
 
 Every variant shares a base of `inline-flex h-10 items-center justify-center gap-2 rounded-lg
@@ -159,8 +159,12 @@ already handles it.
   be identical everywhere, never gray in one table and rose in another). Slate-at-rest + rose-on-hover
   is the **industry-standard destructive affordance** (GitHub, Gmail, Linear): it reveals danger at the
   point of action without an always-on red. Reinforced by the `bi-trash` icon + "Delete" label +
-  confirm dialog. A prominent destructive CTA (a card footer, not a repeated row) is
-  `button_classes(:danger_outline)`/`(:danger)` instead. No border, fill, or shadow: the
+  confirm dialog. **Every resting destructive action uses this** -- row, toolbar, header, OR prominent
+  (Delete / Remove / Unassign / Deactivate) -- so there is **no red-at-rest anywhere**. The one
+  emphasized-red exception is the CONFIRM button inside the delete dialog (`button_classes(:danger)`);
+  `button_classes(:danger_outline)` is retired for resting buttons. Because destructive actions are
+  the *lowest*-emphasis at rest, a ghost Delete/Deactivate can sit among fuller utility buttons
+  (Resend, Assign) -- that de-emphasis is intentional. No border, fill, or shadow: the
   lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
   in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
   CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat

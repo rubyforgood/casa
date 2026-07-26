@@ -42,10 +42,10 @@
                 <td class="<%= td %> whitespace-nowrap text-slate-500"><%= time_ago_in_words(banner.updated_at) %> ago</td>
                 <td class="<%= td %> text-right">
                   <div class="inline-flex items-center gap-2">
-                    <%= link_to edit_banner_path(banner), class: button_classes(:secondary) do %>
+                    <%= link_to edit_banner_path(banner), class: ghost_class do %>
                       <i class="bi bi-pencil" aria-hidden="true"></i> Edit
                     <% end %>
-                    <%= render "shared/confirm_button", url: banner_path(banner), method: :delete, title: "Delete banner?", message: "This banner will be permanently deleted.", confirm_label: "Delete", trigger_icon: "bi bi-trash", trigger_label: "Delete", trigger_class: button_classes(:danger_outline) %>
+                    <%= render "shared/confirm_button", url: banner_path(banner), method: :delete, title: "Delete banner?", message: "This banner will be permanently deleted.", confirm_label: "Delete", trigger_icon: "bi bi-trash", trigger_label: "Delete", trigger_class: ghost_class(:danger) %>
                   </div>
                 </td>
               </tr>

@@ -112,7 +112,7 @@
         <div class="mt-4 flex flex-wrap gap-2">
           <% if @casa_admin.active? %>
             <% if policy(@casa_admin).deactivate? %>
-              <%= link_to deactivate_casa_admin_path(@casa_admin), method: :patch, class: button_classes(:danger_outline),
+              <%= link_to deactivate_casa_admin_path(@casa_admin), method: :patch, class: ghost_class(:danger),
                     data: {confirm: "WARNING: Marking an admin inactive will make them unable to login. Are you sure you want to do this?"} do %>
                 <i class="bi bi-slash-circle" aria-hidden="true"></i> Deactivate
               <% end %>

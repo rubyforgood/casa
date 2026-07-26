@@ -46,12 +46,12 @@
                   </td>
                   <td class="<%= td %> text-right">
                     <div class="inline-flex items-center gap-2">
-                      <%= link_to edit_casa_case_placement_path(@casa_case, placement), class: button_classes(:secondary) do %>
+                      <%= link_to edit_casa_case_placement_path(@casa_case, placement), class: ghost_class do %>
                         <i class="bi bi-pencil" aria-hidden="true"></i> Edit
                       <% end %>
                       <%= render Dialog::GroupComponent.new(id: placement.id, label: "Delete placement?") do |dialog| %>
                         <% dialog.with_trigger do %>
-                          <%= tag.button "Delete", type: "button", data: {action: "modal#open"}, class: button_classes(:danger_outline) %>
+                          <%= tag.button "Delete", type: "button", data: {action: "modal#open"}, class: ghost_class(:danger) %>
                         <% end %>
                         <%= render Dialog::HeaderComponent.new(title: "Delete placement?", icon: "bi bi-exclamation-triangle", variant: :danger) %>
                         <%= render Dialog::BodyComponent.new do %>

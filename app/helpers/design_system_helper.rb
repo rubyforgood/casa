@@ -78,11 +78,13 @@ module DesignSystemHelper
   # Both variants are SLATE at rest (no jarring wall of colored text in a table -- design.md line 333);
   # they differ ONLY on hover/focus:
   #   :neutral -- gray hover. Edit / Detail view / View / Impersonate / Assign / filter toggles.
-  #   :danger  -- ROSE hover. Delete / Remove / every destructive row action. Slate-at-rest + rose-on-
-  #               hover is the industry-standard destructive affordance (GitHub, Gmail, Linear, ...):
-  #               it reveals the danger at the point of action without an always-on red, and keeps the
-  #               destructive hover identical everywhere. A PROMINENT destructive CTA (a card footer,
-  #               not a repeated row) is button_classes(:danger_outline)/(:danger) instead.
+  #   :danger  -- ROSE hover. Delete / Remove / Unassign / Deactivate / EVERY resting destructive
+  #               action -- row, toolbar, header, OR prominent. Slate-at-rest + rose-on-hover is the
+  #               industry-standard destructive affordance (GitHub, Gmail, Linear, ...): the danger
+  #               appears at the point of action, never an always-on red -- so there is NO red-at-rest
+  #               anywhere. The one emphasized-red exception is the CONFIRM button inside a delete
+  #               dialog (shared/confirm_button -> button_classes(:danger)). button_classes
+  #               (:danger_outline) is retired for resting destructive buttons.
   # Full literal strings so Tailwind's scanner compiles them.
   def ghost_class(variant = :neutral)
     base = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 focus-visible:outline-none focus-visible:ring-2"

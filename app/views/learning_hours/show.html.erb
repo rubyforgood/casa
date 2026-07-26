@@ -11,8 +11,8 @@
         <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= @learning_hour.name %></h1>
       </div>
       <div class="flex items-center gap-2">
-        <%= link_to edit_learning_hour_path(@learning_hour), class: button_classes(:secondary) do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
-        <%= button_to learning_hour_path(@learning_hour), method: :delete, form_class: "contents", class: button_classes(:danger_outline), data: {confirm: "Are you sure to delete this learning record?"} do %><i class="bi bi-trash" aria-hidden="true"></i> Delete<% end %>
+        <%= link_to edit_learning_hour_path(@learning_hour), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
+        <%= button_to learning_hour_path(@learning_hour), method: :delete, form_class: "contents", class: ghost_class(:danger), data: {confirm: "Are you sure to delete this learning record?"} do %><i class="bi bi-trash" aria-hidden="true"></i> Delete<% end %>
       </div>
     </div>
 
