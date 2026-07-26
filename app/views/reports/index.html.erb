@@ -13,7 +13,7 @@
 <% section_title = "text-lg font-semibold text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-<% radio_class = "h-4 w-4 border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -86,17 +86,13 @@
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
             <% [["want_driving_reimbursement", "Want driving reimbursement"], ["contact_made", "Contact made"], ["has_transitioned", "Transition-aged youth"]].each do |field, heading| %>
-              <fieldset class="m-0 border-0 p-0">
-                <legend class="<%= label_class %>"><%= heading %></legend>
-                <div class="space-y-1.5">
-                  <%= f.collection_radio_buttons field.to_sym, boolean_choices, :last, :first do |b| %>
-                    <div class="flex items-center gap-2">
-                      <%= b.radio_button(class: radio_class) %>
-                      <%= b.label(class: "text-sm text-slate-700") %>
-                    </div>
-                  <% end %>
+              <div>
+                <%= f.label field.to_sym, heading, class: label_class %>
+                <div class="relative">
+                  <%= f.select field.to_sym, options_for_select([["Any", ""], ["Yes", true], ["No", false]]), {}, {class: select_class} %>
+                  <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
                 </div>
-              </fieldset>
+              </div>
             <% end %>
           </div>
         <% end %>

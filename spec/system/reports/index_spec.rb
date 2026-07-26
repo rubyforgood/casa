@@ -75,9 +75,9 @@ RSpec.describe "reports", :js, type: :system do
         expect(page).to have_text "Want driving reimbursement"
         expect(page).to have_text "Contact made"
         expect(page).to have_text "Transition-aged youth"
-        expect(page).to have_field("Both", count: 3)
-        expect(page).to have_field("Yes", count: 3)
-        expect(page).to have_field("No", count: 3)
+        expect(page).to have_select("report_want_driving_reimbursement", with_options: ["Any", "Yes", "No"])
+        expect(page).to have_select("report_contact_made", with_options: ["Any", "Yes", "No"])
+        expect(page).to have_select("report_has_transitioned", with_options: ["Any", "Yes", "No"])
       end
 
       it "downloads case contacts report with default filters" do
@@ -142,7 +142,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a driving reimbursement filter" do
         before do
           visit reports_path
-          choose_report_radio_option("want_driving_reimbursement", "true")
+          choose_report_boolean_option("want_driving_reimbursement", "true")
         end
 
         include_examples "case contacts report with filter", "driving reimbursement"
@@ -151,7 +151,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a contact made filters" do
         before do
           visit reports_path
-          choose_report_radio_option("contact_made", "true")
+          choose_report_boolean_option("contact_made", "true")
         end
 
         include_examples "case contacts report with filter", "contact made"
@@ -160,7 +160,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a transition aged youth filter" do
         before do
           visit reports_path
-          choose_report_radio_option("has_transitioned", "true")
+          choose_report_boolean_option("has_transitioned", "true")
         end
 
         include_examples "case contacts report with filter", "transition aged youth"
@@ -183,7 +183,7 @@ RSpec.describe "reports", :js, type: :system do
           set_report_date_range(start_date: filter_start_date, end_date: filter_end_date)
           select_report_filter_option(VOLUNTEER_SELECT_ID, volunteer_name)
           select_report_filter_option(CONTACT_TYPE_SELECT_ID, contact_type_name)
-          choose_report_radio_option("want_driving_reimbursement", "false")
+          choose_report_boolean_option("want_driving_reimbursement", "false")
         end
 
         include_examples "case contacts report with filter", "multiple filters"
@@ -211,7 +211,8 @@ RSpec.describe "reports", :js, type: :system do
     fill_in "report_end_date", with: end_date
   end
 
-  def choose_report_radio_option(field_name, value)
-    find("input[name=\"report[#{field_name}]\"][value=\"#{value}\"]", visible: :all).click
+  def choose_report_boolean_option(field_name, value)
+    label = {"true" => "Yes", "false" => "No", "" => "Any"}.fetch(value)
+    select label, from: "report_#{field_name}"
   end
 end
