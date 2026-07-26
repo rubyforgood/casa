@@ -45,8 +45,13 @@ export default class extends Controller {
       onDropdownOpen,
       onDropdownClose
     }
-    // A blank-load filter shows a placeholder ("All supervisors", ...) until an item is picked.
-    if (this.placeholderValue) settings.placeholder = this.placeholderValue
+    // A blank-load filter shows a placeholder ("Select or search supervisors", ...) until an item is
+    // picked; hidePlaceholder clears the prompt once a chip exists (industry standard -- a lingering
+    // placeholder next to selected chips reads as unfinished).
+    if (this.placeholderValue) {
+      settings.placeholder = this.placeholderValue
+      settings.hidePlaceholder = true
+    }
     /* eslint-disable no-new */
     new TomSelect(this.selectTarget, settings)
   }

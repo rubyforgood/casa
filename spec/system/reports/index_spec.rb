@@ -52,8 +52,10 @@ RSpec.describe "reports", :js, type: :system do
     # rubocop:disable RSpec/MultipleMemoizedHelpers
     context "with a #{role} user" do
       let(:user) { create(role) }
-      let(:volunteer_name) { Faker::Name.unique.name }
-      let(:supervisor_name) { Faker::Name.unique.name }
+      # first + last only: Faker::Name.name can emit an honorific (e.g. "Rev.") that the dropdown
+      # strips via formatted_name, which would make the option text not match the search term.
+      let(:volunteer_name) { "#{Faker::Name.unique.first_name} #{Faker::Name.unique.last_name}" }
+      let(:supervisor_name) { "#{Faker::Name.unique.first_name} #{Faker::Name.unique.last_name}" }
       let(:contact_type_name) { Faker::Lorem.unique.word }
       let(:contact_type_group_name) { Faker::Lorem.unique.word }
       let(:filter_start_date) { "2025-01-01" }

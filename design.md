@@ -295,7 +295,9 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   (matching the rich component; e.g. the report filters, one per line), **never `All <term>`**:
   `All supervisors` read as a *selectable option* users tried to pick, not an empty-state prompt.
   If a blank filter means "include everything", say so in **hint text near the fields**, not in the
-  placeholder.
+  placeholder. When a placeholder is set the controller also passes **`hidePlaceholder: true`**, so the
+  prompt disappears once a chip is present (a placeholder lingering next to selected chips reads as
+  unfinished -- verify by selecting an item and checking the input's `placeholder` attribute is empty).
 - **Chevron**: the Bootstrap-Icons `chevron-down` shape as a `.ts-wrapper::after` **base64-SVG**,
   sized (`text-xs`) and placed (`right-3`) to **match the single-select chevrons**, with
   **`z-index: 2`**. The z-index is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is
