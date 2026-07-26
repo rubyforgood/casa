@@ -58,12 +58,12 @@
         <% if contact.active? %>
           <%= render "case_contacts/reminder_control", contact: contact, followup: contact.requested_followup %>
         <% end %>
-        <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: ghost_class do %>
+        <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %>
           <i class="bi bi-pencil" aria-hidden="true"></i> Edit
         <% end %>
       <% end %>
       <% if policy(contact).destroy? && !contact.deleted? %>
-        <%= link_to case_contact_path(contact.id), method: :delete, data: {turbo: false}, class: ghost_class(:danger) do %>
+        <%= link_to case_contact_path(contact.id), method: :delete, data: {turbo: false}, class: button_classes(:danger_outline) do %>
           <i class="bi bi-trash" aria-hidden="true"></i> Delete
         <% end %>
       <% end %>

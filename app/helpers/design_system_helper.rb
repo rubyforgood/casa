@@ -62,7 +62,7 @@ module DesignSystemHelper
       when :primary then "bg-brand-600 font-semibold text-white hover:bg-brand-700 focus-visible:ring-brand-500"
       when :secondary then "border border-slate-200 bg-white font-medium text-slate-700 hover:bg-slate-50 focus-visible:ring-brand-500"
       when :danger then "bg-rose-600 font-semibold text-white hover:bg-rose-700 focus-visible:ring-rose-500"
-      when :danger_outline then "border border-rose-200 bg-white font-medium text-rose-700 hover:bg-rose-50 focus-visible:ring-rose-500"
+      when :danger_outline then "border border-slate-200 bg-white font-medium text-slate-700 hover:border-rose-300 hover:bg-rose-50 hover:text-rose-700 focus-visible:ring-rose-500"
       when :success then "bg-emerald-700 font-semibold text-white hover:bg-emerald-800 focus-visible:ring-emerald-500"
       else raise ArgumentError, "unknown button variant: #{variant.inspect}"
       end
@@ -78,13 +78,14 @@ module DesignSystemHelper
   # Both variants are SLATE at rest (no jarring wall of colored text in a table -- design.md line 333);
   # they differ ONLY on hover/focus:
   #   :neutral -- gray hover. Edit / Detail view / View / Impersonate / Assign / filter toggles.
-  #   :danger  -- ROSE hover. Delete / Remove / Unassign / Deactivate / EVERY resting destructive
-  #               action -- row, toolbar, header, OR prominent. Slate-at-rest + rose-on-hover is the
-  #               industry-standard destructive affordance (GitHub, Gmail, Linear, ...): the danger
-  #               appears at the point of action, never an always-on red -- so there is NO red-at-rest
-  #               anywhere. The one emphasized-red exception is the CONFIRM button inside a delete
-  #               dialog (shared/confirm_button -> button_classes(:danger)). button_classes
-  #               (:danger_outline) is retired for resting destructive buttons.
+  #   :danger  -- ROSE hover, SLATE at rest. A destructive action MATCHES the buttons beside it:
+  #               among ghost/compact actions (table rows, per-item lists) use this ghost_class(:danger);
+  #               among BORDERED buttons (a toolbar/section/header of :secondary/:primary/:success) use
+  #               button_classes(:danger_outline) -- redefined to be identical to :secondary at rest
+  #               (slate border + text) and rose only on hover, so it sits among secondary buttons
+  #               with no always-on red. Never mix (a ghost Delete next to secondary buttons reads as
+  #               broken). Either way there is no red-at-rest; the one solid rose is the CONFIRM button
+  #               in a delete dialog (shared/confirm_button -> button_classes(:danger)).
   # Full literal strings so Tailwind's scanner compiles them.
   def ghost_class(variant = :neutral)
     base = "inline-flex items-center gap-1.5 rounded-lg px-2 py-1 text-sm font-medium text-slate-600 focus-visible:outline-none focus-visible:ring-2"

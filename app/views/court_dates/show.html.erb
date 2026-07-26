@@ -62,7 +62,7 @@
           <i class="bi bi-download" aria-hidden="true"></i> Download report (.docx)
         <% end %>
         <% if policy(:court_date).destroy? && @court_date.date > Time.now %>
-          <%= link_to casa_case_court_date_path(@casa_case, @court_date), method: :delete, data: {confirm: "Are you sure?"}, class: "#{ghost_class(:danger)} sm:ms-auto" do %>
+          <%= link_to casa_case_court_date_path(@casa_case, @court_date), method: :delete, data: {confirm: "Are you sure?"}, class: "#{button_classes(:danger_outline)} sm:ms-auto" do %>
             <i class="bi bi-trash" aria-hidden="true"></i> Delete future court date
           <% end %>
         <% end %>
