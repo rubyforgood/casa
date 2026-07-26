@@ -66,22 +66,23 @@
 
         <% if current_user&.casa_admin? || current_user&.supervisor? %>
           <div class="space-y-4">
-            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All supervisors">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search supervisors">
               <%= f.label :supervisor_ids, "Assigned to", class: label_class, for: "multiple-select-field1" %>
               <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All volunteers">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search volunteers">
               <%= f.label :creator_ids, "Volunteers", class: label_class, for: "multiple-select-field2" %>
               <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All contact types">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types">
               <%= f.label :contact_type_ids, "Contact type", class: label_class, for: "multiple-select-field3" %>
               <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <div data-controller="multiple-select" data-multiple-select-placeholder-value="All contact type groups">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact type groups">
               <%= f.label :contact_type_group_ids, "Contact type group", class: label_class, for: "multiple-select-field4" %>
               <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
+            <p class="text-xs text-slate-500">These filters are optional. Leave one empty to include everything for that field.</p>
           </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">

@@ -291,8 +291,11 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   `Select/Unselect all` in the menu. (Contact types is required, so blank plus the "at least
   one contact type" validation is the correct required-field UX; it is not a reason to
   default-select everything.) The **basic** `multiple-select` controller takes an optional
-  **`data-multiple-select-placeholder-value`** (e.g. the report filters' `All supervisors` /
-  `All contact types`, one filter per line) -- a blank filter means "no filter / all".
+  **`data-multiple-select-placeholder-value`** -- use the **`Select or search <term>`** phrasing
+  (matching the rich component; e.g. the report filters, one per line), **never `All <term>`**:
+  `All supervisors` read as a *selectable option* users tried to pick, not an empty-state prompt.
+  If a blank filter means "include everything", say so in **hint text near the fields**, not in the
+  placeholder.
 - **Chevron**: the Bootstrap-Icons `chevron-down` shape as a `.ts-wrapper::after` **base64-SVG**,
   sized (`text-xs`) and placed (`right-3`) to **match the single-select chevrons**, with
   **`z-index: 2`**. The z-index is the crux: TomSelect's opaque `.ts-control` paints over a plain `::after`, so the caret is
