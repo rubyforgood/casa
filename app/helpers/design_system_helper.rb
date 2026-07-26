@@ -70,8 +70,10 @@ module DesignSystemHelper
   end
 
   # Tertiary "ghost" button: the lowest-emphasis action, for REPEATED row / toolbar actions (Edit,
-  # Delete, Detail view, an inline Assign submit) so they recede from brand links and never compete
-  # with a page's primary CTA. Deliberately NOT a button_classes variant -- no fill/border/shadow and
+  # Delete, Detail view) so they recede from brand links and never compete with a page's primary CTA.
+  # (An "assign a new X" sub-form submit is NOT a row action -- it sits next to a full-height select,
+  # so it's button_classes(:secondary), not ghost; see design.md "One primary CTA per page".)
+  # Deliberately NOT a button_classes variant -- no fill/border/shadow and
   # shorter than the 40px CTA token. Single source of truth so table row actions stay identical
   # app-wide (they used to be copy-pasted inline strings + ad hoc colored text links, which drifted).
   #

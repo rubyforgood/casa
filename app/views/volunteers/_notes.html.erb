@@ -73,7 +73,7 @@
       <h3 class="mb-3 text-sm font-semibold text-slate-900">Create a new note</h3>
       <%= form.text_area :content, rows: 5, placeholder: "Enter a note regarding the volunteer. These notes are only visible to CASA administrators and supervisors.", class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
       <div class="actions mt-3">
-        <%= button_tag type: "submit", id: "note-submit", class: button_classes(:primary) do %>
+        <%= button_tag type: "submit", id: "note-submit", class: button_classes(:secondary) do %>
           <i class="bi bi-save" aria-hidden="true"></i> Save note
         <% end %>
       </div>

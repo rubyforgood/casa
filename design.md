@@ -151,6 +151,17 @@ not** re-equalize sizes with `border border-transparent` on the filled variants;
 fragile compensation pinned to the secondary's exact border width, and the height token
 already handles it.
 
+**One primary CTA per page.** A view gets exactly ONE filled `:primary` button -- the page's main
+action (on a form page, its save: "Submit" / "Save changes"). Every *other* action is lower emphasis:
+`:secondary` for a clear standalone action, ghost for repeated row/toolbar actions. In particular an
+inline **"assign a new X" / "add note" sub-form submit** inside a management card (Assign case / Assign
+supervisor / Assign volunteer / Save note) is **`:secondary`, never `:primary`** -- it sits next to a
+full-height select/textarea (so a 40px `:secondary` aligns with the input) and must not compete with
+the page's save. Stacking a main-form Submit primary with several assign-form primaries is the
+recurring bug -- it read as 3-4 competing CTAs on the volunteer / supervisor / case edit pages. A
+**dialog keeps its own primary confirm** ("Yes, send reminder" / "Yes, copy"): that's the dialog's
+local primary, visible only while the modal is open, so it doesn't count against the page.
+
 **Feature-gated action** (an action that needs an org setting, e.g. "Send reactivation alert (SMS)"
 which requires Twilio): keep it a **real, clickable button in both states** -- the *same*
 `link_to`/element/variant as its enabled twin, only swapping in a struck icon (`bi-bell-slash`) and a
