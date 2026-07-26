@@ -34,7 +34,7 @@
 
           <% if @volunteer.active? && assignment.active && casa_case.active? && Pundit.policy(current_user, @volunteer).unassign_case? %>
             <div class="mt-3">
-              <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
+              <%= button_to unassign_case_assignment_path(assignment, volunteer_id: @volunteer.id), method: :patch, form_class: "contents", class: ghost_class(:danger) do %>
                 <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign case
               <% end %>
             </div>

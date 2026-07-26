@@ -11,7 +11,7 @@
       <p class="text-sm text-slate-600">Current supervisor:
         <span class="font-medium text-slate-800"><%= formatted_name(@volunteer.supervisor.display_name) %></span>
       </p>
-      <%= button_to unassign_supervisor_volunteer_path(@volunteer), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
+      <%= button_to unassign_supervisor_volunteer_path(@volunteer), method: :patch, form_class: "contents", class: ghost_class(:danger) do %>
         <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign from supervisor
       <% end %>
     </div>
