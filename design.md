@@ -266,7 +266,11 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
 the `searchable-select` Stimulus controller (TomSelect single-select). A native dropdown is fine only
-for a short, fixed list (the 3-option status filter stays native).
+for a short, fixed list (the 3-option status filter stays native). The supervisor/admin **volunteer
+search** (the learning-hours roster and the other-duties log) uses this control as a *filter*
+(`name="search"` + `auto-submit`) over a **Pagy-paginated table** -- the standard "review the time my
+volunteers logged" shape; a per-person card/table stack (the old other-duties layout) doesn't scale
+past a handful of people.
 - **Inside an overflow container** (a table with `overflow-x-auto`, a card with `overflow-hidden`),
   pass **`data-searchable-select-dropdown-parent-value="body"`** so the menu renders on `<body>` and
   isn't clipped. Verify the open menu isn't clipped (it should sit just below/above the control).
