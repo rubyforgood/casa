@@ -294,8 +294,9 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   **`data-multiple-select-placeholder-value`** -- use the **`Select or search <term>`** phrasing
   (matching the rich component; e.g. the report filters, one per line), **never `All <term>`**:
   `All supervisors` read as a *selectable option* users tried to pick, not an empty-state prompt.
-  If a blank filter means "include everything", say so in **hint text near the fields**, not in the
-  placeholder. When a placeholder is set the controller also passes **`hidePlaceholder: true`**, so the
+  If a blank filter means "include everything", say so in **hint text under the group's subheader**
+  (e.g. a "Filters" heading), not in the placeholder and **not floating between two field groups** --
+  a hint sandwiched between groups is ambiguous about which group it modifies. When a placeholder is set the controller also passes **`hidePlaceholder: true`**, so the
   prompt disappears once a chip is present (a placeholder lingering next to selected chips reads as
   unfinished -- verify by selecting an item and checking the input's `placeholder` attribute is empty).
 - **Chevron**: the Bootstrap-Icons `chevron-down` shape as a `.ts-wrapper::after` **base64-SVG**,

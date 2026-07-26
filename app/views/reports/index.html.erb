@@ -65,6 +65,10 @@
         </div>
 
         <% if current_user&.casa_admin? || current_user&.supervisor? %>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-900">Filters</h3>
+            <p class="mt-0.5 text-sm text-slate-500">All optional. A blank filter (or one set to Any) includes everything.</p>
+          </div>
           <div class="space-y-4">
             <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search supervisors">
               <%= f.label :supervisor_ids, "Assigned to", class: label_class, for: "multiple-select-field1" %>
@@ -82,7 +86,6 @@
               <%= f.label :contact_type_group_ids, "Contact type group", class: label_class, for: "multiple-select-field4" %>
               <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-            <p class="text-xs text-slate-500">These filters are optional. Leave one empty to include everything for that field.</p>
           </div>
 
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
