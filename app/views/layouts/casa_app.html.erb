@@ -28,27 +28,54 @@
         <span class="truncate text-[15px] font-bold tracking-tight text-slate-900"><%= current_organization&.name.presence || "CASA Tracker" %></span>
       </div>
 
-      <nav class="flex-1 space-y-1 overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
-        <% nav_items = [
-          ["Dashboard", "bi-grid-1x2", authenticated_user_root_path, "dashboard", true],
-          ["Volunteers", "bi-people", volunteers_path, "volunteers", policy(Volunteer).index?],
-          ["Supervisors", "bi-diagram-3", supervisors_path, "supervisors", policy(Supervisor).index?],
-          [cases_index_title, "bi-folder2", casa_cases_path, "cases", true],
-          ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
-          ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
-          ["Other duties", "bi-list-task", other_duties_path, "other_duties", policy(OtherDuty).index?],
-          ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?],
-          ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
-          ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],
-          ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?],
-          ["Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?]
-        ] %>
-        <% nav_items.each do |title, icon, path, key, allowed| %>
-          <% next unless allowed %>
-          <% active = (@active_nav == key) %>
-          <%= link_to path, "aria-current": (active ? "page" : nil), class: "flex items-center gap-3 rounded-lg px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 #{active ? "bg-brand-50 font-semibold text-brand-700" : "text-slate-600 hover:bg-slate-100"}" do %>
-            <i class="bi <%= icon %> text-base" aria-hidden="true"></i> <%= title %>
+      <%# Grouped primary nav (design.md "Left nav"): Dashboard first, Settings pinned to the bottom,
+          the middle grouped by domain (Records / Activity / Reporting) with a divider between groups.
+          Each group carries an aria-label; a group whose every item is role-gated out renders nothing
+          (no stray divider). Items: [title, icon, path, key, allowed?]. %>
+      <nav class="flex flex-1 flex-col overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
+        <%
+          nav_groups = [
+            ["Overview", [
+              ["Dashboard", "bi-grid-1x2", authenticated_user_root_path, "dashboard", true]
+            ]],
+            ["Records", [
+              ["Volunteers", "bi-people", volunteers_path, "volunteers", policy(Volunteer).index?],
+              ["Supervisors", "bi-diagram-3", supervisors_path, "supervisors", policy(Supervisor).index?],
+              [cases_index_title, "bi-folder2", casa_cases_path, "cases", true]
+            ]],
+            ["Activity", [
+              ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
+              ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
+              ["Other duties", "bi-list-task", other_duties_path, "other_duties", policy(OtherDuty).index?],
+              ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?]
+            ]],
+            ["Reporting", [
+              ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
+              ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],
+              ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?]
+            ]]
+          ]
+          visible_groups = nav_groups
+            .map { |label, items| [label, items.select { |item| item[4] }] }
+            .reject { |_label, items| items.empty? }
+          settings_title, settings_icon, settings_path, settings_key, settings_allowed =
+            "Settings", "bi-gear", edit_casa_org_path(current_organization), "settings", policy(:application).modify_organization?
+        %>
+        <% visible_groups.each_with_index do |(label, items), index| %>
+          <% unless index.zero? %>
+            <div class="my-2 border-t border-slate-200" aria-hidden="true"></div>
           <% end %>
+          <div role="group" aria-label="<%= label %>" class="space-y-1">
+            <% items.each do |title, icon, path, key, _allowed| %>
+              <%= render "layouts/nav_link", title: title, icon: icon, path: path, key: key %>
+            <% end %>
+          </div>
+        <% end %>
+        <% if settings_allowed %>
+          <div class="mt-auto">
+            <div class="my-2 border-t border-slate-200" aria-hidden="true"></div>
+            <%= render "layouts/nav_link", title: settings_title, icon: settings_icon, path: settings_path, key: settings_key %>
+          </div>
         <% end %>
       </nav>
     </aside>

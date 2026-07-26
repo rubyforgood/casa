@@ -932,6 +932,16 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   infrastructure), then nav links (active = `bg-brand-50 text-brand-700`, idle =
   `text-slate-600 hover:bg-slate-100`). Nav visibility follows Pundit policies.
   Collapses to an off-canvas drawer below `lg`.
+- **Sidebar nav order** (**not** alphabetical -- alphabetical is arbitrary vs. how people work):
+  **Dashboard first, Settings pinned to the bottom** (`mt-auto` + its own divider), the middle
+  **grouped by domain, ordered by frequency** -- Overview / Records (Volunteers, Supervisors, Cases) /
+  Activity (Case contacts, Learning hours, Other duties, Reimbursements) / Reporting (Reports,
+  Analytics, Court reports). Groups are separated by a **thin divider** (`border-t border-slate-200`),
+  **not** section labels: at ~12 items in 4 small groups, dividers convey the grouping without the
+  extra text weight (uppercase section labels earn their keep only on long, dense navs / settings
+  consoles). Each group is a `role="group"` with an **`aria-label`** (screen-reader grouping with no
+  visible heading); a group whose every item is policy-gated out **renders nothing -- no orphan
+  divider**. Built from a `nav_groups` array + the `layouts/_nav_link` partial in `layouts/casa_app`.
 - **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): mobile nav
   toggle, notifications, and the avatar **account menu** — the single place for identity
   + account actions (no duplicate identity block in the sidebar). Its header shows name,

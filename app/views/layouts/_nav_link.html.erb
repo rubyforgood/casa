@@ -1,0 +1,6 @@
+<%# One primary-nav link (design.md "Left nav"). Locals: title, icon (a bi-* class), path, key
+    (matched against @active_nav for the active state). Used by the grouped nav in casa_app. %>
+<% active = (@active_nav == key) %>
+<%= link_to path, "aria-current": (active ? "page" : nil), class: "flex items-center gap-3 rounded-lg px-3 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500 #{active ? "bg-brand-50 font-semibold text-brand-700" : "text-slate-600 hover:bg-slate-100"}" do %>
+  <i class="bi <%= icon %> text-base" aria-hidden="true"></i> <%= title %>
+<% end %>
