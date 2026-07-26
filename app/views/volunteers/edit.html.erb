@@ -20,6 +20,10 @@
         <%= link_to casa_case_path(from_case), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
           <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to case <%= from_case.case_number %>
         <% end %>
+      <% elsif params[:from] == "other_duties" %>
+        <%= link_to other_duties_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+          <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to other duties
+        <% end %>
       <% else %>
         <%= link_to volunteers_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
           <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteers

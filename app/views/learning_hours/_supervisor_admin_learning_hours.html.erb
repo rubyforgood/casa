@@ -7,7 +7,7 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <h1 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
 
-  <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 max-w-sm" do %>
+  <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 sm:max-w-xs" do %>
     <select name="search" aria-label="Search volunteers" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
       <option value=""></option>
       <% @roster_names.each do |name| %>

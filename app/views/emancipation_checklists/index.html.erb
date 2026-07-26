@@ -16,7 +16,7 @@
     </div>
 
     <% if @transitioning_case_numbers.any? %>
-      <%= form_with url: emancipation_checklists_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "max-w-sm" do %>
+      <%= form_with url: emancipation_checklists_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 sm:max-w-xs" do %>
         <select name="search" aria-label="Search cases" data-controller="searchable-select" data-searchable-select-placeholder-value="Search case number" class="block w-full">
           <option value=""></option>
           <% @transitioning_case_numbers.each do |cn| %>

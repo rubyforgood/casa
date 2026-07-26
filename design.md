@@ -271,6 +271,12 @@ search** (the learning-hours roster and the other-duties log) uses this control 
 (`name="search"` + `auto-submit`) over a **Pagy-paginated table** -- the standard "review the time my
 volunteers logged" shape; a per-person card/table stack (the old other-duties layout) doesn't scale
 past a handful of people.
+- **Width:** a standalone search/filter control is sized to **one form column** -- `sm:max-w-xs`
+  (~320px) on the block `<form>`, so it's **full-width on mobile** (a two-column form's single column
+  collapses to full width below `sm`) and one field wide on desktop. Applied uniformly on the
+  learning-hours, other-duties, and emancipation searches; don't hand-pick `max-w-sm`/etc. per page.
+  (Multi-field **filter bars** -- volunteers / cases / reimbursements -- are a separate responsive
+  grid and set their own per-field widths.)
 - **Inside an overflow container** (a table with `overflow-x-auto`, a card with `overflow-hidden`),
   pass **`data-searchable-select-dropdown-parent-value="body"`** so the menu renders on `<body>` and
   isn't clipped. Verify the open menu isn't clipped (it should sit just below/above the control).

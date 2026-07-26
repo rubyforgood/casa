@@ -21,7 +21,7 @@
     </div>
 
     <% unless is_volunteer %>
-      <%= form_with url: other_duties_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 max-w-sm" do %>
+      <%= form_with url: other_duties_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 sm:max-w-xs" do %>
         <select name="search" aria-label="Search volunteers" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
           <option value=""></option>
           <% @roster_names.each do |name| %>
@@ -50,7 +50,7 @@
               <% @other_duties.each do |duty| %>
                 <% decorated = duty.decorate %>
                 <tr class="hover:bg-slate-50/70">
-                  <% unless is_volunteer %><td class="<%= td %> font-medium text-slate-800"><%= formatted_name(duty.creator.display_name) %></td><% end %>
+                  <% unless is_volunteer %><td class="<%= td %>"><%= link_to formatted_name(duty.creator.display_name), edit_volunteer_path(duty.creator, from: "other_duties"), class: "font-medium #{name_link_class}" %></td><% end %>
                   <td class="<%= td %> whitespace-nowrap"><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
                   <td class="<%= td %> whitespace-nowrap"><%= decorated.duration_in_minutes %></td>
                   <td class="<%= td %> max-w-md"><%= decorated.truncate_notes %></td>
@@ -82,7 +82,7 @@
           <li class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
             <div class="flex items-start justify-between gap-3">
               <div>
-                <% unless is_volunteer %><p class="text-sm font-medium text-slate-800"><%= formatted_name(duty.creator.display_name) %></p><% end %>
+                <% unless is_volunteer %><p class="text-sm"><%= link_to formatted_name(duty.creator.display_name), edit_volunteer_path(duty.creator, from: "other_duties"), class: "font-medium #{name_link_class}" %></p><% end %>
                 <p class="<%= is_volunteer ? "text-sm font-semibold text-slate-900" : "mt-0.5 text-xs text-slate-500" %>"><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></p>
               </div>
               <% if is_volunteer %>
