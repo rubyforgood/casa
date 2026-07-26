@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="border-t border-slate-100 bg-slate-50 px-4 py-2.5 text-xs text-slate-500 sm:px-5">
+    <div class="border-t border-slate-100 px-4 py-2.5 text-xs text-slate-500 sm:px-5">
       Created by:
       <% creator_name = formatted_name(contact.creator&.display_name) %>
       <% if policy(contact).edit? && !current_user.volunteer? %>

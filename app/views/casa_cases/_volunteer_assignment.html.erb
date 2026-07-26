@@ -58,7 +58,7 @@
 
             <div class="ml-auto flex flex-wrap items-center gap-2">
               <% if policy(assignment).unassign? %>
-                <%= button_to "Unassign volunteer", unassign_case_assignment_path(assignment), method: :patch, form_class: "contents", class: button_classes(:danger_outline) %>
+                <%= button_to "Unassign volunteer", unassign_case_assignment_path(assignment), method: :patch, form_class: "contents", class: ghost_class(:danger) %>
               <% else %>
                 <% if !volunteer.active? && policy(volunteer).activate? %>
                   <%= button_to "Activate volunteer", activate_volunteer_path(volunteer, redirect_to_path: "casa_case", casa_case_id: @casa_case.id), method: :patch, form_class: "contents", class: button_classes(:secondary) %>
@@ -80,7 +80,7 @@
     </div>
   <% end %>
 
-  <div class="border-t border-slate-100 bg-slate-50 p-4">
+  <div class="border-t border-slate-100 p-4">
     <h3 class="text-sm font-semibold text-slate-900">Assign a volunteer to this case</h3>
     <%= form_with model: CaseAssignment.new, url: case_assignments_path(casa_case_id: @casa_case.id) do |form| %>
       <fieldset class="m-0 border-0 p-0" <%= "disabled" unless available_volunteers.any? %>>

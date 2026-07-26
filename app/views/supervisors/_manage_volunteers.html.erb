@@ -18,7 +18,7 @@
   </div>
 
   <% if show_assigned_volunteers %>
-    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 bg-slate-50 p-4 sm:px-6">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-4 sm:px-6">
       <h3 class="text-sm font-semibold text-slate-900"><%= volunteer_title %></h3>
       <% if @supervisor_has_unassigned_volunteers %>
         <%= button_to button_text, edit_supervisor_path(@supervisor), params: {include_unassigned: @all_volunteers_ever_assigned.nil?}, method: :get, class: button_classes(:secondary) %>
@@ -33,7 +33,7 @@
               <p class="truncate text-sm text-slate-500"><%= volunteer.email %></p>
             </div>
             <% if volunteer.supervised_by?(@supervisor) %>
-              <%= button_to unassign_supervisor_volunteer_path(volunteer), method: :patch, form_class: "contents", class: button_classes(:danger_outline) do %>
+              <%= button_to unassign_supervisor_volunteer_path(volunteer), method: :patch, form_class: "contents", class: ghost_class(:danger) do %>
                 <i class="bi bi-x-circle" aria-hidden="true"></i> Unassign
               <% end %>
             <% else %>
@@ -51,7 +51,7 @@
     </ul>
   <% end %>
 
-  <div class="border-t border-slate-100 bg-slate-50 p-4 sm:px-6">
+  <div class="border-t border-slate-100 p-4 sm:px-6">
     <h3 class="text-sm font-semibold text-slate-900">Assign a volunteer</h3>
     <%= form_with model: SupervisorVolunteer.new, url: supervisor_volunteers_path(supervisor_id: @supervisor.id) do |form| %>
       <fieldset class="m-0 border-0 p-0" <%= "disabled" unless available.any? %>>
