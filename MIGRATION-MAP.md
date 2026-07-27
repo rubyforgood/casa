@@ -83,7 +83,9 @@ the `*_reports` CSV exporters, case_contacts/followups (redirect / JSON / CSV on
 - **Dead legacy files — DELETED** (verified 0 references across views / rb / js / specs; superseded by
   `Dialog::` and the casa_app twins): `shared/_court_order_form`, `shared/_court_order_list`,
   `casa_cases/_thank_you_modal`, `case_contacts/_confirm_note_content_dialog`, `layouts/_mobile_navbar`,
-  `devise/shared/_links`, `all_casa_admins/shared/_links`.
+  `devise/shared/_links`, `all_casa_admins/shared/_links`; and (2026-07-27) the legacy Bootstrap
+  **`Modal::*` suite** (Group/Header/Body/Footer/OpenButton/OpenLink) + **`DropdownMenuComponent`**
+  -- superseded by `Dialog::` and the native `<details>` + `dropdown` controller -- with their specs.
 - **Footer — DELETED**: `layouts/footers/_logged_in` + `_not_logged_in` + `spec/.../footer.html.erb_spec.rb`
   (rendered by no layout). Their links survive on the `all_casa_admin` layout footer + the `static`
   landing. **Note:** `casa_app` (the main chapter app) has **no footer** — so the SMS Terms & Conditions

@@ -4,7 +4,7 @@
 # Stimulus controller (`showModal()` gives a focus trap, Escape-to-close, and an
 # inert background for free). Compose the inside from Dialog::Header / Dialog::Body
 # / Dialog::Footer so the template cannot drift. This is the Tailwind replacement
-# for the legacy Bootstrap Modal::* suite; do not restyle Bootstrap `.modal` markup.
+# for the (now-deleted) Bootstrap Modal::* suite.
 class Dialog::GroupComponent < ViewComponent::Base
   renders_one :trigger
 
