@@ -6,7 +6,8 @@
   <title>Request rejected &middot; CASA Volunteer Tracker</title>
   <link rel="icon" href="/favicon.ico">
   <!-- Static (served straight from public/, shown even when Rails is down), so the design-system
-       look — slate surface, indigo brand accent, one centered card — is inlined with hardcoded hex. -->
+       look — slate surface, indigo brand accent, a centered card, and the CASA butterfly badge —
+       is inlined with hardcoded hex. Copy stays neutral; the badge is the (subtle) delight. -->
   <style>
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
@@ -21,7 +22,11 @@
     .brand { text-align: center; color: #4f46e5; font-weight: 700; font-size: .9375rem; letter-spacing: -.01em; margin: 0 0 1rem; }
     .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.05); overflow: hidden; }
     .accent { height: .375rem; background: linear-gradient(90deg, #4338ca, #4f46e5); }
-    .card-body { padding: 2.25rem 2rem 2rem; text-align: center; }
+    .card-body { padding: 2.5rem 2rem 2rem; text-align: center; }
+    .badge { width: 5rem; height: 5rem; margin: 0 auto 1.25rem; border-radius: 9999px; background: linear-gradient(135deg, #4338ca, #6366f1); display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 22px rgba(79,70,229,.28); }
+    .badge img { width: 34px; height: 36px; display: block; }
+    @media (prefers-reduced-motion: no-preference) { .badge img { animation: float 3s ease-in-out infinite; } }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-5px) rotate(3deg); } }
     .code { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4f46e5; }
     h1 { margin: .5rem 0 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -.015em; color: #0f172a; }
     .msg { margin: .625rem 0 0; color: #475569; font-size: .9375rem; }
@@ -39,6 +44,7 @@
     <div class="card">
       <div class="accent"></div>
       <div class="card-body">
+        <div class="badge"><img src="/butterfly.svg" alt=""></div>
         <p class="code">Error 422</p>
         <h1>Request rejected</h1>
         <p class="msg">The change you wanted was rejected. Maybe you tried to change something you didn&rsquo;t have access to.</p>
