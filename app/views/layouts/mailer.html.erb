@@ -1,93 +1,49 @@
 <!DOCTYPE html>
-<html style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+<html lang="en" style="margin:0; padding:0;">
 <head>
-  <meta name="viewport" content="width=device-width">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Actionable emails e.g. reset password</title>
-  <style>/* Email styles need to be inline, except @media queries */</style>
+  <title>CASA Volunteer Tracker</title>
   <style type="text/css">
-      @media only screen and (max-width: 640px) {
-          body {
-              padding: 0 !important;
-          }
-
-          h3 {
-              font-weight: 800 !important;
-              margin: 20px 0 5px !important;
-          }
-
-          h3 {
-              font-size: 16px !important;
-          }
-
-          .container {
-              padding: 0 !important;
-              width: 100% !important;
-          }
-      }
+    /* Only @media queries may live in a <style> for email; everything else is inlined (ADR 0007). */
+    @media only screen and (max-width: 600px) {
+      .email-container { width: 100% !important; }
+      .email-card-body { padding: 24px !important; }
+    }
   </style>
 </head>
-
-<body itemscope itemtype="http://schema.org/EmailMessage" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; -webkit-font-smoothing: antialiased; -webkit-text-size-adjust: none; width: 100% !important; height: 100%; line-height: 1.6em; background-color: #f6f6f6; margin: 0;" bgcolor="#f6f6f6">
-<table class="main-body" style="box-sizing: border-box; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%; height: 100%; background-color: rgb(234, 236, 237);" width="100%" height="100%" bgcolor="rgb(234, 236, 237)">
-  <tbody style="box-sizing: border-box;">
-  <tr class="row" style="box-sizing: border-box; vertical-align: top;" valign="top">
-    <td class="main-body-cell" style="box-sizing: border-box;">
-      <table class="container" style="box-sizing: border-box; font-family: Helvetica, serif; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-top: auto; margin-right: auto; margin-bottom: auto; margin-left: auto; height: 0px; width: 90%; max-width: 550px;" width="90%" height="0">
-        <tbody style="box-sizing: border-box;">
-        <tr style="box-sizing: border-box;">
-          <td class="container-cell" style="box-sizing: border-box; vertical-align: top; font-size: medium; padding-bottom: 50px;" valign="top">
-            <table class="c1766" style="box-sizing: border-box; margin-top: 0px; margin-right: auto; background:#728089;margin-left: 0px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; width: 100%; min-height: 30px;" width="100%">
-              <tbody style="box-sizing: border-box;">
-              <tr style="box-sizing: border-box;">
-                <td class="cell c1776" style="box-sizing: border-box; width: 70%; vertical-align: middle;" width="70%" valign="middle">
-                  <div class="c1144" style="box-sizing: border-box; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px; font-size: 17px; font-weight: 500;text-align: center;color: #fff;">Court
-                    Appointed Special Advocate (CASA) / <%= @casa_organization&.name %>
-                    <br style="box-sizing: border-box;">
-                  </div>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <table class="card" style="background:#fff;box-sizing: border-box; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; margin-bottom: 20px; height: 0px;" height="0">
-              <tbody style="box-sizing: border-box;">
-              <tr style="box-sizing: border-box;">
-                <td class="card-cell" style="box-sizing: border-box; background-color: rgb(255, 255, 255); overflow-x: hidden; overflow-y: hidden; border-top-left-radius: 3px; border-top-right-radius: 3px; border-bottom-right-radius: 3px; border-bottom-left-radius: 3px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; text-align: center;" bgcolor="rgb(255, 255, 255)" align="center">
-                  <table class="table100 c1357" style="box-sizing: border-box; width: 100%; min-height: 150px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px; height: 0px; margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; border-collapse: collapse;" width="100%" height="0">
-                    <tbody style="box-sizing: border-box;">
-                    <tr style="box-sizing: border-box;">
-                      <td class="card-content" style="box-sizing: border-box; font-size: 13px; line-height: 20px; color: rgb(111, 119, 125); padding-top: 10px; padding-right: 20px; padding-bottom: 0px; padding-left: 20px; vertical-align: top;" valign="top">
-                        <%= yield %>
-                      </td>
-                    </tr>
-                    </tbody>
-                  </table>
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <table class="footer" style="box-sizing: border-box; margin-top: 50px; color: rgb(152, 156, 165); text-align: center; font-size: 11px; padding-top: 5px; padding-right: 5px; padding-bottom: 5px; padding-left: 5px;" align="center">
-              <tbody style="box-sizing: border-box;">
-              <tr style="box-sizing: border-box;">
-                <td class="footer-cell" style="box-sizing: border-box;">
-                </td>
-              </tr>
-              </tbody>
-            </table>
-            <div class="c2577" style="text-align:center;box-sizing: border-box; padding-top: 10px; padding-right: 10px; padding-bottom: 10px; padding-left: 10px;">
-              <p class="footer-info" style="box-sizing: border-box;">Court Appointed Special Advocate (CASA) /
-                <%= @casa_organization&.name %>
-                <br style="box-sizing: border-box;">
-                <br style="box-sizing: border-box;"><%= @casa_organization&.address %>
-              </p>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </td>
-  </tr>
-  </tbody>
-</table>
+<body style="margin:0; padding:0; width:100%; background-color:#f8fafc; -webkit-font-smoothing:antialiased; -webkit-text-size-adjust:100%; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;" bgcolor="#f8fafc">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#f8fafc;" bgcolor="#f8fafc">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px;">
+          <tr>
+            <td align="center" style="padding-bottom:16px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; font-weight:700; color:#4f46e5; letter-spacing:-0.01em;">
+              Court Appointed Special Advocate (CASA)<%= " / #{@casa_organization.name}" if @casa_organization&.name.present? %>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#ffffff; border:1px solid #e2e8f0; border-radius:16px; overflow:hidden;" bgcolor="#ffffff">
+                <tr><td height="6" style="height:6px; line-height:6px; font-size:0; background-color:#4f46e5;" bgcolor="#4f46e5">&nbsp;</td></tr>
+                <tr>
+                  <td class="email-card-body" style="padding:32px; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:15px; line-height:1.6; color:#334155;">
+                    <%= yield %>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <tr>
+            <td align="center" style="padding:20px 16px 0; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif; font-size:12px; line-height:1.6; color:#64748b;">
+              Court Appointed Special Advocate (CASA)<%= " / #{@casa_organization.name}" if @casa_organization&.name.present? %>
+              <% if @casa_organization&.address.present? %><br><%= @casa_organization.address %><% end %>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
 </body>
 </html>
