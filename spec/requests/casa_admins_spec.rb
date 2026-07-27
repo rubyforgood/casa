@@ -88,7 +88,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(response.request.flash[:notice]).to eq "Casa Admin was successfully updated."
       end
 
-      it "can update a casa admin user's email and send them a confirmation email", :aggregate_failures do
+      it "can update a casa admin user's email immediately, without requiring confirmation", :aggregate_failures do
         casa_admin = create(:casa_admin)
         expected_email = "admin2@casa.com"
 
@@ -102,11 +102,9 @@ RSpec.describe "/casa_admins", type: :request do
         casa_admin.reload
         expect(response).to have_http_status(:redirect)
 
-        expect(casa_admin.unconfirmed_email).to eq("admin2@casa.com")
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+        expect(casa_admin.email).to eq("admin2@casa.com")
+        expect(casa_admin.unconfirmed_email).to be_nil
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
 
       it "also respond as json", :aggregate_failures do
