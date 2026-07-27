@@ -1069,6 +1069,12 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
     **above** a `flex items-start justify-between` row, so the actions top-align with the title, not
     the bottom of the (tall) subtitle -- putting the link inside the left column with `items-end` here
     would sink the buttons to the subtitle's bottom.
+  - **Audited 2026-07-27** (all 19 casa_app header pages): all group the back link + `<h1 class="mt-2 ...">`
+    correctly except `volunteers/new`, which had regressed to the anti-pattern (back link a bare `space-y-6`
+    child -> 24px gap); fixed + pixel-verified 9px, matching `supervisors/new` / `casa_admins/new`. It
+    recurs because headers are hand-written per page (no shared partial) and this checkout's working-tree
+    reverts reintroduce stale headers -- re-check the header block whenever editing a page that may have
+    been rolled back.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.
