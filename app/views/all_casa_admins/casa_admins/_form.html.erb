@@ -1,13 +1,15 @@
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <%= form_with(model: casa_admin, url: all_casa_admins_casa_org_casa_admins_path(casa_org), id: :new_casa_admin, class: "space-y-5") do |form| %>
   <%= render "shared/form_errors", resource: casa_admin %>
   <div>
-    <%= form.label :email, "Email", class: label_class %>
+    <%= form.label :email, class: label_class do %>Email <%= req %><% end %>
     <%= form.text_field :email, class: input_class %>
   </div>
   <div>
-    <%= form.label :display_name, "Display name", class: label_class %>
+    <%= form.label :display_name, class: label_class do %>Display name <%= opt %><% end %>
     <%= form.text_field :display_name, class: input_class %>
   </div>
   <div>

@@ -3,6 +3,7 @@
     like the regular user edit-profile page — Bootstrap collapse CSS is not loaded on this shell.
     The panel keeps id="collapseOne" (specs reference it). error_messages stays for #error_explanation. %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -16,7 +17,7 @@
       <%= form_with(model: @user, scope: :all_casa_admin, url: all_casa_admins_path, method: :patch, class: "space-y-5") do |form| %>
         <%= render "shared/form_errors", resource: @user %>
         <div>
-          <%= form.label :email, "Email", class: label_class %>
+          <%= form.label :email, class: label_class do %>Email <%= req %><% end %>
           <%= form.email_field :email, class: input_class %>
         </div>
         <div class="flex flex-wrap gap-2">

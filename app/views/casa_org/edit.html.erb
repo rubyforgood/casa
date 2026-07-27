@@ -9,6 +9,8 @@
 <% card = "p-5 sm:p-6 lg:rounded-2xl lg:border lg:border-slate-200 lg:bg-white lg:shadow-sm" %>
 <% section_title = "text-xl font-bold tracking-tight text-slate-900" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% file_class = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-3 file:border-0 file:bg-slate-100 file:px-3.5 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "mt-0.5 h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
@@ -45,23 +47,23 @@
                 <%= render "shared/form_errors", resource: current_organization %>
 
                 <div>
-                  <%= form.label :name, "Name", class: label_class %>
+                  <%= form.label :name, class: label_class do %>Name <%= req %><% end %>
                   <%= form.text_field :name, required: true, class: input_class %>
                 </div>
                 <div>
-                  <%= form.label :display_name, "Display name", class: label_class %>
+                  <%= form.label :display_name, class: label_class do %>Display name <%= opt %><% end %>
                   <%= form.text_field :display_name, class: input_class %>
                 </div>
                 <div>
-                  <%= form.label :address, "Address", class: label_class %>
+                  <%= form.label :address, class: label_class do %>Address <%= opt %><% end %>
                   <%= form.text_field :address, class: input_class %>
                 </div>
                 <div>
-                  <%= form.label :logo, "Logo", class: label_class %>
+                  <%= form.label :logo, class: label_class do %>Logo <%= opt %><% end %>
                   <%= form.file_field :logo, accept: ".png,.gif,.jpg,.jpeg,.webp,.svg", class: file_class %>
                 </div>
                 <div>
-                  <%= form.label :court_report_template, "Court report template", class: label_class %>
+                  <%= form.label :court_report_template, class: label_class do %>Court report template <%= opt %><% end %>
                   <div class="flex flex-wrap items-center gap-3">
                     <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
                     <% if current_organization.court_report_template.attached? %>

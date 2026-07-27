@@ -1,6 +1,8 @@
 <% content_for :page_title, "Create a new CASA Organization" %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -15,15 +17,15 @@
       <%= form_with model: selected_organization, url: all_casa_admins_casa_orgs_path, method: :post, local: true, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: selected_organization %>
         <div>
-          <%= form.label :name, "Name", class: label_class %>
+          <%= form.label :name, class: label_class do %>Name <%= req %><% end %>
           <%= form.text_field :name, class: input_class, required: true %>
         </div>
         <div>
-          <%= form.label :display_name, "Display name", class: label_class %>
+          <%= form.label :display_name, class: label_class do %>Display name <%= opt %><% end %>
           <%= form.text_field :display_name, class: input_class %>
         </div>
         <div>
-          <%= form.label :address, "Address", class: label_class %>
+          <%= form.label :address, class: label_class do %>Address <%= opt %><% end %>
           <%= form.text_field :address, class: input_class %>
         </div>
         <div>
