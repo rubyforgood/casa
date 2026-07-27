@@ -1192,7 +1192,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Edit profile
 - [x] Other app-shell leaf pages (impersonation banner + flash parity + footer shipped — the casa_app
   footer restores parity with the all-casa shell: Built by Ruby For Good / Report a site issue (the
-  help/support link) / SMS Terms & Conditions, `border-t px-4 py-4 text-xs text-slate-500`, after `<main>`)
+  help/support link) / SMS Terms & Conditions, `border-t px-4 py-5 text-xs text-slate-500`, after `<main>`.
+  `py-5` (not py-4) makes the footer 57px so its top rule lands on the same y as the sidebar's pinned
+  Settings divider (the sticky h-screen sidebar puts that 57px block at the viewport bottom too) — verified aligned)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)
