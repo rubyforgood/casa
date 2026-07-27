@@ -1,5 +1,2 @@
-<% if @resource.try(:unconfirmed_email?) %>
-  <p>Your CASA account's email has been updated to <%= @resource.unconfirmed_email %>.</p>
-<% else %>
-  <p>Your CASA account's email has been updated to <%= @resource.email %>.</p>
-<% end %>
+<% updated = @resource.try(:unconfirmed_email?) ? @resource.unconfirmed_email : @resource.email %>
+<p style="margin:0; font-size:15px; line-height:1.6; color:#334155;">Your CASA account email has been updated to <%= updated %>. If this wasn&rsquo;t you, please contact your administrator.</p>
