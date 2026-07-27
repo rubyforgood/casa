@@ -13,8 +13,8 @@
 <% can_edit = policy(@volunteer).update_user_setting? %>
 <%# Required/optional markers mirror volunteers/new, but only while the profile is editable --
     when can_edit is false every field is read-only display, so the markers would be noise. %>
-<% req = can_edit ? tag.span("*", class: "text-rose-600", "aria-hidden": "true") : nil %>
-<% opt = can_edit ? tag.span("Optional", class: "ml-1.5 text-xs font-normal text-slate-500") : nil %>
+<% req = can_edit ? required_marker : nil %>
+<% opt = can_edit ? optional_marker : nil %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-4xl space-y-6">

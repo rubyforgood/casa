@@ -422,11 +422,13 @@ Submit). Three Stimulus contracts must survive a restyle **verbatim**:
   this form uses the controller). Keep it initially `hidden` so the non-JS `have_no_field` specs
   pass and rack_test (ignores CSS) can still reach the fields.
 
-Required-field markers are `tag.span("*", class: "text-rose-600", "aria-hidden": "true")` — **not** a
-`.html_safe` string literal, which erb_lint rejects as unsafe interpolation. On a form that mixes required and optional inputs
-(e.g. `volunteers/new`), pair the required `*` with a muted `tag.span("Optional", class: "text-xs
-font-normal text-slate-500")` suffix on the optional labels, so the required/optional split is explicit
-on every field rather than inferred from the lone `*`. Shared bits stay shared:
+Required/optional field markers come from the `required_marker` / `optional_marker` helpers
+(`design_system_helper`), **not** hand-written `.html_safe` string literals (erb_lint rejects those as
+unsafe interpolation). `required_marker` is a rose `*` (`text-rose-600`, `aria-hidden` — the input's
+`required` attribute carries the state to assistive tech); on a form that mixes required and optional
+inputs, pair it with `optional_marker` (a muted "Optional", `text-xs font-normal text-slate-500`) on the
+optional labels, so the split is explicit on every field rather than inferred from the lone `*`. This is
+the app-wide convention for data-entry forms (see the forms-section bullet). Shared bits stay shared:
 relevant-case picking is `Form::MultipleSelectComponent` (TomSelect) and errors use
 `shared/form_errors`; only the form-private partials (`_contact_topic_answer`,
 `shared/_additional_expense_form`) are restyled in place. Duration is an inline Tailwind twin, like
@@ -838,6 +840,15 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   (Turbo Drive is off, so it runs on each full page load); opt a form back in with
   `data-native-validation`. An invalid submit then reaches the server and re-renders the
   design-system errors. (The case-contact form also sets `novalidate` explicitly, server-rendered.)
+- **Required / optional markers.** `required_marker` (rose `*`, aria-hidden) marks a required label and
+  `optional_marker` (muted "Optional") marks an optional one on a form that mixes the two, so the split
+  is explicit per field rather than inferred from the lone `*`. Which fields are required comes from the
+  model validations (e.g. a `User` needs email + display name; phone / DOB / address are optional), not a
+  guess. The required input also carries `required` (a11y; harmless because native validation is disabled
+  app-wide, so it never pre-empts the server-rendered errors). Applied to the data-entry forms app-wide —
+  volunteers / admins / supervisors profiles, casa_cases, court dates, and the settings CRUD forms. An
+  edit form gated on `can_edit` **suppresses** the markers when the profile is read-only (nothing is
+  editable, so they would be noise). Single-required-field forms (e.g. a settings name) just take the `*`.
 - **Summary.** `shared/_form_errors` — the **same alert card** (`alert_classes(:danger)` + icon),
   `id="error_explanation"` + `role="alert"` + the `alert` class + the lead **"Unable to save"**
   (spec hooks). It lists **every** error so the summary matches the per-field messages: a lone error

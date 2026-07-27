@@ -13,6 +13,9 @@
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% readonly_class = "block w-full rounded-lg border border-slate-200 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-500 shadow-sm" %>
 <% can_edit = policy(@supervisor).update_user_setting? %>
+<%# Required/optional markers only while editable -- read-only display would make them noise. %>
+<% req = can_edit ? required_marker : nil %>
+<% opt = can_edit ? optional_marker : nil %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-4xl space-y-6">
@@ -32,23 +35,23 @@
       <%= form_with model: @supervisor, as: :supervisor, url: supervisor_path(@supervisor), method: :patch do |form| %>
         <div class="mt-4 grid grid-cols-1 gap-5 sm:grid-cols-2">
           <div>
-            <%= form.label :email, "Email", class: label_class %>
+            <%= form.label :email, class: label_class do %>Email <%= req %><% end %>
             <% if can_edit %>
-              <%= form.email_field :email, placeholder: "Email", class: input_class %>
+              <%= form.email_field :email, placeholder: "Email", required: true, class: input_class %>
             <% else %>
               <input type="text" value="<%= @supervisor.email %>" autocomplete="off" readonly class="<%= readonly_class %>">
             <% end %>
           </div>
           <div>
-            <%= form.label :display_name, "Display name", class: label_class %>
+            <%= form.label :display_name, class: label_class do %>Display name <%= req %><% end %>
             <% if can_edit %>
-              <%= form.text_field :display_name, placeholder: "Display name", class: input_class %>
+              <%= form.text_field :display_name, placeholder: "Display name", required: true, class: input_class %>
             <% else %>
               <input type="text" value="<%= formatted_name(@supervisor.display_name) %>" autocomplete="off" readonly class="<%= readonly_class %>">
             <% end %>
           </div>
           <div>
-            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <%= form.label :phone_number, class: label_class do %>Phone number <%= opt %><% end %>
             <% if can_edit %>
               <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
             <% else %>
@@ -56,7 +59,7 @@
             <% end %>
           </div>
           <div>
-            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <%= form.label :date_of_birth, class: label_class do %>Date of birth <%= opt %><% end %>
             <% if can_edit %>
               <%= form.date_field :date_of_birth, value: @supervisor.date_of_birth, class: input_class %>
             <% else %>

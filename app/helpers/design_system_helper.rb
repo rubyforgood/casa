@@ -156,6 +156,21 @@ module DesignSystemHelper
     "#{record.model_name.param_key}_#{attribute}_error"
   end
 
+  # Required / optional field markers (casadesign). A required field's label gets a rose "*"
+  # (aria-hidden -- the input's `required` attribute carries the state to assistive tech); on a form
+  # that mixes required and optional inputs, optional labels get a muted "Optional" suffix so the
+  # split is explicit rather than inferred from the lone "*". design.md documents the convention.
+  #
+  #   <%= form.label :email, class: label_class do %>Email <%= required_marker %><% end %>
+  #   <%= form.label :phone_number, class: label_class do %>Phone number <%= optional_marker %><% end %>
+  def required_marker
+    tag.span("*", class: "text-rose-600", "aria-hidden": "true")
+  end
+
+  def optional_marker
+    tag.span("Optional", class: "ml-1.5 text-xs font-normal text-slate-500")
+  end
+
   # Court-order implementation status. Presentation lives here (a design-system
   # status pill, design.md), not on the CaseCourtOrder model.
   def court_order_status_label(court_order)
