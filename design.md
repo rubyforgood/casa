@@ -320,6 +320,11 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Flip-up**: the controller's `onDropdownOpen` adds `.ts-flip-up` when the control is near
   the viewport bottom, so the menu opens above and stays on screen.
+- **Accessible name**: like the single-select, the controller sets an `aria-label` on TomSelect's
+  control input from the native `<select>`'s name (its `aria-label` or associated `<label>`, read
+  before init). A `<label for>` picker (the report filters, case groups) already resolves via
+  `aria-labelledby`; the fix matters for the rich `Form::MultipleSelectComponent`, which names its
+  select with `aria-label` (which TomSelect ignores). See "Searchable single-select -> Accessible name".
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 

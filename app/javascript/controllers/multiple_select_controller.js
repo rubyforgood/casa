@@ -28,10 +28,27 @@ export default class extends Controller {
   }
 
   connect () {
+    // Read the native <select>'s accessible name BEFORE TomSelect init: it rewrites a <label for=...>
+    // to target its own input, and ignores an aria-label set on the <select>.
+    this.accessibleName = this.nativeAccessibleName()
     if (this.withOptionsValue) {
       this.createMultiSelectWithOptionGroups()
     } else {
       this.createBasicMultiSelect()
+    }
+  }
+
+  // The native <select>'s accessible name -- its aria-label, or its associated <label> text.
+  nativeAccessibleName () {
+    const label = this.selectTarget.labels && this.selectTarget.labels[0]
+    return this.selectTarget.getAttribute('aria-label') || (label && label.textContent.trim())
+  }
+
+  // Copy that name onto TomSelect's control input, so a <select> labelled only by aria-label (the rich
+  // Form::MultipleSelectComponent) doesn't render an input named only by its placeholder.
+  labelControlInput (tomSelect) {
+    if (this.accessibleName && tomSelect.control_input) {
+      tomSelect.control_input.setAttribute('aria-label', this.accessibleName)
     }
   }
 
@@ -52,8 +69,7 @@ export default class extends Controller {
       settings.placeholder = this.placeholderValue
       settings.hidePlaceholder = true
     }
-    /* eslint-disable no-new */
-    new TomSelect(this.selectTarget, settings)
+    this.labelControlInput(new TomSelect(this.selectTarget, settings))
   }
 
   createMultiSelectWithOptionGroups () {
@@ -87,8 +103,7 @@ export default class extends Controller {
       ? [{ text: 'Select/Unselect all', subtext: '', value: ' ', group: '' }].concat(this.optionsValue)
       : this.optionsValue
 
-    /* eslint-disable no-new */
-    new TomSelect(this.selectTarget, {
+    const select = new TomSelect(this.selectTarget, {
       onDropdownOpen,
       onDropdownClose,
       onItemRemove: function (value) {
@@ -137,5 +152,6 @@ export default class extends Controller {
         }
       }
     })
+    this.labelControlInput(select)
   }
 }
