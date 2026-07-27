@@ -1190,7 +1190,9 @@ High-level progress; the granular, prioritized backlog lives in
 - [x] Supervisor dashboard (triage-pattern reference)
 - [x] Notifications
 - [x] Edit profile
-- [~] Other app-shell leaf pages (impersonation banner + flash parity shipped; help-link destination remains)
+- [x] Other app-shell leaf pages (impersonation banner + flash parity + footer shipped — the casa_app
+  footer restores parity with the all-casa shell: Built by Ruby For Good / Report a site issue (the
+  help/support link) / SMS Terms & Conditions, `border-t px-4 py-4 text-xs text-slate-500`, after `<main>`)
 - [x] Volunteer dashboard (triage: cases, follow-ups, hours)
 - [x] Admin dashboard (org triage: unassigned & stale cases)
 - [x] Cases index (bespoke table + server-side filter selects + Pagy pagination)

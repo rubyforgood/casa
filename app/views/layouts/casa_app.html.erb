@@ -125,6 +125,16 @@
         <%= render "shared/flashes", wrapper_class: "px-4 pt-4 sm:px-6 lg:px-8" %>
         <%= yield %>
       </main>
+
+      <%# Footer: restores parity with the all-casa shell (the chapter shell dropped it in the Bootstrap
+          migration), so signed-in chapter users keep the support + SMS-compliance links. %>
+      <footer class="border-t border-slate-200 px-4 py-4 text-xs text-slate-500 sm:px-6 lg:px-8">
+        <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
+          <span>Built by <%= link_to "Ruby For Good", "https://rubyforgood.org/", class: "font-medium text-brand-600 hover:text-brand-700" %></span>
+          <%= link_to "Report a site issue", "https://form.typeform.com/to/iXY4BubB", class: "hover:text-slate-700" %>
+          <%= link_to "SMS Terms & Conditions", "/sms-terms-conditions.html", class: "hover:text-slate-700" %>
+        </div>
+      </footer>
     </div>
   </div>
 </body>
