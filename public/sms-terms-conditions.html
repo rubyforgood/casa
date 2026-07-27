@@ -1,88 +1,70 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
- <title>SMS Terms & Conditions</title>
- <meta name="viewport" content="width=device-width,initial-scale=1">
- <style>
- .terms-conditions-page {
-   background-color: #325271;
-   color: #2E2F30;
-   font-family: arial, sans-serif;
-   margin: 0;
- }
- 
- .terms-conditions-page div.dialog {
-   width: 95%;
-   max-width: 60em;
-   margin: 4em auto 0;
- }
- 
- .terms-conditions-page div.dialog > div {
-   border: 1px solid #CCC;
-   border-right-color: #999;
-   border-left-color: #999;
-   border-bottom-color: #BBB;
-   border-top: #EF5652 solid 4px;
-   border-top-left-radius: 9px;
-   border-top-right-radius: 9px;
-   background-color: white;
-   padding: 7px 12% 0;
-   box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
- }
- 
- .terms-conditions-page h1 {
-   font-size: 100%;
-   color: #325271;
-   line-height: 1.5em;
-   text-align: center;
-  }
- .terms-conditions-page h2 {
-   font-size: 85%;
-   color: #325271;
-   line-height: 1.5em;
-   text-align: center;
-  }
- 
- .terms-conditions-page div.dialog > p {
-   margin: 0 0 1em;
-   padding: 1em;
-   background-color: #F7F7F7;
-   color: #666;
- }
- 
- .terms-conditions-page div.dialog > p.section {
- 
-   text-indent: 5%;
-   margin: 0 0 0em;
-   padding: 1em;
-   background-color: #F7F7F7;
-   color: #666;
- }
- 
- .center {
-   display: block;
-   margin-left: auto;
-   margin-right: auto;
- }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SMS Terms &amp; Conditions · CASA Volunteer Tracker</title>
+  <link rel="icon" href="/favicon.ico">
+  <!-- This file lives in public/sms-terms-conditions.html. It is static (served straight from public/,
+       no Rails/asset pipeline), so the design-system look — slate surface + indigo brand accent,
+       Figtree fallback stack, one card — is inlined here to match the app's casa_app/casa_auth shells. -->
+  <style>
+    :root {
+      --slate-50:#f8fafc; --slate-200:#e2e8f0; --slate-500:#64748b;
+      --slate-700:#334155; --slate-800:#1e293b; --slate-900:#0f172a;
+      --brand-600:#4f46e5; --brand-700:#4338ca;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      background: var(--slate-50);
+      color: var(--slate-800);
+      font-family: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      line-height: 1.65;
+    }
+    .wrap { max-width: 44rem; margin: 0 auto; padding: 2.5rem 1rem 4rem; }
+    .back {
+      display: inline-flex; align-items: center; gap: .375rem;
+      color: var(--slate-500); text-decoration: none; font-size: .875rem; font-weight: 500;
+      margin-bottom: 1.25rem;
+    }
+    .back:hover { color: var(--slate-700); }
+    .card {
+      overflow: hidden; background: #fff;
+      border: 1px solid var(--slate-200); border-radius: 1rem;
+      box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.05);
+    }
+    .accent { height: .375rem; background: linear-gradient(90deg, var(--brand-700), var(--brand-600)); }
+    .card-body { padding: 2rem 2.25rem 2.5rem; }
+    h1 { margin: 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -.015em; color: var(--slate-900); }
+    .meta { margin: .375rem 0 1.5rem; color: var(--slate-500); font-size: .875rem; }
+    .rule { height: 1px; background: var(--slate-200); border: 0; margin: 0 0 1.5rem; }
+    .section { margin: 0 0 1.125rem; color: var(--slate-700); font-size: .9375rem; }
+    .section:last-of-type { margin-bottom: 0; }
+    a { color: var(--brand-600); text-decoration: none; }
+    a:hover { color: var(--brand-700); text-decoration: underline; }
+    @media (max-width: 480px) { .card-body { padding: 1.5rem; } }
   </style>
 </head>
- 
-<body class="terms-conditions-page">
- <!-- This file lives in public/sms-terms-conditions.html -->
- <div class="dialog">
-   <img src="apple-icon.png" style="width:150px;height:140px;" class="center">
-   <br>
-   <div>
-     <h1>SMS Terms & Conditions</h1>
-     <h2>Last updated: 05/21/2022</h2>
-   </div>
-   <p class="section">The CASA mobile message service (the "Service") is operated by "Court Appointed Special Advocate (CASA)/Prince George's County" ("CASA", "PGCasa", "we", or "us"). Your use of the Service constitutes your agreement to these terms and conditions ("Mobile Terms"). We may modify or cancel the Service or any of its features without notice. To the extent permitted by applicable law, we may also modify these Mobile Terms at any time and your continued use of the Service following the effective date of any such changes shall constitute your acceptance of such changes.</p>
-   <p class="section">By consenting to CASA's SMS/text messaging service, you agree to receive recurring SMS/text messages from and on behalf of CASA through your wireless provider to the mobile number you provided, even if your mobile number is registered on any state or federal Do Not Call list. Text messages may be sent using an automatic telephone dialing system or other technology. Service-related messages may include updates, alerts, and information (e.g., event reminders, account alerts, password resets, etc.).</p>
-   <p class="section">You understand that you do not have to sign up for this program, and your consent is not a condition of any purchase with CASA. Your participation in this program is completely voluntary. We do not charge for the Service, but you are responsible for all charges and fees associated with text messaging imposed by your wireless provider. Message frequency varies. Message and data rates may apply. Check your mobile plan and contact your wireless provider for details. You are solely responsible for all charges related to SMS/text messages, including charges from your wireless provider.</p>
-   <p class="section">You may opt-in/out of the Service at any time under your CASA profile page (https://casavolunteertracking.org/). No further messages will be sent to your mobile device unless initiated by you. If you have subscribed to other CASA mobile message programs and wish to cancel, except where applicable law requires otherwise, you will need to opt-out separately from those programs by following the instructions provided in their respective mobile terms. For Service support or assistance, email casa@rubyforgood.org.</p>
-   <p class="section">We may change any short-code or telephone number we use to operate the Service at any time and will notify you of these changes. You acknowledge that any messages you send to a short-code or telephone number we have changed may not be received and we will not be responsible for honoring requests made in such messages. The wireless carriers supported by the Service are not liable for delayed or undelivered messages. You agree to provide us with a valid mobile number. If you get a new mobile number, you will need to update your profile with the new number.</p>
-   <p class="section">To the extent permitted by applicable law, you agree that we will not be liable for failed, delayed, or misdirected delivery of any information sent through the Service, any errors in such information, and/or any action you may or may not take in reliance on the information or Service.</p>
-   <br>
- </div>
+<body>
+  <div class="wrap">
+    <a class="back" href="/">&larr; Back to CASA</a>
+    <div class="card">
+      <div class="accent"></div>
+      <div class="card-body">
+        <h1>SMS Terms &amp; Conditions</h1>
+        <p class="meta">Last updated: 05/21/2022</p>
+        <hr class="rule">
+        <p class="section">The CASA mobile message service (the "Service") is operated by "Court Appointed Special Advocate (CASA)/Prince George's County" ("CASA", "PGCasa", "we", or "us"). Your use of the Service constitutes your agreement to these terms and conditions ("Mobile Terms"). We may modify or cancel the Service or any of its features without notice. To the extent permitted by applicable law, we may also modify these Mobile Terms at any time and your continued use of the Service following the effective date of any such changes shall constitute your acceptance of such changes.</p>
+        <p class="section">By consenting to CASA's SMS/text messaging service, you agree to receive recurring SMS/text messages from and on behalf of CASA through your wireless provider to the mobile number you provided, even if your mobile number is registered on any state or federal Do Not Call list. Text messages may be sent using an automatic telephone dialing system or other technology. Service-related messages may include updates, alerts, and information (e.g., event reminders, account alerts, password resets, etc.).</p>
+        <p class="section">You understand that you do not have to sign up for this program, and your consent is not a condition of any purchase with CASA. Your participation in this program is completely voluntary. We do not charge for the Service, but you are responsible for all charges and fees associated with text messaging imposed by your wireless provider. Message frequency varies. Message and data rates may apply. Check your mobile plan and contact your wireless provider for details. You are solely responsible for all charges related to SMS/text messages, including charges from your wireless provider.</p>
+        <p class="section">You may opt-in/out of the Service at any time under your CASA profile page (<a href="https://casavolunteertracking.org/">https://casavolunteertracking.org/</a>). No further messages will be sent to your mobile device unless initiated by you. If you have subscribed to other CASA mobile message programs and wish to cancel, except where applicable law requires otherwise, you will need to opt-out separately from those programs by following the instructions provided in their respective mobile terms. For Service support or assistance, email <a href="mailto:casa@rubyforgood.org">casa@rubyforgood.org</a>.</p>
+        <p class="section">We may change any short-code or telephone number we use to operate the Service at any time and will notify you of these changes. You acknowledge that any messages you send to a short-code or telephone number we have changed may not be received and we will not be responsible for honoring requests made in such messages. The wireless carriers supported by the Service are not liable for delayed or undelivered messages. You agree to provide us with a valid mobile number. If you get a new mobile number, you will need to update your profile with the new number.</p>
+        <p class="section">To the extent permitted by applicable law, you agree that we will not be liable for failed, delayed, or misdirected delivery of any information sent through the Service, any errors in such information, and/or any action you may or may not take in reliance on the information or Service.</p>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
