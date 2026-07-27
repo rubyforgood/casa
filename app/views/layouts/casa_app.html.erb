@@ -128,7 +128,10 @@
 
       <%# Footer: restores parity with the all-casa shell (the chapter shell dropped it in the Bootstrap
           migration), so signed-in chapter users keep the support + SMS-compliance links. %>
-      <footer class="border-t border-slate-200 px-4 py-4 text-xs text-slate-500 sm:px-6 lg:px-8">
+      <%# py-5 (not py-4) so the footer's top rule lines up with the sidebar's pinned-Settings divider:
+          the Settings block is 57px tall (8px + a 40px nav item + 8px), and on a short page the sticky
+          h-screen sidebar puts that divider at the same y as the footer -- matching heights aligns them. %>
+      <footer class="border-t border-slate-200 px-4 py-5 text-xs text-slate-500 sm:px-6 lg:px-8">
         <div class="flex flex-wrap items-center gap-x-4 gap-y-1">
           <span>Built by <%= link_to "Ruby For Good", "https://rubyforgood.org/", class: "font-medium text-brand-600 hover:text-brand-700" %></span>
           <%= link_to "Report a site issue", "https://form.typeform.com/to/iXY4BubB", class: "hover:text-slate-700" %>
