@@ -14,6 +14,10 @@ export default class extends Controller {
   static values = { dropdownParent: String, placeholder: String, toggleSubmit: Boolean }
 
   connect () {
+    // Read the native <select>'s accessible name BEFORE TomSelect init: TomSelect rewrites a page
+    // <label for=...> to target its own input (emptying this.element.labels) and ignores an aria-label
+    // set on the <select>.
+    const accessibleName = this.nativeAccessibleName()
     const options = {
       maxItems: 1,
       // With a placeholder (a blank-load picker) the empty <option> must NOT become a selected item --
@@ -25,6 +29,11 @@ export default class extends Controller {
     }
     if (this.placeholderValue) options.placeholder = this.placeholderValue
     this.select = new TomSelect(this.element, options)
+    // Give the search input an explicit accessible name so it never falls back to the placeholder
+    // (or nothing). TomSelect wires a <label for=...> via aria-labelledby, but not an aria-label.
+    if (accessibleName && this.select.control_input) {
+      this.select.control_input.setAttribute('aria-label', accessibleName)
+    }
 
     if (this.toggleSubmitValue) {
       this.form = this.element.closest('form')
@@ -32,6 +41,12 @@ export default class extends Controller {
       if (this.form) this.form.addEventListener('submit', this.guard)
       this.select.on('change', () => { if (this.element.value) this.hideError() })
     }
+  }
+
+  // The native <select>'s accessible name -- its aria-label, or its associated <label> text.
+  nativeAccessibleName () {
+    const label = this.element.labels && this.element.labels[0]
+    return this.element.getAttribute('aria-label') || (label && label.textContent.trim())
   }
 
   guard (event) {

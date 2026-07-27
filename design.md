@@ -345,6 +345,14 @@ past a handful of people.
   `.ts-control`, and TomSelect copies the `<select>`'s classes onto `.ts-wrapper`, so a bordered class
   **double-borders** the control (measured: `.ts-control` 1px + `.ts-wrapper` 1px). Drop the manual
   chevron too -- the `.ts-wrapper::after` caret handles it.
+- **Accessible name**: the controller sets an **`aria-label`** on TomSelect's control input, copied from
+  the native `<select>`'s accessible name (its `aria-label`, or its associated `<label>` text, read
+  *before* init). TomSelect wires a `<label for=...>` to its input via `aria-labelledby`, but **ignores
+  an `aria-label` on the `<select>`** -- so a picker that labels itself that way (the roster / case /
+  supervisor search filters) would otherwise render an input named only by its placeholder. Verify with
+  the **accessibility tree** (the input's computed name is non-empty), not the mere presence of an
+  attribute -- a `<label for>` picker (court report) already resolves to a name via `aria-labelledby`
+  even with no `aria-label` on the input.
 - **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
   (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
   native `<select>` to empty for submit + no-JS). **A placeholder picker MUST also set
