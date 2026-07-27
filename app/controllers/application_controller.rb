@@ -174,12 +174,4 @@ class ApplicationController < ActionController::Base
       end
     end
   end
-
-  def check_unconfirmed_email_notice(user)
-    notice = "#{user.role} was successfully updated."
-    if user.saved_changes.include?("unconfirmed_email")
-      notice += " Confirmation Email Sent."
-    end
-    notice
-  end
 end

@@ -148,7 +148,7 @@ RSpec.describe "/supervisors", type: :request do
         expect(supervisor.phone_number).to eq "+14163218092"
       end
 
-      it "updates supervisor email and sends a confirmation email" do
+      it "updates supervisor email immediately, without requiring confirmation" do
         patch supervisor_path(supervisor), params: {
           supervisor: {email: "newemail@gmail.com"}
         }
@@ -156,11 +156,9 @@ RSpec.describe "/supervisors", type: :request do
         supervisor.reload
         expect(response).to have_http_status(:redirect)
 
-        expect(supervisor.unconfirmed_email).to eq("newemail@gmail.com")
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+        expect(supervisor.email).to eq("newemail@gmail.com")
+        expect(supervisor.unconfirmed_email).to be_nil
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
 
       it "can set the supervisor to be inactive" do
@@ -195,18 +193,16 @@ RSpec.describe "/supervisors", type: :request do
         expect(supervisor).to be_active
       end
 
-      it "supervisor updates their own email and receives a confirmation email" do
+      it "supervisor updates their own email immediately, without requiring confirmation" do
         patch supervisor_path(supervisor), params: {
           supervisor: {email: "newemail@gmail.com"}
         }
 
         supervisor.reload
         expect(response).to have_http_status(:redirect)
-        expect(supervisor.unconfirmed_email).to eq("newemail@gmail.com")
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+        expect(supervisor.email).to eq("newemail@gmail.com")
+        expect(supervisor.unconfirmed_email).to be_nil
+        expect(ActionMailer::Base.deliveries.count).to eq(0)
       end
 
       it "cannot change its own type" do
