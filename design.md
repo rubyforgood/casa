@@ -423,7 +423,10 @@ Submit). Three Stimulus contracts must survive a restyle **verbatim**:
   pass and rack_test (ignores CSS) can still reach the fields.
 
 Required-field markers are `tag.span("*", class: "text-rose-600", "aria-hidden": "true")` — **not** a
-`.html_safe` string literal, which erb_lint rejects as unsafe interpolation. Shared bits stay shared:
+`.html_safe` string literal, which erb_lint rejects as unsafe interpolation. On a form that mixes required and optional inputs
+(e.g. `volunteers/new`), pair the required `*` with a muted `tag.span("Optional", class: "text-xs
+font-normal text-slate-500")` suffix on the optional labels, so the required/optional split is explicit
+on every field rather than inferred from the lone `*`. Shared bits stay shared:
 relevant-case picking is `Form::MultipleSelectComponent` (TomSelect) and errors use
 `shared/form_errors`; only the form-private partials (`_contact_topic_answer`,
 `shared/_additional_expense_form`) are restyled in place. Duration is an inline Tailwind twin, like

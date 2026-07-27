@@ -19,6 +19,49 @@ RSpec.describe "volunteers/new", type: :system do
       expect(page).to have_text("new_volunteer2@example.com")
       expect(page).to have_text("Active")
     end
+
+    it "saves the optional mailing address when provided" do
+      sign_in supervisor
+      visit new_volunteer_path
+
+      fill_in "Email", with: "addressed_volunteer@example.com"
+      fill_in "Display name", with: "Addressed Volunteer"
+      fill_in "Address line 1", with: "123 Main St"
+      fill_in "City", with: "Springfield"
+      fill_in "State", with: "IL"
+      fill_in "ZIP", with: "62704"
+
+      click_on "Create volunteer"
+
+      address = Volunteer.find_by(email: "addressed_volunteer@example.com").address
+      expect(address.line_1).to eq "123 Main St"
+      expect(address.city).to eq "Springfield"
+    end
+
+    it "leaves no address record when the optional address is left blank" do
+      sign_in supervisor
+      visit new_volunteer_path
+
+      fill_in "Email", with: "no_address@example.com"
+      fill_in "Display name", with: "No Address"
+
+      click_on "Create volunteer"
+
+      expect(Volunteer.find_by(email: "no_address@example.com").address).to be_nil
+    end
+
+    it "shows a design-system error when a required field is blank" do
+      sign_in supervisor
+      visit new_volunteer_path
+
+      fill_in "Email", with: "missing_name@example.com"
+      # Display name (required) left blank
+
+      click_on "Create volunteer"
+
+      expect(page).to have_selector("#error_explanation", text: "Unable to save")
+      expect(page).to have_selector("#error_explanation", text: /Display name.*blank/)
+    end
   end
 
   context "volunteer user" do

@@ -51,7 +51,11 @@ class User < ApplicationRecord
   has_many :languages, through: :user_languages
   has_many :login_activities, as: :user
 
-  accepts_nested_attributes_for :user_sms_notification_events, :address, allow_destroy: true
+  accepts_nested_attributes_for :user_sms_notification_events, allow_destroy: true
+  # The mailing address is optional (invite form, edit form). An all-blank submission must not persist
+  # an empty addresses row -- only build/keep the record once a part is filled in. (Editing an existing
+  # address is unaffected: its :id is present, so :all_blank never rejects it.)
+  accepts_nested_attributes_for :address, reject_if: :all_blank, allow_destroy: true
 
   scope :active, -> { where(active: true) }
 
