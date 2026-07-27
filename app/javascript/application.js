@@ -1,7 +1,6 @@
 /* global window */
 import './jQueryGlobalizer.js'
 import '@hotwired/turbo-rails'
-import 'bootstrap'
 import './sweet-alert-confirm.js'
 import './controllers'
 import 'trix'
@@ -25,7 +24,6 @@ require('./src/read_more')
 require('./src/reports')
 require('./src/require_communication_preference')
 require('./src/select')
-require('./src/tooltip')
 require('./src/time_zone')
 require('./src/session_timeout_poller.js')
 require('./src/sms_reactivation_toggle')

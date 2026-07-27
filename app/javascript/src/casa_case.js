@@ -189,10 +189,6 @@ $(() => { // JQuery's callback for the DOM loading
   $('#generate-docx-report-modal').on('shown.bs.modal', () => handleDropdownSelection())
 
   $('#btnGenerateReport').on('click', handleGenerateReport)
-
-  if (/\/casa_cases\/.*\?.*success=true/.test(window.location.href)) {
-    $('#thank_you').modal()
-  }
 })
 
 export {
