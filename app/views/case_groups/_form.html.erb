@@ -1,6 +1,7 @@
 <% content_for :page_title, case_group.persisted? ? "Edit case group" : "New case group" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% btn_primary = button_classes(:primary) %>
+<% req = required_marker %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
@@ -14,12 +15,12 @@
         <%= render "shared/form_errors", resource: case_group %>
         <div class="space-y-5">
           <div>
-            <%= form.label :name, class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+            <%= form.label :name, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Name <%= req %><% end %>
             <%= form.text_field :name, required: true, class: input_class %>
           </div>
 
           <div data-controller="multiple-select">
-            <%= form.label :casa_case_ids, "Cases", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+            <%= form.label :casa_case_ids, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Cases <%= req %><% end %>
             <%= form.select(
               :casa_case_ids,
               current_organization.casa_cases.map { |casa_case| ["#{casa_case.case_number} - #{casa_case.assigned_volunteers.map(&:display_name).join(", ").presence || "Unassigned"}", casa_case.id] },

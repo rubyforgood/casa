@@ -3,6 +3,7 @@
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% req = required_marker %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -11,11 +12,11 @@
       <%= form_with model: @custom_org_link, local: true, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: @custom_org_link %>
         <div>
-          <%= form.label :text, "Display text", class: label_class %>
+          <%= form.label :text, class: label_class do %>Display text <%= req %><% end %>
           <%= form.text_field :text, required: true, class: input_class %>
         </div>
         <div>
-          <%= form.label :url, "URL", class: label_class %>
+          <%= form.label :url, class: label_class do %>URL <%= req %><% end %>
           <%= form.text_field :url, required: true, class: input_class %>
         </div>
         <label class="flex items-center gap-2 text-sm font-medium text-slate-700">

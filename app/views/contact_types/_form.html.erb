@@ -6,6 +6,7 @@
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 <% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% req = required_marker %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -15,7 +16,7 @@
         <%= render "shared/form_errors", resource: contact_type %>
         <p class="text-sm text-slate-500">Case contact types are the types of people that can be contacted for a case contact. Some examples are parents, teachers, and social workers.</p>
         <div>
-          <%= form.label :name, "Name", class: label_class %>
+          <%= form.label :name, class: label_class do %>Name <%= req %><% end %>
           <%= form.text_field :name, required: true, class: input_class %>
         </div>
         <div>

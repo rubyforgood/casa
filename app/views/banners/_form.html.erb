@@ -6,6 +6,8 @@
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -14,7 +16,7 @@
       <%= form_with model: banner, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: banner %>
         <div>
-          <%= form.label :name, class: label_class %>
+          <%= form.label :name, class: label_class do %>Name <%= req %><% end %>
           <%= form.text_field :name, required: true, class: input_class %>
         </div>
         <div data-controller="reveal" data-reveal-hidden-class="hidden">
@@ -25,11 +27,11 @@
           <span data-reveal-target="item" class="mt-1.5 block text-sm text-rose-600 <%= conditionally_add_hidden_class(form.object.active) %>">Warning: This will replace your current active banner</span>
         </div>
         <div>
-          <%= form.label :expires_at, "Expires at (optional)", class: label_class %>
+          <%= form.label :expires_at, class: label_class do %>Expires at <%= opt %><% end %>
           <%= form.datetime_field :expires_at, value: banner.expires_at_in_time_zone(browser_time_zone), required: false, include_seconds: false, min: Time.current.in_time_zone(browser_time_zone), class: input_class %>
         </div>
         <div>
-          <%= form.label :content, class: label_class %>
+          <%= form.label :content, class: label_class do %>Content <%= req %><% end %>
           <%= form.rich_text_area :content, class: "trix-content rounded-lg border border-slate-300 shadow-sm" %>
         </div>
         <div>

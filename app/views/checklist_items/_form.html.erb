@@ -4,6 +4,7 @@
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% req = required_marker %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -12,11 +13,11 @@
       <%= form_with model: [hearing_type, checklist_item], local: true, class: "space-y-5" do |form| %>
         <%= render "shared/form_errors", resource: checklist_item %>
         <div>
-          <%= form.label :category, "Category", class: label_class %>
+          <%= form.label :category, class: label_class do %>Category <%= req %><% end %>
           <%= form.text_field :category, required: true, class: input_class %>
         </div>
         <div>
-          <%= form.label :description, "Description", class: label_class %>
+          <%= form.label :description, class: label_class do %>Description <%= req %><% end %>
           <%= form.text_field :description, required: true, class: input_class %>
         </div>
         <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
