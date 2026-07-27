@@ -20,7 +20,10 @@
       <div>
         <label for="case-selection" class="<%= label_class %>">Case</label>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
-        <%= select_tag :case_number, options_for_select(select_options), prompt: "Select case number", include_blank: false, id: "case-selection", data: {controller: "searchable-select"}, class: input_class %>
+        <%# Minimal class only: the tom-select theme owns the border/padding/shadow on .ts-control, and
+            TomSelect copies these classes onto .ts-wrapper -- a bordered input_class here double-borders
+            (a box-in-a-box). See design.md "Searchable single-select". %>
+        <%= select_tag :case_number, options_for_select(select_options), prompt: "Select case number", include_blank: false, id: "case-selection", data: {controller: "searchable-select"}, class: "block w-full" %>
       </div>
       <%= form.hidden_field :time_zone, id: "user-time-zone", data: {court_report_target: "timeZone"} %>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
