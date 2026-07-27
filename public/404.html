@@ -1,90 +1,51 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>The page you were looking for doesn't exist (404)</title>
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Page not found &middot; CASA Volunteer Tracker</title>
+  <link rel="icon" href="/favicon.ico">
+  <!-- Static (served straight from public/, shown even when Rails is down), so the design-system
+       look — slate surface, indigo brand accent, one centered card — is inlined with hardcoded hex. -->
   <style>
-    .rails-default-error-page {
-      background-color: #EFEFEF;
-      color: #2E2F30;
-      text-align: center;
-      font-family: arial, sans-serif;
-      margin: 0;
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; min-height: 100vh; padding: 1.5rem;
+      display: flex; align-items: center; justify-content: center;
+      background: #f8fafc; color: #1e293b;
+      font-family: "Figtree", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased; line-height: 1.6;
     }
-
-    .rails-default-error-page .header {
-      color: #fff;
-      background: #00447c;
-      background-color: rgb(0, 68, 124);
-      box-shadow: 0 0 4px 4px rgb(0 0 0 / 28%);
-      height: 80px;
-      justify-content: flex-start;
-      padding: 16px;
-      display: flex;
-      flex-direction: row;
-      font-size: 48px;
-      align-items: center;
-      font-weight: bolder;
-    }
-
-    .rails-default-error-page div.dialog {
-      width: 95%;
-      max-width: 33em;
-      margin: 15em auto;
-    }
-
-    .rails-default-error-page div.dialog > div {
-      border: 1px solid #CCC;
-      border-right-color: #999;
-      border-left-color: #999;
-      border-bottom-color: #BBB;
-      border-top: #103862 solid 4px;
-      border-radius: 9px;
-      background-color: white;
-      padding: 7px 12% 0;
-      box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
-      height: 150px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-
-    .rails-default-error-page h1 {
-      font-size: 100%;
-      color: #103862;
-      line-height: 1.5em;
-    }
-
-    .rails-default-error-page .footer {
-      color: #fff;
-      padding: 2rem 0;
-      text-align: center;
-      background-color: #00447c;
-      bottom: 0;
-      position: fixed;
-      width: 100vw;
-    }
+    .wrap { width: 100%; max-width: 30rem; }
+    .brand { text-align: center; color: #4f46e5; font-weight: 700; font-size: .9375rem; letter-spacing: -.01em; margin: 0 0 1rem; }
+    .card { background: #fff; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 1px 2px rgba(15,23,42,.06), 0 1px 3px rgba(15,23,42,.05); overflow: hidden; }
+    .accent { height: .375rem; background: linear-gradient(90deg, #4338ca, #4f46e5); }
+    .card-body { padding: 2.25rem 2rem 2rem; text-align: center; }
+    .code { margin: 0; font-size: .75rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #4f46e5; }
+    h1 { margin: .5rem 0 0; font-size: 1.5rem; font-weight: 800; letter-spacing: -.015em; color: #0f172a; }
+    .msg { margin: .625rem 0 0; color: #475569; font-size: .9375rem; }
+    .note { margin: .75rem 0 0; color: #64748b; font-size: .8125rem; }
+    .actions { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: .75rem 1rem; justify-content: center; align-items: center; }
+    .btn { display: inline-flex; align-items: center; height: 2.5rem; padding: 0 1.125rem; border-radius: .5rem; background: #4f46e5; color: #fff; font-size: .875rem; font-weight: 600; text-decoration: none; }
+    .btn:hover { background: #4338ca; }
+    .link { color: #64748b; font-size: .875rem; text-decoration: none; }
+    .link:hover { color: #334155; text-decoration: underline; }
   </style>
 </head>
-
-<body class="rails-default-error-page">
-  <!-- This file lives in public/404.html -->
-  <div class="header">
-    CASA/Volunteer Tracking
-  </div>
-
-  <div class="dialog">
-    <div>
-      <h1>The page you were looking for doesn't exist.</h1>
-      <p>You may have mistyped the address or the page may have moved.</p>
+<body>
+  <main class="wrap">
+    <p class="brand">CASA Volunteer Tracker</p>
+    <div class="card">
+      <div class="accent"></div>
+      <div class="card-body">
+        <p class="code">Error 404</p>
+        <h1>Page not found</h1>
+        <p class="msg">The page you were looking for doesn&rsquo;t exist. You may have mistyped the address or the page may have moved.</p>
+        
+        <div class="actions"><a class="btn" href="/">Back to homepage</a> <a class="link" href="https://form.typeform.com/to/iXY4BubB">Report a site issue</a></div>
+      </div>
     </div>
-  </div>
-
-  <div class="footer">
-    <p class="copyright">
-      &#169 CASA / Volunteer Tracking
-    </p>
-  </div>
+  </main>
 </body>
-
 </html>
