@@ -11,7 +11,6 @@ Turbo.session.drive = false
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
-require('bootstrap-datepicker')
 require('./src/case_contact')
 require('./src/case_emancipation')
 require('./src/casa_case')
