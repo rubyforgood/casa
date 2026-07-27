@@ -1,0 +1,21 @@
+<%# Shared casa_app sub-page header: an optional "Back to X" chevron link + the <h1> (+ optional
+    subtitle), grouped in ONE <div> so the back link sits 8px above the title (h1 `mt-2`) instead of a
+    full space-y-6 (24px) gap. This is the SINGLE implementation of the header spacing so it can't drift
+    per page (see design.md "Back navigation on sub-pages"). Locals:
+      title          (required) <h1> text
+      back           (optional) {path:, label:} -> renders the chevron "Back to X" link above the title
+      subtitle       (optional) text under the title (text-sm text-slate-500)
+      wrapper_class  (optional) extra class on the outer <div> (e.g. "mb-6" when not a space-y-* child)
+    Headers with top-right actions or an identity name/email subtitle keep their bespoke markup (the
+    person edit pages) -- this partial is deliberately the simple back + title (+ subtitle) shape. %>
+<%= tag.div class: local_assigns[:wrapper_class].presence do %>
+  <% if local_assigns[:back].present? %>
+    <%= link_to back[:path], class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+      <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> <%= back[:label] %>
+    <% end %>
+  <% end %>
+  <h1 class="<%= "mt-2 " if local_assigns[:back].present? %>text-2xl font-bold tracking-tight text-slate-900"><%= title %></h1>
+  <% if local_assigns[:subtitle].present? %>
+    <p class="mt-1 text-sm text-slate-500"><%= subtitle %></p>
+  <% end %>
+<% end %>

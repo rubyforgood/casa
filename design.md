@@ -1069,12 +1069,17 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
     **above** a `flex items-start justify-between` row, so the actions top-align with the title, not
     the bottom of the (tall) subtitle -- putting the link inside the left column with `items-end` here
     would sink the buttons to the subtitle's bottom.
-  - **Audited 2026-07-27** (all 19 casa_app header pages): all group the back link + `<h1 class="mt-2 ...">`
-    correctly except `volunteers/new`, which had regressed to the anti-pattern (back link a bare `space-y-6`
-    child -> 24px gap); fixed + pixel-verified 9px, matching `supervisors/new` / `casa_admins/new`. It
-    recurs because headers are hand-written per page (no shared partial) and this checkout's working-tree
-    reverts reintroduce stale headers -- re-check the header block whenever editing a page that may have
-    been rolled back.
+  - **`shared/_page_header` is the single implementation** (2026-07-27): `render "shared/page_header",
+    back: {path:, label:}, title:, subtitle:` (optional `wrapper_class:`, e.g. "mb-6" when the header is not
+    a `space-y-*` child). It renders the ONE correct header block (back link + `h1 mt-2` + optional
+    subtitle), so the spacing can't drift per page. **Use it for every new sub-page.** Audited all 19
+    header pages: the 16 simple back+title(+subtitle) headers were converted to it (`volunteers/new` had
+    regressed to the bare-`space-y-6` anti-pattern -> 24px, which triggered this); pixel-verified 9px
+    across the space-y / `mb-6` / with-subtitle variants; view spec at `spec/views/shared/_page_header...`.
+    The 3 person-edit pages (`volunteers/edit`, `supervisors/edit`, `casa_admins/edit`) keep bespoke
+    headers -- identity name/email subtitle + volunteers/edit's Impersonate/reminder actions, shapes the
+    partial deliberately doesn't cover. Root cause of the recurrence was per-page hand-written headers +
+    this checkout's working-tree reverts reintroducing stale ones; the partial removes the per-page copy.
 - **Triage dashboard** (supervisor landing): greeting -> KPI row -> "Needs your
   attention" list -> roster table. Lead with what needs action; power tools live in a
   "More" menu.

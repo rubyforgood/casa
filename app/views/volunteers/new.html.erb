@@ -15,13 +15,7 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
-    <div>
-      <%= link_to volunteers_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteers
-      <% end %>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">New volunteer</h1>
-      <p class="mt-1 text-sm text-slate-500">They&rsquo;ll get an email invitation to set a password and join.</p>
-    </div>
+    <%= render "shared/page_header", back: {path: volunteers_path, label: "Back to volunteers"}, title: "New volunteer", subtitle: "They’ll get an email invitation to set a password and join." %>
 
     <section class="<%= card %>">
       <%= form_with model: @volunteer, url: volunteers_path, id: "new_volunteer" do |form| %>

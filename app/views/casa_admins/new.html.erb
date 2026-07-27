@@ -10,13 +10,7 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
-    <div>
-      <%= link_to casa_admins_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to admins
-      <% end %>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Create new CASA admin</h1>
-      <p class="mt-1 text-sm text-slate-500">They&rsquo;ll get an email invitation to set a password and join.</p>
-    </div>
+    <%= render "shared/page_header", back: {path: casa_admins_path, label: "Back to admins"}, title: "Create new CASA admin", subtitle: "They’ll get an email invitation to set a password and join." %>
 
     <section class="<%= card %>">
       <%= form_with model: @casa_admin, url: casa_admins_path do |form| %>

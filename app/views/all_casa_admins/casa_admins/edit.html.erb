@@ -3,12 +3,7 @@
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
-    <div>
-      <%= link_to all_casa_admins_casa_org_path(@casa_admin.casa_org), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to organization
-      <% end %>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Edit admin</h1>
-    </div>
+    <%= render "shared/page_header", back: {path: all_casa_admins_casa_org_path(@casa_admin.casa_org), label: "Back to organization"}, title: "Edit admin" %>
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <%= form_with(model: @casa_admin, as: :all_casa_admin, url: all_casa_admins_casa_org_casa_admin_path, class: "space-y-5") do |form| %>
         <%= render "shared/form_errors", resource: @casa_admin %>

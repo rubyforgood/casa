@@ -6,12 +6,7 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
-    <div>
-      <%= link_to edit_volunteer_path(@volunteer), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
-        <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteer
-      <% end %>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">Update volunteer note</h1>
-    </div>
+    <%= render "shared/page_header", back: {path: edit_volunteer_path(@volunteer), label: "Back to volunteer"}, title: "Update volunteer note" %>
 
     <section class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <%= form_with model: @note, url: volunteer_note_path(@volunteer, @note) do |form| %>

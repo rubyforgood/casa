@@ -9,10 +9,7 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
     <%= form_with model: @casa_case, local: true do |form| %>
-      <div class="mb-6">
-        <%= link_to casa_cases_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %><i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to cases<% end %>
-        <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900">New case</h1>
-      </div>
+      <%= render "shared/page_header", wrapper_class: "mb-6", back: {path: casa_cases_path, label: "Back to cases"}, title: "New case" %>
 
       <%= render "shared/form_errors", resource: @casa_case %>
 

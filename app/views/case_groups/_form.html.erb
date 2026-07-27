@@ -5,10 +5,7 @@
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl">
-    <div class="mb-6">
-      <%= link_to case_groups_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %><i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to case groups<% end %>
-      <h1 class="mt-2 text-2xl font-bold tracking-tight text-slate-900"><%= case_group.persisted? ? "Edit case group" : "New case group" %></h1>
-    </div>
+    <%= render "shared/page_header", wrapper_class: "mb-6", back: {path: case_groups_path, label: "Back to case groups"}, title: (case_group.persisted? ? "Edit case group" : "New case group") %>
 
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <%= form_with model: case_group do |form| %>
