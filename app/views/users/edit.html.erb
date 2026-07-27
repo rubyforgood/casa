@@ -2,6 +2,8 @@
 
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 <% btn_primary = button_classes(:primary) %>
 <% disclosure_trigger = "flex w-full items-center justify-between gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500" %>
 <% checkbox_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 focus:ring-offset-0" %>
@@ -24,21 +26,21 @@
       <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>
         <div class="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
-            <%= form.label :display_name, "Display name", class: label_class %>
+            <%= form.label :display_name, class: label_class do %>Display name <%= req %><% end %>
             <%= form.text_field :display_name, class: input_class %>
           </div>
           <div>
-            <%= form.label :phone_number, "Phone number", class: label_class %>
+            <%= form.label :phone_number, class: label_class do %>Phone number <%= opt %><% end %>
             <%= form.text_field :phone_number, class: input_class %>
           </div>
           <div>
-            <%= form.label :date_of_birth, "Date of birth", class: label_class %>
+            <%= form.label :date_of_birth, class: label_class do %>Date of birth <%= opt %><% end %>
             <%= form.date_field :date_of_birth, value: @user.date_of_birth, class: input_class %>
           </div>
           <div class="sm:col-span-2">
             <%= form.fields_for :address, address do |address_form| %>
               <fieldset class="space-y-2.5">
-                <legend class="<%= label_class %>">Mailing address</legend>
+                <legend class="<%= label_class %>">Mailing address <%= opt %></legend>
                 <div>
                   <%= address_form.label :line_1, "Address line 1", class: label_class %>
                   <%= address_form.text_field :line_1, class: input_class %>

@@ -4,6 +4,7 @@
     for the sentence-case sweep). Duration fields default to 0 so leaving one blank submits 0. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
@@ -14,7 +15,7 @@
 
   <section class="<%= card %> mt-4 space-y-5">
     <div>
-      <%= form.label :name, "Learning hours title", class: label_class %>
+      <%= form.label :name, class: label_class do %>Learning hours title <%= req %><% end %>
       <%= form.text_field :name, placeholder: "-- Enter a title --", value: learning_hour.name, required: true, class: input_class %>
     </div>
 
@@ -52,7 +53,7 @@
 
     <div>
       <% occurred_at = learning_hour.occurred_at || Date.today %>
-      <%= form.label :occurred_at, "Occurred on", class: label_class %>
+      <%= form.label :occurred_at, class: label_class do %>Occurred on <%= req %><% end %>
       <%= form.date_field :occurred_at, value: occurred_at.to_date, class: input_class %>
     </div>
 

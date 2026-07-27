@@ -4,6 +4,7 @@
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% req = required_marker %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
@@ -20,7 +21,7 @@
           <div class="<%= card %>">
             <% if @casa_case.new_record? || policy(@casa_case).update_case_number? %>
               <div class="mb-6">
-                <%= form.label :case_number, "Case number", class: label_class %>
+                <%= form.label :case_number, class: label_class do %>Case number <%= req %><% end %>
                 <%= form.text_field :case_number, required: true, class: input_class %>
               </div>
             <% end %>
