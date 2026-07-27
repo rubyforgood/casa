@@ -95,20 +95,6 @@ class CasaCaseDecorator < Draper::Decorator
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
   end
 
-  def transition_aged_youth
-    text = object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
-    if object.in_transition_age?
-      badge_html = h.render(partial: "shared/emancipation_link", locals: {casa_case: object})
-      h.safe_join([text, " ", badge_html])
-    else
-      text
-    end
-  end
-
-  def transition_aged_youth_icon
-    object.in_transition_age? ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
-  end
-
   def unsuccessful_contacts_this_week
     this_week = Date.today - 7.days..Date.today
     object.case_contacts.where(occurred_at: this_week).where(contact_made: false).count
