@@ -1065,6 +1065,29 @@ standalone `rotate` property**, so verify with `getComputedStyle(el).rotate` (`n
 broken. Verified rotating: the case-contacts + new-design filter panels, users/edit change
 password + change email, all-casa-admins change password, reports "Filter columns".
 
+**A disclosure inside a form that re-renders must carry its open state across the render.** Otherwise
+the server re-derives it and the panel snaps shut under the user. Two shapes of this, both were live:
+- **Auto-submitting filter bar** (case-contacts index + new_design). The open state was
+  `expand_filters?`, i.e. "is a hidden filter active", re-evaluated on every submit -- so the panel
+  closed itself whenever a change left no hidden filter on: **clearing** the contact types, setting a
+  select back to **All**, and even just ticking **Hide drafts** while the panel was open (the user had
+  not touched a hidden filter at all). Fix: the `disclosure` controller takes an optional **`field`
+  target** -- a `hidden_field_tag :filters_open` inside the form -- and writes `1`/`''` into it on
+  toggle. The view reads `filters_open?`, which honours that param when present and falls back to
+  `expand_filters?` only on first load (so a URL with filters still arrives open). Check **both
+  directions**: a panel the user *closed* must stay closed even while a filter is active, which
+  deriving-from-params also got wrong.
+- **Validation re-render** (users/edit change password + change email, all-casa-admins change
+  password). `update_password` / `update_email` fail with `render :edit`, and the panels hardcoded
+  `hidden` + `aria-expanded="false"` -- so the error rendered at the top of the page while the form it
+  referred to collapsed out of sight, losing the user's input. No round-trip needed here: **`action_name`
+  is still the failed action** inside `render :edit`, so open exactly that panel
+  (`password_open = action_name == "update_password"`) and leave its sibling shut.
+
+Not affected: the reports column-filter `<details>` (its form native-submits a CSV download, so the
+page never re-renders) and the new-design row expanders (a filter change legitimately re-runs the
+query and resets rows).
+
 **Deliberate exception:** the case-contact card's inline `<details>` swaps `Show details` /
 `Hide details` via `group-open:`. That is an inline "more of this item" reveal, not a section
 header, the text still names the content, and a state-swapping label there is well-precedented

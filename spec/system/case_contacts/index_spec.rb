@@ -204,6 +204,59 @@ RSpec.describe "case_contacts/index", type: :system do
         end
       end
 
+      # The panel's open state used to be re-derived from expand_filters? on every render, and the
+      # form auto-submits, so any change that left no hidden filter active slammed the panel shut
+      # under the user -- clearing the contact types, setting a select back to All, or merely ticking
+      # Hide drafts. It is now the user's state, round-tripped through a hidden field.
+      describe "panel stays where the user put it", :js do
+        let(:group) { create(:contact_type_group, casa_org: organization, name: "CASA") }
+        let!(:youth) { create(:contact_type, contact_type_group: group, name: "Youth") }
+
+        it "stays open when a surfaced filter is touched" do
+          subject
+          click_on "More filters"
+          expect(page).to have_content "Other filters"
+
+          check "Hide drafts"
+
+          expect(page).to have_field("Hide drafts", checked: true)
+          expect(page).to have_content "Other filters"
+        end
+
+        it "stays open when the last hidden filter is cleared" do
+          visit case_contacts_path(filterrific: {contact_type: [youth.id.to_s]})
+          expect(page).to have_content "Other filters"
+
+          find(".clear-button").click
+
+          expect(page).to have_no_css(".ts-control .item")
+          expect(page).to have_content "Other filters"
+        end
+
+        it "stays open when a hidden select goes back to All" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person"})
+          expect(page).to have_content "Other filters"
+
+          select "All", from: "Contact medium"
+
+          expect(page).to have_select("Contact medium", selected: "All")
+          expect(page).to have_content "Other filters"
+        end
+
+        it "stays closed once the user closes it, even with a filter active" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person"})
+          expect(page).to have_content "Other filters"
+
+          click_on "More filters" # close it
+          expect(page).to have_no_content "Other filters"
+
+          check "Hide drafts"
+
+          expect(page).to have_field("Hide drafts", checked: true)
+          expect(page).to have_no_content "Other filters"
+        end
+      end
+
       describe "filter toolbar" do
         # Clear renders exactly when clicking it would change something -- never at the defaults,
         # where it would be dead chrome.

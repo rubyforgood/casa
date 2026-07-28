@@ -18,6 +18,11 @@ RSpec.describe "users/edit", type: :system do
       click_on "Update password"
       expect(page).to have_content "Unable to save"
       expect(page).to have_text("Current password is incorrect")
+
+      # update_password re-renders edit, which used to hardcode the panel shut: the error appeared
+      # at the top of the page while the form it referred to had collapsed out of sight.
+      expect(page.find("#change-password-panel", visible: :all)[:class]).not_to include("hidden")
+      expect(page.find("#change-email-panel", visible: :all)[:class]).to include("hidden")
     end
 
     it "displays password errors messages when user is unable to set a password" do

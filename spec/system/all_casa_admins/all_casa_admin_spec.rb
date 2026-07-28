@@ -120,6 +120,8 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     fill_in "all_casa_admin_password_confirmation", with: "badmatch"
     click_on "Update password"
     expect(page).to have_text "confirmation doesn't match"
+    # The re-render used to collapse the panel, hiding the form the error refers to.
+    expect(page.find("#collapseOne", visible: :all)[:class]).not_to include("hidden")
 
     click_on "Change password"
     fill_in "all_casa_admin_password", with: "newpassword"

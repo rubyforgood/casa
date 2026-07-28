@@ -62,6 +62,17 @@ module CaseContactsHelper
     end
   end
 
+  # Is the More-filters panel open? This is the USER's state, round-tripped through the form, not
+  # re-derived from the params on every render. The filter bar auto-submits, so deriving it meant the
+  # panel snapped shut whenever the last hidden filter went away -- clearing the contact types, or
+  # setting a select back to All -- and even when the user merely ticked Hide drafts with the panel
+  # open. `expand_filters?` is only the DEFAULT, for arriving with hidden filters already in the URL.
+  def filters_open?
+    return params[:filters_open] == "1" if params.key?(:filters_open)
+
+    expand_filters?
+  end
+
   def expand_filters?(surfaced_keys = %i[no_drafts sorted_by])
     params.fetch(:filterrific, {})
       .except(*surfaced_keys)
