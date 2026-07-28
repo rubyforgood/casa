@@ -68,6 +68,11 @@ export default class extends Controller {
       plugins: {
         remove_button: {
           title: 'Remove this item'
+        },
+        // Clear-all inside the control, matching the searchable single-select. remove_button only
+        // gives a per-chip x, which is a chip-at-a-time chore once several are picked.
+        clear_button: {
+          title: 'Clear all selections'
         }
       },
       onDropdownOpen,
@@ -135,6 +140,9 @@ export default class extends Controller {
           title: 'Remove this item',
           className: 'btn text-white rounded-circle',
           label: '<i class="lni lni-cross-circle"></i>'
+        },
+        clear_button: {
+          title: 'Clear all selections'
         },
         checkbox_options: {
           checkedClassNames: ['form-check-input', 'form-check-input--checked'],

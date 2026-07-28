@@ -277,6 +277,31 @@ RSpec.describe "case_contacts/index", type: :system do
 
           expect(page).to have_css(".ts-control .item", text: "Youth")
         end
+
+        # tom-select ships the clear-all at opacity 0, revealed only on hover/focus -- no visible way
+        # to empty a control full of chips, and unreachable by hover on touch. `find` here only
+        # matches a VISIBLE element, so this fails if that reveal is ever gated again.
+        it "offers a visible clear-all inside the field that empties it", :js do
+          create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [youth])
+          create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [school])
+          visit case_contacts_path(filterrific: {contact_type: [youth.id.to_s, school.id.to_s]})
+
+          expect(page).to have_css(".ts-control .item", count: 2)
+
+          find(".clear-button").click
+
+          expect(page).to have_no_css(".ts-control .item")
+          expect(page).to have_text("Showing 1\u20132 of 2")
+        end
+
+        it "keeps the clear-all keyboard reachable and named", :js do
+          visit case_contacts_path(filterrific: {contact_type: [youth.id.to_s]})
+
+          clear = find(".clear-button")
+          expect(clear[:role]).to eq("button")
+          expect(clear[:tabindex]).to eq("0")
+          expect(clear[:title]).to eq("Clear all selections")
+        end
       end
 
       describe "active filter count" do

@@ -97,15 +97,34 @@
 .ts-wrapper.single .ts-control { flex-wrap: nowrap; }
 .ts-wrapper.single .ts-control > input { min-width: 0 !important; }
 .ts-wrapper.single .ts-control > .item { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-/* legible placeholder, matching the design-system inputs (slate-400) */
-.ts-wrapper .ts-control input::placeholder { color: #94a3b8; opacity: 1; }
+/* legible placeholder, matching the design-system inputs (slate-500 -- slate-400 is 2.56:1 and a
+   placeholder is text). This rule outranks the bare `.ts-control input::placeholder` one, so it is
+   the only place the colour is set. */
+.ts-wrapper .ts-control input::placeholder { color: #64748b; opacity: 1; }
 /* clear_button plugin: the bundled plugin CSS positions the x and toggles its opacity on
    hover/focus-with-selection. We (a) hide the chevron underneath while the x shows so the two never
    overlap, (b) restyle the x for casa, and (c) hide the blank placeholder option from the menu (it
    exists only to default the native <select> to empty). */
 .ts-wrapper.has-items.focus::after, .ts-wrapper.has-items:hover::after { opacity: 0; }
-.ts-wrapper .clear-button { color: #94a3b8 !important; font-size: 1.125rem; z-index: 2; }
+/* Multi: show the clear-all WHENEVER there is something to clear. tom-select ships it at opacity 0
+   and reveals it only on :hover / .focus, so a control full of chips offers no visible way to empty
+   it -- unreachable by hover on touch, undiscoverable everywhere else, and a tabindex=0 control left
+   at zero opacity. The chevron hides unconditionally to match, since the two share the right edge.
+   Single-select keeps tom-select's hover/focus reveal: there the x replaces the chevron. */
+.ts-wrapper.multi.plugin-clear_button.has-items .clear-button { opacity: 1; }
+.ts-wrapper.multi.has-items::after { opacity: 0; }
+/* 1.5rem square: tom-select's x measures 23x22, just under the 24x24 target-size minimum. */
+.ts-wrapper .clear-button {
+  color: #64748b !important; /* slate-500, 4.76:1; slate-400 was 2.56:1, under the 3:1 icon floor */
+  font-size: 1.125rem;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  min-width: 1.5rem;
+  min-height: 1.5rem;
+}
 .ts-wrapper .clear-button:hover { color: #475569 !important; }
+.ts-wrapper .clear-button:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 0.25rem; } /* it is role=button tabindex=0, so it needs a visible focus ring */
 .ts-dropdown .option[data-value=""] { display: none; }
 /* Chips. tom-select's default theme styles these at .ts-wrapper.multi specificity
    (grey), so match that specificity and use !important where tom-select does. */
@@ -145,7 +164,6 @@
 [data-multiple-select-with-options-value="true"] .ts-control > .item > a > i { display: none; }
 [data-multiple-select-with-options-value="true"] .ts-control > .item > a::after { content: "\00d7"; font-size: 0.95rem; line-height: 1; }
 [data-multiple-select-with-options-value="true"] .ts-control > .item > a:hover { color: #312e81 !important; }
-.ts-control input::placeholder { color: #64748b; } /* slate-500 */
 .ts-dropdown {
   border-radius: 0.5rem;
   border: 1px solid #e2e8f0; /* slate-200 */

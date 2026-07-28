@@ -16,7 +16,7 @@
             <%= form.text_field :name, required: true, class: input_class %>
           </div>
 
-          <div data-controller="multiple-select">
+          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search cases">
             <%= form.label :casa_case_ids, class: "mb-1.5 block text-sm font-medium text-slate-700" do %>Cases <%= req %><% end %>
             <%= form.select(
               :casa_case_ids,

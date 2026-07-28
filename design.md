@@ -302,6 +302,10 @@ bars follow it. Specifics, all measured on case-contacts:
   as a bordered button it was the heaviest thing in the card, louder than the filters themselves.
 - Result: the collapsed card went **144px -> 100px** desktop and **238px -> 142px** mobile, for the
   same controls.
+- **A sort control is labelled `Sort by`** (Jira / Polaris / Amazon; GitHub shortens to `Sort`), not
+  Rails' auto-humanised `Sorted by`. It is **not** `Filter by` even though it sits in the filter card:
+  it changes the order, not which rows show, so `Filter by` over a list of `(newest first)` /
+  `(A-z)` orderings mislabels it. The card's own name is carried by the sr-only `Filters` heading.
 
 **Past ~10 options, a filter is a searchable multiselect -- never an exposed checkbox grid.** The
 case-contacts contact-type filter was ~25 checkboxes in ~10 groups: **502px** on desktop and **954px**
@@ -414,6 +418,26 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   computed style, which reports the element as present even when nothing paints.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
+- **Clear-all inside the field, always visible once there is something to clear.** `remove_button`
+  alone gives only a per-chip ×, which is a chip-at-a-time chore, so **both** controller paths
+  (`createBasicMultiSelect` and `createMultiSelectWithOptionGroups`) also load
+  **`clear_button: { title: 'Clear all selections' }`**, matching the searchable single-select.
+  **The plugin's own CSS is the catch:** it ships the × at `opacity: 0` and reveals it only on
+  `:hover` / `.focus`, so a control full of chips shows no way to empty it -- undiscoverable with a
+  mouse and unreachable by hover on touch, and it leaves a `tabindex=0` control at zero opacity. So
+  `tailwind.css` forces `.ts-wrapper.multi.plugin-clear_button.has-items .clear-button { opacity: 1 }`
+  and hides the chevron unconditionally at `.multi.has-items` (they share the right edge).
+  **Single-select keeps** tom-select's hover/focus reveal -- there the × *replaces* the chevron.
+  Ink is **slate-500** (4.76:1; the theme's old slate-400 was 2.56:1, under the 3:1 icon floor), the
+  hit area is forced to **1.5rem square** (tom-select's × measures 23×22, just under the 24×24 target
+  minimum), and it gets a `:focus-visible` ring since it is `role=button tabindex=0`. Assert with
+  Capybara `find(".clear-button")`, which matches only a **visible** element -- that is what catches a
+  re-gated reveal. **Audited: all 10 instances** carry it (case-contacts index + new_design ×2,
+  reports ×4, case groups, and the rich component on the case-contact form).
+- **Placeholder ink** in the tom-select theme is **slate-500**. Note
+  `.ts-wrapper .ts-control input::placeholder` **outranks** a bare `.ts-control input::placeholder`,
+  so set the colour in the `.ts-wrapper` rule only -- a second, lower rule silently loses (the theme
+  carried both, and the slate-400 one won).
 - **Flip-up**: the controller's `onDropdownOpen` adds `.ts-flip-up` when the control is near
   the viewport bottom, so the menu opens above and stays on screen.
 - **Accessible name**: like the single-select, the controller sets an `aria-label` on TomSelect's
