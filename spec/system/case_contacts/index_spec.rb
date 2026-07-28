@@ -355,6 +355,11 @@ RSpec.describe "case_contacts/index", type: :system do
         # types cost N page loads and N reopenings. The submit is now held until the menu closes.
         it "takes several picks in one menu session, then submits once", :js do
           create(:contact_type, contact_type_group: group, name: "Court")
+          # Spare options on purpose: hideSelected removes each pick, and TomSelect closes the menu
+          # when the list empties -- which legitimately fires the deferred submit. Keep the list
+          # non-empty so this example measures the picking session and not that edge.
+          create(:contact_type, contact_type_group: group, name: "Attorney")
+          create(:contact_type, contact_type_group: group, name: "Teacher")
           subject
           click_on "More filters"
           find(".ts-control").click
@@ -413,54 +418,30 @@ RSpec.describe "case_contacts/index", type: :system do
         end
       end
 
-      describe "applied filter chips" do
+      # The bar had two submit mechanisms: the legacy .filter-input inputs submit natively (their
+      # jQuery handler bypasses Turbo, re-rendering the page) while the multiselect used
+      # requestSubmit(), which Turbo scoped to the results turbo-frame -- so the card's Clear action
+      # and count went stale after a contact-type change while every other filter updated them.
+      describe "the card keeps up with every filter path", :js do
         let(:group) { create(:contact_type_group, casa_org: organization, name: "CASA") }
         let!(:youth) { create(:contact_type, contact_type_group: group, name: "Youth") }
 
-        it "shows nothing to remove at the defaults" do
+        it "updates Clear and the count whichever control is used" do
           subject
-
-          expect(page).to have_no_css("[aria-label^='Remove filter']")
-        end
-
-        # :js -- the panel is always in the DOM (rack_test would see it whatever its CSS says), so only
-        # a real browser can prove the chips are readable while it is collapsed.
-        it "names each applied filter, and stays visible with the panel collapsed", :js do
-          visit case_contacts_path(filterrific: {contact_medium: "in-person", contact_made: "true"}, filters_open: "")
-
-          expect(page).to have_no_content("Other filters") # panel closed
-          expect(page).to have_content("Contact medium: In person")
-          expect(page).to have_content("Contact made: Yes")
-        end
-
-        it "removes only the filter whose x is clicked" do
-          visit case_contacts_path(filterrific: {contact_medium: "in-person", contact_made: "true"})
-
-          click_on "Remove filter: Contact medium"
-
-          expect(page).to have_no_content("Contact medium: In person")
-          expect(page).to have_content("Contact made: Yes")
-        end
-
-        # Sort is not a filter: it must survive both a chip removal and Clear.
-        it "keeps the sort through a chip removal and through Clear" do
-          visit case_contacts_path(filterrific: {contact_medium: "in-person", sorted_by: "occurred_at_asc"})
-
-          click_on "Remove filter: Contact medium"
-          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
-
-          visit case_contacts_path(filterrific: {contact_medium: "in-person", sorted_by: "occurred_at_asc"})
-          click_on "Clear filters"
-
-          expect(page).to have_no_css("[aria-label^='Remove filter']")
-          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
-        end
-
-        it "does not offer Clear filters for a non-default sort alone" do
-          visit case_contacts_path(filterrific: {sorted_by: "occurred_at_asc"})
-
-          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
           expect(page).to have_no_link("Clear filters")
+
+          click_on "More filters"
+          select "In person", from: "Contact medium"
+          expect(page).to have_link("Clear filters")
+          expect(page).to have_css("[data-disclosure-target=trigger] span.rounded-full", text: "1")
+
+          find(".ts-control").click
+          find(".ts-dropdown .option", text: "Youth", match: :first).click
+          find("#filterrific_sorted_by").click # leaving the menu applies the selection
+
+          # Was stuck at 1: the multiselect's submit only replaced the results frame.
+          expect(page).to have_css("[data-disclosure-target=trigger] span.rounded-full", text: "2")
+          expect(page).to have_link("Clear filters")
         end
       end
 

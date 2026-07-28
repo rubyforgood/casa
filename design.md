@@ -311,16 +311,25 @@ bars follow it. Specifics, all measured on case-contacts:
   most: a filter applied while the panel is collapsed, where the user cannot see what is narrowing
   the list. Polaris / Jira / Linear / GitHub all keep the clear affordance independent of the
   popover's state.
-- **Applied-filter chips, one per active filter, each with its own ×.** A count says how many are on;
-  chips say **which** -- and because they sit *outside* the panel, a collapsed panel no longer hides
-  what is filtering. `applied_filter_chips` builds them: a human label (`FILTER_LABELS`), a human
-  value (booleans read `Yes`/`No`, a medium is humanised, contact types are listed by name, and
-  `Hide drafts` shows no value because the label already is the value), and a remove path that drops
-  **only** that filter. brand-100/brand-700, matching the multiselect chips. Give the × a **`title`
-  as well as an `aria-label`**: `aria-label` alone is invisible to Capybara's `click_on`, which
-  matches text/title/id.
-- Result: the collapsed card went **144px -> 100px** desktop and **238px -> 142px** mobile, for the
-  same controls.
+- **No applied-filter chips here.** They were built and then removed. The count badge plus Clear is
+  the treatment for this bar: the panel auto-opens when a hidden filter is active, so the filters are
+  already on screen in the normal case, and chips duplicated that while doubling the surface that has
+  to stay in sync. Chips remain the right pattern for a bar whose filters are *never* visible (Polaris
+  / Linear / Jira), but that is not this one. If they ever come back, the × needs a **`title`** as well
+  as an `aria-label` -- `aria-label` alone is invisible to Capybara's `click_on`, which matches
+  text/title/id.
+- **Never mix submit mechanisms on one filter bar.** This is what made the bar behave two ways at
+  once. The legacy `.filter-input` inputs submit through a **jQuery** handler, which bypasses Turbo and
+  does a **native full-page** submit; the multiselect's deferred submit used **`requestSubmit()`**,
+  which fires a real submit event that Turbo intercepts and -- because the form carries
+  `data-turbo-frame` -- scopes to the **results frame only**. Everything in the card lives *outside*
+  that frame, so the Clear action and the count silently went stale after a contact-type change while
+  every other control updated them. Use **`form.submit()`** (native) for the deferred submit so all of
+  them agree. The trap when testing this: a frame update **preserves the document**, so tagging
+  `window` and finding the tag still there proves nothing about whether a submit fired -- it only
+  proves no *full* navigation happened. Assert on the chrome that must change (the count badge), not
+  on document identity.
+
 - **A sort control is labelled `Sort by`** (Jira / Polaris / Amazon; GitHub shortens to `Sort`), not
   Rails' auto-humanised `Sorted by`. It is **not** `Filter by` even though it sits in the filter card:
   it changes the order, not which rows show, so `Filter by` over a list of `(newest first)` /

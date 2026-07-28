@@ -66,7 +66,15 @@ export default class extends Controller {
 
   submitForm () {
     const form = this.element.closest('form')
-    if (form) form.requestSubmit()
+    if (!form) return
+
+    // form.submit(), NOT requestSubmit(). The other filters on this bar submit through a jQuery
+    // handler that bypasses Turbo, so they re-render the whole page. requestSubmit() fires a real
+    // submit event, which Turbo intercepts and -- because the form targets a turbo-frame -- scopes to
+    // the RESULTS only. The card's Clear action and filter count live outside that frame, so they
+    // went stale after a multiselect change while every other filter updated them: the same bar
+    // behaving two different ways. Native submit keeps all of them consistent.
+    form.submit()
   }
 
   // Distinct non-blank groups, in the order the options arrive (the Select/Unselect all pseudo-option

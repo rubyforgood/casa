@@ -80,17 +80,6 @@ module CaseContactsHelper
       .present?
   end
 
-  # Human names for the applied-filter chips.
-  FILTER_LABELS = {
-    "occurred_starting_at" => "From",
-    "occurred_ending_at" => "To",
-    "contact_type" => "Contact types",
-    "contact_medium" => "Contact medium",
-    "want_driving_reimbursement" => "Want driving reimbursement",
-    "contact_made" => "Contact made",
-    "no_drafts" => "Hide drafts"
-  }.freeze
-
   # Is anything actually filtering? The Clear action only renders when there is something to
   # clear -- a Clear button sitting at the defaults is dead chrome. Note `no_drafts` always
   # posts ("0" when unchecked) and array filters arrive as [""], so neither can be judged by bare
@@ -98,19 +87,6 @@ module CaseContactsHelper
   # filters" on screen, and clearing must not reset the user's sort.
   def filters_applied?
     applied_filter_params.any?
-  end
-
-  # One chip per applied filter, each carrying the URL that removes just that one. Showing WHICH
-  # filters are on is the part that makes a collapsed panel safe (Polaris / Linear / Jira all do
-  # this); a count alone leaves the user guessing.
-  def applied_filter_chips
-    applied_filter_params.map do |key, value|
-      {
-        label: FILTER_LABELS.fetch(key, key.humanize),
-        value: filter_chip_value(key, value),
-        remove_path: filter_path_without(key)
-      }
-    end
   end
 
   # Everything cleared, sort kept -- unlike `reset_filterrific_url`, which drops the sort too.
@@ -136,10 +112,6 @@ module CaseContactsHelper
     end
   end
 
-  def filter_path_without(key)
-    filter_path_with(applied_filter_params.except(key))
-  end
-
   # ALWAYS sends a filterrific hash (sorted_by at minimum). Filterrific falls back to its
   # session-persisted params when the submitted hash is blank, so an empty one would resurrect the
   # filters this link is meant to drop. Case scope and panel state are not filters, so they survive.
@@ -153,16 +125,6 @@ module CaseContactsHelper
 
   def current_sorted_by
     params.dig(:filterrific, :sorted_by).presence || default_sorted_by
-  end
-
-  def filter_chip_value(key, value)
-    case key
-    when "no_drafts" then nil # the label already says it
-    when "contact_made", "want_driving_reimbursement" then ActiveModel::Type::Boolean.new.cast(value) ? "Yes" : "No"
-    when "contact_medium" then value.to_s.tr("-", " ").humanize
-    when "contact_type" then ContactType.where(id: Array.wrap(value)).order(:name).pluck(:name).to_sentence
-    else value.to_s
-    end
   end
 
   def filter_applied?(key, value)

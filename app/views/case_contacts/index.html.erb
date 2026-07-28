@@ -86,26 +86,6 @@
         </div>
       </div>
 
-      <%# Applied-filter chips. A count alone tells the user how many filters are on; chips tell them
-          WHICH -- and they sit outside the panel, so a collapsed panel no longer hides what is
-          narrowing the list. Each x drops just that filter. brand-100/brand-700, matching the
-          multiselect chips. Polaris / Linear / Jira all show applied filters this way. %>
-      <% chips = applied_filter_chips %>
-      <% if chips.any? %>
-        <ul class="mt-3 flex flex-wrap items-center gap-2">
-          <% chips.each do |chip| %>
-            <li class="inline-flex items-center gap-1 rounded-full bg-brand-100 py-1 pl-2.5 pr-1 text-xs font-medium text-brand-700">
-              <span><%= chip[:label] %><%= ": #{chip[:value]}" if chip[:value].present? %></span>
-              <%# title as well as aria-label: it gives a tooltip, and it is what makes the control
-                  reachable by name (Capybara's click_on matches title, not aria-label). %>
-              <%= link_to chip[:remove_path], "aria-label": "Remove filter: #{chip[:label]}",
-                title: "Remove filter: #{chip[:label]}",
-                class: "grid h-5 w-5 place-items-center rounded-full hover:bg-brand-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" do %><i class="bi bi-x-lg text-[10px]" aria-hidden="true"></i><% end %>
-            </li>
-          <% end %>
-        </ul>
-      <% end %>
-
       <div id="filter-card-body" data-disclosure-target="panel" class="<%= "hidden" unless panel_open %> mt-5 space-y-5 border-t border-slate-100 pt-5">
         <div>
           <h3 class="mb-2 text-sm font-semibold text-slate-900">Date of contact</h3>
