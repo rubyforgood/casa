@@ -1299,7 +1299,13 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   or the **chevron** "Back to X" (`inline-flex items-center gap-1 text-sm font-medium text-slate-500
   hover:text-slate-700` + `bi-chevron-left`). Top-level destinations (Dashboard, Cases, Settings, etc.)
   don't need one. Add a back affordance to every new sub-page -- it's a recurring gap (bulk court
-  dates, case groups, and the emancipation-checklists index were dead-ends until audited).
+  dates, case groups, the emancipation-checklists index, and the **case-contact form** were dead-ends
+  until audited). On the case-contact form the back link points at the existing **`#leave`** action
+  (`redirect_back_to_referer`, falling back to the list), so Back lands exactly where a successful
+  Submit would -- that action was already routed and nothing linked to it. Its label is a bare
+  **`Back`**, not `Back to X`, because the destination is the referer and so varies; and it is **not
+  `Cancel`** -- the form autosaves, so on an existing contact the changes are already saved and
+  offering to cancel them would be a lie.
   **Spacing/placement (verified 8px gap, pixel-identical across pages).** The back link + title are
   one header block with an **8px gap** below the link -- `mt-2` on the title when they share a wrapper,
   `mb-2` when the link is its own block. Never leave the link as a **bare child of a `space-y-*`

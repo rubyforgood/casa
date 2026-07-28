@@ -65,6 +65,40 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
+  # The form was a dead end: Submit and Submit & add another were the only ways off it. Back uses the
+  # #leave action, so it returns where a successful Submit would -- see design.md "Back navigation on
+  # sub-pages", which calls this out as a recurring gap.
+  describe "leaving the form" do
+    it "offers Back, which returns to the page the form was opened from" do
+      visit casa_case_path(casa_case)
+      click_on "New case contact"
+      expect(page).to have_text("Record new case contact")
+
+      click_on "Back"
+
+      expect(page).to have_current_path(casa_case_path(casa_case))
+    end
+
+    it "falls back to the case-contacts list" do
+      visit case_contacts_path
+      click_on "New case contact"
+      expect(page).to have_text("Record new case contact")
+
+      click_on "Back"
+
+      expect(page).to have_current_path(case_contacts_path)
+    end
+
+    # Not "Cancel": the form autosaves, so on an existing contact the changes are already saved.
+    it "says Back rather than Cancel" do
+      subject
+
+      expect(page).to have_link("Back")
+      expect(page).to have_no_link("Cancel")
+      expect(page).to have_no_button("Cancel")
+    end
+  end
+
   it "'Submit & add another' saves, reopens a fresh form for the same case, and links to the list", :js do
     subject
     complete_details_page(case_numbers: [case_number], contact_types: %w[School])

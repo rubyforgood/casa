@@ -166,6 +166,15 @@ RSpec.describe "case_contacts/edit", type: :system do
     expect(case_contact.reload.notes).to eq "Hello world"
   end
 
+  it "offers a way back out of the edit form" do
+    visit edit_case_contact_path(case_contact)
+
+    expect(page).to have_text("Editing existing case contact")
+    click_on "Back"
+
+    expect(page).to have_current_path(case_contacts_path)
+  end
+
   context "when 'Create another' option is checked" do
     it "creates a duplicate case contact for the second contact", :js do
       case_contact_draft_ids = case_contact.draft_case_ids
