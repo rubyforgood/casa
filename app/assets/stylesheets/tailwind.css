@@ -172,6 +172,25 @@
 }
 .ts-dropdown .option { padding: 0.5rem 0.75rem; color: #334155; } /* slate-700 */
 .ts-dropdown .active { background-color: #eef2ff; color: #4338ca; } /* brand-50 / brand-700 */
+/* Group headers read as HEADERS, not as short options. tom-select ships them at the same 13px/400 as
+   the options with 4px LESS left padding, so a dark line sat one notch out from the items and looked
+   like misaligned text. Same token as the sidebar's group labels (text-xs semibold uppercase
+   tracking-wide slate-500), padded to the options' 0.75rem so the column edge is straight, with a
+   divider between groups. */
+.ts-dropdown .optgroup-header {
+  padding: 0.5rem 0.75rem 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+  color: #64748b; /* slate-500, 4.76:1 */
+  background: transparent;
+}
+.ts-dropdown .optgroup + .optgroup .optgroup-header {
+  margin-top: 0.25rem;
+  border-top: 1px solid #f1f5f9; /* slate-100 */
+  padding-top: 0.5rem;
+}
 /* Flip the menu above the control when there isn't room below (set by the
    multiple-select controller's onDropdownOpen). */
 .ts-wrapper.ts-flip-up .ts-dropdown { top: auto; bottom: 100%; margin-top: 0; margin-bottom: 0.25rem; }

@@ -307,6 +307,16 @@ bars follow it. Specifics, all measured on case-contacts:
   it changes the order, not which rows show, so `Filter by` over a list of `(newest first)` /
   `(A-z)` orderings mislabels it. The card's own name is carried by the sr-only `Filters` heading.
 
+**Same control, or same language?** "Pick contact types" appears three times and does not need one
+control everywhere -- it needs one **grouping language**. The *filter* is a searchable multiselect
+(chrome, must stay compact). `casa_cases` new/edit is the rich multiselect, now grouped to match. The
+**case-contact form keeps its exposed grouped checkbox fieldset**: contact types is that page's
+primary *required* input and each row carries a per-type recency hint ("2 days ago") that cannot
+survive collapsing into chips, so forcing the filter's control there would cost real information on
+the page where it matters most. What *is* unified is the **group label token** -- `text-xs
+font-semibold uppercase tracking-wide text-slate-500` on the fieldset, the menu headers and the
+sidebar alike. Consistency of the pattern, not of the widget.
+
 **Past ~10 options, a filter is a searchable multiselect -- never an exposed checkbox grid.** The
 case-contacts contact-type filter was ~25 checkboxes in ~10 groups: **502px** on desktop and **954px**
 on mobile, i.e. **taller than the results list it filters**, so opening the panel pushed the data off
@@ -434,6 +444,28 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   Capybara `find(".clear-button")`, which matches only a **visible** element -- that is what catches a
   re-gated reveal. **Audited: all 10 instances** carry it (case-contacts index + new_design ×2,
   reports ×4, case groups, and the rich component on the case-contact form).
+- **Menu group headers are a header, not a short option.** tom-select ships `.optgroup-header` at the
+  options' own **13px/400** with **4px LESS left padding**, so a dark line sat one notch out from the
+  items and read as misaligned text rather than a group label. Theme it with the **same token as the
+  sidebar group labels** -- `12px`, `600`, `uppercase`, `0.025em` tracking, **slate-500** -- padded to
+  the options' `0.75rem` so the left column edge is straight, plus a `slate-100` top border between
+  groups. Verify by comparing the header's and an option's computed `paddingLeft` and `fontWeight`,
+  not by eye.
+- **A grouped multiselect must actually be told to group.** `optgroupField` alone is not enough:
+  without **`optgroups:`** (the list of groups) TomSelect uses the option's `group` for **search only**
+  and renders a flat list. The rich component carried `group` on every option and still showed 25
+  ungrouped rows, while the filter's grouped `<optgroup>` markup showed headers -- the same data, two
+  different menus. Pass `optgroups` + `optgroupField: 'group'` + `lockOptgroupOrder: true`.
+- **Never re-render the page on each pick.** A multiselect wired to the `filter-input` change-submit
+  fired a **full page render per chip**, which tore down the open menu: picking N types cost N page
+  loads and N reopenings of the dropdown (confirmed by tagging `window` and watching the tag vanish).
+  `closeAfterSelect` is a red herring -- it already defaults to false. Instead **leave `filter-input`
+  off** and set **`data-multiple-select-submit-on-close-value="true"`**: the controller holds the
+  submit while `select.isOpen` and fires it once on `dropdown_close`, so one menu session is one
+  render. A change with the menu already shut (the clear-all ×) still submits immediately, so clearing
+  stays instant. All the natural exits close the menu and apply the selection -- Escape, clicking
+  another control, blur -- verified; note a Capybara click on a non-focusable element (an `h1`) does
+  **not** close it, which will make a test look broken when the feature works.
 - **Placeholder ink** in the tom-select theme is **slate-500**. Note
   `.ts-wrapper .ts-control input::placeholder` **outranks** a bare `.ts-control input::placeholder`,
   so set the colour in the `.ts-wrapper` rule only -- a second, lower rule silently loses (the theme

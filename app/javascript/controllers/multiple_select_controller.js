@@ -19,6 +19,7 @@ export default class extends Controller {
     options: Array,
     selectedItems: Array,
     withOptions: Boolean,
+    submitOnClose: Boolean,
     placeholder: String,
     placeholderTerm: {
       type: String,
@@ -37,6 +38,45 @@ export default class extends Controller {
       this.createBasicMultiSelect()
     }
     this.nameNativeSelect()
+    if (this.submitOnCloseValue) this.deferSubmitUntilDropdownCloses()
+  }
+
+  // An auto-submitting filter re-renders the whole page on `change`, which tears down the open menu:
+  // picking five contact types meant five page loads and five reopenings of the dropdown. Hold the
+  // submit while the menu is open and fire it once on close, so a selection session costs one render.
+  // A change with the menu already shut (the clear-all x) still submits immediately.
+  deferSubmitUntilDropdownCloses () {
+    const select = this.tomSelect
+    let pending = false
+
+    select.on('change', () => {
+      if (select.isOpen) {
+        pending = true
+      } else {
+        this.submitForm()
+      }
+    })
+
+    select.on('dropdown_close', () => {
+      if (!pending) return
+      pending = false
+      this.submitForm()
+    })
+  }
+
+  submitForm () {
+    const form = this.element.closest('form')
+    if (form) form.requestSubmit()
+  }
+
+  // Distinct non-blank groups, in the order the options arrive (the Select/Unselect all pseudo-option
+  // carries a blank group and stays ungrouped, above the first header).
+  optgroupsFrom (options) {
+    const seen = []
+    options.forEach((option) => {
+      if (option.group && !seen.includes(option.group)) seen.push(option.group)
+    })
+    return seen.map((group) => ({ value: group, label: group }))
   }
 
   // Re-name the native <select> AFTER init. TomSelect repoints the <label for=...> at its own control
@@ -85,7 +125,8 @@ export default class extends Controller {
       settings.placeholder = this.placeholderValue
       settings.hidePlaceholder = true
     }
-    this.labelControlInput(new TomSelect(this.selectTarget, settings))
+    this.tomSelect = new TomSelect(this.selectTarget, settings)
+    this.labelControlInput(this.tomSelect)
   }
 
   createMultiSelectWithOptionGroups () {
@@ -150,6 +191,12 @@ export default class extends Controller {
         }
       },
       options: dropdownOptions,
+      // Render the groups the options already carry. Without optgroups/optgroupField TomSelect uses
+      // `group` for SEARCH only and shows a flat list, so this menu threw its grouping away while the
+      // filter's showed it -- the same data, two different menus.
+      optgroups: this.optgroupsFrom(dropdownOptions),
+      optgroupField: 'group',
+      lockOptgroupOrder: true,
       items: initItems,
       placeholder,
       hidePlaceholder: true,
@@ -171,6 +218,7 @@ export default class extends Controller {
         }
       }
     })
+    this.tomSelect = select
     this.labelControlInput(select)
   }
 }

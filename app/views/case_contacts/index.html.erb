@@ -93,14 +93,17 @@
             controller can copy it onto TomSelect's input and back onto the select. %>
         <div>
           <%= f.label :contact_type, "Contact types", class: label_class %>
-          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types">
+          <%# No `filter-input` here, and submit-on-close instead: the delegated change-submit fired a
+              full page render per chip, tearing down the open menu so every pick meant reopening it.
+              The controller holds the submit until the menu closes. %>
+          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types" data-multiple-select-submit-on-close-value="true">
             <%= f.select :contact_type,
               grouped_options_for_select(
                 @current_organization_groups.map { |group| [group.name, group.contact_types.map { |type| [type.name, type.id] }] },
                 Array(f.object.contact_type).map(&:to_s)
               ),
               {include_hidden: false},
-              {multiple: true, class: "filter-input block w-full", data: {"multiple-select-target": "select"}} %>
+              {multiple: true, class: "block w-full", data: {"multiple-select-target": "select"}} %>
           </div>
         </div>
 

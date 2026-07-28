@@ -307,8 +307,11 @@ RSpec.describe "case_contacts/index", type: :system do
 
           select = page.find("#filterrific_contact_type", visible: :all)
           expect(select[:multiple]).to be_truthy
-          expect(select[:class]).to include("filter-input")
           expect(page).to have_css("#filterrific_contact_type optgroup[label='CASA']", visible: :all)
+          # Deliberately NOT `filter-input`: that hook submits on every change, which re-rendered the
+          # page under the open menu. This control defers its submit to the menu closing instead.
+          expect(select[:class]).not_to include("filter-input")
+          expect(page).to have_css("[data-multiple-select-submit-on-close-value='true']", visible: :all)
         end
 
         it "filters the list when a type is picked", :js do
@@ -321,6 +324,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
           find(".ts-control").click
           find(".ts-dropdown .option", text: "Youth", match: :first).click
+          find("#filterrific_sorted_by").click # the selection applies when the menu closes
 
           expect(page).to have_text("Showing 1\u20131 of 1")
         end
@@ -345,6 +349,58 @@ RSpec.describe "case_contacts/index", type: :system do
 
           expect(page).to have_no_css(".ts-control .item")
           expect(page).to have_text("Showing 1\u20132 of 2")
+        end
+
+        # The auto-submit re-rendered the page on every chip, tearing down the open menu: picking N
+        # types cost N page loads and N reopenings. The submit is now held until the menu closes.
+        it "takes several picks in one menu session, then submits once", :js do
+          create(:contact_type, contact_type_group: group, name: "Court")
+          subject
+          click_on "More filters"
+          find(".ts-control").click
+
+          page.execute_script("window.__tag = 'same-document'")
+
+          ["Youth", "School", "Court"].each do |name|
+            find(".ts-dropdown .option", text: name, match: :first).click
+            expect(page).to have_css(".ts-control .item", text: name)
+            # Same document, menu still open: no submit happened for this pick.
+            expect(page.evaluate_script("window.__tag")).to eq("same-document")
+          end
+
+          expect(page).to have_css(".ts-control .item", count: 3)
+
+          find("#filterrific_sorted_by").click # leaving the menu applies the whole selection
+
+          expect(page).to have_current_path(/contact_type/, url: true)
+          expect(page.current_url.scan(/contact_type%5D%5B%5D=\d+/).size).to eq(3)
+        end
+
+        it "gives the menu's group headers their own visual level", :js do
+          subject
+          click_on "More filters"
+          find(".ts-control").click
+          expect(page).to have_css(".ts-dropdown .optgroup-header")
+
+          style = page.evaluate_script(<<~JS)
+            (function () {
+              var h = getComputedStyle(document.querySelector('.ts-dropdown .optgroup-header'));
+              var o = getComputedStyle(document.querySelector('.ts-dropdown .option'));
+              return {
+                weight: h.fontWeight,
+                transform: h.textTransform,
+                headerPad: h.paddingLeft,
+                optionPad: o.paddingLeft,
+                sameWeight: h.fontWeight === o.fontWeight
+              };
+            })()
+          JS
+
+          # tom-select ships headers at the options' weight with 4px less left padding, which read as
+          # a misaligned option rather than a header.
+          expect(style["transform"]).to eq("uppercase")
+          expect(style["sameWeight"]).to eq(false)
+          expect(style["headerPad"]).to eq(style["optionPad"])
         end
 
         it "keeps the clear-all keyboard reachable and named", :js do
