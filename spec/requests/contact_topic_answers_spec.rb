@@ -35,7 +35,7 @@ RSpec.describe "/contact_topic_answers", type: :request do
       answer = ContactTopicAnswer.last
       expect(response_json[:id]).to eq answer.id
       expect(response_json.keys)
-        .to contain_exactly(:id, :contact_topic_id, :value, :case_contact_id, :created_at, :updated_at, :selected)
+        .to contain_exactly(:id, :contact_topic_id, :value, :case_contact_id, :created_at, :updated_at, :selected, :deleted_at)
     end
 
     context "as casa_admin" do

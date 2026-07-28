@@ -1,5 +1,4 @@
 require "rails_helper"
-require_relative "../../../lib/tasks/case_contact_types_reminder"
 require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CaseContactTypesReminder do

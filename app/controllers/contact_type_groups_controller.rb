@@ -38,6 +38,6 @@ class ContactTypeGroupsController < ApplicationController
   end
 
   def set_contact_type_group
-    @contact_type_group = ContactTypeGroup.find(params[:id])
+    @contact_type_group = current_organization.contact_type_groups.find(params[:id])
   end
 end

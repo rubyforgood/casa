@@ -145,3 +145,37 @@
 .cc-italic {
     font-style: italic;
 }
+
+.expand-toggle {
+  display: inline-block;
+  cursor: pointer;
+  background: none;
+  border: 0;
+  padding: 0;
+  transition: transform 0.3s;
+
+  &.expanded {
+    transform: rotate(180deg);
+  }
+}
+
+.expanded-content {
+  padding: 0.75rem 1rem;
+
+  .expanded-topic {
+    margin-bottom: 0.75rem;
+
+    strong {
+      display: block;
+    }
+
+    p {
+      margin: 0.25rem 0 0;
+    }
+  }
+}
+
+.expanded-empty {
+  padding: 0.75rem 1rem;
+  margin: 0;
+}

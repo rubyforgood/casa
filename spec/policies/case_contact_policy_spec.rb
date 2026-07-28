@@ -50,11 +50,12 @@ RSpec.describe CaseContactPolicy, :aggregate_failures do
       expect(subject).not_to permit(casa_admin, other_org_case_contact)
     end
 
-    it "does not allow supervisors" do
-      expect(subject).not_to permit(supervisor, case_contact)
-      expect(subject).not_to permit(supervisor, draft_case_contact)
-      expect(subject).not_to permit(supervisor, same_case_volunteer_case_contact)
-      expect(subject).not_to permit(supervisor, unassigned_case_case_contact)
+    it "allows same org supervisors" do
+      expect(subject).to permit(supervisor, case_contact)
+      expect(subject).to permit(supervisor, draft_case_contact)
+      expect(subject).to permit(supervisor, same_case_volunteer_case_contact)
+      expect(subject).to permit(supervisor, unassigned_case_case_contact)
+
       expect(subject).not_to permit(supervisor, other_org_case_contact)
     end
 

@@ -269,6 +269,68 @@ RSpec.describe CaseCourtReportContext, type: :model do
       end
     end
 
+    context "when some topics have no answers" do
+      it "includes every topic, with an empty answer list for unanswered ones" do
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[0], value: "Answer 1")
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics["Question 1"][:answers].pluck(:value)).to eq(["Answer 1"])
+        expect(court_topics["Question 2"][:answers]).to eq([])
+        expect(court_topics["Question 3"][:answers]).to eq([])
+      end
+
+      it "does not include unanswered topics that are inactive" do
+        topics[1].update!(active: false)
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 3"])
+      end
+
+      it "does not include unanswered topics excluded from the court report" do
+        topics[1].update!(exclude_from_court_report: true)
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 3"])
+      end
+
+      it "does not include topics from other organizations" do
+        topics
+        create(:contact_topic, question: "Other Org Question")
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+      end
+    end
+
+    context "when answers occur in a different order than the topics were created" do
+      it "orders topics by creation order, not by answer date" do
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[2], value: "Earliest answer")
+        create(:contact_topic_answer, case_contact: contacts[1], contact_topic: topics[1], value: "Middle answer")
+        create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[0], value: "Latest answer")
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+      end
+    end
+
+    context "when an inactive topic has answers" do
+      it "includes the topic and its answers" do
+        topics[1].update!(active: false)
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[1], value: "Answer before deactivation")
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics["Question 2"][:answers].pluck(:value)).to eq(["Answer before deactivation"])
+      end
+    end
+
     context "when there are no contact topics" do
       it "returns an empty hash" do
         court_report_context = build(:case_court_report_context, start_date: 45.day.ago.to_s, end_date: 5.day.ago.to_s, casa_case: casa_case)

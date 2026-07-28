@@ -17,7 +17,7 @@ class DeliveryMethods::Sms < Noticed::DeliveryMethod
   private
 
   def sender
-    User.find(params[:followup][:creator_id])
+    @sender ||= User.find(params[:followup][:creator_id])
   end
 
   def case_contact_id

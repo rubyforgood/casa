@@ -56,4 +56,8 @@ class UserDecorator < Draper::Decorator
 
     object.date_of_birth.to_date.to_fs(:slashes)
   end
+
+  def email_confirmation_status
+    object.confirmed? ? "Confirmed" : "Not confirmed"
+  end
 end

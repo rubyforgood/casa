@@ -27,7 +27,6 @@
                      class: 'form-control mt-4',
                      type: 'file',
                      style: "margin: auto;" %>
-    </div>
 
     <%= render "sms_opt_in_modal", { form: f } if @sms_opt_in_warning == "volunteer" %>
     <%= button_tag id: "volunteer-import-button", class: "main-btn primary-btn btn-hover pull-right",
@@ -35,3 +34,4 @@
       <i class="lni lni-upload"></i> Import Volunteers CSV
     <% end %>
   <% end %>
+</div>

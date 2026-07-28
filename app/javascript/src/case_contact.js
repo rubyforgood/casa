@@ -54,5 +54,6 @@ $(() => { // JQuery's callback for the DOM loading
 })
 
 export {
-  convertDateToSystemTimeZone
+  convertDateToSystemTimeZone,
+  fireSwalFollowupAlert
 }

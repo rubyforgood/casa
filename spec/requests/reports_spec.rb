@@ -1,5 +1,13 @@
 require "rails_helper"
 
+RSpec.shared_examples "successful authentication" do |user_role|
+  before do
+    sign_in build(user_role)
+  end
+
+  it { is_expected.to be_successful }
+end
+
 RSpec.describe "/reports", type: :request do
   describe "GET #index" do
     subject do
@@ -8,19 +16,11 @@ RSpec.describe "/reports", type: :request do
     end
 
     context "while signed in as an admin" do
-      before do
-        sign_in build(:casa_admin)
-      end
-
-      it { is_expected.to be_successful }
+      include_examples "successful authentication", :casa_admin
     end
 
     context "while signed in as a supervisor" do
-      before do
-        sign_in build(:supervisor)
-      end
-
-      it { is_expected.to be_successful }
+      include_examples "successful authentication", :supervisor
     end
 
     context "while signed in as a volunteer" do

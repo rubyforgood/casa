@@ -7,7 +7,10 @@ class CaseContacts::FollowupsController < ApplicationController
     note = simple_followup_params[:note]
     FollowupService.create_followup(case_contact, current_user, note)
 
-    redirect_to casa_case_path(case_contact.casa_case)
+    respond_to do |format|
+      format.html { redirect_to casa_case_path(case_contact.casa_case) }
+      format.json { head :no_content }
+    end
   end
 
   def resolve
@@ -17,7 +20,10 @@ class CaseContacts::FollowupsController < ApplicationController
     @followup.resolved!
     create_notification
 
-    redirect_to casa_case_path(@followup.case_contact.casa_case)
+    respond_to do |format|
+      format.html { redirect_to casa_case_path(@followup.case_contact.casa_case) }
+      format.json { head :no_content }
+    end
   end
 
   private

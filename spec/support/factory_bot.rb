@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+def described_class_factory
+  described_class.name.gsub("::", "").underscore
+end
+
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 

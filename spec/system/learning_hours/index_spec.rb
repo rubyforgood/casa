@@ -23,6 +23,7 @@ RSpec.describe "Learning Hours Index", type: :system do
 
   context "when the user is a supervisor or admin" do
     let(:user) { supervisor }
+    let(:zero_hour_volunteer) { supervisor.volunteers.second }
 
     before do
       visit learning_hours_path
@@ -34,6 +35,14 @@ RSpec.describe "Learning Hours Index", type: :system do
       expect(page).to have_content(volunteer.display_name)
       expect(page).to have_content("Time Completed")
       expect(page).to have_content("#{volunteer.learning_hours.sum(:duration_hours)} hours")
+    end
+
+    it "displays assigned volunteers with no learning hours as zero hours" do
+      expect(page).to have_content(zero_hour_volunteer.display_name)
+
+      within("tr", text: zero_hour_volunteer.display_name) do
+        expect(page).to have_content("0 hours 0 minutes")
+      end
     end
 
     it "when clicking on a volunteer's name it redirects to the `learning_hours_volunteer_path` for the volunteer" do

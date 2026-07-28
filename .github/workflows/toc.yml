@@ -8,6 +8,6 @@ jobs:
     name: TOC Generator
     runs-on: ubuntu-latest
     steps:
-      - uses: technote-space/toc-generator@v4
+      - uses: technote-space/toc-generator@ce21845a0177fd1288cada589dd4efd2e46a27ca # v4
         with:
           CREATE_PR: true

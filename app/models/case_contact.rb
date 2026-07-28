@@ -191,6 +191,15 @@ class CaseContact < ApplicationRecord
   LETTER = "letter".freeze
   CONTACT_MEDIUMS = [IN_PERSON, TEXT_EMAIL, VIDEO, VOICE_ONLY, LETTER].freeze
 
+  TOGGLEABLE_COLUMNS = [
+    {key: "relationship", label: "Relationship", index: 4},
+    {key: "medium", label: "Medium", index: 5},
+    {key: "created_by", label: "Created By", index: 6},
+    {key: "contacted", label: "Contacted", index: 7},
+    {key: "topics", label: "Topics", index: 8},
+    {key: "draft", label: "Draft", index: 9}
+  ].freeze
+
   def update_cleaning_contact_types(args)
     transaction do
       contact_types.clear

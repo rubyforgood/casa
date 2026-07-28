@@ -21,7 +21,7 @@ module LoadsCaseContacts
     case_contacts = case_contacts.slice(*current_user.casa_cases.pluck(:id)) if current_user.volunteer?
     case_contacts = case_contacts.select { |k, _v| k == params[:casa_case_id].to_i } if params[:casa_case_id].present?
 
-    @presenter = CaseContactPresenter.new(case_contacts)
+    @case_contacts = CaseContactsDecorator.decorate(case_contacts)
   end
 
   def current_organization_groups
@@ -36,6 +36,8 @@ module LoadsCaseContacts
     policy_scope(current_organization.case_contacts).preload(
       :creator,
       :followups,
+      :contact_topics,
+      :casa_org,
       contact_types: :contact_type_group,
       contact_topic_answers: :contact_topic,
       casa_case: :volunteers

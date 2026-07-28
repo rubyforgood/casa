@@ -6,7 +6,7 @@ class CasaCasesController < ApplicationController
 
   def index
     authorize CasaCase
-    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
+    org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers, :casa_case_emancipation_categories)
     @casa_cases = policy_scope(org_cases).includes([:hearing_type, :judge])
     @casa_cases_filter_id = policy(CasaCase).can_see_filters? ? "casa-cases" : ""
     @duties = OtherDuty.where(creator_id: current_user.id)

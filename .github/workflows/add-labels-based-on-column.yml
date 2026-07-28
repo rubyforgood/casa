@@ -10,7 +10,7 @@ jobs:
     name: Add help wanted labels
     steps:
       - name: Add help wanted labels
-        uses: rubyforgood/add-label-to-cards@v3.3
+        uses: rubyforgood/add-label-to-cards@62e1346cb6a1837c82e1c2919562d54dd2893ddf # v3.3
         id: add-help-wanted-labels
         with:
           columns_labels: >

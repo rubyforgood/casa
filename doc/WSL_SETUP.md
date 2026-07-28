@@ -28,7 +28,7 @@ You will need the following local tools installed:
 
 Install a ruby version manager like [rbenv](https://github.com/rbenv/rbenv#installation)
 
-  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.3.10.**
+  **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 4.0.3.**
 
 Instructions for rbenv:
 
@@ -48,13 +48,13 @@ Instructions for rbenv:
 
 5.  **[Install Ruby](https://github.com/rbenv/rbenv#installing-ruby-versions)**
 
-      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 3.3.10.**
+      **Be sure to install the ruby version in `.ruby-version`. Right now that's Ruby 4.0.3.**
 
-      `rbenv install 3.3.10`
+      `rbenv install 4.0.3`
 
 6. **Set a Ruby version to finish installation and start**
 
-    `rbenv global 3.3.10` OR `rbenv local 3.3.10`
+    `rbenv global 4.0.3` OR `rbenv local 4.0.3`
 
 #### Troubleshooting
     If you are on Ubuntu in Windows Subsystem for Linux (WSL) and `rbenv install` indicates that the Ruby version is unavailable, you might be using Ubuntu's default install of `ruby-build`, which only comes with old installs of Ruby (ending before 2.6.) You should uninstall rvm and ruby-build's apt packages (`apt remove rvm ruby-build`) and install them with Git like this:
@@ -149,7 +149,7 @@ Casa's install will also install the correct version of Rails.
 
 1. **Download the project**
 
-   **You should create a fork in GitHub if you don't have permission to directly commit to this repo. See our [contributing guide](https://github.com/rubyforgood/casa/blob/main/doc/CONTRIBUTING.md) for more detailed instructions.**
+   **You should create a fork in GitHub if you don't have permission to directly commit to this repo. See our [contributing guide](https://github.com/rubyforgood/casa/blob/main/CONTRIBUTING.md) for more detailed instructions.**
 
    `git clone <git address>` - use your fork's address if you have one
 

@@ -77,11 +77,28 @@ RSpec.describe "/contact_type_groups", type: :request do
   describe "GET /contact_type_groups/:id/edit" do
     context "logged in as admin user" do
       it "can successfully access a contact type group edit page" do
-        sign_in_as_admin
+        casa_org = create(:casa_org)
+        sign_in create(:casa_admin, casa_org: casa_org)
+        group = create(:contact_type_group, casa_org: casa_org)
 
-        get edit_contact_type_group_path(create(:contact_type_group))
+        get edit_contact_type_group_path(group)
 
         expect(response).to be_successful
+      end
+    end
+
+    context "logged in as admin from a different organization" do
+      it "cannot access another organization's contact type group edit page" do
+        admin_org = create(:casa_org)
+        admin = create(:casa_admin, casa_org: admin_org)
+        other_org = create(:casa_org)
+        other_org_group = create(:contact_type_group, casa_org: other_org)
+
+        sign_in admin
+
+        get edit_contact_type_group_path(other_org_group)
+
+        expect(response).to have_http_status(:not_found)
       end
     end
 
@@ -124,6 +141,22 @@ RSpec.describe "/contact_type_groups", type: :request do
 
         expect(response).to redirect_to edit_casa_org_path(casa_org)
         expect(response.request.flash[:notice]).to eq "Contact Type Group was successfully updated."
+      end
+    end
+
+    context "logged in as admin from a different organization" do
+      it "cannot update another organization's contact type group" do
+        admin_org = create(:casa_org)
+        admin = create(:casa_admin, casa_org: admin_org)
+        other_org = create(:casa_org)
+        other_org_group = create(:contact_type_group, casa_org: other_org)
+
+        sign_in admin
+
+        put contact_type_group_path(other_org_group), params: params
+
+        expect(response).to have_http_status(:not_found)
+        expect(other_org_group.reload.name).not_to eq("New Group Name")
       end
     end
 

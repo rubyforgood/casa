@@ -1,5 +1,6 @@
 class AndroidAppAssociationsController < ApplicationController
   skip_before_action :authenticate_user!
+  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
 
   def index
     android_asset_link_data = [

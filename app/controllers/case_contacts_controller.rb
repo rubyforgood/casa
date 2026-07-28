@@ -44,8 +44,14 @@ class CaseContactsController < ApplicationController
     authorize @case_contact
 
     @case_contact.destroy
-    flash[:notice] = "Contact is successfully deleted."
-    redirect_to request.referer
+
+    respond_to do |format|
+      format.html do
+        flash[:notice] = "Contact is successfully deleted."
+        redirect_to request.referer
+      end
+      format.json { head :no_content }
+    end
   end
 
   def restore

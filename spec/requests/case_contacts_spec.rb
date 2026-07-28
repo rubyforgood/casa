@@ -162,14 +162,12 @@ RSpec.describe "/case_contacts", type: :request do
     end
   end
 
-  xdescribe "GET /leave" do
+  describe "GET /leave" do
     subject(:request) do
-      get leave_case_contact_path
+      get leave_case_contacts_form_path
 
       response
     end
-
-    it { is_expected.to redirect_to(case_contacts_path) }
 
     it "redirects back to referer or fallback location" do
       request

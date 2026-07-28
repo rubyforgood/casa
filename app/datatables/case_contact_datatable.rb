@@ -8,10 +8,20 @@ class CaseContactDatatable < ApplicationDatatable
     duration_minutes
   ].freeze
 
+  def initialize(base_relation, params, current_user)
+    super(base_relation, params)
+    @current_user = current_user
+  end
+
   private
+
+  attr_reader :current_user
 
   def data
     records.map do |case_contact|
+      policy = CaseContactPolicy.new(current_user, case_contact)
+      requested_followup = case_contact.followups.find(&:requested?)
+
       {
         id: case_contact.id,
         occurred_at: I18n.l(case_contact.occurred_at, format: :full, default: nil),
@@ -29,22 +39,42 @@ class CaseContactDatatable < ApplicationDatatable
         },
         contact_made: case_contact.contact_made,
         duration_minutes: case_contact.duration_minutes,
-        contact_topics: case_contact.contact_topics.map(&:question).join(" | "),
+        contact_topics: case_contact.contact_topics.map(&:question),
+        contact_topic_answers: case_contact.contact_topic_answers
+          .reject { |a| a.value.blank? }
+          .map { |a| {question: a.contact_topic&.question, value: a.value} },
+        notes: case_contact.notes.presence,
         is_draft: !case_contact.active?,
-        has_followup: case_contact.followups.requested.exists?
+        has_followup: requested_followup.present?,
+        can_edit: policy.update?,
+        can_destroy: policy.destroy?,
+        edit_path: Rails.application.routes.url_helpers.edit_case_contact_path(case_contact),
+        followup_id: requested_followup&.id
       }
     end
   end
 
   def filtered_records
-    raw_records.where(search_filter)
+    apply_additional_filters(raw_records.where(search_filter))
+  end
+
+  def apply_additional_filters(records)
+    records = records.occurred_starting_at(additional_filters[:occurred_starting_at])
+    records = records.occurred_ending_at(additional_filters[:occurred_ending_at])
+    records = records.with_casa_case(Array(additional_filters[:casa_case_ids])) if additional_filters[:casa_case_ids].present?
+    records = records.contact_type(Array(additional_filters[:contact_type_ids])) if additional_filters[:contact_type_ids].present?
+    records = records.contact_medium(additional_filters[:contact_medium])
+    records = records.contact_made(additional_filters[:contact_made])
+    records = records.no_drafts(additional_filters[:no_drafts].to_i) if additional_filters[:no_drafts].present?
+    records
   end
 
   def raw_records
     base_relation
       .joins("INNER JOIN users creators ON creators.id = case_contacts.creator_id")
       .left_joins(:casa_case)
-      .includes(:contact_types, :contact_topics, :followups, :creator)
+      .includes(:casa_case, :contact_types, :contact_topics, :followups, :creator, contact_topic_answers: :contact_topic)
+      .preload(:casa_org, :creator_casa_org)
       .order(order_clause)
       .order(:id)
   end

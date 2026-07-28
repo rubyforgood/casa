@@ -13,10 +13,8 @@ describe('session_timeout_poller', () => {
     mockAlert = jest.fn()
     mockReload = jest.fn()
     global.alert = mockAlert
-    Object.defineProperty(window, 'location', {
-      writable: true,
-      value: { reload: mockReload }
-    })
+    delete window.location
+    window.location = { reload: mockReload }
 
     // Set a short timeout for testing (in minutes)
     originalTimeout = global.window.timeout

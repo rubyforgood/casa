@@ -49,7 +49,9 @@ class UserParameters < SimpleDelegator
   end
 
   def without(*keys)
+    keys = keys.map(&:to_s)
     params.reject! { |key| keys.include?(key) }
+    self
   end
 
   private

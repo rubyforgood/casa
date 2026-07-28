@@ -34,6 +34,6 @@ class CaseContactsContactDates
   end
 
   def order_and_format(case_contacts)
-    case_contacts.then { chron_sort _1 }.then { format_dates _1 }
+    case_contacts.then { chron_sort it }.then { format_dates it }
   end
 end

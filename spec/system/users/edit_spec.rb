@@ -213,6 +213,27 @@ RSpec.describe "users/edit", type: :system do
       uncheck "user_receive_sms_notifications"
       expect(page).to have_field("toggle-sms-notification-event", type: "checkbox", disabled: true)
     end
+
+    it "displays the email confirmation status" do
+      volunteer = create(:volunteer)
+
+      sign_in volunteer
+      visit edit_users_path
+
+      expect(page).to have_text("Email confirmation status")
+      expect(page).to have_text("Confirmed")
+    end
+
+    it "displays a pending email change awaiting confirmation" do
+      volunteer = create(:volunteer)
+      volunteer.update(email: "new-email@example.com")
+
+      sign_in volunteer
+      visit edit_users_path
+
+      expect(page).to have_text("Pending email confirmation")
+      expect(page).to have_text("new-email@example.com")
+    end
   end
 
   context "when a user's casa organization does not have twilio enabled" do

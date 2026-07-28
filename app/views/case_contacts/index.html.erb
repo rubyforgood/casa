@@ -110,14 +110,14 @@
         <div class="col-md-3 select-style-1 pr-5">
           <%= f.label :want_driving_reimbursement %>
           <div class="select-position">
-            <%= f.select(:want_driving_reimbursement, @presenter.boolean_select_options,
+            <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options,
                                                     {include_blank: "Display all", class: "filter-input"}) %>
           </div>
         </div>
         <div class="col-md-3 select-style-1 pr-5">
           <%= f.label :contact_made %>
           <div class="select-position">
-            <%= f.select(:contact_made, @presenter.boolean_select_options,
+            <%= f.select(:contact_made, @case_contacts.boolean_select_options,
                                       {include_blank: "Display all", class: "filter-input"}) %>
           </div>
         </div>
@@ -127,19 +127,19 @@
 <% end %>
 
 <%= turbo_frame_tag :case_contacts do %>
-  <% @presenter.case_contacts.each do |casa_case_id, data| %>
+  <% @case_contacts.object.each do |casa_case_id, data| %>
     <div class="card-style-1 mb-5">
       <div class="card-content">
-        <h3 class="mb-10"><%= @presenter.display_case_number(casa_case_id) %></h3>
+        <h3 class="mb-10"><%= @case_contacts.display_case_number(casa_case_id) %></h3>
         <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
       </div>
     </div>
   <% end %>
-  <% if @presenter.case_contacts.empty? %>
+  <% if @case_contacts.object.empty? %>
     <% if params.key?(:casa_case_id) %>
       <div class="card-style-1 mb-5">
         <div class="card-content">
-          <h3 class="mb-10"><%= @presenter.display_case_number(params[:casa_case_id].to_i) %></h3>
+          <h3 class="mb-10"><%= @case_contacts.display_case_number(params[:casa_case_id].to_i) %></h3>
           <%= params[:filterrific] ?
               "No case contacts have been found." :
               "You have no case contacts for this case. \

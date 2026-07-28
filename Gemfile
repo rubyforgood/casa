@@ -2,8 +2,8 @@
 
 source "https://rubygems.org"
 
-ruby "3.3.10"
-gem "rails", "~> 7.2"
+ruby "4.0.3"
+gem "rails", "~> 8.0"
 
 gem "after_party" # Post-deployment tasks
 gem "amazing_print" # Easier console reading
@@ -11,8 +11,8 @@ gem "authtrail" # Track Devise login activity
 gem "azure-storage-blob", require: false
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
-gem "caxlsx", "~> 4.2" # Excel spreadsheets - TODO can we remove this version restriction?
-gem "caxlsx_rails", "~> 0.6.4" # Excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx", "~> 4.5" # Excel spreadsheets - TODO can we remove this version restriction?
+gem "caxlsx_rails", "~> 0.7.1" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
 gem "devise" # Authentication
@@ -22,7 +22,7 @@ gem "filterrific" # Filtering and sorting of models
 gem "flipper" # Feature flag management
 gem "flipper-active_record" # Active Record adapter for Flipper
 gem "flipper-ui" # Web UI for managing feature flags
-gem "friendly_id", "~> 5.6.0" # Allows us to use a slug instead of CASA case IDs in their URLs
+gem "friendly_id", "~> 5.7.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
 gem "httparty" # HTTP network requests
 gem "image_processing", "~> 1.14" # Image processing helpers
@@ -41,7 +41,7 @@ gem "pg" # Use PostgreSQL as the database for Active Record
 gem "pghero" # PostgreSQL performance monitoring and query insights
 gem "pg_query" # PostgreSQL query parser
 gem "pretender" # Allows admins to impersonate users
-gem "puma", "~> 7.0" # Use Puma as the app server
+gem "puma", "~> 8.0" # Use Puma as the app server
 gem "pundit" # Authorization management based on user.role field
 gem "rack-attack" # Blocking & throttling abusive requests
 gem "rack-cors" # Cross-origin resource sharing
@@ -57,14 +57,14 @@ gem "stimulus-rails" # Stimulus JavaScript framework
 gem "strong_migrations" # Catch unsafe database migrations
 gem "turbo-rails", "~> 2.0" # Turbo framework for Rails
 gem "twilio-ruby" # Twilio helper functions
-gem "tzinfo-data", platforms: %i[mingw mswin x64_mingw jruby] # Windows does not include zoneinfo files
+gem "tzinfo-data", platforms: %i[windows jruby] # Windows does not include zoneinfo files
 gem "view_component" # View components for reusability
 gem "wicked" # Multi-step form wizard for Rails
 
-group :development, :test do
+group :development, :test, :production do
   gem "brakeman" # Security inspection
-  gem "bullet" # Detect and fix N+1 queries
-  gem "byebug", platforms: %i[mri mingw x64_mingw] # Debugger console
+  gem "prosopite" # N+1 query detection via SQL pattern analysis
+  gem "byebug", platforms: %i[mri windows] # Debugger console
   gem "dotenv-rails" # Environment variable management
   gem "erb_lint", require: false # ERB linter
   gem "factory_bot_rails" # Test data factories
@@ -86,14 +86,14 @@ group :development, :test do
 end
 
 group :development do
-  gem "annotate" # Adds database field listings to models as comments
+  gem "annotaterb" # Adds database field listings to models as comments
   gem "bundler-audit" # Checks for security issues in gems
   gem "letter_opener" # Opens emails in new tab for easier testing
   gem "simplecov-mcp" # SimpleCov MCP integration
   gem "spring" # Speeds up development by keeping your application running in the background
   gem "spring-commands-rspec" # Spring integration for RSpec
   gem "traceroute" # Finds unused routes
-  gem "web-console", "~> 4.0" # Interactive console on exception pages
+  gem "web-console", "~> 4.3" # Interactive console on exception pages
 end
 
 group :test do

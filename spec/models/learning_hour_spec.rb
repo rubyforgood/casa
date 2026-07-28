@@ -36,7 +36,7 @@ RSpec.describe LearningHour, type: :model do
   end
 
   it "has date that is not in the future" do
-    learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now.strftime("%d %b %Y"))
+    learning_hour = build_stubbed(:learning_hour, occurred_at: 1.day.from_now)
     expect(learning_hour).not_to be_valid
   end
 

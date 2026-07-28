@@ -3,8 +3,8 @@ require "rails_helper"
 RSpec.describe UiHelper, type: :helper do
   describe "#grouped_options_for_assigning_case" do
     before do
-      @casa_cases = create_list(:casa_case, 4)
-      @volunteer = create(:volunteer, casa_org: @casa_cases[0].casa_org)
+      @casa_case = create(:casa_case)
+      @volunteer = create(:volunteer, casa_org: @casa_case.casa_org)
       current_user = create(:supervisor)
       allow(helper).to receive(:current_user).and_return(current_user)
     end

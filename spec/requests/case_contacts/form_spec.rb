@@ -73,13 +73,14 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     context "when user is supervisor" do
       let(:user) { supervisor }
 
-      it "does not permit volunteer's supervisor to view the form" do
+      it "allows volunteer's supervisor to view the form" do
         expect(supervisor.volunteers).to include(volunteer)
         expect(casa_case.volunteers).to include(volunteer)
         expect(case_contact.creator).to eq volunteer
         request
 
-        expect(response).to redirect_to(root_path)
+        expect(response).to have_http_status(:success)
+        expect(response).to render_template(:details)
       end
     end
 
@@ -174,9 +175,10 @@ RSpec.describe "CaseContacts::Forms", type: :request do
       expect(case_contact.reload.status).to eq "active"
     end
 
-    it "raises RoutingError if no step in url" do
-      expect { patch "/case_contacts/#{case_contact.id}/form", params: {case_contact: attributes} }
-        .to raise_error(ActionController::RoutingError)
+    it "responds with 404 if no step in url" do
+      patch "/case_contacts/#{case_contact.id}/form", params: params
+
+      expect(response).to have_http_status(:not_found)
     end
 
     it "redirects to referrer (fallback /case_contacts?success=true)" do

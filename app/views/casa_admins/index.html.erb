@@ -34,7 +34,7 @@
 
           <tbody>
           <% @admins.each do |admin| %>
-            <tr id="admin-<%= admin.id %>" class="">
+            <tr id="admin-<%= admin.id %>">
               <td scope="row" class="min-wdth">
                 <span class="ml-10 mb-10 mt-10  pb-1"><%= admin.email %></span>
                 <% unless admin.active? %>

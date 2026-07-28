@@ -4,6 +4,7 @@ class ImportsController < ApplicationController
   include ActionView::Helpers::UrlHelper
   before_action :failed_csv_service, only: [:create, :download_failed]
   after_action :verify_authorized
+  skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
 
   ERR_FAILED_IMPORT_NOTE = "Note: An additional 'error' column has been added to the file. " \
     "Please note the failure reason and remove the column when resubmitting."

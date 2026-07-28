@@ -18,7 +18,12 @@ class User < ApplicationRecord
 
   belongs_to :casa_org
 
-  has_many :case_assignments, foreign_key: "volunteer_id", dependent: :destroy # TODO destroy is wrong
+  # Volunteers are deactivated, not destroyed: Volunteer#deactivate sets the
+  # user and each case_assignment inactive while preserving the rows for
+  # audit/history. restrict_with_error catches anything that tries to
+  # hard-delete a volunteer that still has assignments, rather than silently
+  # cascading and losing the history. Issue #6911.
+  has_many :case_assignments, foreign_key: "volunteer_id", dependent: :restrict_with_error
   has_many :casa_cases, -> { where(case_assignments: {active: true}) }, through: :case_assignments
 
   has_many :case_contacts, foreign_key: "creator_id"

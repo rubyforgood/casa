@@ -73,6 +73,7 @@
                             data: {confirm: "Contact your administrator at Ruby For Good to deactivate this account."} %>
               <% end %>
             <% end %>
+          </div>
           <% end %>
           <div class="accordionGroup">
             <div id="collapseOne" class="collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
@@ -119,7 +120,6 @@
       </div>
     </div>
   </div>
-</div>
 
 <div>
   <%= form_with(model: @user, scope: :user, url: users_path, method: :patch) do |form| %>

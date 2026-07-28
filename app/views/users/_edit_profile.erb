@@ -11,6 +11,16 @@
   <%= resource&.email %>
 </div>
 <div class="mb-1">
+  <strong class="text-dark">Email confirmation status </strong>
+  <%= resource&.decorate&.email_confirmation_status %>
+</div>
+<% if resource&.unconfirmed_email.present? %>
+  <div class="mb-1">
+    <strong class="text-dark">Pending email confirmation </strong>
+    <%= resource.unconfirmed_email %>
+  </div>
+<% end %>
+<div class="mb-1">
   <strong class="text-dark">Invitation email sent </strong>
   <%= resource&.decorate(context: {format: :edit_profile})&.formatted_invitation_sent_at || "never" %>
 </div>

@@ -116,6 +116,123 @@ RSpec.describe "/case_contacts_new_design", type: :request do
         end
       end
 
+      context "with additional_filters" do
+        let!(:other_case) { create(:casa_case, casa_org: organization) }
+        let(:contact_type) { create(:contact_type) }
+
+        def post_with_filters(filters)
+          post datatable_case_contacts_new_design_path,
+            params: datatable_params.merge(additional_filters: filters),
+            as: :json
+        end
+
+        def ids
+          JSON.parse(response.body, symbolize_names: true)[:data].pluck(:id)
+        end
+
+        it "filters by occurred_starting_at" do
+          old_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: 2.weeks.ago)
+
+          post_with_filters(occurred_starting_at: 1.week.ago.to_date.to_s)
+
+          expect(ids).to include(case_contact.id.to_s)
+          expect(ids).not_to include(old_contact.id.to_s)
+        end
+
+        it "filters by occurred_ending_at" do
+          old_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: 2.weeks.ago)
+          recent_contact = create(:case_contact, :active, casa_case: casa_case, occurred_at: Time.zone.today)
+
+          post_with_filters(occurred_ending_at: 1.week.ago.to_date.to_s)
+
+          expect(ids).to include(old_contact.id.to_s)
+          expect(ids).not_to include(recent_contact.id.to_s)
+        end
+
+        it "filters by casa_case_ids" do
+          other_contact = create(:case_contact, :active, casa_case: other_case)
+
+          post_with_filters(casa_case_ids: [casa_case.id.to_s])
+
+          expect(ids).to include(case_contact.id.to_s)
+          expect(ids).not_to include(other_contact.id.to_s)
+        end
+
+        it "filters by contact_type_ids" do
+          matching_contact = create(:case_contact, :active, casa_case: casa_case, contact_types: [contact_type])
+          non_matching_contact = create(:case_contact, :active, casa_case: casa_case, contact_types: [create(:contact_type)])
+
+          post_with_filters(contact_type_ids: [contact_type.id.to_s])
+
+          expect(ids).to include(matching_contact.id.to_s)
+          expect(ids).not_to include(non_matching_contact.id.to_s)
+        end
+
+        it "filters by contact_medium" do
+          in_person_contact = create(:case_contact, :active, casa_case: casa_case, medium_type: CaseContact::IN_PERSON)
+          video_contact = create(:case_contact, :active, casa_case: casa_case, medium_type: CaseContact::VIDEO)
+
+          post_with_filters(contact_medium: CaseContact::IN_PERSON)
+
+          expect(ids).to include(in_person_contact.id.to_s)
+          expect(ids).not_to include(video_contact.id.to_s)
+        end
+
+        it "filters by contact_made true" do
+          reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: true)
+          not_reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: false)
+
+          post_with_filters(contact_made: "true")
+
+          expect(ids).to include(reached_contact.id.to_s)
+          expect(ids).not_to include(not_reached_contact.id.to_s)
+        end
+
+        it "filters by contact_made false" do
+          reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: true)
+          not_reached_contact = create(:case_contact, :active, casa_case: casa_case, contact_made: false)
+
+          post_with_filters(contact_made: "false")
+
+          expect(ids).to include(not_reached_contact.id.to_s)
+          expect(ids).not_to include(reached_contact.id.to_s)
+        end
+
+        it "filters by no_drafts" do
+          active_contact = create(:case_contact, :active, casa_case: casa_case)
+          draft_contact = create(:case_contact, casa_case: casa_case, status: "started")
+
+          post_with_filters(no_drafts: "1")
+
+          expect(ids).to include(active_contact.id.to_s)
+          expect(ids).not_to include(draft_contact.id.to_s)
+        end
+
+        it "combines multiple filters with AND logic" do
+          matching = create(:case_contact, :active,
+            casa_case: casa_case,
+            medium_type: CaseContact::IN_PERSON,
+            occurred_at: 2.days.ago)
+          wrong_medium = create(:case_contact, :active,
+            casa_case: casa_case,
+            medium_type: CaseContact::VIDEO,
+            occurred_at: 2.days.ago)
+          wrong_case = create(:case_contact, :active,
+            casa_case: other_case,
+            medium_type: CaseContact::IN_PERSON,
+            occurred_at: 2.days.ago)
+
+          post_with_filters(
+            casa_case_ids: [casa_case.id.to_s],
+            contact_medium: CaseContact::IN_PERSON
+          )
+
+          expect(ids).to include(matching.id.to_s)
+          expect(ids).not_to include(wrong_medium.id.to_s)
+          expect(ids).not_to include(wrong_case.id.to_s)
+        end
+      end
+
       context "when user is a volunteer" do
         let(:volunteer) { create(:volunteer, casa_org: organization) }
 
@@ -175,6 +292,155 @@ RSpec.describe "/case_contacts_new_design", type: :request do
           post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
 
           expect(response).to have_http_status(:unauthorized)
+        end
+      end
+
+      context "expanded content fields" do
+        let(:contact_topic) { create(:contact_topic, casa_org: organization) }
+        let(:case_contact_with_details) do
+          create(:case_contact, :active, casa_case: casa_case, notes: "Important follow-up")
+        end
+
+        before do
+          create(:contact_topic_answer,
+            case_contact: case_contact_with_details,
+            contact_topic: contact_topic,
+            value: "Youth is doing well")
+        end
+
+        it "includes contact_topic_answers in the response" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers]).to be_an(Array)
+          expect(record[:contact_topic_answers].first[:value]).to eq("Youth is doing well")
+        end
+
+        it "includes the topic question in contact_topic_answers" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers].first[:question]).to eq(contact_topic.question)
+        end
+
+        it "includes notes in the response" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:notes]).to eq("Important follow-up")
+        end
+
+        it "omits blank topic answer values" do
+          create(:contact_topic_answer,
+            case_contact: case_contact_with_details,
+            contact_topic: contact_topic,
+            value: "")
+
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_details.id.to_s }
+          expect(record[:contact_topic_answers].pluck(:value)).to all(be_present)
+        end
+
+        it "returns a blank value for notes when notes are empty" do
+          case_contact_without_notes = create(:case_contact, :active, casa_case: casa_case, notes: "")
+
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_without_notes.id.to_s }
+          expect(record[:notes]).to be_blank
+        end
+      end
+
+      context "contact_topics field" do
+        let(:contact_topic) { create(:contact_topic, casa_org: organization) }
+        let(:case_contact_with_topics) { create(:case_contact, :active, casa_case: casa_case) }
+
+        before do
+          case_contact_with_topics.contact_topics << contact_topic
+        end
+
+        it "returns contact_topics as an array of strings" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_topics.id.to_s }
+          expect(record[:contact_topics]).to be_an(Array)
+        end
+
+        it "includes the topic question in the array" do
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+
+          json = JSON.parse(response.body, symbolize_names: true)
+          record = json[:data].find { |d| d[:id] == case_contact_with_topics.id.to_s }
+          expect(record[:contact_topics]).to include(contact_topic.question)
+        end
+      end
+
+      context "with permission flags and action metadata" do
+        let(:volunteer) { create(:volunteer, casa_org: organization) }
+        let!(:active_contact) { create(:case_contact, :active, casa_case: casa_case, creator: volunteer) }
+        let!(:draft_contact) { create(:case_contact, casa_case: casa_case, creator: volunteer, status: "started") }
+
+        def post_datatable
+          post datatable_case_contacts_new_design_path, params: datatable_params, as: :json
+        end
+
+        def row_for(contact_id)
+          json = JSON.parse(response.body, symbolize_names: true)
+          json[:data].find { |row| row[:id] == contact_id.to_s }
+        end
+
+        context "when signed in as admin" do
+          it "includes can_edit as true" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_edit]).to eq("true")
+          end
+
+          it "includes can_destroy as true" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_destroy]).to eq("true")
+          end
+
+          it "includes edit_path for the contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:edit_path]).to eq(edit_case_contact_path(active_contact))
+          end
+
+          it "includes followup_id as empty when no followup exists" do
+            post_datatable
+            expect(row_for(active_contact.id)[:followup_id]).to eq("")
+          end
+
+          it "includes followup_id when a requested followup exists" do
+            followup = create(:followup, case_contact: active_contact, status: :requested, creator: admin)
+            post_datatable
+            expect(row_for(active_contact.id)[:followup_id]).to eq(followup.id.to_s)
+          end
+        end
+
+        context "when signed in as volunteer" do
+          before { sign_in volunteer }
+
+          it "includes can_edit as true for their own contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_edit]).to eq("true")
+          end
+
+          it "includes can_destroy as false for their own active contact" do
+            post_datatable
+            expect(row_for(active_contact.id)[:can_destroy]).to eq("false")
+          end
+
+          it "includes can_destroy as true for their own draft contact" do
+            post_datatable
+            expect(row_for(draft_contact.id)[:can_destroy]).to eq("true")
+          end
         end
       end
     end

@@ -109,25 +109,23 @@ RSpec.describe VolunteerPolicy do
       let(:casa_org) { create(:casa_org) }
       let(:another_casa_org) { create(:casa_org) }
 
-      context "when admin" do
-        let(:user) { build_stubbed(:casa_admin, casa_org: casa_org) }
+      shared_examples "volunteer scope with user" do |factory|
+        let(:user) { build_stubbed(factory, casa_org: casa_org) }
 
         it { is_expected.to include(volunteer1) }
         it { is_expected.not_to include(another_org_volunteer) }
+      end
+
+      context "when admin" do
+        include_examples "volunteer scope with user", :casa_admin
       end
 
       context "when supervisor" do
-        let(:user) { build_stubbed(:supervisor, casa_org: casa_org) }
-
-        it { is_expected.to include(volunteer1) }
-        it { is_expected.not_to include(another_org_volunteer) }
+        include_examples "volunteer scope with user", :supervisor
       end
 
       context "when volunteer" do
-        let(:user) { build_stubbed(:volunteer, casa_org: casa_org) }
-
-        it { is_expected.to include(volunteer1) }
-        it { is_expected.not_to include(another_org_volunteer) }
+        include_examples "volunteer scope with user", :volunteer
       end
     end
   end

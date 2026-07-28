@@ -21,7 +21,7 @@ class CaseContactTypesReminder
             messages: send_sms_messages(volunteer, uncontacted_case_contact_type_names)
           }
         )
-        UserReminderTime.find_by(user_id: volunteer.id)&.update_attributes(case_contact_types: DateTime.now)
+        UserReminderTime.find_by(user_id: volunteer.id)&.update(case_contact_types: DateTime.now)
       end
     end
 

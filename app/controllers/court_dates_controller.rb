@@ -5,7 +5,7 @@ class CourtDatesController < ApplicationController
   before_action :set_court_date, only: %i[edit show update destroy]
   before_action :require_organization!
 
-  rescue_from ActiveRecord::RecordNotFound, with: -> { head :not_found }
+  rescue_from ActiveRecord::RecordNotFound, with: :not_authorized_redirect
 
   def show
     authorize @casa_case
@@ -66,9 +66,14 @@ class CourtDatesController < ApplicationController
   def set_casa_case
     @casa_case = current_organization.casa_cases.friendly.find(params[:casa_case_id])
   rescue ActiveRecord::RecordNotFound
+    not_authorized_redirect
+  end
+
+  def not_authorized_redirect
     respond_to do |format|
       format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
       format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :unauthorized }
+      format.any { head :not_found }
     end
   end
 

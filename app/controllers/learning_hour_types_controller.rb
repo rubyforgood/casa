@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LearningHourTypesController < ApplicationController
   before_action :set_learning_hour_type, only: %i[edit update]
   after_action :verify_authorized
