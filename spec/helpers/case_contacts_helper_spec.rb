@@ -167,4 +167,36 @@ RSpec.describe CaseContactsHelper, type: :helper do
       expect(helper.filters_applied?).to eq(true)
     end
   end
+
+  describe "#hidden_filter_count" do
+    def with_params(filterrific)
+      allow(helper).to receive(:params).and_return(
+        ActionController::Parameters.new(filterrific.nil? ? {} : {filterrific: filterrific})
+      )
+    end
+
+    it "is zero with no filterrific params" do
+      with_params(nil)
+
+      expect(helper.hidden_filter_count).to eq(0)
+    end
+
+    it "counts one per active field" do
+      with_params({contact_medium: "in-person", contact_made: "true", occurred_starting_at: ""})
+
+      expect(helper.hidden_filter_count).to eq(2)
+    end
+
+    it "counts a multi-value field once" do
+      with_params({contact_type: ["3", "4", "5"]})
+
+      expect(helper.hidden_filter_count).to eq(1)
+    end
+
+    it "excludes the filters surfaced in the toolbar row" do
+      with_params({no_drafts: "1", sorted_by: "occurred_at_asc", contact_medium: "letter"})
+
+      expect(helper.hidden_filter_count).to eq(1)
+    end
+  end
 end

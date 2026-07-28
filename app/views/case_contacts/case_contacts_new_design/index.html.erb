@@ -54,8 +54,11 @@
         <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <div class="sm:col-span-2">
             <%= label_tag :casa_case_ids, "Cases", class: label_class %>
-            <div data-controller="multiple-select">
-              <%= select_tag "casa_case_ids[]", options_for_select(@filterable_cases.map { |c| [c.case_number, c.id] }, params[:casa_case_ids]), multiple: true, include_blank: false, data: {"multiple-select-target": "select"}, class: "w-full" %>
+            <%# Explicit id: select_tag would sanitise "casa_case_ids[]" to "casa_case_ids_", which the
+                label's for="casa_case_ids" does not match -- leaving the select unlabelled, and so with
+                no accessible name for the controller to copy onto TomSelect. %>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search cases">
+              <%= select_tag "casa_case_ids[]", options_for_select(@filterable_cases.map { |c| [c.case_number, c.id] }, params[:casa_case_ids]), multiple: true, include_blank: false, id: "casa_case_ids", data: {"multiple-select-target": "select"}, class: "w-full" %>
             </div>
           </div>
           <div>
@@ -78,22 +81,18 @@
           </label>
         </div>
 
+        <%# Searchable multiselect, matching the live index: the checkbox grid this replaces was ~25
+            boxes in ~10 groups (502px desktop / 954px mobile). Groups become <optgroup>s. %>
         <div>
-          <h3 class="mb-2 text-sm font-semibold text-slate-900">Contact types</h3>
-          <div class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @current_organization_groups.each do |group| %>
-              <div>
-                <h4 class="mb-1.5 text-xs font-semibold text-slate-600"><%= group.name %></h4>
-                <div class="space-y-1.5">
-                  <% group.contact_types.each do |contact_type| %>
-                    <label class="flex items-center gap-2 text-sm text-slate-700">
-                      <%= check_box_tag "contact_type_ids[]", contact_type.id, Array(params[:contact_type_ids]).include?(contact_type.id.to_s), id: "contact_type_#{contact_type.id}", class: check_class %>
-                      <%= contact_type.name %>
-                    </label>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
+          <%= label_tag :contact_type_ids, "Contact types", class: label_class %>
+          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types">
+            <%= select_tag "contact_type_ids[]",
+              grouped_options_for_select(
+                @current_organization_groups.map { |group| [group.name, group.contact_types.map { |type| [type.name, type.id] }] },
+                Array(params[:contact_type_ids])
+              ),
+              multiple: true, include_blank: false, id: "contact_type_ids",
+              data: {"multiple-select-target": "select"}, class: "w-full" %>
           </div>
         </div>
       </div>

@@ -52,8 +52,16 @@
             <%= link_to "Clear filters", reset_filterrific_url, class: ghost_class,
               data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} %>
           <% end %>
+          <%# Count badge: how many hidden filters are on. A brand-tinted pill, not a parenthetical --
+              a number inside the label reads as part of it. Counts fields, so 3 contact types is 1. %>
+          <% hidden_count = hidden_filter_count %>
           <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= expand_filters? %>" aria-controls="filter-card-body" class="group <%= ghost_class %>">
-            More filters <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
+            More filters
+            <% if hidden_count.positive? %>
+              <span class="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-semibold text-brand-700"><%= hidden_count %></span>
+              <span class="sr-only"><%= pluralize(hidden_count, "filter") %> applied</span>
+            <% end %>
+            <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
           </button>
         </div>
       </div>
@@ -73,22 +81,21 @@
           </div>
         </div>
 
+        <%# A searchable multiselect, not an exposed checkbox grid: a default org has ~25 contact types
+            in ~10 groups, which rendered a 502px wall on desktop and 954px on mobile -- taller than the
+            results list it filters. Groups become <optgroup>s, and the chips double as the "which types
+            are on" readout. The label (not an h3) names the native <select> so the multiple-select
+            controller can copy it onto TomSelect's input and back onto the select. %>
         <div>
-          <h3 class="mb-2 text-sm font-semibold text-slate-900">Contact types</h3>
-          <div id="contact-type-form" class="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
-            <% @current_organization_groups.each do |group| %>
-              <div>
-                <h4 class="mb-1.5 text-xs font-semibold text-slate-600"><%= group.name %></h4>
-                <div class="space-y-1.5">
-                  <% group.contact_types.each do |contact_type| %>
-                    <label class="flex items-center gap-2 text-sm text-slate-700">
-                      <%= f.check_box :contact_type, {multiple: true, class: check_class}, contact_type.id, nil %>
-                      <%= contact_type.name %>
-                    </label>
-                  <% end %>
-                </div>
-              </div>
-            <% end %>
+          <%= f.label :contact_type, "Contact types", class: label_class %>
+          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types">
+            <%= f.select :contact_type,
+              grouped_options_for_select(
+                @current_organization_groups.map { |group| [group.name, group.contact_types.map { |type| [type.name, type.id] }] },
+                Array(f.object.contact_type).map(&:to_s)
+              ),
+              {include_hidden: false},
+              {multiple: true, class: "filter-input block w-full", data: {"multiple-select-target": "select"}} %>
           </div>
         </div>
 

@@ -303,6 +303,41 @@ bars follow it. Specifics, all measured on case-contacts:
 - Result: the collapsed card went **144px -> 100px** desktop and **238px -> 142px** mobile, for the
   same controls.
 
+**Past ~10 options, a filter is a searchable multiselect -- never an exposed checkbox grid.** The
+case-contacts contact-type filter was ~25 checkboxes in ~10 groups: **502px** on desktop and **954px**
+on mobile, i.e. **taller than the results list it filters**, so opening the panel pushed the data off
+screen (the whole card hit 1599px on a 390px-wide phone). As one `multiple-select` TomSelect it is
+**42px**, and the card drops to 415px desktop / 679px mobile. Groups become **`<optgroup>`s**, and the
+chips are the "which ones are on" readout, so nothing is lost. Jira / Linear / GitHub / Polaris all
+put long option sets behind a searchable control for the same reason. Keep `filter-input` on the
+`<select>`: TomSelect's `change` is dispatched with `initEvent(name, true, false)`, so it **bubbles**
+and the delegated auto-submit still fires (verify -- a non-bubbling change would silently make the
+filter inert).
+
+**`select_tag "name[]"` does not get the id you think.** Rails sanitises it to `name_` (trailing
+underscore), so a `label_tag :name` pointing at `for="name"` matches **nothing** -- the control is
+unlabelled, and the multiselect controller then finds no accessible name to copy, which is the
+`select-name` violation again. Pass an explicit **`id:`**. (This was live on the prototype's Cases
+filter.)
+
+**Active-filter count: a tinted pill on the overflow trigger.**
+
+```
+[Sorted by ▾]        [☑ Hide drafts]  [Clear filters]  [More filters (2) ▾]
+                                                                    ^^^
+                                        brand-100 bg / brand-700 text, rounded-full,
+                                        px-1.5 py-0.5 text-xs font-semibold
+```
+
+A **pill**, not a parenthetical in the label: a bare number inside the text reads as part of the
+label and is easy to miss, where a tinted pill signals "something is on" at a glance (Jira, Notion,
+Airtable all tint the control when filters are active). It **counts fields, not values** -- three
+contact types picked is `1` -- and it **excludes the filters visible in the row** (sort, Hide drafts),
+which would otherwise be double-reported. `hidden_filter_count` is the helper; it renders only when
+positive, with an `sr-only` "N filters applied" beside it since the digit alone is not a sentence.
+The richer version of this pattern is a **removable chip per active filter** (Polaris / Linear /
+Jira), which says *which* filters rather than how many; the count is the cheap 90%.
+
 **The unfiltered option is `All`** (`["All", ""]`, or `All <term>` -- `All volunteers`,
 `All supervisors` -- when the field needs naming). Never `Display all`: it instructs the UI
 instead of naming the scope, and it does not match any other filter on any other page. The

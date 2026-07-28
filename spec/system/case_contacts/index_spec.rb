@@ -242,6 +242,63 @@ RSpec.describe "case_contacts/index", type: :system do
         end
       end
 
+      describe "contact types filter" do
+        let(:group) { create(:contact_type_group, casa_org: organization, name: "CASA") }
+        let!(:youth) { create(:contact_type, contact_type_group: group, name: "Youth") }
+        let!(:school) { create(:contact_type, contact_type_group: group, name: "School") }
+
+        # Was an exposed grid of ~25 checkboxes (502px desktop / 954px mobile, taller than the
+        # results). Now one searchable multiselect, so guard the pieces that make it work.
+        it "renders one searchable multiselect with the groups as optgroups" do
+          subject
+
+          select = page.find("#filterrific_contact_type", visible: :all)
+          expect(select[:multiple]).to be_truthy
+          expect(select[:class]).to include("filter-input")
+          expect(page).to have_css("#filterrific_contact_type optgroup[label='CASA']", visible: :all)
+        end
+
+        it "filters the list when a type is picked", :js do
+          create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [youth])
+          create(:case_contact, creator: volunteer, casa_case: casa_case, contact_types: [school])
+
+          subject
+          click_on "More filters"
+          expect(page).to have_text("Showing 1\u20132 of 2")
+
+          find(".ts-control").click
+          find(".ts-dropdown .option", text: "Youth", match: :first).click
+
+          expect(page).to have_text("Showing 1\u20131 of 1")
+        end
+
+        it "shows the active type as a chip when it arrives in the params", :js do
+          visit case_contacts_path(filterrific: {contact_type: [youth.id.to_s]})
+
+          expect(page).to have_css(".ts-control .item", text: "Youth")
+        end
+      end
+
+      describe "active filter count" do
+        it "shows no badge when no hidden filter is on" do
+          subject
+
+          expect(page).to have_no_css("[data-disclosure-target=trigger] span.rounded-full")
+        end
+
+        it "counts hidden filters, one per field" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person", contact_made: "true"})
+
+          expect(page).to have_css("[data-disclosure-target=trigger] span.rounded-full", text: "2")
+        end
+
+        it "excludes the filters already visible in the toolbar row" do
+          visit case_contacts_path(filterrific: {no_drafts: "1", sorted_by: "occurred_at_asc"})
+
+          expect(page).to have_no_css("[data-disclosure-target=trigger] span.rounded-full")
+        end
+      end
+
       describe "other filters" do
         # These three selects once passed `class:` in f.select's options hash instead of
         # html_options, so they rendered with no class at all: unstyled, and missing the

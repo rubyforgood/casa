@@ -46,6 +46,22 @@ module CaseContactsHelper
     end
   end
 
+  # Filters that live in the always-visible toolbar row rather than behind `More filters`.
+  SURFACED_FILTERS = %w[no_drafts sorted_by].freeze
+
+  # How many of the *hidden* filters are active, for the count badge on the overflow trigger.
+  # Counts FIELDS, not values: three contact types picked is one active filter, which is what the
+  # badge means (and what Jira / Polaris count). Sort and Hide drafts are excluded -- they are
+  # visible in the row, so the badge would double-report them.
+  def hidden_filter_count
+    filterrific = params[:filterrific]
+    return 0 if filterrific.blank?
+
+    filterrific.each_pair.count do |key, value|
+      SURFACED_FILTERS.exclude?(key.to_s) && filter_applied?(key.to_s, value)
+    end
+  end
+
   def expand_filters?(surfaced_keys = %i[no_drafts sorted_by])
     params.fetch(:filterrific, {})
       .except(*surfaced_keys)
