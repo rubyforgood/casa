@@ -36,6 +36,17 @@ export default class extends Controller {
     } else {
       this.createBasicMultiSelect()
     }
+    this.nameNativeSelect()
+  }
+
+  // Re-name the native <select> AFTER init. TomSelect repoints the <label for=...> at its own control
+  // input, which leaves the original <select> nameless -- and it stays in the accessibility tree
+  // (.ts-hidden-accessible clips it rather than display:none), so axe's select-name rule fails
+  // (critical). Stamping the pre-init name on as an aria-label gives it a name TomSelect can't take.
+  nameNativeSelect () {
+    if (this.accessibleName && !this.selectTarget.getAttribute('aria-label')) {
+      this.selectTarget.setAttribute('aria-label', this.accessibleName)
+    }
   }
 
   // The native <select>'s accessible name -- its aria-label, or its associated <label> text.

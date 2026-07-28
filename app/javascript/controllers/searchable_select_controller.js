@@ -34,6 +34,12 @@ export default class extends Controller {
     if (accessibleName && this.select.control_input) {
       this.select.control_input.setAttribute('aria-label', accessibleName)
     }
+    // Same name back onto the native <select>: TomSelect took its <label for=...> away, and
+    // .ts-hidden-accessible keeps it in the accessibility tree, so without this it trips axe's
+    // select-name rule (critical).
+    if (accessibleName && !this.element.getAttribute('aria-label')) {
+      this.element.setAttribute('aria-label', accessibleName)
+    }
 
     if (this.toggleSubmitValue) {
       this.form = this.element.closest('form')

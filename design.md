@@ -238,7 +238,11 @@ bug; the only non-`button_classes` clickable is the tertiary ghost, which has it
 helper (call it -- do not re-derive the string). **This grep is necessary but not sufficient:** a status glyph emitted by a Ruby **model/decorator/helper method** (e.g. a court order's ✅/❌ from an `implementation_status_symbol`) or a **third-party web component / legacy CSS-class widget** (e.g. `<add-to-calendar-button>` / `.cal-btn`) is not a class-string button, so the grep cannot see it -- also scan Ruby methods that emit glyphs and non-`button_classes` interactive widgets, and pixel-check the rendered page.
 
 ### Inputs
-`block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-400 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
+`block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none`
+
+Placeholder ink is **`slate-500`**, like every other muted string -- `slate-400` is 2.63:1 and a
+placeholder is text. All 50 placeholder sites in `app/` already use `slate-500`; this token was the
+last `slate-400` placeholder left anywhere, and only in the doc.
 
 ### Select
 A native `<select>`, but the browser's arrow is replaced with a Bootstrap-icon chevron so it
@@ -354,9 +358,11 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   the viewport bottom, so the menu opens above and stays on screen.
 - **Accessible name**: like the single-select, the controller sets an `aria-label` on TomSelect's
   control input from the native `<select>`'s name (its `aria-label` or associated `<label>`, read
-  before init). A `<label for>` picker (the report filters, case groups) already resolves via
-  `aria-labelledby`; the fix matters for the rich `Form::MultipleSelectComponent`, which names its
-  select with `aria-label` (which TomSelect ignores). See "Searchable single-select -> Accessible name".
+  before init) **and stamps that name back onto the native `<select>` after init**. A `<label for>`
+  picker (the report filters, case groups) is **not** already safe -- that was a wrong call here, and
+  it cost the axe suite a critical `select-name` violation on the reports page: TomSelect repoints the
+  label at its own input, so the label names the input and the `<select>` behind it ends up nameless.
+  See "Searchable single-select -> Accessible name" for the full mechanism.
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 
@@ -390,6 +396,15 @@ past a handful of people.
   the **accessibility tree** (the input's computed name is non-empty), not the mere presence of an
   attribute -- a `<label for>` picker (court report) already resolves to a name via `aria-labelledby`
   even with no `aria-label` on the input.
+- **Name the NATIVE `<select>` too, after init.** Naming the control input is only half of it:
+  TomSelect **repoints the `<label for=...>` at its own input**, which empties `select.labels` and
+  leaves the original `<select>` with **no accessible name** -- and `.ts-hidden-accessible` *clips*
+  that select rather than `display:none`-ing it, so it stays in the accessibility tree and trips
+  axe's **`select-name` (critical)**. Both controllers stamp the pre-init name back on as an
+  `aria-label` on the `<select>` itself. This is why a `<label for>` picker is **not** automatically
+  safe: the label resolves for TomSelect's input, never for the select behind it. The symptom is
+  slippery -- axe flags only the selects that have finished initialising, so the violation count
+  moves between runs (the report filters showed 3 nodes one run and 2 the next).
 - **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
   (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
   native `<select>` to empty for submit + no-JS). **A placeholder picker MUST also set
