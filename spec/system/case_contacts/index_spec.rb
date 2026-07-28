@@ -110,7 +110,7 @@ RSpec.describe "case_contacts/index", type: :system do
           create(:case_contact, creator: volunteer, casa_case: casa_case, occurred_at: today)
           subject
 
-          click_on "Expand / Hide"
+          click_on "More filters"
 
           yesterday_display = I18n.l(yesterday, format: :full, default: nil)
           day_before_yesterday_display = I18n.l(day_before_yesterday, format: :full, default: nil)
@@ -179,13 +179,25 @@ RSpec.describe "case_contacts/index", type: :system do
         end
 
         it "displays other filters when expanded" do
-          click_on "Expand / Hide"
+          click_on "More filters"
 
           expect(page).to have_content "Other filters"
         end
 
+        # Tailwind v4 emits rotate-180 as the standalone `rotate` property, so read that --
+        # `transform` is "none" in both states and would pass a broken rotation.
+        it "rotates the trigger chevron when expanded", :js do
+          chevron = "[data-disclosure-target=trigger] i"
+          expect(page.evaluate_script("getComputedStyle(document.querySelector('#{chevron}')).rotate")).to eq("none")
+
+          click_on "More filters"
+          expect(page).to have_content "Other filters"
+
+          expect(page.evaluate_script("getComputedStyle(document.querySelector('#{chevron}')).rotate")).to eq("180deg")
+        end
+
         it "does not hide menu when filtering by placement filter" do
-          click_on "Expand / Hide"
+          click_on "More filters"
           select "In person", from: "Contact medium"
 
           expect(page).to have_content "Other filters"
@@ -225,7 +237,7 @@ RSpec.describe "case_contacts/index", type: :system do
           create(:case_contact, creator: volunteer, casa_case: casa_case, medium_type: "letter")
 
           subject
-          click_on "Expand / Hide"
+          click_on "More filters"
           expect(page).to have_text("Showing 1\u20132 of 2")
 
           select "In person", from: "Contact medium"
@@ -278,7 +290,7 @@ RSpec.describe "case_contacts/index", type: :system do
       expect(page).to have_no_content(case_number)
 
       # a date range that keeps case 2's contact (today) and drops case 1's (day before yesterday)
-      click_on "Expand / Hide"
+      click_on "More filters"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
@@ -287,7 +299,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
       # case 1 + a date range that excludes its only contact -> no contact cards render
       visit case_contacts_path(casa_case_id: casa_case.id)
-      click_on "Expand / Hide"
+      click_on "More filters"
       fill_in "filterrific_occurred_starting_at", with: yesterday
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 

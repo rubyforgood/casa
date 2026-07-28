@@ -89,9 +89,9 @@
       <h2 class="text-base font-semibold text-slate-900">Security</h2>
       <div class="mt-4 space-y-3">
         <div data-controller="disclosure" class="rounded-xl border border-slate-200">
-          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-password-panel" class="<%= disclosure_trigger %>">
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-password-panel" class="group <%= disclosure_trigger %>">
             <span class="flex items-center gap-2.5"><i class="bi bi-key text-base text-slate-400" aria-hidden="true"></i> Change password</span>
-            <i class="bi bi-chevron-down text-slate-400" aria-hidden="true"></i>
+            <i class="bi bi-chevron-down text-slate-400 transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
           </button>
           <div id="change-password-panel" data-disclosure-target="panel" class="hidden border-t border-slate-100 p-4">
             <%= form_with(model: @user, scope: :user, url: {action: "update_password"}, method: :patch) do |f| %>
@@ -115,9 +115,9 @@
         </div>
 
         <div data-controller="disclosure" class="rounded-xl border border-slate-200">
-          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-email-panel" class="<%= disclosure_trigger %>">
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="change-email-panel" class="group <%= disclosure_trigger %>">
             <span class="flex items-center gap-2.5"><i class="bi bi-envelope text-base text-slate-400" aria-hidden="true"></i> Change email</span>
-            <i class="bi bi-chevron-down text-slate-400" aria-hidden="true"></i>
+            <i class="bi bi-chevron-down text-slate-400 transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
           </button>
           <div id="change-email-panel" data-disclosure-target="panel" class="hidden border-t border-slate-100 p-4">
             <%= form_with(model: @user, scope: :user, url: {action: "update_email"}, method: :patch) do |f| %>

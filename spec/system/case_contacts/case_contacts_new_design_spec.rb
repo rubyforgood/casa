@@ -55,9 +55,9 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       visit case_contacts_new_design_path
     end
 
-    it "hides the filter panel by default and opens it on Expand / hide" do
+    it "hides the filter panel by default and opens it on More filters" do
       expect(page).not_to have_css("#cc-filter-panel", visible: true)
-      click_button "Expand / hide"
+      click_button "More filters"
       expect(page).to have_css("#cc-filter-panel", visible: true)
     end
 
@@ -65,7 +65,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       in_person_date = I18n.l(in_person_contact.occurred_at, format: :full)
       video_date = I18n.l(video_contact.occurred_at, format: :full)
 
-      click_button "Expand / hide"
+      click_button "More filters"
       select "In person", from: "Medium"
 
       expect(page).to have_text(in_person_date)
@@ -76,7 +76,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       old_date = I18n.l(in_person_contact.occurred_at, format: :full)
       recent_date = I18n.l(video_contact.occurred_at, format: :full)
 
-      click_button "Expand / hide"
+      click_button "More filters"
       execute_script("const el = document.getElementById('occurred_ending_at'); el.value = '#{4.days.ago.to_date}'; el.dispatchEvent(new Event('change', {bubbles: true}))")
 
       expect(page).to have_text(old_date)
@@ -90,7 +90,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     xit "hides drafts when Hide drafts is checked" do
       draft_date = I18n.l(draft_contact.occurred_at, format: :full)
 
-      click_button "Expand / hide"
+      click_button "More filters"
       check "Hide drafts"
 
       expect(page).not_to have_text(draft_date)
@@ -99,7 +99,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
     it "resets all filters when Reset filters is clicked" do
       video_date = I18n.l(video_contact.occurred_at, format: :full)
 
-      click_button "Expand / hide"
+      click_button "More filters"
       select "In person", from: "Medium"
       expect(page).not_to have_text(video_date)
 

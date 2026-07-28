@@ -17,7 +17,9 @@
         </div>
         <div class="flex flex-wrap gap-2">
           <%= form.button "Update profile", type: "submit", class: button_classes(:primary) %>
-          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="collapseOne" class="<%= button_classes(:secondary) %>">Change password</button>
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="false" aria-controls="collapseOne" class="group <%= button_classes(:secondary) %>">
+            Change password <i class="bi bi-chevron-down text-xs text-slate-500 transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
+          </button>
         </div>
       <% end %>
 

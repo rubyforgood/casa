@@ -936,10 +936,40 @@ mobile). This keeps it no-JS and unambiguous, and a non-JS click still finds the
 button (rack_test ignores the `hidden` class but respects the closed `<details>`).
 
 ### Disclosure (collapsible panel)
-Secondary actions (e.g. Change Password / Change Email) hide behind a full-width trigger
+Secondary actions (e.g. Change password / Change email) hide behind a full-width trigger
 button; the `disclosure` Stimulus controller toggles a `hidden` panel and keeps
 `aria-expanded` in sync. Keep the trigger a real `<button>` so it stays keyboard- and
 test-reachable.
+
+**The trigger label names the CONTENT, never the action.** This is the WAI-ARIA APG disclosure
+rule (the button's accessible name describes the content it controls; `aria-expanded` carries the
+state) and it is what Material, USWDS, Polaris and Primer all ship. `Expand / Hide` named the
+action twice, described nothing, and duplicated `aria-expanded` -- and the two case-contacts
+filter panels had already drifted to different casings of it. So:
+
+| trigger | label |
+|---|---|
+| filter panel, some filters visible outside it | **`More filters`** (card heading `Filters`) |
+| filter panel controlling every filter | `Filters` |
+| form section | the section name -- `Change password`, `Change email`, `Filter columns` |
+| icon-only row expander | content name as `aria-label` -- **`Contact details`**, not `Toggle contact details` ("Toggle" duplicates `aria-expanded`) |
+
+On case-contacts the sticky filters (Sorted by / Hide drafts / Reset filters) sit *above* the
+panel, so a bare `Filters` on the trigger would misdescribe what it controls -- hence
+`More filters`, the label Jira / Linear / Polaris use for exactly this split.
+
+**State is `aria-expanded` + a chevron that rotates -- never the label text.** Put `group` on the
+trigger and `transition-transform group-aria-[expanded=true]:rotate-180` on the chevron
+(`group-open:rotate-180` inside a native `<details>`). **Tailwind v4 emits `rotate-180` as the
+standalone `rotate` property**, so verify with `getComputedStyle(el).rotate` (`none` ->
+`180deg`): `.transform` reads `none` in *both* states and will tell you a working rotation is
+broken. Verified rotating: the case-contacts + new-design filter panels, users/edit change
+password + change email, all-casa-admins change password, reports "Filter columns".
+
+**Deliberate exception:** the case-contact card's inline `<details>` swaps `Show details` /
+`Hide details` via `group-open:`. That is an inline "more of this item" reveal, not a section
+header, the text still names the content, and a state-swapping label there is well-precedented
+(GOV.UK's accordion does it for every section). Keep it; don't propagate it to section triggers.
 
 ### Modal (native dialog)
 Built on the native `<dialog>` element driven by the `modal` Stimulus controller: `open`

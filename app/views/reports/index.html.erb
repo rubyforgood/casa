@@ -101,9 +101,10 @@
           </div>
         <% end %>
 
-        <details class="rounded-lg border border-slate-200">
+        <details class="group rounded-lg border border-slate-200">
           <summary class="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 [&::-webkit-details-marker]:hidden">
             <i class="bi bi-funnel" aria-hidden="true"></i> Filter columns
+            <i class="bi bi-chevron-down ml-auto text-xs text-slate-500 transition-transform group-open:rotate-180" aria-hidden="true"></i>
           </summary>
           <div class="border-t border-slate-100 px-4 py-4">
             <p class="mb-3 text-xs text-slate-500">All columns are exported by default. Uncheck any you want to omit.</p>
