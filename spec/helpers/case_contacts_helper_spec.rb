@@ -155,16 +155,87 @@ RSpec.describe CaseContactsHelper, type: :helper do
       expect(helper.filters_applied?).to eq(true)
     end
 
-    it "is false for the default sort, which the user did not choose" do
+    # Sort is not a filter. A non-default sort must not put a control labelled "Clear filters" on
+    # screen, and clearing must leave the ordering alone.
+    it "is false for any sort, default or not" do
       with_params({sorted_by: CaseContact.filterrific_default_filter_params[:sorted_by]})
+      expect(helper.filters_applied?).to eq(false)
 
+      with_params({sorted_by: "occurred_at_asc"})
       expect(helper.filters_applied?).to eq(false)
     end
+  end
 
-    it "is true for a non-default sort, since clearing would change it back" do
-      with_params({sorted_by: "occurred_at_asc"})
+  describe "#applied_filter_chips" do
+    def with_params(filterrific)
+      allow(helper).to receive(:params).and_return(
+        ActionController::Parameters.new(filterrific.nil? ? {} : {filterrific: filterrific})
+      )
+    end
 
-      expect(helper.filters_applied?).to eq(true)
+    it "is empty with nothing filtering" do
+      with_params({contact_medium: "", sorted_by: "occurred_at_asc"})
+
+      expect(helper.applied_filter_chips).to be_empty
+    end
+
+    it "names each applied filter and reads its value for a human" do
+      with_params({contact_medium: "in-person", contact_made: "false", no_drafts: "1"})
+
+      expect(helper.applied_filter_chips.map { |chip| [chip[:label], chip[:value]] })
+        .to contain_exactly(
+          ["Contact medium", "In person"],
+          ["Contact made", "No"],
+          ["Hide drafts", nil] # the label already says it
+        )
+    end
+
+    it "lists the selected contact types by name" do
+      group = create(:contact_type_group)
+      youth = create(:contact_type, contact_type_group: group, name: "Youth")
+      school = create(:contact_type, contact_type_group: group, name: "School")
+      with_params({contact_type: [youth.id.to_s, school.id.to_s]})
+
+      chip = helper.applied_filter_chips.sole
+
+      expect(chip[:label]).to eq("Contact types")
+      expect(chip[:value]).to eq("School and Youth")
+    end
+
+    it "gives each chip a path that drops only that filter and keeps the sort" do
+      with_params({contact_medium: "in-person", contact_made: "true", sorted_by: "occurred_at_asc"})
+
+      medium = helper.applied_filter_chips.find { |chip| chip[:label] == "Contact medium" }
+
+      expect(medium[:remove_path]).to include("contact_made")
+      expect(medium[:remove_path]).not_to include("contact_medium")
+      expect(medium[:remove_path]).to include("occurred_at_asc")
+    end
+  end
+
+  describe "#clear_filters_path" do
+    def with_params(filterrific)
+      allow(helper).to receive(:params).and_return(
+        ActionController::Parameters.new(filterrific.nil? ? {} : {filterrific: filterrific})
+      )
+    end
+
+    it "drops every filter but keeps the sort" do
+      with_params({contact_medium: "in-person", no_drafts: "1", sorted_by: "occurred_at_asc"})
+
+      path = helper.clear_filters_path
+
+      expect(path).to include("occurred_at_asc")
+      expect(path).not_to include("contact_medium")
+      expect(path).not_to include("no_drafts")
+    end
+
+    # Filterrific restores its session-persisted filters when the submitted hash is blank, so the
+    # link has to carry something or clearing would hand the old filters straight back.
+    it "always sends a filterrific hash" do
+      with_params(nil)
+
+      expect(helper.clear_filters_path).to include("filterrific")
     end
   end
 

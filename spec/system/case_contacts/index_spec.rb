@@ -413,6 +413,57 @@ RSpec.describe "case_contacts/index", type: :system do
         end
       end
 
+      describe "applied filter chips" do
+        let(:group) { create(:contact_type_group, casa_org: organization, name: "CASA") }
+        let!(:youth) { create(:contact_type, contact_type_group: group, name: "Youth") }
+
+        it "shows nothing to remove at the defaults" do
+          subject
+
+          expect(page).to have_no_css("[aria-label^='Remove filter']")
+        end
+
+        # :js -- the panel is always in the DOM (rack_test would see it whatever its CSS says), so only
+        # a real browser can prove the chips are readable while it is collapsed.
+        it "names each applied filter, and stays visible with the panel collapsed", :js do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person", contact_made: "true"}, filters_open: "")
+
+          expect(page).to have_no_content("Other filters") # panel closed
+          expect(page).to have_content("Contact medium: In person")
+          expect(page).to have_content("Contact made: Yes")
+        end
+
+        it "removes only the filter whose x is clicked" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person", contact_made: "true"})
+
+          click_on "Remove filter: Contact medium"
+
+          expect(page).to have_no_content("Contact medium: In person")
+          expect(page).to have_content("Contact made: Yes")
+        end
+
+        # Sort is not a filter: it must survive both a chip removal and Clear.
+        it "keeps the sort through a chip removal and through Clear" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person", sorted_by: "occurred_at_asc"})
+
+          click_on "Remove filter: Contact medium"
+          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
+
+          visit case_contacts_path(filterrific: {contact_medium: "in-person", sorted_by: "occurred_at_asc"})
+          click_on "Clear filters"
+
+          expect(page).to have_no_css("[aria-label^='Remove filter']")
+          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
+        end
+
+        it "does not offer Clear filters for a non-default sort alone" do
+          visit case_contacts_path(filterrific: {sorted_by: "occurred_at_asc"})
+
+          expect(page).to have_select("Sort by", selected: "Date of contact (oldest first)")
+          expect(page).to have_no_link("Clear filters")
+        end
+      end
+
       describe "active filter count" do
         it "shows no badge when no hidden filter is on" do
           subject

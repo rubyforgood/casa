@@ -80,23 +80,93 @@ module CaseContactsHelper
       .present?
   end
 
+  # Human names for the applied-filter chips.
+  FILTER_LABELS = {
+    "occurred_starting_at" => "From",
+    "occurred_ending_at" => "To",
+    "contact_type" => "Contact types",
+    "contact_medium" => "Contact medium",
+    "want_driving_reimbursement" => "Want driving reimbursement",
+    "contact_made" => "Contact made",
+    "no_drafts" => "Hide drafts"
+  }.freeze
+
   # Is anything actually filtering? The Clear action only renders when there is something to
   # clear -- a Clear button sitting at the defaults is dead chrome. Note `no_drafts` always
-  # posts ("0" when unchecked) and array filters arrive as [""], so neither can be judged by
-  # bare presence, and a default sort is not something the user set.
+  # posts ("0" when unchecked) and array filters arrive as [""], so neither can be judged by bare
+  # presence. SORT IS NOT A FILTER: a non-default sort must not put a button labelled "Clear
+  # filters" on screen, and clearing must not reset the user's sort.
   def filters_applied?
-    filterrific = params[:filterrific]
-    return false if filterrific.blank?
+    applied_filter_params.any?
+  end
 
-    # each_pair, not any?: ActionController::Parameters is not Enumerable.
-    filterrific.each_pair.any? { |key, value| filter_applied?(key.to_s, value) }
+  # One chip per applied filter, each carrying the URL that removes just that one. Showing WHICH
+  # filters are on is the part that makes a collapsed panel safe (Polaris / Linear / Jira all do
+  # this); a count alone leaves the user guessing.
+  def applied_filter_chips
+    applied_filter_params.map do |key, value|
+      {
+        label: FILTER_LABELS.fetch(key, key.humanize),
+        value: filter_chip_value(key, value),
+        remove_path: filter_path_without(key)
+      }
+    end
+  end
+
+  # Everything cleared, sort kept -- unlike `reset_filterrific_url`, which drops the sort too.
+  def clear_filters_path
+    filter_path_with({})
   end
 
   private
 
+  # The filterrific params that are actually filtering, as a plain hash. Sort is excluded
+  # throughout: it is a sort, not a filter.
+  def applied_filter_params
+    filterrific = params[:filterrific]
+    return {} if filterrific.blank?
+
+    # each_pair, not select: ActionController::Parameters is not Enumerable.
+    filterrific.each_pair.each_with_object({}) do |(key, value), applied|
+      key = key.to_s
+      next if key == "sorted_by"
+      next unless filter_applied?(key, value)
+
+      applied[key] = value.is_a?(ActionController::Parameters) ? value.to_unsafe_h : value
+    end
+  end
+
+  def filter_path_without(key)
+    filter_path_with(applied_filter_params.except(key))
+  end
+
+  # ALWAYS sends a filterrific hash (sorted_by at minimum). Filterrific falls back to its
+  # session-persisted params when the submitted hash is blank, so an empty one would resurrect the
+  # filters this link is meant to drop. Case scope and panel state are not filters, so they survive.
+  def filter_path_with(filters)
+    case_contacts_path({
+      casa_case_id: params[:casa_case_id].presence,
+      filters_open: params[:filters_open].presence,
+      filterrific: {"sorted_by" => current_sorted_by}.merge(filters)
+    }.compact)
+  end
+
+  def current_sorted_by
+    params.dig(:filterrific, :sorted_by).presence || default_sorted_by
+  end
+
+  def filter_chip_value(key, value)
+    case key
+    when "no_drafts" then nil # the label already says it
+    when "contact_made", "want_driving_reimbursement" then ActiveModel::Type::Boolean.new.cast(value) ? "Yes" : "No"
+    when "contact_medium" then value.to_s.tr("-", " ").humanize
+    when "contact_type" then ContactType.where(id: Array.wrap(value)).order(:name).pluck(:name).to_sentence
+    else value.to_s
+    end
+  end
+
   def filter_applied?(key, value)
     case key
-    when "sorted_by" then value.present? && value.to_s != default_sorted_by
     when "no_drafts" then ActiveModel::Type::Boolean.new.cast(value).present?
     else Array.wrap(value).any?(&:present?)
     end

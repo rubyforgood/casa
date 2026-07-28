@@ -294,12 +294,31 @@ bars follow it. Specifics, all measured on case-contacts:
   group **`min-h-[38px]` + `items-center`** and the centres coincide. Verify by comparing centre-y of
   the sort control, the checkbox and the trigger -- `index_spec` "keeps Hide drafts on one line with
   the overflow trigger" asserts all three are equal.
-- **Clear renders exactly when clicking it would change something**, never at the defaults, where it
-  is dead chrome (Polaris and Jira both gate it this way). `filters_applied?` is the predicate, and
-  the awkward cases are why it exists: a checkbox always posts (`no_drafts=0` when unchecked), array
-  filters arrive as `[""]`, and the *default* sort is not a user choice -- but a **non-default** sort
-  is, because `reset_filterrific` resets sort too. It is a **ghost** action, not a 40px `:secondary`:
-  as a bordered button it was the heaviest thing in the card, louder than the filters themselves.
+- **Clear renders exactly when a FILTER is applied**, never at the defaults, where it is dead chrome
+  (Polaris and Jira both gate it this way). `filters_applied?` is the predicate, and the awkward
+  cases are why it exists: a checkbox always posts (`no_drafts=0` when unchecked) and array filters
+  arrive as `[""]`, so neither can be judged by bare presence. It is a **ghost** action, not a 40px
+  `:secondary`: as a bordered button it was the heaviest thing in the card, louder than the filters.
+- **A sort is not a filter.** A non-default sort must not put a control labelled *Clear filters* on
+  screen, and clearing must not silently reorder the list. So `clear_filters_path`, **not**
+  `reset_filterrific_url` -- filterrific's reset drops the sort along with everything else. Both that
+  link and every chip's remove link **always send a `filterrific` hash carrying `sorted_by`**:
+  filterrific restores its *session-persisted* filters whenever the submitted hash is blank, so an
+  empty one would hand the filters straight back. Case scope (`casa_case_id`) and panel state
+  (`filters_open`) ride along too -- neither is a filter.
+- **Do NOT gate Clear on the panel being open.** It is tempting (filters open the panel, so surely
+  Clear belongs to the open panel) but it removes the escape hatch in the one state that needs it
+  most: a filter applied while the panel is collapsed, where the user cannot see what is narrowing
+  the list. Polaris / Jira / Linear / GitHub all keep the clear affordance independent of the
+  popover's state.
+- **Applied-filter chips, one per active filter, each with its own ×.** A count says how many are on;
+  chips say **which** -- and because they sit *outside* the panel, a collapsed panel no longer hides
+  what is filtering. `applied_filter_chips` builds them: a human label (`FILTER_LABELS`), a human
+  value (booleans read `Yes`/`No`, a medium is humanised, contact types are listed by name, and
+  `Hide drafts` shows no value because the label already is the value), and a remove path that drops
+  **only** that filter. brand-100/brand-700, matching the multiselect chips. Give the × a **`title`
+  as well as an `aria-label`**: `aria-label` alone is invisible to Capybara's `click_on`, which
+  matches text/title/id.
 - Result: the collapsed card went **144px -> 100px** desktop and **238px -> 142px** mobile, for the
   same controls.
 - **A sort control is labelled `Sort by`** (Jira / Polaris / Amazon; GitHub shortens to `Sort`), not
