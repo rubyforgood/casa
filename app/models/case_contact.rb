@@ -72,6 +72,21 @@ class CaseContact < ApplicationRecord
     expenses: "expenses"
   }, validate: true, default: :started
 
+  # Throw a draft away for good, with the children that hold FK constraints.
+  #
+  # HARD delete, not Paranoia's `destroy`: a soft-deleted draft keeps its row AND surfaces to
+  # CasaAdmins as a "[DELETE]" row (`grab_all` uses `with_deleted`), so discarding would leave more
+  # clutter than it removed. additional_expenses and contact_topic_answers hold FK constraints to
+  # case_contacts so `really_destroy!` raises while their rows exist, and contact_topic_answers is
+  # itself paranoid, so a plain destroy leaves those rows behind.
+  def discard!
+    followups.destroy_all
+    additional_expenses.destroy_all
+    case_contact_contact_types.destroy_all
+    contact_topic_answers.with_deleted.each(&:really_destroy!)
+    really_destroy!
+  end
+
   def active_or_details?
     details? || active?
   end

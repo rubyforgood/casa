@@ -65,6 +65,62 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
+  describe "discarding a draft" do
+    let(:draft) do
+      create(:case_contact, :started_status, creator: volunteer, casa_case: nil,
+        draft_case_ids: [casa_case.id], notes: "half a thought")
+    end
+
+    it "is not offered on a brand-new form, which has nothing to discard" do
+      subject
+
+      expect(page).to have_no_button("Discard draft")
+      expect(CaseContact.count).to eq(0)
+    end
+
+    it "is not offered for an active contact, which is a real record" do
+      contact = create(:case_contact, :active, casa_case: casa_case, creator: volunteer)
+
+      visit edit_case_contact_path(contact)
+
+      expect(page).to have_text("Editing existing case contact")
+      expect(page).to have_no_button("Discard draft")
+    end
+
+    it "is offered once a draft exists" do
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+
+      expect(page).to have_button("Discard draft")
+    end
+
+    it "confirms first, and keeps the draft when cancelled", :js do
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+
+      click_on "Discard draft"
+      expect(page).to have_text("Discard this draft?")
+      click_button "Cancel"
+
+      expect(CaseContact.with_deleted).to exist(draft.id)
+    end
+
+    # Hard delete: a soft-deleted draft keeps its row and resurfaces to admins as "[DELETE]".
+    it "deletes the draft and its autosaved children, then leaves the form", :js do
+      answer_topic = create(:contact_topic, casa_org: casa_org, question: "What was discussed?")
+      create(:contact_topic_answer, case_contact: draft, contact_topic: answer_topic, value: "an answer")
+      create(:additional_expense, case_contact: draft)
+
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+      click_on "Discard draft"
+      within("dialog") { click_button "Discard draft" }
+
+      expect(page).to have_text("Draft discarded.")
+      expect(CaseContact.with_deleted.where(id: draft.id)).to be_empty
+      expect(ContactTopicAnswer.with_deleted.where(case_contact_id: draft.id)).to be_empty
+      expect(AdditionalExpense.where(case_contact_id: draft.id)).to be_empty
+      expect(page).to have_current_path(case_contacts_path)
+    end
+  end
+
   # The form was a dead end: Submit and Submit & add another were the only ways off it. Back uses the
   # #leave action, so it returns where a successful Submit would -- see design.md "Back navigation on
   # sub-pages", which calls this out as a recurring gap.

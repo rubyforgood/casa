@@ -3,7 +3,7 @@
 class CaseContactsController < ApplicationController
   include LoadsCaseContacts
 
-  before_action :set_case_contact, only: %i[edit destroy]
+  before_action :set_case_contact, only: %i[edit destroy discard_draft]
   before_action :set_contact_types, only: %i[edit]
   before_action :require_organization!
   after_action :verify_authorized, except: %i[leave]
@@ -51,6 +51,23 @@ class CaseContactsController < ApplicationController
   end
 
   def leave
+    redirect_back_to_referer(fallback_location: case_contacts_path)
+  end
+
+  # Explicit "Discard draft" from the form. Separate from #destroy because the redirect differs: that
+  # one returns to `request.referer`, which here is the form of the record just deleted. This returns
+  # where the form was opened from (session[:return_to], set by #new), so discarding lands in the same
+  # place as Back and as a successful Submit.
+  def discard_draft
+    authorize @case_contact
+
+    if @case_contact.active?
+      # An active contact is a real record, not a draft; deleting one goes through #destroy.
+      return redirect_back_to_referer(fallback_location: case_contacts_path)
+    end
+
+    @case_contact.discard!
+    flash[:notice] = "Draft discarded."
     redirect_back_to_referer(fallback_location: case_contacts_path)
   end
 

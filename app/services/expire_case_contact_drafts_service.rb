@@ -6,12 +6,8 @@
 # it represents intent worth keeping; `active` is a finished contact. `updated_at` is the liveness
 # signal because autosave touches it, so a draft someone is editing right now is never in range.
 #
-# HARD delete, not Paranoia's soft delete: CaseContact is `acts_as_paranoid`, and a soft-deleted draft
-# keeps its row AND becomes *more* visible -- `grab_all` shows deleted records to CasaAdmins and the
-# card prefixes them "[DELETE]" -- so soft-deleting would worsen the clutter it is meant to remove.
-# Children have to go first: additional_expenses and contact_topic_answers hold FK constraints to
-# case_contacts, so `really_destroy!` raises while their rows exist, and contact_topic_answers is
-# itself paranoid, so a plain destroy leaves those rows behind.
+# Deletion goes through CaseContact#discard!, which hard-deletes and clears the children that hold FK
+# constraints -- see there for why a soft delete would make the clutter worse.
 class ExpireCaseContactDraftsService
   DEFAULT_EXPIRY_DAYS = 7
 
@@ -38,11 +34,9 @@ class ExpireCaseContactDraftsService
     CaseContact.started.where(updated_at: ..days.days.ago)
   end
 
+  # CaseContact#discard! is the single place that knows how to take a draft apart -- the same path a
+  # user's explicit "Discard draft" takes.
   def delete(draft)
-    draft.followups.destroy_all
-    draft.additional_expenses.destroy_all
-    draft.case_contact_contact_types.destroy_all
-    draft.contact_topic_answers.with_deleted.each(&:really_destroy!)
-    draft.really_destroy!
+    draft.discard!
   end
 end

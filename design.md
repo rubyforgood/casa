@@ -1191,6 +1191,28 @@ separate **status variant** (the success/thank-you dialog) centers a 48px hero b
 components on Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded
 on `casa_app`).
 
+**`shared/_confirm_button` cannot go inside another `<form>`.** It confirms via **`button_to`**, which
+renders its own `<form>`, and **nested forms are invalid HTML**: the browser drops the inner one, so
+the confirm button submits the OUTER form instead. On the case-contact form that sent
+`DELETE /case_contacts/:id/form/details` and hit a routing error, silently -- the dialog looked
+perfect. Put the confirm **outside** the `form_with` (the case-contact "Discard draft" sits on its own
+`mt-6 border-t pt-4` row below the form, which is better placement for a destructive action anyway).
+The Dialog components themselves are fine inside a form; it is `button_to` that is not.
+
+**Name the policy predicate after the action.** `authorize @case_contact, :destroy?` still resolved to
+`discard_draft?` and raised `NoMethodError`; alias it in the policy
+(`alias_method :discard_draft?, :destroy?`) and call a bare `authorize`, like every other alias in
+`CaseContactPolicy`.
+
+**Discarding a draft** (case-contact form): offered only when the draft actually exists --
+`persisted? && !active?`. A brand-new form has nothing to discard (nothing is inserted until the
+first save, so **Back** is the whole exit), and an active contact is a real record, deleted from the
+list instead. It **hard-deletes** through `CaseContact#discard!` -- the same path the expiry task
+uses -- because Paranoia's soft delete keeps the row and resurfaces it to CasaAdmins as a "[DELETE]"
+row, i.e. it would leave more clutter than it removed. Its own action (`#discard_draft`) exists so the
+redirect can return where the form was opened from; `#destroy` redirects to `request.referer`, which
+here is the form of the record just deleted.
+
 **Delete confirm in a table row.** For a per-row destructive confirm, reuse
 `shared/_confirm_button` (a visible-label trigger + the Dialog). When a **non-`:js` (rack_test)**
 spec drives the flow — click "Delete", assert the title, then a visible "Close"/"Confirm" — render

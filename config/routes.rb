@@ -87,6 +87,7 @@ Rails.application.routes.draw do
   resources :case_contacts, except: %i[create update show new] do
     member do
       post :restore
+      delete :discard_draft
     end
     resources :form, controller: "case_contacts/form", only: %i[show update]
     resources :followups, only: %i[create], controller: "case_contacts/followups", shallow: true do

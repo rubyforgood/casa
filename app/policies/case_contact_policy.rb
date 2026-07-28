@@ -26,6 +26,10 @@ class CaseContactPolicy < ApplicationPolicy
   # opening the form. Without this, create fell through to ApplicationPolicy#create? (admin only).
   alias_method :create?, :new?
   alias_method :edit?, :update?
+  # Discarding a draft is the same permission as deleting it (creator of a draft, or an
+  # admin/supervisor in the org). Named for the action so Pundit resolves it without an explicit
+  # query, like every other alias here.
+  alias_method :discard_draft?, :destroy?
   alias_method :restore?, :is_admin_same_org?
 
   class Scope < ApplicationPolicy::Scope

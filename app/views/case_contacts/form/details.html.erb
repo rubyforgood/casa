@@ -448,6 +448,30 @@
           <%= button_tag type: "submit", name: "case_contact[metadata][create_another]", value: "true", class: button_classes(:secondary) do %>
             <i class="bi bi-plus-lg" aria-hidden="true"></i> Submit &amp; add another
           <% end %>
+
+        </div>
+      <% end %>
+
+      <%# Discard sits OUTSIDE the form on purpose. shared/confirm_button confirms via `button_to`,
+          which renders its own <form>; nested forms are invalid HTML, so the browser dropped the
+          inner one and the confirm submitted the CASE-CONTACT form instead (DELETE to the wizard
+          path -> routing error). Out here it posts to its own action. Keeping the destructive action
+          away from Submit is the better placement anyway.
+
+          Only for a draft that actually EXISTS: persisted and not yet active. A brand-new form has
+          nothing to discard (Back is enough -- nothing is inserted until the first save), and an
+          active contact is a real record, deleted from the list instead. :danger_outline because it
+          sits on its own bordered row (design.md). %>
+      <% if @case_contact.persisted? && !@case_contact.active? %>
+        <div class="mt-6 border-t border-slate-100 pt-4">
+          <%= render "shared/confirm_button",
+            url: discard_draft_case_contact_path(@case_contact),
+            title: "Discard this draft?",
+            message: "This draft and anything autosaved into it -- notes, topic answers and expenses -- will be deleted. This cannot be undone.",
+            confirm_label: "Discard draft",
+            trigger_label: "Discard draft",
+            trigger_icon: "bi bi-trash",
+            trigger_class: button_classes(:danger_outline) %>
         </div>
       <% end %>
     </div>
