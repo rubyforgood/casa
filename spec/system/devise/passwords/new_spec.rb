@@ -96,8 +96,10 @@ RSpec.describe "users/passwords/new", type: :system do
   end
 end
 
+# Find the link by URL rather than by position: the design-system mailer layout and the
+# CTA-button partial change how many links an email carries, and a magic index silently
+# picks up the wrong one (or nil) whenever that shifts.
 def reset_password_link(email_address)
   email = open_email(email_address)
-  links = links_in_email(email)
-  links[2]
+  links_in_email(email).find { |link| link.include?("/users/password/edit") }
 end

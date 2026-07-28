@@ -29,7 +29,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       last_email = ActionMailer::Base.deliveries.last
       expect(last_email.to).to eq ["new_volunteer@example.com"]
       expect(last_email.subject).to have_text "CASA Console invitation instructions"
-      expect(last_email.html_part.body.encoded).to have_text "your new Volunteer account"
+      expect(last_email.html_part.body.encoded).to have_text "Volunteer console account has been created for you"
     end
 
     it "sets invitation_created_at timestamp" do

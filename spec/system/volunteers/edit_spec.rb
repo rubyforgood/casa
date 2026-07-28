@@ -148,7 +148,7 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+          .to match("Confirm my email")
       end
 
       it "succesfully displays the new email once the user confirms" do

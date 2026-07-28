@@ -106,7 +106,7 @@ RSpec.describe "/casa_admins", type: :request do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+          .to match("Confirm my email")
       end
 
       it "also respond as json", :aggregate_failures do

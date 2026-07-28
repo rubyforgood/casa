@@ -32,7 +32,7 @@ RSpec.describe "casa_admins/new", type: :system do
     last_email = ActionMailer::Base.deliveries.last
     expect(last_email.to).to eq ["valid@example.com"]
     expect(last_email.subject).to have_text "CASA Console invitation instructions"
-    expect(last_email.html_part.body.encoded).to have_text "your new CasaAdmin account."
+    expect(last_email.html_part.body.encoded).to have_text "CasaAdmin console account has been created for you"
 
     click_on "New admin"
     fill_in "Email", with: "valid@example.com"

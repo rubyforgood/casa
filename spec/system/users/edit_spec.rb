@@ -117,7 +117,7 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to have_text("Click here to confirm your email")
+        .to have_text("Confirm my email")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do
@@ -292,7 +292,7 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Click here to confirm your email")
+        .to match("Confirm my email")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do
@@ -453,7 +453,7 @@ RSpec.describe "users/edit", type: :system do
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Click here to confirm your email")
+        .to match("Confirm my email")
     end
 
     it "displays email errors messages when user is unable to set a email with incorrect current password" do

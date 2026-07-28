@@ -256,7 +256,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("Click here to confirm your email")
+            .to match("Confirm my email")
         end
 
         it "strips whitespace from email" do
@@ -316,7 +316,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("Click here to confirm your email")
+            .to match("Confirm my email")
         end
 
         it "bypasses sign in if the current user is the true user" do
@@ -375,7 +375,7 @@ RSpec.describe "/users", type: :request do
 
           expect(ActionMailer::Base.deliveries.count).to eq(1)
           expect(ActionMailer::Base.deliveries.last.body.encoded)
-            .to match("Click here to confirm your email")
+            .to match("Confirm my email")
         end
 
         it "bypasses sign in if the current user is the true user" do
