@@ -484,6 +484,11 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   and renders a flat list. The rich component carried `group` on every option and still showed 25
   ungrouped rows, while the filter's grouped `<optgroup>` markup showed headers -- the same data, two
   different menus. Pass `optgroups` + `optgroupField: 'group'` + `lockOptgroupOrder: true`.
+  **Then audit every option builder that sets `group`.** While groups were search-only, a `group` that
+  was not a human label went unnoticed; the moment they render, it is drawn as a header.
+  `CasaCaseDecorator#hash_for_multi_select` set `group: casa_org_id`, so the relevant-cases dropdown
+  grew a stray, unclickable **org id** above the cases. Cases are already org-scoped, so they carry no
+  group at all now; contact types keep theirs because it is a real name.
 - **Never re-render the page on each pick.** A multiselect wired to the `filter-input` change-submit
   fired a **full page render per chip**, which tore down the open menu: picking N types cost N page
   loads and N reopenings of the dropdown (confirmed by tagging `window` and watching the tag vanish).
@@ -1203,6 +1208,16 @@ The Dialog components themselves are fine inside a form; it is `button_to` that 
 `discard_draft?` and raised `NoMethodError`; alias it in the policy
 (`alias_method :discard_draft?, :destroy?`) and call a bare `authorize`, like every other alias in
 `CaseContactPolicy`.
+
+**A control gated on `persisted?` will not appear on a lazily-created record.** The form persists on
+first save and the autosave **never re-renders the page**, so anything server-rendered on
+`persisted?` stays as it was at page load -- the Discard button was invisible until a manual reload,
+which reads as "the feature does not work". Render such a control **up front with `hidden`**, and let
+`case_contact_draft.js#adopt` reveal it and fill in its URL (the create response hands back
+`discard_path` beside `id` and `form_action`, so no route is rebuilt in JS). Drive this from the FORM
+when testing -- seeding a draft and visiting the wizard URL renders the persisted branch and proves
+nothing about the path a user takes. Note the rack_test consequence: a `hidden` block is still
+"visible" to rack_test, so assert the **class** in a non-`:js` example and visibility in a `:js` one.
 
 **Discarding a draft** (case-contact form): offered only when the draft actually exists --
 `persisted? && !active?`. A brand-new form has nothing to discard (nothing is inserted until the

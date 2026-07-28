@@ -33,6 +33,15 @@ function adopt (form, data) {
     nested.setAttribute('data-casa-nested-form-parent-id-value', data.id)
   })
 
+  // The Discard control is server-rendered on `persisted?`, so it ships hidden on a new form. Point
+  // its button_to at the record and reveal it -- otherwise it stays invisible until a reload.
+  const discard = document.getElementById('discard-draft')
+  if (discard && data.discard_path) {
+    const discardForm = discard.querySelector('form')
+    if (discardForm) { discardForm.action = data.discard_path }
+    discard.classList.remove('hidden')
+  }
+
   // Leave the browser on the draft's own URL so a refresh resumes it instead of starting over.
   if (window.history && window.history.replaceState) {
     window.history.replaceState({}, '', data.form_action)

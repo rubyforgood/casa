@@ -116,6 +116,10 @@ class CasaCaseDecorator < Draper::Decorator
   def hash_for_multi_select
     volunteers = object.volunteers.map(&:display_name).join(", ")
 
-    {value: object.id, text: object.case_number, group: object&.casa_org_id, subtext: volunteers}
+    # No `group`: every case in this list is already scoped to the current org, so grouping by
+    # casa_org_id conveys nothing -- and once the multiselect started RENDERING optgroups (rather than
+    # only searching them) it drew that raw org id as a header, a stray unclickable number above the
+    # cases. Contact types keep their group because theirs is a real name.
+    {value: object.id, text: object.case_number, subtext: volunteers}
   end
 end

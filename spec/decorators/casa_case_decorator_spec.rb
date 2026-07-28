@@ -96,4 +96,19 @@ RSpec.describe CasaCaseDecorator do
       expect(casa_case.decorate.emancipation_checklist_count).to eq "2 / 5"
     end
   end
+
+  describe "#hash_for_multi_select" do
+    let(:casa_case) { create(:casa_case, case_number: "CINA-1") }
+
+    # It used to carry `group: casa_org_id`. That was invisible while the multiselect only SEARCHED
+    # groups, but once it started rendering optgroups the raw org id was drawn as a header: a stray,
+    # unclickable number above the cases. Every case here is already org-scoped, so there is no group
+    # worth showing.
+    it "declares no group, so the multiselect draws no header" do
+      hash = casa_case.decorate.hash_for_multi_select
+
+      expect(hash).not_to have_key(:group)
+      expect(hash).to include(value: casa_case.id, text: "CINA-1")
+    end
+  end
 end

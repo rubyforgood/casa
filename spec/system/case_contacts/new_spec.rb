@@ -71,11 +71,36 @@ RSpec.describe "case_contacts/new", type: :system do
         draft_case_ids: [casa_case.id], notes: "half a thought")
     end
 
+    # Assert the server-rendered `hidden`, not visibility: this is a rack_test example and rack_test
+    # ignores CSS, so it "sees" the hidden block. The :js example below covers the visible behaviour.
     it "is not offered on a brand-new form, which has nothing to discard" do
       subject
 
-      expect(page).to have_no_button("Discard draft")
+      expect(page.find("#discard-draft", visible: :all)[:class]).to include("hidden")
       expect(CaseContact.count).to eq(0)
+    end
+
+    # The control is server-rendered on `persisted?` and the autosave that creates the draft never
+    # re-renders the page, so it used to stay hidden until a reload -- i.e. it looked like it never
+    # worked. It now ships hidden and case_contact_draft.js reveals it (and fills in its action).
+    it "appears as soon as autosave creates the draft, with no reload", :js do
+      visit casa_case_path(casa_case)
+      click_on "New case contact"
+      expect(page).to have_no_button("Discard draft")
+
+      fill_in "case_contact_notes", with: "a partial thought"
+      expect(page).to have_text("Saved!")
+
+      expect(page).to have_button("Discard draft")
+
+      # And the revealed control is wired to the record that was just created.
+      draft = CaseContact.last
+      click_on "Discard draft"
+      within("dialog") { click_button "Discard draft" }
+
+      expect(page).to have_text("Draft discarded.")
+      expect(CaseContact.with_deleted.where(id: draft.id)).to be_empty
+      expect(page).to have_current_path(casa_case_path(casa_case))
     end
 
     it "is not offered for an active contact, which is a real record" do
@@ -124,6 +149,18 @@ RSpec.describe "case_contacts/new", type: :system do
   # The form was a dead end: Submit and Submit & add another were the only ways off it. Back uses the
   # #leave action, so it returns where a successful Submit would -- see design.md "Back navigation on
   # sub-pages", which calls this out as a recurring gap.
+  describe "the relevant-cases dropdown" do
+    # The case options used to carry `group: casa_org_id`, which the multiselect rendered as a header
+    # once it started drawing optgroups: a stray unclickable number sitting above the cases.
+    it "lists the cases with no group header", :js do
+      subject
+      find("#draft-case-id-selector .ts-control").click
+
+      expect(page).to have_css("#draft-case-id-selector .ts-dropdown .option", text: case_number)
+      expect(page).to have_no_css("#draft-case-id-selector .ts-dropdown .optgroup-header")
+    end
+  end
+
   describe "leaving the form" do
     it "offers Back, which returns to the page the form was opened from" do
       visit casa_case_path(casa_case)
@@ -146,12 +183,16 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     # Not "Cancel": the form autosaves, so on an existing contact the changes are already saved.
+    # Scoped to the actions row: the discard confirm dialog has its own Cancel, which is always in the
+    # DOM. The claim here is that the way OUT of the form is Back, not a Cancel beside Submit.
     it "says Back rather than Cancel" do
       subject
 
       expect(page).to have_link("Back")
-      expect(page).to have_no_link("Cancel")
-      expect(page).to have_no_button("Cancel")
+      within("#contact-form-action-buttons") do
+        expect(page).to have_no_link("Cancel")
+        expect(page).to have_no_button("Cancel")
+      end
     end
   end
 

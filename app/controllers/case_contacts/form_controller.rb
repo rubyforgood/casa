@@ -40,8 +40,13 @@ class CaseContacts::FormController < ApplicationController
         # back where every later save must go -- the record exists now, so posting here again would
         # create a second draft.
         if @case_contact.update(case_contact_params)
-          render json: {id: @case_contact.id, form_action: wizard_path(steps.first, case_contact_id: @case_contact.id)},
-            status: :created
+          # discard_path travels with the id: the Discard control is server-rendered on `persisted?`,
+          # and an autosave never re-renders the page, so without this it stayed hidden until a reload.
+          render json: {
+            id: @case_contact.id,
+            form_action: wizard_path(steps.first, case_contact_id: @case_contact.id),
+            discard_path: discard_draft_case_contact_path(@case_contact)
+          }, status: :created
         else
           render json: @case_contact.errors.full_messages, status: :unprocessable_content
         end
