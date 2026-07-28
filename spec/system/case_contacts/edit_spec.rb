@@ -177,9 +177,12 @@ RSpec.describe "case_contacts/edit", type: :system do
       expect(page).to have_text "Record new case contact"
       expect(page).to have_text casa_case.case_number
 
-      expect(CaseContact.started.count).to eq(1)
-      new_case_contact = CaseContact.last
-      expect(new_case_contact.draft_case_ids).to match_array(case_contact_draft_ids)
+      # The reopened form is unsaved until something is entered, so it carries the cases forward in
+      # the markup rather than in a draft row.
+      expect(CaseContact.started.count).to eq(0)
+      expect(page).to have_css(
+        %([data-multiple-select-selected-items-value="#{case_contact_draft_ids.to_json}"]), visible: :all
+      )
     end
   end
 end

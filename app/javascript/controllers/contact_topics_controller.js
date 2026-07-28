@@ -1,4 +1,5 @@
 import { Controller } from '@hotwired/stimulus'
+import { ensureCaseContact } from '../src/case_contact_draft'
 
 // Contact-topic checklist for the case-contact form (details). Every org contact topic is
 // listed; checking one reveals its notes field and CREATES the ContactTopicAnswer right away
@@ -58,15 +59,23 @@ export default class extends Controller {
     notes.querySelectorAll('input, textarea').forEach(field => { field.disabled = true })
   }
 
+  // Checking a topic is a real edit, so it is one of the things that brings the case contact into
+  // existence: the answer needs a case_contact_id to belong to.
   create (group, idField) {
+    ensureCaseContact(this.element.closest('form'))
+      .then(caseContactId => this.createAnswer(group, idField, caseContactId))
+      .catch(error => console.error('Failed to create the case contact', error.status, error.statusText))
+  }
+
+  createAnswer (group, idField, caseContactId) {
     const value = group.querySelector('textarea').value
-    fetch(this.routeValue, {
+    return fetch(this.routeValue, {
       method: 'POST',
       headers: this.headers,
       body: JSON.stringify({
         contact_topic_answer: {
           contact_topic_id: group.dataset.topicId,
-          case_contact_id: this.caseContactIdValue,
+          case_contact_id: caseContactId,
           value
         }
       })

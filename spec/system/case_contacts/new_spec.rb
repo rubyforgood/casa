@@ -16,22 +16,22 @@ RSpec.describe "case_contacts/new", type: :system do
 
   before { sign_in user }
 
-  it "page load creates a case_contact with status: 'started' & draft_case_ids: [casa_case.id]" do
+  # Opening the form no longer inserts a row -- that is what left an empty draft behind on every
+  # abandoned click. The case is still pre-selected, just not persisted.
+  it "page load creates nothing and pre-selects the case" do
     subject
 
     expect(page).to have_content("Record new case contact")
-
-    expect(CaseContact.started.count).to eq(1)
-    case_contact = CaseContact.started.last
-    expect(case_contact.draft_case_ids).to contain_exactly(casa_case.id)
-    expect(case_contact.casa_case_id).to be_nil
+    # The case selection is server-rendered into the multiselect's values; TomSelect builds the
+    # native select's options client-side, so without JS that select is empty.
+    expect(page).to have_css(%([data-multiple-select-selected-items-value="[#{casa_case.id}]"]), visible: :all)
+    expect(CaseContact.count).to eq(0)
   end
 
   it "saves entered details and updates status to 'active'", :js do
     subject
 
     expect(page).to have_text "Record new case contact"
-    case_contact = CaseContact.started.last
 
     complete_details_page(
       case_numbers: [case_number], contact_types: %w[School], contact_made: true,
@@ -40,7 +40,7 @@ RSpec.describe "case_contacts/new", type: :system do
     click_on "Submit"
     expect(page).to have_text "Case contact successfully created."
 
-    case_contact.reload
+    case_contact = CaseContact.last # created by the submit, not by the page load
     aggregate_failures do
       expect(case_contact.status).to eq "active"
       # entered details
@@ -73,7 +73,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
     expect(page).to have_text "Case contact successfully created."
     expect(page).to have_link "View case contacts", href: case_contacts_path
-    expect(page).to have_current_path(%r{/case_contacts/\d+/form/details}) # reopened a fresh form
+    expect(page).to have_current_path(%r{/case_contacts/new}) # reopened a fresh, unsaved form
     expect(CaseContact.active.count).to eq 1
     expect(CaseContact.active.last.metadata["create_another"]).to be true
   end
@@ -94,7 +94,9 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_field("case_contact_contact_made", with: "1")
       expect(page).to have_field(class: "contact-form-type-checkbox", with: school_contact_type.id, checked: true)
 
-      expect(CaseContact.count).to eq(1)
+      # The whole point of persisting on save rather than on open: an invalid first submit leaves no
+      # draft behind at all.
+      expect(CaseContact.count).to eq(0)
     end
   end
 
@@ -428,22 +430,16 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_text case_number
 
       expect(CaseContact.active.count).to eq(1)
-      expect(CaseContact.started.count).to eq(1)
+      # The reopened form is unsaved, so no second draft exists yet.
+      expect(CaseContact.started.count).to eq(0)
 
       submitted_case_contact = CaseContact.active.last
-      next_case_contact = CaseContact.started.last
-
       expect(submitted_case_contact.reload.metadata["create_another"]).to be true
-      # new contact uses draft_case_ids from the original & form selects them
-      expect(next_case_contact.draft_case_ids).to eq [casa_case.id]
-      # default values for other attributes (not from the last contact)
-      expect(next_case_contact.status).to eq "started"
-      expect(next_case_contact.miles_driven).to be_zero
-      %i[casa_case_id duration_minutes occurred_at medium_type
-        want_driving_reimbursement notes].each do |attribute|
-        expect(next_case_contact.send(attribute)).to be_blank
-      end
-      expect(next_case_contact.contact_made).to be true
+
+      # The reopened form carries the case forward but none of the last contact's other answers.
+      expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number])
+      expect(page).to have_no_field("case_contact_medium_type", checked: true)
+      expect(page).to have_field("case_contact_notes", with: "")
     end
 
     it "does not reset referring location", :js do
@@ -474,8 +470,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect {
           visit new_case_contact_path(casa_case, {draft_case_ids:})
           expect(page).to have_content("Record new case contact")
-        }.to change(CaseContact.started, :count).by(1)
-        this_case_contact = CaseContact.started.last
+        }.not_to change(CaseContact, :count)
 
         expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
         complete_details_page(case_numbers: [])
@@ -487,14 +482,11 @@ RSpec.describe "case_contacts/new", type: :system do
         }.to change(CaseContact.active, :count).by(2)
 
         expect(page).to have_text "Record new case contact"
-        expect(this_case_contact.reload.status).to eq "active"
-        next_case_contact = CaseContact.not_active.last
-        expect(next_case_contact).to be_present
-
-        expect(next_case_contact.status).to eq "started"
+        # Both submitted contacts went active and the reopened form persisted nothing.
+        expect(CaseContact.not_active).to be_empty
         expect(page).to have_text case_number
         expect(page).to have_text case_number_two
-        expect(next_case_contact.draft_case_ids).to match_array draft_case_ids
+        expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
       end
     end
   end

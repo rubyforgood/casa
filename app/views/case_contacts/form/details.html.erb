@@ -38,13 +38,18 @@
       <%# novalidate: skip the browser's native validation bubbles so an invalid submit reaches the
           server and renders the design-system validation instead (the _form_errors summary + the
           .field_with_errors rose borders). Native bubbles can't be styled. %>
+      <%# A brand-new contact has no id yet (nothing is inserted until the first real save), so it
+          POSTs to create; once it exists every save PATCHes the wizard step. The autosave controller
+          swaps the action over after the first create. %>
       <%= form_with(
         model: @case_contact,
-        url: wizard_path(nil, case_contact_id: @case_contact.id),
+        url: @case_contact.new_record? ? case_contacts_path : wizard_path(nil, case_contact_id: @case_contact.id),
         id: "case-contact-form",
         class: "space-y-6",
         novalidate: true,
-        data: {controller: "case-contact-form", "autosave-target": "form"},
+        # case-contact-id marks the form as backed by a saved record, so the autosave PATCHes it
+        # instead of creating. Absent on a new contact until the first save adopts an id.
+        data: {controller: "case-contact-form", "autosave-target": "form", "case-contact-id": @case_contact.id},
         local: true
       ) do |form| %>
 

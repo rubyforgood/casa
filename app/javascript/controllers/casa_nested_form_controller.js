@@ -1,4 +1,5 @@
 import NestedForm from '@stimulus-components/rails-nested-form'
+import { ensureCaseContact } from '../src/case_contact_draft'
 
 /**
  * Allows nested forms to be used with the autosave controller,
@@ -84,8 +85,22 @@ export default class extends NestedForm {
     this.dispatchChangeEvent('add')
   }
 
-  /* Creates a new record for the added item (before submission). */
+  /* Creates a new record for the added item (before submission). The case contact may not exist yet
+     -- the form persists on first save, not on open -- and the child needs a parent id, so bring the
+     parent into existence first. Without this the fetch below aborts on an empty parent id and the
+     expense is silently never saved. */
   addAndCreate (e) {
+    const form = this.element.closest('form')
+    if (form && !form.dataset.caseContactId) {
+      ensureCaseContact(form)
+        .then(() => this.addAndCreateRow(e))
+        .catch(error => console.error('Failed to create the case contact', error.status, error.statusText))
+      return
+    }
+    this.addAndCreateRow(e)
+  }
+
+  addAndCreateRow (e) {
     this.add(e)
     const items = this.element.querySelectorAll(this.wrapperSelectorValue)
     const addedItem = items[items.length - 1]

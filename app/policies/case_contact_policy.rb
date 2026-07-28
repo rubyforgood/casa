@@ -22,6 +22,9 @@ class CaseContactPolicy < ApplicationPolicy
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
   alias_method :drafts?, :admin_or_supervisor?
+  # The form persists on first save rather than on open, so creating is the same permission as
+  # opening the form. Without this, create fell through to ApplicationPolicy#create? (admin only).
+  alias_method :create?, :new?
   alias_method :edit?, :update?
   alias_method :restore?, :is_admin_same_org?
 

@@ -76,9 +76,15 @@ Rails.application.routes.draw do
   get "case_contacts/leave", to: "case_contacts#leave", as: "leave_case_contacts_form"
   get "case_contacts/drafts", to: "case_contacts#drafts"
 
+  # New/create live on the wizard controller so they share its prepare_form / finish_editing, and so
+  # opening the form no longer INSERTS a draft: `new` renders an unsaved record and `create` persists
+  # it at the first real save. See CaseContacts::FormController.
+  get "case_contacts/new", to: "case_contacts/form#new", as: "new_case_contact"
+  post "case_contacts", to: "case_contacts/form#create"
+
   # Feature flag for new case contact table design
   get "case_contacts/new_design", to: "case_contacts/case_contacts_new_design#index"
-  resources :case_contacts, except: %i[create update show] do
+  resources :case_contacts, except: %i[create update show new] do
     member do
       post :restore
     end

@@ -7,10 +7,58 @@ class CaseContacts::FormController < ApplicationController
 
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
-  before_action :set_active_nav, only: [:show, :update]
+  before_action :set_active_nav
   after_action :verify_authorized
 
   steps :details
+
+  # Opening the form no longer inserts a row. It used to: CaseContactsController#new created the
+  # record so the wizard had an id to autosave into, which meant every abandoned "New case contact"
+  # click left a permanent empty draft. The record is now built unsaved and persisted by #create at
+  # the first real save -- the first autosave (typing notes or a topic answer), the first checked
+  # contact topic, or the submit itself.
+  def new
+    store_referring_location
+
+    @case_contact = CaseContact.new(creator: current_user, contact_made: true,
+      draft_case_ids: build_draft_case_ids(policy_scope(current_organization.casa_cases)))
+    authorize @case_contact
+
+    prepare_form
+    render :details
+  end
+
+  def create
+    @case_contact = CaseContact.new(creator: current_user)
+    authorize @case_contact
+
+    remove_nil_draft_ids
+
+    respond_to do |format|
+      format.json do
+        # An autosave: keep the default `started` status so the lax draft validations apply, and hand
+        # back where every later save must go -- the record exists now, so posting here again would
+        # create a second draft.
+        if @case_contact.update(case_contact_params)
+          render json: {id: @case_contact.id, form_action: wizard_path(steps.first, case_contact_id: @case_contact.id)},
+            status: :created
+        else
+          render json: @case_contact.errors.full_messages, status: :unprocessable_content
+        end
+      end
+      format.html do
+        # A real submit, so hold it to the step's validations exactly as #update does. A failure
+        # persists nothing, which is the point: no draft for a form that was never valid.
+        params[:case_contact][:status] = CaseContact.statuses[steps.first]
+        if @case_contact.update(case_contact_params)
+          finish_editing
+        else
+          prepare_form
+          render :details, status: :unprocessable_content
+        end
+      end
+    end
+  end
 
   def show
     authorize @case_contact
@@ -178,5 +226,15 @@ class CaseContacts::FormController < ApplicationController
 
   def remove_nil_draft_ids
     params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
+  end
+
+  # Pre-select the case(s) the user arrived with, so a contact started from a case page is already
+  # pointed at it. Moved here with #new.
+  def build_draft_case_ids(casa_cases)
+    return params[:draft_case_ids] if params[:draft_case_ids].present?
+    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
+    return [casa_cases.first.id] if casa_cases.count == 1
+
+    []
   end
 end

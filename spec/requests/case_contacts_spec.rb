@@ -60,13 +60,13 @@ RSpec.describe "/case_contacts", type: :request do
       response
     end
 
-    it { is_expected.to have_http_status(:redirect) }
+    it { is_expected.to have_http_status(:success) }
 
-    it "creates a 'started' status case contact and redirects to the form" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      new_case_contact = CaseContact.last
-      expect(new_case_contact.status).to eq "started"
-      expect(response).to redirect_to(case_contact_form_path(:details, case_contact_id: new_case_contact.id))
+    # Opening the form used to INSERT a draft, so every abandoned click left an empty row behind.
+    # It now renders an unsaved record; #create persists it at the first real save.
+    it "renders the form without creating anything" do
+      expect { request }.not_to change(CaseContact, :count)
+      expect(response.body).to include("case-contact-form")
     end
 
     context "when current org has contact topics" do
@@ -77,10 +77,8 @@ RSpec.describe "/case_contacts", type: :request do
 
       it "does not create contact topic answers" do
         expect { request }
-          .to change(CaseContact.started, :count).by(1)
+          .to not_change(CaseContact, :count)
           .and not_change(ContactTopicAnswer, :count)
-
-        expect(CaseContact.started.last.contact_topic_answers).to be_empty
       end
     end
   end

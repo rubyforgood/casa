@@ -16,23 +16,17 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   describe "GET /new" do
     subject(:request) { get new_case_contact_path(casa_case_id: casa_case.id) }
 
-    it "creates a new case_contact record with user as creator and status 'started'" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(case_contact.status).to eq "started"
-      expect(case_contact.creator).to eq user
+    # Nothing is inserted until the first real save -- see CaseContacts::FormController#new.
+    it "renders the form without creating a record" do
+      expect { request }.not_to change(CaseContact, :count)
+      expect(response).to have_http_status(:success)
     end
 
-    it "does not set the contact's casa_case_id" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(case_contact.casa_case_id).to be_nil
-    end
+    it "pre-selects the case it was opened from, without persisting it" do
+      request
 
-    it "redirects to show(:details) with the created contact id" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(request).to redirect_to(case_contact_form_path(:details, case_contact_id: case_contact.id))
+      expect(response.body).to include(casa_case.case_number)
+      expect(CaseContact.count).to eq(0)
     end
   end
 

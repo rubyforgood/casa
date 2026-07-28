@@ -118,7 +118,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
 
     it "navigates to the new case contact form when clicked as an admin" do
       click_link "New case contact"
-      expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+      expect(page).to have_current_path(%r{/case_contacts/new}) # unsaved until the first save
     end
 
     context "when signed in as a volunteer" do
@@ -135,7 +135,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
 
       it "navigates to the new case contact form when clicked as a volunteer" do
         click_link "New case contact"
-        expect(page).to have_current_path(%r{/case_contacts/\d+/form/details})
+        expect(page).to have_current_path(%r{/case_contacts/new}) # unsaved until the first save
       end
     end
   end
