@@ -1196,13 +1196,24 @@ separate **status variant** (the success/thank-you dialog) centers a 48px hero b
 components on Tailwind pages; do not restyle Bootstrap `.modal` markup (its CSS is not loaded
 on `casa_app`).
 
-**`shared/_confirm_button` cannot go inside another `<form>`.** It confirms via **`button_to`**, which
-renders its own `<form>`, and **nested forms are invalid HTML**: the browser drops the inner one, so
-the confirm button submits the OUTER form instead. On the case-contact form that sent
-`DELETE /case_contacts/:id/form/details` and hit a routing error, silently -- the dialog looked
-perfect. Put the confirm **outside** the `form_with` (the case-contact "Discard draft" sits on its own
-`mt-6 border-t pt-4` row below the form, which is better placement for a destructive action anyway).
-The Dialog components themselves are fine inside a form; it is `button_to` that is not.
+**`shared/_confirm_button` inside another `<form>`: pass `confirm_form:`.** By default it confirms via
+**`button_to`**, which renders its own `<form>`, and **nested forms are invalid HTML**: the browser
+drops the inner one, so the confirm button submits the OUTER form instead. On the case-contact form
+that sent `DELETE /case_contacts/:id/form/details` into a routing error, silently -- the dialog looked
+perfect. The Dialog components themselves are fine inside a form; it is `button_to` that is not.
+
+Rather than exiling the control, give the partial **`confirm_form:`** -- the id of a **bodyless
+`form_with url:, method:, id:`** rendered outside the enclosing form. The confirm then renders as a
+plain submit owned by that form through HTML's `form` attribute, so the trigger and dialog can sit
+wherever the design wants while the request still goes to the right place. (Moving the control out of
+the row instead was the wrong call: a discard belongs with the actions it is an alternative to.)
+
+**Placement of a destructive action in a form's action row:** same row as the submits, pushed to the
+**far end** (`sm:ml-auto`), not adjacent to the primary. That is the compose-toolbar shape -- Gmail
+puts Send at one end and discard at the other -- so it is grouped without sitting under a thumb aiming
+for Submit. Verify it is genuinely in the row and on the same line (compare `getBoundingClientRect`
+tops and the row's right edge), and that no nested `<form>` appeared:
+`document.querySelector('#case-contact-form form')` must be null.
 
 **Name the policy predicate after the action.** `authorize @case_contact, :destroy?` still resolved to
 `discard_draft?` and raised `NoMethodError`; alias it in the policy

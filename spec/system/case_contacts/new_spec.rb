@@ -183,16 +183,19 @@ RSpec.describe "case_contacts/new", type: :system do
     end
 
     # Not "Cancel": the form autosaves, so on an existing contact the changes are already saved.
-    # Scoped to the actions row: the discard confirm dialog has its own Cancel, which is always in the
-    # DOM. The claim here is that the way OUT of the form is Back, not a Cancel beside Submit.
-    it "says Back rather than Cancel" do
+    # The way out of the form is Back. Not asserted by hunting for the absence of "Cancel" any more:
+    # the discard confirm now lives in the actions row and its dialog legitimately has a Cancel, and
+    # rack_test cannot tell a closed dialog's contents from visible ones. Assert the actions the row
+    # actually offers instead.
+    it "offers Back as the way out, and no Cancel among the form's own actions" do
       subject
 
       expect(page).to have_link("Back")
       within("#contact-form-action-buttons") do
-        expect(page).to have_no_link("Cancel")
-        expect(page).to have_no_button("Cancel")
+        expect(page).to have_button("Submit")
+        expect(page).to have_button("Submit & add another")
       end
+      expect(page).to have_no_css("#contact-form-action-buttons > button[type=button]", text: "Cancel")
     end
   end
 

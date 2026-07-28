@@ -449,33 +449,41 @@
             <i class="bi bi-plus-lg" aria-hidden="true"></i> Submit &amp; add another
           <% end %>
 
+          <%# Discard belongs in this row, but pushed to the far end (`sm:ml-auto`) instead of sitting
+              beside Submit: the destructive action shares the toolbar without landing under a thumb
+              aiming for Submit. That is the compose-toolbar shape -- Gmail puts Send at one end and
+              discard at the other.
+
+              It ships `hidden` because the control is gated on `persisted?` and the autosave that
+              creates the draft never re-renders the page; case_contact_draft.js reveals it.
+
+              `confirm_form:` is what lets it live inside this form at all. The partial's default
+              `button_to` renders its own <form>, and nested forms are invalid HTML -- the browser
+              drops the inner one and the confirm submits THIS form instead. Instead the confirm is a
+              plain submit owned (via HTML's `form` attribute) by the bodyless form below. %>
+          <% unless @case_contact.active? %>
+            <div id="discard-draft" class="<%= "hidden " unless @case_contact.persisted? %>sm:ml-auto">
+              <%= render "shared/confirm_button",
+                url: @case_contact.persisted? ? discard_draft_case_contact_path(@case_contact) : "#",
+                confirm_form: "discard-draft-form",
+                title: "Discard this draft?",
+                message: "This draft and anything autosaved into it -- notes, topic answers and expenses -- will be deleted. This cannot be undone.",
+                confirm_label: "Discard draft",
+                trigger_label: "Discard draft",
+                trigger_icon: "bi bi-trash",
+                trigger_class: button_classes(:danger_outline) %>
+            </div>
+          <% end %>
         </div>
       <% end %>
 
-      <%# Discard sits OUTSIDE the form on purpose. shared/confirm_button confirms via `button_to`,
-          which renders its own <form>; nested forms are invalid HTML, so the browser dropped the
-          inner one and the confirm submitted the CASE-CONTACT form instead (DELETE to the wizard
-          path -> routing error). Out here it posts to its own action. Keeping the destructive action
-          away from Submit is the better placement anyway.
-
-          Only ever for a draft, never for an active contact -- that is a real record, deleted from
-          the list instead. :danger_outline because it sits on its own bordered row (design.md). %>
+      <%# The form the Discard confirm owns. Outside the case-contact form on purpose (see above);
+          bodyless, but form_with still emits the CSRF token and the _method override. %>
       <% unless @case_contact.active? %>
-        <%# Rendered up front but `hidden` until the draft exists, because the autosave that creates it
-            never re-renders the page -- gating the markup on `persisted?` alone meant the control only
-            appeared after a reload. case_contact_draft.js fills the action in and reveals it the moment
-            the record is created. %>
-        <div id="discard-draft" class="mt-6 border-t border-slate-100 pt-4<%= " hidden" unless @case_contact.persisted? %>">
-          <%= render "shared/confirm_button",
-            url: @case_contact.persisted? ? discard_draft_case_contact_path(@case_contact) : "#",
-            title: "Discard this draft?",
-            message: "This draft and anything autosaved into it -- notes, topic answers and expenses -- will be deleted. This cannot be undone.",
-            confirm_label: "Discard draft",
-            trigger_label: "Discard draft",
-            trigger_icon: "bi bi-trash",
-            trigger_class: button_classes(:danger_outline) %>
-        </div>
+        <%= form_with url: (@case_contact.persisted? ? discard_draft_case_contact_path(@case_contact) : "#"),
+          method: :delete, id: "discard-draft-form", class: "hidden" do %><% end %>
       <% end %>
+
     </div>
   </div>
 </div>

@@ -35,12 +35,13 @@ function adopt (form, data) {
 
   // The Discard control is server-rendered on `persisted?`, so it ships hidden on a new form. Point
   // its button_to at the record and reveal it -- otherwise it stays invisible until a reload.
+  // The Discard control lives in the form's action row but SUBMITS a bodyless form rendered outside
+  // it (nested forms are invalid HTML), so point that form at the record and reveal the control.
+  const discardForm = document.getElementById('discard-draft-form')
+  if (discardForm && data.discard_path) { discardForm.action = data.discard_path }
+
   const discard = document.getElementById('discard-draft')
-  if (discard && data.discard_path) {
-    const discardForm = discard.querySelector('form')
-    if (discardForm) { discardForm.action = data.discard_path }
-    discard.classList.remove('hidden')
-  }
+  if (discard && data.discard_path) { discard.classList.remove('hidden') }
 
   // Leave the browser on the draft's own URL so a refresh resumes it instead of starting over.
   if (window.history && window.history.replaceState) {
