@@ -31,7 +31,12 @@ class CaseContactReport
   private
 
   def filtered_case_contacts(args)
+    # `.active` states what was previously only an accident: drafts have a nil casa_case_id, and the
+    # `casa_org` scope inner-joins casa_cases, so they fell out of the export silently. Anything that
+    # loosened that join -- or ever gave a draft a casa_case_id -- would have started exporting
+    # half-finished contacts into supervisors' CSVs.
     CaseContact
+      .active
       .supervisors(args[:supervisor_ids])
       .creators(args[:creator_ids])
       .casa_org(args[:casa_org_id])

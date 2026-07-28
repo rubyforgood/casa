@@ -289,7 +289,7 @@ RSpec.describe CaseContactReport, type: :model do
               {contact_type_group_ids: [""]}
             )
             expect(report.case_contacts.length).to eq(3)
-            expect(report.case_contacts).to eq(CaseContact.all)
+            expect(report.case_contacts).to match_array(CaseContact.all)
           end
         end
 
@@ -299,7 +299,7 @@ RSpec.describe CaseContactReport, type: :model do
               {contact_type_group_ids: nil}
             )
             expect(report.case_contacts.length).to eq(3)
-            expect(report.case_contacts).to eq(CaseContact.all)
+            expect(report.case_contacts).to match_array(CaseContact.all)
           end
         end
       end
@@ -323,7 +323,7 @@ RSpec.describe CaseContactReport, type: :model do
         it "return all case contacts" do
           report = described_class.new({casa_case_ids: nil})
           expect(report.case_contacts.length).to eq(CaseContact.count)
-          expect(report.case_contacts).to eq(CaseContact.all)
+          expect(report.case_contacts).to match_array(CaseContact.all)
         end
       end
     end

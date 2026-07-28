@@ -15,7 +15,21 @@
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
     <h1 class="text-2xl font-bold tracking-tight text-slate-900">Case contacts</h1>
-    <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New case contact<% end %>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New case contact<% end %>
+      <%# The org-wide drafts list was routed but linked from nowhere, so abandoned drafts piled up
+          where no one could find them. Occasional action, so it goes in More (policy: drafts?). %>
+      <% if policy(CaseContact).drafts? %>
+        <details class="relative" data-controller="dropdown">
+          <summary class="<%= button_classes(:secondary) %> cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            More <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
+          </summary>
+          <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <%= link_to case_contacts_drafts_path, class: "flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" do %><i class="bi bi-file-earmark-text text-slate-500" aria-hidden="true"></i> Draft case contacts<% end %>
+          </div>
+        </details>
+      <% end %>
+    </div>
   </div>
 
   <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "filter-form mb-6"}, remote: true,
