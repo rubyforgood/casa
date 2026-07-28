@@ -256,6 +256,38 @@ is the reference). Wrap the select in a `relative` div and overlay the chevron:
 crowds the chevron: a plain `<select>` with `px-3` collides the text with the native arrow.
 Chevron ink is `slate-500` (AA). Month/year pickers reuse this through
 `casa_cases/_month_year_select` (it keeps Rails' `_1i`/`_2i` date-part field names).
+The cases-index filter is the reference for the **chevron**, not for the padding above: a
+*filter* control is one step more compact than a *form* field (see "Filter bar").
+
+### Filter bar
+Controls in a filter bar are **one step more compact than form fields** -- filters are
+chrome above the data, not the primary task. Two sizes, both measured, don't mix them:
+
+| | form field | filter control |
+|---|---|---|
+| select | `py-2.5 pl-3.5 pr-9` (42px) | `py-2 pl-3 pr-9` (**38px**) |
+| text/date input | `px-3.5 py-2.5` (42px) | `px-3 py-2` (**38px**) |
+| label | `mb-1.5 block text-sm font-medium text-slate-700` | `mb-1 block text-xs font-medium text-slate-500` (**12px slate-500**) |
+
+Cases / volunteers / supervisors / reimbursements / case-contacts all converge on the filter
+column; a filter built from the form tokens sits 4px taller with 14px slate-700 labels and
+reads as a form embedded in the page (this was the case-contacts bug). Verify by measuring
+control height against a sibling roster filter, not by reading tokens.
+
+**The unfiltered option is `All`** (`["All", ""]`, or `All <term>` -- `All volunteers`,
+`All supervisors` -- when the field needs naming). Never `Display all`: it instructs the UI
+instead of naming the scope, and it does not match any other filter on any other page. The
+blank value means "no filter", which every filter scope must treat as a no-op
+(`if value.present?`), so picking `All` genuinely clears that filter.
+
+**`f.select` trap.** `f.select(method, choices, options, html_options)` -- `class:` belongs in
+the **fourth** argument. Passing `{include_blank: "All", class: select_class}` as one hash puts
+`class` in `options`, where Rails silently drops it: the select renders with **no class at all**,
+so it is both unstyled *and* missing behavioural hooks (on case-contacts it lost `filter-input`,
+the class the form auto-submits on, leaving three filters inert). Also pass the **current value**
+to `options_from_collection_for_select(..., selected)`: when `choices` is pre-rendered option
+HTML, `f.select` cannot mark the selection, so the control reads `All` while its filter is
+active. `spec/system/case_contacts/index_spec.rb` "other filters" guards all three.
 
 ### Form layout
 Forms use a **two-column responsive grid**: `grid grid-cols-1 gap-5 sm:grid-cols-2`, which

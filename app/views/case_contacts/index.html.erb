@@ -4,11 +4,13 @@
     collapse is replaced by the `disclosure` controller: the panel is always in the DOM (so
     rack_test finds "Other filters" regardless) but starts `hidden` unless expand_filters?, so
     JS users see it collapsed. Cards are grouped by case; _case_contact is the shared card. %>
-<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
-<% select_class = "filter-input block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-<% input_class = "filter-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<%# Control tokens match the roster filter bars (cases / volunteers / supervisors /
+    reimbursements) exactly, plus the `filter-input` auto-submit hook this page needs. %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+<% select_class = "filter-input block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% input_class = "filter-input block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
-<% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500 filter-input" %>
+<% check_class = "filter-input h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
@@ -86,21 +88,23 @@
             <div>
               <%= f.label :contact_medium, class: label_class %>
               <div class="relative">
-                <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"), {include_blank: "Display all", class: select_class}) %>
+                <%# Pass the current value: pre-rendered option HTML can't be marked selected by f.select,
+                    so without it the dropdown reads "All" while a medium filter is active. %>
+                <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label", f.object.contact_medium), {include_blank: "All"}, {class: select_class}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>
             <div>
               <%= f.label :want_driving_reimbursement, class: label_class %>
               <div class="relative">
-                <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options, {include_blank: "Display all", class: select_class}) %>
+                <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>
             <div>
               <%= f.label :contact_made, class: label_class %>
               <div class="relative">
-                <%= f.select(:contact_made, @case_contacts.boolean_select_options, {include_blank: "Display all", class: select_class}) %>
+                <%= f.select(:contact_made, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>

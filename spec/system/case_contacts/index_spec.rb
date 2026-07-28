@@ -191,6 +191,48 @@ RSpec.describe "case_contacts/index", type: :system do
           expect(page).to have_content "Other filters"
         end
       end
+
+      describe "other filters" do
+        # These three selects once passed `class:` in f.select's options hash instead of
+        # html_options, so they rendered with no class at all: unstyled, and missing the
+        # `filter-input` hook the form auto-submits on, which left them inert.
+        it "styles the selects and keeps the auto-submit hook" do
+          subject
+
+          %w[filterrific_contact_medium filterrific_want_driving_reimbursement filterrific_contact_made].each do |id|
+            classes = page.find("##{id}", visible: :all)[:class].to_s
+            expect(classes).to include("filter-input")
+            expect(classes).to include("rounded-lg")
+          end
+        end
+
+        it "offers All as the unfiltered option" do
+          subject
+
+          expect(page).to have_select("Contact medium", with_options: ["All"], visible: :all)
+          expect(page).to have_select("Contact made", with_options: ["All"], visible: :all)
+          expect(page).to have_select("Want driving reimbursement", with_options: ["All"], visible: :all)
+        end
+
+        it "shows the active contact medium as selected" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person"})
+
+          expect(page).to have_select("Contact medium", selected: "In person", visible: :all)
+        end
+
+        it "filters by contact medium", :js do
+          create(:case_contact, creator: volunteer, casa_case: casa_case, medium_type: "in-person")
+          create(:case_contact, creator: volunteer, casa_case: casa_case, medium_type: "letter")
+
+          subject
+          click_on "Expand / Hide"
+          expect(page).to have_text("Showing 1\u20132 of 2")
+
+          select "In person", from: "Contact medium"
+
+          expect(page).to have_text("Showing 1\u20131 of 1")
+        end
+      end
     end
 
     describe "case contacts text color" do
