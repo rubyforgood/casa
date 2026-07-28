@@ -1039,7 +1039,7 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   middle **grouped by domain, ordered by frequency** -- Records (Volunteers, Supervisors, Cases) /
   Activity (Case contacts, Learning hours, Other duties, Reimbursements) / Reporting (Reports,
   Analytics, Court reports). Each middle group wears an **uppercase section label** (`text-xs
-  font-semibold uppercase tracking-wide text-slate-400`, `mt-4` above); the label does the separating,
+  font-semibold uppercase tracking-wide text-slate-500`, `mt-4` above); the label does the separating,
   so there are **no between-group dividers** -- the only divider sits above the pinned Settings. Each
   group is a `role="group"` with an **`aria-label`** (the visible label is `aria-hidden` so it isn't
   announced twice); a group whose every item is policy-gated out **renders nothing -- no orphan
@@ -1077,7 +1077,7 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 
 ## Key patterns
 - **Settings (master-detail)** (`casa_org#edit` is the reference): a `max-w-7xl` two-pane — a
-  sticky grouped **sub-nav rail** (`hidden lg:block lg:w-48`; **text-only** (icons are noise in a dense grouped list, and a repeated one reads as clutter; the primary sidebar keeps its icons); quiet slate-400 group labels; active
+  sticky grouped **sub-nav rail** (`hidden lg:block lg:w-48`; **text-only** (icons are noise in a dense grouped list, and a repeated one reads as clutter; the primary sidebar keeps its icons); quiet slate-500 group labels; active
   item `bg-brand-50 text-brand-700`) beside a content column that shows **one section at a time**.
   The `settings-nav` Stimulus controller drives it as **progressive enhancement**: with JS off every
   `[data-settings-nav-target="section"]` stays visible (a plain scroll — so no-JS users and rack_test

@@ -64,7 +64,7 @@
         <% visible_groups.each_with_index do |(label, items), index| %>
           <div role="group" aria-label="<%= label %>" class="space-y-1<%= " mt-4" unless index.zero? %>">
             <% unless index.zero? %>
-              <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-400" aria-hidden="true"><%= label %></div>
+              <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-500" aria-hidden="true"><%= label %></div>
             <% end %>
             <% items.each do |title, icon, path, key, _allowed| %>
               <%= render "layouts/nav_link", title: title, icon: icon, path: path, key: key %>
