@@ -204,6 +204,44 @@ RSpec.describe "case_contacts/index", type: :system do
         end
       end
 
+      describe "filter toolbar" do
+        # Clear renders exactly when clicking it would change something -- never at the defaults,
+        # where it would be dead chrome.
+        it "hides Clear filters at the defaults" do
+          subject
+
+          expect(page).to have_no_link("Clear filters")
+        end
+
+        it "hides Clear filters when only the default sort is set" do
+          visit case_contacts_path(filterrific: {sorted_by: "occurred_at_desc"})
+
+          expect(page).to have_no_link("Clear filters")
+        end
+
+        it "shows Clear filters once a filter is applied" do
+          visit case_contacts_path(filterrific: {contact_medium: "in-person"})
+
+          expect(page).to have_link("Clear filters")
+        end
+
+        it "keeps Hide drafts on one line with the overflow trigger", :js do
+          subject
+
+          centres = page.evaluate_script(<<~JS)
+            (function () {
+              function cy (sel) {
+                var r = document.querySelector(sel).getBoundingClientRect();
+                return Math.round((r.top + r.bottom) / 2);
+              }
+              return [cy('#filterrific_sorted_by'), cy('#filterrific_no_drafts'), cy('[data-disclosure-target=trigger]')];
+            })()
+          JS
+
+          expect(centres.uniq.size).to eq(1), "sort / Hide drafts / More filters centres differ: #{centres.inspect}"
+        end
+      end
+
       describe "other filters" do
         # These three selects once passed `class:` in f.select's options hash instead of
         # html_options, so they rendered with no class at all: unstyled, and missing the

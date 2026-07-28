@@ -278,6 +278,31 @@ column; a filter built from the form tokens sits 4px taller with 14px slate-700 
 reads as a form embedded in the page (this was the case-contacts bug). Verify by measuring
 control height against a sibling roster filter, not by reading tokens.
 
+**Layout: one toolbar row, not a titled panel.** The list-toolbar standard (GitHub issues, Linear,
+Jira, Notion, Polaris, Stripe) is a single horizontal row directly above the list, and the roster
+bars follow it. Specifics, all measured on case-contacts:
+- **No visible "Filters" heading.** The controls say what they are; a heading costs a whole row and
+  reads as redundant next to a `More filters` trigger. Keep it as `<h2 class="sr-only">Filters</h2>`
+  so the section stays named for AT and the heading outline survives. (Before: a 45px heading
+  marooned **767px** from its trigger on a 960px card.)
+- **A single high-traffic boolean goes inline in the row, beside the overflow trigger** -- not inside
+  the panel. `Hide drafts` sits next to `More filters`. It also removes an alignment hack: in a row of
+  *labelled* fields a bare checkbox has to fake a baseline (`pb-2.5`, measured 1px off); beside the
+  trigger it just centres.
+- **Bottom-aligning a bare control group against a labelled field lands it low.** The row is
+  `items-end`, so a 28px action group bottom-aligns **5px below** the 38px control's centre. Give the
+  group **`min-h-[38px]` + `items-center`** and the centres coincide. Verify by comparing centre-y of
+  the sort control, the checkbox and the trigger -- `index_spec` "keeps Hide drafts on one line with
+  the overflow trigger" asserts all three are equal.
+- **Clear renders exactly when clicking it would change something**, never at the defaults, where it
+  is dead chrome (Polaris and Jira both gate it this way). `filters_applied?` is the predicate, and
+  the awkward cases are why it exists: a checkbox always posts (`no_drafts=0` when unchecked), array
+  filters arrive as `[""]`, and the *default* sort is not a user choice -- but a **non-default** sort
+  is, because `reset_filterrific` resets sort too. It is a **ghost** action, not a 40px `:secondary`:
+  as a bordered button it was the heaviest thing in the card, louder than the filters themselves.
+- Result: the collapsed card went **144px -> 100px** desktop and **238px -> 142px** mobile, for the
+  same controls.
+
 **The unfiltered option is `All`** (`["All", ""]`, or `All <term>` -- `All volunteers`,
 `All supervisors` -- when the field needs naming). Never `Display all`: it instructs the UI
 instead of naming the scope, and it does not match any other filter on any other page. The

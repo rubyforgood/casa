@@ -53,7 +53,31 @@ module CaseContactsHelper
       .present?
   end
 
+  # Is anything actually filtering? The Clear action only renders when there is something to
+  # clear -- a Clear button sitting at the defaults is dead chrome. Note `no_drafts` always
+  # posts ("0" when unchecked) and array filters arrive as [""], so neither can be judged by
+  # bare presence, and a default sort is not something the user set.
+  def filters_applied?
+    filterrific = params[:filterrific]
+    return false if filterrific.blank?
+
+    # each_pair, not any?: ActionController::Parameters is not Enumerable.
+    filterrific.each_pair.any? { |key, value| filter_applied?(key.to_s, value) }
+  end
+
   private
+
+  def filter_applied?(key, value)
+    case key
+    when "sorted_by" then value.present? && value.to_s != default_sorted_by
+    when "no_drafts" then ActiveModel::Type::Boolean.new.cast(value).present?
+    else Array.wrap(value).any?(&:present?)
+    end
+  end
+
+  def default_sorted_by
+    CaseContact.filterrific_default_filter_params.with_indifferent_access[:sorted_by].to_s
+  end
 
   def send_home
     root_path

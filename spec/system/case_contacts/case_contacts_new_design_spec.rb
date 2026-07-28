@@ -96,14 +96,14 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(page).not_to have_text(draft_date)
     end
 
-    it "resets all filters when Reset filters is clicked" do
+    it "resets all filters when Clear filters is clicked" do
       video_date = I18n.l(video_contact.occurred_at, format: :full)
 
       click_button "More filters"
       select "In person", from: "Medium"
       expect(page).not_to have_text(video_date)
 
-      click_link "Reset filters"
+      click_link "Clear filters"
 
       expect(page).to have_text(video_date)
     end

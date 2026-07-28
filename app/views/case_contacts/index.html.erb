@@ -23,29 +23,39 @@
     <%= hidden_field_tag "casa_case_id", params[:casa_case_id] %>
 
     <div data-controller="disclosure" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
-      <div class="flex items-center justify-between gap-3">
-        <h2 class="text-base font-semibold text-slate-900">Filters</h2>
-        <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= expand_filters? %>" aria-controls="filter-card-body" class="group <%= ghost_class %>">
-          More filters <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
-        </button>
-      </div>
+      <%# One toolbar row (the list-toolbar standard: GitHub / Linear / Jira / Polaris). The heading is
+          sr-only -- it keeps the section named for AT while the controls speak for themselves, and buys
+          back the row it used to occupy. `Hide drafts` is the single high-traffic boolean, so it sits
+          inline beside the overflow trigger rather than inside it; there it also aligns against the
+          trigger instead of faking a baseline against the labelled sort field. Clear only renders when
+          something is actually filtering. %>
+      <h2 class="sr-only">Filters</h2>
 
-      <div class="mt-4 flex flex-wrap items-end justify-between gap-4">
-        <div class="flex flex-wrap items-end gap-4">
-          <div class="min-w-[12rem]">
-            <%= f.label :sorted_by, class: label_class %>
-            <div class="relative">
-              <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: select_class}) %>
-              <i class="<%= chevron %>" aria-hidden="true"></i>
-            </div>
+      <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div class="min-w-[12rem]">
+          <%= f.label :sorted_by, class: label_class %>
+          <div class="relative">
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: select_class}) %>
+            <i class="<%= chevron %>" aria-hidden="true"></i>
           </div>
-          <label class="inline-flex items-center gap-2 pb-2.5 text-sm text-slate-700">
+        </div>
+
+        <%# min-h matches the 38px control height so bottom-aligning this group against the sort field
+            also centres it on the control (a bare 28px group bottom-aligns 5px low). It grows when the
+            group wraps on narrow screens. %>
+        <div class="flex min-h-[38px] flex-wrap items-center gap-x-4 gap-y-2">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700">
             <%= f.check_box :no_drafts, class: check_class %>
             Hide drafts
           </label>
+          <% if filters_applied? %>
+            <%= link_to "Clear filters", reset_filterrific_url, class: ghost_class,
+              data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} %>
+          <% end %>
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= expand_filters? %>" aria-controls="filter-card-body" class="group <%= ghost_class %>">
+            More filters <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
+          </button>
         </div>
-        <%= link_to "Reset filters", reset_filterrific_url, class: button_classes(:secondary),
-          data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} %>
       </div>
 
       <div id="filter-card-body" data-disclosure-target="panel" class="<%= "hidden" unless expand_filters? %> mt-5 space-y-5 border-t border-slate-100 pt-5">

@@ -109,4 +109,62 @@ RSpec.describe CaseContactsHelper, type: :helper do
       expect(helper.expand_filters?([:surfaced_param])).to eq(true)
     end
   end
+
+  describe "#filters_applied?" do
+    # Real ActionController::Parameters, not a Hash: Parameters is not Enumerable, which is exactly
+    # what a Hash-stubbed test would hide.
+    def with_params(filterrific)
+      allow(helper).to receive(:params).and_return(
+        ActionController::Parameters.new(filterrific.nil? ? {} : {filterrific: filterrific})
+      )
+    end
+
+    it "is false with no filterrific params" do
+      with_params(nil)
+
+      expect(helper.filters_applied?).to eq(false)
+    end
+
+    it "is false when every value is blank" do
+      with_params({contact_medium: "", occurred_starting_at: "", contact_made: ""})
+
+      expect(helper.filters_applied?).to eq(false)
+    end
+
+    it "is false for an unchecked Hide drafts, which always posts 0" do
+      with_params({no_drafts: "0"})
+
+      expect(helper.filters_applied?).to eq(false)
+    end
+
+    it "is true for a checked Hide drafts" do
+      with_params({no_drafts: "1"})
+
+      expect(helper.filters_applied?).to eq(true)
+    end
+
+    it "is false for an array filter holding only a blank" do
+      with_params({contact_type: [""]})
+
+      expect(helper.filters_applied?).to eq(false)
+    end
+
+    it "is true for an array filter holding a value" do
+      with_params({contact_type: ["", "3"]})
+
+      expect(helper.filters_applied?).to eq(true)
+    end
+
+    it "is false for the default sort, which the user did not choose" do
+      with_params({sorted_by: CaseContact.filterrific_default_filter_params[:sorted_by]})
+
+      expect(helper.filters_applied?).to eq(false)
+    end
+
+    it "is true for a non-default sort, since clearing would change it back" do
+      with_params({sorted_by: "occurred_at_asc"})
+
+      expect(helper.filters_applied?).to eq(true)
+    end
+  end
 end

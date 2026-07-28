@@ -27,7 +27,9 @@
       <div class="flex items-center justify-between gap-3">
         <h2 class="text-base font-semibold text-slate-900">Filters</h2>
         <div class="flex items-center gap-2">
-          <%= link_to "Reset filters", case_contacts_new_design_path, class: "text-sm font-medium text-slate-600 hover:text-slate-900" %>
+          <% if filters_active %>
+            <%= link_to "Clear filters", case_contacts_new_design_path, class: ghost_class %>
+          <% end %>
           <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= filters_active %>" aria-controls="cc-filter-panel" class="group <%= ghost_class %>">
             More filters <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
           </button>
