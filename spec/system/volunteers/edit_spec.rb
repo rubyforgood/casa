@@ -133,22 +133,21 @@ RSpec.describe "volunteers/edit", type: :system do
         organization = create(:casa_org)
         admin = create(:casa_admin, casa_org: organization)
         volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
-        old_email = volunteer.email
+        new_email = "newemail@example.com"
 
         sign_in admin
         visit edit_volunteer_path(volunteer)
 
-        fill_in "Email", with: "newemail@example.com"
-        click_on "Submit"
+        fill_in "Email", with: new_email
+        click_on "Update"
 
-        expect(page).to have_text "Volunteer was successfully updated. Confirmation Email Sent."
-        expect(page).to have_field("Email", with: old_email)
-        expect(volunteer.reload.unconfirmed_email).to eq("newemail@example.com")
+        expect(page).to have_text "Volunteer was successfully updated."
+        expect(page).to have_field("Email", with: new_email)
 
-        expect(ActionMailer::Base.deliveries.count).to eq(1)
-        expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
-        expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+        volunteer.reload
+        expect(volunteer.email).to eq(new_email)
+        expect(volunteer.unconfirmed_email).to be_nil
+        expect(ActionMailer::Base.deliveries).to be_empty
       end
 
       it "updates volunteer email and tracks old emails" do
