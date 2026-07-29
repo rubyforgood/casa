@@ -1077,14 +1077,27 @@ Counts are also **dead ends unless they link**: point each one at the filtered l
 exists (`volunteers_path(supervisor:)`, `volunteers_path(supervisor:, transition: "yes")`). Colour
 and weight stay as *reinforcement* only -- the header names the column, so nothing is colour-only.
 
-**Do not colour the numeral to flag the actionable one.** The first version of the roster put the
-non-zero "Not attempting" count in `text-rose-700`. rose *is* the semantic "needs follow-up" token,
-but the system spends it on **status pills and danger buttons** -- not on bare coloured digits in a
-data cell, where it makes colour carry the meaning and reads as an error state rather than a figure.
-Emphasise with **weight** (`font-semibold text-slate-900`, muted `text-slate-500` at zero); the
-column header already says what the number is. If a count ever needs a genuine status treatment, that
-is a pill in its own status column, not a tinted numeral -- a pill in the numeric column would break
-the digit alignment the column exists for.
+**Every figure in a numeric column gets the SAME style -- one colour, one weight, zeros included.**
+Use the table body colour (`text-slate-700`) + `tabular-nums` + `text-right` and vary nothing per
+cell. This took three tries to get right, and each intermediate version looked reasonable in
+isolation:
+1. rose on the non-zero "needs follow-up" count. rose *is* that semantic token, but the system spends
+   it on **status pills and danger buttons**, not bare coloured digits, where it makes colour carry
+   the meaning and reads as an error state rather than a figure.
+2. weight instead (`font-semibold` on the interesting one, muted `text-slate-500` for zeros) plus a
+   brand-coloured link on the two figures that had somewhere to point.
+That last combination put **four different treatments in four adjacent cells** -- colour meaning "is
+a link", weight meaning "is the actionable one", muting meaning "is zero" -- three unrelated signals
+fighting in the one place whose whole purpose is comparing figures down and across. A reader cannot
+tell whether blue-vs-grey encodes magnitude, status, or navigability.
+
+So: **no per-cell emphasis, and never put the drill-through on the numeral.** Where the row needs to
+link somewhere, make it **one row-level action** in the actions column (`ghost_class`, alongside
+Edit -- the two-ghost-action shape the cases table already uses). That also stops the styling from
+advertising an asymmetry in the data model: only two of the roster's four counts could link at all,
+because `volunteers#index` filters by supervisor and transition age but not by contact activity.
+If a count genuinely needs a status treatment, that is a pill in its own status column -- in the
+numeric column it would break the digit alignment the column exists for.
 
 **A count that links needs `record_link_class`, and the destination needs a way back.** These are
 record links in a links-only cell, so the brand colour is the cue: use

@@ -129,12 +129,16 @@ RSpec.describe "supervisors/index", type: :system do
       expect(row).to have_css("[data-stat='not-attempting']", text: "1")
     end
 
-    it "drills the volunteer count through to that supervisor's volunteers, with a way back" do
+    it "drills through to that supervisor's volunteers from the row action, with a way back" do
       supervisor = create(:supervisor, display_name: "Drill Supervisor", casa_org: organization)
       create(:volunteer, :with_cases_and_contacts, supervisor: supervisor, casa_org: organization)
 
       visit supervisors_path
-      within("#supervisor-#{supervisor.id}-information") { find("[data-stat='volunteers'] a").click }
+      # The drill-through is a row-level action; the figures themselves are plain text.
+      within("#supervisor-#{supervisor.id}-information") do
+        expect(page).to have_no_css("td[data-stat] a")
+        click_link "Volunteers"
+      end
 
       expect(page).to have_current_path(volunteers_path(supervisor: supervisor.id, from: "supervisors"), ignore_query: false)
       # The drill-through must not be a dead end.
