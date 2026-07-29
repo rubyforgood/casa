@@ -61,6 +61,11 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
+
+    if params.dig(:volunteer, :email).present? && params[:volunteer][:email] != @volunteer.email
+      @volunteer.skip_reconfirmation!
+    end
+
     if @volunteer.update(update_volunteer_params)
       notice = check_unconfirmed_email_notice(@volunteer)
 
