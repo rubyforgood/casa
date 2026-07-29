@@ -14,6 +14,17 @@ RSpec.describe "Accessibility (axe)", type: :system do
     expect(page).to be_axe_clean
   end
 
+  # A desktop-only pass cannot see `md:hidden` / `lg:hidden` markup at all -- axe skips hidden
+  # elements -- so the mobile card lists, the mobile settings labels and the auth pages' heading
+  # structure went unaudited until this was added.
+  def expect_axe_clean_at_mobile(path)
+    page.driver.browser.manage.window.resize_to(390, 900)
+    visit path
+    expect(page).to be_axe_clean
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 900)
+  end
+
   context "signed in as an admin" do
     before { sign_in admin }
 
@@ -101,6 +112,37 @@ RSpec.describe "Accessibility (axe)", type: :system do
     before { sign_in volunteer }
 
     it("emancipation", :js) { expect_axe_clean casa_case_emancipation_path(volunteer.casa_cases.first) }
+  end
+
+  # Violations that only exist below a breakpoint: the auth pages' only <h1> sits in an aside
+  # hidden below lg, the org-settings group labels are lg:hidden, and the metrics tables become
+  # scroll containers once they no longer fit.
+  context "at a mobile viewport" do
+    let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
+    let!(:reached) { create(:case_contact, creator: volunteer, casa_case: casa_case, contact_made: true) }
+    let!(:not_reached) { create(:case_contact, creator: volunteer, casa_case: casa_case, contact_made: false) }
+
+    it("sign in", :js) { expect_axe_clean_at_mobile new_user_session_path }
+    it("password reset request", :js) { expect_axe_clean_at_mobile new_user_password_path }
+
+    context "signed in as an admin" do
+      before { sign_in admin }
+
+      it("org settings", :js) { expect_axe_clean_at_mobile edit_casa_org_path(organization) }
+      it("analytics", :js) { expect_axe_clean_at_mobile analytics_path }
+      it("case contacts index", :js) { expect_axe_clean_at_mobile case_contacts_path }
+      it("cases index", :js) { expect_axe_clean_at_mobile casa_cases_path }
+
+      # Behind the :new_case_contact_table flag, so a route-walking audit never reaches it.
+      context "with the new case contact table flag on" do
+        before do
+          allow(Flipper).to receive(:enabled?).and_call_original
+          allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
+        end
+
+        it("case contacts new_design", :js) { expect_axe_clean_at_mobile case_contacts_new_design_path }
+      end
+    end
   end
 
   context "signed out" do

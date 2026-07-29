@@ -80,7 +80,7 @@ module MetricsHelper
     tag.details(class: "mt-3 border-t border-slate-100 pt-2.5") do
       safe_join([
         tag.summary("View as table", class: "w-max cursor-pointer text-[13px] font-medium text-brand-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500"),
-        tag.div(table, class: "mt-2.5 overflow-x-auto"),
+        tag.div(table, class: "mt-2.5 overflow-x-auto", tabindex: 0),
         (footnote ? tag.p(footnote, class: "mt-2 text-[11px] text-slate-500") : "".html_safe)
       ])
     end
@@ -102,7 +102,7 @@ module MetricsHelper
       end
       tag.tr(safe_join([tag.th(day, scope: "row", class: "sticky left-0 z-10 bg-white px-1 py-1 pr-2.5 text-right text-[11px] font-semibold text-slate-700")] + cells))
     end
-    tag.div(class: "overflow-x-auto") do
+    tag.div(class: "overflow-x-auto", tabindex: 0) do
       tag.table(class: "border-collapse") do
         safe_join([
           tag.caption("Case contacts created by day of week (rows) and hour of day (columns, 0 to 23). Cell shade and number both encode the count.", class: "sr-only"),

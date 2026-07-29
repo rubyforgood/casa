@@ -187,6 +187,24 @@ Likewise, a page that 500s reports `document-title` + `html-has-lang` + `landmar
 finding. Capybara then re-raises the server error on the *next* `visit`, so the exception is
 reported against the following page.
 
+**Audit at more than one viewport.** axe skips hidden elements, so a desktop-only pass cannot
+see `md:hidden` / `lg:hidden` markup *at all* — and this codebase renders a separate mobile
+card list next to every desktop table. A whole-app sweep run at 1400px came back clean while
+390px still had six violations, every one of them in below-the-breakpoint markup:
+- the auth pages' only `<h1>` sat in an `<aside class="hidden … lg:flex">`, so below `lg` the
+  page had **no `h1` at all**. Fixed by making each form heading ("Welcome back", "Reset your
+  password") the `<h1>` and the marketing line a `<p>` — the page's subject is the form, not
+  the brand statement. Sign-in/reset/invite/confirm all follow this.
+- the `lg:hidden` org-settings group labels were `slate-400`.
+- the metrics data tables and heatmap become **scroll containers** once they stop fitting, and
+  they contain no links or controls, so nothing inside could take focus (axe
+  `scrollable-region-focusable`). A scrollable region built from pure data needs
+  **`tabindex: 0`** on the scroll container itself so it can be scrolled from the keyboard.
+
+Sweep at **390 / 768 / 1400** before calling a page clean. Also note a route-walking audit
+silently skips **Flipper-gated** pages (it just follows the redirect): `/case_contacts/new_design`
+was missed that way and had two failing status colours behind the flag.
+
 ## Components
 
 ### Buttons
