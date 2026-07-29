@@ -21,7 +21,7 @@ RSpec.describe "/custom_org_links", type: :request do
       it "cannot access a custom org link create page" do
         get new_custom_org_link_path
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -54,7 +54,7 @@ RSpec.describe "/custom_org_links", type: :request do
       it "cannot create a custom org link" do
         post custom_org_links_path, params: params
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -82,7 +82,7 @@ RSpec.describe "/custom_org_links", type: :request do
       it "cannot access a contact type edit page" do
         get edit_custom_org_link_path(create(:custom_org_link))
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -116,7 +116,7 @@ RSpec.describe "/custom_org_links", type: :request do
       it "cannot update a custom org link" do
         put custom_org_link_path(custom_org_link), params: params
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -147,7 +147,7 @@ RSpec.describe "/custom_org_links", type: :request do
       it "cannot delete a custom org link" do
         delete custom_org_link_path(custom_org_link)
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 

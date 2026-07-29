@@ -201,6 +201,29 @@ card list next to every desktop table. A whole-app sweep run at 1400px came back
   `scrollable-region-focusable`). A scrollable region built from pure data needs
   **`tabindex: 0`** on the scroll container itself so it can be scrolled from the keyboard.
 
+**Icon contrast is not automatable — check it by hand.** axe has **no rule** for non-text
+contrast, so a decorative-looking icon can fail 1.4.11 (3:1) on a page that audits perfectly
+clean. The org announcement banner shipped its megaphone as `text-amber-500`, which is
+**2.07:1 on the `amber-50` banner background**. Icons in an alert/banner should **inherit the
+container's text colour** (as `shared/_flashes` does) rather than setting their own, which keeps
+them at the same ratio as the copy they sit with. Note contrast is against the *tinted* surface,
+not white: measure against the actual background.
+
+**Flash messages** (`shared/_flashes`): success auto-hides, errors stay.
+- A success message carries the `auto-dismiss` controller and clears itself after ~6s. The timer
+  **pauses on hover and on `focusin`**, so it cannot vanish mid-read — that plus a delay well
+  above a couple of seconds is what keeps an auto-hiding status message clear of WCAG 2.2.1. The
+  message keeps `role="status"`, so it is announced when it appears; removing it later is silent.
+- Warnings and errors (`role="alert"`) are **never** auto-dismissed: they are often the only
+  record of what went wrong.
+- The fade is applied as an **inline style**, not a utility class, and the removal is on a timer
+  rather than `transitionend`. A class added from JS only works while Tailwind still emits it, and
+  a missed `transitionend` would leave the message on screen forever.
+- Because the partial keys off the flash type (`notice` -> green success, anything else -> amber
+  warning), **an error must not be sent as `flash[:notice]`**, or it renders green *and* now
+  auto-dismisses. Authorization failures use `flash[:alert]`: `ApplicationController#not_authorized`
+  plus the cross-org `RecordNotFound` rescues in `CasaCasesController` and `CourtDatesController`.
+
 Sweep at **390 / 768 / 1400** before calling a page clean. Also note a route-walking audit
 silently skips **Flipper-gated** pages (it just follows the redirect): `/case_contacts/new_design`
 was missed that way and had two failing status colours behind the flag.

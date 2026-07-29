@@ -318,7 +318,7 @@ RSpec.describe "/case_assignments", type: :request do
       it "redirects to root with an authorization failure message" do
         request
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to match "not authorized"
+        expect(response.request.flash[:alert]).to match "not authorized"
       end
     end
   end

@@ -514,7 +514,7 @@ RSpec.describe "/volunteers", type: :request do
       expect(controller.current_user).to eq(volunteer)
 
       follow_redirect!
-      expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
+      expect(flash[:alert]).to match(/Sorry, you are not authorized to perform this action./)
     end
   end
 

@@ -150,7 +150,10 @@ class ApplicationController < ActionController::Base
       end
       format.any do
         session[:user_return_to] = nil
-        flash[:notice] = message
+        # :alert, not :notice. An authorization failure is not a success, and shared/_flashes maps
+        # :notice to the green success variant -- so this rendered a permission error as a success,
+        # and success messages now auto-dismiss, which would have quietly thrown it away.
+        flash[:alert] = message
         redirect_to(root_url)
       end
     end

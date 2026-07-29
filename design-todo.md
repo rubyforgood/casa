@@ -597,6 +597,18 @@ Verified still open against `main` at the time of writing.
   `@casa_org`, so those fall back to the generic "Court Appointed Special Advocate (CASA)". Either set
   `@casa_organization` everywhere or have the layout also read `@casa_org` / the resource's org.
   Whether Devise emails *should* name the org is a product call.
+- [ ] **`patch_notes/index_spec` still reads a raw Selenium handle.**
+  `spec/system/all_casa_admins/patch_notes/index_spec.rb:31` does
+  `first(:css, "textarea").native.send_keys(...)`. That call sits outside Capybara's `synchronize`,
+  so a `StaleElementReferenceError` raised while the page settles is never retried — the exact
+  failure fixed in `other_duties/new_spec` (3/20 -> 0/20) and the same antipattern removed from
+  `court_dates/new_spec` and `bulk_court_dates/new_spec`. It is the last one left in the system
+  specs. Left alone for now because it is materially safer than those were: the textarea is static
+  (not cloned from a `<template>`) and already scoped by `within "#new-patch-note"`, and it has not
+  been observed failing across repeated full-suite runs. Swap it for
+  `find("#new-patch-note textarea").set(...)` next time that file is touched, or sooner if it ever
+  flakes in CI.
+
 - [ ] **Contact types on the case-contact form are still an exposed grouped checkbox fieldset**, while
   the filter and `casa_cases` new/edit use the searchable multiselect. Deliberate: it is that page's
   primary required input and each row carries a per-type recency hint that does not survive collapsing

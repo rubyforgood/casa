@@ -15,7 +15,7 @@ RSpec.describe "ChecklistItems", type: :request do
         sign_in_as_volunteer
         get new_hearing_type_checklist_item_path(create(:hearing_type))
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
   end
@@ -55,7 +55,7 @@ RSpec.describe "ChecklistItems", type: :request do
           }
         )
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
   end
@@ -78,7 +78,7 @@ RSpec.describe "ChecklistItems", type: :request do
         checklist_item = create(:checklist_item)
         get edit_hearing_type_checklist_item_path(hearing_type, checklist_item)
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
   end
@@ -125,7 +125,7 @@ RSpec.describe "ChecklistItems", type: :request do
           }
         )
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
         checklist_item.reload
         expect(checklist_item.description).to eq "checklist item description"
         expect(checklist_item.category).to eq "checklist item category"
@@ -153,7 +153,7 @@ RSpec.describe "ChecklistItems", type: :request do
         checklist_item = create(:checklist_item)
         delete hearing_type_checklist_item_path(hearing_type, checklist_item)
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
         expect(ChecklistItem.count).to eq 1
       end
     end

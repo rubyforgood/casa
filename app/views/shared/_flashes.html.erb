@@ -10,7 +10,11 @@
     <% flash.each do |type, message| %>
       <% next if message.blank? || type.to_s == "notice_action" %>
       <% variant = (type.to_s == "notice") ? :success : :warning %>
-      <div role="<%= type.to_s == "notice" ? "status" : "alert" %>" class="<%= ["alert", type.to_s].uniq.join(" ") %> <%= alert_classes(variant) %>">
+      <%# Success messages auto-hide after a few seconds (auto-dismiss controller, paused while the
+          pointer or keyboard focus is inside them). Warnings and errors are left on screen: they are
+          often the only record of what went wrong, so clearing them for the user loses it. %>
+      <div role="<%= (variant == :success) ? "status" : "alert" %>" class="<%= ["alert", type.to_s].uniq.join(" ") %> <%= alert_classes(variant) %>"
+        <%= tag.attributes(data: {controller: "auto-dismiss", action: "mouseenter->auto-dismiss#pause mouseleave->auto-dismiss#resume focusin->auto-dismiss#pause focusout->auto-dismiss#resume"}) if variant == :success %>>
         <i class="bi <%= alert_icon(variant) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
         <div><%= message %><% if type.to_s == "notice" && flash[:notice_action].present? %> <%= link_to flash[:notice_action]["label"], flash[:notice_action]["path"], class: "font-semibold underline underline-offset-2 hover:no-underline" %><% end %></div>
       </div>

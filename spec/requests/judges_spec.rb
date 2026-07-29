@@ -19,7 +19,7 @@ RSpec.describe "/judges", type: :request do
         get new_judge_path
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe "/judges", type: :request do
         post judges_path, params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -94,7 +94,7 @@ RSpec.describe "/judges", type: :request do
         get edit_judge_path(judge)
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -134,7 +134,7 @@ RSpec.describe "/judges", type: :request do
         put judge_path(judge), params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 

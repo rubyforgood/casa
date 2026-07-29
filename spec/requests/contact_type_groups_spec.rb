@@ -19,7 +19,7 @@ RSpec.describe "/contact_type_groups", type: :request do
         get new_contact_type_group_path
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -61,7 +61,7 @@ RSpec.describe "/contact_type_groups", type: :request do
         post contact_type_groups_path, params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -109,7 +109,7 @@ RSpec.describe "/contact_type_groups", type: :request do
         get edit_contact_type_group_path(create(:contact_type_group))
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -167,7 +167,7 @@ RSpec.describe "/contact_type_groups", type: :request do
         put contact_type_group_path(create(:contact_type_group)), params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 

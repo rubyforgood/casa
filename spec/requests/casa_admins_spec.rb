@@ -37,7 +37,7 @@ RSpec.describe "/casa_admins", type: :request do
           get edit_casa_admin_path(casa_admin_diff_org)
 
           expect(response).to redirect_to root_path
-          expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+          expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
         end
       end
     end
@@ -50,7 +50,7 @@ RSpec.describe "/casa_admins", type: :request do
         get edit_casa_admin_path(admin)
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -169,7 +169,7 @@ RSpec.describe "/casa_admins", type: :request do
         }
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -353,7 +353,7 @@ RSpec.describe "/casa_admins", type: :request do
         patch deactivate_casa_admin_path(admin)
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
