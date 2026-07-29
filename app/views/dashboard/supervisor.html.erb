@@ -68,36 +68,63 @@
       </div>
     </div>
 
-    <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="attention-heading">
-      <div class="mb-4 flex items-center justify-between">
+    <%# Worklist: table on md+, divided list below md -- see the note on dashboard/admin. %>
+    <section class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white pb-2 shadow-sm" aria-labelledby="attention-heading">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-4">
         <h2 id="attention-heading" class="text-base font-semibold text-slate-900">Needs your attention</h2>
-        <% if @dashboard.needs_attention.any? %><span class="text-sm text-slate-500"><%= pluralize(@dashboard.needs_attention.size, "volunteer") %></span><% end %>
+        <% if @dashboard.needs_attention.any? %><span class="shrink-0 text-sm text-slate-500"><%= pluralize(@dashboard.needs_attention.size, "volunteer") %></span><% end %>
       </div>
       <% if @dashboard.needs_attention.any? %>
-        <%# A divided list in ONE container. Every row used to be its own rose-tinted, rose-bordered
-            box with a filled 40px icon tile, nested inside this card: at any length that reads as a
-            stack of alert banners rather than a worklist, and a tint applied to every row stops
-            signalling anything. Severity is stated once, by the section heading and count. Matches
-            the in-card list on casa_cases#show. %>
-        <ul class="divide-y divide-slate-100">
-          <% @dashboard.needs_attention.each do |row| %>
-            <li class="flex flex-wrap items-center justify-between gap-3 py-3">
-              <div class="min-w-0">
-                <%# Identifying text, not a link: design.md prefers not to route people out of a flow
-                    via a name, and the row already has one control. The old row had TWO buttons with
-                    the same href ("Send reminder" and "View", both the volunteer page) -- linking the
-                    name as well would just have moved that duplication rather than removed it. %>
-                <div class="font-medium text-slate-800"><%= display_person(row.volunteer) %></div>
-                <div class="mt-0.5 text-xs text-slate-500"><%= pluralize(row.cases_count, "active case") %> · last contact <%= row.last_contact_label.downcase %></div>
-              </div>
-              <%= link_to edit_volunteer_path(row.volunteer), class: ghost_class do %>
-                <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
+        <div class="hidden overflow-x-auto md:block">
+          <table class="w-full text-sm">
+            <caption class="sr-only">Volunteers you supervise who have not logged a case contact recently.</caption>
+            <thead class="text-left text-xs font-semibold text-slate-500">
+              <tr class="border-b border-slate-100">
+                <th scope="col" class="px-4 py-3 font-semibold">Volunteer</th>
+                <th scope="col" class="px-4 py-3 text-center font-semibold">Cases</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Last contact</th>
+                <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+              <% @dashboard.needs_attention.each do |row| %>
+                <tr class="hover:bg-slate-50/70">
+                  <td class="px-4 py-3 align-top">
+                    <div class="flex items-center gap-3">
+                      <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold <%= avatar_classes[row.avatar_color] %>" aria-hidden="true"><%= avatar_initials(display_person(row.volunteer)) %></span>
+                      <%# Identifying text, not a link: the row already has one control, and design.md
+                          prefers not to route people out of a flow via a name. The old row had TWO
+                          buttons with the same href ("Send reminder" and "View", both the volunteer
+                          page). %>
+                      <span class="font-medium text-slate-800"><%= display_person(row.volunteer) %></span>
+                    </div>
+                  </td>
+                  <td class="px-4 py-3 text-center align-top tabular-nums text-slate-700"><%= row.cases_count %></td>
+                  <td class="px-4 py-3 align-top text-slate-700"><%= row.last_contact_label %></td>
+                  <td class="px-4 py-3 text-right align-top whitespace-nowrap">
+                    <%= link_to edit_volunteer_path(row.volunteer), class: ghost_class do %><i class="bi bi-bell" aria-hidden="true"></i> Send reminder<% end %>
+                  </td>
+                </tr>
               <% end %>
-            </li>
+            </tbody>
+          </table>
+        </div>
+        <div class="divide-y divide-slate-100 md:hidden">
+          <% @dashboard.needs_attention.each do |row| %>
+            <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+              <div class="flex min-w-0 items-center gap-3">
+                <span class="grid h-9 w-9 shrink-0 place-items-center rounded-full text-xs font-semibold <%= avatar_classes[row.avatar_color] %>" aria-hidden="true"><%= avatar_initials(display_person(row.volunteer)) %></span>
+                <div class="min-w-0">
+                  <div class="font-medium text-slate-800"><%= display_person(row.volunteer) %></div>
+                  <div class="mt-0.5 text-xs text-slate-500"><%= pluralize(row.cases_count, "active case") %> · last contact <%= row.last_contact_label.downcase %></div>
+                </div>
+              </div>
+              <%= link_to edit_volunteer_path(row.volunteer), class: ghost_class do %><i class="bi bi-bell" aria-hidden="true"></i> Remind<% end %>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <div class="flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+        <div class="m-4 flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600"><i class="bi bi-check2-circle text-xl" aria-hidden="true"></i></span>
           <div>
             <h3 class="text-sm font-semibold text-slate-900">You're all caught up</h3>

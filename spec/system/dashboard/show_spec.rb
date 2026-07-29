@@ -52,23 +52,23 @@ RSpec.describe "dashboard/show", type: :system do
       sign_in supervisor
     end
 
-    it "is one divided list, not a stack of tinted boxes" do
+    it "is a table with real columns, not tinted boxes or a stretched list" do
       visit root_path
 
       section = find("[aria-labelledby='attention-heading']")
-      expect(section).to have_css("ul.divide-y li", count: 3)
+      # Columns spend the card's width on data. As a list, each row was one or two short items flung
+      # to opposite edges of a ~918px card, leaving a measured 645px void that read as an empty table.
+      expect(section).to have_css("table tbody tr", count: 3)
+      expect(section).to have_css("table thead th", minimum: 3)
 
-      # Each row used to carry its own rose border, rose fill and filled 40px icon tile, nested
-      # inside this card -- at any length that reads as a stack of alert banners, and a tint on every
-      # row signals nothing. Severity is stated once, by the heading and the count.
-      expect(section).to have_no_css("li[class*='bg-rose']")
-      expect(section).to have_no_css("li[class*='border-rose']")
-      expect(section).to have_no_css("li[class*='rounded']")
-      expect(section).to have_no_css("li span.h-10")
+      # Rows used to carry their own rose border, rose fill and a filled 40px icon tile nested inside
+      # this card; a tint on every row signals nothing. Severity is stated once, by the heading.
+      expect(section).to have_no_css("[class*='bg-rose']")
+      expect(section).to have_no_css("[class*='border-rose']")
+      expect(section).to have_no_css("span.h-10")
 
-      # One control per row, and the name beside it is identifying text rather than a second link to
-      # the same page.
-      section.all("li").to_a.each { |row| expect(row.all("a").size).to eq 1 }
+      # One action per row -- the name beside it is identifying text, not a second link to the same page.
+      section.all("table tbody tr").to_a.each { |row| expect(row.all("a").size).to eq 1 }
     end
   end
 

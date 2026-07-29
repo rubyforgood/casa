@@ -1177,11 +1177,28 @@ with no return is a flow trap).
 "mine" etc.: `rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-600`.
 
 ### Dashboard worklist ("Needs your attention")
-A prioritised list of things to act on. **One container: the section card.** Rows are a divided list
-(`ul.divide-y divide-slate-100`, `li` = `flex flex-wrap items-center justify-between gap-3 py-3`) --
-matching the in-card list on `casa_cases#show`. Each row is primary text (the record link, or a
-person's name as identifying `font-medium text-slate-800`), an optional `text-xs text-slate-500`
-context line, and **one** action on the right.
+A prioritised list of things to act on. **One container: the section card** -- and inside it, the
+same desktop-table + `md:hidden`-divided-list pair the sibling tables on these pages already use
+(`hidden overflow-x-auto md:block` table, then `divide-y divide-slate-100 md:hidden` rows).
+
+**Pick table vs list by the row's width, not by taste.** A divided list is right in a narrow column
+and wrong in a wide card: `justify-between` pins two small items to opposite edges, and at a ~918px
+card that measured a **645px void** per row -- which reads as an empty table, the exact complaint the
+tinted boxes had been hiding. Columns spend that width on data instead (largest inter-column gap after
+the fix: 0px). So:
+- **Wide card (a full-width dashboard section): a table.** Give it at least two data columns, or the
+  same void reappears in table clothing -- the admin worklist only had a case number, so it gained a
+  **Next court date** column, which is also what you triage on. Use the sibling table's tokens:
+  `thead` `text-left text-xs font-semibold text-slate-500`, `th`/`td` `px-4 py-3`, `tbody`
+  `divide-y divide-slate-50`, `tr` `hover:bg-slate-50/70`, `<caption class="sr-only">`, `scope="col"`.
+- **Narrow column or below `md`: the divided list**, with the context on a second
+  `text-xs text-slate-500` line.
+If a new column needs data the service does not have, **batch it** -- `AdminDashboard` documents
+"no per-case queries", so `next_court_dates` is one grouped `minimum(:date)` lookup, not
+`CasaCase#next_court_date` per row (3 queries total for the section, verified).
+
+Each row is primary text (a record link, or a person's name as identifying `font-medium
+text-slate-800` + the initials avatar), and **one** action.
 
 **Do not give each row its own box.** All three dashboards shipped every row as a rose-tinted,
 rose-bordered `rounded-xl` panel with a filled 40px rose icon tile, nested inside the section card.

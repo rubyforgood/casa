@@ -29,6 +29,17 @@ class AdminDashboard
     unassigned_cases.first(ATTENTION_LIMIT)
   end
 
+  # Next upcoming court date per case, for the needs-attention table: an unassigned case with court
+  # imminent is the one to staff first. ONE grouped query for the whole set, keeping this class's
+  # no-per-case-queries contract (CasaCase#next_court_date would issue one query per row).
+  def next_court_dates
+    @next_court_dates ||= CourtDate
+      .where(casa_case_id: needs_attention.map(&:id))
+      .where(date: Date.current..)
+      .group(:casa_case_id)
+      .minimum(:date)
+  end
+
   def empty?
     active_cases.empty? && active_volunteers.zero?
   end
