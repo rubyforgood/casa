@@ -1,7 +1,9 @@
 require "rails_helper"
 
 RSpec.describe ApiBaseHelper, type: :helper do
-  # TODO: Add tests for ApiBaseHelper
-
-  pending "add some tests for ApiBaseHelper"
+  describe "SHORT_IO" do
+    it "is the short.io API base URL" do
+      expect(ApiBaseHelper::SHORT_IO).to eq("https://api.short.io/")
+    end
+  end
 end
