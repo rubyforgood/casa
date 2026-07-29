@@ -1059,6 +1059,34 @@ Implemented (emerald + check), Partially implemented (amber + clock), Not implem
 model `implementation_status_symbol` that returned literal ✅/🕗/❌, which render
 inconsistently across platforms and are invisible to a class-string button audit). Court orders render as a compact 2-column **table** (`Court order` | `Status`, design.md table tokens: sentence-case `text-xs font-semibold text-slate-600` header, `align-top` cells, `divide-y`; pill in a left-aligned `whitespace-nowrap` status column). NOT a leading badge (variable widths make the directive text start at a ragged left edge) and NOT a right-floating badge (it hovers at the top-right of multi-line directive text) -- both were tried and read wrong; the directive text is a paragraph, so it needs a real column.
 
+**A pill carries a status, never a quantity.** Counts belong in their own right-aligned numeric
+column (`text-right` + **`tabular-nums`**), with the label in the column header and the cell
+holding just the numeral. Every major system draws this line the same way -- Polaris badges,
+Atlassian lozenges, Carbon tags are all for categorical state -- and GOV.UK and Material both
+specify right alignment for numbers so digits line up and a column can be compared top to bottom.
+
+The supervisor roster had three count pills stacked in one "Volunteers" cell
+(`N attempting` / `N not attempting` / `N transition-aged`), the first two omitted at zero. Two
+things went wrong, and they are what to watch for:
+- **Ragged metrics.** Because the leading pills were conditional, the *same* metric landed at a
+  different x-offset on every row -- measured 787 / 651 / 673px for `transition-aged` across three
+  rows. Nothing could be scanned down the column. As columns, all four right-align exactly.
+- **Omitting a zero breaks comparison.** Show `0` (muted `text-slate-500`), don't drop the cell;
+  a missing number is not the same as zero, and dropping it is what made the row shift.
+Counts are also **dead ends unless they link**: point each one at the filtered list where a filter
+exists (`volunteers_path(supervisor:)`, `volunteers_path(supervisor:, transition: "yes")`). Colour
+and weight stay as *reinforcement* only -- the header names the column, so nothing is colour-only.
+
+**Trade-off to check when converting pills to columns:** wrapping pills fit a narrow viewport;
+fixed columns do not. The roster table measured 341px (no scroll) as pills and 616px in a 341px
+viewport as six columns, i.e. the change *introduced* horizontal scrolling on mobile. A data table
+is the documented WCAG 1.4.10 Reflow exception and axe stays clean either way, so this will not show
+up in an audit -- measure it. The fix is this page's existing pattern: desktop table
+`hidden md:block` plus a `md:hidden` card list repeating the figures in a labelled `dl` grid. Hoist
+the counts into one array first (`no_attempt_for_two_weeks` walks every volunteer's contacts, so
+rendering both copies would double that), and keep ids and `[data-stat]` hooks on the table only so
+the two copies never collide.
+
 ### Person avatar (initials)
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
 pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
