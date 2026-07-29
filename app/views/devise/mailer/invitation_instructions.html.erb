@@ -1,66 +1,8 @@
-<meta itemprop="name"
-      content="Confirm Email"
-      style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-<style>/* Email styles need to be inline */</style>
-<table
-  width="100%"
-  cellpadding="0"
-  cellspacing="0"
-  style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-  <% if @resource.is_a?(User) %>
-    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td
-        class="content-block"
-        style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
-        valign="top">
-        A <%= @resource.casa_org.display_name %>’s County <%= @resource.type %> console account has been created for you.
-        This console is for logging the time you spend and actions you take on your CASA case.
-        You can log activity with your CASA youth, their family members, their foster family or placement, the DSS worker,
-        your Case Supervisor and others associated with your CASA case (such as teachers and therapists).
-      </td>
-    </tr>
-    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td
-        class="content-block"
-        style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
-        valign="top">
-        Your console account is associated with this email. If this is not the correct email to use, please stop here
-        and contact your Case Supervisor to change the email address. If you are ready to get started, please set your
-        password. This is the first step to accessing your new <%= @resource.type %> account.
-      </td>
-    </tr>
-  <% else %>
-    <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-      <td
-        class="content-block"
-        style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
-        valign="top">
-        A CASA console admin account has been created for you. Your console account is associated with this email.
-        If you are ready to get started, please set your password. This is the first step to accessing your new account.
-      </td>
-    </tr>
-  <% end %>
-  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-    <td
-      class="content-block"
-      itemprop="handler"
-      itemscope
-      itemtype="http://schema.org/HttpActionHandler"
-      style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;"
-      valign="top">
-      <p><%= link_to "Set your password", accept_invitation_url(@resource, invitation_token: @token) %></p>
-    </td>
-  </tr>
-  <tr style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
-    <td class="content-block" style="font-family: Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
-      This invitation will expire on <%= I18n.l(@resource.invitation_due_at, format: :full, default: nil) %>
-      <% if @resource.is_a?(AllCasaAdmin) %>
-        (one week).
-      <% elsif @resource.is_a?(Supervisor) || @resource.is_a?(CasaAdmin) %>
-        (two weeks).
-      <% elsif @resource.is_a?(Volunteer) %>
-        (one year).
-      <% end %>
-    </td>
-  </tr>
-</table>
+<% if @resource.is_a?(User) %>
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#334155;">A <%= @resource.casa_org.display_name %> <%= @resource.type %> console account has been created for you. This console is for logging the time you spend and actions you take on your CASA case &mdash; with your CASA youth, their family, their foster family or placement, the DSS worker, your case supervisor, and others (such as teachers and therapists).</p>
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#334155;">Your account is tied to this email address. If it isn&rsquo;t the right one, stop here and contact your case supervisor to change it. Otherwise, set your password to get started.</p>
+<% else %>
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.6; color:#334155;">A CASA console admin account has been created for you, tied to this email address. When you&rsquo;re ready, set your password to get started.</p>
+<% end %>
+<%= render "mailer_shared/cta_button", url: accept_invitation_url(@resource, invitation_token: @token), label: "Set your password" %>
+<p style="margin:16px 0 0; font-size:15px; line-height:1.6; color:#334155;">This invitation will expire on <%= I18n.l(@resource.invitation_due_at, format: :full, default: nil) %><% if @resource.is_a?(AllCasaAdmin) %> (one week).<% elsif @resource.is_a?(Supervisor) || @resource.is_a?(CasaAdmin) %> (two weeks).<% elsif @resource.is_a?(Volunteer) %> (one year).<% end %></p>

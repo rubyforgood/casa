@@ -1,6 +1,8 @@
 class AllCasaAdminsController < ApplicationController
+  layout "all_casa_admin"
   skip_before_action :authenticate_user!
   before_action :authenticate_all_casa_admin!
+  before_action -> { @active_nav ||= "profile" }
   before_action :set_custom_error_heading, only: [:update_password]
   after_action :reset_custom_error_heading, only: [:update_password]
   skip_after_action :verify_authorized

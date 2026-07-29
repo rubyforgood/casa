@@ -1,18 +1,13 @@
 <% current_placement = casa_case.placements.order(placement_started_at: :desc).first %>
-
-<% if current_placement %>
-  <h6>
-    <strong>Current Placement:</strong>
-    <%= current_placement.placement_type.name %>
-  </h6>
-
-  <p>Placed since: <%= current_placement.decorate.formatted_date %></p>
-  <p><%= link_to "See All Placements", casa_case_placements_path(casa_case), class: 'text-primary hover-underline' %></p>
-<% elsif casa_case.casa_org.placement_types.present? %>
-  <h6>
-    <strong>Current Placement:</strong>
-    Unknown
-  </h6>
-
-  <p><%= link_to "See All Placements", casa_case_placements_path(casa_case), class: 'text-primary hover-underline' %></p>
+<% if current_placement || casa_case.casa_org.placement_types.present? %>
+  <div class="mt-6 border-t border-slate-100 pt-4">
+    <h3 class="text-sm font-semibold text-slate-900">Current placement</h3>
+    <% if current_placement %>
+      <p class="mt-1 text-sm text-slate-800"><%= current_placement.placement_type.name %></p>
+      <p class="mt-0.5 text-xs text-slate-500">Placed since: <%= current_placement.decorate.formatted_date %></p>
+    <% else %>
+      <p class="mt-1 text-sm text-slate-500">Unknown</p>
+    <% end %>
+    <p class="mt-2"><%= link_to "See all placements", casa_case_placements_path(casa_case), class: "text-sm font-medium text-brand-600 hover:text-brand-700" %></p>
+  </div>
 <% end %>

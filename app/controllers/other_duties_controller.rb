@@ -1,4 +1,7 @@
 class OtherDutiesController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "other_duties" }
+
   before_action :set_other_duty, except: [:new, :create, :index]
   before_action :convert_duration_minutes, only: [:update, :create]
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
@@ -6,13 +9,32 @@ class OtherDutiesController < ApplicationController
   def index
     authorize OtherDuty
 
-    @volunteer_duties = if current_user.casa_admin?
-      generate_other_duty_list(policy_scope(Volunteer))
+    # Whose duties this user reviews: an admin sees every org volunteer's, a supervisor their
+    # (active) assigned volunteers', a volunteer only their own.
+    volunteers = if current_user.casa_admin?
+      policy_scope(Volunteer)
     elsif current_user.supervisor?
-      generate_other_duty_list(current_user.volunteers)
-    else # for volunteer user
-      generate_other_duty_list([current_user])
+      current_user.volunteers
+    else
+      [current_user]
     end
+
+    # A flat, most-recent-first log of entries (replacing the per-volunteer grouped tables).
+    duties = OtherDuty.where(creator: volunteers).includes(:creator).order(occurred_at: :desc).to_a
+
+    unless current_user.volunteer?
+      # Type-ahead volunteer search, mirroring the learning-hours roster (searchable-select).
+      @roster_names = duties.map { |duty| duty.creator.display_name }.compact.uniq.sort
+      if params[:search].present?
+        query = params[:search].strip.downcase
+        duties = duties.select { |duty| duty.creator.display_name.to_s.downcase.include?(query) }
+      end
+    end
+
+    per_page = 25
+    page = params[:page].to_i.clamp(1, [(duties.size.to_f / per_page).ceil, 1].max)
+    @pagy = Pagy.new(count: duties.size, page: page, limit: per_page)
+    @other_duties = duties[@pagy.offset, per_page] || []
   end
 
   def new
@@ -52,26 +74,6 @@ class OtherDutiesController < ApplicationController
     converted_duration_hours = duration_hours * 60
     duration_minutes = params[:other_duty][:duration_minutes].to_i
     params[:other_duty][:duration_minutes] = (converted_duration_hours + duration_minutes).to_s
-  end
-
-  def generate_other_duty_list(volunteers)
-    return [] if no_other_duties_for(volunteers)
-    volunteers.map do |volunteer|
-      {
-        volunteer: volunteer,
-        other_duties: volunteer.other_duties
-      }
-    end
-  end
-
-  def no_other_duties_for(volunteers)
-    no_duties_found = true
-    volunteers.each do |volunteer|
-      if volunteer.other_duties.present?
-        no_duties_found = false
-      end
-    end
-    no_duties_found
   end
 
   def other_duty_params

@@ -21,6 +21,14 @@ RSpec.describe LoadsCaseContacts do
 
     before { sign_in admin }
 
+    # The main case_contacts#index (and #drafts) still consume the concern's
+    # load_case_contacts; the migrated new-design controller builds its own paginated
+    # query, so its flag gate is what matters there.
+    it "decorates case contacts with the correct decorator on the main index" do
+      get case_contacts_path
+      expect(assigns(:case_contacts)).to be_decorated_with CaseContactsDecorator
+    end
+
     context "when new_case_contact_table flag is enabled" do
       before do
         allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
@@ -29,13 +37,7 @@ RSpec.describe LoadsCaseContacts do
       it "loads case contacts successfully through the new design controller" do
         get case_contacts_new_design_path
         expect(response).to have_http_status(:success)
-        expect(assigns(:filtered_case_contacts)).to be_present
-      end
-
-      it "decorates case contacts with the correct decorator" do
-        get case_contacts_new_design_path
-
-        expect(assigns(:case_contacts)).to be_decorated_with CaseContactsDecorator
+        expect(assigns(:case_contacts)).to be_present
       end
     end
 

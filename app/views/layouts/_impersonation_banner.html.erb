@@ -1,0 +1,13 @@
+<%# Impersonation banner for the casa_app shell. Shown only while an admin/supervisor is
+    impersonating another user (pretender's current_user != true_user). The whole bar is the
+    "stop impersonating" control. Keeps the `.header` hook the system specs assert against.
+    Amber-950 on amber-400 is ~8:1 (AA). %>
+<% if current_user != true_user %>
+  <div class="header">
+    <%= link_to stop_impersonating_volunteers_path, method: :post,
+          class: "flex flex-wrap items-center justify-center gap-2 bg-amber-400 px-4 py-2.5 text-center text-sm font-semibold text-amber-950 hover:bg-amber-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-amber-700" do %>
+      <i class="bi bi-person-badge" aria-hidden="true"></i>
+      <span>You (<%= formatted_name(true_user.display_name) %>) are signed in as <%= formatted_name(current_user.display_name) %>. Click here to stop impersonating.</span>
+    <% end %>
+  </div>
+<% end %>

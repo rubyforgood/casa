@@ -8,9 +8,7 @@ RSpec.describe "User Login", type: :system do
       visit new_user_session_path
       fill_in "Email", with: user.email
       fill_in "Password", with: "12345678"
-      within ".actions" do
-        find("#log-in").click
-      end
+      click_on "Sign in"
 
       expect(page).to have_text user.email
     end
@@ -19,9 +17,7 @@ RSpec.describe "User Login", type: :system do
       visit new_user_session_path
       fill_in "Email", with: user.email
       fill_in "Password", with: "wrong_password"
-      within ".actions" do
-        find("#log-in").click
-      end
+      click_on "Sign in"
 
       expect(page).to have_content(/invalid email or password/i)
     end

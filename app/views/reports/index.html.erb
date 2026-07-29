@@ -1,221 +1,132 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
+<% content_for :page_title, "Reports" %>
+<%# reports#index (the reports hub) on the casa_app shell. A list of one-click CSV exports + a
+    filterable Case Contacts Report builder. Export/submit buttons keep `.report-form-submit` +
+    `data-disable-with` — src/reports.js intercepts the click, swaps the whole button to the
+    disable-with text, and native-submits the form (so the CSV download bypasses Turbo); EVERY icon
+    inside these buttons is pointer-events-none so `event.target` is always the button. The four
+    filter selects are TomSelect multi-select type-aheads (`multiple-select` controller), each on its
+    own line; they keep their spec-locked ids (multiple-select-field1..4) and specs drive them via the
+    .ts-control (see spec/system/reports). The column filter is a native <details>. Several
+    headings/labels + button names are Title Case and spec-locked; kept verbatim, queued for the
+    sentence-case sweep. %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% section_title = "text-lg font-semibold text-slate-900" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% check_class = "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
-    <div class="col-lg-12">
-      <div class="title mb-30">
-        <h1>Export Data</h1>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Reports</h1>
+      <p class="mt-1 text-sm text-slate-500">Download CSV exports for your organization.</p>
+    </div>
+
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Quick exports</h2>
+      <p class="mt-1 text-sm text-slate-500">One-click CSV downloads.</p>
+      <div class="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
+        <% exports = [
+          ["Mileage report", "Downloading mileage report", mileage_reports_path(format: :csv), "bi-signpost-2"],
+          ["Missing data report", "Downloading missing data report", missing_data_reports_path(format: :csv), "bi-database"],
+          ["Learning hours report", "Downloading learning hours report", learning_hours_reports_path(format: :csv), "bi-hourglass-split"],
+          ["Export volunteers emails", "Downloading export volunteers emails", export_emails_path(format: :csv), "bi-envelope"],
+          ["Followups report", "Downloading followups report", followup_reports_path(format: :csv), "bi-check2-square"],
+          ["Placements report", "Downloading placements report", placement_reports_path(format: :csv), "bi-house-door"]
+        ] %>
+        <% exports.each do |label, feedback, url, icon| %>
+          <%= form_with url: url, method: :get do %>
+            <%# flex-1 on the label makes it fill the row so the download icon sits hard right and the
+                label reads from the left -- button_classes bakes in justify-center, which flex-1 makes moot. %>
+            <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:secondary)} w-full", data: {disable_with: feedback} do %>
+              <span class="pointer-events-none flex flex-1 items-center gap-2 text-left"><i class="bi <%= icon %>" aria-hidden="true"></i> <%= label %></span>
+              <i class="bi bi-download pointer-events-none text-slate-400" aria-hidden="true"></i>
+            <% end %>
+          <% end %>
+        <% end %>
       </div>
-    </div>
+    </section>
 
-    <div class="col-lg-12">
-      <ul class="buttons-group mb-30">
-        <li>
-          <%= form_with url: mileage_reports_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Mileage Report" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-dashboard mr-10"></i> Mileage Report
-            <% end %>
-          <% end %>
-        </li>
+    <section class="<%= card %>">
+      <h2 class="<%= section_title %>">Case contacts report</h2>
+      <p class="mt-1 text-sm text-slate-500">A CSV of all fields for every volunteer's case contacts. Choose a date range and optional filters.</p>
 
-        <li>
-          <%= form_with url: missing_data_reports_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Missing Data Report" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-database mr-10"></i> Missing Data Report
-            <% end %>
-          <% end %>
-        </li>
+      <%= form_with url: case_contact_reports_path(format: :csv), scope: "report", method: :get, local: true, class: "mt-5 space-y-5" do |f| %>
+        <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div>
+            <%= f.label :start_date, "Start date", class: label_class %>
+            <%= f.date_field :start_date, value: 6.months.ago, class: input_class %>
+          </div>
+          <div>
+            <%= f.label :end_date, "End date", class: label_class %>
+            <%= f.date_field :end_date, value: Date.today, class: input_class %>
+          </div>
+        </div>
 
-        <li>
-          <%= form_with url: learning_hours_reports_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Learning Hours Report" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-hourglass mr-10"></i> Learning Hours Report
-            <% end %>
-          <% end %>
-        </li>
-
-        <li>
-          <%= form_with url: export_emails_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Export Volunteers Emails" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-envelope mr-10"></i> Export Volunteers Emails
-            <% end %>
-          <% end %>
-        </li>
-
-        <li>
-          <%= form_with url: followup_reports_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Followups Report" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-check-box mr-10"></i> Followups Report
-            <% end %>
-          <% end %>
-        </li>
-        <li>
-          <%= form_with url: placement_reports_path(format: :csv), method: :get do |f| %>
-            <%= button_tag(
-                  data: { disable_with: "Downloading Placements Report" },
-                  class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                ) do %>
-              <i class="lni lni-check-box mr-10"></i> Placements Report
-            <% end %>
-          <% end %>
-        </li>
-      </ul>
-    </div>
-
-    <div class="col-lg-12">
-      <div class="card-style mb-30">
-        <h6 class="mb-10">Case Contacts Report</h6>
-        <p class="text-sm mb-20">
-          This CSV is a listing of all fields for the case contacts of all volunteers. Select the start and end date.
-        </p>
-
-        <hr>
-
-        <div class="table-wrapper table-responsive">
-          <%= form_with url: case_contact_reports_path(format: :csv), scope: 'report', method: :get, local: true do |f| %>
-
-            <div class="field form-group mb-20">
-              <label class="form-label"><h6>Starting From</h6></label>
-              <%= f.date_field :start_date,
-                               value: 6.months.ago,
-                               class: "form-control" %>
+        <% if current_user&.casa_admin? || current_user&.supervisor? %>
+          <div>
+            <h3 class="text-sm font-semibold text-slate-900">Filters</h3>
+            <p class="mt-0.5 text-sm text-slate-500">All optional. A blank filter (or one set to Any) includes everything.</p>
+          </div>
+          <div class="space-y-4">
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search supervisors">
+              <%= f.label :supervisor_ids, "Assigned to", class: label_class, for: "multiple-select-field1" %>
+              <%= f.select :supervisor_ids, options_for_select(Supervisor.where(casa_org: current_user.casa_org).map { |s| [formatted_name(s.display_name), s.id] }), {include_hidden: false}, {id: "multiple-select-field1", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
-
-            <div class="field form-group mb-20">
-              <label class="form-label"><h6>Ending At</h6></label>
-              <%= f.date_field :end_date,
-                               value: Date.today,
-                               class: "form-control" %>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search volunteers">
+              <%= f.label :creator_ids, "Volunteers", class: label_class, for: "multiple-select-field2" %>
+              <%= f.select :creator_ids, options_for_select(Volunteer.where(casa_org: current_user.casa_org).map { |v| [formatted_name(v.display_name), v.id] }), {include_hidden: false}, {id: "multiple-select-field2", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
             </div>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types">
+              <%= f.label :contact_type_ids, "Contact type", class: label_class, for: "multiple-select-field3" %>
+              <%= f.collection_select :contact_type_ids, ContactType.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field3", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
+            </div>
+            <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact type groups">
+              <%= f.label :contact_type_group_ids, "Contact type group", class: label_class, for: "multiple-select-field4" %>
+              <%= f.collection_select :contact_type_group_ids, ContactTypeGroup.for_organization(current_user.casa_org), :id, :name, {include_hidden: false}, {id: "multiple-select-field4", multiple: true, autocomplete: "off", data: {"multiple-select-target": "select"}} %>
+            </div>
+          </div>
 
-            <% if current_user&.casa_admin? || current_user&.supervisor? %>
-              <div class="select-style-1">
-                <label><h6>Assigned To</h6></label>
-                <div class="select-position">
-                  <%= f.collection_select(
-                        :supervisor_ids,
-                        Supervisor.where(casa_org: current_user.casa_org),
-                        :id,
-                        :display_name,
-                        {prompt: false, :include_hidden => false},
-                        {class: "form-control form-select select2", id:"multiple-select-field1", multiple:true, data: { placeholder: '-Select Supervisors-' }}
-                      ) %>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <% [["want_driving_reimbursement", "Want driving reimbursement"], ["contact_made", "Contact made"], ["has_transitioned", "Transition-aged youth"]].each do |field, heading| %>
+              <div>
+                <%= f.label field.to_sym, heading, class: label_class %>
+                <div class="relative">
+                  <%= f.select field.to_sym, options_for_select([["Any", ""], ["Yes", true], ["No", false]]), {}, {class: select_class} %>
+                  <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
                 </div>
               </div>
+            <% end %>
+          </div>
+        <% end %>
 
-              <div class="select-style-1">
-                <label><h6>Volunteers</h6></label>
-                <div class="select-position">
-                  <%= f.collection_select(
-                        :creator_ids,
-                        Volunteer.where(casa_org: current_user.casa_org),
-                        :id,
-                        :display_name,
-                        {prompt: false, :include_hidden => false},
-                        {class: "form-control form-select select2", id:"multiple-select-field2", multiple:true, data: { placeholder: '-Select Volunteers-' }}
-                      ) %>
-                </div>
-              </div>
-
-              <div class="select-style-1">
-                <label><h6>Contact Type</h6></label>
-                <div class="select-position">
-                  <%= f.collection_select(
-                        :contact_type_ids,
-                        ContactType.for_organization(current_user.casa_org),
-                        :id,
-                        :name,
-                        {prompt: false, :include_hidden => false},
-                        {class: "form-control form-select select2", id:"multiple-select-field3", multiple:true, data: { placeholder: '-Select Contact Types-' }}
-                      ) %>
-                </div>
-              </div>
-
-              <div class="select-style-1">
-                <label><h6>Contact Type Group</h6></label>
-                <div class="select-position">
-                  <%= f.collection_select(
-                        :contact_type_group_ids,
-                        ContactTypeGroup.for_organization(current_user.casa_org),
-                        :id,
-                        :name,
-                        { },
-                        { class: "form-control form-select select2", id:"multiple-select-field4", multiple:true, data: { placeholder: '-Select Contact Type Groups-' }  }
-                      ) %>
-                </div>
-              </div>
-
-              <h6 class="mb-10">Want Driving Reimbursement</h6>
-              <div class="form-check radio-style mb-10">
-                <%= f.collection_radio_buttons :want_driving_reimbursement, boolean_choices, :last, :first do |b| %>
-                  <div class="form-check">
-                    <%= b.radio_button(class: "form-check-input") %>
-                    <%= b.label(class: "form-check-label") %>
-                  </div>
-                <% end %>
-              </div>
-
-              <h6 class="mb-10">Contact Made</h6>
-              <div class="form-check radio-style mb-20">
-                <%= f.collection_radio_buttons :contact_made, boolean_choices, :last, :first do |b| %>
-                  <div class="form-check">
-                    <%= b.radio_button(class: "form-check-input") %>
-                    <%= b.label(class: "form-check-label") %>
-                  </div>
-                <% end %>
-              </div>
-
-              <h6 class="mb-10">Transition Aged Youth</h6>
-              <div class="form-check radio-style mb-20">
-                <%= f.collection_radio_buttons :has_transitioned, boolean_choices, :last, :first do |b| %>
-                  <div class="form-check">
-                    <%= b.radio_button(class: "form-check-input") %>
-                    <%= b.label(class: "form-check-label") %>
-                  </div>
+        <details class="group rounded-lg border border-slate-200">
+          <summary class="flex cursor-pointer list-none items-center gap-2 px-4 py-3 text-sm font-medium text-slate-700 [&::-webkit-details-marker]:hidden">
+            <i class="bi bi-funnel" aria-hidden="true"></i> Filter columns
+            <i class="bi bi-chevron-down ml-auto text-xs text-slate-500 transition-transform group-open:rotate-180" aria-hidden="true"></i>
+          </summary>
+          <div class="border-t border-slate-100 px-4 py-4">
+            <p class="mb-3 text-xs text-slate-500">All columns are exported by default. Uncheck any you want to omit.</p>
+            <%= f.fields_for :filtered_csv_cols do |ff| %>
+              <div class="grid grid-cols-1 gap-2 sm:grid-cols-2">
+                <% CaseContactReport::COLUMNS.each do |column| %>
+                  <label class="flex items-center gap-2 text-sm text-slate-700">
+                    <%= ff.check_box column, {checked: true, class: check_class}, true, false %>
+                    <%= column.to_s.titleize %>
+                  </label>
                 <% end %>
               </div>
             <% end %>
+          </div>
+        </details>
 
-            <%= render 'filter', form: f %>
-
-            <ul class="buttons-group mt-30 col-8">
-              <li>
-                <button
-                  type="button"
-                  class="btn-sm main-btn primary-btn-outline btn-hover"
-                  data-bs-toggle="modal"
-                  data-bs-target="#filterColumns"><i class="lni lni-funnel mr-10"></i>
-                  Filter Columns
-                </button>
-              </li>
-
-              <li>
-                <%= button_tag(
-                      type: "submit",
-                      data: { disable_with: "Downloading Report" },
-                      class: "btn-sm main-btn primary-btn btn-hover report-form-submit"
-                    ) do %>
-                  <i class="lni lni-download mr-10"></i> Download Report
-                <% end %>
-              </li>
-            </ul>
+        <div>
+          <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:primary)}", data: {disable_with: "Downloading report"} do %>
+            <i class="bi bi-download pointer-events-none" aria-hidden="true"></i> Download report
           <% end %>
         </div>
-      </div>
-    </div>
+      <% end %>
+    </section>
   </div>
 </div>

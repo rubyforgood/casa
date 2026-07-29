@@ -1,143 +1,50 @@
-<div>
-  <div class="row casa-case-filters">
-    <div class="col-sm-12 flex align-items-center">
-      <h4 class="pull-left my-1 mr-2">Filter by:</h4>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Status
-        </button>
-        <div class="dropdown-menu status-options" aria-labelledby="dropdownMenuButton1">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_active", "Active", true,
-                              class: "form-check-input",
-                              data: { value: "Active" } %>
-            <%= label_tag "status_option_active", "Active", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "status_option_inactive", "Inactive", false,
-                              class: "form-check-input",
-                              data: { value: "Inactive" } %>
-            <%= label_tag "status_option_inactive", "Inactive", class: "form-check-label" %>
-          </div>
-        </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Volunteer
-        </button>
-        <div class="dropdown-menu assigned-to-volunteer-options" aria-labelledby="dropdownMenuButton2">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "assigned_to_volunteer_option_yes", "Yes", true,
-                              class: "form-check-input",
-                              data: { value: "Yes" } %>
-            <%= label_tag "assigned_to_volunteer_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check form-check checkbox-style">
-            <%= check_box_tag "assigned_to_volunteer_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No" } %>
-            <%= label_tag "assigned_to_volunteer_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to more than 1 Volunteer
-        </button>
-        <div class="dropdown-menu more-than-one-volunteer-options" aria-labelledby="dropdownMenuButton3">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_yes", "Yes", true,
-                              class: "form-check-input",
-                              data: { value: "Yes" } %>
-            <%= label_tag "more_than_one_volunteer_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "more_than_one_volunteer_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No" } %>
-            <%= label_tag "more_than_one_volunteer_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton4" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-          Assigned to Transition Aged Youth
-        </button>
-        <div class="dropdown-menu transition-youth-options" aria-labelledby="dropdownMenuButton4">
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_yes", "Yes 🦋", true,
-                              class: "form-check-input",
-                              data: { value: "Yes 🦋" } %>
-            <%= label_tag "transition_youth_option_yes", "Yes", class: "form-check-label" %>
-          </div>
-          <div class="dropdown-item form-check checkbox-style">
-            <%= check_box_tag "transition_youth_option_no", "No", true,
-                              class: "form-check-input",
-                              data: { value: "No 🐛" } %>
-            <%= label_tag "transition_youth_option_no", "No", class: "form-check-label" %>
-          </div>
-        </div>
-      </div>
-      <div class="dropdown pull-left mx-2 my-1">
-        <% unless current_user.volunteer? %>
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton5" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Casa Case Prefix
-          </button>
-        <% end %>
-        <div class="dropdown-menu case-number-prefix-options" aria-labelledby="dropdownMenuButton5">
-          <% ["CINA", "None", "TPR"].each do |option| %>
-            <div class="dropdown-item form-check checkbox-style">
-              <% option_for_name = option.downcase.gsub(/[^a-z]+/, '') -%>
-              <% tag_name = "case_case_prefix_option_#{option_for_name}" -%>
-              <%= check_box_tag tag_name, option, true,
-                                class: "form-check-input",
-                                data: { value: option } %>
-              <%= label_tag tag_name, option, class: "form-check-label" %>
-            </div>
-          <% end %>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+<%# Casa case filter bar (casadesign, bespoke). Clear server-side selects that submit on
+    change (auto-submit controller; Turbo Drive keeps it smooth). Volunteers never reach
+    this — the view gates it on can_see_filters?. %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+<% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
-<div class="warning-modal">
-  <div class="modal fade" id="visibleColumns" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content card-style">
-        <div class="modal-header px-0 border-0">
-          <h5 class="text-bold">Pick Displayed Columns</h5>
-          <button
-            class="border-0 bg-transparent h1"
-            data-bs-dismiss="modal">
-            <i class="lni lni-cross-circle"></i>
-          </button>
-        </div>
-        <div class="modal-body px-0">
-          <div class="mb-30">
-            <h6 class="mb-20">
-              Select columns:
-  </h6>
-            <% CasaCase::TABLE_COLUMNS.each_with_index do |column, index| %>
-              <div class="form-check checkbox-style m-2">
-                <%= check_box_tag "pick-#{column}",
-                                  "1",
-                                  false,
-                                  class: "form-check-input toggle-visibility",
-                                  data: { column: index } %>
-                <%= label_tag "pick-#{column}", column.titleize, class: "form-check-label" %>
-              </div>
-            <% end %>
-          </div>
-          <div class="action d-flex flex-wrap justify-content-end">
-            <button
-              data-bs-dismiss="modal"
-              class="main-btn danger-btn-outline btn-hover m-1"><i class="lni lni-ban mr-10"></i>
-              Close
-            </button>
-          </div>
-        </div>
-      </div>
+<%= form_with url: casa_cases_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+  <div class="col-span-2 lg:min-w-[16rem] lg:max-w-sm lg:flex-1">
+    <%= label_tag :search, "Search", class: label_class %>
+    <div class="relative">
+      <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500" aria-hidden="true"></i>
+      <%= search_field_tag :search, params[:search], placeholder: "Search case number or volunteer", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{params[:search].present? ? 'pr-9' : 'pr-3'} text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
+      <% if params[:search].present? %>
+        <%= link_to casa_cases_path(request.query_parameters.except("search", "page")), "aria-label": "Clear search", class: "absolute right-2.5 top-1/2 -translate-y-1/2 grid h-5 w-5 place-items-center rounded text-slate-500 hover:text-slate-600" do %><i class="bi bi-x-lg text-[11px]" aria-hidden="true"></i><% end %>
+      <% end %>
     </div>
   </div>
-</div>
+  <div class="lg:min-w-[10rem]">
+    <%= label_tag :status, "Status", class: label_class %>
+    <div class="relative">
+      <%= select_tag :status, options_for_select([["Active", "active"], ["Inactive", "inactive"], ["All", "all"]], params[:status].presence || "active"), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="lg:min-w-[10rem]">
+    <%= label_tag :assigned, "Assignment", class: label_class %>
+    <div class="relative">
+      <%= select_tag :assigned, options_for_select([["All volunteers", ""], ["Assigned", "assigned"], ["Unassigned", "unassigned"]], params[:assigned]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="lg:min-w-[10rem]">
+    <%= label_tag :transition, "Transition-aged youth", class: label_class %>
+    <div class="relative">
+      <%= select_tag :transition, options_for_select([["All", ""], ["Yes", "yes"], ["No", "no"]], params[:transition]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
+  </div>
+  <div class="lg:min-w-[10rem]">
+    <%= label_tag :prefix, "Case number prefix", class: label_class %>
+    <div class="relative">
+      <%= select_tag :prefix, options_for_select([["All", ""], ["CINA", "CINA"], ["TPR", "TPR"], ["None", "None"]], params[:prefix]), class: select_class %>
+      <i class="<%= chevron_class %>" aria-hidden="true"></i>
+    </div>
+  </div>
+  <noscript>
+    <%= submit_tag "Filter", class: button_classes(:primary) %>
+  </noscript>
+<% end %>

@@ -18,7 +18,7 @@ RSpec.describe "casa_cases/show", type: :system do
     let(:user) { volunteer }
 
     it "has a title" do
-      expect(page).to have_content("Emancipation Checklist")
+      expect(page).to have_content("Emancipation checklist")
       expect(page).to have_content(emancipation_category.name)
     end
 

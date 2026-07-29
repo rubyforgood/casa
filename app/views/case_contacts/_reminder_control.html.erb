@@ -1,0 +1,30 @@
+<%# Shared reminder control for a case-contact card (case-show + case-contacts index): a
+    "Resolve reminder" button_to when a follow-up is requested, else a "Set reminder" trigger
+    opening a design-system Dialog to create the follow-up with an optional note. Creating or
+    resolving it emails BOTH the volunteer (contact creator) and the setter -- see FollowupService
+    / CaseContacts::FollowupsController. Replaced a SweetAlert2 popup; UI covered by
+    followups/create_spec (:js). Locals: contact, followup. %>
+<% if followup %>
+  <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:secondary) do %>
+    <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
+  <% end %>
+<% else %>
+  <%= render Dialog::GroupComponent.new(label: "Set a reminder for this case contact", wrapper_class: "contents") do |dialog| %>
+    <% dialog.with_trigger do %>
+      <%= button_tag type: "button", data: {action: "modal#open"}, class: button_classes(:secondary) do %>
+        <i class="bi bi-calendar-plus" aria-hidden="true"></i> Set reminder
+      <% end %>
+    <% end %>
+    <%= form_with url: case_contact_followups_path(contact), method: :post, data: {turbo: false} do %>
+      <%= render Dialog::HeaderComponent.new(title: "Set a reminder", icon: "bi bi-calendar-plus", variant: :info) %>
+      <%= render Dialog::BodyComponent.new do %>
+        <%= label_tag "note_#{contact.id}", "Optional: add a note about what followup is needed", class: "block text-sm font-medium text-slate-700" %>
+        <%= text_area_tag :note, nil, id: "note_#{contact.id}", rows: 3, placeholder: "Type your note here...", class: "mt-1.5 block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+      <% end %>
+      <%= render Dialog::FooterComponent.new do %>
+        <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+        <%= button_tag "Save reminder", type: "submit", class: button_classes(:primary) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

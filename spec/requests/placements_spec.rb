@@ -14,7 +14,7 @@ RSpec.describe "Placements", type: :request do
       get casa_case_placements_path(casa_case)
 
       expect(response).to have_http_status(:success)
-      expect(response.body).to include("Placement History")
+      expect(response.body).to include("Placement history")
       expect(response.body).to include(casa_case.case_number)
     end
   end
@@ -114,7 +114,7 @@ RSpec.describe "Placements", type: :request do
       expect(response).to have_http_status(:redirect)
       expect(flash[:notice]).to match(/placement was successfully deleted/i)
       follow_redirect!
-      expect(response.body).to include("Placement History")
+      expect(response.body).to include("Placement history")
       expect(response.body).to include(casa_case.case_number)
     end
   end

@@ -1,7 +1,13 @@
-<div class="card text-center">
-  <div class="card-body">
-    <h1 class="card-title">Intentional Error Test</h1>
-    <p class="card-text" style="color:grey">Click the button below to trigger an intentional test exception.</p>
-    <%= button_to "Trigger Exception", error_path, method: :post, class: "btn btn-danger", data: { turbo: false } %>
+<% content_for :page_title, "Error test" %>
+<%# Public dev/QA utility (ErrorController, no auth) on the minimal `error` layout. The button
+    POSTs to #create, which raises an intentional exception to verify error handling. Not the
+    404/500 handler (those stay static public/*.html). %>
+<div class="flex min-h-screen items-center justify-center px-4 py-12">
+  <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+    <h1 class="text-xl font-bold tracking-tight text-slate-900">Intentional error test</h1>
+    <p class="mt-2 text-sm text-slate-500">Trigger an intentional test exception to verify error handling and monitoring.</p>
+    <div class="mt-6">
+      <%= button_to "Trigger exception", error_path, method: :post, form_class: "inline-flex", data: {turbo: false}, class: button_classes(:danger) %>
+    </div>
   </div>
 </div>

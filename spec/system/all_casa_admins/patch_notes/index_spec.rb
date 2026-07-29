@@ -26,7 +26,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
         sign_in all_casa_admin
         visit all_casa_admins_patch_notes_path
 
-        expect(page).to have_text("Patch Notes")
+        expect(page).to have_text("Patch notes")
         within "#new-patch-note" do
           text_area = first(:css, "textarea").native
           text_area.send_keys(patch_note_text)
@@ -39,7 +39,7 @@ RSpec.describe "all_casa_admins/patch_notes/index", type: :system do
         #
         #           NoMethodError:
         #             undefined method `slice' for nil:NilClass
-        expect(page).to have_text("Patch Notes")
+        expect(page).to have_text("Patch notes")
 
         expect(page.find(".patch-note-list-item.new textarea")&.value).to eq(patch_note_text)
       end

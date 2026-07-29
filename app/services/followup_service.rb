@@ -17,8 +17,9 @@ class FollowupService
   end
 
   private_class_method def self.send_notification(followup, creator)
+    recipients = [followup.case_contact.creator, creator].compact.uniq(&:id)
     FollowupNotifier
       .with(followup: followup, created_by: creator)
-      .deliver(followup.case_contact.creator)
+      .deliver(recipients)
   end
 end

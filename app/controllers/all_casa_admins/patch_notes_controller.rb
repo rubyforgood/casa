@@ -1,4 +1,6 @@
 class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
+  before_action -> { @active_nav = "patch_notes" }
+
   # GET /patch_notes or /patch_notes.json
   def index
     @patch_note_groups = PatchNoteGroup.all

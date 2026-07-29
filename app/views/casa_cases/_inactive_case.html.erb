@@ -1,10 +1,9 @@
-<div class="alert alert-danger">
-  <p>Case was deactivated on: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
-    <%= link_to(
-            "Reactivate CASA Case",
-            reactivate_casa_case_path(@casa_case),
-            method: :patch,
-            class: "main-btn primary-btn btn-hover pull-right"
-        ) if Pundit.policy(current_user, @casa_case).update_case_status? %>
+<div class="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4">
+  <p class="flex items-center gap-3 text-sm text-rose-800">
+    <span class="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-slash-circle" aria-hidden="true"></i></span>
+    Case was deactivated on: <%= I18n.l(@casa_case.updated_at, format: :standard, default: nil) %>
   </p>
+  <% if Pundit.policy(current_user, @casa_case).update_case_status? %>
+    <%= link_to "Reactivate CASA Case", reactivate_casa_case_path(@casa_case), method: :patch, class: button_classes(:primary) %>
+  <% end %>
 </div>

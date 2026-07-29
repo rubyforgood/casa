@@ -21,16 +21,16 @@ RSpec.describe "reports", :js, type: :system do
       instance_exec(&setup_action) if setup_action
       visit reports_path
       instance_exec(&filter_action)
-      click_on "Download Report"
-      expect(page).to have_text("Downloading Report")
+      click_on "Download report"
+      expect(page).to have_text("Downloading report")
     end
   end
 
   shared_examples "empty select downloads report" do |select_id, description|
     it "renders the #{description} select with no options and downloads the report" do
-      expect(page).to have_select(select_id, options: [])
-      click_on "Download Report"
-      expect(page).to have_text("Downloading Report")
+      expect(page).to have_select(select_id, options: [], visible: :all)
+      click_on "Download report"
+      expect(page).to have_text("Downloading report")
     end
   end
 
@@ -43,7 +43,7 @@ RSpec.describe "reports", :js, type: :system do
     end
 
     it "redirects to root", :aggregate_failures do
-      expect(page).not_to have_text "Case Contacts Report"
+      expect(page).not_to have_text "Case contacts report"
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
     end
   end
@@ -52,8 +52,10 @@ RSpec.describe "reports", :js, type: :system do
     # rubocop:disable RSpec/MultipleMemoizedHelpers
     context "with a #{role} user" do
       let(:user) { create(role) }
-      let(:volunteer_name) { Faker::Name.unique.name }
-      let(:supervisor_name) { Faker::Name.unique.name }
+      # first + last only: Faker::Name.name can emit an honorific (e.g. "Rev.") that the dropdown
+      # strips via formatted_name, which would make the option text not match the search term.
+      let(:volunteer_name) { "#{Faker::Name.unique.first_name} #{Faker::Name.unique.last_name}" }
+      let(:supervisor_name) { "#{Faker::Name.unique.first_name} #{Faker::Name.unique.last_name}" }
       let(:contact_type_name) { Faker::Lorem.unique.word }
       let(:contact_type_group_name) { Faker::Lorem.unique.word }
       let(:filter_start_date) { "2025-01-01" }
@@ -65,37 +67,37 @@ RSpec.describe "reports", :js, type: :system do
       end
 
       it "renders form elements", :aggregate_failures do
-        expect(page).to have_text "Case Contacts Report"
+        expect(page).to have_text "Case contacts report"
         expect(page).to have_field("report_start_date", with: 6.months.ago.strftime("%Y-%m-%d"))
         expect(page).to have_field("report_end_date", with: Date.today)
-        expect(page).to have_text "Assigned To"
+        expect(page).to have_text "Assigned to"
         expect(page).to have_text "Volunteers"
-        expect(page).to have_text "Contact Type"
-        expect(page).to have_text "Contact Type Group"
-        expect(page).to have_text "Want Driving Reimbursement"
-        expect(page).to have_text "Contact Made"
-        expect(page).to have_text "Transition Aged Youth"
-        expect(page).to have_field("Both", count: 3)
-        expect(page).to have_field("Yes", count: 3)
-        expect(page).to have_field("No", count: 3)
+        expect(page).to have_text "Contact type"
+        expect(page).to have_text "Contact type group"
+        expect(page).to have_text "Want driving reimbursement"
+        expect(page).to have_text "Contact made"
+        expect(page).to have_text "Transition-aged youth"
+        expect(page).to have_select("report_want_driving_reimbursement", with_options: ["Any", "Yes", "No"])
+        expect(page).to have_select("report_contact_made", with_options: ["Any", "Yes", "No"])
+        expect(page).to have_select("report_has_transitioned", with_options: ["Any", "Yes", "No"])
       end
 
       it "downloads case contacts report with default filters" do
-        click_on "Download Report"
-        expect(page).to have_text("Downloading Report")
+        click_on "Download report"
+        expect(page).to have_text("Downloading report")
       end
 
-      include_examples "downloads report button", "Mileage Report", "Downloading Mileage Report"
-      include_examples "downloads report button", "Missing Data Report", "Downloading Missing Data Report"
-      include_examples "downloads report button", "Learning Hours Report", "Downloading Learning Hours Report"
-      include_examples "downloads report button", "Export Volunteers Emails", "Downloading Export Volunteers Emails"
-      include_examples "downloads report button", "Followups Report", "Downloading Followups Report"
-      include_examples "downloads report button", "Placements Report", "Downloading Placements Report"
+      include_examples "downloads report button", "Mileage report", "Downloading mileage report"
+      include_examples "downloads report button", "Missing data report", "Downloading missing data report"
+      include_examples "downloads report button", "Learning hours report", "Downloading learning hours report"
+      include_examples "downloads report button", "Export volunteers emails", "Downloading export volunteers emails"
+      include_examples "downloads report button", "Followups report", "Downloading followups report"
+      include_examples "downloads report button", "Placements report", "Downloading placements report"
 
       shared_examples "case contacts report with filter" do |filter_type|
         it "downloads case contacts report with #{filter_type}" do
-          click_on "Download Report"
-          expect(page).to have_text("Downloading Report")
+          click_on "Download report"
+          expect(page).to have_text("Downloading report")
         end
       end
 
@@ -142,7 +144,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a driving reimbursement filter" do
         before do
           visit reports_path
-          choose_report_radio_option("want_driving_reimbursement", "true")
+          choose_report_boolean_option("want_driving_reimbursement", "true")
         end
 
         include_examples "case contacts report with filter", "driving reimbursement"
@@ -151,7 +153,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a contact made filters" do
         before do
           visit reports_path
-          choose_report_radio_option("contact_made", "true")
+          choose_report_boolean_option("contact_made", "true")
         end
 
         include_examples "case contacts report with filter", "contact made"
@@ -160,7 +162,7 @@ RSpec.describe "reports", :js, type: :system do
       context "with a transition aged youth filter" do
         before do
           visit reports_path
-          choose_report_radio_option("has_transitioned", "true")
+          choose_report_boolean_option("has_transitioned", "true")
         end
 
         include_examples "case contacts report with filter", "transition aged youth"
@@ -183,7 +185,7 @@ RSpec.describe "reports", :js, type: :system do
           set_report_date_range(start_date: filter_start_date, end_date: filter_end_date)
           select_report_filter_option(VOLUNTEER_SELECT_ID, volunteer_name)
           select_report_filter_option(CONTACT_TYPE_SELECT_ID, contact_type_name)
-          choose_report_radio_option("want_driving_reimbursement", "false")
+          choose_report_boolean_option("want_driving_reimbursement", "false")
         end
 
         include_examples "case contacts report with filter", "multiple filters"
@@ -206,17 +208,13 @@ RSpec.describe "reports", :js, type: :system do
 
   private
 
-  def select_report_filter_option(select_id, option)
-    expect(page).to have_select(select_id, with_options: [option])
-    find("##{select_id}").select(option)
-  end
-
   def set_report_date_range(start_date:, end_date:)
     fill_in "report_start_date", with: start_date
     fill_in "report_end_date", with: end_date
   end
 
-  def choose_report_radio_option(field_name, value)
-    find("input[name=\"report[#{field_name}]\"][value=\"#{value}\"]", visible: :all).click
+  def choose_report_boolean_option(field_name, value)
+    label = {"true" => "Yes", "false" => "No", "" => "Any"}.fetch(value)
+    select label, from: "report_#{field_name}"
   end
 end

@@ -1,0 +1,24 @@
+<%# Month + year picker styled with the design-system select (appearance-none + chevron).
+    Keeps Rails' date-part field names/ids (_2i month, _1i year, hidden _3i day = 1) so the
+    behaviour matches `date_select` exactly. Locals: form, method, label, disabled (optional). %>
+<% my_select = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500" %>
+<% my_chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% current = form.object.public_send(method) %>
+<div>
+  <label class="mb-1.5 block text-sm font-medium text-slate-700"><%= label %></label>
+  <div class="grid grid-cols-2 gap-2">
+    <div class="relative">
+      <%= select_tag "#{form.object_name}[#{method}(2i)]",
+            options_for_select((1..12).map { |m| [Date::MONTHNAMES[m], m] }, current&.month),
+            prompt: "Month", id: "#{form.object_name}_#{method}_2i", disabled: local_assigns[:disabled], "aria-label": "#{label} month", class: my_select %>
+      <i class="<%= my_chevron %>" aria-hidden="true"></i>
+    </div>
+    <div class="relative">
+      <%= select_tag "#{form.object_name}[#{method}(1i)]",
+            options_for_select((1989..Date.current.year).to_a.reverse.map { |y| [y, y] }, current&.year),
+            prompt: "Year", id: "#{form.object_name}_#{method}_1i", disabled: local_assigns[:disabled], "aria-label": "#{label} year", class: my_select %>
+      <i class="<%= my_chevron %>" aria-hidden="true"></i>
+    </div>
+  </div>
+  <%= hidden_field_tag "#{form.object_name}[#{method}(3i)]", 1 %>
+</div>

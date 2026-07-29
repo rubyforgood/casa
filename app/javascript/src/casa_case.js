@@ -155,15 +155,7 @@ function handleModalClose () {
   if (!selectEl) return
 
   clearSelectErrors()
-  // this line taken from docs https://select2.org/programmatic-control/add-select-clear-items
   $('#case-selection').val(null).trigger('change')
-}
-
-// re-initialized for setting modal as dropdownParent
-function handleDropdownSelection () {
-  if ($('#case-selection').hasClass('select2')) {
-    $('#case-selection').select2()
-  }
 }
 
 $(() => { // JQuery's callback for the DOM loading
@@ -186,13 +178,7 @@ $(() => { // JQuery's callback for the DOM loading
   // but not sure how to
   $('#generate-docx-report-modal').on('hidden.bs.modal', () => handleModalClose())
 
-  $('#generate-docx-report-modal').on('shown.bs.modal', () => handleDropdownSelection())
-
   $('#btnGenerateReport').on('click', handleGenerateReport)
-
-  if (/\/casa_cases\/.*\?.*success=true/.test(window.location.href)) {
-    $('#thank_you').modal()
-  }
 })
 
 export {

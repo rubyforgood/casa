@@ -94,7 +94,7 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :index?, :datatable? do
+  permissions :index? do
     context "when user is an admin" do
       it "has access to the supervisors index action" do
         expect(subject).to permit(casa_admin, Supervisor)
@@ -108,7 +108,7 @@ RSpec.describe SupervisorPolicy do
     end
   end
 
-  permissions :index?, :datatable?, :edit? do
+  permissions :index?, :edit? do
     context "when user is a volunteer" do
       it "does not have access to the supervisors index action" do
         expect(subject).not_to permit(volunteer, Supervisor)

@@ -36,17 +36,6 @@ class CaseCourtOrder < ApplicationRecord
   def self.court_order_options
     STANDARD_COURT_ORDERS.map { |o| [o, o] }
   end
-
-  def implementation_status_symbol
-    case implementation_status
-    when "implemented"
-      "✅".freeze
-    when "partially_implemented"
-      "🕗".freeze
-    else
-      "❌".freeze
-    end
-  end
 end
 
 # == Schema Information

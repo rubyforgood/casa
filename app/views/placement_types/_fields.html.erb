@@ -1,17 +1,17 @@
 <div class="input-style-1">
-  <%= form.label :placement_started_at, "Placement Started At" %>
+  <%= form.label :placement_started_at, "Placement started at" %>
   <%= form.date_field :placement_started_at,
                       value: placement.placement_started_at&.to_date || Time.zone.now,
                       class: "form-control" %>
 </div>
 <div class="select-style-1">
-  <%= form.label :placement_type_id, "Placement Type" %>
+  <%= form.label :placement_type_id, "Placement type" %>
   <div class="select-position">
     <%= form.collection_select(
           :placement_type_id,
           PlacementType.for_organization(current_organization).order_alphabetically,
           :id, :name,
-          {include_hidden: false, include_blank: "-Select Placement Type-"},
+          {include_hidden: false, include_blank: "-Select placement type-"},
           {class: "form-control"}
         ) %>
   </div>

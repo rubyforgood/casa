@@ -1,5 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { debounce } from 'lodash'
+import { ensureCaseContact, isPersisted } from '../src/case_contact_draft'
 
 export default class extends Controller {
   static targets = ['form', 'alert']
@@ -17,8 +18,9 @@ export default class extends Controller {
   static classes = ['goodAlert', 'badAlert']
 
   connect () {
-    this.visibleClass = 'visible'
-    this.hiddenClass = 'invisible'
+    // display (not visibility) so a hidden status line reserves no space at the card's bottom
+    this.visibleClass = 'block'
+    this.hiddenClass = 'hidden'
     this.save = debounce(this.save, this.delayValue).bind(this)
   }
 
@@ -28,38 +30,56 @@ export default class extends Controller {
   }
 
   submitForm () {
+    // First save of a brand-new contact: the record does not exist yet, so create it and adopt the
+    // id. Every save after that PATCHes the wizard step -- posting to create twice would insert a
+    // second draft.
+    if (!isPersisted(this.formTarget)) {
+      ensureCaseContact(this.formTarget)
+        .then(() => this.handleSuccess())
+        .catch(error => this.handleError(error))
+      return
+    }
+
     fetch(this.formTarget.action, {
       method: 'POST',
       headers: { Accept: 'application/json' },
       body: new FormData(this.formTarget)
     }).then(response => {
       if (response.ok) {
-        this.goodAlert()
-        const event = new CustomEvent('autosave:success', { bubbles: true }) // eslint-disable-line no-undef
-        this.element.dispatchEvent(event)
+        this.handleSuccess()
       } else {
         return Promise.reject(response)
       }
-    }).catch(error => {
-      console.error(error.status, error.statusText)
-      switch (error.status) {
-        case 504:
-          this.badAlert('Connection lost: Changes will be saved when connection is restored.')
-          break
-        case 422:
-          error.json().then(errorJson => {
-            console.error('errorJson', errorJson)
-            const errorMessage = errorJson.join('. ')
-            this.badAlert(`Unable to save: ${errorMessage}`)
-          })
-          break
-        case 401:
-          this.badAlert('You must be signed in to save changes.')
-          break
-        default:
-          this.badAlert('Error: Unable to save changes.')
-      }
-    })
+    }).catch(error => this.handleError(error))
+  }
+
+  // Both save paths land here: the nested-form controller listens for autosave:success, so the
+  // create path has to announce it too or the expense rows stop reacting to saves.
+  handleSuccess () {
+    this.goodAlert()
+    const event = new CustomEvent('autosave:success', { bubbles: true }) // eslint-disable-line no-undef
+    this.element.dispatchEvent(event)
+  }
+
+  handleError (error) {
+    console.error(error.status, error.statusText)
+    switch (error.status) {
+      case 504:
+        this.badAlert('Connection lost: Changes will be saved when connection is restored.')
+        break
+      case 422:
+        error.json().then(errorJson => {
+          console.error('errorJson', errorJson)
+          const errorMessage = errorJson.join('. ')
+          this.badAlert(`Unable to save: ${errorMessage}`)
+        })
+        break
+      case 401:
+        this.badAlert('You must be signed in to save changes.')
+        break
+      default:
+        this.badAlert('Error: Unable to save changes.')
+    }
   }
 
   autosaveAlert () {

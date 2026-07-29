@@ -10,10 +10,10 @@ RSpec.describe "other_duties/edit", type: :view do
   it "display all form fields" do
     render template: "other_duties/edit"
 
-    expect(rendered).to have_text("Editing Duty")
-    expect(rendered).to have_text("Occurred On")
-    expect(rendered).to have_text("Duty Duration")
-    expect(rendered).to have_text("Enter Notes")
+    expect(rendered).to have_text("Editing duty")
+    expect(rendered).to have_text("Occurred on")
+    expect(rendered).to have_text("Duty duration")
+    expect(rendered).to have_text("Enter notes")
   end
 
   it "displays occurred time in the occurred at form field" do

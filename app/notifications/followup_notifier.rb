@@ -3,6 +3,13 @@
 # FollowupNotifier.with(followup: @followup).deliver(current_user)
 #
 class FollowupNotifier < BaseNotifier
+  deliver_by :email do |config|
+    config.mailer = "UserMailer"
+    config.method = "followup_notification"
+    config.args = -> { [recipient, params[:followup]] }
+    config.if = -> { recipient.receive_email_notifications? }
+  end
+
   # deliver_by :email do |config|
   #   config.mailer = "UserMailer"
   #   ...
@@ -24,7 +31,12 @@ class FollowupNotifier < BaseNotifier
   end
 
   def url
-    edit_case_contact_path(params[:followup].case_contact_id)
+    followup = params[:followup]
+    followup ? edit_case_contact_path(followup.case_contact_id) : case_contacts_path
+  end
+
+  def renderable?
+    params[:followup].present?
   end
 
   private
@@ -38,7 +50,10 @@ class FollowupNotifier < BaseNotifier
   end
 
   def build_message
-    note = params[:followup].note
+    # params[:followup] can be nil if the followup (or its case contact) was deleted after the
+    # notification was sent -- the GlobalID no longer resolves. Degrade gracefully instead of crashing
+    # the whole notifications page.
+    note = params[:followup]&.note
     join_char = note.present? ? "\n" : " "
     result = ["#{created_by} has flagged a Case Contact that needs follow up."]
     result << "Note: #{note}" if note.present?

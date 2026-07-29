@@ -35,28 +35,6 @@ RSpec.describe "/volunteers", type: :request do
     end
   end
 
-  describe "POST /datatable" do
-    let(:data) { {recordsTotal: 51, recordsFiltered: 10, data: 10.times.map { {} }} }
-
-    before do
-      allow(VolunteerDatatable).to receive(:new).and_return double "datatable", to_json: data.to_json
-    end
-
-    it "is successful" do
-      sign_in admin
-
-      post datatable_volunteers_path
-      expect(response).to be_successful
-    end
-
-    it "renders json data" do
-      sign_in admin
-
-      post datatable_volunteers_path
-      expect(response.body).to eq data.to_json
-    end
-  end
-
   describe "GET /new" do
     it "renders a successful response for admin user" do
       sign_in admin
@@ -106,7 +84,11 @@ RSpec.describe "/volunteers", type: :request do
 
       page = Nokogiri::HTML(subject.body)
       names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text)
-      expect(supervisors.map(&:display_name)).to match_array(names)
+      # Options render the honorific-free name (formatted_name / NamePresentation.strip_honorific), so
+      # compare against the stripped names. Faker::Name sometimes yields a "Rev."/"Dr." prefix, which
+      # made the raw-display_name assertion flaky (passed or failed depending on the seed).
+      expected = supervisors.map { |s| NamePresentation.strip_honorific(s.display_name) }
+      expect(expected).to match_array(names)
     end
   end
 
@@ -250,7 +232,7 @@ RSpec.describe "/volunteers", type: :request do
         expect(ActionMailer::Base.deliveries.count).to eq(1)
         expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
         expect(ActionMailer::Base.deliveries.first.body.encoded)
-          .to match("Click here to confirm your email")
+          .to match("Confirm my email")
       end
     end
 
@@ -533,6 +515,59 @@ RSpec.describe "/volunteers", type: :request do
 
       follow_redirect!
       expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
+    end
+  end
+
+  describe "PATCH /reminder" do
+    let(:organization) { create(:casa_org) }
+
+    context "as a supervisor" do
+      before { sign_in create(:supervisor, casa_org: organization) }
+
+      it "emails only the volunteer when CC is not checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        expect {
+          patch reminder_volunteer_path(volunteer)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+        expect(ActionMailer::Base.deliveries.last.cc).to be_empty
+      end
+
+      it "ccs the volunteer's supervisor when CC is checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        expect(ActionMailer::Base.deliveries.last.cc).to include(volunteer.supervisor.email)
+      end
+
+      it "sends no CC when the volunteer has no supervisor" do
+        volunteer = create(:volunteer, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        expect(ActionMailer::Base.deliveries.last.cc).to be_empty
+      end
+    end
+
+    context "as an admin" do
+      let(:admin) { create(:casa_admin, casa_org: organization) }
+      before { sign_in admin }
+
+      it "emails the volunteer" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        expect {
+          patch reminder_volunteer_path(volunteer)
+        }.to change { ActionMailer::Base.deliveries.count }.by(1)
+      end
+
+      it "ccs the volunteer's supervisor and the admin when CC is checked" do
+        volunteer = create(:volunteer, :with_assigned_supervisor, casa_org: organization)
+
+        patch reminder_volunteer_path(volunteer), params: {with_cc: "1"}
+        cc = ActionMailer::Base.deliveries.last.cc
+        expect(cc).to include(volunteer.supervisor.email)
+        expect(cc).to include(admin.email)
+      end
     end
   end
 end

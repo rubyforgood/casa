@@ -17,7 +17,7 @@ RSpec.describe "casa_cases/new", type: :view do
 
       render template: "casa_cases/new"
 
-      expect(rendered).to include("Youth's Birth Month & Year")
+      expect(rendered).to have_content("Youth's birth month and year")
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe "casa_cases/new", type: :view do
 
       render template: "casa_cases/new"
 
-      expect(rendered).to have_content("Assign a Volunteer")
+      expect(rendered).to have_content("Assign a volunteer")
       expect(rendered).to have_css("#casa_case_case_assignments_attributes_0_volunteer_id")
     end
   end

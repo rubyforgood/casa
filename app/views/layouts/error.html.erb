@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<%# Minimal logged-out tailwind shell for standalone/public pages that have no signed-in user
+    or org sidebar (the error test page; a natural home for styled error pages later). No app JS —
+    it loads only the compiled design-system CSS + Figtree. %>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><%= content_for?(:page_title) ? yield(:page_title) : "CASA" %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  </head>
+  <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
+    <%= yield %>
+  </body>
+</html>

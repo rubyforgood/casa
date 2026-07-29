@@ -50,7 +50,7 @@ class CasaCaseDecorator < Draper::Decorator
 
   def duration_in_care
     return nil unless object.date_in_care
-    "(#{time_ago_in_words(object.date_in_care)} ago)"
+    "In care for #{time_ago_in_words(object.date_in_care)}"
   end
 
   def calendar_next_court_date
@@ -71,6 +71,12 @@ class CasaCaseDecorator < Draper::Decorator
     I18n.l(object.updated_at, format: :standard, default: nil)
   end
 
+  def formatted_next_court_date
+    upcoming = object.court_dates.select { |court_date| court_date.date.to_date >= Date.current }.min_by(&:date)
+    return nil unless upcoming
+    I18n.l(upcoming.date, format: :full, default: nil)
+  end
+
   def inactive_class
     (!object.active) ? "table-secondary" : ""
   end
@@ -87,20 +93,6 @@ class CasaCaseDecorator < Draper::Decorator
   def successful_contacts_this_week_before(date)
     this_week_before_date = Date.today - 7.days..date
     object.case_contacts.where(occurred_at: this_week_before_date).where(contact_made: true).count
-  end
-
-  def transition_aged_youth
-    text = object.in_transition_age? ? "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}" : "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
-    if object.in_transition_age?
-      badge_html = h.render(partial: "shared/emancipation_link", locals: {casa_case: object})
-      h.safe_join([text, " ", badge_html])
-    else
-      text
-    end
-  end
-
-  def transition_aged_youth_icon
-    object.in_transition_age? ? CasaCase::TRANSITION_AGE_YOUTH_ICON : CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
   end
 
   def unsuccessful_contacts_this_week
@@ -124,6 +116,10 @@ class CasaCaseDecorator < Draper::Decorator
   def hash_for_multi_select
     volunteers = object.volunteers.map(&:display_name).join(", ")
 
-    {value: object.id, text: object.case_number, group: object&.casa_org_id, subtext: volunteers}
+    # No `group`: every case in this list is already scoped to the current org, so grouping by
+    # casa_org_id conveys nothing -- and once the multiselect started RENDERING optgroups (rather than
+    # only searching them) it drew that raw org id as a header, a stray unclickable number above the
+    # cases. Contact types keep their group because theirs is a real name.
+    {value: object.id, text: object.case_number, subtext: volunteers}
   end
 end

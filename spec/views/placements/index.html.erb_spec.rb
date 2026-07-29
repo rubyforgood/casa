@@ -27,7 +27,7 @@ RSpec.describe "placements/index", type: :view do
   end
 
   it "has a link to create a new placement" do
-    expect(rendered).to have_link("New Placement", href: new_casa_case_placement_path(casa_case))
+    expect(rendered).to have_link("New placement", href: new_casa_case_placement_path(casa_case))
   end
 
   it "displays placement information for each placement" do
@@ -49,17 +49,16 @@ RSpec.describe "placements/index", type: :view do
   end
 
   it "has delete buttons for each placement" do
-    placements.each do |placement|
-      expect(rendered).to have_selector("a[data-bs-target='##{placement.id}']", text: "Delete")
-    end
+    expect(rendered).to have_button("Delete", count: placements.size)
   end
 
-  it "renders delete confirmation modals for each placement" do
+  it "renders delete confirmation dialogs for each placement" do
     placements.each do |placement|
-      expect(rendered).to have_selector("##{placement.id}.modal")
-      within "##{placement.id}" do
-        expect(rendered).to have_content("Delete Placement?")
-        expect(rendered).to have_link("Delete Placement", href: casa_case_placement_path(casa_case, placement))
+      expect(rendered).to have_selector("dialog##{placement.id}")
+      within "dialog##{placement.id}" do
+        expect(rendered).to have_content("Delete placement?")
+        expect(rendered).to have_selector("form[action='#{casa_case_placement_path(casa_case, placement)}']")
+        expect(rendered).to have_button("Confirm")
       end
     end
   end

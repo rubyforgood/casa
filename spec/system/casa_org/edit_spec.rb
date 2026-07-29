@@ -67,9 +67,9 @@ RSpec.describe "casa_org/edit", type: :system do
     sign_in admin
     visit edit_casa_org_path(organization)
 
-    fill_in "Twilio Phone Number", with: ""
+    fill_in "Twilio phone number", with: ""
     click_on "Submit"
 
-    expect(page).to have_css("#casa_org_twilio_phone_number:invalid")
+    expect(page).to have_text("Twilio phone number can't be blank")
   end
 end

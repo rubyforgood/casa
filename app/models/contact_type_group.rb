@@ -11,14 +11,16 @@ class ContactTypeGroup < ApplicationRecord
 
   scope :alphabetically, -> { order(:name) }
 
+  # App-shipped defaults use sentence case (design system), keeping proper nouns/acronyms
+  # (CASA, IEP). Org admins can still rename them; only these seeded defaults are cased here.
   DEFAULT_CONTACT_TYPE_GROUPS = {
     CASA: ["Youth", "Supervisor"],
-    Family: ["Parent", "Other Family", "Sibling", "Grandparent", "Aunt Uncle or Cousin", "Fictive Kin"],
-    Placement: ["Foster Parent", "Caregiver Family", "Therapeutic Agency Worker"],
-    "Social Services": ["Social Worker"],
+    Family: ["Parent", "Other family", "Sibling", "Grandparent", "Aunt, uncle, or cousin", "Fictive kin"],
+    Placement: ["Foster parent", "Caregiver family", "Therapeutic agency worker"],
+    "Social services": ["Social worker"],
     Legal: ["Court", "Attorney"],
-    Health: ["Medical Professional", "Mental Health Therapist", "Other Therapist", "Psychiatric Practitioner"],
-    Education: ["School", "Guidance Counselor", "Teacher", "IEP Team"]
+    Health: ["Medical professional", "Mental health therapist", "Other therapist", "Psychiatric practitioner"],
+    Education: ["School", "Guidance counselor", "Teacher", "IEP team"]
   }.freeze
 
   class << self

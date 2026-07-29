@@ -16,7 +16,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       fill_in "Display name", with: expected_display_name
       fill_in "Phone number", with: expected_phone_number
       fill_in "Date of birth", with: expected_date_of_birth
-      check "Receive Monthly Learning Hours Report"
+      check "Receive monthly learning hours report"
 
       click_on "Submit"
 
@@ -24,7 +24,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(page).to have_field "Display name", with: expected_display_name
       expect(page).to have_field "Phone number", with: expected_phone_number
       expect(page).to have_field "Date of birth", with: expected_date_of_birth
-      expect(page).to have_checked_field("Receive Monthly Learning Hours Report")
+      expect(page).to have_checked_field("Receive monthly learning hours report")
     end
   end
 
@@ -42,7 +42,7 @@ RSpec.describe "casa_admins/edit", type: :system do
       expect(ActionMailer::Base.deliveries.count).to eq(1)
       expect(ActionMailer::Base.deliveries.first).to be_a(Mail::Message)
       expect(ActionMailer::Base.deliveries.first.body.encoded)
-        .to match("Click here to confirm your email")
+        .to match("Confirm my email")
 
       expect(page).to have_text "Admin was successfully updated. Confirmation Email Sent."
       expect(page).to have_field("Email", with: @old_email)
@@ -111,7 +111,7 @@ RSpec.describe "casa_admins/edit", type: :system do
     another = create(:casa_admin)
     visit edit_casa_admin_path(another)
 
-    click_on "Resend Invitation"
+    click_on "Resend invitation"
 
     expect(page).to have_content("Invitation sent")
   end
@@ -119,7 +119,7 @@ RSpec.describe "casa_admins/edit", type: :system do
   it "can convert the admin to a supervisor", :js do
     visit edit_casa_admin_path(admin)
 
-    click_on "Change to Supervisor"
+    click_on "Change to supervisor"
 
     expect(page).to have_text("Admin was changed to Supervisor.")
     expect(User.find(admin.id)).to be_supervisor

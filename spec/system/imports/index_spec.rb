@@ -21,14 +21,14 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
-        expect(page).to have_button("volunteer-import-button", disabled: true)
+        expect(page).to have_content("Import volunteers")
+        expect(page).to have_button("volunteer-import-button", disabled: false)
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
 
-        expect(page).to have_text("SMS Opt In")
-        expect(page).to have_button("sms-opt-in-continue-button", disabled: true)
+        expect(page).to have_text("SMS opt in")
+        expect(page).to have_button("sms-opt-in-continue-button", disabled: false)
 
         check "sms-opt-in-checkbox"
         click_button "sms-opt-in-continue-button"
@@ -45,7 +45,7 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
+        expect(page).to have_content("Import volunteers")
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
@@ -62,7 +62,7 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path(:volunteer)
 
-        expect(page).to have_content("Import Volunteers")
+        expect(page).to have_content("Import volunteers")
 
         attach_file "volunteer-file", import_file_path
         click_button "volunteer-import-button"
@@ -70,7 +70,7 @@ RSpec.describe "imports/index", type: :system do
         check "sms-opt-in-checkbox"
         click_button "sms-opt-in-continue-button"
 
-        expect(page).to have_text("CSV Import Error")
+        expect(page).to have_text("CSV import error")
       end
     end
 
@@ -83,14 +83,14 @@ RSpec.describe "imports/index", type: :system do
         visit imports_path
         click_on "supervisor-tab"
 
-        expect(page).to have_content("Import Supervisors")
-        expect(page).to have_button("supervisor-import-button", disabled: true)
+        expect(page).to have_content("Import supervisors")
+        expect(page).to have_button("supervisor-import-button", disabled: false)
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
 
-        expect(page).to have_text("SMS Opt In")
-        expect(page).to have_button("sms-opt-in-continue-button", disabled: true)
+        expect(page).to have_text("SMS opt in")
+        expect(page).to have_button("sms-opt-in-continue-button", disabled: false)
 
         find("#sms-opt-in-checkbox", visible: true).check
         click_button "sms-opt-in-continue-button"
@@ -107,9 +107,9 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path
 
-        click_on "Import Supervisors"
+        click_on "Import supervisors"
 
-        expect(page).to have_content("Import Supervisors")
+        expect(page).to have_content("Import supervisors")
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
@@ -126,9 +126,9 @@ RSpec.describe "imports/index", type: :system do
         sign_in admin
         visit imports_path
 
-        click_on "Import Supervisors"
+        click_on "Import supervisors"
 
-        expect(page).to have_content("Import Supervisors")
+        expect(page).to have_content("Import supervisors")
 
         attach_file "supervisor-file", import_file_path
         click_button "supervisor-import-button"
@@ -136,7 +136,42 @@ RSpec.describe "imports/index", type: :system do
         check "sms-opt-in-checkbox"
         click_button "sms-opt-in-continue-button"
 
-        expect(page).to have_text("CSV Import Error")
+        expect(page).to have_text("CSV import error")
+      end
+    end
+
+    context "with no file chosen", :js do
+      it "stays on the page and shows a validation error (button not disabled)" do
+        admin = create(:casa_admin)
+
+        sign_in admin
+        visit imports_path(:volunteer)
+
+        expect(page).to have_button("volunteer-import-button", disabled: false)
+        click_button "volunteer-import-button"
+
+        expect(page).to have_text("Please choose a CSV file to import")
+        expect(page).to have_content("Import volunteers")
+        expect(page).to have_button("volunteer-import-button", disabled: false)
+      end
+    end
+
+    context "with SMS opt-in not confirmed", :js do
+      it "shows a validation error when Continue is clicked without checking the box" do
+        import_file_path = file_fixture "volunteers.csv"
+        admin = create(:casa_admin)
+
+        sign_in admin
+        visit imports_path(:volunteer)
+
+        attach_file "volunteer-file", import_file_path
+        click_button "volunteer-import-button"
+
+        expect(page).to have_text("SMS opt in")
+        expect(page).to have_button("sms-opt-in-continue-button", disabled: false)
+        click_button "sms-opt-in-continue-button"
+
+        expect(page).to have_text("Please confirm the numbers have opted in")
       end
     end
   end

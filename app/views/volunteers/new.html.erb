@@ -1,11 +1,78 @@
-<div class="col-md-6">
-  <div class="title mb-30 mt-30">
-    <h1>Create New Volunteer</h1>
-  </div>
-</div>
+<% content_for :page_title, "New volunteer" %>
+<%# volunteers#new on the casa_app shell. Self-contained (the old volunteers/_form was used
+    only here). There is no UI sign-up (ADR 0002) — admins/supervisors invite; on save the
+    volunteer is emailed an invitation. Only email + display name are required (Devise /
+    UserValidator); phone, date of birth and the mailing address are optional — a blank address
+    is dropped by reject_if: :all_blank on User, so an empty invite never leaves a stray row.
+    Field labels + the "Create volunteer" button are spec-locked (invite_spec / new_spec); the
+    required "*" (aria-hidden) and "Optional" suffixes keep fill_in-by-label matching. Invalid
+    fields get the rose border + inline message automatically (field_error_proc). %>
+<% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% req = required_marker %>
+<% opt = optional_marker %>
 
-<div class="card card-container">
-  <div class="card-body">
-    <%= render 'form', volunteer: @volunteer %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-2xl space-y-6">
+    <%= render "shared/page_header", back: {path: volunteers_path, label: "Back to volunteers"}, title: "New volunteer", subtitle: "They’ll get an email invitation to set a password and join." %>
+
+    <section class="<%= card %>">
+      <%= form_with model: @volunteer, url: volunteers_path, id: "new_volunteer" do |form| %>
+        <%= render "shared/form_errors", resource: @volunteer, order: [:email, :display_name, :phone_number, :date_of_birth] %>
+        <div class="grid grid-cols-1 gap-5 sm:grid-cols-2">
+          <div>
+            <%= form.label :email, class: label_class do %>Email <%= req %><% end %>
+            <%= form.email_field :email, placeholder: "Email", required: true, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :display_name, class: label_class do %>Display name <%= req %><% end %>
+            <%= form.text_field :display_name, placeholder: "Display name", required: true, class: input_class %>
+          </div>
+          <div>
+            <%= form.label :phone_number, class: label_class do %>Phone number <%= opt %><% end %>
+            <%= form.telephone_field :phone_number, placeholder: "Phone number", class: input_class %>
+          </div>
+          <div>
+            <%= form.label :date_of_birth, class: label_class do %>Date of birth <%= opt %><% end %>
+            <%= form.date_field :date_of_birth, value: @volunteer.date_of_birth, class: input_class %>
+          </div>
+          <div class="sm:col-span-2">
+            <%= form.fields_for :address, (@volunteer.address ? nil : Address.new) do |a| %>
+              <fieldset class="space-y-2.5">
+                <legend class="<%= label_class %>">Mailing address <%= opt %></legend>
+                <div>
+                  <%= a.label :line_1, "Address line 1", class: label_class %>
+                  <%= a.text_field :line_1, class: input_class %>
+                </div>
+                <div>
+                  <%= a.label :line_2, "Address line 2", class: label_class %>
+                  <%= a.text_field :line_2, placeholder: "Apartment, suite, unit, etc.", class: input_class %>
+                </div>
+                <div class="grid grid-cols-1 gap-2.5 sm:grid-cols-6">
+                  <div class="sm:col-span-3">
+                    <%= a.label :city, "City", class: label_class %>
+                    <%= a.text_field :city, class: input_class %>
+                  </div>
+                  <div class="sm:col-span-2">
+                    <%= a.label :state, "State", class: label_class %>
+                    <%= a.text_field :state, class: input_class %>
+                  </div>
+                  <div class="sm:col-span-1">
+                    <%= a.label :zip, "ZIP", class: label_class %>
+                    <%= a.text_field :zip, class: input_class %>
+                  </div>
+                </div>
+              </fieldset>
+            <% end %>
+          </div>
+        </div>
+        <div class="actions mt-5">
+          <%= form.button type: "submit", class: button_classes(:primary) do %>
+            <i class="bi bi-person-plus" aria-hidden="true"></i> Create volunteer
+          <% end %>
+        </div>
+      <% end %>
+    </section>
   </div>
 </div>

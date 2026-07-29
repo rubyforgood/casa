@@ -1,0 +1,12 @@
+<%# Shared amber pending-follow-up callout for a case-contact card: the note + who set it + when,
+    so the reminder's content is visible where you act (not just a swapped button). Local: followup
+    (the requested follow-up, or nil). %>
+<% if followup %>
+  <div class="mt-4 <%= alert_classes(:warning) %>">
+    <i class="bi bi-calendar-check mt-0.5 shrink-0 text-amber-600" aria-hidden="true"></i>
+    <div class="min-w-0">
+      <p class="font-medium">Reminder set<% if followup.creator %> by <%= formatted_name(followup.creator.display_name) %><% end %> · <%= followup.created_at.strftime("%b %-d, %Y") %></p>
+      <% if followup.note.present? %><p class="mt-0.5 whitespace-pre-line"><%= followup.note %></p><% end %>
+    </div>
+  </div>
+<% end %>

@@ -1,6 +1,8 @@
 class CourtDatesController < ApplicationController
   include CourtDateParams
 
+  layout "casa_app"
+  before_action -> { @active_nav = "cases" }
   before_action :set_casa_case
   before_action :set_court_date, only: %i[edit show update destroy]
   before_action :require_organization!

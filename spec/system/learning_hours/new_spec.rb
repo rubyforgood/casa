@@ -13,57 +13,57 @@ RSpec.describe "learning_hours/new", :js, type: :system do
   end
 
   it "errors without selected type of learning" do
-    fill_in "Learning Hours Title",	with: "Test title"
+    fill_in "Learning hours title",	with: "Test title"
     fill_in "Hour(s)", with: "0"
     fill_in "Minute(s)", with: "30"
-    click_on "Create New Learning Hours Entry"
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("Learning hour type must exist")
   end
 
   it "creates learning hours entry with valid data" do
-    fill_in "Learning Hours Title",	with: "Test title"
-    select "Book", from: "Type of Learning"
+    fill_in "Learning hours title",	with: "Test title"
+    select "Book", from: "Type of learning"
     fill_in "Hour(s)", with: "0"
     fill_in "Minute(s)", with: "30"
-    click_on "Create New Learning Hours Entry"
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("New entry was successfully created.")
   end
 
   it "creates learning hours entry without minutes duration" do
-    fill_in "Learning Hours Title", with: "Test title"
-    select "Book", from: "Type of Learning"
+    fill_in "Learning hours title", with: "Test title"
+    select "Book", from: "Type of learning"
     fill_in "Hour(s)", with: "3"
-    click_on "Create New Learning Hours Entry"
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("New entry was successfully created.")
   end
 
   it "creates learning hours entry without hours duration" do
-    fill_in "Learning Hours Title", with: "Test title"
-    select "Book", from: "Type of Learning"
+    fill_in "Learning hours title", with: "Test title"
+    select "Book", from: "Type of learning"
     fill_in "Minute(s)", with: "30"
-    click_on "Create New Learning Hours Entry"
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("New entry was successfully created.")
   end
 
   it "errors without hours and minutes duration" do
-    fill_in "Learning Hours Title", with: "Test title"
-    select "Book", from: "Type of Learning"
-    click_on "Create New Learning Hours Entry"
+    fill_in "Learning hours title", with: "Test title"
+    select "Book", from: "Type of learning"
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("Duration minutes and hours (total duration) must be greater than 0")
   end
 
   it "errors if occured on date set in the future" do
-    fill_in "Learning Hours Title", with: "Test title"
-    select "Book", from: "Type of Learning"
+    fill_in "Learning hours title", with: "Test title"
+    select "Book", from: "Type of learning"
     fill_in "Hour(s)", with: "2"
     fill_in "Minute(s)", with: "30"
-    fill_in "Occurred On", with: Date.tomorrow
-    click_on "Create New Learning Hours Entry"
+    fill_in "Occurred on", with: Date.tomorrow
+    click_on "Create new learning hours entry"
 
     expect(page).to have_text("Date cannot be in the future")
   end

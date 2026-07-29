@@ -1,17 +1,33 @@
 import NestedForm from '@stimulus-components/rails-nested-form'
-import Swal from 'sweetalert2'
 
+// Court-orders nested sub-form. Extends the shared nested-form controller: `add`
+// clones a court-order row (prefilled from the standard-order select), and `remove`
+// on an existing (persisted) order asks for confirmation first through the
+// design-system <dialog> (the `modal` controller centers it and handles the backdrop)
+// rather than deleting outright. New, unsaved rows are removed without a prompt.
 export default class extends NestedForm {
-  //
-  static targets = ['selectedCourtOrder']
+  static targets = ['selectedCourtOrder', 'confirmDialog']
 
   remove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
     if (wrapper.dataset.newRecord !== 'true' && wrapper.dataset.type === 'COURT_ORDER') {
-      this.removeCourtOrderWithConfirmation(e, wrapper)
+      e.preventDefault()
+      this.pendingWrapper = wrapper
+      this.confirmDialogTarget.showModal()
     } else {
       super.remove(e)
     }
+  }
+
+  confirmRemove () {
+    const wrapper = this.pendingWrapper
+    if (wrapper) {
+      wrapper.style.display = 'none'
+      const destroyInput = wrapper.querySelector("input[name*='_destroy']")
+      if (destroyInput) destroyInput.value = '1'
+      this.pendingWrapper = null
+    }
+    this.confirmDialogTarget.close()
   }
 
   add (e) {
@@ -22,33 +38,5 @@ export default class extends NestedForm {
       const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
       $textarea.val(selectedValue)
     }
-  }
-
-  removeCourtOrderWithConfirmation (e, wrapper) {
-    const text = 'Are you sure you want to remove this court order? Doing so will ' +
-      'delete all records of it unless it was included in a previous court report.'
-    Swal.fire({
-      icon: 'warning',
-      title: 'Delete court order?',
-      text,
-      showCloseButton: true,
-      showCancelButton: true,
-      focusConfirm: false,
-
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#39c',
-
-      confirmButtonText: 'Delete',
-      cancelButtonText: 'Go back'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.removeCourtOrder(e, wrapper)
-      }
-    })
-  }
-
-  removeCourtOrder (e, wrapper) {
-    super.remove(e)
-    wrapper.classList.remove('d-flex')
   }
 }

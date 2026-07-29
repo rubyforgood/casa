@@ -1,4 +1,6 @@
 class BannersController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }, except: %i[dismiss]
   after_action :verify_authorized, except: %i[dismiss]
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
   before_action :set_banner, only: %i[edit update destroy dismiss]

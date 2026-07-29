@@ -1,60 +1,52 @@
-<div class="row justify-content-between align-items-center pt-30 mb-30">
-  <div class="col-sm-auto dashboard-table-header">
-    <h1>Emancipation Checklist</h1>
-    <%= link_to @current_case.case_number, casa_case_path(@current_case) %>
-  </div>
-  <div class="col-sm-auto">
-    <span class="mt-md-0 text-center">
-      <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: "main-btn primary-btn btn-sm btn-hover" do %>
-        <i class="lni lni-download mr-10"></i>
-            Download Checklist
-      <% end %>
-    </span>
-  </div>
-</div>
+<% content_for :page_title, "Emancipation checklist" %>
+<%# emancipations#show on casa_app. The category/option checkboxes are AJAX-saved and collapsed by
+    the global src/case_emancipation.js, so every hook is preserved verbatim: the .emancipation-category
+    h6 with data-is-open, its child .category-collapse-icon, the IMMEDIATELY-adjacent .category-options
+    sibling (the Toggler reads .next('.category-options')), the .emacipation-category-input-label-pair
+    div (a div, not a label — the label would double-toggle the checkbox the JS already flips), each
+    .check-item with its O#{id} / C#{category} inputs, and the #notifications element the Notifier needs. %>
+<% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+<% radio_class = "h-4 w-4 shrink-0 border-slate-300 text-brand-600 focus:ring-brand-500" %>
 
-<!-- ========== card start ========== -->
-<div class="card-style mb-40">
-  <% @emancipation_form_data.each do |category| %>
-    <h6 class="emancipation-category no-select" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
-      <div class="checkbox-style emacipation-category-input-label-pair">
-        <%= tag.input(
-          type: "checkbox",
-          class: "emancipation-category-check-box form-check-input",
-          value: category.id,
-          checked: emancipation_category_checkbox_checked(@current_case, category)) %>
-
-        <div class="pt-10"><%= category.name %></div>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-3xl space-y-6">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Emancipation checklist</h1>
+        <%= link_to @current_case.case_number, casa_case_path(@current_case), class: "mt-1 inline-block text-sm font-medium text-brand-600 hover:text-brand-700" %>
       </div>
-      <% if category.emancipation_options.count > 0 %>
-        <span class="category-collapse-icon pt-10"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
+      <%= link_to casa_case_emancipation_path(@current_case, format: :docx), class: button_classes(:primary) do %>
+        <i class="bi bi-download" aria-hidden="true"></i> Download checklist
       <% end %>
-    </h6>
-    <div class="category-options" style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
-      <% category.emancipation_options.each do |option| %>
-        <div class="check-item">
-          <% if category.mutually_exclusive %>
-            <%= tag.input(
-              type: "radio",
-              id: "O#{option.id}",
-              class: "emancipation-radio-button",
-              name: "C#{category.id}",
-              value: option.id,
-              checked: emancipation_option_checkbox_checked(@current_case, option)) %>
-          <% else %>
-            <%= tag.input(
-              type: "checkbox",
-              id: "O#{option.id}",
-              class: "emancipation-option-check-box",
-              value: option.id,
-              checked: emancipation_option_checkbox_checked(@current_case, option)) %>
+    </div>
+
+    <%= render "layouts/components/notifier" %>
+
+    <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
+      <% @emancipation_form_data.each do |category| %>
+        <h6 class="emancipation-category no-select flex items-center justify-between gap-3 border-b border-slate-100 py-2.5 last:border-b-0" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
+          <div class="emacipation-category-input-label-pair flex cursor-pointer items-center gap-2.5">
+            <%= tag.input(type: "checkbox", class: "emancipation-category-check-box #{check_class}", value: category.id, checked: emancipation_category_checkbox_checked(@current_case, category)) %>
+            <div class="text-sm font-medium text-slate-800"><%= category.name %></div>
+          </div>
+          <% if category.emancipation_options.count > 0 %>
+            <span class="category-collapse-icon grid h-6 w-6 shrink-0 cursor-pointer select-none place-items-center rounded text-lg leading-none text-slate-500 hover:bg-slate-100"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
           <% end %>
-          <label><%= option.name %></label>
+        </h6>
+        <div class="category-options ml-[9px] space-y-1 border-l border-slate-200 py-1 pl-5" style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
+          <% category.emancipation_options.each do |option| %>
+            <div class="check-item flex cursor-pointer items-center gap-2.5 py-1 text-sm text-slate-700">
+              <% if category.mutually_exclusive %>
+                <%= tag.input(type: "radio", id: "O#{option.id}", class: "emancipation-radio-button #{radio_class}", name: "C#{category.id}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option)) %>
+              <% else %>
+                <%= tag.input(type: "checkbox", id: "O#{option.id}", class: "emancipation-option-check-box #{check_class}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option)) %>
+              <% end %>
+              <label><%= option.name %></label>
+            </div>
+          <% end %>
+          <%# The labels intentionally have no for= matching the inputs: JS sets checkbox state after the AJAX save succeeds. %>
         </div>
       <% end %>
-      <!-- The labels here intentionally do not have for attributes matching the inputs -->
-      <!-- This is because javascript sets the state of the checkbox depending on whether the ajax based saving was successful -->
     </div>
-  <% end %>
+  </div>
 </div>
-<!-- card end -->

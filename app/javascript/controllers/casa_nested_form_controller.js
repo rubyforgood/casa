@@ -1,4 +1,5 @@
 import NestedForm from '@stimulus-components/rails-nested-form'
+import { ensureCaseContact } from '../src/case_contact_draft'
 
 /**
  * Allows nested forms to be used with the autosave controller,
@@ -24,6 +25,8 @@ export default class extends NestedForm {
       type: Array, default: []
     }
   }
+
+  static targets = ['confirmDialog']
 
   connect () {
     super.connect()
@@ -82,8 +85,22 @@ export default class extends NestedForm {
     this.dispatchChangeEvent('add')
   }
 
-  /* Creates a new record for the added item (before submission). */
+  /* Creates a new record for the added item (before submission). The case contact may not exist yet
+     -- the form persists on first save, not on open -- and the child needs a parent id, so bring the
+     parent into existence first. Without this the fetch below aborts on an empty parent id and the
+     expense is silently never saved. */
   addAndCreate (e) {
+    const form = this.element.closest('form')
+    if (form && !form.dataset.caseContactId) {
+      ensureCaseContact(form)
+        .then(() => this.addAndCreateRow(e))
+        .catch(error => console.error('Failed to create the case contact', error.status, error.statusText))
+      return
+    }
+    this.addAndCreateRow(e)
+  }
+
+  addAndCreateRow (e) {
     this.add(e)
     const items = this.element.querySelectorAll(this.wrapperSelectorValue)
     const addedItem = items[items.length - 1]
@@ -144,8 +161,31 @@ export default class extends NestedForm {
     this.dispatchChangeEvent('remove')
   }
 
-  /* Destroys a record when removing the item (before submission). */
+  /* Delete button: a saved (autosaved) expense confirms through the design-system dialog before
+     the API delete; brand-new, unsaved rows are removed without a prompt. */
   destroyAndRemove (e) {
+    const wrapper = e.target.closest(this.wrapperSelectorValue)
+    const recordId = this.getRecordId(wrapper)
+    if (wrapper.dataset.newRecord === 'false' && recordId.length > 0 && this.hasConfirmDialogTarget) {
+      e.preventDefault()
+      this.pendingEvent = e
+      this.confirmDialogTarget.showModal()
+    } else {
+      this.performDestroyAndRemove(e)
+    }
+  }
+
+  /* Confirm button inside the removal dialog. */
+  confirmRemove () {
+    this.confirmDialogTarget.close()
+    if (this.pendingEvent) {
+      this.performDestroyAndRemove(this.pendingEvent)
+      this.pendingEvent = null
+    }
+  }
+
+  /* Destroys a record when removing the item (before submission). */
+  performDestroyAndRemove (e) {
     const wrapper = e.target.closest(this.wrapperSelectorValue)
     const recordId = this.getRecordId(wrapper)
     if (wrapper.dataset.newRecord === 'false' && (recordId.length > 0)) {
@@ -182,13 +222,6 @@ export default class extends NestedForm {
         }
       )
       this.remove(e) // treat as typical removal
-    }
-  }
-
-  confirmDestroyAndRemove (e) {
-    const text = 'Are you sure you want to remove this item?'
-    if (window.confirm(text)) {
-      this.destroyAndRemove(e)
     }
   }
 }

@@ -13,7 +13,7 @@ export default class extends Controller {
       .then(response => response.json())
       .then(data => {
         if (data.status === 'ok') {
-          this.elementTarget.classList.add('d-none')
+          this.elementTarget.classList.add('d-none', 'hidden')
         }
       })
   }

@@ -12,6 +12,9 @@ class CasaOrg < ApplicationRecord
 
   validates :name, presence: true, uniqueness: true
   validates_with CasaOrgValidator
+  # The credentials check below verifies the account/API keys but not the phone number, and native
+  # form validation is disabled app-wide -- so enforce the phone's presence server-side.
+  validates :twilio_phone_number, presence: true, if: :twilio_enabled, on: :update
   validate :validate_twilio_credentials, if: :twilio_enabled, on: :update
 
   has_many :users, dependent: :destroy
@@ -135,6 +138,9 @@ class CasaOrg < ApplicationRecord
   # end
 
   def validate_twilio_credentials
+    # Skip the API round-trip when the phone is blank: the presence validation already fails the form,
+    # so there's no point calling Twilio (and the empty-phone submit must not reach the network).
+    return if twilio_phone_number.blank?
     client = Twilio::REST::Client.new(twilio_api_key_sid, twilio_api_key_secret, twilio_account_sid)
     begin
       client.messages.list(limit: 1)

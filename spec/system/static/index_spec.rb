@@ -9,7 +9,7 @@ RSpec.describe "static/index", type: :system do
       end
 
       it "has CASA organizations section" do
-        expect(page).to have_text "CASA Organizations Powered by Our App"
+        expect(page).to have_text "CASA organizations powered by our app"
         expect(page).to have_text "CASA of Awesome"
       end
 

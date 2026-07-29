@@ -3,7 +3,7 @@ require "rails_helper"
 RSpec.describe "users/invitations/new", type: :view do
   it "displays title" do
     render template: "devise/invitations/new"
-    expect(rendered).to have_text("Send invitation")
+    expect(rendered).to have_text("Send an invitation")
   end
 
   it "displays fields for inviting a user" do

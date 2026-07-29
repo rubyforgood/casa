@@ -15,7 +15,7 @@ RSpec.describe "learning_hours/edit", type: :system do
     datepicker_input = find("#learning_hour_occurred_at")
     datepicker_input.set((Date.today + 1.month).strftime("%Y-%m-%d"))
 
-    click_on "Update Learning Hours Entry"
+    click_on "Update learning hours entry"
 
     expect(page).to have_text("Date cannot be in the future")
   end
@@ -23,10 +23,10 @@ RSpec.describe "learning_hours/edit", type: :system do
   it "can update learning hours entry with proper data" do
     title = "Updated Title"
 
-    expect(page).to have_field("Learning Hours Title", with: learning_hours.name)
+    expect(page).to have_field("Learning hours title", with: learning_hours.name)
 
-    fill_in "Learning Hours Title",	with: title
-    click_on "Update Learning Hours Entry"
+    fill_in "Learning hours title",	with: title
+    click_on "Update learning hours entry"
 
     expect(page).to have_text("Entry was successfully updated.")
     expect(page).to have_text(title)

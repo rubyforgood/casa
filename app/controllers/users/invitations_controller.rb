@@ -4,6 +4,6 @@ class Users::InvitationsController < Devise::InvitationsController
     self.resource = resource_class.new
     set_minimum_password_length if respond_to?(:set_minimum_password_length, true)
     resource.invitation_token = params[:invitation_token]
-    render :edit
+    render :edit, layout: "casa_auth"
   end
 end

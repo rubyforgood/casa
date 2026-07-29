@@ -1,18 +1,22 @@
-<div class="input-style-1">
-  <%= form.label :placement_started_at, "Placement Started At" %>
-  <%= form.date_field :placement_started_at,
-                      value: placement.placement_started_at&.to_date || Time.zone.now,
-                      class: "form-control" %>
+<%# Placement form fields (casa_app): start date + a native placement-type select with the
+    design-system chevron. Locals: form, placement, casa_case. %>
+<% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
+<% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<div>
+  <%= form.label :placement_started_at, "Placement started at", class: label_class %>
+  <%= form.date_field :placement_started_at, value: placement.placement_started_at&.to_date || Time.zone.now, class: input_class %>
 </div>
-<div class="select-style-1">
-  <%= form.label :placement_type_id, "Placement Type" %>
-  <div class="select-position">
+<div>
+  <%= form.label :placement_type_id, "Placement type", class: label_class %>
+  <div class="relative">
     <%= form.collection_select(
           :placement_type_id,
           PlacementType.for_organization(current_organization).order_alphabetically,
           :id, :name,
-          {include_hidden: false, include_blank: "-Select Placement Type-"},
-          {class: "form-control"}
+          {include_hidden: false, include_blank: "-Select placement type-"},
+          {class: select_class}
         ) %>
+    <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
   </div>
 </div>

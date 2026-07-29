@@ -21,6 +21,12 @@ RSpec.describe FollowupNotifier, type: :model do
 
       expect(notifier.url).to eq "/case_contacts/#{followup.case_contact_id}/edit"
     end
+
+    it "falls back to the case contacts list when the followup no longer exists" do
+      notifier = FollowupNotifier.with(followup: nil, created_by: created_by)
+
+      expect(notifier.url).to eq "/case_contacts"
+    end
   end
 
   describe "message" do
@@ -48,6 +54,32 @@ RSpec.describe FollowupNotifier, type: :model do
           "Ada Lovelace has flagged a Case Contact that needs follow up. Click to see more."
         )
       end
+    end
+
+    context "when the followup no longer exists" do
+      it "omits the note instead of raising" do
+        notifier = FollowupNotifier.with(followup: nil, created_by: created_by)
+
+        expect(notifier.message).to eq(
+          "Ada Lovelace has flagged a Case Contact that needs follow up. Click to see more."
+        )
+      end
+    end
+  end
+
+  describe "renderable?" do
+    it "is true when the followup still exists" do
+      followup = create(:followup, :without_note)
+
+      notifier = FollowupNotifier.with(followup: followup, created_by: created_by)
+
+      expect(notifier).to be_renderable
+    end
+
+    it "is false when the followup is gone" do
+      notifier = FollowupNotifier.with(followup: nil, created_by: created_by)
+
+      expect(notifier).not_to be_renderable
     end
   end
 end

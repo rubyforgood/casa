@@ -1,0 +1,8 @@
+<% content_for :page_title, "Metrics" %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-4xl">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Metrics</h1>
+    <p class="mt-1 text-sm text-slate-500">Platform activity across all chapters. Hover a chart for details.</p>
+    <%= render "metrics/dashboard", cc: @case_contacts, heatmap: @contact_heatmap, au: @active_users, range: @range, base_path: all_casa_admins_metrics_path %>
+  </div>
+</div>

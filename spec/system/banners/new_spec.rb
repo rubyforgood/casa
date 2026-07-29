@@ -10,7 +10,7 @@ RSpec.describe "Banners", :js, type: :system do
     sign_in admin
 
     visit banners_path
-    click_on "New Banner"
+    click_on "New banner"
     fill_in "Name", with: "Volunteer Survey Announcement"
     check "Active?"
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
@@ -35,7 +35,7 @@ RSpec.describe "Banners", :js, type: :system do
     sign_in admin
 
     visit banners_path
-    click_on "New Banner"
+    click_on "New banner"
     fill_in "Name", with: "Expiring Announcement"
     check "Active?"
     find("#banner_expires_at").execute_script("this.value = arguments[0]", 7.days.from_now.strftime("%Y-%m-%dT%H:%M"))
@@ -60,7 +60,7 @@ RSpec.describe "Banners", :js, type: :system do
     sign_in admin
 
     visit banners_path
-    click_on "New Banner"
+    click_on "New banner"
     fill_in "Name", with: "Announcement not created"
     find("#banner_expires_at").execute_script("this.value = arguments[0]", 1.week.ago.strftime("%Y-%m-%dT%H:%M"))
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
@@ -83,7 +83,7 @@ RSpec.describe "Banners", :js, type: :system do
 
         visit banners_path
         expect(page).to have_text(active_banner.content.body.to_plain_text)
-        click_on "New Banner"
+        click_on "New banner"
         fill_in "Name", with: "New active banner name"
         check "Active?"
         fill_in_rich_text_area "banner_content", with: "New active banner content."
@@ -110,7 +110,7 @@ RSpec.describe "Banners", :js, type: :system do
 
         visit banners_path
         expect(page).to have_text(active_banner.content.body.to_plain_text)
-        click_on "New Banner"
+        click_on "New banner"
         fill_in "Name", with: "New active banner name"
         fill_in_rich_text_area "banner_content", with: "New active banner content."
         click_on "Submit"

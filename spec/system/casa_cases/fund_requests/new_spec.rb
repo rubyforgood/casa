@@ -26,10 +26,10 @@ RSpec.describe "fund_requests/new", type: :system do
     fill_in "Please use this space", with: "foo bar"
 
     expect {
-      click_on "Submit Fund Request"
+      click_on "Submit fund request"
     }.to change(FundRequest, :count).by(1)
 
-    expect(page).to have_text "Fund Request was sent for case #{casa_case.case_number}"
+    expect(page).to have_text "Fund request was sent for case #{casa_case.case_number}"
 
     fr = FundRequest.last
     aggregate_failures do
@@ -54,7 +54,7 @@ RSpec.describe "fund_requests/new", type: :system do
     fill_in "Name of payee", with: "Minnie Mouse"
 
     expect {
-      click_on "Submit Fund Request"
+      click_on "Submit fund request"
     }.not_to change(FundRequest, :count)
 
     expect(page).to have_content("Submitter email can't be blank")

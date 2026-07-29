@@ -33,8 +33,8 @@ RSpec.describe NotificationComponent, type: :component do
     component = described_class.new(notification: followup_read)
 
     render_inline(component)
-    expect(page).to have_css("a.bg-light.text-muted")
-    expect(page).not_to have_css("i.fas.fa-bell")
+    expect(page).to have_css("a[data-read]")
+    expect(page).not_to have_css("[data-unread-dot]")
   end
 
   it "renders an emancipation checklist reminder" do

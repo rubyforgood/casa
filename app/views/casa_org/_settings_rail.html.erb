@@ -1,0 +1,39 @@
+<%# Shared settings sub-nav rail -- TEXT-ONLY (icons add noise in a dense grouped settings list, and
+    a repeated icon reads as clutter; the primary sidebar keeps its icons). `panels: true` on
+    casa_org/edit -- section items switch in-page panels via the settings-nav Stimulus controller
+    (which drives the active highlight). `panels: false` on the standalone admin pages -- section
+    items navigate to the settings page and open that section via the URL hash, and `active`
+    statically highlights the current item. %>
+<% panels = local_assigns.fetch(:panels, false) %>
+<% active = local_assigns.fetch(:active, nil) %>
+<% base = "block rounded-lg px-3 py-1.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-brand-500" %>
+<% idle = "text-slate-600 hover:bg-slate-100" %>
+<% on = "bg-brand-50 font-semibold text-brand-700" %>
+<% group_label = "px-3 pb-1 text-xs font-semibold text-slate-500" %>
+<% sections = [
+     ["Organization", [["Details", "organization-details"], ["Languages", "languages"], ["Custom links", "custom-org-links"]]],
+     ["Case setup", [["Contact types", "contact-types"], ["Contact topics", "case-contact-topics"], ["Placement types", "placement-types"]]],
+     ["Court", [["Hearing types", "hearing-types"], ["Judges", "judges"], ["Sent emails", "sent-emails"]]],
+     ["Volunteer setup", [["Learning hours", "learning-hours"]]]
+   ] %>
+<% admin_items = [["Manage admins", casa_admins_path, "manage-admins"], ["Mileage rates", mileage_rates_path, "mileage-rates"], ["Banners", banners_path, "banners"], ["Imports", imports_path, "imports"]] %>
+<nav class="hidden shrink-0 space-y-5 text-sm lg:sticky lg:top-6 lg:block lg:w-48" aria-label="Settings sections">
+  <% sections.each do |group, items| %>
+    <div>
+      <p class="<%= group_label %>"><%= group %></p>
+      <% items.each do |label, key| %>
+        <% if panels %>
+          <%= link_to label, "##{key}", data: {settings_nav_target: "link", key: key, action: "settings-nav#navigate"}, class: "#{base} #{idle}" %>
+        <% else %>
+          <%= link_to label, edit_casa_org_path(current_organization, anchor: key), class: "#{base} #{active == key ? on : idle}" %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+  <div>
+    <p class="<%= group_label %>">Administration</p>
+    <% admin_items.each do |label, path, key| %>
+      <%= link_to label, path, class: "#{base} #{active == key ? on : idle}" %>
+    <% end %>
+  </div>
+</nav>

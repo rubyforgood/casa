@@ -1,0 +1,24 @@
+<%# Two-pane settings frame for the standalone admin pages (casa_admins / mileage_rates / banners /
+    imports), so they match casa_org/edit: a "Settings" header + the persistent sub-nav rail (current
+    item highlighted via `active`) + the page content in the right pane. On mobile the rail is hidden,
+    so a "Back to settings" link is the return path. `active` = this page's rail key. Rendered via
+    `render layout: "casa_org/settings_frame", locals: {active: ...} do ... end`. %>
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-7xl">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold tracking-tight text-slate-900">Settings</h1>
+      <p class="mt-1 text-sm text-slate-500">Organization profile, case setup, court details, and administration.</p>
+    </div>
+    <div class="flex flex-col gap-8 lg:flex-row lg:items-start">
+      <%= render "casa_org/settings_rail", panels: false, active: active %>
+      <div class="min-w-0 flex-1 space-y-4 lg:space-y-6">
+        <div class="lg:hidden">
+          <%= link_to edit_casa_org_path(current_organization), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+            <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to settings
+          <% end %>
+        </div>
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,36 +3,23 @@
 class CaseContactsController < ApplicationController
   include LoadsCaseContacts
 
-  before_action :set_case_contact, only: %i[edit destroy]
-  before_action :set_contact_types, only: %i[new edit create]
+  before_action :set_case_contact, only: %i[edit destroy discard_draft]
+  before_action :set_contact_types, only: %i[edit]
   before_action :require_organization!
   after_action :verify_authorized, except: %i[leave]
 
   def index
+    @active_nav = "contacts"
     load_case_contacts
+    render :index, layout: "casa_app" unless performed?
   end
 
   def drafts
     authorize CaseContact
+    @active_nav = "contacts"
 
     @case_contacts = current_organization.case_contacts.not_active
-  end
-
-  def new
-    store_referring_location
-
-    casa_cases = policy_scope(current_organization.casa_cases)
-    draft_case_ids = build_draft_case_ids(params, casa_cases)
-
-    @case_contact = CaseContact.create(creator: current_user, draft_case_ids: draft_case_ids, contact_made: true)
-    authorize @case_contact
-
-    if @case_contact.errors.any?
-      flash[:alert] = @case_contact.errors.full_messages.join("\n")
-      redirect_to request.referer
-    else
-      redirect_to case_contact_form_path(:details, case_contact_id: @case_contact.id)
-    end
+    render layout: "casa_app"
   end
 
   def edit
@@ -67,6 +54,23 @@ class CaseContactsController < ApplicationController
     redirect_back_to_referer(fallback_location: case_contacts_path)
   end
 
+  # Explicit "Discard draft" from the form. Separate from #destroy because the redirect differs: that
+  # one returns to `request.referer`, which here is the form of the record just deleted. This returns
+  # where the form was opened from (session[:return_to], set by #new), so discarding lands in the same
+  # place as Back and as a successful Submit.
+  def discard_draft
+    authorize @case_contact
+
+    if @case_contact.active?
+      # An active contact is a real record, not a draft; deleting one goes through #destroy.
+      return redirect_back_to_referer(fallback_location: case_contacts_path)
+    end
+
+    @case_contact.discard!
+    flash[:notice] = "Draft discarded."
+    redirect_back_to_referer(fallback_location: case_contacts_path)
+  end
+
   private
 
   def update_or_create_additional_expense(all_ae_params, cc)
@@ -94,14 +98,5 @@ class CaseContactsController < ApplicationController
   def set_case_contact
     @case_contact = authorize(current_organization.case_contacts.find_by(id: params[:id]))
     redirect_to authenticated_user_root_path unless @case_contact
-  end
-
-  def build_draft_case_ids(params, casa_cases)
-    # Use case(s) from params if present
-    return params[:draft_case_ids] if params[:draft_case_ids].present?
-    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
-    return [casa_cases.first.id] if casa_cases.count == 1
-
-    []
   end
 end

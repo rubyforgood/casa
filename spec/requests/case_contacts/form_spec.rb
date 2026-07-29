@@ -16,23 +16,17 @@ RSpec.describe "CaseContacts::Forms", type: :request do
   describe "GET /new" do
     subject(:request) { get new_case_contact_path(casa_case_id: casa_case.id) }
 
-    it "creates a new case_contact record with user as creator and status 'started'" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(case_contact.status).to eq "started"
-      expect(case_contact.creator).to eq user
+    # Nothing is inserted until the first real save -- see CaseContacts::FormController#new.
+    it "renders the form without creating a record" do
+      expect { request }.not_to change(CaseContact, :count)
+      expect(response).to have_http_status(:success)
     end
 
-    it "does not set the contact's casa_case_id" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(case_contact.casa_case_id).to be_nil
-    end
+    it "pre-selects the case it was opened from, without persisting it" do
+      request
 
-    it "redirects to show(:details) with the created contact id" do
-      expect { request }.to change(CaseContact, :count).by(1)
-      case_contact = CaseContact.last
-      expect(request).to redirect_to(case_contact_form_path(:details, case_contact_id: case_contact.id))
+      expect(response.body).to include(casa_case.case_number)
+      expect(CaseContact.count).to eq(0)
     end
   end
 
@@ -328,43 +322,39 @@ RSpec.describe "CaseContacts::Forms", type: :request do
     context "when contact topic answers in params" do
       let(:contact_topics) { create_list(:contact_topic, 3, casa_org:) }
       let(:topic_one) { contact_topics.first }
+      # Answers are created/destroyed via POST/DELETE /contact_topic_answers (contact-topics
+      # controller; see the contact_topic_answers request spec). The wizard update only *updates*
+      # answers referenced by id, so a slow autosave can't create a duplicate -- id-less
+      # attributes are rejected.
+      let!(:answers) do
+        contact_topics.map { |topic| create(:contact_topic_answer, contact_topic: topic, case_contact:, value: "Original") }
+      end
       let(:contact_topic_answers_attributes) do
         {
-          "0" => {contact_topic_id: topic_one.id, value: "Topic 1 Answer"},
-          "1" => {contact_topic_id: contact_topics.second.id, value: "Topic 2 Answer"},
-          "2" => {contact_topic_id: contact_topics.third.id, value: "Topic 3 Answer"}
+          "0" => {id: answers[0].id, contact_topic_id: topic_one.id, value: "Topic 1 Answer"},
+          "1" => {id: answers[1].id, contact_topic_id: contact_topics.second.id, value: "Topic 2 Answer"},
+          "2" => {id: answers[2].id, contact_topic_id: contact_topics.third.id, value: "Topic 3 Answer"}
         }
       end
 
       let(:attributes) { valid_attributes.merge({contact_topic_answers_attributes:}) }
 
-      it "creates contact topic answers" do
-        expect(attributes[:contact_topic_answers_attributes]).to eq contact_topic_answers_attributes
+      it "updates the existing contact topic answers" do
         request
 
         case_contact.reload
         expect(case_contact.contact_topic_answers.size).to eq 3
         expect(case_contact.contact_topic_answers.pluck(:value))
           .to contain_exactly("Topic 1 Answer", "Topic 2 Answer", "Topic 3 Answer")
-        expect(case_contact.contact_topics.flat_map(&:id)).to match_array(contact_topics.collect(&:id))
       end
 
-      context "when answer exists for the same contact topic" do
-        let!(:contact_topic_one_answer) do
-          create(:contact_topic_answer, value: "Original Discussion Topic Answer.", contact_topic: topic_one, case_contact:)
-        end
+      it "rejects an answer attribute without an id (neither creates nor updates)" do
+        contact_topic_answers_attributes["0"].delete(:id)
+        request
 
-        it "overwrites existing answer with id in answer attributes" do
-          contact_topic_answers_attributes["0"][:id] = contact_topic_one_answer.id
-          expect(case_contact.contact_topic_answers.size).to eq 1
-          request
-
-          case_contact.reload
-          topic_one_contact_answers = case_contact.contact_topic_answers.where(contact_topic: topic_one)
-          expect(topic_one_contact_answers.size).to eq 1
-          expect(case_contact.contact_topic_answers.size).to eq 3
-          expect(topic_one_contact_answers.first.value).to eq "Topic 1 Answer"
-        end
+        case_contact.reload
+        expect(case_contact.contact_topic_answers.size).to eq 3
+        expect(case_contact.contact_topic_answers.find_by(contact_topic: topic_one).value).to eq "Original"
       end
     end
 

@@ -46,6 +46,9 @@ class CaseContactDecorator < Draper::Decorator
   def subheading
     [
       I18n.l(object.occurred_at, format: :full, default: nil),
+      # Medium (how the contact happened) reads as plain text alongside the other facts rather than
+      # as an ambiguous icon; omitted when unset, like the conditional facts below it.
+      (medium_label if object.medium_type.present?),
       duration_minutes,
       contact_made,
       miles_traveled
@@ -97,6 +100,26 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  # Bootstrap Icons variant of medium_icon_classes, for the Tailwind (casa_app)
+  # views, which load bootstrap-icons rather than the legacy LineIcons font.
+  def medium_icon
+    case object.medium_type
+    when CaseContact::IN_PERSON then "bi bi-people"
+    when CaseContact::TEXT_EMAIL then "bi bi-envelope"
+    when CaseContact::VIDEO then "bi bi-camera-video"
+    when CaseContact::VOICE_ONLY then "bi bi-telephone"
+    when CaseContact::LETTER then "bi bi-envelope-paper"
+    else "bi bi-question-circle"
+    end
+  end
+
+  # Human-readable medium name in sentence case (design-system), used as the medium icon's tooltip +
+  # accessible label: "voice-only" -> "Voice only", "text/email" -> "Text/email". Falls back for a
+  # contact whose medium is not set.
+  def medium_label
+    object.medium_type.present? ? object.medium_type.tr("-", " ").humanize : "Medium not set"
+  end
+
   def contact_groups
     groups = contact_groups_with_types.keys
     if groups.count > 0
@@ -130,20 +153,35 @@ class CaseContactDecorator < Draper::Decorator
     end
   end
 
+  # Structured parts to prefill the reimbursement address fields: prefer the volunteer's saved
+  # structured Address; otherwise put the whole known address (snapshot or legacy content) into
+  # line 1 so nothing is lost when it can't be split into parts.
+  def volunteer_address_parts
+    address = volunteer&.address
+    if address&.structured?
+      Address::STRUCTURED_FIELDS.index_with { |field| address.public_send(field) }
+    else
+      {line_1: address_of_volunteer, line_2: nil, city: nil, state: nil, zip: nil}
+    end
+  end
+
+  # Structured address parts for a SPECIFIC volunteer -- prefills the reimbursement address when the
+  # editor picks one from the case's volunteers.
+  def address_parts_for(some_volunteer)
+    address = some_volunteer&.address
+    if address&.structured?
+      Address::STRUCTURED_FIELDS.index_with { |field| address.public_send(field) }
+    else
+      {line_1: address&.content, line_2: nil, city: nil, state: nil, zip: nil}
+    end
+  end
+
   def ambiguous_volunteer_address_message
-    "There are two or more volunteers assigned to this case and you are trying to set the address for both of them. This is not currently possible."
+    "No volunteer is assigned to this case, so a reimbursement mailing address can't be set."
   end
 
   def form_title
-    active? ? "Editing Existing Case Contact" : "Record New Case Contact"
-  end
-
-  def form_page_notes
-    {
-      details: nil,
-      notes: "This question will be included in the court report for your assigned foster youth. Your response here will appear on the generated report for this case. To download the report, head to 'Group Actions'.",
-      expenses: nil
-    }
+    active? ? "Editing existing case contact" : "Record new case contact"
   end
 
   def form_updated_message

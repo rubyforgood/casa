@@ -4,7 +4,9 @@ class LearningHours::VolunteersController < ApplicationController
 
   def show
     authorize @volunteer
+    @active_nav = "learning"
     @learning_hours = LearningHour.where(user: @volunteer)
+    render layout: "casa_app"
   end
 
   private

@@ -1,0 +1,35 @@
+<%# Tailwind pagination footer for bespoke tables/lists. Pass the Pagy instance as `pagy`.
+    Industry-standard table footer: render it as the LAST child INSIDE the table card -- a `border-t`
+    divider + `px-4` aligned with the cells, compact (`pt-3`, no extra gap). On responsive pages whose
+    desktop table card is `hidden md:block`, also render a `md:hidden` copy below the mobile card list.
+    Results summary left, page controls right. %>
+<% if pagy.count.positive? %>
+  <% link = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-slate-200 bg-white px-2 text-sm font-medium text-slate-700 hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
+  <% disabled = "grid h-8 min-w-[2rem] place-items-center rounded-lg border border-transparent px-2 text-slate-300" %>
+  <nav class="mt-1 flex flex-wrap items-center justify-between gap-3 border-t border-slate-100 px-4 py-3 text-sm" aria-label="Pagination">
+    <p class="text-slate-500">Showing <span class="font-medium text-slate-700"><%= pagy.from %></span>&ndash;<span class="font-medium text-slate-700"><%= pagy.to %></span> of <span class="font-medium text-slate-700"><%= pagy.count %></span></p>
+    <% if pagy.pages > 1 %>
+      <div class="flex items-center gap-1">
+        <% if pagy.prev %>
+          <%= link_to url_for(request.query_parameters.merge(page: pagy.prev)), rel: "prev", "aria-label": "Previous page", class: link do %><i class="bi bi-chevron-left" aria-hidden="true"></i><% end %>
+        <% else %>
+          <span class="<%= disabled %>" aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+        <% end %>
+        <% pagy.series.each do |item| %>
+          <% if item == :gap %>
+            <span class="grid h-8 min-w-[2rem] place-items-center px-1 text-slate-400" aria-hidden="true">&hellip;</span>
+          <% elsif item.is_a?(String) %>
+            <span class="grid h-8 min-w-[2rem] place-items-center rounded-lg border border-brand-600 bg-brand-600 px-2 text-sm font-semibold text-white" aria-current="page"><%= item %></span>
+          <% else %>
+            <%= link_to item, url_for(request.query_parameters.merge(page: item)), "aria-label": "Page #{item}", class: link %>
+          <% end %>
+        <% end %>
+        <% if pagy.next %>
+          <%= link_to url_for(request.query_parameters.merge(page: pagy.next)), rel: "next", "aria-label": "Next page", class: link do %><i class="bi bi-chevron-right" aria-hidden="true"></i><% end %>
+        <% else %>
+          <span class="<%= disabled %>" aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+        <% end %>
+      </div>
+    <% end %>
+  </nav>
+<% end %>

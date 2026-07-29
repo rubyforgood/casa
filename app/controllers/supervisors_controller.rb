@@ -7,18 +7,28 @@ class SupervisorsController < ApplicationController
   before_action :set_supervisor, only: [:edit, :update, :activate, :deactivate, :resend_invitation, :change_to_admin]
   before_action :all_volunteers_ever_assigned, only: [:update]
   before_action :supervisor_has_unassigned_volunteers, only: [:edit]
+  before_action :set_active_nav, only: [:index, :new, :create, :edit, :update, :activate, :deactivate]
 
   after_action :verify_authorized
 
   def index
     authorize Supervisor
-    @supervisors = policy_scope(current_organization.supervisors)
+    @status = %w[active inactive all].include?(params[:status]) ? params[:status] : "active"
+    supervisors = policy_scope(current_organization.supervisors)
+    supervisors = supervisors.where(active: true) if @status == "active"
+    supervisors = supervisors.where(active: false) if @status == "inactive"
+    @supervisors = supervisors.order(:display_name)
+    # Active supervisors for the inline "assign supervisor" control in the volunteers-without-
+    # supervisors table (independent of the roster status filter above).
+    @active_supervisors = current_organization.supervisors.active.order(:display_name)
     @casa_cases = current_organization.casa_cases.missing_court_dates
+    render :index, layout: "casa_app"
   end
 
   def new
     authorize Supervisor
     @supervisor = Supervisor.new
+    render layout: "casa_app"
   end
 
   def create
@@ -35,7 +45,7 @@ class SupervisorsController < ApplicationController
       sms_status = deliver_sms_to @supervisor, body_msg
       redirect_to edit_supervisor_path(@supervisor), notice: sms_acct_creation_notice("supervisor", sms_status)
     else
-      render new_supervisor_path, status: :unprocessable_content
+      render :new, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -45,6 +55,7 @@ class SupervisorsController < ApplicationController
       all_volunteers_ever_assigned
     end
     @unassigned_volunteer_count ||= 0
+    render layout: "casa_app"
   end
 
   def update
@@ -55,7 +66,7 @@ class SupervisorsController < ApplicationController
       @supervisor.filter_old_emails!(@supervisor.email)
       redirect_to edit_supervisor_path(@supervisor), notice: notice
     else
-      render :edit, status: :unprocessable_content
+      render :edit, status: :unprocessable_content, layout: "casa_app"
     end
   end
 
@@ -66,7 +77,7 @@ class SupervisorsController < ApplicationController
 
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was activated. They have been sent an email."
     else
-      render :edit, notice: "Supervisor could not be activated."
+      render :edit, layout: "casa_app", notice: "Supervisor could not be activated."
     end
   end
 
@@ -75,7 +86,7 @@ class SupervisorsController < ApplicationController
     if @supervisor.deactivate
       redirect_to edit_supervisor_path(@supervisor), notice: "Supervisor was deactivated."
     else
-      render :edit, notice: "Supervisor could not be deactivated."
+      render :edit, layout: "casa_app", notice: "Supervisor could not be deactivated."
     end
   end
 
@@ -93,18 +104,14 @@ class SupervisorsController < ApplicationController
     redirect_to edit_casa_admin_path(@supervisor), notice: "Supervisor was changed to Admin."
   end
 
-  def datatable
-    authorize Supervisor
-    supervisors = policy_scope(current_organization.supervisors)
-    datatable = SupervisorDatatable.new supervisors, params
-
-    render json: datatable
-  end
-
   private
 
   def set_supervisor
     @supervisor = Supervisor.find(params[:id])
+  end
+
+  def set_active_nav
+    @active_nav = "supervisors"
   end
 
   def all_volunteers_ever_assigned
@@ -117,7 +124,7 @@ class SupervisorsController < ApplicationController
   end
 
   def available_volunteers
-    @available_volunteers = Volunteer.with_no_supervisor(current_user.casa_org)
+    @available_volunteers = Volunteer.with_no_supervisor(current_user.casa_org).includes(:casa_cases)
   end
 
   def supervisor_values

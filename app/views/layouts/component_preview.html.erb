@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<%# Layout for ViewComponent previews (/rails/view_components/...). Loads the app JS
+    bundle so Stimulus controllers connect (previews are interactive + system-spec'd) and
+    tailwind.css so components render with their real styling. %>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Component preview</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+  <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+</head>
+<body class="bg-slate-50 p-6 font-sans text-slate-800 antialiased">
+  <%= yield %>
+</body>
+</html>

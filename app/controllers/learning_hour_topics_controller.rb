@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LearningHourTopicsController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :set_learning_hour_topic, only: %i[edit update]
   after_action :verify_authorized
 

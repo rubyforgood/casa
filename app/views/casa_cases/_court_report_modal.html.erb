@@ -1,0 +1,40 @@
+<%# Court report generator (design-system dialog + court-report Stimulus controller).
+    Locals:
+      casa_case      the case (required)
+      trigger_class  classes for the trigger button (required)
+      wrapper_class  wrapper layout (default "inline-flex"; use "contents" in a dropdown menu) %>
+<%= render Dialog::GroupComponent.new(id: "generate-court-report", label: "Download court report", controllers: "court-report", wrapper_class: local_assigns.fetch(:wrapper_class, "inline-flex")) do |dialog| %>
+  <% dialog.with_trigger do %>
+    <button type="button" data-action="modal#open" class="<%= trigger_class %>">
+      <i class="bi bi-file-earmark-word" aria-hidden="true"></i> Generate court report
+    </button>
+  <% end %>
+  <%= form_with url: generate_case_court_reports_path, local: false, data: {court_report_target: "form"} do |form| %>
+    <%= render Dialog::HeaderComponent.new(title: "Download court report") %>
+    <%= render Dialog::BodyComponent.new(classes: "space-y-4") do %>
+      <p class="text-sm text-slate-600">Choose a date range for <span class="font-medium text-slate-900"><%= casa_case.case_number %></span>.</p>
+      <div data-court-report-target="error" class="hidden rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert"></div>
+      <%= form.hidden_field :case_number, value: casa_case.case_number %>
+      <%= form.hidden_field :time_zone, data: {court_report_target: "timeZone"} %>
+      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div>
+          <%= form.label :start_date, "Starting from", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+          <%= form.date_field :start_date, value: (casa_case.most_recent_past_court_date&.date || Date.current), required: true,
+                class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+        </div>
+        <div>
+          <%= form.label :end_date, "Ending at", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
+          <%= form.date_field :end_date, value: Date.current, required: true,
+                class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+        </div>
+      </div>
+    <% end %>
+    <%= render Dialog::FooterComponent.new do %>
+      <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
+      <button type="submit" data-action="court-report#generate" data-court-report-target="submit" class="<%= button_classes(:primary) %>">
+        <i class="bi bi-arrow-repeat hidden animate-spin" data-court-report-target="spinner" aria-hidden="true"></i>
+        <i class="bi bi-download" aria-hidden="true"></i> Generate report
+      </button>
+    <% end %>
+  <% end %>
+<% end %>

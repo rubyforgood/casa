@@ -60,11 +60,25 @@ $(() => { // JQuery's callback for the DOM loading
     const importButtonElement = $(`#${importType}-import-button`)[0]
 
     if (inputFileElement && importButtonElement) {
-      inputFileElement.addEventListener('change', function (event) {
-        importButtonElement.disabled = event.target.value === ''
+      const errorElement = document.getElementById(`${importType}-import-error`)
+
+      inputFileElement.addEventListener('change', function () {
+        if (errorElement && inputFileElement.value !== '') errorElement.classList.add('hidden')
         const file = inputFileElement.files[0]
-        storeCSVFile(file, inputFileElementId)
+        if (file) storeCSVFile(file, inputFileElementId)
       })
+
+      const form = importButtonElement.form
+      if (form) {
+        form.addEventListener('submit', function (event) {
+          if (inputFileElement.value === '') {
+            event.preventDefault()
+            event.stopPropagation()
+            if (errorElement) errorElement.classList.remove('hidden')
+            inputFileElement.focus()
+          }
+        })
+      }
 
       if ($('#smsOptIn') == null) {
         delete localStorage[inputFileElementId]

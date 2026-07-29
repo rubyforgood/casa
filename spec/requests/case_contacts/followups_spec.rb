@@ -42,19 +42,28 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
       end
     end
 
-    it "sends a Followup Notifier to case contact creator" do
+    it "sends a Followup Notifier to the case contact creator and the setter" do
       request
       followup = Followup.last
       expect(FollowupNotifier).to(
         have_received(:with).once.with(followup: followup, created_by: volunteer)
       )
-      expect(notification_double).to have_received(:deliver).once.with(case_contact.creator)
+      expect(notification_double).to have_received(:deliver).once.with(array_including(case_contact.creator, volunteer))
     end
 
     context "with invalid case_contact" do
       it "responds with 404" do
         post case_contact_followups_path(444444)
         expect(response).to have_http_status(:not_found)
+      end
+    end
+
+    context "when the case contact has no casa_case" do
+      let(:case_contact) { build(:case_contact, casa_case: nil).tap { |cc| cc.save(validate: false) } }
+
+      it "redirects to the case contacts index without a UrlGenerationError" do
+        request
+        expect(response).to redirect_to(case_contacts_path)
       end
     end
   end
@@ -97,21 +106,26 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
         end
       end
 
-      it "does not send Followup Notifier" do
-        followup
-        expect(FollowupResolvedNotifier).not_to receive(:with)
-        expect { request }.to change { followup.reload.resolved? }.from(false).to(true)
+      context "when the resolver is the only party to notify" do
+        let(:case_contact) { create(:case_contact, creator: volunteer) }
+        let(:followup) { create(:followup, case_contact: case_contact, creator: volunteer) }
+
+        it "does not send a Followup Notifier" do
+          followup
+          expect(FollowupResolvedNotifier).not_to receive(:with)
+          expect { request }.to change { followup.reload.resolved? }.from(false).to(true)
+        end
       end
 
       context "when who resolves the followup is not the followup's creator" do
         let(:followup) { create(:followup, case_contact: case_contact) }
 
-        it "sends a Followup Notifier to the creator" do
+        it "sends a Followup Notifier to the case contact creator and the setter" do
           request
           expect(FollowupResolvedNotifier).to(
             have_received(:with).once.with(followup: followup, created_by: volunteer)
           )
-          expect(notification_double).to have_received(:deliver).once.with(followup.creator)
+          expect(notification_double).to have_received(:deliver).once.with(array_including(case_contact.creator, followup.creator))
         end
       end
     end

@@ -1,43 +1,71 @@
-<div class="card card-container">
-  <div class="card-body">
-    <div class="table-wrapper table-responsive">
-      <table class="table learning-hours-list" id="all-learning-hours">
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Learning Type</th>
-            <% if current_user.casa_org.learning_topic_active %>
-              <th>Learning Topic</th>
-            <% end %>
-            <th>Date</th>
-            <th>Time Spent</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% learning_hours.order(occurred_at: :desc).each do |learning_hour| %>
-            <tr>
-              <td>
+<%# Learning-hours entries table (casa_app). Reused by the volunteer index and the
+    supervisor/admin volunteers#show. Volunteers see the title as a link to the entry;
+    supervisors/admins see plain dark text. Desktop table (md+) + a mobile card twin. %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
+<% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
+<% topic_active = current_user.casa_org.learning_topic_active %>
+<% entries = learning_hours.order(occurred_at: :desc) %>
+<% cols = topic_active ? 5 : 4 %>
+
+<%# Desktop (md+) %>
+<div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white py-2 shadow-sm md:block">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="border-b border-slate-100">
+          <th class="<%= th %>">Title</th>
+          <th class="<%= th %>">Learning type</th>
+          <% if topic_active %><th class="<%= th %>">Learning topic</th><% end %>
+          <th class="<%= th %>">Date</th>
+          <th class="<%= th %>">Time spent</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-slate-50">
+        <% if entries.any? %>
+          <% entries.each do |lh| %>
+            <tr class="hover:bg-slate-50/70">
+              <td class="<%= td %>">
                 <% if current_user.volunteer? %>
-                  <%= link_to learning_hour.name, learning_hour_path(id: learning_hour.id) %>
+                  <%= link_to lh.name, learning_hour_path(lh), class: "font-medium #{name_link_class}" %>
                 <% else %>
-                  <%= learning_hour.name %>
+                  <span class="font-medium text-slate-800"><%= lh.name %></span>
                 <% end %>
               </td>
-              <td> <%= learning_hour.learning_hour_type&.name %> </td>
-              <% if current_user.casa_org.learning_topic_active %>
-                <td> <%= learning_hour.learning_hour_topic&.name %> </td>
-              <% end %>
-              <td> <%= learning_hour.occurred_at.strftime("%B %-d, %Y") %> </td>
-              <td>
-              <% if (learning_hour.duration_hours > 0) %>
-                <%= learning_hour.duration_hours %> hr
-              <% end %>
-              <%= learning_hour.duration_minutes %> min
-              </td>
+              <td class="<%= td %>"><%= lh.learning_hour_type&.name %></td>
+              <% if topic_active %><td class="<%= td %>"><%= lh.learning_hour_topic&.name %></td><% end %>
+              <td class="<%= td %>"><%= lh.occurred_at.strftime("%B %-d, %Y") %></td>
+              <td class="<%= td %> whitespace-nowrap"><% if lh.duration_hours > 0 %><%= lh.duration_hours %> hr <% end %><%= lh.duration_minutes %> min</td>
             </tr>
           <% end %>
-        </tbody>
-      </table>
-    </div>
+        <% else %>
+          <tr><td colspan="<%= cols %>" class="px-4 py-10 text-center text-sm text-slate-500">No learning hours recorded yet.</td></tr>
+        <% end %>
+      </tbody>
+    </table>
   </div>
+</div>
+
+<%# Mobile (below md) %>
+<div class="md:hidden">
+  <% if entries.any? %>
+    <ul class="space-y-3">
+      <% entries.each do |lh| %>
+        <li class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+          <% if current_user.volunteer? %>
+            <%= link_to lh.name, learning_hour_path(lh), class: "text-base font-semibold #{name_link_class}" %>
+          <% else %>
+            <span class="text-base font-semibold text-slate-800"><%= lh.name %></span>
+          <% end %>
+          <dl class="mt-2 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+            <div><dt class="text-xs text-slate-500">Learning type</dt><dd class="mt-0.5 text-slate-700"><%= lh.learning_hour_type&.name %></dd></div>
+            <% if topic_active %><div><dt class="text-xs text-slate-500">Learning topic</dt><dd class="mt-0.5 text-slate-700"><%= lh.learning_hour_topic&.name %></dd></div><% end %>
+            <div><dt class="text-xs text-slate-500">Date</dt><dd class="mt-0.5 text-slate-700"><%= lh.occurred_at.strftime("%B %-d, %Y") %></dd></div>
+            <div><dt class="text-xs text-slate-500">Time spent</dt><dd class="mt-0.5 text-slate-700"><% if lh.duration_hours > 0 %><%= lh.duration_hours %> hr <% end %><%= lh.duration_minutes %> min</dd></div>
+          </dl>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 text-center text-sm text-slate-500">No learning hours recorded yet.</div>
+  <% end %>
 </div>

@@ -1,4 +1,6 @@
 class ContactTypeGroupsController < ApplicationController
+  layout "casa_app"
+  before_action -> { @active_nav = "settings" }
   before_action :set_contact_type_group, except: [:new, :create]
   after_action :verify_authorized
 

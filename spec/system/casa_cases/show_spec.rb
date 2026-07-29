@@ -24,7 +24,8 @@ RSpec.describe "casa_cases/show", type: :system do
 
   shared_examples "shows emancipation checklist link" do
     context "when youth is in transition age" do
-      it "sees link to emancipation" do
+      it "sees link to emancipation", :js do
+        find("summary", text: "More").click
         expect(page).to have_link("Emancipation 0 / #{emancipation_categories.size}")
       end
     end
@@ -42,7 +43,6 @@ RSpec.describe "casa_cases/show", type: :system do
   end
 
   describe "Report Generation", :js do
-    let(:modal_selector) { '[data-bs-target="#generate-docx-report-modal"]' }
     let(:user) { volunteer }
 
     before do
@@ -51,44 +51,24 @@ RSpec.describe "casa_cases/show", type: :system do
       visit casa_case_path(casa_case.id)
     end
 
-    context "when first arriving to 'Generate Court Report' page" do
-      it "generation modal hidden" do
-        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: false
-        expect(page).not_to have_selector ".select2"
-      end
+    it "keeps the generate button inside the closed modal" do
+      expect(page).to have_button("Generate report", visible: false)
     end
 
-    context "after opening 'Download Court Report' modal" do
-      before do
-        page.find(modal_selector).click
+    it "generates a court report for the case's date range" do
+      find("summary", text: "More").click
+      click_button "Generate court report"
+
+      within("#generate-court-report") do
+        expect(page).to have_content(casa_case.case_number)
+        expect(page.find("#start_date").value).to eq("2021-01-01") # default: today, no past court dates
+        expect(page.find("#end_date").value).to eq("2021-01-01")
+
+        click_button "Generate report"
       end
 
-      # putting all this in the same system test shaves 3 seconds off the test suite
-      it "modal has correct contents" do
-        start_date = page.find("#start_date").value
-        expect(start_date).to eq("January 01, 2021") # default date
-
-        end_date = page.find("#end_date").value
-        expect(end_date).to eq("January 01, 2021") # default date
-
-        expect(page).to have_selector "#btnGenerateReport", text: "Generate Report", visible: true
-        expect(page).not_to have_selector ".select2"
-
-        expect(page).to have_selector("#btnGenerateReport .lni-download", visible: true)
-        expect(page).not_to have_selector("#btnGenerateReport[disabled]")
-        expect(page).to have_selector("#spinner", visible: :hidden)
-
-        within("#generate-docx-report-modal") do
-          expect(page).to have_content(casa_case.case_number)
-
-          # when choosing the prompt option (value is empty) and click on 'Generate Report' button, nothing should happen"
-          # should have disabled generate button, download icon and no spinner
-          click_button "Generate Report"
-        end
-
-        wait_for_download
-        expect(download_file_name).to match(/#{casa_case.case_number}.docx/)
-      end
+      wait_for_download
+      expect(download_file_name).to match(/#{casa_case.case_number}.docx/)
     end
   end
 
@@ -103,37 +83,36 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can navigate to edit volunteer page" do
-      expect(page).to have_link("Bob Loblaw", href: "/volunteers/#{volunteer.id}/edit")
+      expect(page).to have_link("Bob Loblaw", href: %r{/volunteers/#{volunteer.id}/edit})
     end
 
     it "sees link to profile page" do
-      expect(page).to have_link(href: "/users/edit")
+      # the profile link lives in the account menu dropdown (closed by default)
+      expect(page).to have_link(href: "/users/edit", visible: false)
     end
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     it "can see next court date", :js do
-      expect(page).to have_content(
-        "Next Court Date: #{I18n.l(future_court_date.date, format: :day_and_date)}"
-      )
+      expect(page).to have_content("Next court date:")
+      expect(page).to have_content(I18n.l(future_court_date.date, format: :day_and_date))
     end
 
     it "can see the youth's Date In Care", :js do
-      expect(page).to have_content(
-        "Youth's Date in Care: #{I18n.l(date_in_care, format: :youth_date_of_birth)}"
-      )
+      expect(page).to have_content("Youth's date in care:")
+      expect(page).to have_content(I18n.l(date_in_care, format: :youth_date_of_birth))
     end
 
     it "can see the time since the youth's Date In Care", :js do
-      expect(page).to have_content("#{time_ago_in_words(date_in_care)} ago")
+      expect(page).to have_content("In care for #{time_ago_in_words(date_in_care)}")
     end
 
     it "can see Add to Calendar buttons", :js do
-      expect(page).to have_content("Add to Calendar")
+      expect(page).to have_content("Add to calendar")
     end
 
     context "court report download link visibility" do
@@ -171,7 +150,7 @@ RSpec.describe "casa_cases/show", type: :system do
       end
 
       it "can not see Add to Calendar buttons", :js do
-        expect(page).not_to have_content("Add to Calendar")
+        expect(page).not_to have_content("Add to calendar")
       end
     end
 
@@ -187,7 +166,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css("#case_contacts_list [data-case-contact]", count: 2)
       end
     end
   end
@@ -212,9 +191,9 @@ RSpec.describe "casa_cases/show", type: :system do
     end
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     context "court report download link visibility" do
@@ -257,7 +236,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
         visit casa_case_path(casa_case.id)
 
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css("#case_contacts_list [data-case-contact]", count: 2)
       end
     end
   end
@@ -268,9 +247,9 @@ RSpec.describe "casa_cases/show", type: :system do
     it_behaves_like "shows emancipation checklist link"
 
     it "can see court orders" do
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content(casa_case.case_court_orders[0].implementation_status_symbol)
+      expect(page).to have_content(ApplicationController.helpers.court_order_status_label(casa_case.case_court_orders[0]))
     end
 
     context "when old case contacts are hidden" do
@@ -282,7 +261,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       it "displays only visible cases to volunteer", :js do
         visit casa_case_path(casa_case.id)
-        expect(page).to have_css("#case_contacts_list .card-content", count: 1)
+        expect(page).to have_css("#case_contacts_list [data-case-contact]", count: 1)
       end
     end
 
@@ -295,12 +274,12 @@ RSpec.describe "casa_cases/show", type: :system do
 
       it "displays all cases to the volunteer" do
         visit casa_case_path(casa_case.id)
-        expect(page).to have_css("#case_contacts_list .card-content", count: 2)
+        expect(page).to have_css("#case_contacts_list [data-case-contact]", count: 2)
       end
     end
   end
 
-  context "court order - implementation status symbol" do
+  context "court order - implementation status pill" do
     let(:user) { admin }
 
     it "when implemented" do
@@ -308,9 +287,9 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("✅")
+      expect(page).to have_content("Implemented")
     end
 
     it "when not implemented" do
@@ -318,9 +297,9 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content("Not implemented")
     end
 
     it "when partial implemented" do
@@ -328,9 +307,9 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("🕗")
+      expect(page).to have_content("Partially implemented")
     end
 
     it "when not specified" do
@@ -338,9 +317,9 @@ RSpec.describe "casa_cases/show", type: :system do
 
       visit casa_case_path(casa_case)
 
-      expect(page).to have_content("Court Orders")
+      expect(page).to have_content("Court orders")
       expect(page).to have_content(casa_case.case_court_orders[0].text)
-      expect(page).to have_content("❌")
+      expect(page).to have_content("Not specified")
     end
   end
 end

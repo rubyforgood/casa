@@ -145,25 +145,65 @@ RSpec.describe CaseContactDecorator do
     end
   end
 
+  describe "#medium_icon" do
+    {
+      "in-person" => "bi bi-people",
+      "text/email" => "bi bi-envelope",
+      "video" => "bi bi-camera-video",
+      "voice-only" => "bi bi-telephone",
+      "letter" => "bi bi-envelope-paper",
+      "something-else" => "bi bi-question-circle"
+    }.each do |medium, icon|
+      it "maps #{medium} to the bootstrap-icons class #{icon}" do
+        case_contact.medium_type = medium
+
+        expect(case_contact.decorate.medium_icon).to eq(icon)
+      end
+    end
+  end
+
+  describe "#medium_label" do
+    {
+      "in-person" => "In person",
+      "text/email" => "Text/email",
+      "video" => "Video",
+      "voice-only" => "Voice only",
+      "letter" => "Letter"
+    }.each do |medium, label|
+      it "maps #{medium} to the sentence-case label #{label}" do
+        case_contact.medium_type = medium
+
+        expect(case_contact.decorate.medium_label).to eq(label)
+      end
+    end
+
+    it "falls back when the medium is not set" do
+      case_contact.medium_type = nil
+
+      expect(case_contact.decorate.medium_label).to eq("Medium not set")
+    end
+  end
+
   describe "#subheading" do
     let(:contact_group) { build_stubbed(:contact_type_group, name: "Group X") }
     let(:contact_type) { build_stubbed(:contact_type, contact_type_group: contact_group, name: "Type X") }
 
     context "when all information is available" do
       it "returns a properly formatted string" do
-        case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
+        case_contact.update(occurred_at: "2020-12-01", medium_type: "in-person", duration_minutes: 99, contact_made: false, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | 1 hour 39 minutes | No Contact Made | 100 miles driven"
+          "December 1, 2020 | In person | 1 hour 39 minutes | No Contact Made | 100 miles driven"
         )
       end
     end
 
     context "when some information is missing" do
-      it "returns a properly formatted string without extra pipes" do
+      it "omits missing facts (medium, contact made) without extra pipes" do
         case_contact.update(occurred_at: "2020-12-01", duration_minutes: 99, contact_made: true, miles_driven: 100, want_driving_reimbursement: true)
         case_contact.contact_types = [contact_type]
+        case_contact.medium_type = nil
 
         expect(case_contact.decorate.subheading).to eq(
           "December 1, 2020 | 1 hour 39 minutes | 100 miles driven"

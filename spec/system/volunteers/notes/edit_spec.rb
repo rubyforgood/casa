@@ -17,7 +17,7 @@ RSpec.describe "volunteers/notes/edit", type: :system do
 
       fill_in("note[content]", with: "Great job!")
 
-      click_on("Update Note")
+      click_on("Update note")
 
       expect(page).to have_current_path edit_volunteer_path(volunteer), ignore_query: true
 

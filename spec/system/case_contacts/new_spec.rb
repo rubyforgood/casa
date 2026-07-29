@@ -16,31 +16,31 @@ RSpec.describe "case_contacts/new", type: :system do
 
   before { sign_in user }
 
-  it "page load creates a case_contact with status: 'started' & draft_case_ids: [casa_case.id]" do
+  # Opening the form no longer inserts a row -- that is what left an empty draft behind on every
+  # abandoned click. The case is still pre-selected, just not persisted.
+  it "page load creates nothing and pre-selects the case" do
     subject
 
-    expect(page).to have_content("New Case Contact")
-
-    expect(CaseContact.started.count).to eq(1)
-    case_contact = CaseContact.started.last
-    expect(case_contact.draft_case_ids).to contain_exactly(casa_case.id)
-    expect(case_contact.casa_case_id).to be_nil
+    expect(page).to have_content("Record new case contact")
+    # The case selection is server-rendered into the multiselect's values; TomSelect builds the
+    # native select's options client-side, so without JS that select is empty.
+    expect(page).to have_css(%([data-multiple-select-selected-items-value="[#{casa_case.id}]"]), visible: :all)
+    expect(CaseContact.count).to eq(0)
   end
 
   it "saves entered details and updates status to 'active'", :js do
     subject
 
-    expect(page).to have_text "New Case Contact"
-    case_contact = CaseContact.started.last
+    expect(page).to have_text "Record new case contact"
 
     complete_details_page(
       case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-      medium: "In Person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
+      medium: "In person", occurred_on: Time.zone.yesterday, hours: 1, minutes: 45
     )
     click_on "Submit"
     expect(page).to have_text "Case contact successfully created."
 
-    case_contact.reload
+    case_contact = CaseContact.last # created by the submit, not by the page load
     aggregate_failures do
       expect(case_contact.status).to eq "active"
       # entered details
@@ -65,6 +65,153 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
+  describe "discarding a draft" do
+    let(:draft) do
+      create(:case_contact, :started_status, creator: volunteer, casa_case: nil,
+        draft_case_ids: [casa_case.id], notes: "half a thought")
+    end
+
+    # Assert the server-rendered `hidden`, not visibility: this is a rack_test example and rack_test
+    # ignores CSS, so it "sees" the hidden block. The :js example below covers the visible behaviour.
+    it "is not offered on a brand-new form, which has nothing to discard" do
+      subject
+
+      expect(page.find("#discard-draft", visible: :all)[:class]).to include("hidden")
+      expect(CaseContact.count).to eq(0)
+    end
+
+    # The control is server-rendered on `persisted?` and the autosave that creates the draft never
+    # re-renders the page, so it used to stay hidden until a reload -- i.e. it looked like it never
+    # worked. It now ships hidden and case_contact_draft.js reveals it (and fills in its action).
+    it "appears as soon as autosave creates the draft, with no reload", :js do
+      visit casa_case_path(casa_case)
+      click_on "New case contact"
+      expect(page).to have_no_button("Discard draft")
+
+      fill_in "case_contact_notes", with: "a partial thought"
+      expect(page).to have_text("Saved!")
+
+      expect(page).to have_button("Discard draft")
+
+      # And the revealed control is wired to the record that was just created.
+      draft = CaseContact.last
+      click_on "Discard draft"
+      within("dialog") { click_button "Discard draft" }
+
+      expect(page).to have_text("Draft discarded.")
+      expect(CaseContact.with_deleted.where(id: draft.id)).to be_empty
+      expect(page).to have_current_path(casa_case_path(casa_case))
+    end
+
+    it "is not offered for an active contact, which is a real record" do
+      contact = create(:case_contact, :active, casa_case: casa_case, creator: volunteer)
+
+      visit edit_case_contact_path(contact)
+
+      expect(page).to have_text("Editing existing case contact")
+      expect(page).to have_no_button("Discard draft")
+    end
+
+    it "is offered once a draft exists" do
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+
+      expect(page).to have_button("Discard draft")
+    end
+
+    it "confirms first, and keeps the draft when cancelled", :js do
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+
+      click_on "Discard draft"
+      expect(page).to have_text("Discard this draft?")
+      click_button "Cancel"
+
+      expect(CaseContact.with_deleted).to exist(draft.id)
+    end
+
+    # Hard delete: a soft-deleted draft keeps its row and resurfaces to admins as "[DELETE]".
+    it "deletes the draft and its autosaved children, then leaves the form", :js do
+      answer_topic = create(:contact_topic, casa_org: casa_org, question: "What was discussed?")
+      create(:contact_topic_answer, case_contact: draft, contact_topic: answer_topic, value: "an answer")
+      create(:additional_expense, case_contact: draft)
+
+      visit case_contact_form_path(:details, case_contact_id: draft.id)
+      click_on "Discard draft"
+      within("dialog") { click_button "Discard draft" }
+
+      expect(page).to have_text("Draft discarded.")
+      expect(CaseContact.with_deleted.where(id: draft.id)).to be_empty
+      expect(ContactTopicAnswer.with_deleted.where(case_contact_id: draft.id)).to be_empty
+      expect(AdditionalExpense.where(case_contact_id: draft.id)).to be_empty
+      expect(page).to have_current_path(case_contacts_path)
+    end
+  end
+
+  # The form was a dead end: Submit and Submit & add another were the only ways off it. Back uses the
+  # #leave action, so it returns where a successful Submit would -- see design.md "Back navigation on
+  # sub-pages", which calls this out as a recurring gap.
+  describe "the relevant-cases dropdown" do
+    # The case options used to carry `group: casa_org_id`, which the multiselect rendered as a header
+    # once it started drawing optgroups: a stray unclickable number sitting above the cases.
+    it "lists the cases with no group header", :js do
+      subject
+      find("#draft-case-id-selector .ts-control").click
+
+      expect(page).to have_css("#draft-case-id-selector .ts-dropdown .option", text: case_number)
+      expect(page).to have_no_css("#draft-case-id-selector .ts-dropdown .optgroup-header")
+    end
+  end
+
+  describe "leaving the form" do
+    it "offers Back, which returns to the page the form was opened from" do
+      visit casa_case_path(casa_case)
+      click_on "New case contact"
+      expect(page).to have_text("Record new case contact")
+
+      click_on "Back"
+
+      expect(page).to have_current_path(casa_case_path(casa_case))
+    end
+
+    it "falls back to the case-contacts list" do
+      visit case_contacts_path
+      click_on "New case contact"
+      expect(page).to have_text("Record new case contact")
+
+      click_on "Back"
+
+      expect(page).to have_current_path(case_contacts_path)
+    end
+
+    # Not "Cancel": the form autosaves, so on an existing contact the changes are already saved.
+    # The way out of the form is Back. Not asserted by hunting for the absence of "Cancel" any more:
+    # the discard confirm now lives in the actions row and its dialog legitimately has a Cancel, and
+    # rack_test cannot tell a closed dialog's contents from visible ones. Assert the actions the row
+    # actually offers instead.
+    it "offers Back as the way out, and no Cancel among the form's own actions" do
+      subject
+
+      expect(page).to have_link("Back")
+      within("#contact-form-action-buttons") do
+        expect(page).to have_button("Submit")
+        expect(page).to have_button("Submit & add another")
+      end
+      expect(page).to have_no_css("#contact-form-action-buttons > button[type=button]", text: "Cancel")
+    end
+  end
+
+  it "'Submit & add another' saves, reopens a fresh form for the same case, and links to the list", :js do
+    subject
+    complete_details_page(case_numbers: [case_number], contact_types: %w[School])
+
+    click_on "Submit & add another"
+
+    expect(page).to have_text "Case contact successfully created."
+    expect(page).to have_link "View case contacts", href: case_contacts_path
+    expect(page).to have_current_path(%r{/case_contacts/new}) # reopened a fresh, unsaved form
+    expect(CaseContact.active.count).to eq 1
+    expect(CaseContact.active.last.metadata["create_another"]).to be true
+  end
+
   context "with invalid inputs" do
     it "re-renders the form with errors, preserving all previously entered selections" do
       subject
@@ -81,7 +228,9 @@ RSpec.describe "case_contacts/new", type: :system do
       expect(page).to have_field("case_contact_contact_made", with: "1")
       expect(page).to have_field(class: "contact-form-type-checkbox", with: school_contact_type.id, checked: true)
 
-      expect(CaseContact.count).to eq(1)
+      # The whole point of persisting on save rather than on open: an invalid first submit leaves no
+      # draft behind at all.
+      expect(CaseContact.count).to eq(0)
     end
   end
 
@@ -94,7 +243,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Contact Type must be selected")
+      expect(page).to have_text("Contact type must be selected")
       expect(CaseContact.active.count).to eq(0)
 
       check contact_types.first.name
@@ -156,12 +305,12 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:autosave_alert_div) { "#contact-form-notes" }
     let(:autosave_alert_css) { 'small[role="alert"]' }
 
-    it "does not show topic questions that are inactive or soft deleted in select" do
+    it "does not show topic questions that are inactive or soft deleted" do
       contact_topics
       subject
 
       within notes_section_selector do
-        expect(page).to have_select(class: "contact-topic-id-select", options: ["Active Topic", "Select a discussion topic"])
+        expect(page).to have_field("Active Topic", type: :checkbox)
         expect(page).to have_no_text("Inactive Not Soft Deleted")
         expect(page).to have_no_text("Active Soft Deleted")
         expect(page).to have_no_text("Inactive Soft Deleted")
@@ -174,7 +323,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.new(2020, 4, 4), hours: 1, minutes: 45
       )
 
       answer_topic "Active Topic", "Hello world"
@@ -192,7 +341,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
         fill_in_contact_details contact_types: %w[School]
 
-        fill_in "Additional Notes", with: "This is the note"
+        fill_in "Additional notes", with: "This is the note"
 
         click_on "Submit"
 
@@ -219,7 +368,7 @@ RSpec.describe "case_contacts/new", type: :system do
         it "shows the admin the contact topics link" do
           subject
 
-          expect(page).to have_link("Manage Case Contact Topics")
+          expect(page).to have_link("Manage case contact topics")
           expect(CaseContact.active.count).to eq(0)
         end
       end
@@ -244,8 +393,8 @@ RSpec.describe "case_contacts/new", type: :system do
     let(:reimbursement_section_id) { "#contact-form-reimbursement" }
     let(:reimbursement_checkbox) { "case_contact_want_driving_reimbursement" }
     let(:miles_driven_input) { "case_contact_miles_driven" }
-    let(:volunteer_address_input) { "case_contact_volunteer_address" }
-    let(:add_expense_button_text) { "Add Another Expense" }
+    let(:volunteer_address_input) { "case_contact_volunteer_address_line_1" }
+    let(:add_expense_button_text) { "Add another expense" }
 
     before do
       allow(Flipper).to receive(:enabled?).with(:show_additional_expenses).and_return(true)
@@ -328,7 +477,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       click_on "Submit"
 
-      expect(page).to have_text("Must enter a valid mailing address for the reimbursement")
+      expect(page).to have_text("Mailing address must be entered for reimbursement")
 
       expect(CaseContact.active.count).to eq(0)
     end
@@ -399,57 +548,49 @@ RSpec.describe "case_contacts/new", type: :system do
     end
   end
 
-  context "when 'Create Another' is checked" do
+  context "when 'Create another' is checked" do
     it "redirects to the new CaseContact form with the same case selected", :js do
       subject
 
       complete_details_page(
         case_numbers: [case_number], contact_types: %w[School], contact_made: true,
-        medium: "In Person", occurred_on: Date.today, hours: 1, minutes: 45
+        medium: "In person", occurred_on: Date.today, hours: 1, minutes: 45
       )
 
-      check "Create Another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       expect(page).to have_text "Case contact successfully created."
-      expect(page).to have_text "New Case Contact"
+      expect(page).to have_text "Record new case contact"
       expect(page).to have_text case_number
 
       expect(CaseContact.active.count).to eq(1)
-      expect(CaseContact.started.count).to eq(1)
+      # The reopened form is unsaved, so no second draft exists yet.
+      expect(CaseContact.started.count).to eq(0)
 
       submitted_case_contact = CaseContact.active.last
-      next_case_contact = CaseContact.started.last
-
       expect(submitted_case_contact.reload.metadata["create_another"]).to be true
-      # new contact uses draft_case_ids from the original & form selects them
-      expect(next_case_contact.draft_case_ids).to eq [casa_case.id]
-      # default values for other attributes (not from the last contact)
-      expect(next_case_contact.status).to eq "started"
-      expect(next_case_contact.miles_driven).to be_zero
-      %i[casa_case_id duration_minutes occurred_at medium_type
-        want_driving_reimbursement notes].each do |attribute|
-        expect(next_case_contact.send(attribute)).to be_blank
-      end
-      expect(next_case_contact.contact_made).to be true
+
+      # The reopened form carries the case forward but none of the last contact's other answers.
+      expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number])
+      expect(page).to have_no_field("case_contact_medium_type", checked: true)
+      expect(page).to have_field("case_contact_notes", with: "")
     end
 
     it "does not reset referring location", :js do
       visit casa_case_path casa_case
       # referrer will be set by CaseContactsController#new to casa_case_path(casa_case)
-      click_on "New Case Contact"
+      click_on "New case contact"
       fill_in_contact_details contact_types: %w[School]
 
       # goes through CaseContactsController#new, but should not set a referring location
-      check "Create Another"
-      click_on "Submit"
+      click_on "Submit & add another"
 
       fill_in_contact_details contact_types: %w[School]
 
       click_on "Submit"
       # update should redirect to the original referrer, casa_case_path(casa_case)
-      expect(page).to have_text "CASA Case Details"
-      expect(page).to have_text "Case number: #{case_number}"
+      expect(page).to have_text "Case details"
+      expect(page).to have_text "Case #{case_number}"
     end
 
     context "when multiple cases selected" do
@@ -462,30 +603,24 @@ RSpec.describe "case_contacts/new", type: :system do
       it "redirects to the new CaseContact form with the same cases selected", :js do
         expect {
           visit new_case_contact_path(casa_case, {draft_case_ids:})
-          expect(page).to have_content("Record New Case Contact")
-        }.to change(CaseContact.started, :count).by(1)
-        this_case_contact = CaseContact.started.last
+          expect(page).to have_content("Record new case contact")
+        }.not_to change(CaseContact, :count)
 
         expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
         complete_details_page(case_numbers: [])
         expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
 
-        check "Create Another"
-
         expect {
-          click_on "Submit"
+          click_on "Submit & add another"
           expect(page).to have_text "Case contacts successfully created."
         }.to change(CaseContact.active, :count).by(2)
 
-        expect(page).to have_text "New Case Contact"
-        expect(this_case_contact.reload.status).to eq "active"
-        next_case_contact = CaseContact.not_active.last
-        expect(next_case_contact).to be_present
-
-        expect(next_case_contact.status).to eq "started"
+        expect(page).to have_text "Record new case contact"
+        # Both submitted contacts went active and the reopened form persisted nothing.
+        expect(CaseContact.not_active).to be_empty
         expect(page).to have_text case_number
         expect(page).to have_text case_number_two
-        expect(next_case_contact.draft_case_ids).to match_array draft_case_ids
+        expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number, case_number_two])
       end
     end
   end
@@ -517,10 +652,14 @@ RSpec.describe "case_contacts/new", type: :system do
   context "when volunteer has one case" do
     let(:first_case) { volunteer.casa_cases.first }
 
-    it "selects the only case" do
+    # Asserts the sole case is pre-selected in the relevant-cases control (TomSelect). The
+    # legacy sidebar listed each case number, so the old non-JS text match happened to pass;
+    # the casa_app sidebar has one "My Cases" link, so we assert the actual widget selection
+    # like the multi-case sibling below. The server-side default is covered by the first spec.
+    it "selects the only case", :js do
       subject
 
-      expect(page).to have_text(first_case.case_number)
+      expect(page).to have_select("case_contact_draft_case_ids", selected: [first_case.case_number])
       expect(volunteer.casa_cases.size).to eq 1
     end
   end

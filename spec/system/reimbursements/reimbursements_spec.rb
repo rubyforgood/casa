@@ -12,31 +12,29 @@ RSpec.describe "reimbursements", type: :system do
     visit reimbursements_path
   end
 
-  it "shows reimbursements", :js do
-    expect(page).to have_content("Needs Review")
-    expect(page).to have_content("Reimbursement Complete")
-    expect(page).to have_content("Occurred At")
+  it "shows the reimbursement queue" do
+    expect(page).to have_content("Needs review")
+    expect(page).to have_content("Reimbursement complete")
+    expect(page).to have_content("Occurred at")
     expect(page).to have_content(contact1.casa_case.case_number)
     expect(page).to have_content(contact2.miles_driven)
   end
 
-  it "shows pagination", :js do
-    expect(page).to have_content("Previous")
-    expect(page).to have_content("Next")
+  it "shows a result count and a row per reimbursement" do
+    expect(page).to have_content("Showing")
+    expect(page).to have_selector("[data-test=reimbursement-row]", count: 2)
   end
 
-  it "filters by volunteers", :js do
-    expect(page).to have_selector("#reimbursements-datatable tbody tr", count: 2)
+  it "filters by volunteer", :js do
+    expect(page).to have_selector("[data-test=reimbursement-row]", count: 2)
 
-    page.find(".select2-search__field").click
-    send_keys(contact1.creator.display_name)
-    send_keys(:enter)
+    select contact1.creator.display_name, from: "Volunteer"
 
-    expect(page).to have_selector("#reimbursements-datatable tbody tr", count: 1)
-    expect(page).to have_content contact1.creator.display_name
-
-    page.find(".select2-selection__choice__remove").click
-
-    expect(page).to have_selector("#reimbursements-datatable tbody tr", count: 2)
+    expect(page).to have_selector("[data-test=reimbursement-row]", count: 1)
+    # contact2's volunteer is still listed as a filter option, so scope to the row.
+    within "[data-test=reimbursement-row]" do
+      expect(page).to have_content(contact1.creator.display_name)
+      expect(page).to have_no_content(contact2.creator.display_name)
+    end
   end
 end

@@ -23,15 +23,14 @@ RSpec.describe "/dashboard", type: :request do
       context "more than one active case" do
         let!(:active_case_assignment) { create :case_assignment, volunteer: volunteer }
 
-        it "renders a successful response" do
+        it "renders the volunteer dashboard" do
           get root_url
 
-          expect(response).to redirect_to(casa_cases_path)
+          expect(response).to have_http_status(:ok)
         end
 
         it "shows my cases" do
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)
@@ -42,7 +41,6 @@ RSpec.describe "/dashboard", type: :request do
           create(:case_assignment, volunteer: not_logged_in_volunteer)
 
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)
@@ -54,7 +52,6 @@ RSpec.describe "/dashboard", type: :request do
           not_my_case_assignment = create(:case_assignment, casa_org: different_org)
 
           get root_url
-          follow_redirect!
 
           expect(response.body).to include(active_case_assignment.casa_case.case_number)
           expect(response.body).to include(case_assignment.casa_case.case_number)
@@ -66,32 +63,39 @@ RSpec.describe "/dashboard", type: :request do
 
   context "as a supervisor" do
     let(:supervisor) { create(:supervisor, casa_org: organization) }
+    let(:volunteer) { create(:volunteer, casa_org: organization, display_name: "Wanda Volunteer") }
+    let!(:supervisor_volunteer) { create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer) }
 
     before do
       sign_in supervisor
     end
 
     describe "GET /show" do
-      it "redirects to the volunteers overview" do
+      it "renders the supervisor dashboard with the assigned volunteer" do
         get root_url
 
-        expect(response).to redirect_to(volunteers_url)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Dashboard")
+        expect(response.body).to include("Wanda Volunteer")
       end
     end
   end
 
   context "as an admin" do
     let(:admin) { create(:casa_admin, casa_org: organization) }
+    let!(:unassigned_case) { create(:casa_case, casa_org: organization) }
 
     before do
       sign_in admin
     end
 
     describe "GET /show" do
-      it "renders a successful response" do
+      it "renders the admin dashboard with cases needing attention" do
         get root_url
 
-        expect(response).to redirect_to(supervisors_path)
+        expect(response).to have_http_status(:ok)
+        expect(response.body).to include("Dashboard")
+        expect(response.body).to include(unassigned_case.case_number)
       end
     end
   end

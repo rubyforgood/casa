@@ -56,7 +56,7 @@ FileUtils.chdir APP_ROOT do
 
   puts "\n== Building assets =="
   system!('npm run build')
-  system!('npm run build:css')
+  system!('npm run build:tailwind')
 
   puts "\n== Done =="
 end

@@ -1,161 +1,178 @@
-<div class="row">
-  <%= render "casa_cases/thank_you_modal" %>
-  <div class="title-wrapper pt-30">
-    <div class="row align-items-center">
-      <div class="col-md-6">
-        <div class="title d-flex justify-content-between">
-          <h1 class="mb-10">Case Contacts</h1>
-          <%= link_to new_case_contact_path, class: "main-btn secondary-btn btn-sm btn-hover" do %>
-            <i class="lni lni-plus mr-10"></i>
-            New Case Contact
+<% content_for :page_title, "Case contacts" %>
+<%# case_contacts#index on casa_app. Keeps filterrific (the .filter-form auto-submits on
+    .filter-input change; the form targets the :case_contacts turbo-frame). The Bootstrap
+    collapse is replaced by the `disclosure` controller: the panel is always in the DOM (so
+    rack_test finds "Other filters" regardless) but starts `hidden` unless expand_filters?, so
+    JS users see it collapsed. Cards are grouped by case; _case_contact is the shared card. %>
+<%# Control tokens match the roster filter bars (cases / volunteers / supervisors /
+    reimbursements) exactly, plus the `filter-input` auto-submit hook this page needs. %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+<% select_class = "filter-input block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% input_class = "filter-input block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% chevron = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
+<% check_class = "filter-input h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+    <h1 class="text-2xl font-bold tracking-tight text-slate-900">Case contacts</h1>
+    <div class="flex flex-wrap items-center gap-2">
+      <%= link_to new_case_contact_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New case contact<% end %>
+      <%# The org-wide drafts list was routed but linked from nowhere, so abandoned drafts piled up
+          where no one could find them. Occasional action, so it goes in More (policy: drafts?). %>
+      <% if policy(CaseContact).drafts? %>
+        <details class="relative" data-controller="dropdown">
+          <summary class="<%= button_classes(:secondary) %> cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            More <i class="bi bi-chevron-down text-xs text-slate-500" aria-hidden="true"></i>
+          </summary>
+          <div class="absolute right-0 z-20 mt-2 w-56 overflow-hidden rounded-xl border border-slate-200 bg-white py-1 shadow-lg">
+            <%= link_to case_contacts_drafts_path, class: "flex items-center gap-2 px-4 py-2 text-sm text-slate-600 hover:bg-slate-50 focus-visible:bg-slate-50 focus-visible:outline-none" do %><i class="bi bi-file-earmark-text text-slate-500" aria-hidden="true"></i> Draft case contacts<% end %>
+          </div>
+        </details>
+      <% end %>
+    </div>
+  </div>
+
+  <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "filter-form mb-6"}, remote: true,
+    data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} do |f| %>
+    <%= hidden_field_tag "casa_case_id", params[:casa_case_id] %>
+
+    <% panel_open = filters_open? %>
+    <div data-controller="disclosure" class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:p-5">
+      <%# Carries the panel's open state through the auto-submit, so a filter change never closes it. %>
+      <%= hidden_field_tag :filters_open, (panel_open ? "1" : ""), id: nil, data: {disclosure_target: "field"} %>
+      <%# One toolbar row (the list-toolbar standard: GitHub / Linear / Jira / Polaris). The heading is
+          sr-only -- it keeps the section named for AT while the controls speak for themselves, and buys
+          back the row it used to occupy. `Hide drafts` is the single high-traffic boolean, so it sits
+          inline beside the overflow trigger rather than inside it; there it also aligns against the
+          trigger instead of faking a baseline against the labelled sort field. Clear only renders when
+          something is actually filtering. %>
+      <h2 class="sr-only">Filters</h2>
+
+      <div class="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
+        <div class="min-w-[12rem]">
+          <%# "Sort by", not "Sorted by": the conventional label for a sort control (Jira, Polaris).
+              Not "Filter by" -- it changes the order, not which rows show. %>
+          <%= f.label :sorted_by, "Sort by", class: label_class %>
+          <div class="relative">
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: select_class}) %>
+            <i class="<%= chevron %>" aria-hidden="true"></i>
+          </div>
+        </div>
+
+        <%# min-h matches the 38px control height so bottom-aligning this group against the sort field
+            also centres it on the control (a bare 28px group bottom-aligns 5px low). It grows when the
+            group wraps on narrow screens. %>
+        <div class="flex min-h-[38px] flex-wrap items-center gap-x-4 gap-y-2">
+          <label class="inline-flex items-center gap-2 text-sm text-slate-700">
+            <%= f.check_box :no_drafts, class: check_class %>
+            Hide drafts
+          </label>
+          <%# clear_filters_path, not reset_filterrific_url: reset drops the SORT too, and a control
+              labelled "Clear filters" has no business changing the ordering. %>
+          <% if filters_applied? %>
+            <%= link_to "Clear filters", clear_filters_path, class: ghost_class %>
           <% end %>
+          <%# Count badge: how many hidden filters are on. A brand-tinted pill, not a parenthetical --
+              a number inside the label reads as part of it. Counts fields, so 3 contact types is 1. %>
+          <% hidden_count = hidden_filter_count %>
+          <button type="button" data-action="disclosure#toggle" data-disclosure-target="trigger" aria-expanded="<%= panel_open %>" aria-controls="filter-card-body" class="group <%= ghost_class %>">
+            More filters
+            <% if hidden_count.positive? %>
+              <span class="rounded-full bg-brand-100 px-1.5 py-0.5 text-xs font-semibold text-brand-700"><%= hidden_count %></span>
+              <span class="sr-only"><%= pluralize(hidden_count, "filter") %> applied</span>
+            <% end %>
+            <i class="bi bi-chevron-down text-xs transition-transform group-aria-[expanded=true]:rotate-180" aria-hidden="true"></i>
+          </button>
         </div>
       </div>
-    </div>
-  </div>
-</div>
 
-<%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "my-4 filter-form"}, remote: true,
-  data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance } do |f| %>
-  <%= hidden_field_tag 'casa_case_id', params[:casa_case_id] %>
-
-  <div class="card-style">
-    <div class="card-content">
-      <div class="d-flex justify-content-between align-items-center">
-        <div class="h4 btn-lg">Filter by</div>
-        <button href="#"
-                class="btn btn-lg btn-link"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#filter-card-body"
-                aria-expanded="<%= expand_filters? %>>"
-                aria-controls="filter-card-body">
-          <div class="h4">Expand / Hide</div>
-        </button>
-      </div>
-      <div class="d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4">
-        <div class="d-flex flex-column gap-3">
-          <div class="select-style-1 mb-0">
-            <%= f.label :sorted_by %>
-            <div class="select-position">
-              <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: "filter-input"}) %>
-            </div>
-          </div>
-          <div class="form-check checkbox-style">
-            <%= f.check_box :no_drafts, class: "form-check-input case-contact-contact-type filter-input" %>
-            <label class="form-check-label" for="filterrific_no_drafts">Hide drafts</label>
-          </div>
-        </div>
+      <div id="filter-card-body" data-disclosure-target="panel" class="<%= "hidden" unless panel_open %> mt-5 space-y-5 border-t border-slate-100 pt-5">
         <div>
-          <%= link_to("Reset filters", reset_filterrific_url,
-            class: "btn-sm main-btn dark-btn-outline btn-hove",
-            data: { turbo: true, turbo_frame: :case_contacts, turbo_action: :advance }) %>
-        </div>
-      </div>
-    </div>
-
-    <% collapse_class = expand_filters? ? "collapse show" : "collapse" %>
-    <div class="card-content mb-10 ml-20 <%= collapse_class %>" id="filter-card-body">
-      <div class="row">
-        <div class="col-12">
-          <h3 class="mt-10"><label>Date of contact</label></h3>
-        </div>
-        <div class="col-sm-6 input-style-1">
-          <%= f.label "Starting from", for: "filterrific_occurred_starting_at" %>
-          <%= f.date_field(:occurred_starting_at, class: "filter-input") %>
-        </div>
-        <div class="col-sm-6 input-style-1">
-          <%= f.label "Ending at", for: "filterrific_occurred_ending_at" %>
-          <%= f.date_field(:occurred_ending_at, class: "filter-input") %>
-        </div>
-      </div>
-      <div class="row mb-4">
-        <div class="col-12">
-          <h3 class="mb-4"><label>Contact types</label></h3>
-          <div id="contact-type-form" class="">
-            <div class="row">
-              <% @current_organization_groups.each do |group| %>
-                <div class="col-md-4 justify-content-start pb-5">
-                  <h5 class="mb-1"> <%= group.name %> </h5>
-                  <% group.contact_types.each do |contact_type| %>
-                    <div class="form-check checkbox-style">
-                      <%=
-                      f.check_box :contact_type,
-                        {multiple: true, class: "form-check-input case-contact-contact-type filter-input"},
-                        contact_type.id,
-                        nil
-                      %>
-                      <label class="form-check-label" for="filterrific_contact_type_<%= contact_type.id %>">
-                        <%= contact_type.name %>
-                      </label>
-                    </div>
-                  <% end %>
-                </div>
-              <% end %>
+          <h3 class="mb-2 text-sm font-semibold text-slate-900">Date of contact</h3>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div>
+              <%= f.label "Starting from", for: "filterrific_occurred_starting_at", class: label_class %>
+              <%= f.date_field(:occurred_starting_at, class: input_class) %>
+            </div>
+            <div>
+              <%= f.label "Ending at", for: "filterrific_occurred_ending_at", class: label_class %>
+              <%= f.date_field(:occurred_ending_at, class: input_class) %>
             </div>
           </div>
         </div>
-      </div>
-      <div class="row align-items-end  mb-10">
-        <div class="col-12">
-          <h3>Other filters</h3>
-        </div>
-        <div class="col-md-6 select-style-1 pr-5">
-          <%= f.label :contact_medium %>
-          <div class="select-position">
-            <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label"),
-                                        {include_blank: "Display all", class: "filter-input"}) %>
-          </div>
-        </div>
-        <div class="col-md-3 select-style-1 pr-5">
-          <%= f.label :want_driving_reimbursement %>
-          <div class="select-position">
-            <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options,
-                                                    {include_blank: "Display all", class: "filter-input"}) %>
-          </div>
-        </div>
-        <div class="col-md-3 select-style-1 pr-5">
-          <%= f.label :contact_made %>
-          <div class="select-position">
-            <%= f.select(:contact_made, @case_contacts.boolean_select_options,
-                                      {include_blank: "Display all", class: "filter-input"}) %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-<% end %>
 
-<%= turbo_frame_tag :case_contacts do %>
-  <% @case_contacts.object.each do |casa_case_id, data| %>
-    <div class="card-style-1 mb-5">
-      <div class="card-content">
-        <h3 class="mb-10"><%= @case_contacts.display_case_number(casa_case_id) %></h3>
-        <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
+        <%# A searchable multiselect, not an exposed checkbox grid: a default org has ~25 contact types
+            in ~10 groups, which rendered a 502px wall on desktop and 954px on mobile -- taller than the
+            results list it filters. Groups become <optgroup>s, and the chips double as the "which types
+            are on" readout. The label (not an h3) names the native <select> so the multiple-select
+            controller can copy it onto TomSelect's input and back onto the select. %>
+        <div>
+          <%= f.label :contact_type, "Contact types", class: label_class %>
+          <%# No `filter-input` here, and submit-on-close instead: the delegated change-submit fired a
+              full page render per chip, tearing down the open menu so every pick meant reopening it.
+              The controller holds the submit until the menu closes. %>
+          <div data-controller="multiple-select" data-multiple-select-placeholder-value="Select or search contact types" data-multiple-select-submit-on-close-value="true">
+            <%= f.select :contact_type,
+              grouped_options_for_select(
+                @current_organization_groups.map { |group| [group.name, group.contact_types.map { |type| [type.name, type.id] }] },
+                Array(f.object.contact_type).map(&:to_s)
+              ),
+              {include_hidden: false},
+              {multiple: true, class: "block w-full", data: {"multiple-select-target": "select"}} %>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="mb-2 text-sm font-semibold text-slate-900">Other filters</h3>
+          <div class="grid grid-cols-1 gap-4 sm:grid-cols-3">
+            <div>
+              <%= f.label :contact_medium, class: label_class %>
+              <div class="relative">
+                <%# Pass the current value: pre-rendered option HTML can't be marked selected by f.select,
+                    so without it the dropdown reads "All" while a medium filter is active. %>
+                <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label", f.object.contact_medium), {include_blank: "All"}, {class: select_class}) %>
+                <i class="<%= chevron %>" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div>
+              <%= f.label :want_driving_reimbursement, class: label_class %>
+              <div class="relative">
+                <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
+                <i class="<%= chevron %>" aria-hidden="true"></i>
+              </div>
+            </div>
+            <div>
+              <%= f.label :contact_made, class: label_class %>
+              <div class="relative">
+                <%= f.select(:contact_made, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
+                <i class="<%= chevron %>" aria-hidden="true"></i>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   <% end %>
-  <% if @case_contacts.object.empty? %>
-    <% if params.key?(:casa_case_id) %>
-      <div class="card-style-1 mb-5">
-        <div class="card-content">
-          <h3 class="mb-10"><%= @case_contacts.display_case_number(params[:casa_case_id].to_i) %></h3>
-          <%= params[:filterrific] ?
-              "No case contacts have been found." :
-              "You have no case contacts for this case. \
-        Please click New Case Contact button above to create a case contact for your youth!" %>
+
+  <%= turbo_frame_tag :case_contacts do %>
+    <% @case_contacts.object.each do |casa_case_id, data| %>
+      <section class="mb-6">
+        <h2 class="mb-3 text-lg font-semibold text-slate-900"><%= @case_contacts.display_case_number(casa_case_id) %></h2>
+        <div class="space-y-4">
+          <%= render partial: "case_contacts/case_contact", collection: data, as: :contact %>
         </div>
-      </div>
-    <% else %>
-      <div class="card-style-1">
-        <div class="card-content">
-          <%= params[:filterrific] ?
-              "No case contacts have been found." :
-              "You have no case contacts for this case. \
-        Please click New Case Contact button above to create a case contact for your youth!" %>
-        </div>
+      </section>
+    <% end %>
+
+    <% if @case_contacts.object.empty? %>
+      <div class="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+        <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-chat-square-text text-xl" aria-hidden="true"></i></div>
+        <p class="mt-3 text-sm text-slate-500">
+          <% if params.key?(:casa_case_id) %><%= @case_contacts.display_case_number(params[:casa_case_id].to_i) %> &mdash; <% end %><%= params[:filterrific] ? "No case contacts have been found." : "You have no case contacts for this case. Please click New case contact button above to create a case contact for your youth!" %>
+        </p>
       </div>
     <% end %>
+
+    <%= render "shared/pagination", pagy: @pagy %>
   <% end %>
-  <%== pagy_bootstrap_nav(@pagy) %>
-<% end %>
+</div>

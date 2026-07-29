@@ -11,7 +11,7 @@ RSpec.describe "emancipations/show", type: :system do
     sign_in volunteer
     visit casa_case_emancipation_path(casa_case)
 
-    expect(page).to have_link "Download Checklist", href: casa_case_emancipation_path(casa_case, format: :docx)
+    expect(page).to have_link "Download checklist", href: casa_case_emancipation_path(casa_case, format: :docx)
   end
 
   it "expands the emancipation checklist options", :js do

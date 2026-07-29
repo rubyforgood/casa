@@ -55,44 +55,31 @@ RSpec.describe CasaCaseDecorator do
     it { is_expected.to eq "12-09-2020" }
   end
 
-  describe "#transition_age_youth" do
-    it "returns transition age youth status with icon if not transition age youth && birthday is nil" do
-      casa_case = build(:casa_case, birth_month_year_youth: nil)
-      expect(casa_case.decorate.transition_aged_youth)
-        .to eq "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
+  describe "#formatted_next_court_date" do
+    subject { casa_case.decorate.formatted_next_court_date }
+
+    let(:casa_case) { create(:casa_case) }
+
+    context "with no court dates" do
+      it { is_expected.to be_nil }
     end
 
-    it "returns transition age youth status with icon if over 14 years old" do
-      casa_case = build_stubbed(:casa_case, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
-      expect(casa_case.decorate.transition_aged_youth)
-        .to include "Yes #{CasaCase::TRANSITION_AGE_YOUTH_ICON}"
-      expect(casa_case.decorate.transition_aged_youth).to include "Emancipation"
+    context "with only past court dates" do
+      before { create(:court_date, casa_case: casa_case, date: 1.week.ago) }
+
+      it { is_expected.to be_nil }
     end
 
-    it "returns non-transition age youth status with icon if not over 14 years old" do
-      casa_case = build(:casa_case, birth_month_year_youth: 13.years.ago)
-      expect(casa_case.decorate.transition_aged_youth)
-        .to eq "No #{CasaCase::NON_TRANSITION_AGE_YOUTH_ICON}"
-    end
-  end
+    context "with upcoming court dates" do
+      before do
+        create(:court_date, casa_case: casa_case, date: 3.weeks.from_now)
+        create(:court_date, casa_case: casa_case, date: 1.week.from_now)
+        create(:court_date, casa_case: casa_case, date: 2.weeks.ago)
+      end
 
-  describe "#transition_age_youth_icon" do
-    it "returns transition age youth status with icon if not transition age youth && birthday is nil" do
-      casa_case = build(:casa_case, birth_month_year_youth: nil)
-      expect(casa_case.decorate.transition_aged_youth_icon)
-        .to eq CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
-    end
-
-    it "returns transition age youth icon if over 14 years old" do
-      casa_case = build(:casa_case, birth_month_year_youth: CasaCase::TRANSITION_AGE.years.ago)
-      expect(casa_case.decorate.transition_aged_youth_icon)
-        .to eq CasaCase::TRANSITION_AGE_YOUTH_ICON
-    end
-
-    it "returns non-transition age youth icon if not over 14 years old" do
-      casa_case = build(:casa_case, birth_month_year_youth: 13.years.ago)
-      expect(casa_case.decorate.transition_aged_youth_icon)
-        .to eq CasaCase::NON_TRANSITION_AGE_YOUTH_ICON
+      it "returns the earliest upcoming date, formatted" do
+        expect(subject).to eq(I18n.l(1.week.from_now, format: :full))
+      end
     end
   end
 
@@ -107,6 +94,21 @@ RSpec.describe CasaCaseDecorator do
       )
       expect(EmancipationCategory).to receive(:count).and_return(5)
       expect(casa_case.decorate.emancipation_checklist_count).to eq "2 / 5"
+    end
+  end
+
+  describe "#hash_for_multi_select" do
+    let(:casa_case) { create(:casa_case, case_number: "CINA-1") }
+
+    # It used to carry `group: casa_org_id`. That was invisible while the multiselect only SEARCHED
+    # groups, but once it started rendering optgroups the raw org id was drawn as a header: a stray,
+    # unclickable number above the cases. Every case here is already org-scoped, so there is no group
+    # worth showing.
+    it "declares no group, so the multiselect draws no header" do
+      hash = casa_case.decorate.hash_for_multi_select
+
+      expect(hash).not_to have_key(:group)
+      expect(hash).to include(value: casa_case.id, text: "CINA-1")
     end
   end
 end

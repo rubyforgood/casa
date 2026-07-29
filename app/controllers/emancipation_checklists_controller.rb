@@ -1,15 +1,24 @@
 class EmancipationChecklistsController < ApplicationController
   include DateHelper
+  layout "casa_app"
+  before_action -> { @active_nav = "cases" }
   before_action :require_organization!
   after_action :verify_authorized
 
   def index
     authorize :application, :see_emancipation_checklist?
     org_cases = current_user.casa_org.casa_cases.includes(:assigned_volunteers)
-    @casa_transitioning_cases = policy_scope(org_cases).is_transitioned.includes([:hearing_type, :judge])
+    transitioning = policy_scope(org_cases).is_transitioned.includes([:hearing_type, :judge])
+    @transitioning_case_numbers = transitioning.map(&:case_number).sort
+    @casa_transitioning_cases =
+      if params[:search].present?
+        transitioning.where("case_number ILIKE ?", "%#{params[:search]}%")
+      else
+        transitioning
+      end
 
-    if @casa_transitioning_cases.count == 1
-      redirect_to casa_case_emancipation_path(@casa_transitioning_cases[0])
+    if params[:search].blank? && @casa_transitioning_cases.count == 1
+      redirect_to casa_case_emancipation_path(@casa_transitioning_cases.first)
     end
   end
 end

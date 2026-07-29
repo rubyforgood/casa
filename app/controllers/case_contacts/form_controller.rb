@@ -1,11 +1,69 @@
 class CaseContacts::FormController < ApplicationController
   include Wicked::Wizard
 
+  # The wizard renders on the casadesign (Tailwind) shell. layout applies to the HTML
+  # render_wizard/render step paths; the autosave JSON responses skip it.
+  layout "casa_app"
+
   before_action :require_organization!
   before_action :set_case_contact, only: [:show, :update]
+  before_action :set_active_nav
   after_action :verify_authorized
 
   steps :details
+
+  # Opening the form no longer inserts a row. It used to: CaseContactsController#new created the
+  # record so the wizard had an id to autosave into, which meant every abandoned "New case contact"
+  # click left a permanent empty draft. The record is now built unsaved and persisted by #create at
+  # the first real save -- the first autosave (typing notes or a topic answer), the first checked
+  # contact topic, or the submit itself.
+  def new
+    store_referring_location
+
+    @case_contact = CaseContact.new(creator: current_user, contact_made: true,
+      draft_case_ids: build_draft_case_ids(policy_scope(current_organization.casa_cases)))
+    authorize @case_contact
+
+    prepare_form
+    render :details
+  end
+
+  def create
+    @case_contact = CaseContact.new(creator: current_user)
+    authorize @case_contact
+
+    remove_nil_draft_ids
+
+    respond_to do |format|
+      format.json do
+        # An autosave: keep the default `started` status so the lax draft validations apply, and hand
+        # back where every later save must go -- the record exists now, so posting here again would
+        # create a second draft.
+        if @case_contact.update(case_contact_params)
+          # discard_path travels with the id: the Discard control is server-rendered on `persisted?`,
+          # and an autosave never re-renders the page, so without this it stayed hidden until a reload.
+          render json: {
+            id: @case_contact.id,
+            form_action: wizard_path(steps.first, case_contact_id: @case_contact.id),
+            discard_path: discard_draft_case_contact_path(@case_contact)
+          }, status: :created
+        else
+          render json: @case_contact.errors.full_messages, status: :unprocessable_content
+        end
+      end
+      format.html do
+        # A real submit, so hold it to the step's validations exactly as #update does. A failure
+        # persists nothing, which is the point: no draft for a form that was never valid.
+        params[:case_contact][:status] = CaseContact.statuses[steps.first]
+        if @case_contact.update(case_contact_params)
+          finish_editing
+        else
+          prepare_form
+          render :details, status: :unprocessable_content
+        end
+      end
+    end
+  end
 
   def show
     authorize @case_contact
@@ -42,6 +100,10 @@ class CaseContacts::FormController < ApplicationController
 
   private
 
+  def set_active_nav
+    @active_nav = "contacts"
+  end
+
   def set_case_contact
     @case_contact = CaseContact
       .includes(:creator, :contact_topic_answers)
@@ -53,12 +115,9 @@ class CaseContacts::FormController < ApplicationController
     contact_types = get_contact_types.decorate
     @grouped_contact_types = group_contact_types_by_name(contact_types)
     @contact_topics = get_contact_topics
-
-    if !@case_contact.active? && @case_contact.contact_topic_answers.empty?
-      if @contact_topics.present?
-        @case_contact.contact_topic_answers.create
-      end
-    end
+    # No pre-built blank answer: the Notes checklist lists every topic and creates an answer
+    # only when a topic is checked (contact-topics controller). A seeded blank row would just
+    # orphan a nil-topic answer.
   end
 
   def get_casa_cases
@@ -109,6 +168,9 @@ class CaseContacts::FormController < ApplicationController
     update_volunteer_address(@case_contact)
     flash[:notice] = message
     if @case_contact.metadata["create_another"]
+      # "Submit & add another" reopens a fresh form, taking the user off the list -- so surface a
+      # link back to the case-contacts list (there's no per-contact show page) where it now appears
+      flash[:notice_action] = {"label" => "View case contacts", "path" => case_contacts_path}
       redirect_to new_case_contact_path(params: {draft_case_ids:, ignore_referer: true})
     else
       redirect_back_to_referer(fallback_location: case_contacts_path(success: true))
@@ -122,10 +184,16 @@ class CaseContacts::FormController < ApplicationController
   end
 
   def update_volunteer_address(case_contact)
-    return unless case_contact.volunteer_address.present? && !case_contact.address_field_disabled?
+    volunteer = case_contact.volunteer
+    return unless volunteer && case_contact.volunteer_address.present?
 
-    address = case_contact.volunteer.address || case_contact.volunteer.build_address
-    address.update(content: case_contact.volunteer_address)
+    address = volunteer.address || volunteer.build_address
+    parts = case_contact.submitted_address_parts
+    if parts.values.any?(&:present?)
+      address.update(parts)
+    else
+      address.update(content: case_contact.volunteer_address)
+    end
   end
 
   # Makes a copy of the draft for all selected cases not including the first one. The draft becomes the contact for
@@ -163,5 +231,15 @@ class CaseContacts::FormController < ApplicationController
 
   def remove_nil_draft_ids
     params[:case_contact][:draft_case_ids] -= [""] if params.dig(:case_contact, :draft_case_ids)
+  end
+
+  # Pre-select the case(s) the user arrived with, so a contact started from a case page is already
+  # pointed at it. Moved here with #new.
+  def build_draft_case_ids(casa_cases)
+    return params[:draft_case_ids] if params[:draft_case_ids].present?
+    return casa_cases.where(id: params.dig(:case_contact, :casa_case_id)).pluck(:id) if params.dig(:case_contact, :casa_case_id).present?
+    return [casa_cases.first.id] if casa_cases.count == 1
+
+    []
   end
 end

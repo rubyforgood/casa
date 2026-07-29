@@ -1,59 +1,107 @@
-<div class="title-wrapper pt-30">
-  <div class="row align-items-center">
-    <div class="col-md-6">
-      <div class="col-sm-12 dashboard-table-header mb-30">
-        <h1>Other Duties</h1>
-        <% if current_user.volunteer? %>
-          <%= link_to new_other_duty_path, class: "main-btn btn-sm primary-btn btn-hover" do %>
-            <i class="lni lni-plus"></i>
-            New Duty
-          <% end %>
-        <% end %>
+<% content_for :page_title, "Other duties" %>
+<%# other_duties#index on casa_app. A flat, most-recent-first log of duty entries (an admin sees
+    every org volunteer's, a supervisor their active volunteers', a volunteer only their own).
+    Mirrors the learning-hours roster: a TomSelect volunteer type-ahead (searchable-select) for
+    supervisors/admins + Pagy. The "Other duties" heading, the "New duty" link, and the notes text
+    are spec-locked. %>
+<% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top" %>
+<% td = "px-4 py-3 align-top text-sm text-slate-700" %>
+<% is_volunteer = current_user.volunteer? %>
+
+<div class="px-4 py-6 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h1 class="text-2xl font-bold tracking-tight text-slate-900">Other duties</h1>
+        <p class="mt-1 text-sm text-slate-500"><%= is_volunteer ? "Log time you spend on work that isn't a case contact." : "Review the non-case-contact time your volunteers have logged." %></p>
       </div>
+      <% if is_volunteer %>
+        <%= link_to new_other_duty_path, class: button_classes(:primary) do %><i class="bi bi-plus-lg" aria-hidden="true"></i> New duty<% end %>
+      <% end %>
     </div>
-  </div>
-</div>
-<div class="tables-wrapper">
-  <div class="row">
-    <div class="col-lg-12">
-      <div class="card-style mb-30">
-        <% if @volunteer_duties.empty? %>
-          There are no duties to display!
-        <% else %>
-          <% @volunteer_duties.each do |volunteer| %>
-            <% if volunteer[:other_duties].any? %>
-                <% unless current_user.id == volunteer[:volunteer].id %>
-                  <%= link_to(volunteer[:volunteer].display_name, volunteer_path(volunteer[:volunteer].id)) %>
-                <% end %>
-                <div class="table-wrapper table-responsive">
-                  <table class="table">
-                    <thead>
-                    <tr>
-                      <th>Duties Occurred</th>
-                      <th>Created</th>
-                      <th>Duration</th>
-                      <th>Title</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <% volunteer[:other_duties].decorate.each do |duty| %>
-                      <tr>
-                      <td><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
-                      <td><%= I18n.l(duty.created_at, format: :full, default: nil) %></td>
-                      <td><%= duty.duration_in_minutes %></td>
-                      <td><%= duty.truncate_notes %></td>
-                      <% if current_user.volunteer? %>
-                        <td><%= link_to "Edit", edit_other_duty_path(duty) %></td>
-                      <% end %>
-                      </tr>
-                    <% end %>
-                    </tbody>
-                  </table>
-                </div>
+
+    <% unless is_volunteer %>
+      <%= form_with url: other_duties_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 sm:max-w-xs" do %>
+        <select name="search" aria-label="Search volunteers" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
+          <option value=""></option>
+          <% @roster_names.each do |name| %>
+            <option value="<%= name %>" <%= "selected" if name == params[:search] %>><%= formatted_name(name) %></option>
+          <% end %>
+        </select>
+        <noscript><%= submit_tag "Search", class: "#{button_classes(:primary)} mt-2" %></noscript>
+      <% end %>
+    <% end %>
+
+    <%# Desktop table (md+) %>
+    <div class="hidden overflow-hidden rounded-2xl border border-slate-200 bg-white pt-2 shadow-sm md:block">
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-100">
+              <% unless is_volunteer %><th class="<%= th %>">Volunteer</th><% end %>
+              <th class="<%= th %>">Occurred</th>
+              <th class="<%= th %>">Duration</th>
+              <th class="<%= th %>">Notes</th>
+              <% if is_volunteer %><th class="<%= th %>"><span class="sr-only">Actions</span></th><% end %>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-50">
+            <% if @other_duties.any? %>
+              <% @other_duties.each do |duty| %>
+                <% decorated = duty.decorate %>
+                <tr class="hover:bg-slate-50/70">
+                  <% unless is_volunteer %><td class="<%= td %>"><%= link_to formatted_name(duty.creator.display_name), edit_volunteer_path(duty.creator, from: "other_duties"), class: "font-medium #{name_link_class}" %></td><% end %>
+                  <td class="<%= td %> whitespace-nowrap"><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></td>
+                  <td class="<%= td %> whitespace-nowrap"><%= decorated.duration_in_minutes %></td>
+                  <td class="<%= td %> max-w-md"><%= decorated.truncate_notes %></td>
+                  <% if is_volunteer %>
+                    <td class="px-4 py-3 text-right whitespace-nowrap align-top"><%= link_to edit_other_duty_path(duty), class: ghost_class do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %></td>
+                  <% end %>
+                </tr>
+              <% end %>
+            <% else %>
+              <tr>
+                <td colspan="4" class="px-4 py-14 text-center">
+                  <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-clipboard-check text-xl" aria-hidden="true"></i></div>
+                  <p class="mt-3 text-sm font-semibold text-slate-900">No duties to show</p>
+                  <p class="mt-1 text-sm text-slate-500"><%= params[:search].present? ? "No duties match your search." : "Logged duties will appear here." %></p>
+                </td>
+              </tr>
             <% end %>
-          <% end %>
-        <% end %>
+          </tbody>
+        </table>
       </div>
+      <%= render "shared/pagination", pagy: @pagy %>
     </div>
+
+    <%# Mobile cards (below md) %>
+    <ul class="space-y-3 md:hidden">
+      <% if @other_duties.any? %>
+        <% @other_duties.each do |duty| %>
+          <% decorated = duty.decorate %>
+          <li class="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+            <div class="flex items-start justify-between gap-3">
+              <div>
+                <% unless is_volunteer %><p class="text-sm"><%= link_to formatted_name(duty.creator.display_name), edit_volunteer_path(duty.creator, from: "other_duties"), class: "font-medium #{name_link_class}" %></p><% end %>
+                <p class="<%= is_volunteer ? "text-sm font-semibold text-slate-900" : "mt-0.5 text-xs text-slate-500" %>"><%= I18n.l(duty.occurred_at, format: :full, default: nil) %></p>
+              </div>
+              <% if is_volunteer %>
+                <%= link_to edit_other_duty_path(duty), "aria-label": "Edit duty", class: "#{ghost_class} -mr-1 -mt-1 flex-none" do %><i class="bi bi-pencil" aria-hidden="true"></i> Edit<% end %>
+              <% end %>
+            </div>
+            <dl class="mt-2 space-y-2">
+              <div class="flex justify-between gap-4"><dt class="text-xs text-slate-500">Duration</dt><dd class="text-sm text-slate-700"><%= decorated.duration_in_minutes %></dd></div>
+              <div><dt class="text-xs text-slate-500">Notes</dt><dd class="mt-0.5 text-sm text-slate-700"><%= decorated.truncate_notes %></dd></div>
+            </dl>
+          </li>
+        <% end %>
+      <% else %>
+        <li class="rounded-2xl border border-slate-200 bg-white p-8 text-center shadow-sm">
+          <div class="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-slate-100 text-slate-400"><i class="bi bi-clipboard-check text-xl" aria-hidden="true"></i></div>
+          <p class="mt-3 text-sm text-slate-500"><%= params[:search].present? ? "No duties match your search." : "Logged duties will appear here." %></p>
+        </li>
+      <% end %>
+    </ul>
+    <% if @pagy.count.positive? %><div class="mt-4 md:hidden"><%= render "shared/pagination", pagy: @pagy %></div><% end %>
   </div>
 </div>
