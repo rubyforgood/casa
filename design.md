@@ -132,6 +132,61 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
   `aria-hidden`.
 - **Motion**: respect `prefers-reduced-motion` (`motion-reduce:` variants).
 
+**Measured token contrast on white** (computed from the built oklch tokens and cross-checked
+against axe's own numbers — do not eyeball these, and do not assume a `-600` is safe):
+
+| token | ratio | text (4.5:1) | icon/border (3:1) |
+|---|---|---|---|
+| `slate-400` | 2.63:1 | no | no |
+| `slate-500` | 4.77:1 | yes | yes |
+| `amber-600` | 3.19:1 | **no** | yes |
+| `amber-700` | 5.05:1 | yes | yes |
+| `emerald-600` | 3.67:1 | **no** | yes |
+| `emerald-700` | 5.37:1 | yes | yes |
+| `rose-600` | 4.51:1 | yes (barely) | yes |
+| `rose-700` | 6.06:1 | yes | yes |
+
+So `emerald-600`/`amber-600` are fine on a **decorative `aria-hidden` icon** but fail as
+**text**: use `-700` for any status word ("Active", "+3 vs last month"). Watch the mixed
+pattern `<span class="text-emerald-600"><i …></i> Active</span>` — the span colours the word
+too, so it is text, not an icon. Keep a +/- pair on the same step so the two read at the
+same weight.
+
+**Heading order** (axe `heading-order`, and one `h1` per page above):
+- A **subtitle/caption under the page `h1` is a `<p>`**, never a small heading. An `<h6>`
+  used for "Case number: X" or "Create a court date for all cases in a group." skips h2–h5
+  and fails. Small-and-grey is a type decision (`text-sm text-slate-500`), not a level.
+- A **`<dt>` is already the term** — never nest a heading inside it. `<dt><h6>Judge:</h6></dt>`
+  both skipped levels and doubled the semantics.
+- A **card partial shared by a grouped index and a flat list needs a caller-controlled
+  level**. `case_contacts/_case_contact` takes `heading_level` (default 3): `#index` nests
+  cards under an `<h2>` case-number section, `#drafts` has no grouping level and passes 2.
+
+**A `<label for>` does not name a custom element.** `label`/`for` only associates with
+form-associated elements, so `<trix-editor role="textbox">` (and any custom element with an
+ARIA input role) is left nameless — axe `aria-input-field-name` — even with a perfectly
+correct visible `<label>` next to it. Set `aria: {label: …}` on the element itself. Same
+remedy where a real `<label for>` would be actively wrong: the emancipation checklist inputs
+are driven by JS that sets checked state after an AJAX save, so associating a label would
+toggle natively on top of it — they carry `aria-label` and keep the label unassociated.
+
+**Links inside a text block need more than colour.** `brand-600` on `slate-900` body text is
+2.83:1 (3:1 required), so a case-number link inside an `<h1>`/paragraph gets `underline
+underline-offset-2` (axe `link-in-text-block`).
+
+**Scrollable regions must be keyboard-reachable.** Trix ships
+`.trix-button-row { flex-wrap: nowrap; overflow-x: auto }`, a scroll container that is not
+focusable (axe `scrollable-region-focusable`). `tailwind.css` overrides it to wrap instead.
+
+**Auditing caveat:** axe only sees the **rendered** DOM, so a page with an empty collection
+audits clean and hides real defects — a first whole-app pass missed unlabelled emancipation
+checkboxes and both org-settings status chips purely because no categories/contact topics
+were seeded. Seed at least one row of every repeating region before believing a clean result.
+Likewise, a page that 500s reports `document-title` + `html-has-lang` + `landmark-one-main` +
+`region`: that combination means you are auditing a layout-less Rails error page, not a
+finding. Capybara then re-raises the server error on the *next* `visit`, so the exception is
+reported against the following page.
+
 ## Components
 
 ### Buttons

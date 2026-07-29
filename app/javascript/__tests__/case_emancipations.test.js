@@ -17,11 +17,11 @@ beforeEach(() => {
   <div class="card card-container">
     <div class="card-body">
         <div>
-          <h6 class="emancipation-category no-select" id="category-under-test" data-is-open='false'>
+          <h2 class="emancipation-category no-select" id="category-under-test" data-is-open='false'>
             <input type="checkbox" class="emancipation-category-check-box" value="1">
             <label>Youth has housing.</label>
               <span class="category-collapse-icon" id="icon-under-test">+</span>
-          </h6>
+          </h2>
           <div
             class="category-options"
             id="category-options-under-test"
@@ -31,11 +31,11 @@ beforeEach(() => {
                 <label>With Friend</label>
               </div>
           </div>
-          <h6 class="emancipation-category no-select" id="category-control" data-is-open='false'>
+          <h2 class="emancipation-category no-select" id="category-control" data-is-open='false'>
             <input type="checkbox" class="emancipation-category-check-box" value="1">
             <label>Youth has housing.</label>
               <span class="category-collapse-icon">+</span>
-          </h6>
+          </h2>
           <div
             class="category-options"
             id="category-options-control"

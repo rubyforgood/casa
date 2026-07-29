@@ -227,3 +227,15 @@ dialog[data-modal-target="dialog"] {
 @media (max-width: 640px) {
   dialog[data-modal-target="dialog"] { top: 18vh; }
 }
+
+/* ------------------------------------------------------------------
+   Trix toolbar. Trix ships `.trix-button-row { flex-wrap: nowrap; overflow-x: auto }`,
+   a scrollable region that is not itself focusable -- axe's
+   scrollable-region-focusable (serious) flags it, and on narrow screens the
+   buttons hide behind a scrollbar-less horizontal scroll. Let the row wrap
+   instead: no scroll container, so every button stays reachable.
+------------------------------------------------------------------ */
+trix-toolbar .trix-button-row {
+  flex-wrap: wrap;
+  overflow-x: visible;
+}

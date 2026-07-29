@@ -1,6 +1,7 @@
 <%# Volunteer import panel (casa_app). File id volunteer-file + button id volunteer-import-button
     are driven by the global src/import.js (enable-on-select + localStorage persistence across the
     SMS-opt-in reload). %>
+<% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
 <% file_input = "block w-full rounded-lg border border-slate-300 text-sm text-slate-900 shadow-sm file:mr-4 file:border-0 file:border-r file:border-slate-200 file:bg-slate-50 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-slate-700 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <div class="space-y-5">
   <div>
@@ -19,7 +20,10 @@
         <li><strong>Do not</strong> change any of the values in the first line of the example CSV file.</li>
         <li>Then click "Import volunteers CSV" to import your volunteers. <strong>This will email the new volunteers asking them to log in.</strong></li>
       </ul>
-      <%= f.file_field :file, id: "volunteer-file", accept: "text/csv", class: file_input %>
+      <div>
+        <%= f.label :file, "CSV file", for: "volunteer-file", class: label_class %>
+        <%= f.file_field :file, id: "volunteer-file", accept: "text/csv", class: file_input %>
+      </div>
       <%= render "sms_opt_in_modal", form: f if @sms_opt_in_warning == "volunteer" %>
       <div>
         <%= button_tag id: "volunteer-import-button", data: {disable_with: "Importing\u2026"}, class: button_classes(:primary) do %>

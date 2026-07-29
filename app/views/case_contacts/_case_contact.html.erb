@@ -5,7 +5,9 @@
     space-y-4 (a child y-margin overrides the zero-specificity space-y and collapses the gap).
     Topic answers + notes live in ONE native <details> "Show details" disclosure
     (full text, no per-line truncation) so reading a note is one click, not many. Edit/Delete/
-    undelete keep data-turbo:false. %>
+    undelete keep data-turbo:false. The card title's heading level is a local
+    (heading_level, default 3): #index nests cards under an <h2> case-number section heading,
+    but #drafts has no grouping level and h1 -> h3 skips a level (axe heading-order). %>
 <% pill = "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium" %>
 <div class="container-fluid">
   <div class="full-card overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -13,7 +15,7 @@
       <%# Header row: contact groups as the title + status pills. The medium (how the contact
           happened) is a plain-text fact in the meta line below (subheading), not an icon. %>
       <div class="card-title flex flex-wrap items-center gap-2">
-        <h3 class="text-base font-semibold text-slate-900"><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %></h3>
+        <%= content_tag "h#{local_assigns.fetch(:heading_level, 3)}", class: "text-base font-semibold text-slate-900" do %><%= "[DELETE] " if policy(contact).restore? && contact.deleted? %><%= contact.decorate.contact_groups %><% end %>
         <% unless contact.active? %>
           <span class="<%= pill %> bg-slate-100 text-slate-600">Draft</span>
         <% end %>

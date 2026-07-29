@@ -41,11 +41,11 @@ RSpec.describe "court_dates/edit", type: :system do
       expect(page).to have_text court_report_due_date.strftime(displayed_date_format)
       expect(page).to have_text casa_case_number
 
-      court_date_court_orders = find(:xpath, "//h6[text()='Court orders:']/following-sibling::p[1]")
+      court_date_court_orders = find(:xpath, "//h2[text()='Court orders:']/following-sibling::p[1]")
       expect(court_date_court_orders).to have_text("There are no court orders associated with this court date.")
-      court_date_hearing_type = find(:xpath, "//dt[h6[text()='Hearing type:']]/following-sibling::dd[1]")
+      court_date_hearing_type = find(:xpath, "//dt[text()='Hearing type:']/following-sibling::dd[1]")
       expect(court_date_hearing_type).to have_text("None")
-      court_date_judge = find(:xpath, "//dt[h6[text()='Judge:']]/following-sibling::dd[1]")
+      court_date_judge = find(:xpath, "//dt[text()='Judge:']/following-sibling::dd[1]")
       expect(court_date_judge).to have_text("None")
 
       court_order = create(:case_court_order, casa_case: casa_case)

@@ -13,7 +13,7 @@
       <%= form_with(model: @court_date, url: bulk_court_dates_path, method: :post, local: true,
             data: {controller: "court-order-form", nested_form_wrapper_selector_value: ".nested-form-wrapper"}, class: "space-y-6") do |form| %>
         <%= render "shared/form_errors", resource: @court_date %>
-        <h6 class="text-sm text-slate-500">Create a court date for all cases in a group.</h6>
+        <p class="text-sm text-slate-500">Create a court date for all cases in a group.</p>
         <div>
           <%= form.label :case_group_id, "Case group", class: label_class %>
           <div class="relative">
