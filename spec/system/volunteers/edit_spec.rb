@@ -617,7 +617,7 @@ RSpec.describe "volunteers/edit", type: :system do
         expect(page).to have_current_path(edit_volunteer_path(volunteer), ignore_query: true)
         within(".notes") do
           expect(page).to have_text("Great job today.")
-          expect(page).to have_text(volunteer.supervisor.display_name)
+          expect(page).to have_text(NamePresentation.strip_honorific(volunteer.supervisor.display_name))
           expect(page).to have_text(I18n.l(current_date.to_date, format: :standard, default: ""))
         end
       end

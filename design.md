@@ -1176,6 +1176,43 @@ with no return is a flow trap).
 ### Tag
 "mine" etc.: `rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-600`.
 
+### Dashboard worklist ("Needs your attention")
+A prioritised list of things to act on. **One container: the section card.** Rows are a divided list
+(`ul.divide-y divide-slate-100`, `li` = `flex flex-wrap items-center justify-between gap-3 py-3`) --
+matching the in-card list on `casa_cases#show`. Each row is primary text (the record link, or a
+person's name as identifying `font-medium text-slate-800`), an optional `text-xs text-slate-500`
+context line, and **one** action on the right.
+
+**Do not give each row its own box.** All three dashboards shipped every row as a rose-tinted,
+rose-bordered `rounded-xl` panel with a filled 40px rose icon tile, nested inside the section card.
+Two things go wrong and both get worse with length:
+- **Card-in-card.** The section card is already the container; repeating it per row is the nested-card
+  anti-pattern Material calls out for continuous lists. Measured at six rows: 6 boxes, 12 rose-tinted
+  elements and 6 icon tiles, 528px tall vs 483px for the divided list.
+- **A tint on every row signals nothing.** Alert fill is for a *single* message (one banner). Applied
+  to a repeating collection it stops meaning "urgent" and just becomes the background, while fighting
+  the card it sits in. State severity **once** -- the section heading plus its count.
+
+**List or table?** A list when each row is "an entity + a little context + an action" (Polaris
+ResourceList). A table only when rows carry several comparable attributes worth scanning or sorting
+column-wise -- then use the numeric-column rules above. These worklists are the former.
+
+**One action button per row.** The supervisor dashboard had *two adjacent ghost buttons with the
+same href* -- "Send reminder" and "View", both the volunteer page. Two controls styled alike, sitting
+side by side, doing the same thing. Keep the verb (deep-linking it to the page where the action lives
+is fine and is what these dashboards do: "Assign a volunteer" -> the case page) and drop the second.
+
+A record link in the row text *plus* one action button is **not** the same defect, even when both
+resolve to the same page: they are different affordances in different positions, and the row reads
+"here is the case / here is what to do". So the dashboards differ on purpose -- a case number is a
+record link (`record_link_class`), while a person's name is identifying text
+(`font-medium text-slate-800`), because design.md prefers not to route users out of a flow via a
+name. Admin/volunteer rows therefore carry a record link + an action; supervisor rows carry a name +
+an action.
+
+The empty state keeps its single tinted panel -- that is one message, which is exactly what alert
+fill is for.
+
 ### Empty states (3 patterns)
 1. **Cold start** (no data yet): centered icon tile + heading + one-line explainer +
    primary/secondary CTAs. Never show all-zero stat cards.

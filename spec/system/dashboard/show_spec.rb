@@ -40,6 +40,38 @@ RSpec.describe "dashboard/show", type: :system do
     end
   end
 
+  context "the Needs your attention list" do
+    let(:supervisor) { create(:supervisor) }
+
+    before do
+      3.times do
+        vol = create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor)
+        kase = create(:casa_case, casa_org: supervisor.casa_org)
+        create(:case_assignment, volunteer: vol, casa_case: kase, active: true)
+      end
+      sign_in supervisor
+    end
+
+    it "is one divided list, not a stack of tinted boxes" do
+      visit root_path
+
+      section = find("[aria-labelledby='attention-heading']")
+      expect(section).to have_css("ul.divide-y li", count: 3)
+
+      # Each row used to carry its own rose border, rose fill and filled 40px icon tile, nested
+      # inside this card -- at any length that reads as a stack of alert banners, and a tint on every
+      # row signals nothing. Severity is stated once, by the heading and the count.
+      expect(section).to have_no_css("li[class*='bg-rose']")
+      expect(section).to have_no_css("li[class*='border-rose']")
+      expect(section).to have_no_css("li[class*='rounded']")
+      expect(section).to have_no_css("li span.h-10")
+
+      # One control per row, and the name beside it is identifying text rather than a second link to
+      # the same page.
+      section.all("li").to_a.each { |row| expect(row.all("a").size).to eq 1 }
+    end
+  end
+
   context "admin user" do
     before do
       sign_in casa_admin

@@ -74,22 +74,25 @@
         <% if @dashboard.needs_attention.any? %><span class="text-sm text-slate-500"><%= pluralize(@dashboard.needs_attention.size, "volunteer") %></span><% end %>
       </div>
       <% if @dashboard.needs_attention.any? %>
-        <ul class="space-y-2.5">
+        <%# A divided list in ONE container. Every row used to be its own rose-tinted, rose-bordered
+            box with a filled 40px icon tile, nested inside this card: at any length that reads as a
+            stack of alert banners rather than a worklist, and a tint applied to every row stops
+            signalling anything. Severity is stated once, by the section heading and count. Matches
+            the in-card list on casa_cases#show. %>
+        <ul class="divide-y divide-slate-100">
           <% @dashboard.needs_attention.each do |row| %>
-            <li class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-100 bg-rose-50/40 px-4 py-3">
-              <div class="flex items-center gap-3">
-                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-                <div>
-                  <div class="font-semibold text-slate-800"><%= display_person(row.volunteer) %></div>
-                  <div class="text-xs text-slate-500"><%= pluralize(row.cases_count, "active case") %> · last contact <%= row.last_contact_label.downcase %></div>
-                </div>
+            <li class="flex flex-wrap items-center justify-between gap-3 py-3">
+              <div class="min-w-0">
+                <%# Identifying text, not a link: design.md prefers not to route people out of a flow
+                    via a name, and the row already has one control. The old row had TWO buttons with
+                    the same href ("Send reminder" and "View", both the volunteer page) -- linking the
+                    name as well would just have moved that duplication rather than removed it. %>
+                <div class="font-medium text-slate-800"><%= display_person(row.volunteer) %></div>
+                <div class="mt-0.5 text-xs text-slate-500"><%= pluralize(row.cases_count, "active case") %> · last contact <%= row.last_contact_label.downcase %></div>
               </div>
-              <div class="flex items-center gap-2">
-                <%= link_to edit_volunteer_path(row.volunteer), class: ghost_class do %>
-                  <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
-                <% end %>
-                <%= link_to edit_volunteer_path(row.volunteer), "aria-label": "View #{display_person(row.volunteer)}", class: ghost_class do %><i class="bi bi-eye" aria-hidden="true"></i> View<% end %>
-              </div>
+              <%= link_to edit_volunteer_path(row.volunteer), class: ghost_class do %>
+                <i class="bi bi-bell" aria-hidden="true"></i> Send reminder
+              <% end %>
             </li>
           <% end %>
         </ul>

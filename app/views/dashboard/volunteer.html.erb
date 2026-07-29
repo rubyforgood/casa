@@ -52,15 +52,13 @@
           <h2 id="attention-heading" class="text-base font-semibold text-slate-900">Needs your attention</h2>
           <span class="text-sm text-slate-500"><%= pluralize(@dashboard.needs_attention.size, "case") %></span>
         </div>
-        <ul class="space-y-2.5">
+        <%# Divided list in ONE container -- see the note on dashboard/supervisor. %>
+        <ul class="divide-y divide-slate-100">
           <% @dashboard.needs_attention.each do |row| %>
-            <li class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-100 bg-rose-50/40 px-4 py-3">
-              <div class="flex items-center gap-3">
-                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-exclamation-triangle" aria-hidden="true"></i></span>
-                <div>
-                  <div class="font-semibold text-slate-800"><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: record_link_class %></div>
-                  <div class="text-xs text-slate-500"><%= row.last_contact_label %></div>
-                </div>
+            <li class="flex flex-wrap items-center justify-between gap-3 py-3">
+              <div class="min-w-0">
+                <div><%= link_to row.casa_case.case_number, casa_case_path(row.casa_case), class: "font-medium #{record_link_class}" %></div>
+                <div class="mt-0.5 text-xs text-slate-500"><%= row.last_contact_label %></div>
               </div>
               <%= link_to new_case_contact_path, class: ghost_class do %>
                 <i class="bi bi-plus-lg" aria-hidden="true"></i> Log a contact
