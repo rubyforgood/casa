@@ -30,17 +30,35 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     select hearing_type.name, from: "Hearing type"
 
     click_on "Add a court order"
-    text_area = first(:css, "textarea").native
-    text_area.send_keys(court_order_text)
+    # Use Capybara's finder rather than caching a raw Selenium reference: the court-order row is
+    # cloned from a <template> by the court-order-form controller, so a `.native` handle grabbed
+    # from `first` while that insertion is still settling goes stale, and send_keys then fails with
+    # "Node with given id does not belong to the document". find/#set re-resolves and waits.
+    find("textarea[aria-label='Court order text']").set(court_order_text)
     page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
     within ".top-page-actions" do
       click_on "Create"
     end
 
+    # Wait for the create to land before navigating away. `click_on` does not wait for the POST
+    # and its redirect, so the navigation could still be in flight when the `visit` below fires;
+    # whichever won decided which page the assertions ran against. The group holds one case, so
+    # the flash names one court date.
+    expect(page).to have_text("1 court date created!")
+
     visit casa_case_path(casa_case)
-    expect(page).to have_content(hearing_type.name)
-    expect(page).to have_content(court_order_text)
+
+    # Anchor on the case page before asserting its contents: hearing_type.name also appears in
+    # the bulk form's "Hearing type" <select>, so a bare have_content could be satisfied by the
+    # page we just left and never wait for this one.
+    expect(page).to have_css("h1", text: "Case #{casa_case.case_number}")
+
+    # Scoped to the elements that actually carry these values -- the court-date row link
+    # ("<date> - <hearing type>") and the court-orders table -- so no <option> or unrelated copy
+    # can satisfy them.
+    expect(page).to have_css("a", text: hearing_type.name)
+    expect(page).to have_css("td", text: court_order_text)
     travel_back
   end
 end
