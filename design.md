@@ -596,6 +596,27 @@ select + Copy button with a Dialog confirm (the `copy-court-orders` controller P
 `copy_court_orders`, then reloads so the copied orders and the flash show).
 
 ### Autosave wizard form (case-contact)
+
+**Bind the autosave on the FORM, never per field.** `data-action="input->autosave#save"` on the
+`<form>`: `input` bubbles and fires for every control type -- text, number, date, select, checkbox,
+radio -- so one action covers the whole form and cannot be forgotten when a field is added. Per-field
+triggers produced a genuinely confusing form: only notes, topic answers and expense descriptions saved
+themselves, so an edit to duration or medium was **silently dropped** when the user navigated away --
+*unless* they also happened to touch one of those three, because an autosave posts the **entire** form
+and therefore committed everything. Whether your work persisted depended on which field you touched
+last. Measured before the fix: edit the duration, wait past the debounce, leave -> the old value; edit
+the duration then type one character in notes -> both saved.
+
+Because the form autosaves in full, it needs **no Cancel and no unsaved-changes warning** -- the two
+coherent models are "everything autosaves" (Google Docs / Notion / Linear: navigation is the exit) and
+"explicit save" (GitHub / Jira: Cancel plus a `beforeunload` + `turbo:before-visit` guard when dirty).
+This form is the first. A partially-autosaving form is neither, and is the state to avoid.
+
+**Testing an autosave: one interaction per example.** The "Saved!" alert lingers ~3s, so a second
+interaction in the same example will match the PREVIOUS save's alert and let the assertion read the
+database before its own 2s debounce has elapsed -- which reads as "checkboxes don't autosave" when they
+do. Wait on the alert (`within "#contact-form-notes" { find 'small[role=alert]', text: "Saved!" }`),
+then assert the record.
 The case-contact form (`case_contacts/form/details`, a Wicked single-step wizard) is the
 reference for a long **autosave** form on the shell. Render it by setting `layout "casa_app"` on
 the controller — `render_wizard` / `render step` pick it up, while the autosave JSON responses

@@ -39,7 +39,6 @@
       placeholder: "Enter other expense details",
       rows: 2,
       class: "expense-describe-input block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none",
-      data: {action: "input->autosave#save"},
       **field_error_attrs(form.object, :other_expenses_describe, id: describe_error_id)
     ) %>
     <%= field_error(form.object, :other_expenses_describe, id: describe_error_id) %>
