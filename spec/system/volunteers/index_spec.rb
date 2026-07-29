@@ -55,6 +55,38 @@ RSpec.describe "volunteers/index", type: :system do
     end
   end
 
+  describe "return path when reached from the supervisors roster" do
+    before { sign_in admin }
+
+    it "offers a way back, and keeps it across a filter change and a trip to a volunteer", :js do
+      supervisor = create(:supervisor, casa_org: organization)
+      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor,
+        casa_org: organization, display_name: "Wilhelmina Fitzgerald")
+
+      visit volunteers_path(supervisor: supervisor.id, from: "supervisors")
+      expect(page).to have_link("Back to supervisors", href: supervisors_path)
+
+      # A filter change re-submits only the filter fields, so the origin has to be carried through.
+      select "All", from: "Status"
+      # Wait on the new URL, not on the back link: the link exists on the page we came from too, so
+      # it cannot tell us the auto-submit has landed.
+      expect(page).to have_current_path(/status=all/, url: true)
+      expect(page).to have_link("Back to supervisors")
+
+      # ...and the next hop has to come back to this list rather than the unfiltered roster.
+      within("#volunteers") { click_link "Wilhelmina Fitzgerald" }
+      click_link "Back to volunteers"
+      expect(page).to have_link("Back to supervisors")
+    end
+
+    it "shows no back link when reached from the nav" do
+      visit volunteers_path
+
+      expect(page).to have_css("h1", text: "Volunteers")
+      expect(page).to have_no_link("Back to supervisors")
+    end
+  end
+
   describe "supervisor column" do
     it "displays the supervisor's name" do
       s = create(:supervisor, display_name: "Superduper Visor", casa_org: organization)

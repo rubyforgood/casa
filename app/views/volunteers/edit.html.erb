@@ -30,7 +30,9 @@
           <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to other duties
         <% end %>
       <% else %>
-        <%= link_to volunteers_path, class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
+        <%# Preserve a drill-through origin (e.g. from=supervisors + that supervisor's filter) so the
+            list we return to still offers its own way back. %>
+        <%= link_to volunteers_path({from: params[:from].presence, supervisor: params[:supervisor].presence}.compact), class: "inline-flex items-center gap-1 text-sm font-medium text-slate-500 hover:text-slate-700" do %>
           <i class="bi bi-chevron-left text-xs" aria-hidden="true"></i> Back to volunteers
         <% end %>
       <% end %>

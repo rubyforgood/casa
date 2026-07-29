@@ -1077,6 +1077,34 @@ Counts are also **dead ends unless they link**: point each one at the filtered l
 exists (`volunteers_path(supervisor:)`, `volunteers_path(supervisor:, transition: "yes")`). Colour
 and weight stay as *reinforcement* only -- the header names the column, so nothing is colour-only.
 
+**Do not colour the numeral to flag the actionable one.** The first version of the roster put the
+non-zero "Not attempting" count in `text-rose-700`. rose *is* the semantic "needs follow-up" token,
+but the system spends it on **status pills and danger buttons** -- not on bare coloured digits in a
+data cell, where it makes colour carry the meaning and reads as an error state rather than a figure.
+Emphasise with **weight** (`font-semibold text-slate-900`, muted `text-slate-500` at zero); the
+column header already says what the number is. If a count ever needs a genuine status treatment, that
+is a pill in its own status column, not a tinted numeral -- a pill in the numeric column would break
+the digit alignment the column exists for.
+
+**A count that links needs `record_link_class`, and the destination needs a way back.** These are
+record links in a links-only cell, so the brand colour is the cue: use
+`"font-medium #{record_link_class}"` and **not** a hand-rolled string with a persistent underline
+(that treatment is reserved for a record link sitting inline in body text, and hand-rolling it also
+loses the helper's focus ring). Drilling from a roster into a filtered list is a **flow trap** unless
+the destination offers a return -- the rule already stated under Names, and easy to miss because the
+destination here (`volunteers#index`) is itself a top-level nav page, so it must show the back link
+**only** when it was actually reached from somewhere:
+- Mark the origin with `from:` on the drill-through link -- the app's existing convention
+  (`volunteers/edit` already reads `from=other_duties` / `from_case_id`).
+- Render the documented chevron only when `params[:from]` says so. A page with top-right actions uses
+  the "title + actions" shape (back link + `h1 mt-2` as the left column), not `shared/_page_header`.
+- **Carry the origin through anything that re-renders the page**: a filter bar submits only its own
+  fields, so without a hidden `from` the back link vanishes the moment the user filters.
+  `shared/_pagination` is already safe (it merges `request.query_parameters`).
+- **Carry it one hop further**, onto the per-row links, or the next page returns to the *unfiltered*
+  list and strands the user again. Verified end to end: roster -> filtered list -> volunteer -> back
+  to the filtered list -> back to the roster, with the link absent when arriving from the nav.
+
 **Trade-off to check when converting pills to columns:** wrapping pills fit a narrow viewport;
 fixed columns do not. The roster table measured 341px (no scroll) as pills and 616px in a 341px
 viewport as six columns, i.e. the change *introduced* horizontal scrolling on mobile. A data table

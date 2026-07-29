@@ -6,6 +6,11 @@
 <% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
 <%= form_with url: volunteers_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "volunteer-filters mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+  <%# Keep the drill-through origin across a filter change, or the "Back to supervisors" link
+      disappears as soon as the user narrows the list. %>
+  <% if params[:from].present? %>
+    <%= hidden_field_tag :from, params[:from], id: nil %>
+  <% end %>
   <div class="col-span-2 lg:min-w-[16rem] lg:max-w-sm lg:flex-1">
     <%= label_tag :search, "Search", class: label_class %>
     <div class="relative">

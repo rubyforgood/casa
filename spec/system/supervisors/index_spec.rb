@@ -129,6 +129,18 @@ RSpec.describe "supervisors/index", type: :system do
       expect(row).to have_css("[data-stat='not-attempting']", text: "1")
     end
 
+    it "drills the volunteer count through to that supervisor's volunteers, with a way back" do
+      supervisor = create(:supervisor, display_name: "Drill Supervisor", casa_org: organization)
+      create(:volunteer, :with_cases_and_contacts, supervisor: supervisor, casa_org: organization)
+
+      visit supervisors_path
+      within("#supervisor-#{supervisor.id}-information") { find("[data-stat='volunteers'] a").click }
+
+      expect(page).to have_current_path(volunteers_path(supervisor: supervisor.id, from: "supervisors"), ignore_query: false)
+      # The drill-through must not be a dead end.
+      expect(page).to have_link("Back to supervisors", href: supervisors_path)
+    end
+
     it "shows a zero volunteer count for a supervisor with none" do
       supervisor = create(:supervisor, display_name: "Empty Supervisor", casa_org: organization)
 
