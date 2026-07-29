@@ -347,8 +347,11 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign volunteer"
 
-          assign_badge = page.find("[data-test='assignment-status']")
-          expect(assign_badge.text).to eq "Unassigned"
+          # A waiting matcher, not `page.find(...).text` + `eq`: the badge is updated
+          # asynchronously after the click, and reading .text snapshots whatever is rendered at
+          # that instant and compares it with a plain Ruby ==, so it never retries. exact_text
+          # keeps the original whole-string comparison.
+          expect(page).to have_css("[data-test='assignment-status']", exact_text: "Unassigned")
 
           expected_start_and_end_date = "August 29, 2020"
 
@@ -370,8 +373,11 @@ RSpec.describe "Edit CASA Case", type: :system do
 
           click_on "Unassign volunteer"
 
-          assign_badge = page.find("[data-test='assignment-status']")
-          expect(assign_badge.text).to eq "Unassigned"
+          # A waiting matcher, not `page.find(...).text` + `eq`: the badge is updated
+          # asynchronously after the click, and reading .text snapshots whatever is rendered at
+          # that instant and compares it with a plain Ruby ==, so it never retries. exact_text
+          # keeps the original whole-string comparison.
+          expect(page).to have_css("[data-test='assignment-status']", exact_text: "Unassigned")
         end
       end
 
