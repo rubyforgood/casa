@@ -11,13 +11,13 @@ class MileageRatesController < ApplicationController
   end
 
   def new
-    authorize CasaAdmin
     @mileage_rate = current_organization.mileage_rates.build
+    authorize @mileage_rate
   end
 
   def create
-    authorize CasaAdmin
     @mileage_rate = MileageRate.new(mileage_rate_params.merge(casa_org: current_organization))
+    authorize @mileage_rate
     if @mileage_rate.save
       redirect_to mileage_rates_path
     else
@@ -26,11 +26,11 @@ class MileageRatesController < ApplicationController
   end
 
   def edit
-    authorize CasaAdmin
+    authorize @mileage_rate
   end
 
   def update
-    authorize CasaAdmin
+    authorize @mileage_rate
 
     if @mileage_rate.update(mileage_rate_params)
       redirect_to mileage_rates_path
@@ -45,7 +45,9 @@ class MileageRatesController < ApplicationController
     params.require(:mileage_rate).permit(:effective_date, :amount, :is_active)
   end
 
+  # Scoped to the org: an unscoped find let an admin reach another org's rate, and a 404 is the
+  # right answer there rather than leaving it to the policy alone.
   def set_mileage_rate
-    @mileage_rate = MileageRate.find(params[:id])
+    @mileage_rate = current_organization.mileage_rates.find(params[:id])
   end
 end
