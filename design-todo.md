@@ -572,3 +572,32 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
   court date the right thing to surface on the main roster, or do they want the upcoming
   hearing's type/judge (sourced from court dates)? The answer decides whether to delete the dead
   `CasaCase` associations.
+
+## Part 2 — carried over from the casadesign merge (#7051)
+
+Verified still open against `main` at the time of writing.
+
+- [ ] **Re-enable 3 flaky case-contact system specs.** `edit_spec` "successfully edits case contact",
+  `contact_topic_answers` "removes an answer when its topic is unchecked", and `case_contacts_new_design`
+  "hides drafts when Hide drafts is checked" are `xit`'d with a FLAKY comment. They are non-deterministic
+  Selenium timing, not order-dependent state: the same seed passes and fails across runs, and each passes
+  in isolation. Per the repo policy they need a **GitHub tracking issue** whose number goes into the three
+  comments, then `xit` -> `it` once the race is fixed.
+- [ ] **Two view specs raise `SystemStackError`.** `spec/views/mileage_rates/index.html.erb_spec.rb:13`
+  and `spec/views/casa_admins/admins_table.html.erb_spec.rb:4`. Both templates render
+  `casa_org/_settings_frame` -> `_settings_rail`, which calls `edit_casa_org_path(current_organization)`;
+  `current_organization` is not stubbed in a view spec and recurses. Pre-existing, unrelated to the
+  design work, and still red on `main`.
+- [ ] **Sort is not a filter, but still lives on the filterrific form.** `Clear filters` therefore has
+  to carry `sorted_by` through by hand (`clear_filters_path`) so clearing does not silently reorder the
+  list. Moving the sort control off the filterrific form would remove that coupling — it is the last
+  standards gap in the filter bar.
+- [ ] **Emails do not show the chapter name consistently.** `layouts/mailer` prints it only when a
+  mailer sets `@casa_organization`. Devise mailers set nothing and `learning_hours_mailer` sets
+  `@casa_org`, so those fall back to the generic "Court Appointed Special Advocate (CASA)". Either set
+  `@casa_organization` everywhere or have the layout also read `@casa_org` / the resource's org.
+  Whether Devise emails *should* name the org is a product call.
+- [ ] **Contact types on the case-contact form are still an exposed grouped checkbox fieldset**, while
+  the filter and `casa_cases` new/edit use the searchable multiselect. Deliberate: it is that page's
+  primary required input and each row carries a per-type recency hint that does not survive collapsing
+  into chips. Revisit only if the recency hint can move into option subtext (as `casa_cases` does).
