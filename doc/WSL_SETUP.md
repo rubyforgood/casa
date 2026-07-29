@@ -188,7 +188,7 @@ Casa's install will also install the correct version of Rails.
 -  `npm run build` compile javascript
 &ensp;&ensp;`npm run build:dev` to auto recompile for when you edit js files
 -  `npm run build:css` compile css
-&ensp;&ensp;`npm run build:css:dev` to auto recompile for when you edit sass files
+&ensp;&ensp;`npm run build:css:dev` to auto recompile for when you edit Tailwind styles or views
 
 ### Getting Started
 

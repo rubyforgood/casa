@@ -8,8 +8,8 @@
     "toc": "markdown-toc -i README.md",
     "build": "./bin/asset_bundling_scripts/build_js.js",
     "build:dev": "./bin/asset_bundling_scripts/build_js.js --watch",
-    "build:tailwind": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --minify",
-    "build:tailwind:dev": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --watch"
+    "build:css": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --minify",
+    "build:css:dev": "tailwindcss -i ./app/assets/stylesheets/tailwind.css -o ./app/assets/builds/tailwind.css --watch"
   },
   "dependencies": {
     "@babel/core": "^7.29.7",
@@ -22,6 +22,7 @@
     "@rails/activestorage": "^8.1.300",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
+    "@tailwindcss/cli": "^4.3.2",
     "add-to-calendar-button": "^2.14.0",
     "datatables.net-dt": "^1.13.11",
     "esbuild": "^0.28.0",
@@ -32,20 +33,19 @@
     "popper.js": "^1.16.1",
     "strftime": "^0.10.3",
     "sweetalert2": "^11.3.5",
+    "tailwindcss": "^4.3.2",
     "tom-select": "^2.6.1",
     "trix": "^2.1.19"
   },
   "version": "0.1.0",
   "devDependencies": {
     "@babel/preset-env": "^7.29.7",
-    "@tailwindcss/cli": "^4.3.2",
     "faker": "^5.5.3",
     "jest": "^30.4.2",
     "jest-environment-jsdom": "^30.4.1",
     "markdown-toc": "^1.2.0",
     "standard": "^17.1.2",
-    "start-server-and-test": "^2.1.5",
-    "tailwindcss": "^4.3.2"
+    "start-server-and-test": "^2.1.5"
   },
   "standard": {
     "globals": [

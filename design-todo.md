@@ -537,9 +537,12 @@ CSV/XLSX exports, `preference_sets`, `android_app_associations`, and the `api/*`
     `devise_for`). Styled `devise/confirmations/new` and rebuilt `devise/invitations/new` on
     casa_auth — this also **fixes** the all-CASA password/invite pages, which had been rendering
     Tailwind views on the CSS-less Bootstrap devise shell (unstyled).
-  - Rewired the build off Bootstrap SCSS: dropped `build:css` / `build:css:dev` (package.json) +
-    the `css:` `Procfile.dev` process; pointed `bin/setup` + `bin/update` + the assets git hook at
-    `build:tailwind`.
+  - Rewired the build off Bootstrap SCSS: `build:css` / `build:css:dev` (package.json) now run the
+    Tailwind CLI instead of `sass`, and the `css:` `Procfile.dev` process became `tw:`.
+    (These were briefly renamed to `build:tailwind`, which broke the Heroku deploy —
+    `cssbundling-rails`' `css:build` hook shells out to `npm run build:css` by name. Renamed back,
+    and moved `@tailwindcss/cli` + `tailwindcss` into `dependencies` so a production install keeps
+    the CLI, same as `esbuild`.)
   - Verified: all 6 devise HTML pages render 200 on casa_auth; auth specs green; full
     request+view sweep adds **no** new failures.
   - `application.js` stays — `casa_app` + `casa_auth` still load it. Now-orphaned by these deletions
