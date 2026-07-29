@@ -16,8 +16,10 @@ new/redesigned screens use a Tailwind-only layout; untouched screens keep the
 Bootstrap `application` layout. Never load both CSS resets on the same page.
 
 - Tailwind source: `app/assets/stylesheets/tailwind.css` (CSS-first `@theme`).
-- Build: `npm run build:tailwind` (one-off) / `build:tailwind:dev` (watch); the `tw`
+- Build: `npm run build:css` (one-off) / `build:css:dev` (watch); the `tw`
   process in `Procfile.dev` runs the watcher. Output -> `app/assets/builds/`.
+  The name `build:css` is required — `cssbundling-rails`' `css:build` task (hooked
+  into `assets:precompile` on deploy) shells out to exactly that script.
 
 ## Foundations
 
@@ -1440,10 +1442,11 @@ The *why* behind the system, so choices aren't re-litigated or lost.
   `aria-label` on icon-only controls, visible `focus-visible` rings, `sr-only` table
   captions/labels, `role="status"`/`"alert"` on flashes, and `motion-reduce` on the
   drawer. The shell already meets this bar — keep new pages there.
-- **Build:** `npm run build:tailwind` (minified) or `build:tailwind:dev` (watch, the `tw`
+- **Build:** `npm run build:css` (minified) or `build:css:dev` (watch, the `tw`
   process in `Procfile.dev`). Class names are discovered via the `@source` globs in
   `tailwind.css`. The output `app/assets/builds/tailwind.css` is **gitignored** and built
-  on deploy — don't commit it.
+  on deploy — don't commit it. Keep the script named `build:css`: `cssbundling-rails`
+  runs `npm run build:css` during `assets:precompile`, so renaming it breaks the deploy.
 - **Tables are bespoke, not jQuery DataTables (reversed).** Theming DataTables couldn't
   match the dashboard tables or meet WCAG — its generated chrome fights the design system.
   Build tables in Tailwind instead (matching the dashboard): server-side filtering +
@@ -1469,7 +1472,7 @@ Repeatable steps for moving one screen off Bootstrap:
 6. **Keep behavior specs green.** When a spec is coupled to a presentational class, move
    it to a semantic hook (a `data-*` attribute) rather than weakening the assertion.
    Prefer system specs for new UI behavior (ADR 0006).
-7. **Verify:** `npm run build:tailwind`, run the page's specs, then `bin/lint`. Confirm the
+7. **Verify:** `npm run build:css`, run the page's specs, then `bin/lint`. Confirm the
    page fits at true 375 / 414 / 768 / 1024 / 1280 widths, measured with a CDP device-metrics
    override (`bin/measure-responsive.mjs`) rather than `--window-size` (headless Chrome clamps its minimum
    window to ~500px, so `--window-size=375` silently measures 500).
