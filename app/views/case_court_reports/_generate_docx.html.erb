@@ -41,7 +41,10 @@
         </div>
         <div>
           <%= form.label :end_date, "Ending at", class: label_class %>
-          <%= form.date_field :end_date, id: "end_date", value: Date.current, class: input_class %>
+          <%# value is the no-JS fallback only; the controller replaces it with today in the BROWSER's
+              zone on connect, because Date.current here is UTC (see court_report_controller). %>
+          <%= form.date_field :end_date, id: "end_date", value: Date.current,
+                data: {court_report_target: "endDate"}, class: input_class %>
         </div>
       </div>
     <% end %>

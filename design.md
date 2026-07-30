@@ -368,6 +368,23 @@ Placeholder ink is **`slate-500`**, like every other muted string -- `slate-400`
 placeholder is text. All 50 placeholder sites in `app/` already use `slate-500`; this token was the
 last `slate-400` placeholder left anywhere, and only in the doc.
 
+**A date field prefilled with "today" has to get it from the browser.** The app sets no
+`config.time_zone`, so `Date.current` is **UTC**: a server-rendered `value: Date.current` reads as
+**tomorrow** for anyone west of UTC in the evening (after 8pm in New York) and as **yesterday** for
+anyone east of it in the morning -- and yesterday silently drops today's records out of a range. Render
+`Date.current` as the no-JS fallback, then have the controller overwrite it on connect with today in the
+browser's zone (`new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10)`; a plain
+`toISOString()` is UTC and reintroduces the bug). Proven with a CDP timezone override: in
+`Pacific/Kiritimati` the server said 2026-07-30 and the field correctly held 2026-07-31.
+**A JS-set "today" cannot be asserted against `Date.current`** -- `travel_to` freezes Ruby's clock, not
+the browser's; specs compare against `browser_today` (`spec/support/browser_time_helpers.rb`).
+
+**A prefilled default that depends on another field can't be server-rendered.** Carry the per-record
+value on each `<option>` as a `data-` attribute and let the controller copy it across on `change`, reading
+the native `<select>` (which TomSelect keeps in sync) rather than TomSelect's internal option data -- as
+the court-report modal does for "Starting from" (each case's last hearing). Re-apply on every change, so
+switching records does not leave the previous record's default behind.
+
 ### Select
 A native `<select>`, but the browser's arrow is replaced with a Bootstrap-icon chevron so it
 looks the same across browsers and matches the app's other dropdowns (the cases-index filter
