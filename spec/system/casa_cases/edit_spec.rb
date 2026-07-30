@@ -42,7 +42,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       click_on "Edit case details"
       select "Submitted", from: "casa_case_court_report_status"
 
-      find(".ts-control").click
+      # Scoped: the page has a second TomSelect (the volunteer picker), so a bare .ts-control is ambiguous.
+      find("#contact-type-id-selector .ts-control").click
 
       page.all(".ts-dropdown-content input")
 
@@ -247,7 +248,8 @@ RSpec.describe "Edit CASA Case", type: :system do
       # The unset row still shows its prompt beside the real "Implementation status" label.
       expect(page).to have_text("Select a status")
 
-      find(".ts-control").click
+      # Scoped: the page has a second TomSelect (the volunteer picker), so a bare .ts-control is ambiguous.
+      find("#contact-type-id-selector .ts-control").click
 
       select_all_el = page.find("span[data-test=select-all-input]")
       # contact types load blank (nothing selected) by default
@@ -317,7 +319,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "Edit case details"
 
-        select volunteer.display_name, from: "case_assignment[volunteer_id]"
+        # The picker is a searchable-select; the helper drives TomSelect under :js and the plain
+        # native select under rack_test, since both kinds of example call this.
+        choose_typeahead_option(volunteer.display_name, select_css: "#case_assignment_casa_case_id")
 
         click_on "Assign volunteer"
       end

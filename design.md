@@ -34,6 +34,20 @@ Bootstrap `application` layout. Never load both CSS resets on the same page.
   - Label: `text-sm font-medium text-slate-700`
   - Muted / meta: `text-xs text-slate-500` (never `text-slate-400` for text — fails AA)
 
+**`text-xs` (12px) is chrome, not content.** It is the token for a status pill, a column header, a
+**stacked** field label sitting above its value, and the signed-in account line in the nav — short,
+glanceable strings. Anything the user actually *reads or transcribes* — an email address, a date, a
+person's name, a note — stays at `text-sm`, even inside a dense row. WCAG sets **no** minimum font
+size, so 12px `slate-500` is not a conformance failure (4.77:1, passes 1.4.3 at any size); this is a
+legibility floor, and it is where the major systems put theirs (Material reserves 12px for
+captions/labels, Polaris uses `bodySm` sparingly, GOV.UK warns off anything under 16px). Reported as
+"the volunteer email font looks too small … very difficult to read" one turn after an email was
+shrunk from `text-sm` to `text-xs`.
+
+**Fewer type sizes is not the goal — one treatment per role is.** Shrinking *content* to dedupe sizes
+trades a real problem (a control that read as metadata) for a worse one (content nobody can read). When
+a card reads flat, change the role mapping — weight and colour — not the size.
+
 ### Sentence case
 All UI copy — page titles, section headings, subtitles, table headers, field labels,
 buttons, badges and nav — uses **sentence case**: capitalise only the first word and
@@ -678,14 +692,14 @@ The subtext must be `""`, **not nil**: the option template substitutes it throug
 `casa_cases#new` additionally passes `render_option_subtext: false` (no case exists yet, so there is no
 recency to show).
 
-### Typeahead audit (all 13 TomSelect controls)
+### Typeahead audit (all 18 TomSelect controls)
 **A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
 without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
 stay in the control next to the new chip. `multiple_select_controller` has **two** init paths and only
 the grouped one had it, so every plain multiselect was affected -- contact types on the case-contacts
 filter, case_groups#new, and all four report filters -- while the single-selects were fine. Reported as
 "the letters the user types stay even after they have made a selection". Guarded by
-`spec/system/typeahead_controls_spec.rb`, which drives all 13 controls (type -> filter -> select ->
+`spec/system/typeahead_controls_spec.rb`, which drives all 18 controls (type -> filter -> select ->
 query cleared, chip rendered, native `<select>` updated) and asserts the count, so a new control has
 to be added to it.
 
@@ -699,6 +713,29 @@ rows before they have options; and `emancipation_checklists` is **volunteer-only
 admin to the dashboard.
 
 ### Searchable single-select
+**Every "assign a person / a case" picker is a type-ahead.** There are **six**, and they are siblings:
+supervisors#index per-row assign supervisor, `casa_cases/_volunteer_assignment` (volunteer -> this case),
+`supervisors/_manage_volunteers` (volunteer -> this supervisor), `volunteers/_manage_cases` (case -> this
+volunteer), `volunteers/_manage_supervisor` (supervisor -> this volunteer), `casa_cases/new` (volunteer at
+case creation). **Five** of them were still native `<select>`s a full turn *after* this rule was written
+and after the copy-court-orders picker was converted, and the user had to report it twice ("there are too
+many cases for the user to scroll through", then "the assigned volunteer to this case drop-down should be
+a Type ahead select field"). **When you convert one instance of a pattern, grep for its siblings in the
+same turn** -- `grep -rn "<select\|\.select \|select_tag" app/views` and check every hit whose options are
+a person or a case list. Short fixed lists (a 3-option status filter, org config like judges / hearing
+types / languages) stay native.
+
+Two person-list selects are deliberately **still native**, each for a concrete reason -- don't "fix" them
+without handling it:
+- `volunteers/index` bulk **Assign a supervisor** modal: here `value=""` means **"None"** (unassign), and
+  the theme hides empty-valued options in a menu (`.ts-dropdown .option[data-value=""] { display: none }`),
+  so converting it as-is would silently hide the None choice. It needs a non-empty sentinel first, and it
+  drives `disable-form` validation for a bulk write.
+- the **volunteer / supervisor filter selects** on reimbursements#index and the volunteers filter bar:
+  these belong to a filter bar with its own responsive grid and per-field widths (the learning-hours and
+  other-duties volunteer *filters* are searchable, so this is an inconsistency worth closing -- as a
+  filter-bar decision, not a drive-by).
+
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
 the `searchable-select` Stimulus controller (TomSelect single-select). A native dropdown is fine only
@@ -745,6 +782,14 @@ past a handful of people.
   (`left:-10000px`) and shows an empty item -- the field then reads as blank with the caret pushed ~1/3
   in. With it false the empty option is neither an item (input stays on-screen showing the placeholder,
   caret right after the icon) nor a menu row.
+- **An empty picker must LOOK disabled.** Put `disabled` on the `<select>` itself, not only on an
+  ancestor `<fieldset disabled>`: the fieldset makes every descendant inert but does **not** set the
+  select's own `disabled` property, which is what TomSelect reads at init to add `.disabled` to the
+  wrapper. tom-select ships no styling for that class either, so `tailwind.css` mirrors the native
+  `disabled:bg-slate-100 disabled:text-slate-500` (`.ts-wrapper.disabled .ts-control`, plus a
+  half-opacity caret). Without both, an "assign a volunteer" card with nothing to assign renders a
+  white, live-looking control that silently does nothing. Don't add `cursor: not-allowed` -- tom-select
+  forces `cursor: default !important` on a disabled control and wins.
 - **Disable the submit until a choice is made** (it now loads blank): pass **`toggle-submit-value="true"`**
   -- the controller disables the closest form's `[type=submit]` until an option is picked and re-disables
   on clear. Add `disabled:opacity-50 disabled:cursor-not-allowed` to that button.
@@ -1046,10 +1091,18 @@ metadata, then actions -- and each role gets exactly one treatment:
 | role | token |
 |---|---|
 | identity (name) | `text-sm font-medium` + `name_link_class` |
-| secondary identity (email) | `text-xs text-slate-500` |
+| secondary identity (email) | `text-sm text-slate-500` |
 | status | the pill (`text-xs font-medium` + tint) |
-| fact label / value | `font-medium text-slate-500` : `text-slate-800` at `text-xs` |
+| fact label / value | `font-medium text-slate-500` : `text-slate-800`, **both at `text-sm`** |
 | a **control's** label | the Label token, `text-sm font-medium text-slate-700` |
+
+Only the pill is `text-xs`; everything else in the row is 14px, with weight and colour carrying the
+role (measured on one row: 6 size/weight/colour combinations, each mapping to exactly one role).
+**Inline vs stacked:** an inline `dt: dd` pair keeps ONE size for label and value -- 12px against 14px
+on a shared baseline reads as ragged. The 12px label belongs to the **stacked** variant, where it sits
+*above* its value (`dt text-xs text-slate-500` / `dd mt-0.5 text-sm text-slate-700`, as in the
+volunteers-index mobile cards); there the size step is the hierarchy cue. Either way the value stays at
+`text-sm` (see Typography: 12px is chrome, not content).
 
 What made this card unparseable was not the *number* of styles but that two different roles shared
 one: the "Enable reimbursement" checkbox label sat at `text-xs font-medium text-slate-600` while the

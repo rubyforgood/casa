@@ -2,7 +2,7 @@ require "rails_helper"
 
 # Every TomSelect control: does typing filter, and after selecting is the typed text gone and the
 # value registered. Controls are found via their native <select> (page position is unreliable -- one
-# page has a control inside a closed <dialog>). Writes tmp/typeahead.txt.
+# page has a control inside a closed <dialog>). Every problem is named in the failure message.
 RSpec.describe "typeahead audit", :js, type: :system do
   let!(:organization) { create(:casa_org) }
   let!(:admin) { create(:casa_admin, casa_org: organization) }
@@ -139,6 +139,23 @@ RSpec.describe "typeahead audit", :js, type: :system do
       visit supervisors_path
       audit("supervisors#index assign", "select[name='supervisor_volunteer[supervisor_id]']", query: "Zeld", expect_option: "Zelda Zimmerman")
 
+      visit edit_casa_case_path(kase)
+      audit("casa_cases#edit assign volunteer", "#case_assignment_casa_case_id", query: "Aaro", expect_option: "Aaron Ackerman")
+
+      visit edit_volunteer_path(volunteer)
+      audit("volunteers#edit assign case", "#case_assignment_casa_case_id", query: "AAA", expect_option: "AAA-1111")
+
+      # A volunteer who already HAS a supervisor renders the current-supervisor branch, not the assign
+      # form -- so this one is audited on the unassigned volunteer.
+      visit edit_volunteer_path(unassigned)
+      audit("volunteers#edit assign supervisor", "#supervisor_volunteer_supervisor_id", query: "Zeld", expect_option: "Zelda Zimmerman")
+
+      visit edit_supervisor_path(supervisor)
+      audit("supervisors#edit assign volunteer", "select[name='supervisor_volunteer[volunteer_id]']", query: "Nadi", expect_option: "Nadia Nobody")
+
+      visit new_casa_case_path
+      audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman")
+
       visit case_court_reports_path
       # This picker lives inside the "Generate report" Dialog, so it does not exist on screen until
       # the modal is opened -- not a broken control, just one behind a trigger.
@@ -154,7 +171,7 @@ RSpec.describe "typeahead audit", :js, type: :system do
     end
 
     # Guards the inventory itself: a new TomSelect control should be added here too.
-    expect(@results.size).to(eq(13), "expected 13 controls, audited #{@results.size} -- one was added or removed")
+    expect(@results.size).to(eq(18), "expected 18 controls, audited #{@results.size} -- one was added or removed")
     failures = @results.reject { |(_, problems)| problems.empty? }
     expect(failures).to be_empty, "typeahead problems:\n" + failures.map { |l, p| "  #{l}: #{p.join("; ")}" }.join("\n")
   end

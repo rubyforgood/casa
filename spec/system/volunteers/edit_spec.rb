@@ -240,7 +240,9 @@ RSpec.describe "volunteers/edit", type: :system do
     visit edit_volunteer_path(volunteer)
 
     expect(page).not_to have_select("supervisor_volunteer[supervisor_id]", with_options: [deactivated_supervisor.display_name])
-    expect(page).to have_select("supervisor_volunteer[supervisor_id]", options: [active_supervisor.display_name])
+    # The leading "" is the blank option the searchable picker loads with -- it no longer pre-selects
+    # whichever supervisor happens to sort first.
+    expect(page).to have_select("supervisor_volunteer[supervisor_id]", options: ["", active_supervisor.display_name])
     expect(page).to have_content("Select a supervisor")
     expect(page).to have_content("Assign a supervisor")
   end

@@ -49,10 +49,12 @@
         <div class="mt-2 flex flex-wrap items-end gap-3">
           <div class="min-w-0 flex-1">
             <label for="case_assignment_casa_case_id" class="sr-only">Select a case</label>
-            <div class="relative">
-              <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {}, class: "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
-              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-            </div>
+            <%# Searchable: an org has hundreds of cases in two optgroups, so a native dropdown is a
+                scroll. The option labels embed the assigned volunteer names, so the search finds a case
+                by volunteer too. dropdownParent: body -- this card is `overflow-hidden`. Minimal class
+                only (the tom-select theme owns the control's border/padding). %>
+            <%= form.select :casa_case_id, grouped_options_for_assigning_case(@volunteer), {}, class: "block w-full",
+                  data: {controller: "searchable-select", "searchable-select-dropdown-parent-value": "body", "searchable-select-placeholder-value": "Search cases"} %>
           </div>
           <%= button_tag "Assign case", type: "submit", class: button_classes(:secondary) %>
         </div>
