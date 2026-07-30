@@ -633,6 +633,19 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 
+**Option subtext: no "never", and never nil.** The contact-type options carry a recency hint
+("Last logged 3 days ago"). A type that has never been logged shows **no subtext** -- a bare "never"
+repeated down the list is noise, not information. Two decorator methods had answered the same question
+differently (`last_time_used_with_cases` returned "never", `last_logged_hint_with_cases` returned nil
+for exactly this reason), and only the checkbox form used the fixed one, so the multi-select on
+`casa_cases#edit` kept showing "never" long after it was removed elsewhere. Consolidated onto the one
+method; the divergent twin is gone.
+
+The subtext must be `""`, **not nil**: the option template substitutes it through TomSelect's
+`escape()`, which stringifies nil to the literal **"null"** -- a worse bug than the one being fixed.
+`casa_cases#new` additionally passes `render_option_subtext: false` (no case exists yet, so there is no
+recency to show).
+
 ### Typeahead audit (all 13 TomSelect controls)
 **A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
 without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
