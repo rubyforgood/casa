@@ -342,11 +342,11 @@ RSpec.describe "Edit CASA Case", type: :system do
 
         it "shows an assignment start date and no assignment end date" do
           sign_in_and_assign_volunteer
-          assignment_start = page.find("[data-test='assignment-start']").text
-          assignment_end = page.find("[data-test='assignment-end']").text
 
-          expect(assignment_start).to eq("August 29, 2020")
-          expect(assignment_end).to be_empty
+          expect(page.find("[data-test='assignment-start']").text).to eq("August 29, 2020")
+          # An active assignment has no end date, so the pair is omitted entirely rather than rendered
+          # with an empty value -- which showed as "Unassigned:" with nothing after the colon.
+          expect(page).to have_no_css("[data-test='assignment-end']")
         end
       end
 

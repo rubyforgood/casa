@@ -1032,6 +1032,32 @@ label: light-dark-light on one line reads as broken. Keep the "Label:" wording (
 it) and reword derived text to be self-explanatory ("In care for over 8 years", not
 "(over 8 years ago)").
 
+**A label with nothing after it is a bug, not an empty state.** Omit the whole `dt`/`dd` pair when
+the value **cannot exist yet** -- the volunteer-assignment card rendered "Unassigned:" with an empty
+`dd` on every *active* assignment, leaving a hanging colon (and duplicating what the "Assigned" pill
+already said). Use the muted **"Not set"** value only where the field genuinely applies but is unfilled
+(as `casa_cases#show` does for a youth's date in care). Guard it by asserting no `dd` is blank, not by
+eye.
+
+**Keep a card to the type scale: two sizes, two weights, and let colour carry the role.** A person /
+assignment row is a resource-list item -- identity, muted secondary identity, a status pill, label:value
+metadata, then actions -- and each role gets exactly one treatment:
+
+| role | token |
+|---|---|
+| identity (name) | `text-sm font-medium` + `name_link_class` |
+| secondary identity (email) | `text-xs text-slate-500` |
+| status | the pill (`text-xs font-medium` + tint) |
+| fact label / value | `font-medium text-slate-500` : `text-slate-800` at `text-xs` |
+| a **control's** label | the Label token, `text-sm font-medium text-slate-700` |
+
+What made this card unparseable was not the *number* of styles but that two different roles shared
+one: the "Enable reimbursement" checkbox label sat at `text-xs font-medium text-slate-600` while the
+fact values were `text-xs font-medium text-slate-700` -- visually the same thing, so an actionable
+control read as another piece of metadata. Measured before/after on one row: 7 size/weight/colour
+combinations -> 6, but every remaining one now maps to a single role. **Give a control the control
+token; never the metadata token.**
+
 ### Table (in a card)
 Full-bleed table inside an `overflow-hidden rounded-2xl` card: a header row
 (`border-b border-slate-100 p-4`), then `thead`/`tbody` with cells `px-4 py-3` and

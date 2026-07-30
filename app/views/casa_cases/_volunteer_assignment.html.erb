@@ -20,7 +20,7 @@
             <div class="min-w-0">
               <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id),
                     class: "text-sm font-medium #{name_link_class}", data: {test: "volunteer-name"} %>
-              <p class="truncate text-sm text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
+              <p class="mt-0.5 truncate text-xs text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
             </div>
             <% if assignment.active? %>
               <span class="<%= pill_base %> bg-emerald-50 text-emerald-700" data-test="assignment-status">
@@ -37,20 +37,29 @@
             <% end %>
           </div>
 
-          <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-500">
+          <%# Canonical fact-list tokens (design.md "Fact / detail list", as on the case-details card):
+              weight on the muted label, colour on the value -- not font-medium slate-700 on both, which
+              gave the card a third ink and flattened label against value. "Unassigned" only renders
+              once there is one: an active assignment has no unassigned date, so the pair used to show
+              as a label and a hanging colon with nothing after it. %>
+          <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs">
             <div class="flex gap-1">
-              <dt>Assigned:</dt>
-              <dd class="font-medium text-slate-700" data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></dd>
+              <dt class="font-medium text-slate-500">Assigned:</dt>
+              <dd class="text-slate-800" data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></dd>
             </div>
-            <div class="flex gap-1">
-              <dt>Unassigned:</dt>
-              <dd class="font-medium text-slate-700" data-test="assignment-end"><% unless assignment.active? %><%= I18n.l(assignment.updated_at, format: :full, default: nil) %><% end %></dd>
-            </div>
+            <% unless assignment.active? %>
+              <div class="flex gap-1">
+                <dt class="font-medium text-slate-500">Unassigned:</dt>
+                <dd class="text-slate-800" data-test="assignment-end"><%= I18n.l(assignment.updated_at, format: :full, default: nil) %></dd>
+              </div>
+            <% end %>
           </dl>
 
           <div class="mt-3 flex flex-wrap items-center gap-3">
             <%= form_with model: assignment, url: reimbursement_case_assignment_path(assignment), method: :patch do |rf| %>
-              <label class="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-600">
+              <%# The Label token (text-sm font-medium text-slate-700). At text-xs slate-600 it matched
+                  the fact labels above and read as another piece of metadata rather than a control. %>
+              <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700">
                 <%= rf.check_box :allow_reimbursement, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", onchange: "this.form.submit();" %>
                 Enable reimbursement
               </label>
