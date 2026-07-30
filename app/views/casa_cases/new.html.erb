@@ -63,12 +63,13 @@
             <div>
               <%= form.fields_for :case_assignments, @casa_case.case_assignments.new do |caf| %>
                 <%= caf.label :volunteer_id, "Assign a volunteer", class: label_class %>
-                <div class="relative">
-                  <%= caf.select :volunteer_id,
-                        @casa_case.unassigned_volunteers.map { |v| [formatted_name(v.display_name), v.id] },
-                        {prompt: "Please select a volunteer"}, {class: select_class} %>
-                  <i class="<%= chevron_class %>" aria-hidden="true"></i>
-                </div>
+                <%# Searchable, like every other "assign a volunteer" picker: the list is every active
+                    unassigned volunteer in the org. The prompt option keeps the no-JS render honest and
+                    leaves "no volunteer yet" a valid choice here, so no toggle-submit. %>
+                <%= caf.select :volunteer_id,
+                      @casa_case.unassigned_volunteers.map { |v| [formatted_name(v.display_name), v.id] },
+                      {prompt: "Please select a volunteer"},
+                      {class: "block w-full", data: {controller: "searchable-select", "searchable-select-placeholder-value": "Search volunteers"}} %>
               <% end %>
             </div>
           </div>

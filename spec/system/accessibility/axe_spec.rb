@@ -14,6 +14,17 @@ RSpec.describe "Accessibility (axe)", type: :system do
     expect(page).to be_axe_clean
   end
 
+  # A desktop-only pass cannot see `md:hidden` / `lg:hidden` markup at all -- axe skips hidden
+  # elements -- so the mobile card lists, the mobile settings labels and the auth pages' heading
+  # structure went unaudited until this was added.
+  def expect_axe_clean_at_mobile(path)
+    page.driver.browser.manage.window.resize_to(390, 900)
+    visit path
+    expect(page).to be_axe_clean
+  ensure
+    page.driver.browser.manage.window.resize_to(1400, 900)
+  end
+
   context "signed in as an admin" do
     before { sign_in admin }
 
@@ -53,6 +64,84 @@ RSpec.describe "Accessibility (axe)", type: :system do
       check "Request travel or other reimbursement"
       expect(page).to have_field("case_contact_volunteer_address_line_1") # reimbursement revealed
       expect(page).to be_axe_clean
+    end
+  end
+
+  # Pages a whole-app axe sweep flagged, now fixed: heading-order (an <h6> subtitle under the
+  # page <h1>, and an <h6> nested in a <dt>), link-in-text-block, aria-input-field-name +
+  # scrollable-region-focusable (Trix), label (the import file inputs) and color-contrast
+  # (emerald-600 as text). Each example seeds the rows its page needs -- axe only sees the
+  # rendered DOM, so an empty collection audits clean and hides the defect.
+  context "pages fixed by the whole-app WCAG sweep" do
+    let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
+    let!(:court_date) { create(:court_date, casa_case: casa_case) }
+    let!(:placement_type) { create(:placement_type, casa_org: organization) }
+    let!(:placement) { create(:placement, casa_case: casa_case, creator: admin, placement_type: placement_type) }
+    let!(:banner) { create(:banner, casa_org: organization, user: admin) }
+    let!(:mileage_rate) { create(:mileage_rate, casa_org: organization) }
+    let!(:active_topic) { create(:contact_topic, casa_org: organization, active: true) }
+    let!(:inactive_topic) { create(:contact_topic, casa_org: organization, active: false) }
+    let!(:draft) { create(:case_contact, :started_status, creator: volunteer, draft_case_ids: [casa_case.id]) }
+    # A month-over-month delta has to be non-zero for the analytics stat cards to render the
+    # coloured "+N vs last month" line at all.
+    let!(:contacts) { create_list(:case_contact, 3, creator: volunteer, casa_case: casa_case) }
+
+    before { sign_in admin }
+
+    it("court date new", :js) { expect_axe_clean new_casa_case_court_date_path(casa_case) }
+    it("court date show", :js) { expect_axe_clean casa_case_court_date_path(casa_case, court_date) }
+    it("court date edit", :js) { expect_axe_clean edit_casa_case_court_date_path(casa_case, court_date) }
+    it("bulk court date new", :js) { expect_axe_clean new_bulk_court_date_path }
+    it("placements index", :js) { expect_axe_clean casa_case_placements_path(casa_case) }
+    it("placement new", :js) { expect_axe_clean new_casa_case_placement_path(casa_case) }
+    it("placement edit", :js) { expect_axe_clean edit_casa_case_placement_path(casa_case, placement) }
+    it("case contacts drafts", :js) { expect_axe_clean case_contacts_drafts_path }
+    it("banner new (trix)", :js) { expect_axe_clean new_banner_path }
+    it("banner edit (trix)", :js) { expect_axe_clean edit_banner_path(banner) }
+    it("mileage rate edit", :js) { expect_axe_clean edit_mileage_rate_path(mileage_rate) }
+    it("imports", :js) { expect_axe_clean imports_path }
+    it("analytics", :js) { expect_axe_clean analytics_path }
+    it("org settings with contact topics", :js) { expect_axe_clean edit_casa_org_path(organization) }
+  end
+
+  context "emancipation checklist" do
+    let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
+    let!(:category) { create(:emancipation_category) }
+    let!(:option) { create(:emancipation_option, emancipation_category: category) }
+
+    before { sign_in volunteer }
+
+    it("emancipation", :js) { expect_axe_clean casa_case_emancipation_path(volunteer.casa_cases.first) }
+  end
+
+  # Violations that only exist below a breakpoint: the auth pages' only <h1> sits in an aside
+  # hidden below lg, the org-settings group labels are lg:hidden, and the metrics tables become
+  # scroll containers once they no longer fit.
+  context "at a mobile viewport" do
+    let(:volunteer) { create(:volunteer, :with_single_case, casa_org: organization) }
+    let!(:reached) { create(:case_contact, creator: volunteer, casa_case: casa_case, contact_made: true) }
+    let!(:not_reached) { create(:case_contact, creator: volunteer, casa_case: casa_case, contact_made: false) }
+
+    it("sign in", :js) { expect_axe_clean_at_mobile new_user_session_path }
+    it("password reset request", :js) { expect_axe_clean_at_mobile new_user_password_path }
+
+    context "signed in as an admin" do
+      before { sign_in admin }
+
+      it("org settings", :js) { expect_axe_clean_at_mobile edit_casa_org_path(organization) }
+      it("analytics", :js) { expect_axe_clean_at_mobile analytics_path }
+      it("case contacts index", :js) { expect_axe_clean_at_mobile case_contacts_path }
+      it("cases index", :js) { expect_axe_clean_at_mobile casa_cases_path }
+
+      # Behind the :new_case_contact_table flag, so a route-walking audit never reaches it.
+      context "with the new case contact table flag on" do
+        before do
+          allow(Flipper).to receive(:enabled?).and_call_original
+          allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
+        end
+
+        it("case contacts new_design", :js) { expect_axe_clean_at_mobile case_contacts_new_design_path }
+      end
     end
   end
 

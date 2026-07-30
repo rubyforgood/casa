@@ -20,7 +20,9 @@
             <div class="min-w-0">
               <%= link_to formatted_name(volunteer.display_name), edit_volunteer_path(volunteer, from_case_id: @casa_case.id),
                     class: "text-sm font-medium #{name_link_class}", data: {test: "volunteer-name"} %>
-              <p class="truncate text-sm text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
+              <%# text-sm, not text-xs: an email address is content the user reads and transcribes, not
+                  chrome. 12px is reserved for the status pill and stacked field labels. %>
+              <p class="mt-0.5 truncate text-sm text-slate-500" data-test="volunteer-email"><%= volunteer.email %></p>
             </div>
             <% if assignment.active? %>
               <span class="<%= pill_base %> bg-emerald-50 text-emerald-700" data-test="assignment-status">
@@ -37,20 +39,31 @@
             <% end %>
           </div>
 
-          <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-xs text-slate-500">
+          <%# Canonical fact-list tokens (design.md "Fact / detail list", as on the case-details card):
+              weight on the muted label, colour on the value -- not font-medium slate-700 on both, which
+              gave the card a third ink and flattened label against value. "Unassigned" only renders
+              once there is one: an active assignment has no unassigned date, so the pair used to show
+              as a label and a hanging colon with nothing after it. An inline pair keeps ONE size for
+              label and value (text-sm) -- 12px/14px on a shared baseline reads as ragged, and the date
+              is content. The 12px label is for the stacked variant, where it sits above its value. %>
+          <dl class="mt-2 flex flex-wrap gap-x-6 gap-y-1 text-sm">
             <div class="flex gap-1">
-              <dt>Assigned:</dt>
-              <dd class="font-medium text-slate-700" data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></dd>
+              <dt class="font-medium text-slate-500">Assigned:</dt>
+              <dd class="text-slate-800" data-test="assignment-start"><%= I18n.l(assignment.created_at, format: :full, default: nil) %></dd>
             </div>
-            <div class="flex gap-1">
-              <dt>Unassigned:</dt>
-              <dd class="font-medium text-slate-700" data-test="assignment-end"><% unless assignment.active? %><%= I18n.l(assignment.updated_at, format: :full, default: nil) %><% end %></dd>
-            </div>
+            <% unless assignment.active? %>
+              <div class="flex gap-1">
+                <dt class="font-medium text-slate-500">Unassigned:</dt>
+                <dd class="text-slate-800" data-test="assignment-end"><%= I18n.l(assignment.updated_at, format: :full, default: nil) %></dd>
+              </div>
+            <% end %>
           </dl>
 
           <div class="mt-3 flex flex-wrap items-center gap-3">
             <%= form_with model: assignment, url: reimbursement_case_assignment_path(assignment), method: :patch do |rf| %>
-              <label class="inline-flex cursor-pointer items-center gap-2 text-xs font-medium text-slate-600">
+              <%# The Label token (text-sm font-medium text-slate-700). At text-xs slate-600 it matched
+                  the fact labels above and read as another piece of metadata rather than a control. %>
+              <label class="inline-flex cursor-pointer items-center gap-2 text-sm font-medium text-slate-700">
                 <%= rf.check_box :allow_reimbursement, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", onchange: "this.form.submit();" %>
                 Enable reimbursement
               </label>
@@ -87,15 +100,25 @@
         <div class="mt-2 flex flex-wrap items-end gap-3">
           <div class="min-w-0 flex-1">
             <label for="case_assignment_casa_case_id" class="sr-only">Select a volunteer</label>
-            <div class="relative">
-              <select id="case_assignment_casa_case_id" name="case_assignment[volunteer_id]" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500">
-                <option value="">Please select a volunteer</option>
-                <% available_volunteers.each do |v| %>
-                  <option value="<%= v.id %>"><%= formatted_name(v.display_name) %></option>
-                <% end %>
-              </select>
-              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-            </div>
+            <%# Searchable, not a plain native select: an org can have hundreds of unassigned volunteers,
+                and scrolling a native dropdown to find one is unusable (same reason as the copy-orders
+                case picker). dropdownParent: body because this card is `overflow-hidden`, which clips an
+                in-flow menu. Minimal class only -- the tom-select theme owns the border/padding on
+                .ts-control, and TomSelect copies these classes onto .ts-wrapper, so a bordered class here
+                double-borders. `disabled` on the <select> as well as the fieldset: TomSelect reads the
+                element's own disabled attribute, which a disabled ancestor fieldset does not set, so
+                without it the empty state renders a live-looking control over an empty list. The prompt
+                option stays for the no-JS render (TomSelect drops it and shows the placeholder). %>
+            <select id="case_assignment_casa_case_id" name="case_assignment[volunteer_id]"
+                    data-controller="searchable-select"
+                    data-searchable-select-dropdown-parent-value="body"
+                    data-searchable-select-placeholder-value="Search volunteers"
+                    class="block w-full" <%= "disabled" unless available_volunteers.any? %>>
+              <option value="">Please select a volunteer</option>
+              <% available_volunteers.each do |v| %>
+                <option value="<%= v.id %>"><%= formatted_name(v.display_name) %></option>
+              <% end %>
+            </select>
           </div>
           <%= button_tag "Assign volunteer", type: "submit", class: button_classes(:secondary) %>
         </div>

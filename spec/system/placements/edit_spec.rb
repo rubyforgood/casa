@@ -15,6 +15,10 @@ RSpec.describe "placements/edit", type: :system do
     sign_in admin
     visit casa_case_placement_path(casa_case, placement)
     click_link("Edit")
+    # Confirm we are on the edit page before the examples touch the form. The show page we came
+    # from also carries the case number, so an example asserting only that could be satisfied
+    # before this navigation finished and then interact with a page being swapped out.
+    expect(page).to have_css("h1", text: "Editing placement")
   end
 
   it "updates placement with valid form data", :js do

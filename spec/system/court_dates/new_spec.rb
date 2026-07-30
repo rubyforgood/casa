@@ -29,8 +29,10 @@ RSpec.describe "court_dates/new", type: :system do
       select hearing_type.name, from: "Hearing type"
 
       click_on "Add a court order"
-      text_area = first(:css, "textarea").native
-      text_area.send_keys(text)
+      # Capybara's finder rather than a cached `.native` handle: the court-order row is cloned from
+      # a <template> by the court-order-form controller, so a raw Selenium reference taken from
+      # `first` while that insertion settles can detach before send_keys runs.
+      find("textarea.court-order-text-entry").set(text)
       page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
       within ".top-page-actions" do

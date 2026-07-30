@@ -12,7 +12,7 @@ RSpec.shared_examples "casa_case access control" do
 
     get casa_case_url(other_case)
     expect(response).to be_redirect
-    expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+    expect(flash[:alert]).to eq("Sorry, you are not authorized to perform this action.")
   end
 end
 
@@ -59,7 +59,7 @@ RSpec.shared_examples "casa_case edit access control" do
 
     get edit_casa_case_url(other_case)
     expect(response).to be_redirect
-    expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+    expect(flash[:alert]).to eq("Sorry, you are not authorized to perform this action.")
   end
 end
 
@@ -69,7 +69,7 @@ RSpec.shared_examples "denies casa_case creation" do
       post casa_cases_url, params: {casa_case: valid_attributes}
 
       expect(response).not_to be_successful
-      expect(flash[:notice]).to match(/you are not authorized/)
+      expect(flash[:alert]).to match(/you are not authorized/)
     end
   end
 end
@@ -467,7 +467,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         patch deactivate_casa_case_path(other_casa_case), params: params
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+        expect(flash[:alert]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -526,7 +526,7 @@ RSpec.describe "/casa_cases", type: :request do
 
         patch reactivate_casa_case_path(other_casa_case), params: params
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+        expect(flash[:alert]).to eq("Sorry, you are not authorized to perform this action.")
       end
 
       it "also responds as json", :aggregate_failures do
@@ -572,7 +572,7 @@ RSpec.describe "/casa_cases", type: :request do
         get new_casa_case_url
 
         expect(response).not_to be_successful
-        expect(flash[:notice]).to match(/you are not authorized/)
+        expect(flash[:alert]).to match(/you are not authorized/)
       end
     end
 
@@ -663,7 +663,7 @@ RSpec.describe "/casa_cases", type: :request do
       it "renders a redirect" do
         get new_casa_case_url
         expect(response).to be_redirect
-        expect(flash[:notice]).to eq("Sorry, you are not authorized to perform this action.")
+        expect(flash[:alert]).to eq("Sorry, you are not authorized to perform this action.")
       end
     end
 

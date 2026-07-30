@@ -1,16 +1,25 @@
-<%# Volunteer roster filter bar (casadesign, bespoke). Server-side selects that submit on
-    change (auto-submit controller; Turbo Drive keeps it smooth). Replaces the jQuery-DataTables
-    checkbox dropdowns. .volunteer-filters is a spec hook. %>
+<%# Volunteer roster filter bar (casadesign, bespoke). Server-side controls that submit via the
+    auto-submit controller: selects on `change`, and the search field on debounced `input` so it
+    searches as you type (a text input only fires `change` on blur/Enter, so typing used to do nothing
+    -- and the unsubmitted text then applied itself when any other filter changed). Turbo Drive is OFF
+    app-wide (application.js), so each submit is a real page load and the controller parks the caret in
+    sessionStorage to restore it. Replaces the jQuery-DataTables checkbox dropdowns.
+    .volunteer-filters is a spec hook. %>
 <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
 <% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
 
 <%= form_with url: volunteers_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "volunteer-filters mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+  <%# Keep the drill-through origin across a filter change, or the "Back to supervisors" link
+      disappears as soon as the user narrows the list. %>
+  <% if params[:from].present? %>
+    <%= hidden_field_tag :from, params[:from], id: nil %>
+  <% end %>
   <div class="col-span-2 lg:min-w-[16rem] lg:max-w-sm lg:flex-1">
     <%= label_tag :search, "Search", class: label_class %>
     <div class="relative">
       <i class="bi bi-search pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-sm text-slate-500" aria-hidden="true"></i>
-      <%= search_field_tag :search, @search, placeholder: "Search name, email, or case number", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{@search.present? ? "pr-9" : "pr-3"} text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
+      <%= search_field_tag :search, @search, data: {action: "input->auto-submit#search"}, placeholder: "Search name, email, or case number", autocomplete: "off", class: "block w-full rounded-lg border border-slate-300 bg-white py-2 pl-9 #{@search.present? ? "pr-9" : "pr-3"} text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none [&::-webkit-search-cancel-button]:hidden" %>
       <% if @search.present? %>
         <%= link_to volunteers_path(request.query_parameters.except("search", "page")), "aria-label": "Clear search", class: "absolute right-2.5 top-1/2 -translate-y-1/2 grid h-5 w-5 place-items-center rounded text-slate-500 hover:text-slate-600" do %><i class="bi bi-x-lg text-[11px]" aria-hidden="true"></i><% end %>
       <% end %>
@@ -25,10 +34,13 @@
   </div>
   <div class="lg:min-w-[11rem]">
     <%= label_tag :supervisor, "Supervisor", class: label_class %>
-    <div class="relative">
-      <%= select_tag :supervisor, options_for_select([["All supervisors", ""], ["Unassigned", "unassigned"]] + @supervisors.map { |s| [formatted_name(s.display_name), s.id.to_s] }, @supervisor_filter), class: select_class %>
-      <i class="<%= chevron_class %>" aria-hidden="true"></i>
-    </div>
+    <%# Searchable: a chapter has as many supervisors as it has, and this is the one field in the bar
+        whose options are a person list. "All supervisors" carries the non-empty value "all" (the
+        controller already treats "" and "all" alike) because the theme hides empty-valued options in a
+        TomSelect menu -- as `value=""` the row that clears the filter would be missing from the menu. %>
+    <%= select_tag :supervisor,
+          options_for_select([["All supervisors", "all"], ["Unassigned", "unassigned"]] + @supervisors.map { |s| [formatted_name(s.display_name), s.id.to_s] }, @supervisor_filter),
+          class: "ts-filter block w-full", data: {controller: "searchable-select"} %>
   </div>
   <div class="lg:min-w-[9rem]">
     <%= label_tag :transition, "Transition-aged youth", class: label_class %>

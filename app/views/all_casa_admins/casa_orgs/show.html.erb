@@ -18,8 +18,8 @@
         </div>
       </div>
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200">
-          <thead class="bg-slate-50">
+        <table class="min-w-full text-sm">
+          <thead>
             <tr>
               <th scope="col" class="<%= th %>">Name</th>
               <th scope="col" class="<%= th %>">Email</th>
@@ -27,7 +27,7 @@
               <th scope="col" class="<%= th %> text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100">
+          <tbody class="divide-y divide-slate-50">
             <% selected_organization.casa_admins.each do |admin| %>
               <tr class="admin-<%= admin.id %>">
                 <td class="<%= td %> font-medium text-slate-800"><%= admin.display_name %></td>

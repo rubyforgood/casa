@@ -83,7 +83,8 @@ RSpec.describe "/volunteers", type: :request do
       supervisors.append(create(:supervisor, casa_org: organization, display_name: "O'Hara")) # test for HTML escaping
 
       page = Nokogiri::HTML(subject.body)
-      names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text)
+      # Drops the blank option the searchable picker loads with.
+      names = page.css("#supervisor_volunteer_supervisor_id option").map(&:text).compact_blank
       # Options render the honorific-free name (formatted_name / NamePresentation.strip_honorific), so
       # compare against the stripped names. Faker::Name sometimes yields a "Rev."/"Dr." prefix, which
       # made the raw-display_name assertion flaky (passed or failed depending on the seed).
@@ -514,7 +515,7 @@ RSpec.describe "/volunteers", type: :request do
       expect(controller.current_user).to eq(volunteer)
 
       follow_redirect!
-      expect(flash[:notice]).to match(/Sorry, you are not authorized to perform this action./)
+      expect(flash[:alert]).to match(/Sorry, you are not authorized to perform this action./)
     end
   end
 

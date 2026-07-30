@@ -73,7 +73,7 @@ class CourtDatesController < ApplicationController
 
   def not_authorized_redirect
     respond_to do |format|
-      format.html { redirect_to casa_cases_path, notice: "Sorry, you are not authorized to perform this action." }
+      format.html { redirect_to casa_cases_path, alert: "Sorry, you are not authorized to perform this action." }
       format.json { render json: {error: "Sorry, you are not authorized to perform this action."}, status: :unauthorized }
       format.any { head :not_found }
     end

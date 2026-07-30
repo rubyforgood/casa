@@ -19,7 +19,7 @@ RSpec.describe "/hearing_types", type: :request do
         get new_hearing_type_path
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.describe "/hearing_types", type: :request do
         post hearing_types_path, params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -91,7 +91,7 @@ RSpec.describe "/hearing_types", type: :request do
         get edit_hearing_type_path(create(:hearing_type))
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 
@@ -148,7 +148,7 @@ RSpec.describe "/hearing_types", type: :request do
         put hearing_type_path(create(:hearing_type)), params: params
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
 

@@ -42,8 +42,11 @@ RSpec.describe "other_duties/new", type: :system do
 
       click_on "Submit"
 
-      message = page.find("#other_duty_notes").native.attribute("validationMessage")
-      expect(message).to match(/Please fill (in|out) this field./)
+      # Capybara's :validation_message filter, not `find(...).native.attribute(...)`. That call sits
+      # outside Capybara's synchronize, so when the element went stale while the page settled the
+      # StaleElementReferenceError was raised straight through instead of being retried. As a
+      # matcher filter this re-resolves the field on every attempt.
+      expect(page).to have_field("other_duty_notes", validation_message: /Please fill (in|out) this field./)
     end
   end
 end

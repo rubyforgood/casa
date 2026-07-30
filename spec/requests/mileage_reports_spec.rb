@@ -47,7 +47,7 @@ RSpec.describe "MileageReports", type: :request do
         get mileage_reports_path(format: :csv)
 
         expect(response).to redirect_to root_path
-        expect(response.request.flash[:notice]).to eq "Sorry, you are not authorized to perform this action."
+        expect(response.request.flash[:alert]).to eq "Sorry, you are not authorized to perform this action."
       end
     end
   end

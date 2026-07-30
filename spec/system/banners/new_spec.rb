@@ -42,7 +42,10 @@ RSpec.describe "Banners", :js, type: :system do
     fill_in_rich_text_area "banner_content", with: "Please fill out this survey."
     click_on "Submit"
 
-    expect(page).to have_text("Expiring Announcement Yes in 7 days")
+    # Scoped to the row: the status is a pill, so the row is no longer one flat run of text.
+    row = find("#banners tbody tr", text: "Expiring Announcement")
+    expect(row).to have_text("Active")
+    expect(row).to have_text("in 7 days")
 
     within "#banners" do
       click_on "Edit", match: :first
@@ -50,7 +53,10 @@ RSpec.describe "Banners", :js, type: :system do
     find("#banner_expires_at").execute_script("this.value = arguments[0]", 3.days.from_now.strftime("%Y-%m-%dT%H:%M"))
     click_on "Submit"
 
-    expect(page).to have_text("Expiring Announcement Yes in 3 days")
+    # Scoped to the row: the status is a pill, so the row is no longer one flat run of text.
+    row = find("#banners tbody tr", text: "Expiring Announcement")
+    expect(row).to have_text("Active")
+    expect(row).to have_text("in 3 days")
 
     visit root_path
     expect(page).to have_text("Please fill out this survey.")
@@ -95,7 +101,7 @@ RSpec.describe "Banners", :js, type: :system do
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
 
-          expect(already_existing_banner_row).to have_selector("td.min-width", text: "No")
+          expect(already_existing_banner_row).to have_selector("td.min-width", text: "Inactive")
         end
 
         expect(page).to have_text("New active banner content.")
@@ -120,7 +126,7 @@ RSpec.describe "Banners", :js, type: :system do
         within("table#banners") do
           already_existing_banner_row = find("tr", text: active_banner.name)
 
-          expect(already_existing_banner_row).to have_selector("td.min-width", text: "Yes")
+          expect(already_existing_banner_row).to have_selector("td.min-width", text: "Active")
         end
 
         expect(page).to have_text(active_banner.content.body.to_plain_text)

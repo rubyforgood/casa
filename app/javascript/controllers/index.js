@@ -10,6 +10,9 @@ application.register("add-to-calendar", AddToCalendarController)
 import AlertController from "./alert_controller"
 application.register("alert", AlertController)
 
+import AutoDismissController from "./auto_dismiss_controller"
+application.register("auto-dismiss", AutoDismissController)
+
 import AutoSubmitController from "./auto_submit_controller"
 application.register("auto-submit", AutoSubmitController)
 

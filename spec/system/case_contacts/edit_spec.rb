@@ -166,6 +166,56 @@ RSpec.describe "case_contacts/edit", type: :system do
     expect(case_contact.reload.notes).to eq "Hello world"
   end
 
+  # Autosave used to be bound to three fields only -- notes, topic answers, expense descriptions -- so
+  # an edit to duration or medium was silently dropped on navigation UNLESS the user also happened to
+  # touch one of those three (an autosave posts the WHOLE form, so it then committed everything).
+  # Whether your work persisted depended on which field you touched last. It is now bound once on the
+  # form, where `input` bubbles from every control type.
+  #
+  # ONE interaction per example on purpose: the "Saved!" alert lingers for 3s, so a second interaction
+  # can match the previous save's alert and read the DB before its own debounce has elapsed.
+  describe "autosave covers the whole form", :js do
+    let(:autosave_alert_div) { "#contact-form-notes" }
+    let(:autosave_alert_css) { 'small[role="alert"]' }
+
+    def wait_for_autosave
+      within(autosave_alert_div) { find(autosave_alert_css, text: "Saved!", wait: 5) }
+    end
+
+    it "saves an edit to a field that has no trigger of its own, and keeps it after leaving" do
+      visit edit_case_contact_path(case_contact)
+
+      fill_in "case_contact_duration_hours", with: 3
+      fill_in "case_contact_duration_minutes", with: 30
+      wait_for_autosave
+
+      expect(case_contact.reload.duration_minutes).to eq(210)
+
+      click_on "Back"
+
+      expect(page).to have_no_text("Editing existing case contact")
+      expect(case_contact.reload.duration_minutes).to eq(210)
+    end
+
+    it "saves a radio choice" do
+      visit edit_case_contact_path(case_contact)
+
+      choose "Letter"
+      wait_for_autosave
+
+      expect(case_contact.reload.medium_type).to eq("letter")
+    end
+
+    it "saves a checkbox" do
+      visit edit_case_contact_path(case_contact)
+
+      check contact_types.second.name
+      wait_for_autosave
+
+      expect(case_contact.reload.contact_types).to include(contact_types.second)
+    end
+  end
+
   it "offers a way back out of the edit form" do
     visit edit_case_contact_path(case_contact)
 

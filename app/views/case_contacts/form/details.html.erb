@@ -56,7 +56,16 @@
         novalidate: true,
         # case-contact-id marks the form as backed by a saved record, so the autosave PATCHes it
         # instead of creating. Absent on a new contact until the first save adopts an id.
-        data: {controller: "case-contact-form", "autosave-target": "form", "case-contact-id": @case_contact.id},
+        #
+        # The autosave is bound HERE, on the form, not on individual fields. `input` bubbles and fires
+        # for every control type -- text, number, date, select, checkbox, radio -- so one action covers
+        # the whole form and cannot be forgotten when a field is added. Per-field triggers meant only
+        # notes, topic answers and expense descriptions saved themselves, while an edit to duration or
+        # medium was silently dropped on navigation UNLESS the user happened to also touch one of those
+        # three (an autosave posts the entire form, so it committed everything). Whether your work
+        # persisted depended on which field you touched last.
+        data: {controller: "case-contact-form", action: "input->autosave#save",
+               "autosave-target": "form", "case-contact-id": @case_contact.id},
         local: true
       ) do |form| %>
 
@@ -248,7 +257,7 @@
           <% if form.object.notes.present? || @contact_topics.empty? %>
             <div>
               <%= form.label :notes, "Additional notes", class: label_class %>
-              <%= form.text_area(:notes, data: {action: "input->autosave#save"}, rows: 5, class: input_class) %>
+              <%= form.text_area(:notes, rows: 5, class: input_class) %>
             </div>
           <% end %>
 

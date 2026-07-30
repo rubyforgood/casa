@@ -42,7 +42,7 @@ RSpec.describe EmancipationsController, type: :controller do
       it "redirects to root with an authorization notice" do
         get :show, params: {casa_case_id: casa_case.friendly_id}
         expect(response).to redirect_to(root_url)
-        expect(flash[:notice]).to match(/not authorized/)
+        expect(flash[:alert]).to match(/not authorized/)
       end
     end
 

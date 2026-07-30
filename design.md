@@ -34,6 +34,20 @@ Bootstrap `application` layout. Never load both CSS resets on the same page.
   - Label: `text-sm font-medium text-slate-700`
   - Muted / meta: `text-xs text-slate-500` (never `text-slate-400` for text — fails AA)
 
+**`text-xs` (12px) is chrome, not content.** It is the token for a status pill, a column header, a
+**stacked** field label sitting above its value, and the signed-in account line in the nav — short,
+glanceable strings. Anything the user actually *reads or transcribes* — an email address, a date, a
+person's name, a note — stays at `text-sm`, even inside a dense row. WCAG sets **no** minimum font
+size, so 12px `slate-500` is not a conformance failure (4.77:1, passes 1.4.3 at any size); this is a
+legibility floor, and it is where the major systems put theirs (Material reserves 12px for
+captions/labels, Polaris uses `bodySm` sparingly, GOV.UK warns off anything under 16px). Reported as
+"the volunteer email font looks too small … very difficult to read" one turn after an email was
+shrunk from `text-sm` to `text-xs`.
+
+**Fewer type sizes is not the goal — one treatment per role is.** Shrinking *content* to dedupe sizes
+trades a real problem (a control that read as metadata) for a worse one (content nobody can read). When
+a card reads flat, change the role mapping — weight and colour — not the size.
+
 ### Sentence case
 All UI copy — page titles, section headings, subtitles, table headers, field labels,
 buttons, badges and nav — uses **sentence case**: capitalise only the first word and
@@ -132,6 +146,102 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
   `aria-hidden`.
 - **Motion**: respect `prefers-reduced-motion` (`motion-reduce:` variants).
 
+**Measured token contrast on white** (computed from the built oklch tokens and cross-checked
+against axe's own numbers — do not eyeball these, and do not assume a `-600` is safe):
+
+| token | ratio | text (4.5:1) | icon/border (3:1) |
+|---|---|---|---|
+| `slate-400` | 2.63:1 | no | no |
+| `slate-500` | 4.77:1 | yes | yes |
+| `amber-600` | 3.19:1 | **no** | yes |
+| `amber-700` | 5.05:1 | yes | yes |
+| `emerald-600` | 3.67:1 | **no** | yes |
+| `emerald-700` | 5.37:1 | yes | yes |
+| `rose-600` | 4.51:1 | yes (barely) | yes |
+| `rose-700` | 6.06:1 | yes | yes |
+
+So `emerald-600`/`amber-600` are fine on a **decorative `aria-hidden` icon** but fail as
+**text**: use `-700` for any status word ("Active", "+3 vs last month"). Watch the mixed
+pattern `<span class="text-emerald-600"><i …></i> Active</span>` — the span colours the word
+too, so it is text, not an icon. Keep a +/- pair on the same step so the two read at the
+same weight.
+
+**Heading order** (axe `heading-order`, and one `h1` per page above):
+- A **subtitle/caption under the page `h1` is a `<p>`**, never a small heading. An `<h6>`
+  used for "Case number: X" or "Create a court date for all cases in a group." skips h2–h5
+  and fails. Small-and-grey is a type decision (`text-sm text-slate-500`), not a level.
+- A **`<dt>` is already the term** — never nest a heading inside it. `<dt><h6>Judge:</h6></dt>`
+  both skipped levels and doubled the semantics.
+- A **card partial shared by a grouped index and a flat list needs a caller-controlled
+  level**. `case_contacts/_case_contact` takes `heading_level` (default 3): `#index` nests
+  cards under an `<h2>` case-number section, `#drafts` has no grouping level and passes 2.
+
+**A `<label for>` does not name a custom element.** `label`/`for` only associates with
+form-associated elements, so `<trix-editor role="textbox">` (and any custom element with an
+ARIA input role) is left nameless — axe `aria-input-field-name` — even with a perfectly
+correct visible `<label>` next to it. Set `aria: {label: …}` on the element itself. Same
+remedy where a real `<label for>` would be actively wrong: the emancipation checklist inputs
+are driven by JS that sets checked state after an AJAX save, so associating a label would
+toggle natively on top of it — they carry `aria-label` and keep the label unassociated.
+
+**Links inside a text block need more than colour.** `brand-600` on `slate-900` body text is
+2.83:1 (3:1 required), so a case-number link inside an `<h1>`/paragraph gets `underline
+underline-offset-2` (axe `link-in-text-block`).
+
+**Scrollable regions must be keyboard-reachable.** Trix ships
+`.trix-button-row { flex-wrap: nowrap; overflow-x: auto }`, a scroll container that is not
+focusable (axe `scrollable-region-focusable`). `tailwind.css` overrides it to wrap instead.
+
+**Auditing caveat:** axe only sees the **rendered** DOM, so a page with an empty collection
+audits clean and hides real defects — a first whole-app pass missed unlabelled emancipation
+checkboxes and both org-settings status chips purely because no categories/contact topics
+were seeded. Seed at least one row of every repeating region before believing a clean result.
+Likewise, a page that 500s reports `document-title` + `html-has-lang` + `landmark-one-main` +
+`region`: that combination means you are auditing a layout-less Rails error page, not a
+finding. Capybara then re-raises the server error on the *next* `visit`, so the exception is
+reported against the following page.
+
+**Audit at more than one viewport.** axe skips hidden elements, so a desktop-only pass cannot
+see `md:hidden` / `lg:hidden` markup *at all* — and this codebase renders a separate mobile
+card list next to every desktop table. A whole-app sweep run at 1400px came back clean while
+390px still had six violations, every one of them in below-the-breakpoint markup:
+- the auth pages' only `<h1>` sat in an `<aside class="hidden … lg:flex">`, so below `lg` the
+  page had **no `h1` at all**. Fixed by making each form heading ("Welcome back", "Reset your
+  password") the `<h1>` and the marketing line a `<p>` — the page's subject is the form, not
+  the brand statement. Sign-in/reset/invite/confirm all follow this.
+- the `lg:hidden` org-settings group labels were `slate-400`.
+- the metrics data tables and heatmap become **scroll containers** once they stop fitting, and
+  they contain no links or controls, so nothing inside could take focus (axe
+  `scrollable-region-focusable`). A scrollable region built from pure data needs
+  **`tabindex: 0`** on the scroll container itself so it can be scrolled from the keyboard.
+
+**Icon contrast is not automatable — check it by hand.** axe has **no rule** for non-text
+contrast, so a decorative-looking icon can fail 1.4.11 (3:1) on a page that audits perfectly
+clean. The org announcement banner shipped its megaphone as `text-amber-500`, which is
+**2.07:1 on the `amber-50` banner background**. Icons in an alert/banner should **inherit the
+container's text colour** (as `shared/_flashes` does) rather than setting their own, which keeps
+them at the same ratio as the copy they sit with. Note contrast is against the *tinted* surface,
+not white: measure against the actual background.
+
+**Flash messages** (`shared/_flashes`): success auto-hides, errors stay.
+- A success message carries the `auto-dismiss` controller and clears itself after ~6s. The timer
+  **pauses on hover and on `focusin`**, so it cannot vanish mid-read — that plus a delay well
+  above a couple of seconds is what keeps an auto-hiding status message clear of WCAG 2.2.1. The
+  message keeps `role="status"`, so it is announced when it appears; removing it later is silent.
+- Warnings and errors (`role="alert"`) are **never** auto-dismissed: they are often the only
+  record of what went wrong.
+- The fade is applied as an **inline style**, not a utility class, and the removal is on a timer
+  rather than `transitionend`. A class added from JS only works while Tailwind still emits it, and
+  a missed `transitionend` would leave the message on screen forever.
+- Because the partial keys off the flash type (`notice` -> green success, anything else -> amber
+  warning), **an error must not be sent as `flash[:notice]`**, or it renders green *and* now
+  auto-dismisses. Authorization failures use `flash[:alert]`: `ApplicationController#not_authorized`
+  plus the cross-org `RecordNotFound` rescues in `CasaCasesController` and `CourtDatesController`.
+
+Sweep at **390 / 768 / 1400** before calling a page clean. Also note a route-walking audit
+silently skips **Flipper-gated** pages (it just follows the redirect): `/case_contacts/new_design`
+was missed that way and had two failing status colours behind the flag.
+
 ## Components
 
 ### Buttons
@@ -217,6 +327,18 @@ alone, so `:danger_outline`).
   as broken (a `casa_cases#show`-adjacent regression: a ghost Deactivate/Unassign next to `:secondary`
   Resend/Assign). Either way there is **no red-at-rest**. No border, fill, or shadow: the
   lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
+**No red-at-rest applies to the container too, not just the button.** The deactivate section on
+`casa_cases#edit` was a white card with a `border-rose-200` outline -- the only rose-bordered white
+card in the app, and an always-on red of exactly the kind this section rules out. Every comparable
+section (`volunteers/_manage_active`, `supervisors/_manage_active`, `casa_admins#edit`, the all-CASA
+admin edit) is a plain `border-slate-200` card, and it is now one too (verified: its border resolves to
+the same colour as a sibling card on the same page). A rose border belongs to an **alert message**
+panel, paired with `bg-rose-50` and rose ink -- `casa_cases/_inactive_case` is the legitimate use,
+saying the case *is* inactive. Outlining a section in red to mean "the action in here is dangerous" is
+not a pattern; the danger lives in the button variant, its `bi-slash-circle` icon (the same one
+"Deactivate volunteer/supervisor" use -- this trigger was missing it), its label, and the confirm
+dialog whose single solid rose button is the only red at rest anywhere.
+
   in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
   CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat
   at `px-2.5 py-1.5`, and the casa_org settings tables used bare `text-brand-600` / `text-rose-600`
@@ -264,6 +386,46 @@ Chevron ink is `slate-500` (AA). Month/year pickers reuse this through
 `casa_cases/_month_year_select` (it keeps Rails' `_1i`/`_2i` date-part field names).
 The cases-index filter is the reference for the **chevron**, not for the padding above: a
 *filter* control is one step more compact than a *form* field (see "Filter bar").
+
+### Search field in a filter bar
+**Search as you type, debounced (~350ms) on `input`.** A text input fires `change` only on blur or
+Enter, so a filter bar wired only to `change` looks broken: typing does nothing. Worse, the
+unsubmitted text is still in the form, so it applies itself the moment the user touches any *other*
+filter -- which reads as "the search box keeps letters I typed". Reported exactly that way on the
+volunteers roster; the cases index had it too.
+
+`auto-submit` handles both: selects stay on `change->auto-submit#submit`, the search field gets
+`input->auto-submit#search`.
+
+**Turbo Drive is OFF app-wide** (`application.js`: `Turbo.session.drive = false`), so each submit is
+a **real page load** -- do not assume otherwise from a partial's comments (two filter bars claimed
+"Turbo Drive keeps it smooth"; verify with a `window` marker before the submit, which is how this was
+caught). That means the search box is destroyed and rebuilt on every keystroke-pause, so without help
+focus lands on `<body>` and the next letter goes nowhere. `auto-submit` parks
+`{name, selectionStart, selectionEnd}` in **`sessionStorage`** (module/instance state does not survive
+a page load) and restores it in `connect()` inside a `requestAnimationFrame` -- an immediate `focus()`
+was measured being undone as the new page settled. Verify by reading
+`document.activeElement === field` and `selectionStart`, not by eye.
+
+### A stat's period must be stated, and must be true
+The learning-hours roster column read **"Time completed this year"** while neither aggregate scope
+filtered `occurred_at` -- so the number was an **all-time** total. Proven rather than read: 1h today +
+2h from three years ago + 4h from Dec 31 returned 420 minutes, not 60. A header that names a period
+the query does not apply is worse than an unlabelled one, because it is trusted.
+
+Rules for any "total over a period" figure:
+- **Name the period in the header**, with its start date -- "Time completed / since January 1, 2026"
+  (or "X to Y" when the end is not today). "This year" is not a specification: nobody can tell whether
+  it means calendar, fiscal, or rolling.
+- **Let the user change it.** A `from`/`to` pair in the page's filter bar, same tokens as the other
+  rosters, auto-submitting on `change`; `shared/_pagination` carries the params.
+- **Clamp the parsed dates.** `Date.parse` accepts `"0730-02-02"`, which put "since February 2, 0730"
+  in the header. Clamp to the domain's real window -- here 1989-01-01 (what `LearningHour` validates)
+  to today.
+- Keep the range **optional** in the model scope (`occurred_in(range)` no-ops on nil) so the Pundit
+  scopes keep meaning "everything this user may see" rather than inheriting a UI default.
+- `date.formats` has no `:standard` -- that lives under `time.formats`. For a Date use `:full`
+  ("January 1, 2026").
 
 ### Filter bar
 Controls in a filter bar are **one step more compact than form fields** -- filters are
@@ -454,8 +616,14 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   present but hidden without it (that stacking, not a missing rule, is why the chevron read as
   "missing" for so long). Do not use a CSS `content` glyph escape (the minifier drops it), a
   raw non-base64 `data:` URI (broke in the build), or an injected CDN icon-font element (never
-  painted). **Verify a chevron at the pixel level** (screenshot + darkest-pixel), never by
-  computed style, which reports the element as present even when nothing paints.
+  painted). **Verify a chevron at the pixel level** -- never by computed style, which reports the
+  element as present even when nothing paints. **Compare the SHAPE, not the darkest pixel**: dump the
+  ink bounding box + ink-pixel count for the caret and for a native `<i class="bi bi-chevron-down">`
+  in the *same* screenshot -- `bin/caret-map.rb` does exactly this. Darkest-pixel alone is a colour check
+  and it has already produced a false pass -- it read "matches" on a region that actually held the
+  clear **x** (7x7, two crossing diagonals) rather than a caret, because the probe left the control
+  focused. A real match is identical extent and coverage: 10x6 ink, 20 ink pixels, mean lum 251.4 vs
+  251.2. Blur the control before the screenshot, or you are measuring the hover/focus state.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Clear-all inside the field, always visible once there is something to clear.** `remove_button`
@@ -517,7 +685,77 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 
+**Option subtext: no "never", and never nil.** The contact-type options carry a recency hint
+("Last logged 3 days ago"). A type that has never been logged shows **no subtext** -- a bare "never"
+repeated down the list is noise, not information. Two decorator methods had answered the same question
+differently (`last_time_used_with_cases` returned "never", `last_logged_hint_with_cases` returned nil
+for exactly this reason), and only the checkbox form used the fixed one, so the multi-select on
+`casa_cases#edit` kept showing "never" long after it was removed elsewhere. Consolidated onto the one
+method; the divergent twin is gone.
+
+The subtext must be `""`, **not nil**: the option template substitutes it through TomSelect's
+`escape()`, which stringifies nil to the literal **"null"** -- a worse bug than the one being fixed.
+`casa_cases#new` additionally passes `render_option_subtext: false` (no case exists yet, so there is no
+recency to show).
+
+### Typeahead audit (all 18 TomSelect controls)
+**A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
+without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
+stay in the control next to the new chip. `multiple_select_controller` has **two** init paths and only
+the grouped one had it, so every plain multiselect was affected -- contact types on the case-contacts
+filter, case_groups#new, and all four report filters -- while the single-selects were fine. Reported as
+"the letters the user types stay even after they have made a selection". Guarded by
+`spec/system/typeahead_controls_spec.rb`, which drives all 18 controls (type -> filter -> select ->
+query cleared, chip rendered, native `<select>` updated) and asserts the count, so a new control has
+to be added to it.
+
+**Finding a TomSelect control in a spec:** address it through its native `<select>`
+(`select.tomselect.wrapper`), never by `.ts-wrapper` position. Positions lie -- the court-report page's
+first `.ts-wrapper` belongs to a control inside a **closed `<dialog>`** (`display: none`, 0x0), and
+several pages hold four. Also note what does *not* mean "broken": controls inside a collapsed
+disclosure panel (the case-contact filters) or a modal (the court-report case picker) need opening
+first; `learning_hours` / `other_duties` list only names that already appear in the data, so they need
+rows before they have options; and `emancipation_checklists` is **volunteer-only** and redirects an
+admin to the dashboard.
+
 ### Searchable single-select
+**Every "assign a person / a case" picker is a type-ahead.** There are **six**, and they are siblings:
+supervisors#index per-row assign supervisor, `casa_cases/_volunteer_assignment` (volunteer -> this case),
+`supervisors/_manage_volunteers` (volunteer -> this supervisor), `volunteers/_manage_cases` (case -> this
+volunteer), `volunteers/_manage_supervisor` (supervisor -> this volunteer), `casa_cases/new` (volunteer at
+case creation). **Five** of them were still native `<select>`s a full turn *after* this rule was written
+and after the copy-court-orders picker was converted, and the user had to report it twice ("there are too
+many cases for the user to scroll through", then "the assigned volunteer to this case drop-down should be
+a Type ahead select field"). **When you convert one instance of a pattern, grep for its siblings in the
+same turn** -- `grep -rn "<select\|\.select \|select_tag" app/views` and check every hit whose options are
+a person or a case list. Short fixed lists (a 3-option status filter, org config like judges / hearing
+types / languages) stay native.
+
+**A filter-bar picker over a person list is searchable too** (reimbursements#index Volunteer, the
+volunteers bar's Supervisor), and it needs three things a *form* picker doesn't. Mark it `ts-filter` on
+the `<select>` -- TomSelect copies the select's classes onto `.ts-wrapper`, which is what the rules hang
+off:
+- **The "All ..." row carries a non-empty value (`"all"`), never `""`.** The theme hides empty-valued
+  options in a menu (`.ts-dropdown .option[data-value=""] { display: none }`, there so a label-less blank
+  option isn't an empty row), so as `value=""` the row that *clears the filter* would be missing from the
+  very menu the user opens to clear it. The controller reads `"all"` as no filter (`volunteers_controller`
+  already did; `reimbursements_controller` now does). It also means a filter, unlike a form picker,
+  **states its current state including "All"** -- so no `placeholder-value` here: the "All ..." option is
+  the selected item on load, exactly as in the native select.
+- **Height matches the bar, not the form.** Filter fields are native `py-2` selects and date inputs at
+  **38px**, while `.ts-control`'s min-height is the 42px form-input height -- so an unmarked control stood
+  4px taller than every field beside it (bottoms aligned by `items-end`, tops 4px out). Measured 38 == 38,
+  tops and bottoms equal, after `.ts-wrapper.ts-filter .ts-control { min-height: 2.375rem }`.
+- **No clear x; keep the caret.** A filter always has a value, so the wrapper is permanently
+  `.has-items` and the clear-button rules would swap its caret for an x on every hover/focus while the
+  native selects beside it keep theirs -- and "clear" on *All supervisors* means nothing. The reset is
+  the "All ..." row.
+
+One person-list select is deliberately **still native**: the `volunteers/index` bulk **Assign a
+supervisor** modal, where `value=""` means **"None"** (unassign) rather than "no choice". Converting it
+needs a non-empty sentinel first (the same hide rule would eat the None row), and it drives
+`disable-form` validation for a bulk write.
+
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
 the `searchable-select` Stimulus controller (TomSelect single-select). A native dropdown is fine only
@@ -564,6 +802,14 @@ past a handful of people.
   (`left:-10000px`) and shows an empty item -- the field then reads as blank with the caret pushed ~1/3
   in. With it false the empty option is neither an item (input stays on-screen showing the placeholder,
   caret right after the icon) nor a menu row.
+- **An empty picker must LOOK disabled.** Put `disabled` on the `<select>` itself, not only on an
+  ancestor `<fieldset disabled>`: the fieldset makes every descendant inert but does **not** set the
+  select's own `disabled` property, which is what TomSelect reads at init to add `.disabled` to the
+  wrapper. tom-select ships no styling for that class either, so `tailwind.css` mirrors the native
+  `disabled:bg-slate-100 disabled:text-slate-500` (`.ts-wrapper.disabled .ts-control`, plus a
+  half-opacity caret). Without both, an "assign a volunteer" card with nothing to assign renders a
+  white, live-looking control that silently does nothing. Don't add `cursor: not-allowed` -- tom-select
+  forces `cursor: default !important` on a disabled control and wins.
 - **Disable the submit until a choice is made** (it now loads blank): pass **`toggle-submit-value="true"`**
   -- the controller disables the closest form's `[type=submit]` until an option is picked and re-disables
   on clear. Add `disabled:opacity-50 disabled:cursor-not-allowed` to that button.
@@ -589,13 +835,105 @@ past a handful of people.
 ### Nested sub-form (repeatable rows)
 The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the
 pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that clones a
-`<template>` (`court-order-form#add`), and a per-row **Delete** (`danger_outline`). Each row
-is a full-width textarea + a one-column design-system status select + Delete, in a
-`flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). Copy-from-sibling is a
-select + Copy button with a Dialog confirm (the `copy-court-orders` controller PATCHes
-`copy_court_orders`, then reloads so the copied orders and the flash show).
+`<template>` (`court-order-form#add`), and a per-row **Delete**.
+
+**An entry follows "Form layout" above -- it is not exempt for being repeatable.** The order text
+is a wide field, so it takes the **full width on its own line**; the implementation status is a
+status select, which that section names explicitly as a **one-column** field, so it sits on the
+**line below** with Delete beside it (`flex flex-wrap items-end gap-3`; below `sm` the select goes
+full width and Delete wraps under it). Entries are separated by a **hairline**
+(`border-t border-slate-100 pt-4 first:border-t-0 first:pt-0`) -- **not** a box each. The add row gets
+**no rule of its own**: a second hairline of the same weight reads as another entry rather than a
+section break, so space separates it (`mt-6`), which is also what GOV.UK "add another" does. Measured
+with two entries: entry rules `0px, 1px`, rule above the add row `0px`.
+
+This entry previously described the opposite -- all three controls side by side in a
+`flex-col sm:flex-row` bordered card -- and that wording was then used to justify keeping the
+cramped row through two rounds of fixes, including one where the three controls were carefully
+measured into alignment at 881px without anyone asking whether they belonged on one line at all.
+Squeezing the main content field into a fraction of the width to fit a select and a button beside it
+is the thing "Form layout" exists to prevent, and a per-entry bordered box is a card inside a card.
+**A note here does not override a rule above; if they disagree, the note is the drift.**
+
+**Copy-from-sibling lives in a Dialog, not in the card.** It used to be a labelled select plus a
+Copy button inside a **grey bordered panel** in the card body -- a filled nested surface inside the
+card (card-in-card) and a *second* input cluster competing with the real one (Court order type +
+Add), on top of the heading, the youth-names note, the order rows and a divider. Reported as too
+busy, and the grey panel is not a design-system surface.
+
+Now: one **secondary action in the section header** ("Copy from another case"), and the case picker
+moves inside the existing Dialog with the confirmation copy and the inline error. That picker is a
+**searchable-select**, not a plain `<select>`: an org can hold hundreds of cases, so scrolling a native
+dropdown to find one is unusable -- and this app already had the typeahead for exactly that (see
+"Typeahead audit"). Reaching for a plain select while *rebuilding* the control was the miss. Two
+details: pass only `class: "block w-full"` (the tom-select theme owns the border/padding and copies
+these classes onto `.ts-wrapper`, so a bordered input class double-borders), and do **not** set
+`dropdownParent: body` inside a `<dialog>` -- the menu would leave the dialog's top layer and paint
+behind it. Specs must drive it as a user does; `select ... from:` cannot reach the clipped native
+select. Validation moves
+with it -- opening the dialog cannot validate a choice that has not been made, so
+`copy-court-orders#confirm` checks the select and `#open` just opens. The card body is then only the
+order rows plus one add row, so **one** labelled cluster and **one** divider (measured: 2 label
+clusters -> 1, tinted panels -> 0). This is the general rule for a form card: an occasional bulk
+shortcut belongs behind a single control, not permanently expanded beside the primary input.
+
+(An earlier version of this section said rows "stay bordered and unfilled" because only a *fill*
+inside a card is wrong. That is not right either: an outlined box per entry is still a nested card.
+Separate repeated entries with a hairline, the same rule as the dashboard worklist.)
+
+**Every field in a repeatable row gets a real `<label>` -- a placeholder is not a label.** The court
+order row named its textarea with `placeholder: "Describe the court order"` and its select with the
+blank option, plus `aria-label`s on both. That passes axe (there *is* an accessible name), which is
+exactly why it survived an audit: placeholder-as-label is not machine-detectable. It fails the user --
+the placeholder disappears the moment you type, so the field loses its identity precisely when you
+are checking your work. Use the **compact label token** (`mb-1 block text-xs font-medium
+text-slate-500`) so a repeated row does not get heavy, drop the now-duplicate placeholder, and drop
+the `aria-label` -- with a real label it only risks the visible and announced names drifting apart.
+
+Two geometry rules when adding labels to such a row, both measured rather than eyeballed:
+- The label goes **outside** the `relative` wrapper that positions a select's chevron. The chevron is
+  `top-1/2` against that wrapper, so a label inside re-centres it against label+select and drops it
+  below the control (verified: chevron mid == select mid, delta 0px).
+- A trailing action (`Delete`) on the same line as a select is **centred on the control**
+  (`items-center`), and the way to get that is structural: put the **label above the flex line**, so
+  the line holds only the select and the button. While the label sits *inside* the line, every
+  alignment is measured against label+select and the button can never centre on the field -- two
+  earlier attempts (`sm:mt-5`, then `items-end`) only made an edge agree, and "select bottom ==
+  Delete bottom" is a measurement that confirms the choice rather than testing it. Measured now:
+  select mid == Delete mid, delta 0px.
+
+**New rows append to the end of the list, directly above the Add control, and focus moves into them.**
+That position is the convention (GOV.UK "add another", Material, Polaris): the control that adds sits
+after the collection, so anything else would put the button in the middle of the list. What was
+missing is the second half -- `@stimulus-components/rails-nested-form#add` inserts `beforebegin` the
+target and leaves focus on the button, so a keyboard user has to hunt for the field they just made.
+`court-order-form#add` now focuses the new textarea and puts the caret after any prefilled
+standard-order text. Note the last row is **not** `:last-of-type` -- the rows share a parent with the
+insertion target div, so that selector returns the target (no textarea) and silently breaks the
+prefill.
 
 ### Autosave wizard form (case-contact)
+
+**Bind the autosave on the FORM, never per field.** `data-action="input->autosave#save"` on the
+`<form>`: `input` bubbles and fires for every control type -- text, number, date, select, checkbox,
+radio -- so one action covers the whole form and cannot be forgotten when a field is added. Per-field
+triggers produced a genuinely confusing form: only notes, topic answers and expense descriptions saved
+themselves, so an edit to duration or medium was **silently dropped** when the user navigated away --
+*unless* they also happened to touch one of those three, because an autosave posts the **entire** form
+and therefore committed everything. Whether your work persisted depended on which field you touched
+last. Measured before the fix: edit the duration, wait past the debounce, leave -> the old value; edit
+the duration then type one character in notes -> both saved.
+
+Because the form autosaves in full, it needs **no Cancel and no unsaved-changes warning** -- the two
+coherent models are "everything autosaves" (Google Docs / Notion / Linear: navigation is the exit) and
+"explicit save" (GitHub / Jira: Cancel plus a `beforeunload` + `turbo:before-visit` guard when dirty).
+This form is the first. A partially-autosaving form is neither, and is the state to avoid.
+
+**Testing an autosave: one interaction per example.** The "Saved!" alert lingers ~3s, so a second
+interaction in the same example will match the PREVIOUS save's alert and let the assertion read the
+database before its own 2s debounce has elapsed -- which reads as "checkboxes don't autosave" when they
+do. Wait on the alert (`within "#contact-form-notes" { find 'small[role=alert]', text: "Saved!" }`),
+then assert the record.
 The case-contact form (`case_contacts/form/details`, a Wicked single-step wizard) is the
 reference for a long **autosave** form on the shell. Render it by setting `layout "casa_app"` on
 the controller — `render_wizard` / `render step` pick it up, while the autosave JSON responses
@@ -759,6 +1097,40 @@ label: light-dark-light on one line reads as broken. Keep the "Label:" wording (
 it) and reword derived text to be self-explanatory ("In care for over 8 years", not
 "(over 8 years ago)").
 
+**A label with nothing after it is a bug, not an empty state.** Omit the whole `dt`/`dd` pair when
+the value **cannot exist yet** -- the volunteer-assignment card rendered "Unassigned:" with an empty
+`dd` on every *active* assignment, leaving a hanging colon (and duplicating what the "Assigned" pill
+already said). Use the muted **"Not set"** value only where the field genuinely applies but is unfilled
+(as `casa_cases#show` does for a youth's date in care). Guard it by asserting no `dd` is blank, not by
+eye.
+
+**Keep a card to the type scale: two sizes, two weights, and let colour carry the role.** A person /
+assignment row is a resource-list item -- identity, muted secondary identity, a status pill, label:value
+metadata, then actions -- and each role gets exactly one treatment:
+
+| role | token |
+|---|---|
+| identity (name) | `text-sm font-medium` + `name_link_class` |
+| secondary identity (email) | `text-sm text-slate-500` |
+| status | the pill (`text-xs font-medium` + tint) |
+| fact label / value | `font-medium text-slate-500` : `text-slate-800`, **both at `text-sm`** |
+| a **control's** label | the Label token, `text-sm font-medium text-slate-700` |
+
+Only the pill is `text-xs`; everything else in the row is 14px, with weight and colour carrying the
+role (measured on one row: 6 size/weight/colour combinations, each mapping to exactly one role).
+**Inline vs stacked:** an inline `dt: dd` pair keeps ONE size for label and value -- 12px against 14px
+on a shared baseline reads as ragged. The 12px label belongs to the **stacked** variant, where it sits
+*above* its value (`dt text-xs text-slate-500` / `dd mt-0.5 text-sm text-slate-700`, as in the
+volunteers-index mobile cards); there the size step is the hierarchy cue. Either way the value stays at
+`text-sm` (see Typography: 12px is chrome, not content).
+
+What made this card unparseable was not the *number* of styles but that two different roles shared
+one: the "Enable reimbursement" checkbox label sat at `text-xs font-medium text-slate-600` while the
+fact values were `text-xs font-medium text-slate-700` -- visually the same thing, so an actionable
+control read as another piece of metadata. Measured before/after on one row: 7 size/weight/colour
+combinations -> 6, but every remaining one now maps to a single role. **Give a control the control
+token; never the metadata token.**
+
 ### Table (in a card)
 Full-bleed table inside an `overflow-hidden rounded-2xl` card: a header row
 (`border-b border-slate-100 p-4`), then `thead`/`tbody` with cells `px-4 py-3` and
@@ -766,6 +1138,36 @@ Full-bleed table inside an `overflow-hidden rounded-2xl` card: a header row
 the rounded bottom corner instead of butting against it (use `py-2` for a header-less
 list card — e.g. notifications — so the first row clears the top corner too). Keep rows
 a uniform height (a taller last row reads as a bug).
+
+**State that decides whether something is visible must be a pill, and fixable in one click.** The
+banners list reported "Active?" as plain body text ("Yes"/"No") in the same weight as every other
+cell, `create` set no flash at all, and the only way to activate was to find the checkbox on the edit
+form. A banner saved without ticking Active is invisible by design, so the whole feature read as
+broken -- reported as "banners do not work, when I create one it does not load", with two inactive
+banners sitting in the list. Status is now the documented pill (emerald check / slate minus), each
+inactive row has an **Activate** action, and create/update flash the outcome: a `:notice` (green,
+auto-dismisses) when it is live, an **`:alert`** (amber, stays put) when it is not, because that one
+has to be read. When an object has a published/active flag, assume nobody will infer it from a table
+cell.
+
+**Every table converged (2026-07-30).** The three separator sources -- a card title block's
+`border-b`, the `thead` `<tr>`'s `border-b`, and a `divide-y` on the `<table>` element itself -- must
+sum to exactly **one**, and `tbody` is always `divide-y divide-slate-50`. Swept app-wide: 15 tables
+carried `divide-y divide-slate-200` on the table (a darker rule than the token, and a second one
+wherever a header row also had a border), 7 still had the forbidden `thead` fill, one
+(`users/_languages`) had **no** separator at all, and `reimbursements` was on `divide-slate-100` rows.
+All 41 tables now satisfy the invariant -- re-check with a static audit over
+`app/views/**/*.erb`, not by sampling pages, and note that a `thead` fill hides behind longer class
+strings (`class="bg-slate-50 text-left text-xs ..."` survived a grep for the exact attribute).
+
+**Exactly ONE rule above the column headers.** A card with a title block
+(`border-b border-slate-100 p-4`) already has its separator, so the `thead`'s `<tr>` must **not** add
+a second -- two hairlines ~40px apart read as a mistake. Absent a title block (the cases /
+supervisors / volunteers index tables), the `thead`'s `border-b` *is* the separator and stays. Audited
+app-wide: the doubling was in all three dashboard worklists and, pre-existing, in the supervisor "Your
+volunteers", volunteer "Your cases" and `volunteers/_notes` tables -- 6 sites, all fixed. It got there
+by copying a neighbouring table instead of checking this section, which propagates drift rather than
+catching it: **match the pattern, not the nearest sibling.**
 
 ### Tables (bespoke) + pagination
 Hand-built Tailwind (dashboard tables + cases index), not DataTables. `overflow-hidden
@@ -942,6 +1344,75 @@ Implemented (emerald + check), Partially implemented (amber + clock), Not implem
 model `implementation_status_symbol` that returned literal ✅/🕗/❌, which render
 inconsistently across platforms and are invisible to a class-string button audit). Court orders render as a compact 2-column **table** (`Court order` | `Status`, design.md table tokens: sentence-case `text-xs font-semibold text-slate-600` header, `align-top` cells, `divide-y`; pill in a left-aligned `whitespace-nowrap` status column). NOT a leading badge (variable widths make the directive text start at a ragged left edge) and NOT a right-floating badge (it hovers at the top-right of multi-line directive text) -- both were tried and read wrong; the directive text is a paragraph, so it needs a real column.
 
+**A pill carries a status, never a quantity.** Counts belong in their own right-aligned numeric
+column (`text-right` + **`tabular-nums`**), with the label in the column header and the cell
+holding just the numeral. Every major system draws this line the same way -- Polaris badges,
+Atlassian lozenges, Carbon tags are all for categorical state -- and GOV.UK and Material both
+specify right alignment for numbers so digits line up and a column can be compared top to bottom.
+
+The supervisor roster had three count pills stacked in one "Volunteers" cell
+(`N attempting` / `N not attempting` / `N transition-aged`), the first two omitted at zero. Two
+things went wrong, and they are what to watch for:
+- **Ragged metrics.** Because the leading pills were conditional, the *same* metric landed at a
+  different x-offset on every row -- measured 787 / 651 / 673px for `transition-aged` across three
+  rows. Nothing could be scanned down the column. As columns, all four right-align exactly.
+- **Omitting a zero breaks comparison.** Show `0` (muted `text-slate-500`), don't drop the cell;
+  a missing number is not the same as zero, and dropping it is what made the row shift.
+Counts are also **dead ends unless they link**: point each one at the filtered list where a filter
+exists (`volunteers_path(supervisor:)`, `volunteers_path(supervisor:, transition: "yes")`). Colour
+and weight stay as *reinforcement* only -- the header names the column, so nothing is colour-only.
+
+**Every figure in a numeric column gets the SAME style -- one colour, one weight, zeros included.**
+Use the table body colour (`text-slate-700`) + `tabular-nums` + `text-right` and vary nothing per
+cell. This took three tries to get right, and each intermediate version looked reasonable in
+isolation:
+1. rose on the non-zero "needs follow-up" count. rose *is* that semantic token, but the system spends
+   it on **status pills and danger buttons**, not bare coloured digits, where it makes colour carry
+   the meaning and reads as an error state rather than a figure.
+2. weight instead (`font-semibold` on the interesting one, muted `text-slate-500` for zeros) plus a
+   brand-coloured link on the two figures that had somewhere to point.
+That last combination put **four different treatments in four adjacent cells** -- colour meaning "is
+a link", weight meaning "is the actionable one", muting meaning "is zero" -- three unrelated signals
+fighting in the one place whose whole purpose is comparing figures down and across. A reader cannot
+tell whether blue-vs-grey encodes magnitude, status, or navigability.
+
+So: **no per-cell emphasis, and never put the drill-through on the numeral.** Where the row needs to
+link somewhere, make it **one row-level action** in the actions column (`ghost_class`, alongside
+Edit -- the two-ghost-action shape the cases table already uses). That also stops the styling from
+advertising an asymmetry in the data model: only two of the roster's four counts could link at all,
+because `volunteers#index` filters by supervisor and transition age but not by contact activity.
+If a count genuinely needs a status treatment, that is a pill in its own status column -- in the
+numeric column it would break the digit alignment the column exists for.
+
+**A count that links needs `record_link_class`, and the destination needs a way back.** These are
+record links in a links-only cell, so the brand colour is the cue: use
+`"font-medium #{record_link_class}"` and **not** a hand-rolled string with a persistent underline
+(that treatment is reserved for a record link sitting inline in body text, and hand-rolling it also
+loses the helper's focus ring). Drilling from a roster into a filtered list is a **flow trap** unless
+the destination offers a return -- the rule already stated under Names, and easy to miss because the
+destination here (`volunteers#index`) is itself a top-level nav page, so it must show the back link
+**only** when it was actually reached from somewhere:
+- Mark the origin with `from:` on the drill-through link -- the app's existing convention
+  (`volunteers/edit` already reads `from=other_duties` / `from_case_id`).
+- Render the documented chevron only when `params[:from]` says so. A page with top-right actions uses
+  the "title + actions" shape (back link + `h1 mt-2` as the left column), not `shared/_page_header`.
+- **Carry the origin through anything that re-renders the page**: a filter bar submits only its own
+  fields, so without a hidden `from` the back link vanishes the moment the user filters.
+  `shared/_pagination` is already safe (it merges `request.query_parameters`).
+- **Carry it one hop further**, onto the per-row links, or the next page returns to the *unfiltered*
+  list and strands the user again. Verified end to end: roster -> filtered list -> volunteer -> back
+  to the filtered list -> back to the roster, with the link absent when arriving from the nav.
+
+**Trade-off to check when converting pills to columns:** wrapping pills fit a narrow viewport;
+fixed columns do not. The roster table measured 341px (no scroll) as pills and 616px in a 341px
+viewport as six columns, i.e. the change *introduced* horizontal scrolling on mobile. A data table
+is the documented WCAG 1.4.10 Reflow exception and axe stays clean either way, so this will not show
+up in an audit -- measure it. The fix is this page's existing pattern: desktop table
+`hidden md:block` plus a `md:hidden` card list repeating the figures in a labelled `dl` grid. Hoist
+the counts into one array first (`no_attempt_for_two_weeks` walks every volunteer's contacts, so
+rendering both copies would double that), and keep ids and `[data-stat]` hooks on the table only so
+the two copies never collide.
+
 ### Person avatar (initials)
 `grid place-items-center h-9 w-9 rounded-full text-xs font-semibold` with a soft color
 pair (e.g. `bg-sky-100 text-sky-700`). **People only — never for status.**
@@ -989,6 +1460,60 @@ with no return is a flow trap).
 
 ### Tag
 "mine" etc.: `rounded bg-brand-50 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wide text-brand-600`.
+
+### Dashboard worklist ("Needs your attention")
+A prioritised list of things to act on. **One container: the section card** -- and inside it, the
+same desktop-table + `md:hidden`-divided-list pair the sibling tables on these pages already use
+(`hidden overflow-x-auto md:block` table, then `divide-y divide-slate-100 md:hidden` rows).
+
+**Pick table vs list by the row's width, not by taste.** A divided list is right in a narrow column
+and wrong in a wide card: `justify-between` pins two small items to opposite edges, and at a ~918px
+card that measured a **645px void** per row -- which reads as an empty table, the exact complaint the
+tinted boxes had been hiding. Columns spend that width on data instead (largest inter-column gap after
+the fix: 0px). So:
+- **Wide card (a full-width dashboard section): a table.** Give it at least two data columns, or the
+  same void reappears in table clothing -- the admin worklist only had a case number, so it gained a
+  **Next court date** column, which is also what you triage on. Use the sibling table's tokens:
+  `thead` `text-left text-xs font-semibold text-slate-500`, `th`/`td` `px-4 py-3`, `tbody`
+  `divide-y divide-slate-50`, `tr` `hover:bg-slate-50/70`, `<caption class="sr-only">`, `scope="col"`.
+- **Narrow column or below `md`: the divided list**, with the context on a second
+  `text-xs text-slate-500` line.
+If a new column needs data the service does not have, **batch it** -- `AdminDashboard` documents
+"no per-case queries", so `next_court_dates` is one grouped `minimum(:date)` lookup, not
+`CasaCase#next_court_date` per row (3 queries total for the section, verified).
+
+Each row is primary text (a record link, or a person's name as identifying `font-medium
+text-slate-800` + the initials avatar), and **one** action.
+
+**Do not give each row its own box.** All three dashboards shipped every row as a rose-tinted,
+rose-bordered `rounded-xl` panel with a filled 40px rose icon tile, nested inside the section card.
+Two things go wrong and both get worse with length:
+- **Card-in-card.** The section card is already the container; repeating it per row is the nested-card
+  anti-pattern Material calls out for continuous lists. Measured at six rows: 6 boxes, 12 rose-tinted
+  elements and 6 icon tiles, 528px tall vs 483px for the divided list.
+- **A tint on every row signals nothing.** Alert fill is for a *single* message (one banner). Applied
+  to a repeating collection it stops meaning "urgent" and just becomes the background, while fighting
+  the card it sits in. State severity **once** -- the section heading plus its count.
+
+**List or table?** A list when each row is "an entity + a little context + an action" (Polaris
+ResourceList). A table only when rows carry several comparable attributes worth scanning or sorting
+column-wise -- then use the numeric-column rules above. These worklists are the former.
+
+**One action button per row.** The supervisor dashboard had *two adjacent ghost buttons with the
+same href* -- "Send reminder" and "View", both the volunteer page. Two controls styled alike, sitting
+side by side, doing the same thing. Keep the verb (deep-linking it to the page where the action lives
+is fine and is what these dashboards do: "Assign a volunteer" -> the case page) and drop the second.
+
+A record link in the row text *plus* one action button is **not** the same defect, even when both
+resolve to the same page: they are different affordances in different positions, and the row reads
+"here is the case / here is what to do". So the dashboards differ on purpose -- a case number is a
+record link (`record_link_class`), while a person's name is identifying text
+(`font-medium text-slate-800`), because design.md prefers not to route users out of a flow via a
+name. Admin/volunteer rows therefore carry a record link + an action; supervisor rows carry a name +
+an action.
+
+The empty state keeps its single tinted panel -- that is one message, which is exactly what alert
+fill is for.
 
 ### Empty states (3 patterns)
 1. **Cold start** (no data yet): centered icon tile + heading + one-line explainer +

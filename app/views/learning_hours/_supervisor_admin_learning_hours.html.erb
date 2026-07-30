@@ -1,20 +1,39 @@
-<%# Supervisor/admin learning-hours roster (casa_app). One row per volunteer with their
-    year-to-date total. Server-rendered + Pagy paginated; retires the client-side DataTable
-    (learning_hours.js targets table#learning-hours, so the id is intentionally omitted here). %>
+<%# Supervisor/admin learning-hours roster (casa_app). One row per volunteer with their total for a
+    date range the user chooses (defaults to the calendar year to date). Server-rendered + Pagy
+    paginated; retires the client-side DataTable (learning_hours.js targets table#learning-hours, so
+    the id is intentionally omitted here).
+
+    The column header states the period. It used to read "Time completed this year" while nothing in
+    the query filtered occurred_at, so the number was an all-time total -- the header named a period
+    the data did not have. %>
 <% content_for :page_title, "Learning hours" %>
 <% th = "px-4 py-3 text-left text-xs font-semibold text-slate-600 whitespace-nowrap align-top" %>
 <% td = "px-4 py-3 text-sm text-slate-700 align-top" %>
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <h1 class="mb-4 text-2xl font-bold tracking-tight text-slate-900">Learning hours</h1>
 
-  <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 sm:max-w-xs" do %>
-    <select name="search" aria-label="Search volunteers" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
-      <option value=""></option>
-      <% @roster_names.each do |name| %>
-        <option value="<%= name %>" <%= "selected" if name == params[:search] %>><%= formatted_name(name) %></option>
-      <% end %>
-    </select>
-    <noscript><%= submit_tag "Search", class: "#{button_classes(:primary)} mt-2" %></noscript>
+  <%# Filter bar tokens match the other rosters (cases / volunteers / supervisors). %>
+  <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
+  <% date_class = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
+    <div class="col-span-2 lg:min-w-[14rem] lg:max-w-xs lg:flex-1">
+      <%= label_tag :search, "Volunteer", class: label_class %>
+      <select name="search" id="search" data-controller="searchable-select" data-searchable-select-placeholder-value="Search volunteers" class="block w-full">
+        <option value=""></option>
+        <% @roster_names.each do |name| %>
+          <option value="<%= name %>" <%= "selected" if name == params[:search] %>><%= formatted_name(name) %></option>
+        <% end %>
+      </select>
+    </div>
+    <div class="lg:min-w-[9rem]">
+      <%= label_tag :from, "From", class: label_class %>
+      <%= date_field_tag :from, @period_from, max: Date.current, autocomplete: "off", class: date_class %>
+    </div>
+    <div class="lg:min-w-[9rem]">
+      <%= label_tag :to, "To", class: label_class %>
+      <%= date_field_tag :to, @period_to, max: Date.current, autocomplete: "off", class: date_class %>
+    </div>
+    <noscript><%= submit_tag "Apply", class: button_classes(:primary) %></noscript>
   <% end %>
 
   <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white pt-2 shadow-sm">
@@ -23,7 +42,18 @@
         <thead>
           <tr class="border-b border-slate-100">
             <th class="<%= th %>">Volunteer</th>
-            <th class="<%= th %>">Time completed this year</th>
+            <%# Names the period rather than claiming "this year": the range is user-selectable, and the
+                start date is the thing a supervisor needs in order to read the number. %>
+            <th class="<%= th %>">
+              Time completed
+              <span class="mt-0.5 block font-normal text-slate-500">
+                <%= if @period_to == Date.current
+                      "since #{I18n.l(@period_from, format: :full)}"
+                    else
+                      "#{I18n.l(@period_from, format: :full)} to #{I18n.l(@period_to, format: :full)}"
+                    end %>
+              </span>
+            </th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-50">

@@ -53,28 +53,58 @@
       </div>
     </div>
 
-    <section class="mt-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm" aria-labelledby="attention-heading">
-      <div class="mb-4 flex items-center justify-between">
-        <h2 id="attention-heading" class="text-base font-semibold text-slate-900">Needs your attention</h2>
-        <% if @dashboard.unassigned_cases.any? %><%= link_to "All cases", casa_cases_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %><% end %>
+    <%# Worklist. On md+ a real table: each row here is one short datum plus an action, and
+        justify-between across a ~918px card left a measured 645px void that read as an empty table.
+        Columns spend that width on data instead. Below md the table would scroll, so the same rows
+        render as a divided list -- the pattern the sibling tables on this page already use. %>
+    <section class="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white pb-2 shadow-sm" aria-labelledby="attention-heading">
+      <div class="flex items-center justify-between gap-3 border-b border-slate-100 p-4">
+        <div>
+          <h2 id="attention-heading" class="text-base font-semibold text-slate-900">Needs your attention</h2>
+          <% if @dashboard.needs_attention.any? %>
+            <p class="mt-0.5 text-sm text-slate-500"><%= pluralize(@dashboard.stats[:unassigned], "active case") %> with no volunteer assigned.</p>
+          <% end %>
+        </div>
+        <% if @dashboard.unassigned_cases.any? %><%= link_to "All cases", casa_cases_path, class: "shrink-0 text-sm font-medium #{record_link_class}" %><% end %>
       </div>
       <% if @dashboard.needs_attention.any? %>
-        <p class="mb-3 text-sm text-slate-500"><%= pluralize(@dashboard.stats[:unassigned], "active case") %> with no volunteer assigned.</p>
-        <ul class="space-y-2.5">
-          <% @dashboard.needs_attention.each do |casa_case| %>
-            <li class="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-rose-100 bg-rose-50/40 px-4 py-3">
-              <div class="flex items-center gap-3">
-                <span class="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-rose-100 text-rose-600"><i class="bi bi-person-dash" aria-hidden="true"></i></span>
-                <div class="font-semibold text-slate-800"><%= link_to casa_case.case_number, casa_case_path(casa_case), class: record_link_class %></div>
-              </div>
-              <%= link_to casa_case_path(casa_case), class: ghost_class do %>
-                <i class="bi bi-person-plus" aria-hidden="true"></i> Assign a volunteer
+        <% next_dates = @dashboard.next_court_dates %>
+        <div class="hidden overflow-x-auto md:block">
+          <table class="w-full text-sm">
+            <caption class="sr-only">Active cases with no volunteer assigned, and their next court date.</caption>
+            <thead class="text-left text-xs font-semibold text-slate-500">
+              <tr class="">
+                <th scope="col" class="px-4 py-3 font-semibold">Case</th>
+                <th scope="col" class="px-4 py-3 font-semibold">Next court date</th>
+                <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-50">
+              <% @dashboard.needs_attention.each do |casa_case| %>
+                <tr class="hover:bg-slate-50/70">
+                  <td class="px-4 py-3 align-top"><%= link_to casa_case.case_number, casa_case_path(casa_case), class: "font-medium #{record_link_class}" %></td>
+                  <td class="px-4 py-3 align-top text-slate-700"><%= next_dates[casa_case.id] ? I18n.l(next_dates[casa_case.id], format: :standard) : tag.span("None set", class: "text-slate-500") %></td>
+                  <td class="px-4 py-3 text-right align-top whitespace-nowrap">
+                    <%= link_to casa_case_path(casa_case), class: ghost_class do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign a volunteer<% end %>
+                  </td>
+                </tr>
               <% end %>
-            </li>
+            </tbody>
+          </table>
+        </div>
+        <div class="divide-y divide-slate-100 md:hidden">
+          <% @dashboard.needs_attention.each do |casa_case| %>
+            <div class="flex flex-wrap items-center justify-between gap-3 px-4 py-3">
+              <div class="min-w-0">
+                <div><%= link_to casa_case.case_number, casa_case_path(casa_case), class: "font-medium #{record_link_class}" %></div>
+                <div class="mt-0.5 text-xs text-slate-500">Next court date: <%= next_dates[casa_case.id] ? I18n.l(next_dates[casa_case.id], format: :standard) : "none set" %></div>
+              </div>
+              <%= link_to casa_case_path(casa_case), class: ghost_class do %><i class="bi bi-person-plus" aria-hidden="true"></i> Assign<% end %>
+            </div>
           <% end %>
-        </ul>
+        </div>
       <% else %>
-        <div class="flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
+        <div class="m-4 flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 p-4">
           <span class="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-600"><i class="bi bi-check2-circle text-xl" aria-hidden="true"></i></span>
           <div>
             <h3 class="text-sm font-semibold text-slate-900">Every case has a volunteer</h3>

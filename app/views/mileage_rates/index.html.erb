@@ -20,16 +20,16 @@
   <% if @mileage_rates.any? %>
     <div class="<%= card %> overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200" id="mileage_rates">
-          <thead class="bg-slate-50">
-            <tr>
+        <table class="min-w-full" id="mileage_rates">
+          <thead>
+            <tr class="border-b border-slate-100">
               <th scope="col" class="<%= th %>">Effective date</th>
               <th scope="col" class="<%= th %>">Amount</th>
               <th scope="col" class="<%= th %>">Active?</th>
               <th scope="col" class="<%= th %> text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100">
+          <tbody class="divide-y divide-slate-50">
             <% @mileage_rates.each do |mileage_rate| %>
               <tr>
                 <td class="<%= td %> whitespace-nowrap"><%= I18n.l(mileage_rate.effective_date, format: :full, default: nil) %></td>

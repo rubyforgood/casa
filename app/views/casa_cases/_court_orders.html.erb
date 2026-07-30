@@ -3,43 +3,44 @@
     left intact. Preserves the court-order-form Stimulus targets (template / target /
     selectedCourtOrder) and the copy-from-sibling JS hooks: `copy-court-button` plus the
     hidden `casa_case` field, which casa_case.js reads via the button's next sibling. %>
-<h2 class="text-base font-semibold text-slate-900">Court orders</h2>
-<p class="mt-1 text-sm text-slate-500">Please check that you didn't enter any youth names.</p>
-
-<template data-court-order-form-target="template">
-  <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
-    <%= render "casa_cases/court_order_fields", f: ff %>
-  <% end %>
-</template>
-
-<div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list" class="mt-4">
+<%# One header row: heading + the occasional "copy from another case" action. That action used to be
+    a labelled select and a Copy button inside a grey bordered panel in the card body -- a nested
+    surface inside the card (card-in-card) and a second input cluster competing with the real one
+    (Court order type + Add). The picker now lives in its own Dialog, so the card body is just the
+    order rows and the add row. %>
+<div class="flex flex-wrap items-start justify-between gap-3">
+  <div class="min-w-0">
+    <h2 class="text-base font-semibold text-slate-900">Court orders</h2>
+    <p class="mt-1 text-sm text-slate-500">Please check that you didn't enter any youth names.</p>
+  </div>
   <% if siblings_casa_cases && siblings_casa_cases.count >= 1 %>
-    <div data-controller="copy-court-orders" data-copy-court-orders-casa-case-id-value="<%= casa_case.id %>"
-         class="mb-4 rounded-lg border border-slate-200 bg-slate-50 p-3">
-      <div class="flex flex-wrap items-end gap-2">
-        <div class="min-w-0 flex-1">
-          <label for="casa_case_siblings_casa_cases" class="mb-1.5 block text-sm font-medium text-slate-700">Copy all orders from case</label>
-          <div class="relative">
-            <select id="casa_case_siblings_casa_cases" data-copy-court-orders-target="select" data-action="copy-court-orders#clearError"
-                    class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
-              <option value="">Select a case</option>
-              <% siblings_casa_cases.each do |scc| %>
-                <option value="<%= scc.case_number %>"><%= scc.case_number %></option>
-              <% end %>
-            </select>
-            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-          </div>
-        </div>
-        <%= button_tag "Copy", type: "button", id: "copy-court-button", data: {action: "copy-court-orders#open"}, class: button_classes(:secondary) %>
-      </div>
-      <p data-copy-court-orders-target="error" role="alert" class="mt-1.5 hidden text-sm text-slate-500"><i class="bi bi-exclamation-circle text-rose-600" aria-hidden="true"></i> Choose a case to copy orders from.</p>
+    <div data-controller="copy-court-orders" data-copy-court-orders-casa-case-id-value="<%= casa_case.id %>" class="contents">
+      <%= button_tag type: "button", id: "copy-court-button", data: {action: "copy-court-orders#open"}, class: "#{button_classes(:secondary)} shrink-0" do %>
+        <i class="bi bi-files" aria-hidden="true"></i> Copy from another case
+      <% end %>
 
       <div data-controller="modal" class="contents">
         <dialog data-modal-target="dialog" data-copy-court-orders-target="dialog" data-action="click->modal#backdropClose"
                 aria-label="Copy court orders" class="w-[calc(100vw-2rem)] max-w-md overflow-hidden rounded-2xl p-0 text-left shadow-xl backdrop:bg-slate-900/40">
-          <%= render Dialog::HeaderComponent.new(title: "Copy court orders?", icon: "bi bi-files", variant: :info) %>
+          <%= render Dialog::HeaderComponent.new(title: "Copy court orders", icon: "bi bi-files", variant: :info) %>
           <%= render Dialog::BodyComponent.new do %>
-            <p class="text-sm text-slate-600">Copy all orders from case #<span data-copy-court-orders-target="caseNumber" class="font-medium text-slate-900"></span>? They are added to this case and existing orders are kept.</p>
+            <label for="casa_case_siblings_casa_cases" class="mb-1.5 block text-sm font-medium text-slate-700">Copy all orders from case</label>
+            <%# Searchable, not a plain select: an org can have hundreds of cases and scrolling a native
+                dropdown to find one is unusable. Minimal class only -- the tom-select theme owns the
+                border/padding on .ts-control, and TomSelect copies these classes onto .ts-wrapper, so a
+                bordered input class here double-borders. NOT dropdownParent: body -- the menu would
+                render outside the dialog's top layer and be painted behind it. %>
+            <select id="casa_case_siblings_casa_cases" data-copy-court-orders-target="select"
+                    data-action="copy-court-orders#clearError"
+                    data-controller="searchable-select" data-searchable-select-placeholder-value="Search case number"
+                    class="block w-full">
+              <option value=""></option>
+              <% siblings_casa_cases.each do |scc| %>
+                <option value="<%= scc.case_number %>"><%= scc.case_number %></option>
+              <% end %>
+            </select>
+            <p data-copy-court-orders-target="error" role="alert" class="mt-1.5 hidden text-sm text-slate-500"><i class="bi bi-exclamation-circle text-rose-600" aria-hidden="true"></i> Choose a case to copy orders from.</p>
+            <p class="mt-3 text-sm text-slate-600">The orders are added to this case. Existing orders are kept.</p>
           <% end %>
           <%= render Dialog::FooterComponent.new do %>
             <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>
@@ -49,15 +50,28 @@
       </div>
     </div>
   <% end %>
+</div>
 
-  <div class="space-y-3">
+<template data-court-order-form-target="template">
+  <%= form.fields_for :case_court_orders, CaseCourtOrder.new, child_index: "NEW_RECORD" do |ff| %>
+    <%= render "casa_cases/court_order_fields", f: ff %>
+  <% end %>
+</template>
+
+<div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list" class="mt-4">
+  <%# No per-entry box and no space-y: each entry carries a border-t (first:border-t-0), so the
+      entries read as a divided list rather than a stack of nested cards. %>
+  <div>
     <%= form.fields_for :case_court_orders do |ff| %>
       <%= render "casa_cases/court_order_fields", f: ff %>
     <% end %>
     <div data-court-order-form-target="target"></div>
   </div>
 
-  <div class="mt-4 flex flex-wrap items-end gap-2 border-t border-slate-100 pt-4">
+  <%# No rule above the add row: entries are already separated by a hairline of the same weight, so a
+      second one here read as another entry rather than a section break. Space does the separating
+      (GOV.UK "add another" puts the control below the list with clear space, not another rule). %>
+  <div class="mt-6 flex flex-wrap items-end gap-2">
     <div class="min-w-0 flex-1">
       <%= label_tag :selectedCourtOrder, "Court order type", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
       <div class="relative">

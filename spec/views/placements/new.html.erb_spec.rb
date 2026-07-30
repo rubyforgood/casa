@@ -14,7 +14,7 @@ RSpec.describe "placements/new", type: :view do
   let(:casa_case) { create(:casa_case) }
 
   it { is_expected.to have_selector("h1", text: "New placement") }
-  it { is_expected.to have_selector("h6", text: casa_case.case_number) }
+  it { is_expected.to have_selector("p", text: casa_case.case_number) }
   it { is_expected.to have_link(casa_case.case_number, href: "/casa_cases/#{casa_case.case_number.parameterize}") }
   it { is_expected.to have_button("Create") }
 end

@@ -40,6 +40,41 @@ RSpec.describe "dashboard/show", type: :system do
     end
   end
 
+  context "the Needs your attention list" do
+    let(:supervisor) { create(:supervisor) }
+
+    before do
+      3.times do
+        vol = create(:volunteer, casa_org: supervisor.casa_org, supervisor: supervisor)
+        kase = create(:casa_case, casa_org: supervisor.casa_org)
+        create(:case_assignment, volunteer: vol, casa_case: kase, active: true)
+      end
+      sign_in supervisor
+    end
+
+    it "is a table with real columns, not tinted boxes or a stretched list" do
+      visit root_path
+
+      section = find("[aria-labelledby='attention-heading']")
+      # Columns spend the card's width on data. As a list, each row was one or two short items flung
+      # to opposite edges of a ~918px card, leaving a measured 645px void that read as an empty table.
+      expect(section).to have_css("table tbody tr", count: 3)
+      expect(section).to have_css("table thead th", minimum: 3)
+
+      # Rows used to carry their own rose border, rose fill and a filled 40px icon tile nested inside
+      # this card; a tint on every row signals nothing. Severity is stated once, by the heading.
+      # Scoped to the row and its cells: an initials avatar may legitimately be bg-rose-100, since
+      # avatar_color cycles a palette by volunteer id, so a section-wide "no rose" assertion fails at
+      # random (it did -- 2 runs in 8).
+      expect(section).to have_no_css("tr[class*='bg-rose'], tr[class*='border-rose']")
+      expect(section).to have_no_css("td[class*='bg-rose'], td[class*='border-rose']")
+      expect(section).to have_no_css("span.h-10")
+
+      # One action per row -- the name beside it is identifying text, not a second link to the same page.
+      section.all("table tbody tr").to_a.each { |row| expect(row.all("a").size).to eq 1 }
+    end
+  end
+
   context "admin user" do
     before do
       sign_in casa_admin

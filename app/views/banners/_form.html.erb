@@ -32,7 +32,7 @@
         </div>
         <div>
           <%= form.label :content, class: label_class do %>Content <%= req %><% end %>
-          <%= form.rich_text_area :content, class: "trix-content rounded-lg border border-slate-300 shadow-sm" %>
+          <%= form.rich_text_area :content, class: "trix-content rounded-lg border border-slate-300 shadow-sm", aria: {label: "Content"} %>
         </div>
         <div>
           <%= button_tag type: "submit", class: button_classes(:primary) do %>

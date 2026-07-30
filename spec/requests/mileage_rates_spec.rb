@@ -111,8 +111,26 @@ RSpec.describe "/mileage_rates", type: :request do
     end
   end
 
+  describe "GET /edit" do
+    let!(:mileage_rate) { create(:mileage_rate, casa_org: casa_org) }
+
+    before { sign_in admin }
+
+    it "renders a successful response" do
+      get edit_mileage_rate_path(mileage_rate)
+
+      expect(response).to be_successful
+    end
+
+    it "does not expose another org's mileage rate" do
+      get edit_mileage_rate_path(create(:mileage_rate))
+
+      expect(response).to have_http_status(:not_found)
+    end
+  end
+
   describe "PATCH /update" do
-    let(:mileage_rate) { create(:mileage_rate, amount: 10.11, effective_date: DateTime.parse("01-01-2021")) }
+    let(:mileage_rate) { create(:mileage_rate, amount: 10.11, effective_date: DateTime.parse("01-01-2021"), casa_org: casa_org) }
 
     before { sign_in admin }
 
@@ -149,8 +167,19 @@ RSpec.describe "/mileage_rates", type: :request do
       end
     end
 
+    context "when the mileage rate belongs to another organization" do
+      let(:other_org_mileage_rate) { create(:mileage_rate, amount: 10.11) }
+
+      it "does not update it" do
+        patch mileage_rate_path(other_org_mileage_rate), params: {mileage_rate: {amount: "22.87"}}
+
+        expect(response).to have_http_status(:not_found)
+        expect(other_org_mileage_rate.reload.amount).to eq 10.11
+      end
+    end
+
     context "when updating the mileage rate effective date and already exists one" do
-      let(:another_mileage_rate) { create(:mileage_rate) }
+      let(:another_mileage_rate) { create(:mileage_rate, casa_org: casa_org) }
       let(:params) do
         {
           mileage_rate: {

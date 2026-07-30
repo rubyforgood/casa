@@ -16,17 +16,24 @@ class LearningHour < ApplicationRecord
   }
   validates :learning_hour_topic, presence: true, if: :user_org_learning_topic_enable?
 
-  scope :supervisor_volunteers_learning_hours, ->(supervisor_id) {
+  # `occurred_in` is optional so the Pundit scopes keep meaning "everything this user may see".
+  # The roster passes a range; without one these totals are all-time, which is what the roster
+  # column used to show while its header said "this year".
+  scope :occurred_in, ->(range) { range ? where(occurred_at: range) : all }
+
+  scope :supervisor_volunteers_learning_hours, ->(supervisor_id, range = nil) {
     joins(user: :supervisor_volunteer)
       .where(supervisor_volunteers: {supervisor_id: supervisor_id})
+      .occurred_in(range)
       .select("users.id as user_id, users.display_name, SUM(learning_hours.duration_minutes + learning_hours.duration_hours * 60) AS total_time_spent")
       .group("users.display_name, users.id")
       .order("users.display_name")
   }
 
-  scope :all_volunteers_learning_hours, ->(casa_admin_org_id) {
+  scope :all_volunteers_learning_hours, ->(casa_admin_org_id, range = nil) {
     joins(:user)
       .where(users: {casa_org_id: casa_admin_org_id})
+      .occurred_in(range)
       .select("users.id as user_id, users.display_name, SUM(learning_hours.duration_minutes + learning_hours.duration_hours * 60) AS total_time_spent")
       .group("users.display_name, users.id")
       .order("users.display_name")

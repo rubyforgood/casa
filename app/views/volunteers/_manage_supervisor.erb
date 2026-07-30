@@ -22,18 +22,27 @@
       <div class="mt-2 flex flex-wrap items-end gap-3">
         <div class="min-w-0 flex-1">
           <label for="supervisor_volunteer_supervisor_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a supervisor</label>
-          <div class="relative">
-            <select name="supervisor_volunteer[supervisor_id]" id="supervisor_volunteer_supervisor_id" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none">
-              <% @supervisors.each do |supervisor| %>
-                <option value="<%= supervisor.id %>"><%= formatted_name(supervisor.display_name) %></option>
-              <% end %>
-            </select>
-            <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-          </div>
+          <%# Searchable, like every other "assign a person" picker. It now loads BLANK: with no blank
+              option the first supervisor was pre-selected, so "Assign supervisor" assigned whoever
+              happened to sort first -- and clearing a TomSelect that has no blank option makes the
+              browser re-select the first one, which would submit that person silently. Guarded twice so
+              a blank never reaches the controller (`Supervisor.find` raises on a blank id): `required`
+              for the no-JS path, toggle-submit for the JS path. %>
+          <select name="supervisor_volunteer[supervisor_id]" id="supervisor_volunteer_supervisor_id" required
+                  data-controller="searchable-select"
+                  data-searchable-select-placeholder-value="Search supervisors"
+                  data-searchable-select-toggle-submit-value="true"
+                  class="block w-full">
+            <option value=""></option>
+            <% @supervisors.each do |supervisor| %>
+              <option value="<%= supervisor.id %>"><%= formatted_name(supervisor.display_name) %></option>
+            <% end %>
+          </select>
         </div>
         <%= form.hidden_field :volunteer_id, value: @volunteer.id %>
         <%= button_tag "Assign supervisor", type: "submit", class: button_classes(:secondary) %>
       </div>
+      <p data-searchable-select-error role="alert" class="mt-1.5 hidden text-sm text-slate-500"><i class="bi bi-exclamation-circle text-rose-600" aria-hidden="true"></i> Choose a supervisor.</p>
     <% end %>
   <% end %>
 </section>

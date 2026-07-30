@@ -17,9 +17,11 @@
         <% @volunteer.notes.each do |note| %>
           <li class="rounded-xl border border-slate-200 p-3">
             <p class="text-sm text-slate-800"><%= note.content %></p>
-            <dl class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
-              <div class="flex gap-1"><dt>Creator:</dt><dd class="font-medium text-slate-700"><%= formatted_name(note.creator.display_name) %></dd></div>
-              <div class="flex gap-1"><dt>Date:</dt><dd class="font-medium text-slate-700"><%= l(note.created_at, format: :standard) %></dd></div>
+            <%# Canonical inline fact pairs (design.md "Fact / detail list"): one size for label and
+                value, weight on the muted label, colour on the value. %>
+            <dl class="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm">
+              <div class="flex gap-1"><dt class="font-medium text-slate-500">Creator:</dt><dd class="text-slate-800"><%= formatted_name(note.creator.display_name) %></dd></div>
+              <div class="flex gap-1"><dt class="font-medium text-slate-500">Date:</dt><dd class="text-slate-800"><%= l(note.created_at, format: :standard) %></dd></div>
             </dl>
             <div class="mt-3 flex items-center gap-2">
               <%= link_to edit_volunteer_note_path(@volunteer, note), class: ghost_class do %>
@@ -37,7 +39,7 @@
       <div class="hidden overflow-x-auto md:block">
         <table class="table w-full text-left text-sm">
           <thead>
-            <tr class="border-b border-slate-100 text-xs font-semibold text-slate-600">
+            <tr class="text-xs font-semibold text-slate-600">
               <th scope="col" class="py-2 pr-4 font-semibold">Note</th>
               <th scope="col" class="py-2 pr-4 font-semibold">Creator</th>
               <th scope="col" class="py-2 pr-4 font-semibold">Date</th>

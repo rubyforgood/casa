@@ -41,9 +41,12 @@
             <% end %>
           </div>
           <% if button_text == "Hide unassigned" %>
-            <dl class="mt-2 flex flex-wrap gap-x-2 text-xs text-slate-500">
-              <dt>Currently assigned to:</dt>
-              <dd class="font-medium text-slate-700"><%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No one" %></dd>
+            <%# Canonical inline fact pair (design.md "Fact / detail list"): one size for label and
+                value, weight on the muted label, colour on the value. It was text-xs on both with the
+                weight on the value -- a person's name at 12px, and the reverse of the token. %>
+            <dl class="mt-2 flex flex-wrap gap-x-2 text-sm">
+              <dt class="font-medium text-slate-500">Currently assigned to:</dt>
+              <dd class="text-slate-800"><%= volunteer.has_supervisor? ? formatted_name(volunteer.supervisor.display_name) : "No one" %></dd>
             </dl>
           <% end %>
         </li>
@@ -58,15 +61,19 @@
         <div class="mt-2 flex flex-wrap items-end gap-3">
           <div class="min-w-0 flex-1">
             <label for="supervisor_volunteer_volunteer_id" class="mb-1.5 block text-sm font-medium text-slate-700">Select a volunteer</label>
-            <div class="relative">
-              <select id="supervisor_volunteer_volunteer_id" name="supervisor_volunteer[volunteer_id]" class="block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2.5 pl-3.5 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500">
-                <option value="">Please select a volunteer</option>
-                <% available.each do |volunteer| %>
-                  <option value="<%= volunteer.id %>"><%= formatted_name(volunteer.display_name) %></option>
-                <% end %>
-              </select>
-              <i class="bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" aria-hidden="true"></i>
-            </div>
+            <%# Searchable, like the supervisors-index per-row assign and the case page's volunteer
+                picker: a chapter has hundreds of volunteers. dropdownParent: body -- this card is
+                `overflow-hidden`. See casa_cases/_volunteer_assignment for the `disabled` note. %>
+            <select id="supervisor_volunteer_volunteer_id" name="supervisor_volunteer[volunteer_id]"
+                    data-controller="searchable-select"
+                    data-searchable-select-dropdown-parent-value="body"
+                    data-searchable-select-placeholder-value="Search volunteers"
+                    class="block w-full" <%= "disabled" unless available.any? %>>
+              <option value="">Please select a volunteer</option>
+              <% available.each do |volunteer| %>
+                <option value="<%= volunteer.id %>"><%= formatted_name(volunteer.display_name) %></option>
+              <% end %>
+            </select>
           </div>
           <%= form.hidden_field :supervisor_id, value: @supervisor.id %>
           <%= button_tag "Assign volunteer", type: "submit", class: button_classes(:secondary) %>

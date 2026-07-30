@@ -24,27 +24,29 @@
 
     <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
       <% @emancipation_form_data.each do |category| %>
-        <h6 class="emancipation-category no-select flex items-center justify-between gap-3 border-b border-slate-100 py-2.5 last:border-b-0" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
+        <h2 class="emancipation-category no-select flex items-center justify-between gap-3 border-b border-slate-100 py-2.5 last:border-b-0" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
           <div class="emacipation-category-input-label-pair flex cursor-pointer items-center gap-2.5">
-            <%= tag.input(type: "checkbox", class: "emancipation-category-check-box #{check_class}", value: category.id, checked: emancipation_category_checkbox_checked(@current_case, category)) %>
+            <%= tag.input(type: "checkbox", class: "emancipation-category-check-box #{check_class}", value: category.id, checked: emancipation_category_checkbox_checked(@current_case, category), aria: {label: category.name}) %>
             <div class="text-sm font-medium text-slate-800"><%= category.name %></div>
           </div>
           <% if category.emancipation_options.count > 0 %>
             <span class="category-collapse-icon grid h-6 w-6 shrink-0 cursor-pointer select-none place-items-center rounded text-lg leading-none text-slate-500 hover:bg-slate-100"><%= emancipation_category_collapse_icon(@current_case, category) %></span>
           <% end %>
-        </h6>
+        </h2>
         <div class="category-options ml-[9px] space-y-1 border-l border-slate-200 py-1 pl-5" style="<%= emancipation_category_collapse_hidden(@current_case, category) %>">
           <% category.emancipation_options.each do |option| %>
             <div class="check-item flex cursor-pointer items-center gap-2.5 py-1 text-sm text-slate-700">
               <% if category.mutually_exclusive %>
-                <%= tag.input(type: "radio", id: "O#{option.id}", class: "emancipation-radio-button #{radio_class}", name: "C#{category.id}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option)) %>
+                <%= tag.input(type: "radio", id: "O#{option.id}", class: "emancipation-radio-button #{radio_class}", name: "C#{category.id}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
               <% else %>
-                <%= tag.input(type: "checkbox", id: "O#{option.id}", class: "emancipation-option-check-box #{check_class}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option)) %>
+                <%= tag.input(type: "checkbox", id: "O#{option.id}", class: "emancipation-option-check-box #{check_class}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
               <% end %>
               <label><%= option.name %></label>
             </div>
           <% end %>
-          <%# The labels intentionally have no for= matching the inputs: JS sets checkbox state after the AJAX save succeeds. %>
+          <%# The labels intentionally have no for= matching the inputs: JS sets checkbox state after
+              the AJAX save succeeds, and a real label/control pair would toggle natively on top of
+              that. The inputs carry aria-label instead, so they still have an accessible name. %>
         </div>
       <% end %>
     </div>

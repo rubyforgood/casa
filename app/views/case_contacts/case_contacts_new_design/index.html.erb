@@ -243,7 +243,7 @@
               <div>
                 <dt class="text-xs text-slate-500">Contacted</dt>
                 <dd class="mt-0.5 text-sm text-slate-700">
-                  <% if contact.contact_made %><span class="text-emerald-600">Reached</span><% else %><span class="text-amber-600">Not reached</span><% end %><% if contact.duration_minutes %> (<%= "%02d:%02d" % [contact.duration_minutes / 60, contact.duration_minutes % 60] %>)<% end %>
+                  <% if contact.contact_made %><span class="text-emerald-700">Reached</span><% else %><span class="text-amber-700">Not reached</span><% end %><% if contact.duration_minutes %> (<%= "%02d:%02d" % [contact.duration_minutes / 60, contact.duration_minutes % 60] %>)<% end %>
                 </dd>
               </div>
               <div class="col-span-2">

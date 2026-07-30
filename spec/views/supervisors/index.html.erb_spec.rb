@@ -90,7 +90,7 @@ RSpec.describe "supervisors/index", type: :view do
     end
 
     context "when a supervisor only has volunteers who have not submitted a case contact in 14 days" do
-      it "omits the attempting stat" do
+      it "shows a zero attempting count" do
         user = create(:casa_admin)
         enable_pundit(view, user)
         supervisor = create(:supervisor)
@@ -106,13 +106,13 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors [data-stat='attempting']").length).to eq(0)
-        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").length).to eq(1)
+        expect(parsed_html.css("#supervisors [data-stat='attempting']").text.to_i).to eq(0)
+        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").text.to_i).to eq(1)
       end
     end
 
     context "when a supervisor only has volunteers who have submitted a case contact in 14 days" do
-      it "omits the not-attempting stat" do
+      it "shows a zero not-attempting count" do
         user = create(:casa_admin)
         enable_pundit(view, user)
         supervisor = create(:supervisor)
@@ -128,13 +128,13 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors [data-stat='attempting']").length).to eq(1)
-        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").length).to eq(0)
+        expect(parsed_html.css("#supervisors [data-stat='attempting']").text.to_i).to eq(1)
+        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").text.to_i).to eq(0)
       end
     end
 
     context "when a supervisor does not have volunteers" do
-      it "shows a no-assigned-volunteers message instead of the contact stats" do
+      it "shows zeroes and marks the supervisor as having no volunteers" do
         user = create(:casa_admin)
         enable_pundit(view, user)
         supervisor = create(:supervisor)
@@ -149,8 +149,8 @@ RSpec.describe "supervisors/index", type: :view do
 
         parsed_html = Nokogiri.HTML5(rendered)
 
-        expect(parsed_html.css("#supervisors [data-stat='attempting']").length).to eq(0)
-        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").length).to eq(0)
+        expect(parsed_html.css("#supervisors [data-stat='attempting']").text.to_i).to eq(0)
+        expect(parsed_html.css("#supervisors [data-stat='not-attempting']").text.to_i).to eq(0)
         expect(parsed_html.css("#supervisors [data-stat='no-volunteers']").length).to eq(1)
       end
     end

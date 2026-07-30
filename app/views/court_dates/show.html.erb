@@ -1,6 +1,8 @@
 <% content_for :page_title, "Court date" %>
-<%# court_dates#show on casa_app. The <dt><h6>Label:</h6></dt><dd> structure + "Court orders:"
-    h6/<p> are preserved verbatim (view + system specs assert them by xpath / substring); the
+<%# court_dates#show on casa_app. Fact labels are bare <dt>s -- they used to wrap an <h6>,
+    which skipped h2-h5 after the page <h1> (axe heading-order) and added a heading level a
+    <dt> already conveys. "Court orders:" is a real section heading, so it is an <h2>. View +
+    system specs assert these by xpath, so keep the dt/dd adjacency. The
     Title-Case-with-colon fact labels ride the deferred sentence-case sweep. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% label = "text-sm font-medium text-slate-500" %>
@@ -21,28 +23,28 @@
 
     <div class="<%= card %>">
       <dl>
-        <dt><h6 class="<%= label %>">Case number:</h6></dt>
+        <dt class="<%= label %>">Case number:</dt>
         <dd class="mb-4 mt-1 text-sm"><%= link_to @casa_case.case_number, casa_case_path(@casa_case), class: "font-medium text-brand-600 hover:text-brand-700" %></dd>
-        <dt><h6 class="<%= label %>">Court report due date:</h6></dt>
+        <dt class="<%= label %>">Court report due date:</dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= I18n.l(@court_date.court_report_due_date, format: :full, default: "None") %></dd>
-        <dt><h6 class="<%= label %>">Judge:</h6></dt>
+        <dt class="<%= label %>">Judge:</dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.judge&.name || "None" %></dd>
-        <dt><h6 class="<%= label %>">Hearing type:</h6></dt>
+        <dt class="<%= label %>">Hearing type:</dt>
         <dd class="mb-4 mt-1 text-sm text-slate-800"><%= @court_date.hearing_type&.name || "None" %></dd>
       </dl>
 
-      <h6 class="<%= label %> mb-2">Court orders:</h6>
+      <h2 class="<%= label %> mb-2">Court orders:</h2>
       <% if @court_date.case_court_orders.any? %>
         <div class="overflow-hidden rounded-xl border border-slate-200">
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200">
-              <thead class="bg-slate-50">
-                <tr>
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-100">
                   <th scope="col" class="<%= th %>">Case order text</th>
                   <th scope="col" class="<%= th %> text-center">Implementation status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
+              <tbody class="divide-y divide-slate-50">
                 <% @court_date.case_court_orders.each do |court_order| %>
                   <tr>
                     <td class="<%= td %>"><%= court_order.text %></td>

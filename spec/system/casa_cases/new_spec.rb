@@ -32,7 +32,7 @@ RSpec.describe "casa_cases/new", type: :system do
 
           select "Submitted", from: "casa_case_court_report_status"
 
-          find(".ts-control").click
+          find("#contact-type-id-selector .ts-control").click
 
           select_all_el = page.find("span[data-test=select-all-input]")
           # contact types load blank (nothing selected) by default
@@ -47,7 +47,7 @@ RSpec.describe "casa_cases/new", type: :system do
             expect(page).to have_css("input.form-check-input--checked", count: 2)
           end
 
-          select "Test User", from: "casa_case[case_assignments_attributes][0][volunteer_id]"
+          choose_typeahead_option("Test User", select_css: "#casa_case_case_assignments_attributes_0_volunteer_id")
 
           within ".actions-cc" do
             click_on "Create case"
@@ -80,7 +80,7 @@ RSpec.describe "casa_cases/new", type: :system do
         select "March", from: "casa_case_birth_month_year_youth_2i"
         select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-        find(".ts-control").click
+        find("#contact-type-id-selector .ts-control").click
         find("span[data-test=select-all-input]").click
         find("h1", text: "New case").click
 
@@ -133,7 +133,7 @@ RSpec.describe "casa_cases/new", type: :system do
           select five_years, from: "casa_case_birth_month_year_youth_1i"
           check "casa_case_empty_court_date"
 
-          find(".ts-control").click
+          find("#contact-type-id-selector .ts-control").click
           find("span[data-test=select-all-input]").click
           find("h1", text: "New case").click
 
@@ -165,7 +165,7 @@ RSpec.describe "casa_cases/new", type: :system do
           select "March", from: "casa_case_birth_month_year_youth_2i"
           select five_years, from: "casa_case_birth_month_year_youth_1i"
 
-          find(".ts-control").click
+          find("#contact-type-id-selector .ts-control").click
           find("span[data-test=select-all-input]").click
           find("h1", text: "New case").click
 
@@ -173,7 +173,7 @@ RSpec.describe "casa_cases/new", type: :system do
             click_on "Create case"
           end
 
-          selected_contact_type = find(".ts-control .item").text
+          selected_contact_type = find("#contact-type-id-selector .ts-control .item").text
 
           expect(selected_contact_type).to eq(contact_type.name)
           expect(page).to have_current_path(casa_cases_path, ignore_query: true)

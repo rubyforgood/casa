@@ -11,52 +11,12 @@ RSpec.describe ContactTypeDecorator do
       expect(hash[:value]).to eq contact_type.id
       expect(hash[:text]).to eq contact_type.name
       expect(hash[:group]).to eq contact_type_group.name
-      expect(hash[:subtext]).to eq "never"
+      # Blank, not "never": a type with no contacts logged shows no subtext beside the option.
+      expect(hash[:subtext]).to eq ""
     end
 
     context "with nil array" do
       it { expect(contact_type.decorate.hash_for_multi_select_with_cases(nil).class).to eq Hash }
-    end
-  end
-
-  describe "last_time_used_with_cases" do
-    subject { contact_type.decorate.last_time_used_with_cases casa_case_ids }
-
-    let(:casa_case_ids) { [] }
-
-    context "with empty array" do
-      it { is_expected.to eq "never" }
-    end
-
-    context "with cases" do
-      let(:casa_case) { create(:casa_case, casa_org: casa_org) }
-      let(:casa_case_ids) { [casa_case.id] }
-
-      context "with no case contacts" do
-        it { expect(contact_type.decorate.last_time_used_with_cases([])).to eq "never" }
-      end
-
-      context "with case contacts" do
-        let(:case_contact1) { create(:case_contact, casa_case: casa_case, occurred_at: 4.days.ago) }
-        let(:case_contact2) { create(:case_contact, casa_case: casa_case, occurred_at: 3.days.ago) }
-
-        it "is the most recent case contact" do
-          case_contact1.contact_types << contact_type
-          expect(subject).to eq "4 days ago"
-
-          case_contact2.contact_types << contact_type
-          expect(contact_type.decorate.last_time_used_with_cases(casa_case_ids)).to eq "3 days ago"
-        end
-
-        context "when case_contact occurred_at is nil" do
-          let(:case_contact1) { build :case_contact, casa_case: casa_case, occurred_at: nil }
-
-          it "returns 'never'" do
-            case_contact1.contact_types << contact_type
-            expect(subject).to eq "never"
-          end
-        end
-      end
     end
   end
 

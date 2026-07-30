@@ -36,7 +36,7 @@ class BannersController < ApplicationController
       @banner.save!
     end
 
-    redirect_to banners_path
+    redirect_to banners_path, **banner_created_flash
   rescue
     render :new, status: :unprocessable_content
   end
@@ -49,7 +49,7 @@ class BannersController < ApplicationController
       @banner.update!(banner_params)
     end
 
-    redirect_to banners_path
+    redirect_to banners_path, **banner_created_flash(verb: "updated")
   rescue
     render :edit, status: :unprocessable_content
   end
@@ -69,6 +69,14 @@ class BannersController < ApplicationController
 
   def banner_params
     BannerParameters.new(params, current_user, browser_time_zone)
+  end
+
+  def banner_created_flash(verb: "created")
+    if @banner.active?
+      {notice: "Banner #{verb} and is now showing at the top of every page."}
+    else
+      {alert: "Banner #{verb}, but it is not active, so no one will see it yet. Use Activate to show it."}
+    end
   end
 
   def deactivate_alternate_active_banner

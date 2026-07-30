@@ -15,7 +15,7 @@
         <div class="mt-3 text-3xl font-bold tracking-tight text-slate-900"><%= k[:contacts_this_month] %></div>
         <div class="text-sm text-slate-500">Contacts this month</div>
         <% d = k[:contacts_delta] %>
-        <div class="mt-1 text-xs font-medium <%= (d > 0) ? "text-emerald-600" : ((d < 0) ? "text-rose-600" : "text-slate-500") %>">
+        <div class="mt-1 text-xs font-medium <%= (d > 0) ? "text-emerald-700" : ((d < 0) ? "text-rose-700" : "text-slate-500") %>">
           <% if d > 0 %><i class="bi bi-arrow-up-short" aria-hidden="true"></i>+<%= d %> vs last month<% elsif d < 0 %><i class="bi bi-arrow-down-short" aria-hidden="true"></i><%= d %> vs last month<% else %>No change vs last month<% end %>
         </div>
       </div>

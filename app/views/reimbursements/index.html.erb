@@ -38,10 +38,14 @@
       <% if params[:status].present? %><%= hidden_field_tag :status, params[:status] %><% end %>
       <div class="col-span-2 lg:min-w-[16rem]">
         <%= label_tag :volunteers, "Volunteer", class: label_class %>
-        <div class="relative">
-          <%= select_tag :volunteers, options_for_select([["All volunteers", ""]] + @volunteers_for_filter.map { |id, name| [formatted_name(name), id.to_s] }, params[:volunteers]), class: select_class %>
-          <i class="<%= chevron_class %>" aria-hidden="true"></i>
-        </div>
+        <%# Searchable: a chapter's reimbursement queue spans every volunteer who ever drove, so this is
+            an unbounded person list (same reason as the learning-hours / other-duties volunteer search).
+            "All volunteers" carries the non-empty value "all", not "": the theme hides empty-valued
+            options in a TomSelect menu, so as `value=""` the row that clears the filter would vanish
+            from the very menu the user opens to clear it. The controller reads "all" as no filter. %>
+        <%= select_tag :volunteers,
+              options_for_select([["All volunteers", "all"]] + @volunteers_for_filter.map { |id, name| [formatted_name(name), id.to_s] }, params[:volunteers]),
+              class: "ts-filter block w-full", data: {controller: "searchable-select"} %>
       </div>
       <div class="lg:min-w-[9rem]">
         <%= label_tag "occurred_at[start]", "Occurred from", class: label_class %>
@@ -74,7 +78,7 @@
                 <th scope="col" class="<%= th %>">Reimbursement complete</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% @reimbursements.each do |reimbursement| %>
                 <tr data-test="reimbursement-row" class="hover:bg-slate-50">
                   <td class="<%= td %> font-medium text-slate-800"><%= formatted_name(reimbursement.creator.display_name) %></td>
