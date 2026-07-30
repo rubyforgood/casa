@@ -5,12 +5,24 @@ import { Controller } from '@hotwired/stimulus'
 // shows a spinner while the docx is built, then opens the download in a new tab.
 // The Tailwind + Stimulus replacement for the legacy jQuery handleGenerateReport.
 export default class extends Controller {
-  static targets = ['form', 'timeZone', 'spinner', 'submit', 'error']
+  static targets = ['form', 'timeZone', 'spinner', 'submit', 'error', 'startDate']
 
   connect () {
     if (this.hasTimeZoneTarget) {
       this.timeZoneTarget.value = Intl.DateTimeFormat().resolvedOptions().timeZone
     }
+  }
+
+  // Autofills "Starting from" with the picked case's own default (its last hearing, or when the case
+  // was opened in CASA) -- carried on each <option> as data-start-date, since the default is per-case
+  // and the case is chosen in this modal. Read off the native <select>, which TomSelect keeps in sync,
+  // rather than TomSelect's internal option data.
+  caseChanged (event) {
+    if (!this.hasStartDateTarget) return
+
+    const option = event.target.selectedOptions[0]
+    const startDate = option && option.dataset.startDate
+    if (startDate) this.startDateTarget.value = startDate
   }
 
   async generate (event) {

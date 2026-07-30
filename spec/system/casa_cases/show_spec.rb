@@ -61,7 +61,9 @@ RSpec.describe "casa_cases/show", type: :system do
 
       within("#generate-court-report") do
         expect(page).to have_content(casa_case.case_number)
-        expect(page.find("#start_date").value).to eq("2021-01-01") # default: today, no past court dates
+        # No past hearing, so the window starts the day the case was opened in CASA -- not "today",
+        # which would be an empty window. (The case is created before this example freezes the clock.)
+        expect(page.find("#start_date").value).to eq(casa_case.created_at.to_date.to_s)
         expect(page.find("#end_date").value).to eq("2021-01-01")
 
         click_button "Generate report"

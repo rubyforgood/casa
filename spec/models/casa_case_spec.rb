@@ -360,6 +360,32 @@ RSpec.describe CasaCase, type: :model do
     end
   end
 
+  describe "#court_report_default_start_date" do
+    let(:casa_case) { create(:casa_case) }
+
+    it "is the last past court date" do
+      casa_case.court_dates << create(:court_date, date: 9.months.ago)
+      last_hearing = create(:court_date, date: 3.months.ago)
+      casa_case.court_dates << last_hearing
+
+      expect(casa_case.court_report_default_start_date).to eq(last_hearing.date.to_date)
+    end
+
+    it "ignores a future court date" do
+      last_hearing = create(:court_date, date: 2.months.ago)
+      casa_case.court_dates << last_hearing
+      casa_case.court_dates << create(:court_date, date: 1.month.from_now)
+
+      expect(casa_case.court_report_default_start_date).to eq(last_hearing.date.to_date)
+    end
+
+    it "falls back to the day the case was opened when there is no past court date" do
+      casa_case.court_dates << create(:court_date, date: 1.month.from_now)
+
+      expect(casa_case.court_report_default_start_date).to eq(casa_case.created_at.to_date)
+    end
+  end
+
   describe "#formatted_latest_court_date" do
     let(:casa_case) { create(:casa_case) }
 
