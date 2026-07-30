@@ -1794,8 +1794,11 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 - **Sidebar nav order** (**not** alphabetical -- alphabetical is arbitrary vs. how people work):
   **Dashboard first (ungrouped), Settings pinned to the bottom** (`mt-auto` + its own divider), the
   middle **grouped by domain, ordered by frequency** -- Records (Volunteers, Supervisors, Cases) /
-  Activity (Case contacts, Learning hours, Other duties, Reimbursements) / Reporting (Reports,
-  Analytics, Court reports). Each middle group wears an **uppercase section label** (`text-xs
+  Activity (Case contacts, Court reports, Learning hours, Other duties, Reimbursements) / Reporting
+  (Reports, Analytics). **Court reports sits in Activity, not Reporting**: it is a per-case document a
+  volunteer or supervisor produces as part of casework, next to the contacts it summarises -- Reporting
+  is the org-wide, cross-case view (Reports, Analytics). Each middle group wears an **uppercase section
+  label** (`text-xs
   font-semibold uppercase tracking-wide text-slate-500`, `mt-4` above); the label does the separating,
   so there are **no between-group dividers** -- the only divider sits above the pinned Settings. Each
   group is a `role="group"` with an **`aria-label`** (the visible label is `aria-hidden` so it isn't

@@ -23,13 +23,21 @@
         <%# Minimal class only: the tom-select theme owns the border/padding/shadow on .ts-control, and
             TomSelect copies these classes onto .ts-wrapper -- a bordered input_class here double-borders
             (a box-in-a-box). See design.md "Searchable single-select". %>
-        <%= select_tag :case_number, options_for_select(select_options), prompt: "Select case number", include_blank: false, id: "case-selection", data: {controller: "searchable-select"}, class: "block w-full" %>
+        <%= select_tag :case_number, options_for_select(select_options), prompt: "Select case number", include_blank: false, id: "case-selection",
+              data: {controller: "searchable-select", action: "change->court-report#caseChanged"}, class: "block w-full" %>
       </div>
       <%= form.hidden_field :time_zone, id: "user-time-zone", data: {court_report_target: "timeZone"} %>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <%= form.label :start_date, "Starting from", class: label_class %>
-          <%= form.date_field :start_date, id: "start_date", value: Date.current, class: input_class %>
+          <%# Filled from the picked case's `data-start-date` (its last hearing, else when the case was
+              opened) -- the default is per-case and the case is chosen here, so it cannot be rendered
+              server-side. It starts empty rather than at today: today is an empty window, which is what
+              silently produced reports with no contacts in them. Deliberately NOT `required`: an empty
+              start_date makes the generator apply the same last-hearing default server-side, and native
+              validation on it would pre-empt the "choose a case" error for a form submitted blank. %>
+          <%= form.date_field :start_date, id: "start_date", value: nil,
+                data: {court_report_target: "startDate"}, class: input_class %>
         </div>
         <div>
           <%= form.label :end_date, "Ending at", class: label_class %>

@@ -65,8 +65,36 @@ RSpec.describe "case_court_reports/index", type: :system do
     end
 
     it "shows correct default dates", :aggregate_failures do
-      expect(page.find("#start_date").value).to eq(Date.current.to_s)
+      # "Starting from" is per-case (the last hearing, else when the case was opened), so it is empty
+      # until a case is picked rather than defaulting to today -- today is an empty window.
+      expect(page.find("#start_date").value).to eq("")
       expect(page.find("#end_date").value).to eq(Date.current.to_s)
+    end
+
+    it "autofills the start date from the picked case's last hearing" do
+      casa_case = casa_cases.first
+      create(:court_date, casa_case: casa_case, date: 3.months.ago.to_date)
+      hearing = create(:court_date, casa_case: casa_case, date: 1.month.ago.to_date)
+      # The options carry each case's default, so the page has to be re-rendered after changing them.
+      visit case_court_reports_path
+      open_court_report_modal
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
+      expect(page.find("#start_date").value).to eq(hearing.date.to_date.to_s)
+    end
+
+    it "falls back to the date the case was opened when it has no past hearing" do
+      casa_case = casa_cases.first
+      casa_case.court_dates.destroy_all
+      visit case_court_reports_path
+      open_court_report_modal
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
+      expect(page.find("#start_date").value).to eq(casa_case.created_at.to_date.to_s)
     end
 
     it "lists all assigned cases" do
