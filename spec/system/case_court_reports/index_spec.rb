@@ -128,11 +128,39 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
     end
 
-    it "defaults to the 'Select case number' prompt", :aggregate_failures do
+    it "loads with no case chosen and invites a search", :aggregate_failures do
+      # The native prompt stays for the no-JS render, but the control itself must read as a SEARCH
+      # field: the prompt used to occupy the item slot, which parks TomSelect's input off-screen and
+      # leaves no placeholder and no magnifier -- searchable, but with nothing saying so.
       expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number", visible: :all
       within "#generate-docx-report-modal" do
-        expect(page).to have_css ".ts-control", text: "Select case number"
+        expect(page).to have_no_css ".ts-control .item"
+        expect(page).to have_css ".ts-control input[placeholder='Search case number']"
       end
+      state = page.evaluate_script(<<~JS)
+        (function () {
+          const ts = document.querySelector('#case-selection').tomselect
+          return {
+            offscreen: ts.control_input.getBoundingClientRect().left < 0,
+            magnifier: getComputedStyle(ts.wrapper.querySelector('.ts-control')).backgroundImage !== 'none'
+          }
+        })()
+      JS
+      expect(state["offscreen"]).to be false
+      expect(state["magnifier"]).to be true
+    end
+
+    it "filters the case menu as you type" do
+      target = casa_cases.first
+      decoy = casa_cases.last
+      expect(target.case_number).not_to eq(decoy.case_number)
+
+      page.execute_script("document.querySelector('#case-selection').tomselect.focus()")
+      page.driver.browser.switch_to.active_element.send_keys(target.case_number)
+
+      # Waiting matchers: reading the menu straight after the keystrokes reads it pre-filter.
+      expect(page).to have_css(".ts-dropdown .option", text: target.case_number)
+      expect(page).to have_no_css(".ts-dropdown .option", text: decoy.case_number)
     end
 
     it "shows an error when generating without a selection" do
@@ -165,6 +193,37 @@ RSpec.describe "case_court_reports/index", type: :system do
       opened_url = page.evaluate_script("window.__last_opened_url")
       expect(opened_url).to be_present
       expect(opened_url).to match(/#{Regexp.escape(transition_case.case_number)}.*\.docx$/i)
+    end
+  end
+
+  context "when the user has exactly one case", :js do
+    let(:volunteer) { create(:volunteer) }
+    let!(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "ONE-0001") }
+    let!(:assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case, active: true) }
+
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+      open_court_report_modal
+    end
+
+    # Nothing is left for a single-case volunteer to fill in: the case is chosen and both dates follow
+    # from it, so the modal is ready to submit on open.
+    it "preselects it and fills both dates from it", :aggregate_failures do
+      expect(page.find("#case-selection", visible: :all).value).to eq("ONE-0001")
+      within "#generate-docx-report-modal" do
+        expect(page).to have_css ".ts-control .item", text: "ONE-0001"
+      end
+      expect(page.find("#start_date").value).to eq(casa_case.court_report_default_start_date.to_s)
+      expect(page.find("#end_date").value).to eq(browser_today)
+    end
+
+    it "starts from the last hearing rather than the day the case was opened" do
+      create(:court_date, casa_case: casa_case, date: 40.days.ago.to_date)
+      visit case_court_reports_path
+      open_court_report_modal
+
+      expect(page.find("#start_date").value).to eq(40.days.ago.to_date.to_s)
     end
   end
 

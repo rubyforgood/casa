@@ -13,13 +13,16 @@ const localToday = () => {
 }
 
 export default class extends Controller {
-  static targets = ['form', 'timeZone', 'spinner', 'submit', 'error', 'startDate', 'endDate']
+  static targets = ['form', 'timeZone', 'spinner', 'submit', 'error', 'startDate', 'endDate', 'caseSelect']
 
   connect () {
     if (this.hasTimeZoneTarget) {
       this.timeZoneTarget.value = Intl.DateTimeFormat().resolvedOptions().timeZone
     }
     this.fillEndDate()
+    // A case can already be selected on load (a volunteer with a single case), and `change` does not
+    // fire for that -- so apply its default here too, leaving nothing for the user to fill in.
+    if (this.hasCaseSelectTarget) this.applyCaseDefault(this.caseSelectTarget)
   }
 
   // "Ending at" is today in the USER's zone. The server renders Date.current and the app runs in UTC
@@ -36,9 +39,13 @@ export default class extends Controller {
   // and the case is chosen in this modal. Read off the native <select>, which TomSelect keeps in sync,
   // rather than TomSelect's internal option data.
   caseChanged (event) {
+    this.applyCaseDefault(event.target)
+  }
+
+  applyCaseDefault (select) {
     if (!this.hasStartDateTarget) return
 
-    const option = event.target.selectedOptions[0]
+    const option = select.selectedOptions[0]
     const startDate = option && option.dataset.startDate
     if (startDate) this.startDateTarget.value = startDate
     // Both ends stay filled: refill "Ending at" if it was cleared.

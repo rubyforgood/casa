@@ -43,7 +43,7 @@ RSpec.describe "typeahead audit", :js, type: :system do
     JS
   end
 
-  def audit(label, select_css, query:, expect_option:)
+  def audit(label, select_css, query:, expect_option:, absent_option: nil)
     @audit_seq = (@audit_seq || 0) + 1
     tag = "audit-target-#{@audit_seq}"
     id = nil
@@ -69,6 +69,7 @@ RSpec.describe "typeahead audit", :js, type: :system do
     page.execute_script("document.querySelector(#{select_css.to_json}).tomselect.focus()")
     page.driver.browser.switch_to.active_element.send_keys(query)
 
+    problems = []
     typed_ok = false
     deadline = Time.current + 4
     until typed_ok || Time.current > deadline
@@ -76,11 +77,18 @@ RSpec.describe "typeahead audit", :js, type: :system do
       sleep 0.1
     end
 
-    # Deliberately not asserting the filtered option list here. Whether TomSelect narrows the menu was
-    # verified by hand across all 13 controls, but every way of reading it from a spec proved racy
-    # (a fixed sleep read mid-filter; `.ts-dropdown .option` is global and picked up another control's
-    # menu; `currentResults` is not the post-query set at read time). This spec guards the thing that
-    # actually regressed: after a selection the query is cleared and the value registers.
+    # Filtering IS asserted now, where the fixtures give a decoy to look for the absence of. Earlier
+    # attempts were racy because they READ the menu (a fixed sleep lands mid-filter; `currentResults`
+    # is not the post-query set; a count read straight after the keystrokes reads the pre-filter DOM).
+    # A waiting matcher on the decoy's absence retries until the filter lands, and only the open menu
+    # is visible so the global `.ts-dropdown` cannot match another control's.
+    if absent_option
+      problems << "menu still lists #{absent_option.inspect} after typing #{query.inspect}" unless
+        page.has_no_css?(".ts-dropdown .option", text: absent_option)
+      problems << "menu lost #{expect_option.inspect} after typing #{query.inspect}" unless
+        page.has_css?(".ts-dropdown .option", text: expect_option)
+    end
+
     find(".ts-dropdown .option", text: expect_option, match: :first).click
     page.has_css?("##{id} .ts-control .item", wait: 3)
 
@@ -97,7 +105,6 @@ RSpec.describe "typeahead audit", :js, type: :system do
       })()
     JS
 
-    problems = []
     problems << "typed text remained #{state["typed"].inspect}" unless state["typed"].to_s.empty?
     problems << "nothing selected in the control" if state["items"].to_i.zero?
     problems << "native select not updated" if state["selected"].to_i.zero?
@@ -116,15 +123,15 @@ RSpec.describe "typeahead audit", :js, type: :system do
 
       visit case_contacts_path
       find("[data-disclosure-target='trigger']").click
-      audit("case_contacts#index contact types", "select[name='filterrific[contact_type][]']", query: "Zebra", expect_option: "Zebra type")
+      audit("case_contacts#index contact types", "select[name='filterrific[contact_type][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
 
       visit case_contacts_new_design_path
       find("[data-disclosure-target='trigger']").click if page.has_css?("[data-disclosure-target='trigger']", wait: 2)
-      audit("new_design cases", "#casa_case_ids", query: "ZZZ", expect_option: "ZZZ-9999")
-      audit("new_design contact types", "#contact_type_ids", query: "Zebra", expect_option: "Zebra type")
+      audit("new_design cases", "#casa_case_ids", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
+      audit("new_design contact types", "#contact_type_ids", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
 
       visit new_case_group_path
-      audit("case_groups#new cases", "select[name='case_group[casa_case_ids][]']", query: "ZZZ", expect_option: "ZZZ-9999")
+      audit("case_groups#new cases", "select[name='case_group[casa_case_ids][]']", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
 
       visit learning_hours_path
       audit("learning_hours volunteer", "select[name='search']", query: "Quen", expect_option: "Quentin Quackenbush")
@@ -134,18 +141,18 @@ RSpec.describe "typeahead audit", :js, type: :system do
 
       visit reports_path
       audit("reports supervisors", "select[name='report[supervisor_ids][]']", query: "Zeld", expect_option: "Zelda Zimmerman")
-      audit("reports volunteers", "select[name='report[creator_ids][]']", query: "Quen", expect_option: "Quentin Quackenbush")
-      audit("reports contact types", "select[name='report[contact_type_ids][]']", query: "Zebra", expect_option: "Zebra type")
-      audit("reports contact type groups", "select[name='report[contact_type_group_ids][]']", query: "Zebra", expect_option: "Zebra group")
+      audit("reports volunteers", "select[name='report[creator_ids][]']", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "Aaron Ackerman")
+      audit("reports contact types", "select[name='report[contact_type_ids][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
+      audit("reports contact type groups", "select[name='report[contact_type_group_ids][]']", query: "Zebra", expect_option: "Zebra group", absent_option: "Alpha group")
 
       visit supervisors_path
       audit("supervisors#index assign", "select[name='supervisor_volunteer[supervisor_id]']", query: "Zeld", expect_option: "Zelda Zimmerman")
 
       visit edit_casa_case_path(kase)
-      audit("casa_cases#edit assign volunteer", "#case_assignment_casa_case_id", query: "Aaro", expect_option: "Aaron Ackerman")
+      audit("casa_cases#edit assign volunteer", "#case_assignment_casa_case_id", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
 
       visit edit_volunteer_path(volunteer)
-      audit("volunteers#edit assign case", "#case_assignment_casa_case_id", query: "AAA", expect_option: "AAA-1111")
+      audit("volunteers#edit assign case", "#case_assignment_casa_case_id", query: "AAA", expect_option: "AAA-1111", absent_option: "ZZZ-9999")
 
       # A volunteer who already HAS a supervisor renders the current-supervisor branch, not the assign
       # form -- so this one is audited on the unassigned volunteer.
@@ -156,21 +163,21 @@ RSpec.describe "typeahead audit", :js, type: :system do
       audit("supervisors#edit assign volunteer", "select[name='supervisor_volunteer[volunteer_id]']", query: "Nadi", expect_option: "Nadia Nobody")
 
       visit new_casa_case_path
-      audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman")
+      audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
 
       # Filter-bar pickers (a person list among short native selects), not assign pickers.
       visit reimbursements_path
-      audit("reimbursements#index volunteer filter", "#volunteers", query: "Quen", expect_option: "Quentin Quackenbush")
+      audit("reimbursements#index volunteer filter", "#volunteers", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "All volunteers")
 
       visit volunteers_path
-      audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman")
+      audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman", absent_option: "All supervisors")
 
       visit case_court_reports_path
       # This picker lives inside the "Generate report" Dialog, so it does not exist on screen until
       # the modal is opened -- not a broken control, just one behind a trigger.
       click_on "Generate report"
       expect(page).to have_css("dialog[open]")
-      audit("court report case picker (in modal)", "#case-selection", query: "ZZZ", expect_option: "ZZZ-9999")
+      audit("court report case picker (in modal)", "#case-selection", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
 
       # Volunteer-only page; as an admin the visit redirects to the dashboard.
       sign_out admin

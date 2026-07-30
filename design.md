@@ -715,16 +715,24 @@ The subtext must be `""`, **not nil**: the option template substitutes it throug
 `casa_cases#new` additionally passes `render_option_subtext: false` (no case exists yet, so there is no
 recency to show).
 
-### Typeahead audit (all 18 TomSelect controls)
+### Typeahead audit (all 20 TomSelect controls)
 **A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
 without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
 stay in the control next to the new chip. `multiple_select_controller` has **two** init paths and only
 the grouped one had it, so every plain multiselect was affected -- contact types on the case-contacts
 filter, case_groups#new, and all four report filters -- while the single-selects were fine. Reported as
 "the letters the user types stay even after they have made a selection". Guarded by
-`spec/system/typeahead_controls_spec.rb`, which drives all 18 controls (type -> filter -> select ->
+`spec/system/typeahead_controls_spec.rb`, which drives all 20 controls (type -> filter -> select ->
 query cleared, chip rendered, native `<select>` updated) and asserts the count, so a new control has
 to be added to it.
+
+**Filtering is asserted by a decoy's ABSENCE, never by reading the menu.** The audit long skipped the
+"does it filter" half because every read proved racy -- and a read is the wrong tool: a count taken
+straight after the keystrokes sees the **pre-filter** DOM, which is how a probe reported "typing does
+nothing" on a control that in fact filtered 31 options down to 1. Name a fixture that must NOT match
+and use Capybara's waiting `have_no_css`, which retries until the filter lands (13 of the 20 controls
+have a distinct decoy; the rest have a one-entry list). Same lesson as the caret: **A/B a suspected bug
+against the old code before calling it one.**
 
 **Finding a TomSelect control in a spec:** address it through its native `<select>`
 (`select.tomselect.wrapper`), never by `.ts-wrapper` position. Positions lie -- the court-report page's
@@ -811,6 +819,18 @@ past a handful of people.
   safe: the label resolves for TomSelect's input, never for the select behind it. The symptom is
   slippery -- axe flags only the selects that have finished initialising, so the violation count
   moves between runs (the report filters showed 3 nodes one run and 2 the next).
+- **A `prompt:` option is not a substitute for `placeholder-value`.** With a prompt and no placeholder
+  the controller leaves `allowEmptyOption` true, so TomSelect takes "Select case number" as a selected
+  **item** -- and an item at rest means `.input-hidden` (the search input parked at `left: -10000px`),
+  **no placeholder and no magnifier**. The control still searched perfectly once clicked, but nothing
+  said so: it was indistinguishable from a native dropdown, over *every active case in the chapter*.
+  Reported as "how many case numbers could there be in the case dropdown, should it be a typeahead
+  select field?" -- about a control that already was one. Keep the prompt for the no-JS render; add the
+  placeholder so the blank option is neither an item nor a menu row.
+- **One option? Preselect it.** A picker whose list has exactly one entry (a volunteer with one case)
+  should choose it, so nothing is left for the user to fill. Anything that keys off the selection must
+  then also run **on connect** -- `change` does not fire for a server-rendered `selected` option, so a
+  dependent date field would otherwise sit empty next to a chosen record.
 - **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
   (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
   native `<select>` to empty for submit + no-JS). **A placeholder picker MUST also set
