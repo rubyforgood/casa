@@ -33,10 +33,20 @@ export default class extends NestedForm {
   add (e) {
     super.add(e)
     const selectedValue = $(this.selectedCourtOrderTarget).val()
+    // The last entry, not `:last-of-type`: the rows share a parent with the insertion target div, so
+    // `div:last-of-type` is that target (which has no textarea) rather than the row just added.
+    const entries = document.querySelectorAll('#court-orders-list-container .court-order-entry')
+    const textarea = entries.length ? entries[entries.length - 1].querySelector('textarea.court-order-text-entry') : null
 
-    if (selectedValue !== '') {
-      const $textarea = $('#court-orders-list-container .court-order-entry:last textarea.court-order-text-entry')
-      $textarea.val(selectedValue)
+    if (selectedValue !== '' && textarea) textarea.value = selectedValue
+
+    // Move focus into the row that was just added. The row appends to the end of the list, which puts
+    // it directly above the Add control -- correct for an "add another" list -- but the button keeps
+    // focus otherwise, so a keyboard user has to go looking for the field they just created.
+    if (textarea) {
+      textarea.focus()
+      // Caret after any prefilled standard-order text rather than before it.
+      textarea.setSelectionRange(textarea.value.length, textarea.value.length)
     }
   }
 }

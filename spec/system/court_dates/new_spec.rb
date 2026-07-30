@@ -32,7 +32,7 @@ RSpec.describe "court_dates/new", type: :system do
       # Capybara's finder rather than a cached `.native` handle: the court-order row is cloned from
       # a <template> by the court-order-form controller, so a raw Selenium reference taken from
       # `first` while that insertion settles can detach before send_keys runs.
-      find("textarea[aria-label='Court order text']").set(text)
+      find("textarea.court-order-text-entry").set(text)
       page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
       within ".top-page-actions" do

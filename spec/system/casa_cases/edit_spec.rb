@@ -234,7 +234,8 @@ RSpec.describe "Edit CASA Case", type: :system do
 
       select "Partially implemented", from: "casa_case[case_court_orders_attributes][0][implementation_status]"
 
-      expect(page).to have_text("Set implementation status")
+      # The unset row still shows its prompt beside the real "Implementation status" label.
+      expect(page).to have_text("Select a status")
 
       find(".ts-control").click
 

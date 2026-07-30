@@ -34,7 +34,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     # cloned from a <template> by the court-order-form controller, so a `.native` handle grabbed
     # from `first` while that insertion is still settling goes stale, and send_keys then fails with
     # "Node with given id does not belong to the document". find/#set re-resolves and waits.
-    find("textarea[aria-label='Court order text']").set(court_order_text)
+    find("textarea.court-order-text-entry").set(court_order_text)
     page.find("select.implementation-status").find(:option, text: "Partially implemented").select_option
 
     within ".top-page-actions" do

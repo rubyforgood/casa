@@ -757,6 +757,33 @@ shortcut belongs behind a single control, not permanently expanded beside the pr
 Rows themselves stay **bordered and unfilled** (`rounded-lg border p-3`) -- that is the nested
 sub-form pattern; it is a fill inside a card that is wrong, not a border.
 
+**Every field in a repeatable row gets a real `<label>` -- a placeholder is not a label.** The court
+order row named its textarea with `placeholder: "Describe the court order"` and its select with the
+blank option, plus `aria-label`s on both. That passes axe (there *is* an accessible name), which is
+exactly why it survived an audit: placeholder-as-label is not machine-detectable. It fails the user --
+the placeholder disappears the moment you type, so the field loses its identity precisely when you
+are checking your work. Use the **compact label token** (`mb-1 block text-xs font-medium
+text-slate-500`) so a repeated row does not get heavy, drop the now-duplicate placeholder, and drop
+the `aria-label` -- with a real label it only risks the visible and announced names drifting apart.
+
+Two geometry rules when adding labels to such a row, both measured rather than eyeballed:
+- The label goes **outside** the `relative` wrapper that positions a select's chevron. The chevron is
+  `top-1/2` against that wrapper, so a label inside re-centres it against label+select and drops it
+  below the control (verified: chevron mid == select mid, delta 0px).
+- A trailing action (`Delete`) must align with the **inputs**, not the labels above them: the label
+  block is 20px (`text-xs` line-height + `mb-1`), so the button takes `sm:mt-5`. Measured all three
+  tops at 881px. Below `sm` the row stacks and the offset must not apply.
+
+**New rows append to the end of the list, directly above the Add control, and focus moves into them.**
+That position is the convention (GOV.UK "add another", Material, Polaris): the control that adds sits
+after the collection, so anything else would put the button in the middle of the list. What was
+missing is the second half -- `@stimulus-components/rails-nested-form#add` inserts `beforebegin` the
+target and leaves focus on the button, so a keyboard user has to hunt for the field they just made.
+`court-order-form#add` now focuses the new textarea and puts the caret after any prefilled
+standard-order text. Note the last row is **not** `:last-of-type` -- the rows share a parent with the
+insertion target div, so that selector returns the target (no textarea) and silently breaks the
+prefill.
+
 ### Autosave wizard form (case-contact)
 
 **Bind the autosave on the FORM, never per field.** `data-action="input->autosave#save"` on the
