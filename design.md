@@ -361,6 +361,26 @@ Chevron ink is `slate-500` (AA). Month/year pickers reuse this through
 The cases-index filter is the reference for the **chevron**, not for the padding above: a
 *filter* control is one step more compact than a *form* field (see "Filter bar").
 
+### Search field in a filter bar
+**Search as you type, debounced (~350ms) on `input`.** A text input fires `change` only on blur or
+Enter, so a filter bar wired only to `change` looks broken: typing does nothing. Worse, the
+unsubmitted text is still in the form, so it applies itself the moment the user touches any *other*
+filter -- which reads as "the search box keeps letters I typed". Reported exactly that way on the
+volunteers roster; the cases index had it too.
+
+`auto-submit` handles both: selects stay on `change->auto-submit#submit`, the search field gets
+`input->auto-submit#search`.
+
+**Turbo Drive is OFF app-wide** (`application.js`: `Turbo.session.drive = false`), so each submit is
+a **real page load** -- do not assume otherwise from a partial's comments (two filter bars claimed
+"Turbo Drive keeps it smooth"; verify with a `window` marker before the submit, which is how this was
+caught). That means the search box is destroyed and rebuilt on every keystroke-pause, so without help
+focus lands on `<body>` and the next letter goes nowhere. `auto-submit` parks
+`{name, selectionStart, selectionEnd}` in **`sessionStorage`** (module/instance state does not survive
+a page load) and restores it in `connect()` inside a `requestAnimationFrame` -- an immediate `focus()`
+was measured being undone as the new page settled. Verify by reading
+`document.activeElement === field` and `selectionStart`, not by eye.
+
 ### Filter bar
 Controls in a filter bar are **one step more compact than form fields** -- filters are
 chrome above the data, not the primary task. Two sizes, both measured, don't mix them:
