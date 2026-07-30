@@ -738,9 +738,24 @@ past a handful of people.
 ### Nested sub-form (repeatable rows)
 The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) is the
 pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that clones a
-`<template>` (`court-order-form#add`), and a per-row **Delete** (`danger_outline`). Each row
-is a full-width textarea + a one-column design-system status select + Delete, in a
-`flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). **Copy-from-sibling lives in a Dialog, not in the card.** It used to be a labelled select plus a
+`<template>` (`court-order-form#add`), and a per-row **Delete**.
+
+**An entry follows "Form layout" above -- it is not exempt for being repeatable.** The order text
+is a wide field, so it takes the **full width on its own line**; the implementation status is a
+status select, which that section names explicitly as a **one-column** field, so it sits on the
+**line below** with Delete beside it (`flex flex-wrap items-end gap-3`; below `sm` the select goes
+full width and Delete wraps under it). Entries are separated by a **hairline**
+(`border-t border-slate-100 pt-4 first:border-t-0 first:pt-0`) -- **not** a box each.
+
+This entry previously described the opposite -- all three controls side by side in a
+`flex-col sm:flex-row` bordered card -- and that wording was then used to justify keeping the
+cramped row through two rounds of fixes, including one where the three controls were carefully
+measured into alignment at 881px without anyone asking whether they belonged on one line at all.
+Squeezing the main content field into a fraction of the width to fit a select and a button beside it
+is the thing "Form layout" exists to prevent, and a per-entry bordered box is a card inside a card.
+**A note here does not override a rule above; if they disagree, the note is the drift.**
+
+**Copy-from-sibling lives in a Dialog, not in the card.** It used to be a labelled select plus a
 Copy button inside a **grey bordered panel** in the card body -- a filled nested surface inside the
 card (card-in-card) and a *second* input cluster competing with the real one (Court order type +
 Add), on top of the heading, the youth-names note, the order rows and a divider. Reported as too
@@ -754,8 +769,9 @@ order rows plus one add row, so **one** labelled cluster and **one** divider (me
 clusters -> 1, tinted panels -> 0). This is the general rule for a form card: an occasional bulk
 shortcut belongs behind a single control, not permanently expanded beside the primary input.
 
-Rows themselves stay **bordered and unfilled** (`rounded-lg border p-3`) -- that is the nested
-sub-form pattern; it is a fill inside a card that is wrong, not a border.
+(An earlier version of this section said rows "stay bordered and unfilled" because only a *fill*
+inside a card is wrong. That is not right either: an outlined box per entry is still a nested card.
+Separate repeated entries with a hairline, the same rule as the dashboard worklist.)
 
 **Every field in a repeatable row gets a real `<label>` -- a placeholder is not a label.** The court
 order row named its textarea with `placeholder: "Describe the court order"` and its select with the
@@ -770,9 +786,10 @@ Two geometry rules when adding labels to such a row, both measured rather than e
 - The label goes **outside** the `relative` wrapper that positions a select's chevron. The chevron is
   `top-1/2` against that wrapper, so a label inside re-centres it against label+select and drops it
   below the control (verified: chevron mid == select mid, delta 0px).
-- A trailing action (`Delete`) must align with the **inputs**, not the labels above them: the label
-  block is 20px (`text-xs` line-height + `mb-1`), so the button takes `sm:mt-5`. Measured all three
-  tops at 881px. Below `sm` the row stacks and the offset must not apply.
+- A trailing action (`Delete`) on the same line as a labelled select aligns to the **bottom** of the
+  control (`items-end`), not to the top -- there is a label above the select, so top-alignment floats
+  the button against the label. Measured: select bottom == Delete bottom. (The previous `sm:mt-5`
+  nudge existed only to rescue the cramped one-line row and is gone with it.)
 
 **New rows append to the end of the list, directly above the Add control, and focus moves into them.**
 That position is the convention (GOV.UK "add another", Material, Polaris): the control that adds sits

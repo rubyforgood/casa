@@ -55,7 +55,9 @@
 </template>
 
 <div id="court-orders-list-container" data-resource="<%= resource %>" data-court-order-list-target="list" class="mt-4">
-  <div class="space-y-3">
+  <%# No per-entry box and no space-y: each entry carries a border-t (first:border-t-0), so the
+      entries read as a divided list rather than a stack of nested cards. %>
+  <div>
     <%= form.fields_for :case_court_orders do |ff| %>
       <%= render "casa_cases/court_order_fields", f: ff %>
     <% end %>
