@@ -64,7 +64,8 @@ RSpec.describe "casa_cases/show", type: :system do
         # No past hearing, so the window starts the day the case was opened in CASA -- not "today",
         # which would be an empty window. (The case is created before this example freezes the clock.)
         expect(page.find("#start_date").value).to eq(casa_case.created_at.to_date.to_s)
-        expect(page.find("#end_date").value).to eq("2021-01-01")
+        # Filled by JS with today in the browser's zone, which travel_to cannot freeze.
+        expect(page.find("#end_date").value).to eq(browser_today)
 
         click_button "Generate report"
       end

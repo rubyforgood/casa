@@ -68,7 +68,9 @@ RSpec.describe "case_court_reports/index", type: :system do
       # "Starting from" is per-case (the last hearing, else when the case was opened), so it is empty
       # until a case is picked rather than defaulting to today -- today is an empty window.
       expect(page.find("#start_date").value).to eq("")
-      expect(page.find("#end_date").value).to eq(Date.current.to_s)
+      # Today in the browser's zone: the server renders Date.current, which is UTC, and the controller
+      # replaces it so the field is the user's today rather than UTC's.
+      expect(page.find("#end_date").value).to eq(browser_today)
     end
 
     it "autofills the start date from the picked case's last hearing" do
@@ -83,6 +85,15 @@ RSpec.describe "case_court_reports/index", type: :system do
 
       expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
       expect(page.find("#start_date").value).to eq(hearing.date.to_date.to_s)
+    end
+
+    it "keeps the end date filled if it is cleared" do
+      casa_case = casa_cases.first
+      page.find("#end_date").set("")
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#end_date").value).to eq(browser_today)
     end
 
     it "falls back to the date the case was opened when it has no past hearing" do
