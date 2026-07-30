@@ -34,10 +34,13 @@
   </div>
   <div class="lg:min-w-[11rem]">
     <%= label_tag :supervisor, "Supervisor", class: label_class %>
-    <div class="relative">
-      <%= select_tag :supervisor, options_for_select([["All supervisors", ""], ["Unassigned", "unassigned"]] + @supervisors.map { |s| [formatted_name(s.display_name), s.id.to_s] }, @supervisor_filter), class: select_class %>
-      <i class="<%= chevron_class %>" aria-hidden="true"></i>
-    </div>
+    <%# Searchable: a chapter has as many supervisors as it has, and this is the one field in the bar
+        whose options are a person list. "All supervisors" carries the non-empty value "all" (the
+        controller already treats "" and "all" alike) because the theme hides empty-valued options in a
+        TomSelect menu -- as `value=""` the row that clears the filter would be missing from the menu. %>
+    <%= select_tag :supervisor,
+          options_for_select([["All supervisors", "all"], ["Unassigned", "unassigned"]] + @supervisors.map { |s| [formatted_name(s.display_name), s.id.to_s] }, @supervisor_filter),
+          class: "ts-filter block w-full", data: {controller: "searchable-select"} %>
   </div>
   <div class="lg:min-w-[9rem]">
     <%= label_tag :transition, "Transition-aged youth", class: label_class %>

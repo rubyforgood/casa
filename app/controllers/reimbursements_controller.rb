@@ -38,7 +38,11 @@ class ReimbursementsController < ApplicationController
   private
 
   def apply_filters_to_query(query)
-    query = query.where(creator_id: params[:volunteers]) if params[:volunteers].present?
+    # "all" is the filter bar's explicit no-filter value. The volunteer picker is a searchable select
+    # and the theme hides empty-valued options in its menu, so the "All volunteers" row cannot carry
+    # value="" -- it would be missing from the menu the user opens to clear the filter.
+    volunteer = params[:volunteers].presence
+    query = query.where(creator_id: volunteer) if volunteer && volunteer != "all"
 
     apply_occurred_at_filters(query)
   end

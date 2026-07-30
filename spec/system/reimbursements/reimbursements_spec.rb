@@ -28,7 +28,7 @@ RSpec.describe "reimbursements", type: :system do
   it "filters by volunteer", :js do
     expect(page).to have_selector("[data-test=reimbursement-row]", count: 2)
 
-    select contact1.creator.display_name, from: "Volunteer"
+    choose_typeahead_option(contact1.creator.display_name, select_css: "#volunteers")
 
     expect(page).to have_selector("[data-test=reimbursement-row]", count: 1)
     # contact2's volunteer is still listed as a filter option, so scope to the row.

@@ -16,6 +16,8 @@ RSpec.describe "typeahead audit", :js, type: :system do
   let!(:ctg2) { create(:contact_type_group, casa_org: organization, name: "Alpha group") }
   let!(:ct2) { create(:contact_type, contact_type_group: ctg2, name: "Alpha type") }
   let!(:lh) { create(:learning_hour, user: volunteer) }
+  # The reimbursement filter lists only volunteers who actually have a reimbursement.
+  let!(:reimbursement) { create(:case_contact, :wants_reimbursement, creator: volunteer, casa_case: kase) }
   let!(:duty) { create(:other_duty, creator: volunteer) }
   let!(:unassigned) { create(:volunteer, casa_org: organization, supervisor: nil, display_name: "Nadia Nobody") }
   let!(:transitioning) do
@@ -156,6 +158,13 @@ RSpec.describe "typeahead audit", :js, type: :system do
       visit new_casa_case_path
       audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman")
 
+      # Filter-bar pickers (a person list among short native selects), not assign pickers.
+      visit reimbursements_path
+      audit("reimbursements#index volunteer filter", "#volunteers", query: "Quen", expect_option: "Quentin Quackenbush")
+
+      visit volunteers_path
+      audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman")
+
       visit case_court_reports_path
       # This picker lives inside the "Generate report" Dialog, so it does not exist on screen until
       # the modal is opened -- not a broken control, just one behind a trigger.
@@ -171,7 +180,7 @@ RSpec.describe "typeahead audit", :js, type: :system do
     end
 
     # Guards the inventory itself: a new TomSelect control should be added here too.
-    expect(@results.size).to(eq(18), "expected 18 controls, audited #{@results.size} -- one was added or removed")
+    expect(@results.size).to(eq(20), "expected 20 controls, audited #{@results.size} -- one was added or removed")
     failures = @results.reject { |(_, problems)| problems.empty? }
     expect(failures).to be_empty, "typeahead problems:\n" + failures.map { |l, p| "  #{l}: #{p.join("; ")}" }.join("\n")
   end

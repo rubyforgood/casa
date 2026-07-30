@@ -616,8 +616,14 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   present but hidden without it (that stacking, not a missing rule, is why the chevron read as
   "missing" for so long). Do not use a CSS `content` glyph escape (the minifier drops it), a
   raw non-base64 `data:` URI (broke in the build), or an injected CDN icon-font element (never
-  painted). **Verify a chevron at the pixel level** (screenshot + darkest-pixel), never by
-  computed style, which reports the element as present even when nothing paints.
+  painted). **Verify a chevron at the pixel level** -- never by computed style, which reports the
+  element as present even when nothing paints. **Compare the SHAPE, not the darkest pixel**: dump the
+  ink bounding box + ink-pixel count for the caret and for a native `<i class="bi bi-chevron-down">`
+  in the *same* screenshot -- `bin/caret-map.rb` does exactly this. Darkest-pixel alone is a colour check
+  and it has already produced a false pass -- it read "matches" on a region that actually held the
+  clear **x** (7x7, two crossing diagonals) rather than a caret, because the probe left the control
+  focused. A real match is identical extent and coverage: 10x6 ink, 20 ink pixels, mean lum 251.4 vs
+  251.2. Blur the control before the screenshot, or you are measuring the hover/focus state.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Clear-all inside the field, always visible once there is something to clear.** `remove_button`
@@ -725,16 +731,30 @@ same turn** -- `grep -rn "<select\|\.select \|select_tag" app/views` and check e
 a person or a case list. Short fixed lists (a 3-option status filter, org config like judges / hearing
 types / languages) stay native.
 
-Two person-list selects are deliberately **still native**, each for a concrete reason -- don't "fix" them
-without handling it:
-- `volunteers/index` bulk **Assign a supervisor** modal: here `value=""` means **"None"** (unassign), and
-  the theme hides empty-valued options in a menu (`.ts-dropdown .option[data-value=""] { display: none }`),
-  so converting it as-is would silently hide the None choice. It needs a non-empty sentinel first, and it
-  drives `disable-form` validation for a bulk write.
-- the **volunteer / supervisor filter selects** on reimbursements#index and the volunteers filter bar:
-  these belong to a filter bar with its own responsive grid and per-field widths (the learning-hours and
-  other-duties volunteer *filters* are searchable, so this is an inconsistency worth closing -- as a
-  filter-bar decision, not a drive-by).
+**A filter-bar picker over a person list is searchable too** (reimbursements#index Volunteer, the
+volunteers bar's Supervisor), and it needs three things a *form* picker doesn't. Mark it `ts-filter` on
+the `<select>` -- TomSelect copies the select's classes onto `.ts-wrapper`, which is what the rules hang
+off:
+- **The "All ..." row carries a non-empty value (`"all"`), never `""`.** The theme hides empty-valued
+  options in a menu (`.ts-dropdown .option[data-value=""] { display: none }`, there so a label-less blank
+  option isn't an empty row), so as `value=""` the row that *clears the filter* would be missing from the
+  very menu the user opens to clear it. The controller reads `"all"` as no filter (`volunteers_controller`
+  already did; `reimbursements_controller` now does). It also means a filter, unlike a form picker,
+  **states its current state including "All"** -- so no `placeholder-value` here: the "All ..." option is
+  the selected item on load, exactly as in the native select.
+- **Height matches the bar, not the form.** Filter fields are native `py-2` selects and date inputs at
+  **38px**, while `.ts-control`'s min-height is the 42px form-input height -- so an unmarked control stood
+  4px taller than every field beside it (bottoms aligned by `items-end`, tops 4px out). Measured 38 == 38,
+  tops and bottoms equal, after `.ts-wrapper.ts-filter .ts-control { min-height: 2.375rem }`.
+- **No clear x; keep the caret.** A filter always has a value, so the wrapper is permanently
+  `.has-items` and the clear-button rules would swap its caret for an x on every hover/focus while the
+  native selects beside it keep theirs -- and "clear" on *All supervisors* means nothing. The reset is
+  the "All ..." row.
+
+One person-list select is deliberately **still native**: the `volunteers/index` bulk **Assign a
+supervisor** modal, where `value=""` means **"None"** (unassign) rather than "no choice". Converting it
+needs a non-empty sentinel first (the same hide rule would eat the None row), and it drives
+`disable-form` validation for a bulk write.
 
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:

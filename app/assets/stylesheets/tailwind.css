@@ -59,8 +59,10 @@
    TomSelect's opaque `.ts-control` paints over a plain `::after` (that stacking, not a
    missing rule, is why every earlier chevron was invisible). base64 is minifier- and
    parser-safe; a raw `data:` URI and a `content` glyph escape both broke in the build, and
-   the injected icon-font element never painted. Pixel-verified to match the single-selects
-   (identical 8x4 dark extent), not just checked by computed style. */
+   the injected icon-font element never painted. Pixel-verified against a native single-select's
+   `<i class="bi bi-chevron-down text-xs">` in the SAME screenshot: identical 10x6 ink extent,
+   20 ink pixels, mean luminance 251.4 vs 251.2. Compare the SHAPE (ink bbox + coverage), not the
+   darkest pixel -- darkest-pixel alone matched while the region actually held the clear x. */
 .ts-wrapper::after {
   content: "";
   position: absolute;
@@ -126,6 +128,18 @@
 .ts-wrapper .clear-button:hover { color: #475569 !important; }
 .ts-wrapper .clear-button:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 0.25rem; } /* it is role=button tabindex=0, so it needs a visible focus ring */
 .ts-dropdown .option[data-value=""] { display: none; }
+/* In a filter bar the control sits in a row of native `py-2` selects and date inputs, which are 38px,
+   not the 42px form-input height -- so a bare .ts-control stood 4px taller than every field beside it
+   (bottoms aligned by `items-end`, tops 4px out). `ts-filter` on the <select> lands on .ts-wrapper
+   (TomSelect copies the select's classes onto it) and matches the bar. */
+.ts-wrapper.ts-filter .ts-control { min-height: 2.375rem; }
+/* A filter picker ALWAYS carries a value (the "All ..." row is a real option), so it is permanently
+   `.has-items`: the clear-button rules below would swap its chevron for an x on every hover/focus,
+   while the native selects beside it keep theirs -- and clearing "All supervisors" means nothing. The
+   reset is the "All ..." row itself, so drop the x and keep the caret. */
+.ts-wrapper.ts-filter .clear-button { display: none !important; }
+.ts-wrapper.ts-filter.has-items.focus::after,
+.ts-wrapper.ts-filter.has-items:hover::after { opacity: 1; }
 /* Disabled control: mirrors the native inputs' `disabled:bg-slate-100 disabled:text-slate-500`.
    TomSelect adds `.disabled` to the wrapper when the <select> carries the attribute, but ships no
    styling for it, so an empty-state picker looked live (a disabled ancestor fieldset makes it inert
