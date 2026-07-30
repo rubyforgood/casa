@@ -65,7 +65,7 @@
             <p class="mt-0.5 text-sm text-slate-500"><%= pluralize(@dashboard.stats[:unassigned], "active case") %> with no volunteer assigned.</p>
           <% end %>
         </div>
-        <% if @dashboard.unassigned_cases.any? %><%= link_to "All cases", casa_cases_path, class: "shrink-0 text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %><% end %>
+        <% if @dashboard.unassigned_cases.any? %><%= link_to "All cases", casa_cases_path, class: "shrink-0 text-sm font-medium #{record_link_class}" %><% end %>
       </div>
       <% if @dashboard.needs_attention.any? %>
         <% next_dates = @dashboard.next_court_dates %>
@@ -73,7 +73,7 @@
           <table class="w-full text-sm">
             <caption class="sr-only">Active cases with no volunteer assigned, and their next court date.</caption>
             <thead class="text-left text-xs font-semibold text-slate-500">
-              <tr class="border-b border-slate-100">
+              <tr class="">
                 <th scope="col" class="px-4 py-3 font-semibold">Case</th>
                 <th scope="col" class="px-4 py-3 font-semibold">Next court date</th>
                 <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>

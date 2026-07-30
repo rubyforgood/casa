@@ -884,6 +884,15 @@ the rounded bottom corner instead of butting against it (use `py-2` for a header
 list card — e.g. notifications — so the first row clears the top corner too). Keep rows
 a uniform height (a taller last row reads as a bug).
 
+**Exactly ONE rule above the column headers.** A card with a title block
+(`border-b border-slate-100 p-4`) already has its separator, so the `thead`'s `<tr>` must **not** add
+a second -- two hairlines ~40px apart read as a mistake. Absent a title block (the cases /
+supervisors / volunteers index tables), the `thead`'s `border-b` *is* the separator and stays. Audited
+app-wide: the doubling was in all three dashboard worklists and, pre-existing, in the supervisor "Your
+volunteers", volunteer "Your cases" and `volunteers/_notes` tables -- 6 sites, all fixed. It got there
+by copying a neighbouring table instead of checking this section, which propagates drift rather than
+catching it: **match the pattern, not the nearest sibling.**
+
 ### Tables (bespoke) + pagination
 Hand-built Tailwind (dashboard tables + cases index), not DataTables. `overflow-hidden
 rounded-2xl` card (+ `pt-2` inset -- top only; a bottom inset would stack under an in-card pagination

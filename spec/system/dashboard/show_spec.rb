@@ -63,8 +63,11 @@ RSpec.describe "dashboard/show", type: :system do
 
       # Rows used to carry their own rose border, rose fill and a filled 40px icon tile nested inside
       # this card; a tint on every row signals nothing. Severity is stated once, by the heading.
-      expect(section).to have_no_css("[class*='bg-rose']")
-      expect(section).to have_no_css("[class*='border-rose']")
+      # Scoped to the row and its cells: an initials avatar may legitimately be bg-rose-100, since
+      # avatar_color cycles a palette by volunteer id, so a section-wide "no rose" assertion fails at
+      # random (it did -- 2 runs in 8).
+      expect(section).to have_no_css("tr[class*='bg-rose'], tr[class*='border-rose']")
+      expect(section).to have_no_css("td[class*='bg-rose'], td[class*='border-rose']")
       expect(section).to have_no_css("span.h-10")
 
       # One action per row -- the name beside it is identifying text, not a second link to the same page.

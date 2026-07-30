@@ -57,7 +57,7 @@
           <table class="w-full text-sm">
             <caption class="sr-only">Your cases without a recent contact.</caption>
             <thead class="text-left text-xs font-semibold text-slate-500">
-              <tr class="border-b border-slate-100">
+              <tr class="">
                 <th scope="col" class="px-4 py-3 font-semibold">Case</th>
                 <th scope="col" class="px-4 py-3 font-semibold">Last contact</th>
                 <th scope="col" class="px-4 py-3"><span class="sr-only">Actions</span></th>
@@ -96,7 +96,7 @@
         <table class="w-full text-sm">
           <caption class="sr-only">Your active cases with contact-follow-up status and most recent contact.</caption>
           <thead class="text-left text-xs font-semibold text-slate-500">
-            <tr class="border-b border-slate-100">
+            <tr class="">
               <th scope="col" class="px-4 py-3">Case</th>
               <th scope="col" class="px-4 py-3">Contact status</th>
               <th scope="col" class="px-4 py-3">Last contact</th>
@@ -115,7 +115,7 @@
                   <% end %>
                 </td>
                 <td class="px-4 py-3 align-top text-slate-600"><%= row.last_contact_label %></td>
-                <td class="px-4 py-3 align-top text-right"><%= link_to "Log contact", new_case_contact_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %></td>
+                <td class="px-4 py-3 align-top text-right"><%= link_to "Log contact", new_case_contact_path, class: ghost_class %></td>
               </tr>
             <% end %>
           </tbody>
@@ -134,7 +134,7 @@
             </div>
             <div class="mt-2 flex items-center justify-between gap-3">
               <span class="text-xs text-slate-500"><%= row.last_contact_label %></span>
-              <%= link_to "Log contact", new_case_contact_path, class: "text-sm font-medium text-brand-600 hover:text-brand-700 focus-visible:outline-none focus-visible:underline" %>
+              <%= link_to "Log contact", new_case_contact_path, class: ghost_class %>
             </div>
           </div>
         <% end %>
