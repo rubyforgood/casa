@@ -124,7 +124,17 @@ export default class extends Controller {
         }
       },
       onDropdownOpen,
-      onDropdownClose
+      onDropdownClose,
+      // Clear the query once an item is picked, and re-score the remaining options against an empty
+      // query so the next search starts clean. Without this TomSelect leaves the typed letters sitting
+      // in the control beside the new chip -- reported as "the letters the user types stay even after
+      // they have made a selection". The grouped path below already did this; this one did not, which
+      // is why it affected every plain multiselect (contact types, case groups, all four report
+      // filters) and none of the single-selects.
+      onItemAdd: function () {
+        this.setTextboxValue('')
+        this.refreshOptions()
+      }
     }
     // A blank-load filter shows a placeholder ("Select or search supervisors", ...) until an item is
     // picked; hidePlaceholder clears the prompt once a chip exists (industry standard -- a lingering

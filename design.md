@@ -633,6 +633,26 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
 - Override tom-select at `.ts-wrapper.multi` specificity (and `!important` where it uses it);
   its default grey theme wins otherwise.
 
+### Typeahead audit (all 13 TomSelect controls)
+**A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
+without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
+stay in the control next to the new chip. `multiple_select_controller` has **two** init paths and only
+the grouped one had it, so every plain multiselect was affected -- contact types on the case-contacts
+filter, case_groups#new, and all four report filters -- while the single-selects were fine. Reported as
+"the letters the user types stay even after they have made a selection". Guarded by
+`spec/system/typeahead_controls_spec.rb`, which drives all 13 controls (type -> filter -> select ->
+query cleared, chip rendered, native `<select>` updated) and asserts the count, so a new control has
+to be added to it.
+
+**Finding a TomSelect control in a spec:** address it through its native `<select>`
+(`select.tomselect.wrapper`), never by `.ts-wrapper` position. Positions lie -- the court-report page's
+first `.ts-wrapper` belongs to a control inside a **closed `<dialog>`** (`display: none`, 0x0), and
+several pages hold four. Also note what does *not* mean "broken": controls inside a collapsed
+disclosure panel (the case-contact filters) or a modal (the court-report case picker) need opening
+first; `learning_hours` / `other_duties` list only names that already appear in the data, so they need
+rows before they have options; and `emancipation_checklists` is **volunteer-only** and redirects an
+admin to the dashboard.
+
 ### Searchable single-select
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
