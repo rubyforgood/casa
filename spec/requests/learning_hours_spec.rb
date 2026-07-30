@@ -14,9 +14,13 @@ RSpec.describe "LearningHours", type: :request do
         expect(response).to have_http_status(:success)
       end
 
-      it "displays the time completed column" do
+      it "displays the time completed column, naming the period it covers" do
         get learning_hours_path
-        expect(response.body).to include("Time completed this year")
+
+        expect(response.body).to include("Time completed")
+        # The header states the period rather than claiming "this year" -- nothing filtered
+        # occurred_at, so that total was actually all-time.
+        expect(response.body).to include("since #{I18n.l(Date.current.beginning_of_year, format: :full)}")
       end
     end
   end

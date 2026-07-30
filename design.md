@@ -381,6 +381,26 @@ a page load) and restores it in `connect()` inside a `requestAnimationFrame` -- 
 was measured being undone as the new page settled. Verify by reading
 `document.activeElement === field` and `selectionStart`, not by eye.
 
+### A stat's period must be stated, and must be true
+The learning-hours roster column read **"Time completed this year"** while neither aggregate scope
+filtered `occurred_at` -- so the number was an **all-time** total. Proven rather than read: 1h today +
+2h from three years ago + 4h from Dec 31 returned 420 minutes, not 60. A header that names a period
+the query does not apply is worse than an unlabelled one, because it is trusted.
+
+Rules for any "total over a period" figure:
+- **Name the period in the header**, with its start date -- "Time completed / since January 1, 2026"
+  (or "X to Y" when the end is not today). "This year" is not a specification: nobody can tell whether
+  it means calendar, fiscal, or rolling.
+- **Let the user change it.** A `from`/`to` pair in the page's filter bar, same tokens as the other
+  rosters, auto-submitting on `change`; `shared/_pagination` carries the params.
+- **Clamp the parsed dates.** `Date.parse` accepts `"0730-02-02"`, which put "since February 2, 0730"
+  in the header. Clamp to the domain's real window -- here 1989-01-01 (what `LearningHour` validates)
+  to today.
+- Keep the range **optional** in the model scope (`occurred_in(range)` no-ops on nil) so the Pundit
+  scopes keep meaning "everything this user may see" rather than inheriting a UI default.
+- `date.formats` has no `:standard` -- that lives under `time.formats`. For a Date use `:full`
+  ("January 1, 2026").
+
 ### Filter bar
 Controls in a filter bar are **one step more compact than form fields** -- filters are
 chrome above the data, not the primary task. Two sizes, both measured, don't mix them:

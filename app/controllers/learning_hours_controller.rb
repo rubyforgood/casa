@@ -5,8 +5,9 @@ class LearningHoursController < ApplicationController
 
   def index
     authorize LearningHour
+    set_period
     rows = LearningHoursDashboardRowsService
-      .new(current_user, policy_scope(LearningHour))
+      .new(current_user, policy_scope(LearningHour), @period)
       .perform
 
     if current_user.volunteer?
@@ -77,6 +78,29 @@ class LearningHoursController < ApplicationController
   end
 
   private
+
+  # The roster column is bounded by a date range the user can change. It defaults to the calendar
+  # year to date, which is what the column header always claimed ("Time completed this year") even
+  # though nothing filtered on occurred_at, so the totals were all-time.
+  # Learning hours cannot occur before 1989-01-01 (LearningHour validates that) or in the future, so
+  # clamp to that window: a hand-edited or mistyped param would otherwise put a nonsense year in the
+  # column header ("since February 2, 0730" -- Date.parse happily accepts it).
+  PERIOD_FLOOR = Date.new(1989, 1, 1)
+
+  def set_period
+    @period_from = parse_date(params[:from]) || Date.current.beginning_of_year
+    @period_to = parse_date(params[:to]) || Date.current
+    @period_from, @period_to = @period_to, @period_from if @period_from > @period_to
+    @period_from = @period_from.clamp(PERIOD_FLOOR, Date.current)
+    @period_to = @period_to.clamp(PERIOD_FLOOR, Date.current)
+    @period = @period_from..@period_to
+  end
+
+  def parse_date(value)
+    Date.parse(value.to_s)
+  rescue Date::Error
+    nil
+  end
 
   def set_learning_hour
     @learning_hour = LearningHour.find(params[:id])
