@@ -67,8 +67,7 @@
                   <div class="flex flex-wrap items-center gap-3">
                     <%= form.file_field :court_report_template, class: "#{file_class} flex-1" %>
                     <% if current_organization.court_report_template.attached? %>
-                      <% ActiveStorage::Current.url_options = {host: request.base_url} %>
-                      <%= link_to "Download current template", current_organization.court_report_template.url(only_path: true), class: button_classes(:secondary) %>
+                      <%= link_to "Download current template", rails_blob_path(current_organization.court_report_template, disposition: "attachment"), class: button_classes(:secondary) %>
                     <% end %>
                   </div>
                 </div>

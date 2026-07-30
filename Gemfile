@@ -13,6 +13,9 @@ gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
 gem "caxlsx", "~> 4.5" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.7.1" # Excel spreadsheets - TODO can we remove this version restriction?
+# Ruby 4.0 ships a cgi stdlib with only escape/unescape; azure-storage-common needs the
+# full library's CGI.parse to sign blob URLs. Remove when azure-storage-blob is dropped.
+gem "cgi", "~> 0.4.2"
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
 gem "devise" # Authentication

@@ -143,6 +143,7 @@ GEM
     caxlsx_rails (0.7.2)
       actionpack (>= 6.1)
       caxlsx (>= 4.0)
+    cgi (0.4.2)
     childprocess (5.1.0)
       logger (~> 1.5)
     cliver (0.3.2)
@@ -238,10 +239,10 @@ GEM
     faraday-retry (1.0.4)
     faraday_middleware (1.2.1)
       faraday (~> 1.0)
-    ffi (1.17.2)
-    ffi (1.17.2-arm64-darwin)
-    ffi (1.17.2-x86_64-darwin)
-    ffi (1.17.2-x86_64-linux-gnu)
+    ffi (1.17.4)
+    ffi (1.17.4-arm64-darwin)
+    ffi (1.17.4-x86_64-darwin)
+    ffi (1.17.4-x86_64-linux-gnu)
     filterrific (5.2.7)
     flipper (1.4.2)
       concurrent-ruby (< 2)
@@ -721,6 +722,7 @@ DEPENDENCIES
   capybara-screenshot
   caxlsx (~> 4.5)
   caxlsx_rails (~> 0.7.1)
+  cgi (~> 0.4.2)
   cssbundling-rails (~> 1.4)
   database_cleaner-active_record
   delayed_job_active_record
