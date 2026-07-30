@@ -21,16 +21,16 @@
       <h2 class="mb-3 text-lg font-semibold text-slate-900">CASA Organizations</h2>
       <div class="<%= card %> overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-slate-200" data-test="organization-table">
-            <thead class="bg-slate-50">
-              <tr>
+          <table class="min-w-full" data-test="organization-table">
+            <thead>
+              <tr class="border-b border-slate-100">
                 <th scope="col" class="<%= th %>">Name</th>
                 <th scope="col" class="<%= th %>">Created at</th>
                 <th scope="col" class="<%= th %>">User count</th>
                 <th scope="col" class="<%= th %>">Case contact count</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% @organizations.each do |organization| %>
                 <tr>
                   <td class="<%= td %>"><%= link_to organization.name, all_casa_admins_casa_org_path(organization), class: "font-medium text-brand-600 hover:text-brand-700" %></td>

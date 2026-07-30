@@ -74,7 +74,7 @@
                 <th scope="col" class="<%= th %>">Reimbursement complete</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% @reimbursements.each do |reimbursement| %>
                 <tr data-test="reimbursement-row" class="hover:bg-slate-50">
                   <td class="<%= td %> font-medium text-slate-800"><%= formatted_name(reimbursement.creator.display_name) %></td>

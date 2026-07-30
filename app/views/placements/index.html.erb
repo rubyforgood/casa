@@ -23,15 +23,15 @@
     <% if @placements.any? %>
       <div class="<%= card %> overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-              <tr>
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-100">
                 <th scope="col" class="<%= th %>">Placement type</th>
                 <th scope="col" class="<%= th %>">Date</th>
                 <th scope="col" class="<%= th %> text-right">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% @placements.each_with_index do |placement, idx| %>
                 <tr>
                   <td class="<%= td %> font-medium text-slate-800"><%= placement.placement_type.name %></td>

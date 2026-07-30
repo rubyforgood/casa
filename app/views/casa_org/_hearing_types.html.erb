@@ -7,16 +7,16 @@
     <% end %>
   </div>
   <div class="mt-4 hidden overflow-x-auto md:block">
-    <table id="hearing-types" class="min-w-full divide-y divide-slate-200">
+    <table id="hearing-types" class="min-w-full">
       <thead>
-        <tr>
+        <tr class="border-b border-slate-100">
           <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Name</th>
           <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Checklist</th>
           <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Active?</th>
           <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
         </tr>
       </thead>
-      <tbody class="divide-y divide-slate-100">
+      <tbody class="divide-y divide-slate-50">
         <% @hearing_types.each do |hearing_type| %>
           <tr id="hearing_type-<%= hearing_type.id %>">
             <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= hearing_type.name %></td>

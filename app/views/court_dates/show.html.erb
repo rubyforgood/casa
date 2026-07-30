@@ -37,14 +37,14 @@
       <% if @court_date.case_court_orders.any? %>
         <div class="overflow-hidden rounded-xl border border-slate-200">
           <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-slate-200">
-              <thead class="bg-slate-50">
-                <tr>
+            <table class="min-w-full text-sm">
+              <thead>
+                <tr class="border-b border-slate-100">
                   <th scope="col" class="<%= th %>">Case order text</th>
                   <th scope="col" class="<%= th %> text-center">Implementation status</th>
                 </tr>
               </thead>
-              <tbody class="divide-y divide-slate-100">
+              <tbody class="divide-y divide-slate-50">
                 <% @court_date.case_court_orders.each do |court_order| %>
                   <tr>
                     <td class="<%= td %>"><%= court_order.text %></td>

@@ -30,14 +30,14 @@
     <% if @casa_transitioning_cases.any? %>
       <div class="<%= card %> overflow-hidden">
         <div class="overflow-x-auto">
-          <table class="min-w-full divide-y divide-slate-200">
-            <thead class="bg-slate-50">
-              <tr>
+          <table class="min-w-full text-sm">
+            <thead>
+              <tr class="border-b border-slate-100">
                 <th scope="col" class="<%= th %>">Case number</th>
                 <th scope="col" class="<%= th %>">Checklist</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% @casa_transitioning_cases.each do |casa_case| %>
                 <tr>
                   <td class="<%= td %>"><%= link_to casa_case.case_number, casa_case, title: "Details", class: "font-medium text-brand-600 hover:text-brand-700" %></td>

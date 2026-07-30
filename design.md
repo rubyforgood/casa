@@ -895,6 +895,16 @@ auto-dismisses) when it is live, an **`:alert`** (amber, stays put) when it is n
 has to be read. When an object has a published/active flag, assume nobody will infer it from a table
 cell.
 
+**Every table converged (2026-07-30).** The three separator sources -- a card title block's
+`border-b`, the `thead` `<tr>`'s `border-b`, and a `divide-y` on the `<table>` element itself -- must
+sum to exactly **one**, and `tbody` is always `divide-y divide-slate-50`. Swept app-wide: 15 tables
+carried `divide-y divide-slate-200` on the table (a darker rule than the token, and a second one
+wherever a header row also had a border), 7 still had the forbidden `thead` fill, one
+(`users/_languages`) had **no** separator at all, and `reimbursements` was on `divide-slate-100` rows.
+All 41 tables now satisfy the invariant -- re-check with a static audit over
+`app/views/**/*.erb`, not by sampling pages, and note that a `thead` fill hides behind longer class
+strings (`class="bg-slate-50 text-left text-xs ..."` survived a grep for the exact attribute).
+
 **Exactly ONE rule above the column headers.** A card with a title block
 (`border-b border-slate-100 p-4`) already has its separator, so the `thead`'s `<tr>` must **not** add
 a second -- two hairlines ~40px apart read as a mistake. Absent a title block (the cases /

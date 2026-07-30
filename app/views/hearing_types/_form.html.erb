@@ -38,16 +38,16 @@
           <% end %>
         </div>
         <div class="mt-4 hidden overflow-x-auto md:block">
-          <table id="checklist_items" class="min-w-full divide-y divide-slate-200">
+          <table id="checklist_items" class="min-w-full">
             <thead>
-              <tr>
+              <tr class="border-b border-slate-100">
                 <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Description</th>
                 <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Category</th>
                 <th scope="col" class="px-4 py-3 text-left text-xs font-semibold text-slate-600 align-top">Mandatory</th>
                 <th scope="col" class="px-4 py-3 text-right text-xs font-semibold text-slate-600 align-top">Actions</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-slate-100">
+            <tbody class="divide-y divide-slate-50">
               <% hearing_type.checklist_items.each do |checklist_item| %>
                 <tr id="checklist_item-<%= checklist_item.id %>">
                   <td class="px-4 py-3 text-sm text-slate-700 align-top"><%= checklist_item.description %></td>

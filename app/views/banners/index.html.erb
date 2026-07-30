@@ -22,7 +22,7 @@
   <% if @banners.any? %>
     <div class="<%= card %> overflow-hidden">
       <div class="overflow-x-auto">
-        <table class="min-w-full divide-y divide-slate-200" id="banners">
+        <table class="min-w-full" id="banners">
           <thead>
             <tr class="border-b border-slate-100">
               <th scope="col" class="<%= th %>">Name</th>
@@ -33,7 +33,7 @@
               <th scope="col" class="<%= th %> text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-slate-100">
+          <tbody class="divide-y divide-slate-50">
             <% @banners.each do |banner| %>
               <tr>
                 <td class="<%= td %> font-medium text-slate-800"><%= banner.name %></td>
