@@ -313,6 +313,18 @@ alone, so `:danger_outline`).
   as broken (a `casa_cases#show`-adjacent regression: a ghost Deactivate/Unassign next to `:secondary`
   Resend/Assign). Either way there is **no red-at-rest**. No border, fill, or shadow: the
   lowest-emphasis action, for repeated row / toolbar actions so they recede from brand links. It lives
+**No red-at-rest applies to the container too, not just the button.** The deactivate section on
+`casa_cases#edit` was a white card with a `border-rose-200` outline -- the only rose-bordered white
+card in the app, and an always-on red of exactly the kind this section rules out. Every comparable
+section (`volunteers/_manage_active`, `supervisors/_manage_active`, `casa_admins#edit`, the all-CASA
+admin edit) is a plain `border-slate-200` card, and it is now one too (verified: its border resolves to
+the same colour as a sibling card on the same page). A rose border belongs to an **alert message**
+panel, paired with `bg-rose-50` and rose ink -- `casa_cases/_inactive_case` is the legitimate use,
+saying the case *is* inactive. Outlining a section in red to mean "the action in here is dangerous" is
+not a pattern; the danger lives in the button variant, its `bi-slash-circle` icon (the same one
+"Deactivate volunteer/supervisor" use -- this trigger was missing it), its label, and the confirm
+dialog whose single solid rose button is the only red at rest anywhere.
+
   in a helper (not a `button_classes` variant -- it is a low-emphasis action at a shorter height, not a
   CTA) as the **single source of truth**, because copy-pasted inline strings drifted: case_groups sat
   at `px-2.5 py-1.5`, and the casa_org settings tables used bare `text-brand-600` / `text-rose-600`

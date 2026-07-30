@@ -67,7 +67,12 @@
       <%# Deactivate is a separate PATCH action, so it lives outside the edit form (a
           button_to nested in the form would submit the outer form instead). %>
       <% if policy(@casa_case).update_case_status? %>
-        <div class="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-rose-200 bg-white p-5 shadow-sm">
+        <%# A normal card: the destructive signal is the danger_outline button plus its confirm dialog,
+            not a tinted container. This was the only rose-bordered white card in the app -- every
+            comparable section (volunteers/supervisors/admins "manage active") uses border-slate-200,
+            and a rose border belongs to an alert *message* panel (see _inactive_case, which pairs it
+            with bg-rose-50 to say the case is inactive). %>
+        <div class="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <div>
             <p class="text-sm font-semibold text-slate-900">Deactivate this case</p>
             <p class="mt-0.5 text-sm text-slate-500">Deactivating unassigns all volunteers. You can reactivate it later.</p>
@@ -77,6 +82,7 @@
                 title: "Deactivate this case?",
                 message: "Deactivating a CASA case unassigns any volunteers currently assigned to it.",
                 confirm_label: "Yes, deactivate",
+                trigger_icon: "bi bi-slash-circle",
                 trigger_label: "Deactivate CASA Case",
                 trigger_class: button_classes(:danger_outline) %>
         </div>
