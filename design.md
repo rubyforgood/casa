@@ -745,7 +745,10 @@ is a wide field, so it takes the **full width on its own line**; the implementat
 status select, which that section names explicitly as a **one-column** field, so it sits on the
 **line below** with Delete beside it (`flex flex-wrap items-end gap-3`; below `sm` the select goes
 full width and Delete wraps under it). Entries are separated by a **hairline**
-(`border-t border-slate-100 pt-4 first:border-t-0 first:pt-0`) -- **not** a box each.
+(`border-t border-slate-100 pt-4 first:border-t-0 first:pt-0`) -- **not** a box each. The add row gets
+**no rule of its own**: a second hairline of the same weight reads as another entry rather than a
+section break, so space separates it (`mt-6`), which is also what GOV.UK "add another" does. Measured
+with two entries: entry rules `0px, 1px`, rule above the add row `0px`.
 
 This entry previously described the opposite -- all three controls side by side in a
 `flex-col sm:flex-row` bordered card -- and that wording was then used to justify keeping the
@@ -762,7 +765,15 @@ Add), on top of the heading, the youth-names note, the order rows and a divider.
 busy, and the grey panel is not a design-system surface.
 
 Now: one **secondary action in the section header** ("Copy from another case"), and the case picker
-moves inside the existing Dialog with the confirmation copy and the inline error. Validation moves
+moves inside the existing Dialog with the confirmation copy and the inline error. That picker is a
+**searchable-select**, not a plain `<select>`: an org can hold hundreds of cases, so scrolling a native
+dropdown to find one is unusable -- and this app already had the typeahead for exactly that (see
+"Typeahead audit"). Reaching for a plain select while *rebuilding* the control was the miss. Two
+details: pass only `class: "block w-full"` (the tom-select theme owns the border/padding and copies
+these classes onto `.ts-wrapper`, so a bordered input class double-borders), and do **not** set
+`dropdownParent: body` inside a `<dialog>` -- the menu would leave the dialog's top layer and paint
+behind it. Specs must drive it as a user does; `select ... from:` cannot reach the clipped native
+select. Validation moves
 with it -- opening the dialog cannot validate a choice that has not been made, so
 `copy-court-orders#confirm` checks the select and `#open` just opens. The card body is then only the
 order rows plus one add row, so **one** labelled cluster and **one** divider (measured: 2 label
@@ -786,10 +797,13 @@ Two geometry rules when adding labels to such a row, both measured rather than e
 - The label goes **outside** the `relative` wrapper that positions a select's chevron. The chevron is
   `top-1/2` against that wrapper, so a label inside re-centres it against label+select and drops it
   below the control (verified: chevron mid == select mid, delta 0px).
-- A trailing action (`Delete`) on the same line as a labelled select aligns to the **bottom** of the
-  control (`items-end`), not to the top -- there is a label above the select, so top-alignment floats
-  the button against the label. Measured: select bottom == Delete bottom. (The previous `sm:mt-5`
-  nudge existed only to rescue the cramped one-line row and is gone with it.)
+- A trailing action (`Delete`) on the same line as a select is **centred on the control**
+  (`items-center`), and the way to get that is structural: put the **label above the flex line**, so
+  the line holds only the select and the button. While the label sits *inside* the line, every
+  alignment is measured against label+select and the button can never centre on the field -- two
+  earlier attempts (`sm:mt-5`, then `items-end`) only made an edge agree, and "select bottom ==
+  Delete bottom" is a measurement that confirms the choice rather than testing it. Measured now:
+  select mid == Delete mid, delta 0px.
 
 **New rows append to the end of the list, directly above the Add control, and focus moves into them.**
 That position is the convention (GOV.UK "add another", Material, Polaris): the control that adds sits

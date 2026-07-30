@@ -131,6 +131,16 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "Copy all court orders from a case" do
+      # The picker is a searchable-select (TomSelect), so the native <select> is clipped out of reach
+      # and Capybara's `select ... from:` cannot touch it. Drive it the way a user does.
+      def pick_case_to_copy(case_number)
+        find("#casa_case_siblings_casa_cases", visible: :all)
+        wrapper = find("dialog[open] .ts-wrapper")
+        wrapper.find(".ts-control").click
+        wrapper.find("input", visible: :all).send_keys(case_number)
+        find(".ts-dropdown .option", text: case_number, match: :first).click
+      end
+
       it "does not allow access to cases not within the organization" do
         visit edit_casa_case_path(other_org_casa_case)
         expect(page).to have_text("Sorry, you are not authorized to perform this action.")
@@ -151,7 +161,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "containses all case from organization except current case", :js do
         visit edit_casa_case_path(casa_case)
         click_on "Copy from another case"
-        within "#casa_case_siblings_casa_cases" do
+        within find("#casa_case_siblings_casa_cases", visible: :all) do
           siblings_casa_cases.each do |scc|
             expect(page).to have_selector("option", text: scc.case_number)
           end
@@ -164,7 +174,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
@@ -183,7 +193,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
@@ -199,7 +209,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
@@ -578,6 +588,16 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "Copy all court orders from a case" do
+      # The picker is a searchable-select (TomSelect), so the native <select> is clipped out of reach
+      # and Capybara's `select ... from:` cannot touch it. Drive it the way a user does.
+      def pick_case_to_copy(case_number)
+        find("#casa_case_siblings_casa_cases", visible: :all)
+        wrapper = find("dialog[open] .ts-wrapper")
+        wrapper.find(".ts-control").click
+        wrapper.find("input", visible: :all).send_keys(case_number)
+        find(".ts-dropdown .option", text: case_number, match: :first).click
+      end
+
       it "shows a validation error when confirming with no case selected", :js do
         visit edit_casa_case_path(casa_case)
         click_on "Copy from another case"
@@ -602,7 +622,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       it "containses all cases associated to current volunteer except current case", :js do
         visit edit_casa_case_path(casa_case)
         click_on "Copy from another case"
-        within "#casa_case_siblings_casa_cases" do
+        within find("#casa_case_siblings_casa_cases", visible: :all) do
           siblings_casa_cases.each do |scc|
             expect(page).to have_selector("option", text: scc.case_number)
           end
@@ -615,7 +635,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
@@ -634,7 +654,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
@@ -650,7 +670,7 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         click_on "Copy from another case"
-        select selected_case.case_number, from: "casa_case_siblings_casa_cases"
+        pick_case_to_copy(selected_case.case_number)
         expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
