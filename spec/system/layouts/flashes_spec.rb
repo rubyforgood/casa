@@ -16,6 +16,11 @@ RSpec.describe "flash messages", :js, type: :system do
     fill_in "Email", with: user.email
     fill_in "Password", with: "12345678"
     click_on "Sign in"
+    # Wait for the sign-in to land before anything else navigates. Without this the next `visit`
+    # races the POST's redirect, and whichever wins decides whether the page under test -- and its
+    # flash -- is the one asserted against. Devise returns us to the stored path (the protected page
+    # we started from), so that is the signal.
+    expect(page).to have_current_path(casa_cases_path, ignore_query: true)
   end
 
   it "auto-dismisses a success notice" do

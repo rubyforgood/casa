@@ -884,6 +884,17 @@ the rounded bottom corner instead of butting against it (use `py-2` for a header
 list card — e.g. notifications — so the first row clears the top corner too). Keep rows
 a uniform height (a taller last row reads as a bug).
 
+**State that decides whether something is visible must be a pill, and fixable in one click.** The
+banners list reported "Active?" as plain body text ("Yes"/"No") in the same weight as every other
+cell, `create` set no flash at all, and the only way to activate was to find the checkbox on the edit
+form. A banner saved without ticking Active is invisible by design, so the whole feature read as
+broken -- reported as "banners do not work, when I create one it does not load", with two inactive
+banners sitting in the list. Status is now the documented pill (emerald check / slate minus), each
+inactive row has an **Activate** action, and create/update flash the outcome: a `:notice` (green,
+auto-dismisses) when it is live, an **`:alert`** (amber, stays put) when it is not, because that one
+has to be read. When an object has a published/active flag, assume nobody will infer it from a table
+cell.
+
 **Exactly ONE rule above the column headers.** A card with a title block
 (`border-b border-slate-100 p-4`) already has its separator, so the `thead`'s `<tr>` must **not** add
 a second -- two hairlines ~40px apart read as a mistake. Absent a title block (the cases /
