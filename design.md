@@ -740,9 +740,22 @@ The court-orders sub-form (`casa_cases/_court_orders` + `_court_order_fields`) i
 pattern: repeatable `.nested-form-wrapper` entry rows, an **Add** button that clones a
 `<template>` (`court-order-form#add`), and a per-row **Delete** (`danger_outline`). Each row
 is a full-width textarea + a one-column design-system status select + Delete, in a
-`flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). Copy-from-sibling is a
-select + Copy button with a Dialog confirm (the `copy-court-orders` controller PATCHes
-`copy_court_orders`, then reloads so the copied orders and the flash show).
+`flex-col sm:flex-row` bordered card (`rounded-lg border p-3`). **Copy-from-sibling lives in a Dialog, not in the card.** It used to be a labelled select plus a
+Copy button inside a **grey bordered panel** in the card body -- a filled nested surface inside the
+card (card-in-card) and a *second* input cluster competing with the real one (Court order type +
+Add), on top of the heading, the youth-names note, the order rows and a divider. Reported as too
+busy, and the grey panel is not a design-system surface.
+
+Now: one **secondary action in the section header** ("Copy from another case"), and the case picker
+moves inside the existing Dialog with the confirmation copy and the inline error. Validation moves
+with it -- opening the dialog cannot validate a choice that has not been made, so
+`copy-court-orders#confirm` checks the select and `#open` just opens. The card body is then only the
+order rows plus one add row, so **one** labelled cluster and **one** divider (measured: 2 label
+clusters -> 1, tinted panels -> 0). This is the general rule for a form card: an occasional bulk
+shortcut belongs behind a single control, not permanently expanded beside the primary input.
+
+Rows themselves stay **bordered and unfilled** (`rounded-lg border p-3`) -- that is the nested
+sub-form pattern; it is a fill inside a card that is wrong, not a border.
 
 ### Autosave wizard form (case-contact)
 

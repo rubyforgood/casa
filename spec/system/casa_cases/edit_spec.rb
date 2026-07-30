@@ -136,21 +136,21 @@ RSpec.describe "Edit CASA Case", type: :system do
         expect(page).to have_text("Sorry, you are not authorized to perform this action.")
       end
 
-      it "shows a validation error when Copy is clicked with no case selected", :js do
+      it "shows a validation error when confirming with no case selected", :js do
         visit edit_casa_case_path(casa_case)
-        expect(page).to have_button("copy-court-button", disabled: false)
-        click_on "Copy"
+        click_on "Copy from another case"
+        click_on "Yes, copy"
         expect(page).to have_text("Choose a case to copy orders from")
       end
 
-      it "copy button should be enabled when a case is selected", :js do
+      it "offers the copy action without a case selected", :js do
         visit edit_casa_case_path(casa_case)
-        select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
-        expect(page).to have_button("copy-court-button", disabled: false)
+        expect(page).to have_button("Copy from another case", disabled: false)
       end
 
       it "containses all case from organization except current case", :js do
         visit edit_casa_case_path(casa_case)
+        click_on "Copy from another case"
         within "#casa_case_siblings_casa_cases" do
           siblings_casa_cases.each do |scc|
             expect(page).to have_selector("option", text: scc.case_number)
@@ -163,9 +163,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
@@ -182,9 +182,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
@@ -198,9 +198,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
@@ -577,17 +577,16 @@ RSpec.describe "Edit CASA Case", type: :system do
     end
 
     context "Copy all court orders from a case" do
-      it "shows a validation error when Copy is clicked with no case selected", :js do
+      it "shows a validation error when confirming with no case selected", :js do
         visit edit_casa_case_path(casa_case)
-        expect(page).to have_button("copy-court-button", disabled: false)
-        click_on "Copy"
+        click_on "Copy from another case"
+        click_on "Yes, copy"
         expect(page).to have_text("Choose a case to copy orders from")
       end
 
-      it "copy button should be enabled when a case is selected", :js do
+      it "offers the copy action without a case selected", :js do
         visit edit_casa_case_path(casa_case)
-        select siblings_casa_cases.first.case_number, from: "casa_case_siblings_casa_cases"
-        expect(page).to have_button("copy-court-button", disabled: false)
+        expect(page).to have_button("Copy from another case", disabled: false)
       end
 
       it "copy button and select shouldn't be visible when a volunteer only has one case", :js do
@@ -595,12 +594,13 @@ RSpec.describe "Edit CASA Case", type: :system do
         casa_case = create(:casa_case, :with_one_court_order, casa_org: volunteer.casa_org)
         create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
         visit edit_casa_case_path(casa_case)
-        expect(page).not_to have_button("copy-court-button")
-        expect(page).not_to have_selector("casa_case_siblings_casa_cases")
+        expect(page).not_to have_button("Copy from another case")
+        expect(page).not_to have_selector("#casa_case_siblings_casa_cases")
       end
 
       it "containses all cases associated to current volunteer except current case", :js do
         visit edit_casa_case_path(casa_case)
+        click_on "Copy from another case"
         within "#casa_case_siblings_casa_cases" do
           siblings_casa_cases.each do |scc|
             expect(page).to have_selector("option", text: scc.case_number)
@@ -613,9 +613,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
@@ -632,9 +632,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
         current_orders = casa_case.case_court_orders.each(&:dup)
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
@@ -648,9 +648,9 @@ RSpec.describe "Edit CASA Case", type: :system do
         visit casa_case_path(casa_case.id)
         click_on "Edit case details"
         selected_case = siblings_casa_cases.first
+        click_on "Copy from another case"
         select selected_case.case_number, from: "casa_case_siblings_casa_cases"
-        click_on "Copy"
-        expect(page).to have_text("Copy all orders from case ##{selected_case.case_number}?")
+        expect(page).to have_text("The orders are added to this case")
         click_on "Yes, copy"
         expect(page).to have_text("Court orders have been copied")
         casa_case.reload
