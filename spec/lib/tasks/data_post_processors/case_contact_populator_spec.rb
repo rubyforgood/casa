@@ -19,6 +19,22 @@ RSpec.describe CaseContactPopulator do
     expect(ContactTypeGroup.count).to eq(0)
   end
 
+  # A draft has no casa_case. This task used to destroy it and then dereference it anyway, so it both
+  # deleted user data and crashed -- and `rake after_party:run` aborts with it.
+  it "leaves drafts alone and keeps going" do
+    draft = create(:case_contact, :started_status)
+    contact_type = create(:contact_type)
+    casa_case = create(:casa_case, casa_org: create(:casa_org))
+    create(:case_contact, casa_case: casa_case, contact_types: [contact_type])
+
+    expect { described_class.populate }.not_to raise_error
+    expect(draft.reload).to be_persisted
+    expect(CaseContact.count).to eq(2)
+
+    # The real contact was still processed after the draft was skipped.
+    expect(ContactTypeGroup.where(casa_org: casa_case.casa_org)).to exist
+  end
+
   it "creates a new contact type group with the org of the casa case" do
     contact_type = create(:contact_type)
     casa_org1 = contact_type.contact_type_group.casa_org

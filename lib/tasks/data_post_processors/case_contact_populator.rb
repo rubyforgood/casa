@@ -1,10 +1,15 @@
 module CaseContactPopulator
   def self.populate
     CaseContact.find_each do |case_contact|
-      # Get rid of drafts
-      unless case_contact.casa_case
-        case_contact.destroy
-      end
+      # No casa_case means a DRAFT -- drafts carry draft_case_ids and are only given a casa_case when
+      # they are finished. Skip them.
+      #
+      # This used to `destroy` such a record ("get rid of drafts"), written years before drafts became
+      # a real feature, and then dereferenced it anyway -- there was no `next` -- so the task deleted
+      # user data and then raised NoMethodError on the first draft it met, taking the whole of
+      # `rake after_party:run` down with it (the after-party CI job runs that on a fresh database).
+      next unless case_contact.casa_case
+
       casa_org = case_contact.casa_case.casa_org
       case_contact.contact_types&.each do |contact_type|
         ct_name = contact_type.name
