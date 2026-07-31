@@ -74,3 +74,21 @@ jobs:
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@99df26d4f13ea111d4ec1a7dddef6063f76b97e9 # v4.37.0
+        with:
+          # Also write the results to disk, so the step below can attach them.
+          # The upload to GitHub still happens as normal; this is additive.
+          output: sarif-results
+
+      # A red CodeQL check tells you nothing without the Security tab, which is
+      # how this one sat unexplained: the rule, file and line live in an alert
+      # not everyone can see, and there is no CodeQL CLI in a normal dev setup
+      # to reproduce it. Attaching the SARIF makes the finding downloadable by
+      # anyone who can see the workflow run.
+      - name: Attach the SARIF to this run
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7
+        with:
+          name: codeql-sarif-${{ matrix.language }}
+          path: sarif-results
+          if-no-files-found: warn
+          retention-days: 14

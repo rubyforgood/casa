@@ -83,11 +83,12 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       expect(page).not_to have_text(recent_date)
     end
 
-    # FLAKY: disabled 2026-07-27 to unblock CI (xit + tracking-issue policy). Reproduced under
-    # `rspec spec/system/case_contacts/ --seed 42`, but the SAME seed passes on rerun -- a non-deterministic
-    # Selenium/JS timing race (the "Hide drafts" filter not applied before the assertion), not a code bug.
-    # Tracking issue to be filed.
-    xit "hides drafts when Hide drafts is checked" do
+    # Re-enabled 2026-07-31. It was disabled as a "non-deterministic Selenium race", diagnosed before
+    # the real cause of the random CI redness was found: android_app_associations_spec stubbed ENV[]
+    # with `.with(...)` and no default, which poisoned every example that ran after it in the same
+    # process (seed 16083: 1697 failures). That has the exact signature this was blamed for -- fails
+    # only in the full suite, green in isolation, unreproducible under a fixed seed.
+    it "hides drafts when Hide drafts is checked" do
       draft_date = I18n.l(draft_contact.occurred_at, format: :full)
 
       click_button "More filters"

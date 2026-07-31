@@ -134,6 +134,24 @@ Flag: presentation logic (formatting dates, conditional display text) in models 
 - Test edge cases: nil values, empty strings, special characters, missing optional fields.
 - No `sleep` in tests — use Capybara's built-in waiting.
 - Flaky tests are disabled with a tracking issue (`xit` + comment), never deleted.
+- **Never stub a framework-wide object with `.with(...)` and no default.** A partial double constrained
+  only by `.with` *raises* on every other argument, and it lives on the real object for the rest of the
+  process:
+  ```ruby
+  # WRONG -- ENV[] is read all over the stack (Flipper's middleware asks for FLIPPER_CLOUD_TOKEN on
+  # the way through a request), so this fails the example AND every example after it in the process.
+  allow(ENV).to receive(:[]).with("SOME_KEY").and_return("value")
+
+  # RIGHT -- default first, then the specific argument.
+  allow(ENV).to receive(:[]).and_call_original
+  allow(ENV).to receive(:[]).with("SOME_KEY").and_return("value")
+  ```
+  One instance of this in `spec/requests/android_app_associations_spec.rb` failed **1697 of 3711
+  examples** on seed 16083 while passing on the next seed. Before writing off an intermittent failure as
+  a Selenium race, look for a stub like this: the signature — fails only in the full suite, green in
+  isolation, no reproducible seed — is identical, and three case-contact specs were `xit`'d for months
+  on that misdiagnosis (re-enabled 2026-07-31, green across seeds 42 / 7 / 999 / 16083 and three full
+  system runs).
 
 ## Style
 
