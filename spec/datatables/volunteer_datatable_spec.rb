@@ -28,6 +28,48 @@ RSpec.describe VolunteerDatatable do
     )
   end
 
+  # Pagination determinism. Without a tiebreaker, Postgres may return rows with equal sort keys in any
+  # order per query, so with LIMIT/OFFSET a row can appear on two pages or on none. `raw_records` chains
+  # `.order(:id)` after the requested column, which covers the fallback ordering too -- this asserts it,
+  # because it is one line away from being dropped by someone tidying the query.
+  describe "ordering determinism" do
+    let(:org) { create(:casa_org) }
+
+    def outer_order_by(order_by)
+      params = datatable_params(
+        additional_filters: {active: %w[false true], supervisor: [""] + Supervisor.pluck(:id),
+                             transition_aged_youth: %w[false true]},
+        order_by: order_by, order_direction: "asc", page: 1, per_page: 10, search_term: nil
+      )
+      # The SQL also contains a window function with its own ORDER BY, so take the last one.
+      described_class.new(org.volunteers, params).send(:filtered_records).to_sql.split("ORDER BY").last
+    end
+
+    it "breaks ties on the primary key for a requested column" do
+      expect(outer_order_by("supervisor_name")).to match(/supervisor_name asc NULLS LAST, "users"\."id" ASC/)
+    end
+
+    it "breaks ties on the primary key for the default ordering" do
+      expect(outer_order_by(nil)).to match(/default_sort_order ASC, "users"\."id" ASC/)
+    end
+
+    it "paginates every row exactly once when the sort key is identical" do
+      3.times { create(:volunteer, casa_org: org, display_name: "Same Name") }
+
+      seen = (1..3).flat_map do |page|
+        params = datatable_params(
+          additional_filters: {active: %w[false true], supervisor: [""] + Supervisor.pluck(:id),
+                               transition_aged_youth: %w[false true]},
+          order_by: "display_name", order_direction: "asc", page: page, per_page: 1, search_term: nil
+        )
+        described_class.new(org.volunteers, params).send(:paginated_records).map(&:id)
+      end
+
+      expect(seen.uniq.size).to eq(3)
+      expect(seen.sort).to eq(org.volunteers.pluck(:id).sort)
+    end
+  end
+
   describe ":has_transition_aged_youth_cases" do
     let(:volunteer_has_transition_aged_youth) { subject[:data].first[:has_transition_aged_youth_cases] }
     let(:non_transitional_birth) { 10.years.ago }

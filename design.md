@@ -513,11 +513,17 @@ Rules for any "total over a period" figure:
   `learning_hours_spent_in_current_year` now, through the same scope, and the label **names the year**
   ("Learning hours in 2026") rather than saying "this year".
 
-**Industry standard for a "this year" figure:** calendar **year-to-date** is the default users expect,
-and the convention (Stripe, GA, Shopify, Polaris) is presets + custom — *Year to date* / *Last 12
-months* / *All time* / *Custom* — with the resolved dates shown next to the number. The roster has the
-custom range and states its start; presets would be the natural next step if anyone asks for them. What
-is *not* standard is a label that names a period the query does not apply.
+**Presets + custom, with the resolved dates shown.** Calendar **year-to-date** is what users expect
+"this year" to mean, and the convention (Stripe, GA, Shopify, Polaris) is a short list of named windows
+one of which is Custom. The learning-hours roster ships exactly that — *Year to date* (default) /
+*Last 12 months* / *All time* / *Custom* — as a `period` param resolved in `set_period`, with the
+column header naming the resolved window ("since January 1, 2026", "January 1 to March 31", or plainly
+"all time"). Two details worth copying: the **From/To inputs render only for Custom**, so the bar stays
+short for the cases a preset already covers; and a URL carrying `from`/`to` with **no** `period` is
+treated as Custom, so a link saved before the presets existed does not snap back to year-to-date. "All
+time" passes `nil`, which `occurred_in` no-ops on, rather than a sentinel floor date — a header reading
+"since January 1, 1989" would be technically true and useless. What is *not* standard is a label that
+names a period the query does not apply.
 - `date.formats` has no `:standard` -- that lives under `time.formats`. For a Date use `:full`
   ("January 1, 2026").
 
