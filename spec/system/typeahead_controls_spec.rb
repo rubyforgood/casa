@@ -172,6 +172,13 @@ RSpec.describe "typeahead audit", :js, type: :system do
       visit volunteers_path
       audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman", absent_option: "All supervisors")
 
+      # The bulk assign-supervisor picker lives inside a dialog whose trigger only appears once a
+      # volunteer row is checked.
+      first("[id^='supervisor_volunteer_volunteer_ids_']").click
+      find("[data-select-all-target='button']").click
+      audit("volunteers#index bulk assign (in dialog)", "#supervisor_volunteer_supervisor_id", query: "Zeld",
+        expect_option: "Zelda Zimmerman", absent_option: "None")
+
       visit case_court_reports_path
       # This picker lives inside the "Generate report" Dialog, so it does not exist on screen until
       # the modal is opened -- not a broken control, just one behind a trigger.
@@ -187,7 +194,7 @@ RSpec.describe "typeahead audit", :js, type: :system do
     end
 
     # Guards the inventory itself: a new TomSelect control should be added here too.
-    expect(@results.size).to(eq(20), "expected 20 controls, audited #{@results.size} -- one was added or removed")
+    expect(@results.size).to(eq(21), "expected 21 controls, audited #{@results.size} -- one was added or removed")
     failures = @results.reject { |(_, problems)| problems.empty? }
     expect(failures).to be_empty, "typeahead problems:\n" + failures.map { |l, p| "  #{l}: #{p.join("; ")}" }.join("\n")
   end

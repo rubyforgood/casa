@@ -828,10 +828,16 @@ off:
   native selects beside it keep theirs -- and "clear" on *All supervisors* means nothing. The reset is
   the "All ..." row.
 
-One person-list select is deliberately **still native**: the `volunteers/index` bulk **Assign a
-supervisor** modal, where `value=""` means **"None"** (unassign) rather than "no choice". Converting it
-needs a non-empty sentinel first (the same hide rule would eat the None row), and it drives
-`disable-form` validation for a bulk write.
+The `volunteers/index` bulk **Assign a supervisor** modal was the last native one, and converting it
+meant **swapping its sentinels** — worth knowing before you convert anything with a "None" row.
+`value=""` used to mean *None* (unassign) while `"unselected"` meant *nothing chosen*, which a
+placeholder picker cannot express: the blank option is the not-chosen state, and the theme hides
+empty-valued options in the menu, so **None would have vanished from the very menu that unassigns**.
+So None is now an explicit `value="none"`, blank is not-chosen, and `disable-form`'s unallowed value is
+`""`. That also closed a hazard the old scheme carried: blank *meant* unassign, so a blank submit
+slipping past the client-side guard quietly stripped the supervisor from every selected volunteer.
+Blank is a **no-op with an alert** server-side now. Inside a native `<dialog>`, **do not** set
+dropdownParent: body — the top layer paints over a body-parented menu.
 
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
