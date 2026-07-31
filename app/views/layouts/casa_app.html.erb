@@ -6,6 +6,7 @@
   <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} · CASA Volunteer Tracker" : "CASA Volunteer Tracker" %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <%= render "shared/favicons" %>
 
   <%# window.timeout (minutes) drives src/session_timeout_poller.js; @timeout_duration =
       current_user.timeout_in (set in ApplicationController). Must precede the deferred bundle. %>
