@@ -148,6 +148,13 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   the banner and from all four alert variants. **A measurement that answers "is it visible?" does not
   answer "does it belong?"** — if the only way to make an ornament visible is to make it loud, the
   ornament is wrong.
+- **Preview it, don't describe it.** The banner's shipped state and the typographic-lead proposals are
+  browsable at `/rails/view_components/announcement_banner/{shipped,lead_variants}` (the `shipped` page
+  renders the real partial, so it cannot drift), and checked in as images at
+  [`doc/design/announcement-banner.md`](doc/design/announcement-banner.md) for review without running
+  the app. Note Tailwind's `@source` list covers `app/` and **not** `spec/`: a utility used only in a
+  preview template is absent from the built CSS, so preview scaffolding is inline styles — the first
+  draft's `w-[390px]` "mobile" boxes rendered full-bleed, which would have made the preview lie.
 - **If a bar needs more presence, add weight where it costs no height** — a 3–4px left accent band in
   the semantic colour (Carbon and USWDS both do this), a heavier first line, or the border you already
   have. Not a bigger icon container. The org banner ships one: `border-l-4 border-l-amber-600`
