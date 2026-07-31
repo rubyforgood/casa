@@ -150,7 +150,11 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   ornament is wrong.
 - **If a bar needs more presence, add weight where it costs no height** — a 3–4px left accent band in
   the semantic colour (Carbon and USWDS both do this), a heavier first line, or the border you already
-  have. Not a bigger icon container.
+  have. Not a bigger icon container. The org banner ships one: `border-l-4 border-l-amber-600`
+  (**3.07:1** against the amber-50 bar, so it clears the 3:1 a meaningful graphic needs; amber-500 is
+  2.07:1 and reads washed, amber-700 at 4.84:1 reads as a second ink). Measured before and after: the
+  bar stays **47px** — a left border cannot add height, which is the whole point of choosing it over a
+  tile.
 - **Align a leading glyph's INK to the text's x-height band, not its box to the line box.** Boxes are
   the wrong reference: with `text-base leading-5` the icon's box matched the 20px line exactly and the
   glyph still read as floating, because its ink centre sat at **85.5** against the text's dense-ink band

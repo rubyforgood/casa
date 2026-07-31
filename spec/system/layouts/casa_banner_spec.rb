@@ -22,6 +22,25 @@ RSpec.describe "org announcement banner", type: :system do
     expect(bar).to have_no_css("span[aria-hidden='true']")
   end
 
+  # A 4px left accent band: presence without height, the way Carbon and USWDS do it. amber-600 is
+  # 3.07:1 against the bar (amber-500 is 2.07:1 and reads washed).
+  it "carries a left accent band that costs no height", :js do
+    visit authenticated_user_root_path
+
+    m = page.evaluate_script(<<~JS)
+      (function () {
+        const bar = document.querySelector("[data-controller='dismiss']")
+        const cs = getComputedStyle(bar)
+        return {width: cs.borderLeftWidth, height: bar.getBoundingClientRect().height,
+                same_as_bottom: cs.borderLeftColor === cs.borderBottomColor}
+      })()
+    JS
+
+    expect(m["width"]).to eq("4px")
+    expect(m["same_as_bottom"]).to be false # a stronger amber than the hairline border
+    expect(m["height"]).to be < 50 # unchanged by the band
+  end
+
   it "keeps the icon on the first line and the bar compact", :js do
     visit authenticated_user_root_path
 

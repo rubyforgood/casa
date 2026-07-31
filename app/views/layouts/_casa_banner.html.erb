@@ -1,7 +1,13 @@
 <%# Org announcement banner for the casa_app (Tailwind) shell. Uses the same
-    @active_banner + dismiss controller as the legacy layout. %>
+    @active_banner + dismiss controller as the legacy layout.
+
+    The 4px left accent band is how a message bar gets presence WITHOUT height (Carbon and USWDS both
+    use one) -- the alternative that was tried first, a filled icon tile, cost 10px of bar and shouted.
+    amber-600 measures 3.07:1 against the amber-50 bar, clearing the 3:1 WCAG 1.4.11 wants of a
+    meaningful graphic; amber-500 is only 2.07:1 and reads washed, amber-700 (4.84:1) reads as a second
+    ink beside the text. %>
 <% if @active_banner %>
-  <div data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>" class="flex items-start gap-3 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
+  <div data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>" class="flex items-start gap-3 border-b border-l-4 border-amber-200 border-l-amber-600 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
     <%# A plain leading glyph, top-aligned to the first line -- NOT an icon tile. The icon-tile pattern
         is for contexts where the icon is the subject (KPI cards, empty states, section headers) and it
         assumes a white surface; a soft tile is invisible on this amber-50 bar (amber-100 measures
