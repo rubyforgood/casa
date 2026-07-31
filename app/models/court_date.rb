@@ -28,17 +28,26 @@ class CourtDate < ApplicationRecord
   scope :ordered_ascending, -> { order("date asc") }
 
   # get reports associated with the case this belongs to before this court date but after the court date before this one
+  # Newest first, and ORDERED: this returned an unordered relation, so the row order was whatever
+  # Postgres felt like -- fine for #latest_associated_report, which re-orders, but the spec asserted an
+  # exact sequence and failed intermittently in a full-suite run. A list of reports has a natural
+  # order; say so once here rather than leave every caller to guess.
   def associated_reports
     prev = casa_case.court_dates.where("date < ?", date).order(:date).last
-    if prev
-      casa_case.court_reports.where("created_at > ?", prev.date).where("created_at < ?", date)
-    else
-      casa_case.court_reports.where("created_at < ?", date)
-    end
+    reports =
+      if prev
+        casa_case.court_reports.where("created_at > ?", prev.date).where("created_at < ?", date)
+      else
+        casa_case.court_reports.where("created_at < ?", date)
+      end
+    reports.order(created_at: :desc)
   end
 
+  # `reorder`, not `order`: Rails APPENDS an order, so chaining `.order(:created_at).last` onto the
+  # now-ordered relation produced `ORDER BY created_at DESC, created_at ASC` and handed back the OLDEST
+  # report. Stating the order it wants makes this independent of however #associated_reports sorts.
   def latest_associated_report
-    associated_reports.order(:created_at).last
+    associated_reports.reorder(created_at: :desc).first
   end
 
   def additional_info?

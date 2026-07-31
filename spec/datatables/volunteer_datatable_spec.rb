@@ -155,24 +155,37 @@ RSpec.describe VolunteerDatatable do
 
       describe "supervisor_name" do
         let(:order_by) { "supervisor_name" }
-        let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
+
+        # The DATABASE does this ordering, so the database decides what "sorted" means. Ruby's
+        # `sort_by` is codepoint order, which puts "van der Berg" AFTER "Zoe Upper"; Postgres' en_US
+        # collation is case-insensitive at the primary level and puts it before. Reproduced, and it is
+        # why this example failed intermittently -- Faker hands out a lowercase-first display name
+        # ("van der ...") often enough to matter. Asking Postgres to sort the same strings keeps the
+        # expectation immune to every other collation subtlety too (punctuation, accents).
+        let(:sorted_supervisor_names) do
+          names = assigned_volunteers.map { |volunteer| volunteer.supervisor.display_name }
+          ActiveRecord::Base.connection.select_values(
+            ActiveRecord::Base.sanitize_sql_array(
+              ["SELECT name FROM unnest(ARRAY[?]::text[]) AS name ORDER BY name", names]
+            )
+          )
+        end
+        # The datatable strips honorifics for display, so compare stripped -- after sorting on the raw
+        # name, which is what the query orders by.
+        let(:expected_names) { sorted_supervisor_names.map { |name| NamePresentation.strip_honorific(name) } }
+        let(:actual_names) { values.map { |row| CGI.unescapeHTML(row[:supervisor][:name]) } }
 
         context "when ascending" do
           it "is successful" do
-            sorted_models.each_with_index do |model, idx|
-              expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
-            end
+            expect(actual_names).to eq expected_names
           end
         end
 
         context "when descending" do
           let(:order_direction) { "desc" }
-          let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
 
           it "is successful" do
-            sorted_models.reverse.each_with_index do |model, idx|
-              expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
-            end
+            expect(actual_names).to eq expected_names.reverse
           end
         end
       end
