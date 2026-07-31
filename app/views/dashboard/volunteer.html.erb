@@ -35,7 +35,8 @@
       </div>
       <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm <%= "ring-1 ring-rose-100" if needs.positive? %>">
         <span class="grid h-9 w-9 place-items-center rounded-xl <%= needs.positive? ? "bg-rose-50 text-rose-600" : "bg-emerald-50 text-emerald-600" %>"><i class="bi <%= needs.positive? ? "bi-exclamation-triangle" : "bi-check2-circle" %>" aria-hidden="true"></i></span>
-        <div class="mt-3 text-3xl font-bold tracking-tight <%= needs.positive? ? "text-rose-600" : "text-slate-900" %>"><%= needs %></div>
+        <%# Slate, like every other KPI numeral -- the tile and ring carry the state. %>
+        <div class="mt-3 text-3xl font-bold tracking-tight text-slate-900"><%= needs %></div>
         <div class="text-sm text-slate-500">Need a contact</div>
         <div class="mt-1 text-xs text-slate-500">Not contacted in <%= Volunteer::CONTACT_MADE_IN_DAYS_NUM %>+ days</div>
       </div>

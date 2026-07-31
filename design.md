@@ -148,20 +148,13 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   the banner and from all four alert variants. **A measurement that answers "is it visible?" does not
   answer "does it belong?"** — if the only way to make an ornament visible is to make it loud, the
   ornament is wrong.
-- **Preview it, don't describe it.** The banner's shipped state and the typographic-lead proposals are
-  browsable at `/rails/view_components/announcement_banner/{shipped,lead_variants}` (the `shipped` page
-  renders the real partial, so it cannot drift), and checked in as images at
-  [`doc/design/announcement-banner.md`](doc/design/announcement-banner.md) for review without running
-  the app. Note Tailwind's `@source` list covers `app/` and **not** `spec/`: a utility used only in a
-  preview template is absent from the built CSS, so preview scaffolding is inline styles — the first
-  draft's `w-[390px]` "mobile" boxes rendered full-bleed, which would have made the preview lie.
-- **If a bar needs more presence, add weight where it costs no height** — a 3–4px left accent band in
-  the semantic colour (Carbon and USWDS both do this), a heavier first line, or the border you already
-  have. Not a bigger icon container. The org banner ships one: `border-l-4 border-l-amber-600`
-  (**3.07:1** against the amber-50 bar, so it clears the 3:1 a meaningful graphic needs; amber-500 is
-  2.07:1 and reads washed, amber-700 at 4.84:1 reads as a second ink). Measured before and after: the
-  bar stays **47px** — a left border cannot add height, which is the whole point of choosing it over a
-  tile.
+- **The bar is plain, and stays plain.** Both attempts to give it more presence were reverted for the
+  same reason: nothing was wrong with it. A filled icon tile shouted and cost 10px of height; a 4px
+  `amber-600` left accent band cost no height at all (measured 47px either way, 3.07:1 against the bar)
+  and was still refused — *"neither of these changes add anything"*. If presence is ever actually
+  needed, a left accent band is the standard device (Carbon, USWDS) because it cannot add height; an
+  icon container is not. But the default answer for a message bar is a tint, a hairline border, a
+  leading glyph and the message.
 - **Align a leading glyph's INK to the text's x-height band, not its box to the line box.** Boxes are
   the wrong reference: with `text-base leading-5` the icon's box matched the 20px line exactly and the
   glyph still read as floating, because its ink centre sat at **85.5** against the text's dense-ink band
@@ -1463,9 +1456,15 @@ Semantic icon tile (`grid h-9 w-9 place-items-center rounded-xl bg-{hue}-50 text
 number (`text-3xl font-bold tracking-tight text-slate-900`) -> label (`text-sm text-slate-500`) ->
 optional meta (`text-xs text-slate-500`, not slate-400 -- the contrast audit bumped readable
 slate-400 to AA slate-500). One shared token across the admin/supervisor/volunteer dashboards and
-the Analytics page. Two accented variants: **danger** (e.g. unassigned cases) = rose number + rose
-icon tile + `ring-1 ring-rose-100`; **attention** (e.g. cases needing contact) = slate number but
-the icon tile flips to amber (`bg-amber-50 text-amber-600`) when positive, emerald when zero. A
+the Analytics page. **The number is ALWAYS `text-slate-900`** — one numeral style on every card, in
+every state. The state is carried by the icon tile, and for the danger cards by a `ring-1
+ring-rose-100` on the card: **danger** (unassigned cases, volunteers needing follow-up) = rose tile +
+rose ring; **attention** (cases needing contact) = amber tile (`bg-amber-50 text-amber-600`) when
+positive, emerald when zero. This entry used to prescribe a **rose number** for the danger variant,
+and it was wrong twice over: the coloured numeral read as an error rather than a count, and it made
+one card in four change colour while the rest held still — reported as "the number is in Red font.
+This does not match the design system". Same correction as the supervisor roster's counts, where red
+numerals were removed for the same reason: **never colour a numeral to signal state.** A
 **trend delta** (Analytics "contacts this month") is the meta line, colored emerald/rose/slate for
 up/down/flat with a direction arrow + signed number + "vs last month" (never color-only).
 

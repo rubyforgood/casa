@@ -75,6 +75,30 @@ RSpec.describe "dashboard/show", type: :system do
     end
   end
 
+  # One numeral style on every KPI card, in every state: the icon tile and the card ring carry the
+  # state. The unassigned-cases number used to turn rose when positive -- the only one of the four that
+  # moved -- which read as an error rather than a count.
+  context "KPI numerals" do
+    let(:organization) { create(:casa_org) }
+    let(:admin) { create(:casa_admin, casa_org: organization) }
+    let!(:unassigned_case) { create(:casa_case, casa_org: organization) }
+
+    it "keeps every number slate even when a danger card is positive", :js do
+      sign_in admin
+      visit authenticated_user_root_path
+
+      colours = page.evaluate_script(<<~JS)
+        [...document.querySelectorAll('.text-3xl')].map(el => getComputedStyle(el).color)
+      JS
+
+      expect(colours.size).to be >= 4
+      expect(colours.uniq.size).to eq(1)
+
+      # And the state is still visible -- on the tile, not the number.
+      expect(page).to have_css("span.rounded-xl.bg-rose-50")
+    end
+  end
+
   context "admin user" do
     before do
       sign_in casa_admin
