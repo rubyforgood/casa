@@ -121,6 +121,18 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   Use for KPI cards, section headers, and list-item leading icons.
   **Do not** use bare floating icons or ringed white "avatar" circles for status
   contexts — reserve initial-avatars for representing *people* only.
+- **On a tinted surface the tile has to be filled, not soft.** A `-50` tile only reads as a ground
+  against white. On the amber-50 announcement bar the soft steps are invisible — measured against the
+  bar, amber-100 is **1.07:1**, amber-200 **1.20:1**, amber-300 **1.40:1** — so the org banner uses a
+  filled `h-8 w-8 rounded-xl bg-amber-700 text-white` tile (4.85:1 against the bar, white glyph 5.03:1
+  on it; amber-600 also clears 3:1 at 3.09/3.20 but that margin is not worth spending).
+- **Align the text to the tile, never the tile to the text.** A 32px tile beside a 20px line box sits
+  6px low under `items-start`; pulling it up with a negative margin eats the bar's top padding and
+  leaves it lopsided. Nudge the *content* down instead (`mt-1.5` on the message and on the trailing
+  action): measured, the tile, the first line and Dismiss share one centre line (0px apart), padding
+  stays 12px/13px, and a wrapped message still starts beside the first line rather than centring the
+  tile against the whole block. The glyph itself lands 0px off horizontally and 1px high inside the
+  tile — font metrics, not worth a `mt-px`.
 - **Leading-icon alignment** — an icon that precedes a label (menu items, list rows) is
   **top-aligned to the first line** (`items-start`), like a list marker, never centered
   against a wrapped block. Single-line labels look identical either way; `items-start` keeps

@@ -2,15 +2,23 @@
     @active_banner + dismiss controller as the legacy layout. %>
 <% if @active_banner %>
   <div data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>" class="flex items-start gap-3 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
-    <%# The icon inherits the container's amber-900 rather than setting its own colour, matching
-        shared/_flashes. It used to be text-amber-500, which is 2.07:1 against this amber-50
-        background where WCAG 1.4.11 (non-text contrast) needs 3:1. axe has no rule for icon
-        contrast, so the whole-app sweep could not catch it. %>
-    <i class="bi bi-megaphone mt-0.5 shrink-0" aria-hidden="true"></i>
-    <div class="min-w-0 flex-1"><%= @active_banner.content %></div>
+    <%# A filled icon tile, not a bare glyph: design.md's icon-tile pattern ("do not use bare floating
+        icons" for status contexts) calls for a soft `bg-{hue}-50` tile, but on this amber-50 bar a soft
+        tile is invisible -- measured against the bar, amber-100 is 1.07:1, amber-200 1.20:1 and
+        amber-300 1.40:1. Filled amber-700 is 4.85:1 against the bar with a white glyph at 5.03:1 on it,
+        both clear of the 3:1 that WCAG 1.4.11 asks of non-text, and it ties to the amber-700 Dismiss.
+        (amber-600 also passes, at 3.09:1 / 3.20:1 -- too thin a margin to spend.) %>
+    <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-amber-700 text-white" aria-hidden="true">
+      <i class="bi bi-megaphone"></i>
+    </span>
+    <%# The text is nudged to the tile's centre line, not the tile to the text: a negative margin on the
+        tile would eat the bar's top padding and leave it lopsided. 6px = half the difference between the
+        32px tile and the 20px line box, so the FIRST line centres on the tile (measured) and a wrapped
+        message still starts beside it rather than centring the tile against the whole block. %>
+    <div class="mt-1.5 min-w-0 flex-1"><%= @active_banner.content %></div>
     <%# A button, not <a href="#">: it performs an action rather than navigating, so a link
         mis-announces it to screen readers and does not activate on Space. amber-700 on amber-50
         is 4.87:1. %>
-    <button type="button" data-action="click->dismiss#dismiss" class="shrink-0 rounded font-medium text-amber-700 underline underline-offset-2 hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600">Dismiss</button>
+    <button type="button" data-action="click->dismiss#dismiss" class="mt-1.5 shrink-0 rounded font-medium text-amber-700 underline underline-offset-2 hover:text-amber-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-600">Dismiss</button>
   </div>
 <% end %>
