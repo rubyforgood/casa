@@ -4,8 +4,6 @@
  */
 
 import {
-  showBtn,
-  hideBtn,
   disableBtn,
   enableBtn
 } from '../src/casa_case'
@@ -18,18 +16,9 @@ beforeEach(() => {
   button = document.getElementById('test-button')
 })
 
-describe('casa_case generate report button applies correct classes and attributes', () => {
-  test('show button', () => {
-    button.classList.add('d-none')
-    showBtn(button)
-    expect(button.classList.contains('d-none')).toBe(false)
-  })
-
-  test('hide button', () => {
-    hideBtn(button)
-    expect(button.classList.contains('d-none')).toBe(true)
-  })
-
+// showBtn/hideBtn are gone with the legacy court-report code: they toggled Bootstrap's `d-none`,
+// which the design system does not define, and once that code went this test was their only caller.
+describe('casa_case button helpers apply the correct classes and attributes', () => {
   test('disable button', () => {
     disableBtn(button)
     expect(button.classList.contains('disabled')).toBe(true)

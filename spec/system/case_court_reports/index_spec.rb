@@ -173,6 +173,35 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_no_css(".ts-dropdown .option", text: decoy.case_number)
     end
 
+    # One click, ONE request. src/casa_case.js kept a jQuery click handler bound to #btnGenerateReport
+    # alongside the Stimulus controller, so every report was generated twice server-side and the
+    # download opened in two tabs. Nothing failed -- the other example here only asserts that *a* URL
+    # was opened -- so this counts.
+    it "generates the report once per click" do
+      casa_case = casa_cases.first
+      page.execute_script(<<~JS)
+        window.__generatePosts = 0
+        window.__opened = []
+        const originalFetch = window.fetch
+        window.fetch = function (url, options) {
+          if (String(url).includes('/case_court_reports/generate')) window.__generatePosts += 1
+          return originalFetch.apply(this, arguments)
+        }
+        window.open = (url) => { window.__opened.push(url); return null }
+      JS
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+      find("#btnGenerateReport").click
+
+      # Same barrier as the success example: the button disables for the request and re-enables after,
+      # which is the page-level signal that the round trip finished. Counting before that reads 0.
+      expect(page).to have_selector "#btnGenerateReport[disabled]"
+      expect(page).to have_no_selector "#btnGenerateReport[disabled]", wait: 10
+
+      expect(page.evaluate_script("window.__opened.length")).to eq(1)
+      expect(page.evaluate_script("window.__generatePosts")).to eq(1)
+    end
+
     it "shows an error when generating without a selection" do
       within "#generate-docx-report-modal" do
         click_button "Generate report"
