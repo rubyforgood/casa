@@ -64,13 +64,22 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
     end
 
-    it "shows correct default dates", :aggregate_failures do
-      # "Starting from" is per-case (the last hearing, else when the case was opened), so it is empty
-      # until a case is picked rather than defaulting to today -- today is an empty window.
+    it "shows both dates empty until a case is chosen", :aggregate_failures do
+      # The range belongs to a case, so neither end is filled in before one is picked. A start date
+      # empty beside an end date already showing today is the asymmetry that read as broken.
       expect(page.find("#start_date").value).to eq("")
-      # Today in the browser's zone: the server renders Date.current, which is UTC, and the controller
-      # replaces it so the field is the user's today rather than UTC's.
-      expect(page.find("#end_date").value).to eq(browser_today)
+      expect(page.find("#end_date").value).to eq("")
+    end
+
+    it "empties both dates again if the case selection is cleared" do
+      casa_case = casa_cases.first
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+      expect(page.find("#start_date").value).to be_present
+
+      page.execute_script("document.querySelector('#case-selection').tomselect.clear()")
+
+      expect(page.find("#start_date").value).to eq("")
+      expect(page.find("#end_date").value).to eq("")
     end
 
     it "autofills the start date from the picked case's last hearing" do
@@ -85,11 +94,12 @@ RSpec.describe "case_court_reports/index", type: :system do
 
       expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
       expect(page.find("#start_date").value).to eq(hearing.date.to_date.to_s)
+      expect(page.find("#end_date").value).to eq(browser_today)
     end
 
-    it "keeps the end date filled if it is cleared" do
+    it "fills the end date with today when a case is chosen" do
       casa_case = casa_cases.first
-      page.find("#end_date").set("")
+      expect(page.find("#end_date").value).to eq("")
 
       choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
 

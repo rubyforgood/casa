@@ -371,11 +371,20 @@ last `slate-400` placeholder left anywhere, and only in the doc.
 **A date field prefilled with "today" has to get it from the browser.** The app sets no
 `config.time_zone`, so `Date.current` is **UTC**: a server-rendered `value: Date.current` reads as
 **tomorrow** for anyone west of UTC in the evening (after 8pm in New York) and as **yesterday** for
-anyone east of it in the morning -- and yesterday silently drops today's records out of a range. Render
-`Date.current` as the no-JS fallback, then have the controller overwrite it on connect with today in the
-browser's zone (`new Date(now - now.getTimezoneOffset() * 60000).toISOString().slice(0, 10)`; a plain
-`toISOString()` is UTC and reintroduces the bug). Proven with a CDP timezone override: in
-`Pacific/Kiritimati` the server said 2026-07-30 and the field correctly held 2026-07-31.
+anyone east of it in the morning -- and yesterday silently drops today's records out of a range. Where
+the field applies immediately, render `Date.current` as the no-JS fallback and have the controller
+overwrite it on connect with today in the browser's zone (`new Date(now - now.getTimezoneOffset() *
+60000).toISOString().slice(0, 10)`; a plain `toISOString()` is UTC and reintroduces the bug). Proven with
+a CDP timezone override: in `Pacific/Kiritimati` the server said 2026-07-30 and the field correctly held
+2026-07-31.
+
+**Never pre-fill one end of a dependent range.** If the range belongs to a record chosen elsewhere on the
+form, **both** ends stay empty until that record is picked, then fill together -- and empty again if the
+selection is cleared. A "Starting from" that waits for the case while "Ending at" already shows today
+reads as a half-broken form, and it cost three rounds of "the start date still isn't defaulting": the
+complaint was the **asymmetry**, not the blank. So the picker modal renders neither date server-side,
+while the case-page modal -- where the case is fixed -- fills both from the moment it opens.
+
 **A JS-set "today" cannot be asserted against `Date.current`** -- `travel_to` freezes Ruby's clock, not
 the browser's; specs compare against `browser_today` (`spec/support/browser_time_helpers.rb`).
 

@@ -19,10 +19,16 @@ export default class extends Controller {
     if (this.hasTimeZoneTarget) {
       this.timeZoneTarget.value = Intl.DateTimeFormat().resolvedOptions().timeZone
     }
-    this.fillEndDate()
-    // A case can already be selected on load (a volunteer with a single case), and `change` does not
-    // fire for that -- so apply its default here too, leaving nothing for the user to fill in.
-    if (this.hasCaseSelectTarget) this.applyCaseDefault(this.caseSelectTarget)
+    if (this.hasCaseSelectTarget) {
+      // The range belongs to a case, so BOTH fields stay empty until one is chosen -- a pre-filled
+      // end date beside an empty start date is what read as broken. A case selected on load (a
+      // volunteer with one case) fills both, since `change` never fires for a server-rendered
+      // `selected` option.
+      this.applyCaseDefault(this.caseSelectTarget)
+    } else {
+      // No picker: the case is fixed (the case page's modal), so the range applies from the start.
+      this.fillEndDate()
+    }
   }
 
   // "Ending at" is today in the USER's zone. The server renders Date.current and the app runs in UTC
@@ -42,14 +48,20 @@ export default class extends Controller {
     this.applyCaseDefault(event.target)
   }
 
+  // Both ends of the range follow the case, together: a case gives "Starting from" its last hearing
+  // (or the day it was opened) and "Ending at" today, and no case leaves both empty -- including after
+  // the selection is cleared, since a stray date range for no case is worse than none.
   applyCaseDefault (select) {
-    if (!this.hasStartDateTarget) return
-
     const option = select.selectedOptions[0]
     const startDate = option && option.dataset.startDate
-    if (startDate) this.startDateTarget.value = startDate
-    // Both ends stay filled: refill "Ending at" if it was cleared.
-    if (this.hasEndDateTarget && !this.endDateTarget.value) this.fillEndDate()
+
+    if (startDate) {
+      if (this.hasStartDateTarget) this.startDateTarget.value = startDate
+      this.fillEndDate()
+    } else {
+      if (this.hasStartDateTarget) this.startDateTarget.value = ''
+      if (this.hasEndDateTarget) this.endDateTarget.value = ''
+    }
   }
 
   async generate (event) {
