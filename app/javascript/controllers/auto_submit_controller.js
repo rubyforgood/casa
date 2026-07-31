@@ -48,6 +48,16 @@ export default class extends Controller {
     this.timer = setTimeout(() => this.submit(), DEBOUNCE_MS)
   }
 
+  // A pending debounce must not outlive a deliberate navigation away -- the "Clear search" link.
+  // Turbo Drive is off, so the click starts a real page load that does not tear this controller down
+  // immediately: the timer fires during the unload and re-submits the query the user just cleared,
+  // and that submit wins. Cancel the timer, and the parked caret with it (after a reset there is no
+  // typing position worth restoring).
+  cancel () {
+    clearTimeout(this.timer)
+    window.sessionStorage.removeItem(FOCUS_KEY)
+  }
+
   disconnect () {
     clearTimeout(this.timer)
   }

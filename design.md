@@ -484,6 +484,19 @@ a page load) and restores it in `connect()` inside a `requestAnimationFrame` -- 
 was measured being undone as the new page settled. Verify by reading
 `document.activeElement === field` and `selectionStart`, not by eye.
 
+**The clear "x" must cancel the pending debounce: `data: {action: "click->auto-submit#cancel"}`.**
+The `x` is a plain link to the index without `search`, and the click starts a real page load that does
+*not* tear the controller down right away -- so a debounce still in flight fires during the unload and
+submits the query the user just cleared, and *that* navigation wins. The search comes back, which reads
+as "clear is broken". In the docker container it reproduced on 4 of 4 runs with the handler removed and
+on none of 7 with it, so it is a real bug and not a test artifact; it surfaces whenever the click lands
+inside the ~350ms window, which is easy on a loaded machine and why CI caught it first. Any control that
+navigates away from a debounced filter bar (not just this `x`) needs the same cancel. `disconnect()`
+clearing the timer is not enough -- a full page unload does not reliably run it. In a spec, wait for the
+*submit* to land (`have_current_path(/search=.../)` plus the result-count text) before clicking
+anything; asserting on `find("#search").value` proves nothing, because the input reads the typed text
+back instantly, submit or no submit.
+
 ### A stat's period must be stated, and must be true
 The learning-hours roster column read **"Time completed this year"** while neither aggregate scope
 filtered `occurred_at` -- so the number was an **all-time** total. Proven rather than read: 1h today +
