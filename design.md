@@ -135,24 +135,28 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   Use for KPI cards, section headers, and list-item leading icons.
   **Do not** use bare floating icons or ringed white "avatar" circles for status
   contexts — reserve initial-avatars for representing *people* only.
-- **On a tinted surface the tile has to be filled, not soft.** A `-50` tile only reads as a ground
-  against white. On the amber-50 announcement bar the soft steps are invisible — measured against the
-  bar, amber-100 is **1.07:1**, amber-200 **1.20:1**, amber-300 **1.40:1** — so the org banner uses a
-  filled `h-8 w-8 rounded-xl bg-amber-700 text-white` tile (4.85:1 against the bar, white glyph 5.03:1
-  on it; amber-600 also clears 3:1 at 3.09/3.20 but that margin is not worth spending).
-  Every **alert card** (flashes, the form-error summary, the case-contact reminder callout) uses the
-  same tile via **`alert_icon_tile(variant)`**, filled at the `-700` step per variant. Measured, all
-  four clear 3:1 with room: glyph on tile 5.03:1 (amber) / 5.36:1 (emerald) / 6.03:1 (rose) / 7.90:1
-  (brand); tile against its own `-50` card 4.85 / 5.09 / 5.49 / 7.07:1. Write the fills as **full class
-  literals** in the helper — Tailwind only generates what it can see as a string, so `bg-#{hue}-700`
-  produces nothing.
-- **Align the text to the tile, never the tile to the text.** A 32px tile beside a 20px line box sits
-  6px low under `items-start`; pulling it up with a negative margin eats the bar's top padding and
-  leaves it lopsided. Nudge the *content* down instead (`mt-1.5` on the message and on the trailing
-  action): measured, the tile, the first line and Dismiss share one centre line (0px apart), padding
-  stays 12px/13px, and a wrapped message still starts beside the first line rather than centring the
-  tile against the whole block. The glyph itself lands 0px off horizontally and 1px high inside the
-  tile — font metrics, not worth a `mt-px`.
+- **A message bar or alert card gets a PLAIN glyph, never a tile.** The tile pattern above is for
+  contexts where the icon is the *subject* — a KPI card, an empty state, a section header — and it
+  assumes a white surface. A banner or alert is text with a marker beside it, and every system that
+  ships one leads with a bare tone-coloured glyph, letting the tint and border carry the semantics:
+  Polaris Banner, Material, Carbon inline notification, Primer flash, Atlassian SectionMessage.
+  This was learned the hard way. A soft `-50` tile is invisible on a `-50` surface (measured against
+  the amber-50 bar: amber-100 **1.07:1**, amber-200 1.20:1, amber-300 1.40:1), so "make it visible"
+  turned into a filled `bg-amber-700` tile with a white glyph — which cleared contrast comfortably and
+  was still wrong: it shouted, and a 32px block in a 20px line pushed the bar from **47px to 57px**.
+  Reported as "draws too much visual attention, and increases the height of the banner". Reverted from
+  the banner and from all four alert variants. **A measurement that answers "is it visible?" does not
+  answer "does it belong?"** — if the only way to make an ornament visible is to make it loud, the
+  ornament is wrong.
+- **If a bar needs more presence, add weight where it costs no height** — a 3–4px left accent band in
+  the semantic colour (Carbon and USWDS both do this), a heavier first line, or the border you already
+  have. Not a bigger icon container.
+- **Align a leading glyph's INK to the text's x-height band, not its box to the line box.** Boxes are
+  the wrong reference: with `text-base leading-5` the icon's box matched the 20px line exactly and the
+  glyph still read as floating, because its ink centre sat at **85.5** against the text's dense-ink band
+  centre of **88.0**. `mt-0.5` (2px) puts it at 87.5. That is what the original `mt-0.5` was for, and
+  the bar measures the same 47px with it as without. Measure the ink: dump per-row ink counts across the
+  text and take the dense band (x-height), since ascenders and descenders drag a naive ink centre around.
 - **Leading-icon alignment** — an icon that precedes a label (menu items, list rows) is
   **top-aligned to the first line** (`items-start`), like a list marker, never centered
   against a wrapped block. Single-line labels look identical either way; `items-start` keeps

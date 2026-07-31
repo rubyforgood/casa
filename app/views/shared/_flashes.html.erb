@@ -15,11 +15,11 @@
           often the only record of what went wrong, so clearing them for the user loses it. %>
       <div role="<%= (variant == :success) ? "status" : "alert" %>" class="<%= ["alert", type.to_s].uniq.join(" ") %> <%= alert_classes(variant) %>"
         <%= tag.attributes(data: {controller: "auto-dismiss", action: "mouseenter->auto-dismiss#pause mouseleave->auto-dismiss#resume focusin->auto-dismiss#pause focusout->auto-dismiss#resume"}) if variant == :success %>>
-        <%# The severity icon sits in a filled tile (alert_icon_tile), like the announcement banner --
-            design.md rules out bare floating icons for status. The MESSAGE is nudged to the tile's
-            centre line rather than the tile pulled up into the card's padding. %>
-        <span class="<%= alert_icon_tile(variant) %>" aria-hidden="true"><i class="bi <%= alert_icon(variant) %>"></i></span>
-        <div class="mt-1.5 min-w-0"><%= message %><% if type.to_s == "notice" && flash[:notice_action].present? %> <%= link_to flash[:notice_action]["label"], flash[:notice_action]["path"], class: "font-semibold underline underline-offset-2 hover:no-underline" %><% end %></div>
+        <%# A plain severity glyph, top-aligned to the first line. It briefly wore a filled tile to match
+            the announcement banner; both reverted -- a tile is for icons that are the subject, and on a
+            compact alert card it shouts and adds height. %>
+        <i class="bi <%= alert_icon(variant) %> mt-0.5 shrink-0 text-base leading-5" aria-hidden="true"></i>
+        <div class="min-w-0"><%= message %><% if type.to_s == "notice" && flash[:notice_action].present? %> <%= link_to flash[:notice_action]["label"], flash[:notice_action]["path"], class: "font-semibold underline underline-offset-2 hover:no-underline" %><% end %></div>
       </div>
     <% end %>
   </div>

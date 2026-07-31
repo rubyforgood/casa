@@ -10,38 +10,43 @@ RSpec.describe "org announcement banner", type: :system do
 
   before { sign_in admin }
 
-  it "grounds the icon in a tile instead of floating a bare glyph" do
+  # A plain leading glyph. It briefly wore a filled amber-700 tile to "ground" it; that read as a
+  # shout and pushed the bar from 44px to 57px, so the tile is gone and the bar is back to its
+  # height. Every message-bar pattern in the wild (Polaris, Material, Carbon, Primer) leads with a
+  # bare tone-coloured glyph and lets the tint plus border carry the severity.
+  it "leads with a plain glyph, no tile" do
     visit authenticated_user_root_path
 
-    tile = find("[data-controller='dismiss'] span[aria-hidden='true']")
-    # design.md's icon-tile pattern; filled rather than the usual soft bg-{hue}-50, which is invisible
-    # on this amber-50 bar (amber-100 measures 1.07:1 against it).
-    expect(tile[:class]).to include("rounded-xl", "bg-amber-700", "text-white", "h-8", "w-8")
-    expect(tile).to have_css("i.bi-megaphone", visible: :all)
+    bar = find("[data-controller='dismiss']")
+    expect(bar).to have_css("i.bi-megaphone", visible: :all)
+    expect(bar).to have_no_css("span[aria-hidden='true']")
   end
 
-  it "centres the tile, the text and Dismiss on the same line", :js do
+  it "keeps the icon on the first line and the bar compact", :js do
     visit authenticated_user_root_path
 
-    centres = page.evaluate_script(<<~JS)
+    m = page.evaluate_script(<<~JS)
       (function () {
         const bar = document.querySelector("[data-controller='dismiss']")
-        const mid = (el) => { const b = el.getBoundingClientRect(); return (b.top + b.bottom) / 2 }
+        const icon = bar.querySelector('i').getBoundingClientRect()
         const body = bar.querySelector('div.min-w-0')
         const range = document.createRange()
         range.selectNodeContents(body)
         // Line rects only: the first rect getClientRects returns is the block itself.
         const lines = [...range.getClientRects()].filter(r => r.height < 30)
         return {
-          tile: mid(bar.querySelector('span[aria-hidden]')),
-          firstLine: (lines[0].top + lines[0].bottom) / 2,
-          dismiss: mid(bar.querySelector('button'))
+          bar_height: bar.getBoundingClientRect().height,
+          icon_mid: (icon.top + icon.bottom) / 2,
+          line_mid: (lines[0].top + lines[0].bottom) / 2
         }
       })()
     JS
 
-    # The text is nudged to the tile's centre line rather than the tile up into the bar's padding.
-    expect(centres["tile"]).to be_within(1).of(centres["firstLine"])
-    expect(centres["dismiss"]).to be_within(1).of(centres["firstLine"])
+    # The icon's BOX sits 2px below the line box on purpose: aligned boxes put the glyph's ink 2px
+    # above the text's x-height band (measured 85.5 vs 88.0), which reads as floating. With mt-0.5 the
+    # ink lands at 87.5 against 88.0. Align ink, not boxes.
+    expect(m["icon_mid"] - m["line_mid"]).to be_within(1).of(2)
+    # Back to the pre-tile height, measured on both: 47px. The tile made it 57px.
+    expect(m["bar_height"]).to be < 50
   end
 end
