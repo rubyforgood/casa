@@ -126,6 +126,12 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   bar, amber-100 is **1.07:1**, amber-200 **1.20:1**, amber-300 **1.40:1** — so the org banner uses a
   filled `h-8 w-8 rounded-xl bg-amber-700 text-white` tile (4.85:1 against the bar, white glyph 5.03:1
   on it; amber-600 also clears 3:1 at 3.09/3.20 but that margin is not worth spending).
+  Every **alert card** (flashes, the form-error summary, the case-contact reminder callout) uses the
+  same tile via **`alert_icon_tile(variant)`**, filled at the `-700` step per variant. Measured, all
+  four clear 3:1 with room: glyph on tile 5.03:1 (amber) / 5.36:1 (emerald) / 6.03:1 (rose) / 7.90:1
+  (brand); tile against its own `-50` card 4.85 / 5.09 / 5.49 / 7.07:1. Write the fills as **full class
+  literals** in the helper — Tailwind only generates what it can see as a string, so `bg-#{hue}-700`
+  produces nothing.
 - **Align the text to the tile, never the tile to the text.** A 32px tile beside a 20px line box sits
   6px low under `items-start`; pulling it up with a negative margin eats the bar's top padding and
   leaves it lopsided. Nudge the *content* down instead (`mt-1.5` on the message and on the trailing

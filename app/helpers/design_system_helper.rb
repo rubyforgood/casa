@@ -124,6 +124,25 @@ module DesignSystemHelper
     end
   end
 
+  # The severity icon's ground. design.md's icon-tile pattern rules out bare floating icons for status,
+  # and a soft `bg-{hue}-50` tile is invisible on a `-50` card (amber-100 measures 1.07:1 against
+  # amber-50), so it is filled at the `-700` step with a white glyph -- measured, every variant clears
+  # the 3:1 WCAG 1.4.11 wants for non-text by a wide margin: glyph on tile 5.03:1 (amber) to 7.90:1
+  # (brand), tile against its card 4.85:1 to 7.07:1. Full class literals, not interpolation: Tailwind
+  # only generates what it can see as a string.
+  def alert_icon_tile(variant = :info)
+    base = "grid h-8 w-8 shrink-0 place-items-center rounded-xl text-white"
+    fill =
+      case variant
+      when :success then "bg-emerald-700"
+      when :warning then "bg-amber-700"
+      when :danger then "bg-rose-700"
+      when :info then "bg-brand-700"
+      else raise ArgumentError, "unknown alert variant: #{variant.inspect}"
+      end
+    "#{base} #{fill}"
+  end
+
   # Field-level validation (casadesign). Shows WHICH field is invalid, accessibly: a secondary-gray
   # message with a rose leading icon (icon + text center-aligned) rendered right under the field, so
   # the error isn't carried by the border color alone (WCAG 1.4.1). Pair with field_error_attrs to tie the input to the message via
