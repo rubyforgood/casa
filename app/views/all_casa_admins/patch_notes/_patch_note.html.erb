@@ -6,7 +6,10 @@
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <div class="patch-note-list-item card rounded-2xl border border-slate-200 bg-white shadow-sm">
   <div id="patch-note-<%= patch_note.id %>" class="card-body space-y-4 p-5 sm:p-6">
-    <textarea disabled="true" class="<%= textarea_class %>"><%= patch_note.note %></textarea>
+    <%# aria-label because there is no label to point at (the JS reads .card-body's direct children by
+        index, so a <label> element here would shift them) and, unlike the new-note textarea, this one
+        carries content instead of a placeholder for axe to fall back on. %>
+    <textarea disabled="true" aria-label="Patch note" class="<%= textarea_class %>"><%= patch_note.note %></textarea>
     <div class="label-and-select">
       <label for="patch-note-<%= patch_note.id %>-type" class="<%= label_class %>">Patch note type</label>
       <select id="patch-note-<%= patch_note.id %>-type" disabled="true" class="<%= select_class %>">

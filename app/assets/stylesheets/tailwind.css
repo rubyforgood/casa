@@ -128,6 +128,29 @@
 .ts-wrapper .clear-button:hover { color: #475569 !important; }
 .ts-wrapper .clear-button:focus-visible { outline: 2px solid #6366f1; outline-offset: 2px; border-radius: 0.25rem; } /* it is role=button tabindex=0, so it needs a visible focus ring */
 .ts-dropdown .option[data-value=""] { display: none; }
+/* Multiselect option marker: a checkbox SHAPE, not a checkbox. tom-select's `checkbox_options` plugin
+   injected a real `<input type="checkbox">` into each `role="option"` row, which is axe
+   `nested-interactive` (serious) + `label` (critical) and unreachable to a screen reader -- and axe
+   rejects aria-hidden/tabindex mitigations outright. It is now an inert <span> the controller draws,
+   which also means it finally looks like the design system instead of a raw native checkbox (nothing
+   ever styled `.form-check-input` once Bootstrap was removed). The row's `aria-selected` is the state. */
+.ts-dropdown .tomselect-checkbox {
+  flex: none;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 0.5rem;
+  border: 1px solid #cbd5e1; /* slate-300 */
+  border-radius: 0.25rem;
+  background-color: #fff;
+}
+.ts-dropdown .tomselect-checkbox.form-check-input--checked {
+  border-color: #4f46e5; /* brand-600 */
+  background-color: #4f46e5;
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0iI2ZmZiI+PHBhdGggZD0iTTEyLjczNiAzLjk3YS43MzMuNzMzIDAgMCAxIDEuMDQ3IDBjLjI4Ni4yODkuMjkuNzU2LjAxIDEuMDVMNy44OCAxMi4wMWEuNzMzLjczMyAwIDAgMS0xLjA2NS4wMkwzLjIxNyA4LjM4NGEuNzU3Ljc1NyAwIDAgMSAwLTEuMDYuNzMzLjczMyAwIDAgMSAxLjA0NyAwbDMuMDUyIDMuMDkzIDUuNC02LjQyNWEuMjQ3LjI0NyAwIDAgMSAuMDItLjAyMloiLz48L3N2Zz4=");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 0.7rem;
+}
 /* In a filter bar the control sits in a row of native `py-2` selects and date inputs, which are 38px,
    not the 42px form-input height -- so a bare .ts-control stood 4px taller than every field beside it
    (bottoms aligned by `items-end`, tops 4px out). `ts-filter` on the <select> lands on .ts-wrapper

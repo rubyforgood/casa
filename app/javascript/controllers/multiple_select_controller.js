@@ -13,6 +13,19 @@ function onDropdownClose () {
   this.wrapper.classList.remove('ts-flip-up')
 }
 
+// An inert stand-in for the checkbox tom-select's `checkbox_options` plugin injects into each option
+// row. A real `<input>` inside `role="option"` is axe `nested-interactive` (serious) + `label`
+// (critical), and axe rejects the mitigations outright: "a negative tabindex on an element inside an
+// interactive control does not prevent assistive technologies from focusing the element (even with
+// aria-hidden)". The row's own `aria-selected` is the state a screen reader reads, so the tick only has
+// to be a shape. It keeps the plugin's classes, so every CSS and spec hook still matches.
+const inertMarkerFor = (checkbox) => {
+  const marker = document.createElement('span')
+  marker.className = checkbox.className
+  marker.setAttribute('aria-hidden', 'true')
+  return marker
+}
+
 export default class extends Controller {
   static targets = ['select', 'option', 'item', 'hiddenItem', 'selectAllOption']
   static values = {
@@ -203,6 +216,9 @@ export default class extends Controller {
         clear_button: {
           title: 'Clear all selections'
         },
+        // Kept for its BEHAVIOUR, not its markup: this plugin is what makes a click on an already
+        // selected row deselect it (it replaces onOptionSelect), and it owns hideSelected. Its
+        // `<input type="checkbox">` is swapped for an inert span after init -- see swapCheckboxForMarker.
         checkbox_options: {
           checkedClassNames: ['form-check-input', 'form-check-input--checked'],
           uncheckedClassNames: ['form-check-input', 'form-check-input--unchecked']
@@ -229,6 +245,7 @@ export default class extends Controller {
             html = optionTemplate.replace(/DATA_LABEL/g, escape(data.text))
             html = html.replace(/DATA_SUB_TEXT/g, escape(data.subtext))
           }
+
           return html
         },
         item: function (data, escape) {
@@ -238,5 +255,42 @@ export default class extends Controller {
     })
     this.tomSelect = select
     this.labelControlInput(select)
+    this.swapCheckboxForMarker(select)
+    select.on('item_add', () => this.syncMarkers(select))
+    select.on('item_remove', () => this.syncMarkers(select))
+  }
+
+  // The plugin's own class updater looks for `input.tomselect-checkbox` and no-ops on the span, and a
+  // re-render will not cover for it because tom-select caches rendered rows -- so after Select all /
+  // Unselect all the ticks kept their old state.
+  //
+  // Read `items`, not the row's `selected` class: the class lands later than these events (the plugin
+  // itself waits 1ms for it), and Select all cascades one item_add per option, so a DOM read is a race
+  // that measured wrong in both directions. `items` is already updated when the event fires, and the
+  // last event of a cascade sees the full set.
+  syncMarkers (select) {
+    select.dropdown_content.querySelectorAll('.option').forEach((row) => {
+      const marker = row.querySelector('.tomselect-checkbox')
+      if (!marker) return
+
+      const checked = select.items.includes(row.dataset.value)
+      marker.classList.toggle('form-check-input--checked', checked)
+      marker.classList.toggle('form-check-input--unchecked', !checked)
+    })
+  }
+
+  // Wrapped here rather than configured, because the plugin installs its own `render.option` wrapper
+  // during `setupTemplates` -- this runs after the constructor, so it wraps the plugin's and sees the
+  // injected checkbox. Both selection paths re-render the row (the plugin refreshes on deselect, our
+  // onItemAdd refreshes on select), so the swap re-applies with the right classes every time.
+  swapCheckboxForMarker (select) {
+    const inner = select.settings.render.option
+
+    select.settings.render.option = function (data, escape) {
+      const rendered = inner.call(this, data, escape)
+      const checkbox = rendered && rendered.querySelector && rendered.querySelector('input.tomselect-checkbox')
+      if (checkbox) checkbox.replaceWith(inertMarkerFor(checkbox))
+      return rendered
+    }
   }
 }

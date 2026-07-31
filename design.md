@@ -146,6 +146,17 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
   `aria-hidden`.
 - **Motion**: respect `prefers-reduced-motion` (`motion-reduce:` variants).
 
+**A page audit that only visits URLs misses whole components.** axe reads the DOM as it stands, so a
+dialog, overflow menu, typeahead menu, multiselect menu, disclosure panel or drawer contributes nothing
+until it is **opened** -- and the last whole-app sweep (137 states: every HTML route for every role, at
+1400px and 390px, plus open component states) found *all* of its remaining violations either in an open
+component or on a page a route-walk reaches but nobody looks at. **Prove the state is open before axe
+runs**: three of the sweep's openers silently no-oped and reported a clean page. Fixtures must also
+populate every table, since an empty collection audits clean and hides the defect. What axe cannot judge
+at all: focus order, keyboard traps, whether alt text is *meaningful*, and icon contrast (there is no
+non-text contrast rule). Regression examples live in `spec/system/accessibility/axe_spec.rb`, including
+the open-component states.
+
 **Measured token contrast on white** (computed from the built oklch tokens and cross-checked
 against axe's own numbers — do not eyeball these, and do not assume a `-600` is safe):
 
@@ -650,6 +661,20 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   clear **x** (7x7, two crossing diagonals) rather than a caret, because the probe left the control
   focused. A real match is identical extent and coverage: 10x6 ink, 20 ink pixels, mean lum 251.4 vs
   251.2. Blur the control before the screenshot, or you are measuring the hover/focus state.
+- **The option tick is a SHAPE, never a checkbox.** tom-select's `checkbox_options` plugin injects a
+  real `<input type="checkbox">` into each `role="option"` row: axe **`label` (critical)** (no name) +
+  **`nested-interactive` (serious)** (a control nested in an option is unreachable to a screen reader),
+  and axe rejects the mitigations in as many words -- *"a negative tabindex on an element inside an
+  interactive control does not prevent assistive technologies from focusing the element (even with
+  aria-hidden)"*. So the controller **keeps the plugin for its behaviour** -- it is what makes a click on
+  a selected row *deselect* it, and it owns `hideSelected` -- and swaps the injected input for an inert
+  `<span aria-hidden>` carrying the same classes (the row's own `aria-selected` is the state). Wrap
+  `render.option` **after** the constructor, since the plugin installs its own wrapper during
+  `setupTemplates`. Two traps found by measuring: tom-select **caches rendered rows**, so a re-render
+  does not restate the tick -- sync it on `item_add`/`item_remove`; and sync it from **`items`**, not the
+  row's `selected` class, which lands later than those events (Select-all cascades one `item_add` per
+  option, and a DOM read measured wrong in both directions). Nothing styled `.form-check-input` after
+  Bootstrap left, so the tick is drawn in `tailwind.css` and finally looks like the design system.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Clear-all inside the field, always visible once there is something to clear.** `remove_button`
