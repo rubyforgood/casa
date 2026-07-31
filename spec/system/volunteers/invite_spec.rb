@@ -28,7 +28,7 @@ RSpec.describe "Inviting volunteers", type: :system do
       # Verify invitation email was sent
       last_email = ActionMailer::Base.deliveries.last
       expect(last_email.to).to eq ["new_volunteer@example.com"]
-      expect(last_email.subject).to have_text "CASA Console invitation instructions"
+      expect(last_email.subject).to have_text "CASA console invitation instructions"
       expect(last_email.html_part.body.encoded).to have_text "Volunteer console account has been created for you"
     end
 
@@ -144,7 +144,7 @@ RSpec.describe "Inviting volunteers", type: :system do
 
       last_email = ActionMailer::Base.deliveries.last
       expect(last_email.to).to eq [volunteer.email]
-      expect(last_email.subject).to have_text "CASA Console invitation instructions"
+      expect(last_email.subject).to have_text "CASA console invitation instructions"
     end
 
     it "hides resend button after invitation is accepted" do

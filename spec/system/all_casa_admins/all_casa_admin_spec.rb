@@ -27,10 +27,10 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     sign_in all_casa_admin
 
     visit "/"
-    expect(page).to have_text "All CASA Admin"
-    expect(page).to have_text "New CASA Organization"
+    expect(page).to have_text "All CASA admin"
+    expect(page).to have_text "New CASA organization"
     expect(page).to have_text "New all CASA admin"
-    expect(page).to have_text "CASA Organizations"
+    expect(page).to have_text "CASA organizations"
 
     # left sidebar
     expect(page).to have_text "Patch notes"
@@ -44,9 +44,9 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_link("SMS Terms & Conditions", href: "/sms-terms-conditions.html")
 
     # create new org
-    click_on "New CASA Organization"
+    click_on "New CASA organization"
     expect(page).to have_current_path "/all_casa_admins/casa_orgs/new", ignore_query: true
-    expect(page).to have_text "Create a new CASA Organization"
+    expect(page).to have_text "Create a new CASA organization"
     fill_in "Name", with: "Cool Org Name"
     fill_in "Display name", with: "display name"
     fill_in "Address", with: "123 Main St"
@@ -67,8 +67,8 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_content "Number of active case assignments: 0"
 
     # create new admin
-    click_on "New CASA Admin"
-    expect(page).to have_content "New CASA Admin for Cool Org Name"
+    click_on "New CASA admin"
+    expect(page).to have_content "New CASA admin for Cool Org Name"
 
     click_button "Submit"
     expect(page).to have_content "Unable to save"
@@ -87,7 +87,7 @@ RSpec.describe "all_casa_admins/casa_orgs/casa_admins/new", type: :system do
     expect(page).to have_content "New admin created successfully"
     expect(page).to have_content "valid@example.com"
 
-    click_on "New CASA Admin"
+    click_on "New CASA admin"
     fill_in "Email", with: "valid@example.com"
     fill_in "Display name", with: "Freddy Valid"
     click_button "Submit"

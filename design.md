@@ -52,7 +52,21 @@ a card reads flat, change the role mapping — weight and colour — not the siz
 All UI copy — page titles, section headings, subtitles, table headers, field labels,
 buttons, badges and nav — uses **sentence case**: capitalise only the first word and
 proper nouns (CASA, Twilio, people's names). So "Track volunteer progress", not "Track
-Volunteer Progress" and never the shouty all-caps "TRACK…". Do **not** apply the
+Volunteer Progress" and never the shouty all-caps "TRACK…".
+
+**The sweep is done, and grepping views is not enough to keep it done.** A scan of headings,
+labels, buttons and `<th>`s in `app/views` came back nearly clean while these were still Title
+Case, because copy lives in five places a view grep misses: **`content_for :page_title`**,
+**decorators** (`"Reimbursement Complete"`, `"Send CC to Supervisor and Admin"`), **`config/locales`**
+(`activerecord.attributes` names, Devise mail subjects), **mailer subjects**, and **app-shipped seed
+data** (`PatchNoteType` names). Two more traps: text inside a `link_to ... do` block is on its own
+line, so a `link_to "..."` pattern never sees it, and a Title Case string can be *correct* — `SID`,
+`ZIP`, "Ansell Casey Assessment", an org's own name, and "Please" starting a second sentence all
+tripped the scan. Renaming shipped seed names needs an **after_party task** as well (seeds
+`first_or_create` by name, so an existing database keeps the old row and a reseed adds a second one) —
+`20260731000000_sentence_case_patch_note_types` follows `20260721000000_sentence_case_default_contact_types`.
+Leave **CSV export headers** alone: they come from `titleize` on column symbols and are interchange
+labels, not UI copy. Do **not** apply the
 `uppercase` CSS transform to labels; use size, weight and colour for hierarchy instead.
 
 **No trailing colon on a heading or subtitle** (`Assigned volunteers`, not `Assigned

@@ -94,7 +94,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       click_on "Yes, deactivate"
       expect(page).to have_text("Case #{casa_case.case_number} has been deactivated")
       expect(page).to have_text("Case was deactivated on: #{I18n.l(casa_case.updated_at, format: :standard, default: nil)}")
-      expect(page).to have_text("Reactivate CASA Case")
+      expect(page).to have_text("Reactivate CASA case")
       expect(page).not_to have_text("Court dates")
       expect(page).not_to have_text("Court Report Due Date")
       expect(page).not_to have_field("Court Report Due Date")
@@ -109,7 +109,7 @@ RSpec.describe "Edit CASA Case", type: :system do
       visit edit_casa_case_path(casa_case)
       click_on "Deactivate CASA Case"
       click_on "Yes, deactivate"
-      click_link("Reactivate CASA Case")
+      click_link("Reactivate CASA case")
 
       expect(page).to have_text("Case #{casa_case.case_number} has been reactivated.")
       expect(page).to have_text("Deactivate CASA Case")

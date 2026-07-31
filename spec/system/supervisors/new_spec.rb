@@ -65,7 +65,7 @@ RSpec.describe "supervisors/new", type: :system do
       it "sends an invitation email to the new supervisor", :aggregate_failures do
         last_email = ActionMailer::Base.deliveries.last
         expect(last_email.to).to eq [new_supervisor_email]
-        expect(last_email.subject).to have_text "CASA Console invitation instructions"
+        expect(last_email.subject).to have_text "CASA console invitation instructions"
         expect(last_email.html_part.body.encoded).to have_text "Supervisor console account has been created for you"
       end
     end

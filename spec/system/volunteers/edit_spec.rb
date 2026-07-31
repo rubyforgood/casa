@@ -418,7 +418,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
       deliveries = ActionMailer::Base.deliveries
       expect(deliveries.count).to eq(1)
-      expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
+      expect(deliveries.last.subject).to have_text "CASA console invitation instructions"
     end
   end
 
@@ -436,7 +436,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
     deliveries = ActionMailer::Base.deliveries
     expect(deliveries.count).to eq(1)
-    expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
+    expect(deliveries.last.subject).to have_text "CASA console invitation instructions"
   end
 
   describe "Send Reactivation (SMS)" do
@@ -480,7 +480,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
       expect(page).to have_button("Send reminder")
       click_on "Send reminder"
-      expect(page).to have_text("Send CC to Supervisor")
+      expect(page).to have_text("Send CC to supervisor")
       click_on "Yes, send reminder"
 
       expect(page).to have_text("Reminder sent to volunteer")
@@ -495,7 +495,7 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       click_on "Send reminder"
-      expect(page).to have_text("Send CC to Supervisor and Admin")
+      expect(page).to have_text("Send CC to supervisor and admin")
       click_on "Yes, send reminder"
 
       expect(page).to have_text("Reminder sent to volunteer")

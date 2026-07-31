@@ -13,7 +13,7 @@ en:
       invitation_removed: "Your invitation was removed."
     mailer:
       invitation_instructions:
-        subject: "CASA Console invitation instructions"
+        subject: "CASA console invitation instructions"
   time:
     formats:
       devise:

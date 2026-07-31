@@ -403,7 +403,7 @@ RSpec.describe Volunteer, type: :model do
 
       expect(email).not_to be_nil
       expect(email.to).to eq ["new_volunteer@example.com"]
-      expect(email.subject).to eq("CASA Console invitation instructions")
+      expect(email.subject).to eq("CASA console invitation instructions")
       expect(email.html_part.body.encoded).to match(/Volunteer console account has been created for you/i)
       expect(volunteer.reload.invitation_created_at).to be_present
     end

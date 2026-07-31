@@ -19,7 +19,7 @@ RSpec.describe "all_casa_admins/casa_orgs/show", type: :view do
     end
 
     it "shows new admin button" do
-      expect(rendered).to have_text("New CASA Admin")
+      expect(rendered).to have_text("New CASA admin")
     end
 
     it "shows metrics" do

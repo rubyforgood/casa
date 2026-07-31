@@ -29,7 +29,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
 
       expect(page).to have_button("Send reminder")
       click_on "Send reminder"
-      expect(page).to have_text("Send CC to Supervisor and Admin")
+      expect(page).to have_text("Send CC to supervisor and admin")
 
       click_on "Yes, send reminder"
 
@@ -45,7 +45,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
 
       expect(page).to have_button("Send reminder")
       click_on "Send reminder"
-      expect(page).to have_text(/Send CC to Supervisor and Admin$/)
+      expect(page).to have_text(/Send CC to supervisor and admin$/)
 
       click_on "Yes, send reminder"
 

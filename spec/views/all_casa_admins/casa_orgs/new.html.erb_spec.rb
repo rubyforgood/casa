@@ -12,7 +12,7 @@ RSpec.describe "all_casa_admins/casa_orgs/new", type: :view do
   end
 
   it "shows new CASA Organization page title" do
-    expect(rendered).to have_text("Create a new CASA Organization")
+    expect(rendered).to have_text("Create a new CASA organization")
   end
 
   it "shows new CASA Organization form" do

@@ -7,7 +7,7 @@ RSpec.describe UserMailer, type: :mailer do
     let(:user) { create(:user) }
 
     it "renders the headers", :aggregate_failures do
-      expect(mail.subject).to eq("CASA Password Changed")
+      expect(mail.subject).to eq("CASA password changed")
       expect(mail.to).to eq([user.email])
     end
 
