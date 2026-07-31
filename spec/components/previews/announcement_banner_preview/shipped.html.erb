@@ -1,0 +1,39 @@
+<%# The real partial, rendered from the real file -- this page cannot drift from what ships.
+    @active_banner is what layouts/_casa_banner reads.
+
+    NOTE for anyone editing this: Tailwind's @source list covers app/, NOT spec/, so a utility used
+    only here is not in the built CSS. Everything below is either a class the app already ships or an
+    inline style. %>
+<% @active_banner = banner %>
+<% label = "margin:0 0 8px;font:600 11px/1.4 ui-monospace,monospace;letter-spacing:.04em;color:#475569" %>
+<% note = "margin:8px 0 0;font:13px/1.5 system-ui;color:#64748b" %>
+
+<div style="display:flex;flex-direction:column;gap:34px">
+  <div>
+    <p style="<%= label %>">SHIPPED &mdash; FULL WIDTH (DESKTOP)</p>
+    <%= render "layouts/casa_banner" %>
+    <p style="<%= note %>">
+      4px amber-600 left accent band (3.07:1 against the amber-50 bar), plain bi-megaphone glyph
+      inheriting amber-900 (8.73:1). 47px tall.
+    </p>
+  </div>
+
+  <div>
+    <p style="<%= label %>">SHIPPED &mdash; 390px (MOBILE)</p>
+    <div style="width:390px;border:1px solid #cbd5e1;border-radius:6px;overflow:hidden">
+      <%= render "layouts/casa_banner" %>
+    </div>
+  </div>
+
+  <div>
+    <p style="<%= label %>">FOR COMPARISON &mdash; THE REVERTED ICON TILE (57px, not in the app)</p>
+    <div class="flex items-start gap-3 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
+      <span class="grid h-8 w-8 shrink-0 place-items-center rounded-xl bg-amber-700 text-white" aria-hidden="true">
+        <i class="bi bi-megaphone"></i>
+      </span>
+      <div class="mt-1.5 min-w-0 flex-1">Quarterly court reports are due at month end.</div>
+      <button type="button" class="mt-1.5 shrink-0 rounded font-medium text-amber-700 underline underline-offset-2">Dismiss</button>
+    </div>
+    <p style="<%= note %>">Shown only so the two are comparable: 10px taller, and the eye goes to the square.</p>
+  </div>
+</div>
