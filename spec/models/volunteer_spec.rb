@@ -409,7 +409,7 @@ RSpec.describe Volunteer, type: :model do
     end
   end
 
-  describe "#learning_hours_spent_in_one_year" do
+  describe "#learning_hours_spent_in_current_year" do
     let(:volunteer) { create :volunteer }
     let(:learning_hour_type) { create :learning_hour_type }
     let!(:learning_hours) do
@@ -420,8 +420,24 @@ RSpec.describe Volunteer, type: :model do
       ]
     end
 
-    it "returns the hours spent in one year" do
-      expect(volunteer.learning_hours_spent_in_one_year).to eq("5h 15min")
+    it "returns the hours spent since January 1" do
+      expect(volunteer.learning_hours_spent_in_current_year).to eq("5h 15min")
+    end
+
+    it "excludes last year, which a rolling 12-month window counted" do
+      last_december = create(:learning_hour, user: volunteer, duration_hours: 8, duration_minutes: 0,
+        learning_hour_type: learning_hour_type)
+      last_december.update_columns(occurred_at: Date.current.beginning_of_year - 1.day)
+
+      expect(volunteer.learning_hours_spent_in_current_year).to eq("5h 15min")
+    end
+
+    it "includes an entry logged earlier today" do
+      today = create(:learning_hour, user: volunteer, duration_hours: 2, duration_minutes: 0,
+        learning_hour_type: learning_hour_type)
+      today.update_columns(occurred_at: Time.current.change(hour: 9))
+
+      expect(volunteer.learning_hours_spent_in_current_year).to eq("7h 15min")
     end
   end
 end

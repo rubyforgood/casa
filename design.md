@@ -493,6 +493,23 @@ Rules for any "total over a period" figure:
   to today.
 - Keep the range **optional** in the model scope (`occurred_in(range)` no-ops on nil) so the Pundit
   scopes keep meaning "everything this user may see" rather than inheriting a UI default.
+- **Widen a Date range to the end of its last day.** A `Date` range against a **datetime** column
+  serialises to `BETWEEN '2026-01-01' AND '2026-07-31'`, and Postgres reads that upper bound as
+  **midnight** — so anything logged *earlier today* fell outside "since January 1" and the total
+  silently ignored it (measured: a 09:00 entry today was excluded). `occurred_in` now expands a Date
+  range to `beginning_of_day..end_of_day`; note `DateTime` subclasses `Date` in Ruby, so the check is
+  `instance_of?(Date)` and an explicit time range is left alone.
+- **One definition of "this year" per app.** The roster defaults to calendar year to date
+  (`beginning_of_year..today`), so the volunteer profile's "Learning hours this year" had to stop being
+  `occurred_at > 1.year.ago` — a rolling 12 months, which on 31 July counted the previous August. It is
+  `learning_hours_spent_in_current_year` now, through the same scope, and the label **names the year**
+  ("Learning hours in 2026") rather than saying "this year".
+
+**Industry standard for a "this year" figure:** calendar **year-to-date** is the default users expect,
+and the convention (Stripe, GA, Shopify, Polaris) is presets + custom — *Year to date* / *Last 12
+months* / *All time* / *Custom* — with the resolved dates shown next to the number. The roster has the
+custom range and states its start; presets would be the natural next step if anyone asks for them. What
+is *not* standard is a label that names a period the query does not apply.
 - `date.formats` has no `:standard` -- that lives under `time.formats`. For a Date use `:full`
   ("January 1, 2026").
 

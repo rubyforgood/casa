@@ -149,7 +149,7 @@ RSpec.describe "volunteers/edit", type: :view do
     expect(rendered).to have_text("Last logged in")
     expect(rendered).to have_text("Invitation accepted")
     expect(rendered).to have_text("Password reset last sent")
-    expect(rendered).to have_text("Learning hours this year")
+    expect(rendered).to have_text("Learning hours in #{Date.current.year}")
     expect(rendered).to have_text("never")
     expect(rendered).to have_text("0h 0min")
   end
