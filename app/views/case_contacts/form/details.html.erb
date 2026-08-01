@@ -64,7 +64,7 @@
         # medium was silently dropped on navigation UNLESS the user happened to also touch one of those
         # three (an autosave posts the entire form, so it committed everything). Whether your work
         # persisted depended on which field you touched last.
-        data: {controller: "case-contact-form", action: "input->autosave#save",
+        data: {controller: "case-contact-form", action: "input->autosave#save submit->autosave#holdForDraft",
                "autosave-target": "form", "case-contact-id": @case_contact.id},
         local: true
       ) do |form| %>
