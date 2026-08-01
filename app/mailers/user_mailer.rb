@@ -3,7 +3,7 @@ class UserMailer < ApplicationMailer
     @user = user
     @casa_organization = user.try(:casa_org) || nil
 
-    mail(to: @user.email, subject: "CASA Password Changed")
+    mail(to: @user.email, subject: "CASA password changed")
   end
 
   def followup_notification(user, followup)

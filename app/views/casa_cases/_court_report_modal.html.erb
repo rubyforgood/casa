@@ -19,12 +19,16 @@
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <%= form.label :start_date, "Starting from", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-          <%= form.date_field :start_date, value: (casa_case.most_recent_past_court_date&.date || Date.current), required: true,
+          <%# The case's last hearing, else when the case was opened in CASA -- never today, which is an
+              empty window (see CasaCase#court_report_default_start_date). %>
+          <%= form.date_field :start_date, value: casa_case.court_report_default_start_date, required: true,
                 class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
         </div>
         <div>
           <%= form.label :end_date, "Ending at", class: "mb-1.5 block text-sm font-medium text-slate-700" %>
-          <%= form.date_field :end_date, value: Date.current, required: true,
+          <%# value is the no-JS fallback only; the controller replaces it with today in the BROWSER's
+              zone on connect, because Date.current here is UTC (see court_report_controller). %>
+          <%= form.date_field :end_date, value: Date.current, required: true, data: {court_report_target: "endDate"},
                 class: "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
         </div>
       </div>

@@ -39,8 +39,8 @@
   </div>
   <% if resource.is_a?(Volunteer) %>
     <div>
-      <dt class="text-xs font-medium text-slate-500">Learning hours this year</dt>
-      <dd class="mt-0.5 text-sm text-slate-700"><%= resource.learning_hours_spent_in_one_year %></dd>
+      <dt class="text-xs font-medium text-slate-500">Learning hours in <%= Date.current.year %></dt>
+      <dd class="mt-0.5 text-sm text-slate-700"><%= resource.learning_hours_spent_in_current_year %></dd>
     </div>
   <% end %>
 </dl>

@@ -28,6 +28,48 @@ RSpec.describe VolunteerDatatable do
     )
   end
 
+  # Pagination determinism. Without a tiebreaker, Postgres may return rows with equal sort keys in any
+  # order per query, so with LIMIT/OFFSET a row can appear on two pages or on none. `raw_records` chains
+  # `.order(:id)` after the requested column, which covers the fallback ordering too -- this asserts it,
+  # because it is one line away from being dropped by someone tidying the query.
+  describe "ordering determinism" do
+    let(:org) { create(:casa_org) }
+
+    def outer_order_by(order_by)
+      params = datatable_params(
+        additional_filters: {active: %w[false true], supervisor: [""] + Supervisor.pluck(:id),
+                             transition_aged_youth: %w[false true]},
+        order_by: order_by, order_direction: "asc", page: 1, per_page: 10, search_term: nil
+      )
+      # The SQL also contains a window function with its own ORDER BY, so take the last one.
+      described_class.new(org.volunteers, params).send(:filtered_records).to_sql.split("ORDER BY").last
+    end
+
+    it "breaks ties on the primary key for a requested column" do
+      expect(outer_order_by("supervisor_name")).to match(/supervisor_name asc NULLS LAST, "users"\."id" ASC/)
+    end
+
+    it "breaks ties on the primary key for the default ordering" do
+      expect(outer_order_by(nil)).to match(/default_sort_order ASC, "users"\."id" ASC/)
+    end
+
+    it "paginates every row exactly once when the sort key is identical" do
+      3.times { create(:volunteer, casa_org: org, display_name: "Same Name") }
+
+      seen = (1..3).flat_map do |page|
+        params = datatable_params(
+          additional_filters: {active: %w[false true], supervisor: [""] + Supervisor.pluck(:id),
+                               transition_aged_youth: %w[false true]},
+          order_by: "display_name", order_direction: "asc", page: page, per_page: 1, search_term: nil
+        )
+        described_class.new(org.volunteers, params).send(:paginated_records).map(&:id)
+      end
+
+      expect(seen.uniq.size).to eq(3)
+      expect(seen.sort).to eq(org.volunteers.pluck(:id).sort)
+    end
+  end
+
   describe ":has_transition_aged_youth_cases" do
     let(:volunteer_has_transition_aged_youth) { subject[:data].first[:has_transition_aged_youth_cases] }
     let(:non_transitional_birth) { 10.years.ago }
@@ -155,24 +197,37 @@ RSpec.describe VolunteerDatatable do
 
       describe "supervisor_name" do
         let(:order_by) { "supervisor_name" }
-        let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
+
+        # The DATABASE does this ordering, so the database decides what "sorted" means. Ruby's
+        # `sort_by` is codepoint order, which puts "van der Berg" AFTER "Zoe Upper"; Postgres' en_US
+        # collation is case-insensitive at the primary level and puts it before. Reproduced, and it is
+        # why this example failed intermittently -- Faker hands out a lowercase-first display name
+        # ("van der ...") often enough to matter. Asking Postgres to sort the same strings keeps the
+        # expectation immune to every other collation subtlety too (punctuation, accents).
+        let(:sorted_supervisor_names) do
+          names = assigned_volunteers.map { |volunteer| volunteer.supervisor.display_name }
+          ActiveRecord::Base.connection.select_values(
+            ActiveRecord::Base.sanitize_sql_array(
+              ["SELECT name FROM unnest(ARRAY[?]::text[]) AS name ORDER BY name", names]
+            )
+          )
+        end
+        # The datatable strips honorifics for display, so compare stripped -- after sorting on the raw
+        # name, which is what the query orders by.
+        let(:expected_names) { sorted_supervisor_names.map { |name| NamePresentation.strip_honorific(name) } }
+        let(:actual_names) { values.map { |row| CGI.unescapeHTML(row[:supervisor][:name]) } }
 
         context "when ascending" do
           it "is successful" do
-            sorted_models.each_with_index do |model, idx|
-              expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
-            end
+            expect(actual_names).to eq expected_names
           end
         end
 
         context "when descending" do
           let(:order_direction) { "desc" }
-          let(:sorted_models) { assigned_volunteers.sort_by { |v| v.supervisor.display_name } }
 
           it "is successful" do
-            sorted_models.reverse.each_with_index do |model, idx|
-              expect(CGI.unescapeHTML(values[idx][:supervisor][:name])).to eq model.supervisor.display_name
-            end
+            expect(actual_names).to eq expected_names.reverse
           end
         end
       end

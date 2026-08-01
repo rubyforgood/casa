@@ -123,7 +123,7 @@ RSpec.describe "supervisors/edit", type: :system do
 
       deliveries = ActionMailer::Base.deliveries
       expect(deliveries.count).to eq(1)
-      expect(deliveries.last.subject).to have_text "CASA Console invitation instructions"
+      expect(deliveries.last.subject).to have_text "CASA console invitation instructions"
     end
 
     it "can convert the supervisor to an admin" do

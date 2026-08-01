@@ -23,6 +23,16 @@ RSpec.describe "flash messages", :js, type: :system do
     expect(page).to have_current_path(casa_cases_path, ignore_query: true)
   end
 
+  # A plain leading glyph, not a tile: a filled tile shouted on a compact card and added height. The
+  # tint and border carry the severity; the glyph inherits the card's ink.
+  it "leads with a plain severity glyph, not a tile" do
+    sign_in_via_form(admin)
+
+    flash = page.find(".header-flash .alert")
+    expect(flash).to have_css("i.bi-check-circle", visible: :all)
+    expect(flash).to have_no_css("span[aria-hidden='true']")
+  end
+
   it "auto-dismisses a success notice" do
     sign_in_via_form(admin)
 

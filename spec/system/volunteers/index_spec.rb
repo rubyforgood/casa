@@ -258,7 +258,7 @@ RSpec.describe "volunteers/index", type: :system do
     it "reassigns the selected volunteers to a supervisor" do
       find("#supervisor_volunteer_volunteer_ids_#{volunteers[0].id}").click
       find("[data-select-all-target='button']").click
-      select supervisor.display_name, from: "supervisor_volunteer_supervisor_id"
+      choose_typeahead_option(supervisor.display_name, select_css: "#supervisor_volunteer_supervisor_id")
       click_on "Confirm"
 
       expect(page).to have_text("successfully assigned to new supervisor")

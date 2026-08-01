@@ -38,7 +38,12 @@ RSpec.describe "volunteers/index search", :js, type: :system do
 
     # typing more should refine without losing position
     find("#search").send_keys("rice")
-    expect(page).to have_css("#search")
+    # Wait for the debounce and the real page load it triggers before touching anything else. The
+    # input already reads "Beatrice" the instant it is typed, so asserting on its value proves
+    # nothing about the submit -- and clicking "Clear search" with that submit still pending let the
+    # timer fire after the click and re-apply search=Beatrice, which is how this failed in CI.
+    expect(page).to have_current_path(/search=Beatrice/)
+    expect(page).to have_text("Showing 1 volunteer matching")
     expect(find("#search").value).to eq "Beatrice"
 
     find("a[aria-label='Clear search']").click

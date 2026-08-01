@@ -18,10 +18,10 @@ RSpec.describe "case_contacts/edit", type: :system do
 
     let(:user) { admin }
 
-    # FLAKY: disabled 2026-07-27 to unblock CI (xit + tracking-issue policy). Fails intermittently only
-    # under the full CI suite (green in isolation) -- a non-deterministic Selenium/JS timing race, not
-    # order-dependent data; not reproducible locally without the CI failing seed. Tracking issue to be filed.
-    xit "successfully edits case contact", :js do
+    # Re-enabled 2026-07-31 -- see case_contacts_new_design_spec: "fails only in the full suite, green
+    # in isolation, no reproducible seed" was the signature of the ENV[] partial double in
+    # android_app_associations_spec, not of a race in this page.
+    it "successfully edits case contact", :js do
       visit edit_case_contact_path(case_contact)
 
       complete_details_page(case_numbers: [], contact_types: [], contact_made: true, medium: "Letter")

@@ -69,8 +69,8 @@ RSpec.describe "case_contacts/index", type: :system do
         subject
 
         within(".full-card", match: :first) do
-          expect(page).to have_text("Reimbursement Pending")
-          expect(page).to have_no_text("Reimbursement Complete")
+          expect(page).to have_text("Reimbursement pending")
+          expect(page).to have_no_text("Reimbursement complete")
         end
       end
 
@@ -81,8 +81,8 @@ RSpec.describe "case_contacts/index", type: :system do
         subject
 
         within(".full-card", match: :first) do
-          expect(page).to have_text("Reimbursement Complete")
-          expect(page).to have_no_text("Reimbursement Pending")
+          expect(page).to have_text("Reimbursement complete")
+          expect(page).to have_no_text("Reimbursement pending")
         end
       end
 
@@ -93,8 +93,8 @@ RSpec.describe "case_contacts/index", type: :system do
         subject
 
         within(".full-card", match: :first) do
-          expect(page).to have_no_text("Reimbursement Pending")
-          expect(page).to have_no_text("Reimbursement Complete")
+          expect(page).to have_no_text("Reimbursement pending")
+          expect(page).to have_no_text("Reimbursement complete")
         end
       end
     end

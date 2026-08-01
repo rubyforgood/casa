@@ -6,6 +6,7 @@
   <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} \u00b7 CASA" : "All CASA Admin" %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <%= render "shared/favicons" %>
 
   <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
   <%= javascript_include_tag "all_casa_admin", "data-turbo-track": "reload", defer: true %>

@@ -11,8 +11,14 @@ services:
       - bundle_data:/usr/local/bundle/gems
     env_file:
       - config/docker.env
+    # `condition: service_healthy`, not a bare `- database`: a bare depends_on
+    # waits for the container to START, not for Postgres to accept connections,
+    # and the docker CI job runs `db:setup` through `compose exec` the moment
+    # `up -d` returns -- so it raced the database and failed on connection
+    # refused.
     depends_on:
-      - database
+      database:
+        condition: service_healthy
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000"]
       interval: 30s
@@ -22,6 +28,9 @@ services:
     platform: linux/x86_64
 
   database:
+    # NOTE: Postgres 12 went end-of-life in November 2024, so CI tests against
+    # an unsupported engine. Bumping it needs the db_data volume recreated, so
+    # it is a separate decision, not part of unbreaking the job.
     image: postgres:12.5
     env_file:
       - config/docker.env
@@ -29,13 +38,34 @@ services:
       - db_data:/var/lib/postgresql/data
     ports:
       - "5435:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
 
   selenium_chrome:
-    image: selenium/standalone-chrome-debug
+    # `selenium/standalone-chrome-debug` was a SELENIUM 3 image, discontinued in
+    # 2021. The tag still pulls, so `compose up` succeeds and quietly hands you
+    # a 2021 Chrome behind the old JSON-wire grid -- while selenium-webdriver
+    # here is 4.43, which speaks W3C only, so every :js spec in the docker job
+    # talks past it. `standalone-chromium` is maintained and, unlike
+    # `standalone-chrome`, publishes arm64 as well as amd64, so it also works on
+    # Apple silicon.
+    image: selenium/standalone-chromium:latest
     logging:
       driver: none
     ports:
+      # noVNC, to watch a spec run (`:debug` driver). The -debug image served
+      # raw VNC on 5900; the maintained images serve noVNC on 7900 in a browser
+      # at http://localhost:7900 (password "secret") and keep 5900 for a VNC
+      # client.
+      - "7900:7900"
       - "5900:5900"
+    # Chrome needs more than the default 64MB of /dev/shm or tabs crash mid-run.
+    # The in-container driver already passes --disable-dev-shm-usage; raising
+    # this is the belt to that braces, as Selenium's own compose examples do.
+    shm_size: 2gb
     volumes:
       - ./tmp/downloads:/home/seluser/Downloads
 

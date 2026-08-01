@@ -9,7 +9,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
 
     it "renders AllCasaAdmin dashboard page" do
       visit "/"
-      expect(page).to have_text "All CASA Admin"
+      expect(page).to have_text "All CASA admin"
     end
 
     it "allows sign out" do
@@ -39,7 +39,7 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
       fill_in "Password", with: "12345678"
       click_on "Log in"
 
-      expect(page).to have_text "All CASA Admin"
+      expect(page).to have_text "All CASA admin"
     end
 
     it "prevents User sign in" do

@@ -156,6 +156,14 @@ class CasaCase < ApplicationRecord
     court_dates.where("date < ?", Date.today).order(:date).last
   end
 
+  # Where a court report's window starts: the last hearing, because that is the point the next report
+  # has to account for. A case with no past hearing has no such point, so it starts when the case was
+  # opened in CASA -- never "today", which is an empty window and the whole report's worth of contacts
+  # silently left out.
+  def court_report_default_start_date
+    (most_recent_past_court_date&.date || created_at).to_date
+  end
+
   def formatted_latest_court_date
     most_recent = most_recent_past_court_date&.date&.in_time_zone || Time.zone.now
 

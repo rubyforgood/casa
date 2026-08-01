@@ -43,8 +43,8 @@ RSpec.describe "casa_cases/new", type: :system do
           # check all contact type options
           select_all_el.click
           within ".ts-dropdown-content" do
-            expect(page).not_to have_css("input.form-check-input--unchecked")
-            expect(page).to have_css("input.form-check-input--checked", count: 2)
+            expect(page).not_to have_css(".form-check-input--unchecked")
+            expect(page).to have_css(".form-check-input--checked", count: 2)
           end
 
           choose_typeahead_option("Test User", select_css: "#casa_case_case_assignments_attributes_0_volunteer_id")

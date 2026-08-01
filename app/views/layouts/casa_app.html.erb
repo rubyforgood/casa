@@ -6,6 +6,7 @@
   <title><%= content_for?(:page_title) ? "#{content_for(:page_title)} · CASA Volunteer Tracker" : "CASA Volunteer Tracker" %></title>
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
+  <%= render "shared/favicons" %>
 
   <%# window.timeout (minutes) drives src/session_timeout_poller.js; @timeout_duration =
       current_user.timeout_in (set in ApplicationController). Must precede the deferred bundle. %>
@@ -45,14 +46,14 @@
             ]],
             ["Activity", [
               ["Case contacts", "bi-chat-square-text", case_contacts_path, "contacts", true],
+              ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?],
               ["Learning hours", "bi-mortarboard", learning_hours_path, "learning", policy(LearningHour).index?],
               ["Other duties", "bi-list-task", other_duties_path, "other_duties", policy(OtherDuty).index?],
               ["Reimbursements", "bi-cash-coin", reimbursements_path, "reimbursements", policy(:reimbursement).index?]
             ]],
             ["Reporting", [
               ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
-              ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?],
-              ["Court reports", "bi-file-earmark-word", case_court_reports_path, "court_reports", policy(:application).see_court_reports_page?]
+              ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?]
             ]]
           ]
           visible_groups = nav_groups

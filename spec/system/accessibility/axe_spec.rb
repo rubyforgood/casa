@@ -147,5 +147,77 @@ RSpec.describe "Accessibility (axe)", type: :system do
 
   context "signed out" do
     it("sign in", :js) { expect_axe_clean new_user_session_path }
+
+    # Devise's inherited #new rendered with NO layout (this app has no `application` layout), so the
+    # page had no <title>, no lang, no <main> and no styles. The controller sets the layout on the
+    # class now, which also covers the create/update re-renders.
+    it("invitation new", :js) { expect_axe_clean new_user_invitation_path }
+
+    # The `error` layout yielded straight into <body>, leaving every element outside a landmark.
+    it("error test page", :js) { expect_axe_clean error_path }
+  end
+
+  # axe only sees the DOM as it stands, so a component's violations are invisible until it is opened.
+  # A whole-app sweep of 137 page states found all of its remaining violations in one of these.
+  context "components in their open state" do
+    let(:volunteer) { create(:volunteer, :with_cases_and_contacts, casa_org: organization) }
+    let(:opened_case) { volunteer.casa_cases.first }
+    let!(:contact_type_group) { create(:contact_type_group, casa_org: organization) }
+    let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group) }
+
+    # The contact-types multiselect: tom-select's `checkbox_options` plugin prepends a bare
+    # `<input type="checkbox">` (no name, no label) to each row, inside a parent with `role="option"`
+    # -- `label` (critical) + `nested-interactive` (serious) until the controller marks it decorative.
+    it("case edit: contact types menu open", :js) do
+      sign_in admin
+      visit edit_casa_case_path(opened_case)
+      find("#contact-type-id-selector .ts-control").click
+      expect(page).to have_css(".ts-dropdown-content .option")
+      expect(page).to be_axe_clean
+    end
+
+    it("case new: contact types menu open", :js) do
+      sign_in admin
+      visit new_casa_case_path
+      find("#contact-type-id-selector .ts-control").click
+      expect(page).to have_css(".ts-dropdown-content .option")
+      expect(page).to be_axe_clean
+    end
+
+    it("court reports: generate dialog open", :js) do
+      sign_in admin
+      visit case_court_reports_path
+      click_on "Generate report"
+      expect(page).to have_css("#generate-docx-report-modal[open]")
+      expect(page).to be_axe_clean
+    end
+
+    it("case show: More menu open", :js) do
+      sign_in admin
+      visit casa_case_path(opened_case)
+      find("summary", text: "More").click
+      expect(page).to have_css("details[open]")
+      expect(page).to be_axe_clean
+    end
+
+    it("case contacts: filter panel expanded", :js) do
+      sign_in admin
+      visit case_contacts_path
+      find("[data-disclosure-target='trigger']").click
+      expect(page).to have_css("#filter-card-body:not(.hidden)")
+      expect(page).to be_axe_clean
+    end
+  end
+
+  context "all casa admin" do
+    let(:all_casa_admin) { create(:all_casa_admin) }
+    let!(:patch_note) { create(:patch_note) }
+
+    before { sign_in all_casa_admin }
+
+    # The saved-note textarea is disabled and carries content rather than a placeholder, so it had no
+    # accessible name at all (`label`, critical).
+    it("patch notes", :js) { expect_axe_clean all_casa_admins_patch_notes_path }
+    it("metrics", :js) { expect_axe_clean all_casa_admins_metrics_path }
   end
 end

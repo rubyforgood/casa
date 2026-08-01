@@ -41,10 +41,10 @@ RSpec.describe CaseContactDecorator do
 
   describe "#contact_made" do
     context "when contact_made is false" do
-      it "returns No Contact Made" do
+      it "returns No contact made" do
         case_contact.update_attribute(:contact_made, false)
 
-        expect(case_contact.decorate.contact_made).to eq "No Contact Made"
+        expect(case_contact.decorate.contact_made).to eq "No contact made"
       end
     end
 
@@ -194,7 +194,7 @@ RSpec.describe CaseContactDecorator do
         case_contact.contact_types = [contact_type]
 
         expect(case_contact.decorate.subheading).to eq(
-          "December 1, 2020 | In person | 1 hour 39 minutes | No Contact Made | 100 miles driven"
+          "December 1, 2020 | In person | 1 hour 39 minutes | No contact made | 100 miles driven"
         )
       end
     end
@@ -217,7 +217,7 @@ RSpec.describe CaseContactDecorator do
       let(:case_contact) { build(:case_contact, reimbursement_complete: false) }
 
       it "returns pending text" do
-        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement Pending")
+        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement pending")
       end
     end
 
@@ -225,7 +225,7 @@ RSpec.describe CaseContactDecorator do
       let(:case_contact) { build(:case_contact, reimbursement_complete: true) }
 
       it "returns complete text" do
-        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement Complete")
+        expect(case_contact.decorate.reimbursement_status_text).to eq("Reimbursement complete")
       end
     end
   end

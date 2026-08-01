@@ -53,6 +53,13 @@ export function isPersisted (form) {
   return Boolean(form.dataset.caseContactId)
 }
 
+// The creation request, while it is still open. Anything that would otherwise become a SECOND
+// creation path -- notably a native form submit, which posts the form as it stands and does not come
+// through here -- has to wait on this instead of racing it.
+export function pendingCaseContact () {
+  return inFlight
+}
+
 // Create the record from the form's current contents, adopt the id, and resolve with it. Concurrent
 // callers share the single request.
 export function ensureCaseContact (form) {

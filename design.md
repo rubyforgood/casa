@@ -52,7 +52,21 @@ a card reads flat, change the role mapping — weight and colour — not the siz
 All UI copy — page titles, section headings, subtitles, table headers, field labels,
 buttons, badges and nav — uses **sentence case**: capitalise only the first word and
 proper nouns (CASA, Twilio, people's names). So "Track volunteer progress", not "Track
-Volunteer Progress" and never the shouty all-caps "TRACK…". Do **not** apply the
+Volunteer Progress" and never the shouty all-caps "TRACK…".
+
+**The sweep is done, and grepping views is not enough to keep it done.** A scan of headings,
+labels, buttons and `<th>`s in `app/views` came back nearly clean while these were still Title
+Case, because copy lives in five places a view grep misses: **`content_for :page_title`**,
+**decorators** (`"Reimbursement Complete"`, `"Send CC to Supervisor and Admin"`), **`config/locales`**
+(`activerecord.attributes` names, Devise mail subjects), **mailer subjects**, and **app-shipped seed
+data** (`PatchNoteType` names). Two more traps: text inside a `link_to ... do` block is on its own
+line, so a `link_to "..."` pattern never sees it, and a Title Case string can be *correct* — `SID`,
+`ZIP`, "Ansell Casey Assessment", an org's own name, and "Please" starting a second sentence all
+tripped the scan. Renaming shipped seed names needs an **after_party task** as well (seeds
+`first_or_create` by name, so an existing database keeps the old row and a reseed adds a second one) —
+`20260731000000_sentence_case_patch_note_types` follows `20260721000000_sentence_case_default_contact_types`.
+Leave **CSV export headers** alone: they come from `titleize` on column symbols and are interchange
+labels, not UI copy. Do **not** apply the
 `uppercase` CSS transform to labels; use size, weight and colour for hierarchy instead.
 
 **No trailing colon on a heading or subtitle** (`Assigned volunteers`, not `Assigned
@@ -121,6 +135,32 @@ Brand scale lives in `tailwind.css` `@theme` as `--color-brand-*`.
   Use for KPI cards, section headers, and list-item leading icons.
   **Do not** use bare floating icons or ringed white "avatar" circles for status
   contexts — reserve initial-avatars for representing *people* only.
+- **A message bar or alert card gets a PLAIN glyph, never a tile.** The tile pattern above is for
+  contexts where the icon is the *subject* — a KPI card, an empty state, a section header — and it
+  assumes a white surface. A banner or alert is text with a marker beside it, and every system that
+  ships one leads with a bare tone-coloured glyph, letting the tint and border carry the semantics:
+  Polaris Banner, Material, Carbon inline notification, Primer flash, Atlassian SectionMessage.
+  This was learned the hard way. A soft `-50` tile is invisible on a `-50` surface (measured against
+  the amber-50 bar: amber-100 **1.07:1**, amber-200 1.20:1, amber-300 1.40:1), so "make it visible"
+  turned into a filled `bg-amber-700` tile with a white glyph — which cleared contrast comfortably and
+  was still wrong: it shouted, and a 32px block in a 20px line pushed the bar from **47px to 57px**.
+  Reported as "draws too much visual attention, and increases the height of the banner". Reverted from
+  the banner and from all four alert variants. **A measurement that answers "is it visible?" does not
+  answer "does it belong?"** — if the only way to make an ornament visible is to make it loud, the
+  ornament is wrong.
+- **The bar is plain, and stays plain.** Both attempts to give it more presence were reverted for the
+  same reason: nothing was wrong with it. A filled icon tile shouted and cost 10px of height; a 4px
+  `amber-600` left accent band cost no height at all (measured 47px either way, 3.07:1 against the bar)
+  and was still refused — *"neither of these changes add anything"*. If presence is ever actually
+  needed, a left accent band is the standard device (Carbon, USWDS) because it cannot add height; an
+  icon container is not. But the default answer for a message bar is a tint, a hairline border, a
+  leading glyph and the message.
+- **Align a leading glyph's INK to the text's x-height band, not its box to the line box.** Boxes are
+  the wrong reference: with `text-base leading-5` the icon's box matched the 20px line exactly and the
+  glyph still read as floating, because its ink centre sat at **85.5** against the text's dense-ink band
+  centre of **88.0**. `mt-0.5` (2px) puts it at 87.5. That is what the original `mt-0.5` was for, and
+  the bar measures the same 47px with it as without. Measure the ink: dump per-row ink counts across the
+  text and take the dense band (x-height), since ascenders and descenders drag a naive ink centre around.
 - **Leading-icon alignment** — an icon that precedes a label (menu items, list rows) is
   **top-aligned to the first line** (`items-start`), like a list marker, never centered
   against a wrapped block. Single-line labels look identical either way; `items-start` keeps
@@ -145,6 +185,17 @@ Everything ships to **WCAG 2.1 AA** — it's part of "done", not a follow-up.
   link, logical order; icon-only controls carry an `aria-label`, decorative icons are
   `aria-hidden`.
 - **Motion**: respect `prefers-reduced-motion` (`motion-reduce:` variants).
+
+**A page audit that only visits URLs misses whole components.** axe reads the DOM as it stands, so a
+dialog, overflow menu, typeahead menu, multiselect menu, disclosure panel or drawer contributes nothing
+until it is **opened** -- and the last whole-app sweep (137 states: every HTML route for every role, at
+1400px and 390px, plus open component states) found *all* of its remaining violations either in an open
+component or on a page a route-walk reaches but nobody looks at. **Prove the state is open before axe
+runs**: three of the sweep's openers silently no-oped and reported a clean page. Fixtures must also
+populate every table, since an empty collection audits clean and hides the defect. What axe cannot judge
+at all: focus order, keyboard traps, whether alt text is *meaningful*, and icon contrast (there is no
+non-text contrast rule). Regression examples live in `spec/system/accessibility/axe_spec.rb`, including
+the open-component states.
 
 **Measured token contrast on white** (computed from the built oklch tokens and cross-checked
 against axe's own numbers — do not eyeball these, and do not assume a `-600` is safe):
@@ -368,6 +419,32 @@ Placeholder ink is **`slate-500`**, like every other muted string -- `slate-400`
 placeholder is text. All 50 placeholder sites in `app/` already use `slate-500`; this token was the
 last `slate-400` placeholder left anywhere, and only in the doc.
 
+**A date field prefilled with "today" has to get it from the browser.** The app sets no
+`config.time_zone`, so `Date.current` is **UTC**: a server-rendered `value: Date.current` reads as
+**tomorrow** for anyone west of UTC in the evening (after 8pm in New York) and as **yesterday** for
+anyone east of it in the morning -- and yesterday silently drops today's records out of a range. Where
+the field applies immediately, render `Date.current` as the no-JS fallback and have the controller
+overwrite it on connect with today in the browser's zone (`new Date(now - now.getTimezoneOffset() *
+60000).toISOString().slice(0, 10)`; a plain `toISOString()` is UTC and reintroduces the bug). Proven with
+a CDP timezone override: in `Pacific/Kiritimati` the server said 2026-07-30 and the field correctly held
+2026-07-31.
+
+**Never pre-fill one end of a dependent range.** If the range belongs to a record chosen elsewhere on the
+form, **both** ends stay empty until that record is picked, then fill together -- and empty again if the
+selection is cleared. A "Starting from" that waits for the case while "Ending at" already shows today
+reads as a half-broken form, and it cost three rounds of "the start date still isn't defaulting": the
+complaint was the **asymmetry**, not the blank. So the picker modal renders neither date server-side,
+while the case-page modal -- where the case is fixed -- fills both from the moment it opens.
+
+**A JS-set "today" cannot be asserted against `Date.current`** -- `travel_to` freezes Ruby's clock, not
+the browser's; specs compare against `browser_today` (`spec/support/browser_time_helpers.rb`).
+
+**A prefilled default that depends on another field can't be server-rendered.** Carry the per-record
+value on each `<option>` as a `data-` attribute and let the controller copy it across on `change`, reading
+the native `<select>` (which TomSelect keeps in sync) rather than TomSelect's internal option data -- as
+the court-report modal does for "Starting from" (each case's last hearing). Re-apply on every change, so
+switching records does not leave the previous record's default behind.
+
 ### Select
 A native `<select>`, but the browser's arrow is replaced with a Bootstrap-icon chevron so it
 looks the same across browsers and matches the app's other dropdowns (the cases-index filter
@@ -407,6 +484,19 @@ a page load) and restores it in `connect()` inside a `requestAnimationFrame` -- 
 was measured being undone as the new page settled. Verify by reading
 `document.activeElement === field` and `selectionStart`, not by eye.
 
+**The clear "x" must cancel the pending debounce: `data: {action: "click->auto-submit#cancel"}`.**
+The `x` is a plain link to the index without `search`, and the click starts a real page load that does
+*not* tear the controller down right away -- so a debounce still in flight fires during the unload and
+submits the query the user just cleared, and *that* navigation wins. The search comes back, which reads
+as "clear is broken". In the docker container it reproduced on 4 of 4 runs with the handler removed and
+on none of 7 with it, so it is a real bug and not a test artifact; it surfaces whenever the click lands
+inside the ~350ms window, which is easy on a loaded machine and why CI caught it first. Any control that
+navigates away from a debounced filter bar (not just this `x`) needs the same cancel. `disconnect()`
+clearing the timer is not enough -- a full page unload does not reliably run it. In a spec, wait for the
+*submit* to land (`have_current_path(/search=.../)` plus the result-count text) before clicking
+anything; asserting on `find("#search").value` proves nothing, because the input reads the typed text
+back instantly, submit or no submit.
+
 ### A stat's period must be stated, and must be true
 The learning-hours roster column read **"Time completed this year"** while neither aggregate scope
 filtered `occurred_at` -- so the number was an **all-time** total. Proven rather than read: 1h today +
@@ -424,6 +514,29 @@ Rules for any "total over a period" figure:
   to today.
 - Keep the range **optional** in the model scope (`occurred_in(range)` no-ops on nil) so the Pundit
   scopes keep meaning "everything this user may see" rather than inheriting a UI default.
+- **Widen a Date range to the end of its last day.** A `Date` range against a **datetime** column
+  serialises to `BETWEEN '2026-01-01' AND '2026-07-31'`, and Postgres reads that upper bound as
+  **midnight** — so anything logged *earlier today* fell outside "since January 1" and the total
+  silently ignored it (measured: a 09:00 entry today was excluded). `occurred_in` now expands a Date
+  range to `beginning_of_day..end_of_day`; note `DateTime` subclasses `Date` in Ruby, so the check is
+  `instance_of?(Date)` and an explicit time range is left alone.
+- **One definition of "this year" per app.** The roster defaults to calendar year to date
+  (`beginning_of_year..today`), so the volunteer profile's "Learning hours this year" had to stop being
+  `occurred_at > 1.year.ago` — a rolling 12 months, which on 31 July counted the previous August. It is
+  `learning_hours_spent_in_current_year` now, through the same scope, and the label **names the year**
+  ("Learning hours in 2026") rather than saying "this year".
+
+**Presets + custom, with the resolved dates shown.** Calendar **year-to-date** is what users expect
+"this year" to mean, and the convention (Stripe, GA, Shopify, Polaris) is a short list of named windows
+one of which is Custom. The learning-hours roster ships exactly that — *Year to date* (default) /
+*Last 12 months* / *All time* / *Custom* — as a `period` param resolved in `set_period`, with the
+column header naming the resolved window ("since January 1, 2026", "January 1 to March 31", or plainly
+"all time"). Two details worth copying: the **From/To inputs render only for Custom**, so the bar stays
+short for the cases a preset already covers; and a URL carrying `from`/`to` with **no** `period` is
+treated as Custom, so a link saved before the presets existed does not snap back to year-to-date. "All
+time" passes `nil`, which `occurred_in` no-ops on, rather than a sentinel floor date — a header reading
+"since January 1, 1989" would be technically true and useless. What is *not* standard is a label that
+names a period the query does not apply.
 - `date.formats` has no `:standard` -- that lives under `time.formats`. For a Date use `:full`
   ("January 1, 2026").
 
@@ -624,6 +737,20 @@ only; Bootstrap pages keep the tom-select.bootstrap5 theme):
   clear **x** (7x7, two crossing diagonals) rather than a caret, because the probe left the control
   focused. A real match is identical extent and coverage: 10x6 ink, 20 ink pixels, mean lum 251.4 vs
   251.2. Blur the control before the screenshot, or you are measuring the hover/focus state.
+- **The option tick is a SHAPE, never a checkbox.** tom-select's `checkbox_options` plugin injects a
+  real `<input type="checkbox">` into each `role="option"` row: axe **`label` (critical)** (no name) +
+  **`nested-interactive` (serious)** (a control nested in an option is unreachable to a screen reader),
+  and axe rejects the mitigations in as many words -- *"a negative tabindex on an element inside an
+  interactive control does not prevent assistive technologies from focusing the element (even with
+  aria-hidden)"*. So the controller **keeps the plugin for its behaviour** -- it is what makes a click on
+  a selected row *deselect* it, and it owns `hideSelected` -- and swaps the injected input for an inert
+  `<span aria-hidden>` carrying the same classes (the row's own `aria-selected` is the state). Wrap
+  `render.option` **after** the constructor, since the plugin installs its own wrapper during
+  `setupTemplates`. Two traps found by measuring: tom-select **caches rendered rows**, so a re-render
+  does not restate the tick -- sync it on `item_add`/`item_remove`; and sync it from **`items`**, not the
+  row's `selected` class, which lands later than those events (Select-all cascades one `item_add` per
+  option, and a DOM read measured wrong in both directions). Nothing styled `.form-check-input` after
+  Bootstrap left, so the tick is drawn in `tailwind.css` and finally looks like the design system.
 - **Chips** are brand-100 pills, brand-700 text (6.4:1), each with a visible × (the
   component's LineIcons X and grey divider are overridden for casa_app).
 - **Clear-all inside the field, always visible once there is something to clear.** `remove_button`
@@ -698,16 +825,24 @@ The subtext must be `""`, **not nil**: the option template substitutes it throug
 `casa_cases#new` additionally passes `render_option_subtext: false` (no case exists yet, so there is no
 recency to show).
 
-### Typeahead audit (all 18 TomSelect controls)
+### Typeahead audit (all 20 TomSelect controls)
 **A multiselect must clear the query when an item is picked.** TomSelect does not do this for you:
 without `onItemAdd: function () { this.setTextboxValue(''); this.refreshOptions() }` the typed letters
 stay in the control next to the new chip. `multiple_select_controller` has **two** init paths and only
 the grouped one had it, so every plain multiselect was affected -- contact types on the case-contacts
 filter, case_groups#new, and all four report filters -- while the single-selects were fine. Reported as
 "the letters the user types stay even after they have made a selection". Guarded by
-`spec/system/typeahead_controls_spec.rb`, which drives all 18 controls (type -> filter -> select ->
+`spec/system/typeahead_controls_spec.rb`, which drives all 20 controls (type -> filter -> select ->
 query cleared, chip rendered, native `<select>` updated) and asserts the count, so a new control has
 to be added to it.
+
+**Filtering is asserted by a decoy's ABSENCE, never by reading the menu.** The audit long skipped the
+"does it filter" half because every read proved racy -- and a read is the wrong tool: a count taken
+straight after the keystrokes sees the **pre-filter** DOM, which is how a probe reported "typing does
+nothing" on a control that in fact filtered 31 options down to 1. Name a fixture that must NOT match
+and use Capybara's waiting `have_no_css`, which retries until the filter lands (13 of the 20 controls
+have a distinct decoy; the rest have a one-entry list). Same lesson as the caret: **A/B a suspected bug
+against the old code before calling it one.**
 
 **Finding a TomSelect control in a spec:** address it through its native `<select>`
 (`select.tomselect.wrapper`), never by `.ts-wrapper` position. Positions lie -- the court-report page's
@@ -751,10 +886,16 @@ off:
   native selects beside it keep theirs -- and "clear" on *All supervisors* means nothing. The reset is
   the "All ..." row.
 
-One person-list select is deliberately **still native**: the `volunteers/index` bulk **Assign a
-supervisor** modal, where `value=""` means **"None"** (unassign) rather than "no choice". Converting it
-needs a non-empty sentinel first (the same hide rule would eat the None row), and it drives
-`disable-form` validation for a bulk write.
+The `volunteers/index` bulk **Assign a supervisor** modal was the last native one, and converting it
+meant **swapping its sentinels** — worth knowing before you convert anything with a "None" row.
+`value=""` used to mean *None* (unassign) while `"unselected"` meant *nothing chosen*, which a
+placeholder picker cannot express: the blank option is the not-chosen state, and the theme hides
+empty-valued options in the menu, so **None would have vanished from the very menu that unassigns**.
+So None is now an explicit `value="none"`, blank is not-chosen, and `disable-form`'s unallowed value is
+`""`. That also closed a hazard the old scheme carried: blank *meant* unassign, so a blank submit
+slipping past the client-side guard quietly stripped the supervisor from every selected volunteer.
+Blank is a **no-op with an alert** server-side now. Inside a native `<dialog>`, **do not** set
+dropdownParent: body — the top layer paints over a body-parented menu.
 
 For a single-select whose options are **unbounded / potentially long** (e.g. every active supervisor
 in the org, on the "assign supervisor" per-row picker), use a **type-ahead**, not a native `<select>`:
@@ -794,6 +935,18 @@ past a handful of people.
   safe: the label resolves for TomSelect's input, never for the select behind it. The symptom is
   slippery -- axe flags only the selects that have finished initialising, so the violation count
   moves between runs (the report filters showed 3 nodes one run and 2 the next).
+- **A `prompt:` option is not a substitute for `placeholder-value`.** With a prompt and no placeholder
+  the controller leaves `allowEmptyOption` true, so TomSelect takes "Select case number" as a selected
+  **item** -- and an item at rest means `.input-hidden` (the search input parked at `left: -10000px`),
+  **no placeholder and no magnifier**. The control still searched perfectly once clicked, but nothing
+  said so: it was indistinguishable from a native dropdown, over *every active case in the chapter*.
+  Reported as "how many case numbers could there be in the case dropdown, should it be a typeahead
+  select field?" -- about a control that already was one. Keep the prompt for the no-JS render; add the
+  placeholder so the blank option is neither an item nor a menu row.
+- **One option? Preselect it.** A picker whose list has exactly one entry (a volunteer with one case)
+  should choose it, so nothing is left for the user to fill. Anything that keys off the selection must
+  then also run **on connect** -- `change` does not fire for a server-rendered `selected` option, so a
+  dependent date field would otherwise sit empty next to a chosen record.
 - **Loads blank with an affordance**, never a pre-selected default: pass **`placeholder-value="Search …"`**
   (signals it's typeable AND is the empty state) plus a leading blank `<option value="">` (defaults the
   native `<select>` to empty for submit + no-JS). **A placeholder picker MUST also set
@@ -1322,9 +1475,15 @@ Semantic icon tile (`grid h-9 w-9 place-items-center rounded-xl bg-{hue}-50 text
 number (`text-3xl font-bold tracking-tight text-slate-900`) -> label (`text-sm text-slate-500`) ->
 optional meta (`text-xs text-slate-500`, not slate-400 -- the contrast audit bumped readable
 slate-400 to AA slate-500). One shared token across the admin/supervisor/volunteer dashboards and
-the Analytics page. Two accented variants: **danger** (e.g. unassigned cases) = rose number + rose
-icon tile + `ring-1 ring-rose-100`; **attention** (e.g. cases needing contact) = slate number but
-the icon tile flips to amber (`bg-amber-50 text-amber-600`) when positive, emerald when zero. A
+the Analytics page. **The number is ALWAYS `text-slate-900`** — one numeral style on every card, in
+every state. The state is carried by the icon tile, and for the danger cards by a `ring-1
+ring-rose-100` on the card: **danger** (unassigned cases, volunteers needing follow-up) = rose tile +
+rose ring; **attention** (cases needing contact) = amber tile (`bg-amber-50 text-amber-600`) when
+positive, emerald when zero. This entry used to prescribe a **rose number** for the danger variant,
+and it was wrong twice over: the coloured numeral read as an error rather than a count, and it made
+one card in four change colour while the rest held still — reported as "the number is in Red font.
+This does not match the design system". Same correction as the supervisor roster's counts, where red
+numerals were removed for the same reason: **never colour a numeral to signal state.** A
 **trend delta** (Analytics "contacts this month") is the meta line, colored emerald/rose/slate for
 up/down/flat with a direction arrow + signed number + "vs last month" (never color-only).
 
@@ -1794,8 +1953,11 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
 - **Sidebar nav order** (**not** alphabetical -- alphabetical is arbitrary vs. how people work):
   **Dashboard first (ungrouped), Settings pinned to the bottom** (`mt-auto` + its own divider), the
   middle **grouped by domain, ordered by frequency** -- Records (Volunteers, Supervisors, Cases) /
-  Activity (Case contacts, Learning hours, Other duties, Reimbursements) / Reporting (Reports,
-  Analytics, Court reports). Each middle group wears an **uppercase section label** (`text-xs
+  Activity (Case contacts, Court reports, Learning hours, Other duties, Reimbursements) / Reporting
+  (Reports, Analytics). **Court reports sits in Activity, not Reporting**: it is a per-case document a
+  volunteer or supervisor produces as part of casework, next to the contacts it summarises -- Reporting
+  is the org-wide, cross-case view (Reports, Analytics). Each middle group wears an **uppercase section
+  label** (`text-xs
   font-semibold uppercase tracking-wide text-slate-500`, `mt-4` above); the label does the separating,
   so there are **no between-group dividers** -- the only divider sits above the pinned Settings. Each
   group is a `role="group"` with an **`aria-label`** (the visible label is `aria-hidden` so it isn't

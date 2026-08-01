@@ -64,9 +64,58 @@ RSpec.describe "case_court_reports/index", type: :system do
       expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
     end
 
-    it "shows correct default dates", :aggregate_failures do
-      expect(page.find("#start_date").value).to eq(Date.current.to_s)
-      expect(page.find("#end_date").value).to eq(Date.current.to_s)
+    it "shows both dates empty until a case is chosen", :aggregate_failures do
+      # The range belongs to a case, so neither end is filled in before one is picked. A start date
+      # empty beside an end date already showing today is the asymmetry that read as broken.
+      expect(page.find("#start_date").value).to eq("")
+      expect(page.find("#end_date").value).to eq("")
+    end
+
+    it "empties both dates again if the case selection is cleared" do
+      casa_case = casa_cases.first
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+      expect(page.find("#start_date").value).to be_present
+
+      page.execute_script("document.querySelector('#case-selection').tomselect.clear()")
+
+      expect(page.find("#start_date").value).to eq("")
+      expect(page.find("#end_date").value).to eq("")
+    end
+
+    it "autofills the start date from the picked case's last hearing" do
+      casa_case = casa_cases.first
+      create(:court_date, casa_case: casa_case, date: 3.months.ago.to_date)
+      hearing = create(:court_date, casa_case: casa_case, date: 1.month.ago.to_date)
+      # The options carry each case's default, so the page has to be re-rendered after changing them.
+      visit case_court_reports_path
+      open_court_report_modal
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
+      expect(page.find("#start_date").value).to eq(hearing.date.to_date.to_s)
+      expect(page.find("#end_date").value).to eq(browser_today)
+    end
+
+    it "fills the end date with today when a case is chosen" do
+      casa_case = casa_cases.first
+      expect(page.find("#end_date").value).to eq("")
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#end_date").value).to eq(browser_today)
+    end
+
+    it "falls back to the date the case was opened when it has no past hearing" do
+      casa_case = casa_cases.first
+      casa_case.court_dates.destroy_all
+      visit case_court_reports_path
+      open_court_report_modal
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+
+      expect(page.find("#case-selection", visible: :all).value).to eq(casa_case.case_number)
+      expect(page.find("#start_date").value).to eq(casa_case.created_at.to_date.to_s)
     end
 
     it "lists all assigned cases" do
@@ -89,11 +138,68 @@ RSpec.describe "case_court_reports/index", type: :system do
       end
     end
 
-    it "defaults to the 'Select case number' prompt", :aggregate_failures do
+    it "loads with no case chosen and invites a search", :aggregate_failures do
+      # The native prompt stays for the no-JS render, but the control itself must read as a SEARCH
+      # field: the prompt used to occupy the item slot, which parks TomSelect's input off-screen and
+      # leaves no placeholder and no magnifier -- searchable, but with nothing saying so.
       expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number", visible: :all
       within "#generate-docx-report-modal" do
-        expect(page).to have_css ".ts-control", text: "Select case number"
+        expect(page).to have_no_css ".ts-control .item"
+        expect(page).to have_css ".ts-control input[placeholder='Search case number']"
       end
+      state = page.evaluate_script(<<~JS)
+        (function () {
+          const ts = document.querySelector('#case-selection').tomselect
+          return {
+            offscreen: ts.control_input.getBoundingClientRect().left < 0,
+            magnifier: getComputedStyle(ts.wrapper.querySelector('.ts-control')).backgroundImage !== 'none'
+          }
+        })()
+      JS
+      expect(state["offscreen"]).to be false
+      expect(state["magnifier"]).to be true
+    end
+
+    it "filters the case menu as you type" do
+      target = casa_cases.first
+      decoy = casa_cases.last
+      expect(target.case_number).not_to eq(decoy.case_number)
+
+      page.execute_script("document.querySelector('#case-selection').tomselect.focus()")
+      page.driver.browser.switch_to.active_element.send_keys(target.case_number)
+
+      # Waiting matchers: reading the menu straight after the keystrokes reads it pre-filter.
+      expect(page).to have_css(".ts-dropdown .option", text: target.case_number)
+      expect(page).to have_no_css(".ts-dropdown .option", text: decoy.case_number)
+    end
+
+    # One click, ONE request. src/casa_case.js kept a jQuery click handler bound to #btnGenerateReport
+    # alongside the Stimulus controller, so every report was generated twice server-side and the
+    # download opened in two tabs. Nothing failed -- the other example here only asserts that *a* URL
+    # was opened -- so this counts.
+    it "generates the report once per click" do
+      casa_case = casa_cases.first
+      page.execute_script(<<~JS)
+        window.__generatePosts = 0
+        window.__opened = []
+        const originalFetch = window.fetch
+        window.fetch = function (url, options) {
+          if (String(url).includes('/case_court_reports/generate')) window.__generatePosts += 1
+          return originalFetch.apply(this, arguments)
+        }
+        window.open = (url) => { window.__opened.push(url); return null }
+      JS
+
+      choose_typeahead_option(casa_case.case_number, select_css: "#case-selection")
+      find("#btnGenerateReport").click
+
+      # Same barrier as the success example: the button disables for the request and re-enables after,
+      # which is the page-level signal that the round trip finished. Counting before that reads 0.
+      expect(page).to have_selector "#btnGenerateReport[disabled]"
+      expect(page).to have_no_selector "#btnGenerateReport[disabled]", wait: 10
+
+      expect(page.evaluate_script("window.__opened.length")).to eq(1)
+      expect(page.evaluate_script("window.__generatePosts")).to eq(1)
     end
 
     it "shows an error when generating without a selection" do
@@ -126,6 +232,37 @@ RSpec.describe "case_court_reports/index", type: :system do
       opened_url = page.evaluate_script("window.__last_opened_url")
       expect(opened_url).to be_present
       expect(opened_url).to match(/#{Regexp.escape(transition_case.case_number)}.*\.docx$/i)
+    end
+  end
+
+  context "when the user has exactly one case", :js do
+    let(:volunteer) { create(:volunteer) }
+    let!(:casa_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "ONE-0001") }
+    let!(:assignment) { create(:case_assignment, volunteer: volunteer, casa_case: casa_case, active: true) }
+
+    before do
+      sign_in volunteer
+      visit case_court_reports_path
+      open_court_report_modal
+    end
+
+    # Nothing is left for a single-case volunteer to fill in: the case is chosen and both dates follow
+    # from it, so the modal is ready to submit on open.
+    it "preselects it and fills both dates from it", :aggregate_failures do
+      expect(page.find("#case-selection", visible: :all).value).to eq("ONE-0001")
+      within "#generate-docx-report-modal" do
+        expect(page).to have_css ".ts-control .item", text: "ONE-0001"
+      end
+      expect(page.find("#start_date").value).to eq(casa_case.court_report_default_start_date.to_s)
+      expect(page.find("#end_date").value).to eq(browser_today)
+    end
+
+    it "starts from the last hearing rather than the day the case was opened" do
+      create(:court_date, casa_case: casa_case, date: 40.days.ago.to_date)
+      visit case_court_reports_path
+      open_court_report_modal
+
+      expect(page.find("#start_date").value).to eq(40.days.ago.to_date.to_s)
     end
   end
 

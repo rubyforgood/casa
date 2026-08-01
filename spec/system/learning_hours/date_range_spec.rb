@@ -22,15 +22,39 @@ RSpec.describe "learning_hours/index date range", :js, type: :system do
     expect(find("table thead tr th", text: "Time completed")).to have_text("since #{I18n.l(Date.current.beginning_of_year, format: :full)}")
     expect(find("table tbody tr td:last-child")).to have_text("1 hours")
 
-    # widen the range back to include everything
+    # The range inputs belong to Custom only -- the presets cover the common windows, so the bar stays
+    # short for everyone who does not need an arbitrary range.
+    expect(page).to have_no_css("#from")
+    select "Custom", from: "period"
+    expect(page).to have_css("#from")
+
     # Set the date input via JS: typing into <input type=date> with Selenium is locale-dependent and
     # produced "0730-02-02" from "2021-07-30".
     find("#from").execute_script("this.value = arguments[0]; this.dispatchEvent(new Event('change', {bubbles: true}))", 5.years.ago.to_date.strftime("%Y-%m-%d"))
-    expect(page).to have_css("table tbody tr")
-    sleep 1
+
+    # A waiting barrier on the URL, not a sleep: the change submits and the page reloads.
+    expect(page).to have_current_path(/from=#{5.years.ago.to_date}/, url: true)
     expect(find("table tbody tr td:last-child")).to have_text("7 hours")
     expect(find("table thead tr th", text: "Time completed")).to have_text("since #{I18n.l(5.years.ago.to_date, format: :full)}")
-    expect(page.current_url).to include("from=#{5.years.ago.to_date}")
+  end
+
+  it "offers presets and resolves each one in the header" do
+    sign_in supervisor
+    visit learning_hours_path
+
+    # Last 12 months takes in last December's 4h but not the 2h from three years ago.
+    select "Last 12 months", from: "period"
+    expect(page).to have_current_path(/period=last_12_months/, url: true)
+    expect(find("table tbody tr td:last-child")).to have_text("5 hours")
+    expect(find("table thead tr th", text: "Time completed"))
+      .to have_text("since #{I18n.l(Date.current.prev_year + 1.day, format: :full)}")
+
+    # All time says so rather than naming a date, and counts everything.
+    select "All time", from: "period"
+    expect(page).to have_current_path(/period=all/, url: true)
+    expect(find("table tbody tr td:last-child")).to have_text("7 hours")
+    expect(find("table thead tr th", text: "Time completed")).to have_text("all time")
+    expect(page).to have_no_css("#from")
   end
 
   it "clamps a nonsense date rather than putting it in the header" do

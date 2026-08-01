@@ -87,13 +87,47 @@ class LearningHoursController < ApplicationController
   # column header ("since February 2, 0730" -- Date.parse happily accepts it).
   PERIOD_FLOOR = Date.new(1989, 1, 1)
 
+  # Presets plus a custom range, which is the convention for a "total over a period" figure (Stripe,
+  # GA, Polaris): a short list of named windows, one of which is Custom, and the resolved dates shown
+  # next to the number -- the column header states them. Year to date is the default, per the design
+  # rule that "this year" has to mean one thing; "all" passes nil, which occurred_in no-ops on.
+  PERIODS = {
+    "ytd" => "Year to date",
+    "last_12_months" => "Last 12 months",
+    "all" => "All time",
+    "custom" => "Custom"
+  }.freeze
+
   def set_period
-    @period_from = parse_date(params[:from]) || Date.current.beginning_of_year
-    @period_to = parse_date(params[:to]) || Date.current
-    @period_from, @period_to = @period_to, @period_from if @period_from > @period_to
-    @period_from = @period_from.clamp(PERIOD_FLOOR, Date.current)
-    @period_to = @period_to.clamp(PERIOD_FLOOR, Date.current)
-    @period = @period_from..@period_to
+    @period_name = PERIODS.key?(params[:period].to_s) ? params[:period].to_s : implied_period_name
+
+    case @period_name
+    when "all"
+      @period_from = @period_to = nil
+      @period = nil
+    when "last_12_months"
+      @period_to = Date.current
+      # Inclusive of today, so it really is 12 months rather than 12 months and a day.
+      @period_from = Date.current.prev_year + 1.day
+      @period = @period_from..@period_to
+    when "custom"
+      @period_from = parse_date(params[:from]) || Date.current.beginning_of_year
+      @period_to = parse_date(params[:to]) || Date.current
+      @period_from, @period_to = @period_to, @period_from if @period_from > @period_to
+      @period_from = @period_from.clamp(PERIOD_FLOOR, Date.current)
+      @period_to = @period_to.clamp(PERIOD_FLOOR, Date.current)
+      @period = @period_from..@period_to
+    else
+      @period_from = Date.current.beginning_of_year
+      @period_to = Date.current
+      @period = @period_from..@period_to
+    end
+  end
+
+  # A link saved before the presets existed carries from/to and no period; treat it as Custom rather
+  # than silently snapping it back to year-to-date.
+  def implied_period_name
+    (params[:from].present? || params[:to].present?) ? "custom" : "ytd"
   end
 
   def parse_date(value)

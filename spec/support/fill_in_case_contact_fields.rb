@@ -18,9 +18,13 @@ module FillInCaseContactFields
         if case_numbers.present?
           find(".ts-control").click
 
-          Array.wrap(case_numbers).each_with_index do |case_number, index|
-            checkbox_for_case_number = first("span", text: case_number).sibling("input")
-            checkbox_for_case_number.click unless checkbox_for_case_number.checked?
+          # Click the option ROW, the way a user does. This used to reach for the row's sibling
+          # `<input>`, but the tick is an inert <span> now (a real checkbox inside `role="option"` is
+          # axe `nested-interactive`), so there is no input and nothing to ask `.checked?`. TomSelect
+          # puts `selected` on a chosen row, and clicking a chosen row would DEselect it.
+          Array.wrap(case_numbers).each do |case_number|
+            option = find(".ts-dropdown-content .option", text: case_number, match: :first)
+            option.click unless option[:class].to_s.split.include?("selected")
           end
 
           find(".ts-control").click

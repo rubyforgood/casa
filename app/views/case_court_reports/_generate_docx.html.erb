@@ -20,20 +20,41 @@
       <div>
         <label for="case-selection" class="<%= label_class %>">Case</label>
         <% select_options = @assigned_cases.map { |casa_case| casa_case.decorate.court_report_select_option } %>
-        <%# Minimal class only: the tom-select theme owns the border/padding/shadow on .ts-control, and
-            TomSelect copies these classes onto .ts-wrapper -- a bordered input_class here double-borders
-            (a box-in-a-box). See design.md "Searchable single-select". %>
-        <%= select_tag :case_number, options_for_select(select_options), prompt: "Select case number", include_blank: false, id: "case-selection", data: {controller: "searchable-select"}, class: "block w-full" %>
+        <%# A supervisor or admin sees EVERY active case in the chapter here (hundreds), so this has to
+            search, not scroll -- and it must LOOK like it does. It always searched, but with only a
+            `prompt:` option and no `placeholder-value` the controller left allowEmptyOption true, so
+            TomSelect took "Select case number" as a selected *item*: an item at rest means
+            `.input-hidden` (the search input parked at `left: -10000px`), no placeholder and no
+            magnifier, so the field was indistinguishable from a plain dropdown and nothing invited
+            you to type. With a placeholder the blank option is neither an item nor a menu row, the
+            input stays on screen with its magnifier and hint, and the prompt stops posing as a value.
+            See design.md "Searchable single-select".
+            Minimal class only: the tom-select theme owns the border/padding/shadow on .ts-control, and
+            TomSelect copies these classes onto .ts-wrapper -- a bordered input_class here double-borders.
+            One case (the common volunteer shape) is preselected, so nothing is left for them to fill. %>
+        <% only_case = (@assigned_cases.size == 1) ? @assigned_cases.first.case_number : nil %>
+        <%= select_tag :case_number, options_for_select(select_options, only_case), prompt: "Select case number", include_blank: false, id: "case-selection",
+              data: {controller: "searchable-select", "searchable-select-placeholder-value": "Search case number",
+                     court_report_target: "caseSelect", action: "change->court-report#caseChanged"}, class: "block w-full" %>
       </div>
       <%= form.hidden_field :time_zone, id: "user-time-zone", data: {court_report_target: "timeZone"} %>
       <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div>
           <%= form.label :start_date, "Starting from", class: label_class %>
-          <%= form.date_field :start_date, id: "start_date", value: Date.current, class: input_class %>
+          <%# BOTH dates are empty until a case is chosen, then the controller fills them together:
+              "Starting from" = that case's last hearing, else the day it was opened (carried per option
+              as data-start-date, since the default is per-case and the case is chosen here); "Ending
+              at" = today. An end date pre-filled with today beside an empty start date is the
+              asymmetry that read as broken. Neither is `required`: submitted blank, the generator
+              applies the same last-hearing default and an open-ended finish server-side, and native
+              validation here would pre-empt the "choose a case" error. %>
+          <%= form.date_field :start_date, id: "start_date", value: nil,
+                data: {court_report_target: "startDate"}, class: input_class %>
         </div>
         <div>
           <%= form.label :end_date, "Ending at", class: label_class %>
-          <%= form.date_field :end_date, id: "end_date", value: Date.current, class: input_class %>
+          <%= form.date_field :end_date, id: "end_date", value: nil,
+                data: {court_report_target: "endDate"}, class: input_class %>
         </div>
       </div>
     <% end %>

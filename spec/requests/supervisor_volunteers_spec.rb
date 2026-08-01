@@ -210,7 +210,9 @@ RSpec.describe "/supervisor_volunteers", type: :request do
     end
 
     context "when none passed as supervisor" do
-      let(:supervisor_id) { "" }
+      # "none", not "": blank means "nothing chosen" now, so that an accidental blank submit cannot
+      # strip the supervisor from every selected volunteer.
+      let(:supervisor_id) { "none" }
       let!(:associations) do
         [
           create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_1),
@@ -233,6 +235,24 @@ RSpec.describe "/supervisor_volunteers", type: :request do
         sign_in(admin)
 
         expect { subject }.not_to change(SupervisorVolunteer, :count)
+      end
+    end
+
+    context "when nothing was chosen" do
+      let(:supervisor_id) { "" }
+      let!(:associations) do
+        [
+          create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_1),
+          create(:supervisor_volunteer, supervisor: supervisor, volunteer: volunteer_2)
+        ]
+      end
+
+      it "changes nothing and says so" do
+        sign_in(admin)
+        subject
+
+        expect(flash[:alert]).to match(/Choose a supervisor/)
+        associations.each { |association| expect(association.reload.is_active?).to be true }
       end
     end
   end

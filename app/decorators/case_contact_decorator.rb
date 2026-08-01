@@ -27,7 +27,7 @@ class CaseContactDecorator < Draper::Decorator
   # volunteers can see at a glance whether their reimbursement is still pending
   # or has been completed, without having to ask their supervisor.
   def reimbursement_status_text
-    object.reimbursement_complete? ? "Reimbursement Complete" : "Reimbursement Pending"
+    object.reimbursement_complete? ? "Reimbursement complete" : "Reimbursement pending"
   end
 
   # Bootstrap badge color for the reimbursement status.
@@ -36,7 +36,7 @@ class CaseContactDecorator < Draper::Decorator
   end
 
   def contact_made
-    object.contact_made ? nil : "No Contact Made"
+    object.contact_made ? nil : "No contact made"
   end
 
   def report_contact_made
@@ -125,7 +125,7 @@ class CaseContactDecorator < Draper::Decorator
     if groups.count > 0
       groups.join(", ")
     else
-      "Not Selected"
+      "Not selected"
     end
   end
 

@@ -1,6 +1,6 @@
 import { Controller } from '@hotwired/stimulus'
 import { debounce } from 'lodash'
-import { ensureCaseContact, isPersisted } from '../src/case_contact_draft'
+import { ensureCaseContact, isPersisted, pendingCaseContact } from '../src/case_contact_draft'
 
 export default class extends Controller {
   static targets = ['form', 'alert']
@@ -51,6 +51,24 @@ export default class extends Controller {
         return Promise.reject(response)
       }
     }).catch(error => this.handleError(error))
+  }
+
+  // Submit is the one save that does NOT come through `ensureCaseContact`: it is a native form post,
+  // so with a creation still in flight it becomes the second creation path the draft module exists to
+  // prevent. The user gets two contacts -- the one they submitted, and the draft the open request
+  // inserts a moment later -- which is what the roster then shows. It needs latency to happen at all
+  // (checking a topic starts a create; submitting before it answers), so it hid on a fast local
+  // machine and reproduced 3 of 3 in the docker container, where the browser and the app are separate
+  // hosts. Hold the submit until the create resolves: `adopt` has pointed the form at the record by
+  // then, so the resubmit PATCHes it instead. Keep the submitter, or the button's name/value is lost.
+  holdForDraft (event) {
+    const pending = pendingCaseContact()
+    if (!pending || isPersisted(this.formTarget)) { return }
+
+    event.preventDefault()
+    const submitter = event.submitter
+    const resubmit = () => this.formTarget.requestSubmit(submitter)
+    pending.then(resubmit, resubmit)
   }
 
   // Both save paths land here: the nested-form controller listens for autosave:success, so the

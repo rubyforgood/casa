@@ -126,9 +126,14 @@ class Volunteer < User
     ["#{minutes / 60}h", "#{minutes % 60}m"].select { |str| str =~ /[1-9]/ }.join(" ")
   end
 
-  def learning_hours_spent_in_one_year
+  # Calendar year to date, matching the learning-hours roster's default period -- and matching what the
+  # label says. This was `occurred_at > 1.year.ago`, a ROLLING 12 months shown under the heading
+  # "Learning hours this year", so on 31 July it included the previous August. design.md's own rule:
+  # "'This year' is not a specification: nobody can tell whether it means calendar, fiscal, or
+  # rolling." The shared scope also handles the end-of-day boundary, so today's entries count.
+  def learning_hours_spent_in_current_year
     year_duration = learning_hours
-      .where("learning_hours.occurred_at > ?", 1.year.ago)
+      .occurred_in(Date.current.beginning_of_year..Date.current)
       .pluck(:duration_hours, :duration_minutes)
 
     total_hours = year_duration.map(&:first).reduce(:+) || 0

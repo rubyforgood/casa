@@ -31,7 +31,17 @@ class SupervisorVolunteersController < ApplicationController
     authorize :supervisor_volunteer
 
     volunteers = policy_scope(current_organization.volunteers).where(id: params[:supervisor_volunteer][:volunteer_ids])
-    supervisor = policy_scope(current_organization.supervisors).where(id: params[:supervisor_volunteer][:supervisor_id]).first
+    choice = params[:supervisor_volunteer][:supervisor_id].to_s
+
+    # Blank is "nothing chosen", NOT "unassign". Unassigning is the explicit "none", so a submit that
+    # slips past the picker's client-side guard can no longer quietly strip the supervisor from every
+    # volunteer the user had selected.
+    if choice.blank?
+      flash[:alert] = "Choose a supervisor, or None, to continue."
+      return redirect_to volunteers_path
+    end
+
+    supervisor = (choice == "none") ? nil : policy_scope(current_organization.supervisors).where(id: choice).first
     if bulk_change_supervisor(supervisor, volunteers)
       flash[:notice] = "#{"Volunteer".pluralize(volunteers.count)} successfully assigned to new supervisor."
     else

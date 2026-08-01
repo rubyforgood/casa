@@ -15,7 +15,7 @@
     messages = error_objects.map(&:full_message)
   %>
   <div id="error_explanation" role="alert" class="alert <%= alert_classes(:danger) %>">
-    <i class="bi <%= alert_icon(:danger) %> mt-0.5 shrink-0 text-base" aria-hidden="true"></i>
+    <i class="bi <%= alert_icon(:danger) %> mt-0.5 shrink-0 text-base leading-5" aria-hidden="true"></i>
     <div class="min-w-0">
       <% if messages.one? %>
         <p><span class="font-semibold">Unable to save:</span> <%= messages.first %></p>

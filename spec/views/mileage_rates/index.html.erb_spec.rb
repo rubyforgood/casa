@@ -7,6 +7,11 @@ RSpec.describe "Index Mileage rates", type: :view do
   before do
     enable_pundit(view, admin)
     allow(view).to receive(:current_user).and_return(admin)
+    # The settings rail this page renders links to edit_casa_org_path(current_organization). An
+    # org-scoped helper left unstubbed in a view spec does not raise NoMethodError -- `helper_method`
+    # generates `def current_organization(...) _test_case.send(:current_organization, ...) end`, so it
+    # recurses between the view and the example group until SystemStackError.
+    allow(view).to receive(:current_organization).and_return(admin.casa_org)
     sign_in admin
   end
 

@@ -15,6 +15,8 @@
   <%# Filter bar tokens match the other rosters (cases / volunteers / supervisors). %>
   <% label_class = "mb-1 block text-xs font-medium text-slate-500" %>
   <% date_class = "block w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  <% select_class = "block w-full appearance-none rounded-lg border border-slate-300 bg-white py-2 pl-3 pr-9 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+  <% chevron_class = "bi bi-chevron-down pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-slate-500" %>
   <%= form_with url: learning_hours_path, method: :get, data: {controller: "auto-submit", action: "change->auto-submit#submit"}, class: "mb-4 grid grid-cols-2 items-end gap-3 lg:flex lg:flex-wrap" do %>
     <div class="col-span-2 lg:min-w-[14rem] lg:max-w-xs lg:flex-1">
       <%= label_tag :search, "Volunteer", class: label_class %>
@@ -25,14 +27,27 @@
         <% end %>
       </select>
     </div>
-    <div class="lg:min-w-[9rem]">
-      <%= label_tag :from, "From", class: label_class %>
-      <%= date_field_tag :from, @period_from, max: Date.current, autocomplete: "off", class: date_class %>
+    <%# Presets first, then the range -- and the range only appears for Custom, so the common cases are
+        one click and the bar stays short. Same select tokens as every other filter bar. %>
+    <div class="lg:min-w-[11rem]">
+      <%= label_tag :period, "Period", class: label_class %>
+      <div class="relative">
+        <%= select_tag :period,
+              options_for_select(LearningHoursController::PERIODS.map { |value, label| [label, value] }, @period_name),
+              class: select_class %>
+        <i class="<%= chevron_class %>" aria-hidden="true"></i>
+      </div>
     </div>
-    <div class="lg:min-w-[9rem]">
-      <%= label_tag :to, "To", class: label_class %>
-      <%= date_field_tag :to, @period_to, max: Date.current, autocomplete: "off", class: date_class %>
-    </div>
+    <% if @period_name == "custom" %>
+      <div class="lg:min-w-[9rem]">
+        <%= label_tag :from, "From", class: label_class %>
+        <%= date_field_tag :from, @period_from, max: Date.current, autocomplete: "off", class: date_class %>
+      </div>
+      <div class="lg:min-w-[9rem]">
+        <%= label_tag :to, "To", class: label_class %>
+        <%= date_field_tag :to, @period_to, max: Date.current, autocomplete: "off", class: date_class %>
+      </div>
+    <% end %>
     <noscript><%= submit_tag "Apply", class: button_classes(:primary) %></noscript>
   <% end %>
 
@@ -47,7 +62,9 @@
             <th class="<%= th %>">
               Time completed
               <span class="mt-0.5 block font-normal text-slate-500">
-                <%= if @period_to == Date.current
+                <%= if @period_from.nil?
+                      "all time"
+                    elsif @period_to == Date.current
                       "since #{I18n.l(@period_from, format: :full)}"
                     else
                       "#{I18n.l(@period_from, format: :full)} to #{I18n.l(@period_to, format: :full)}"

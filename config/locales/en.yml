@@ -40,11 +40,11 @@ en:
           one: Contact type
           other: Contact types
         contact_types:
-          one: Contact Type
-          other: Contact Types
+          one: Contact type
+          other: Contact types
         contact_topic_answers:
-          one: Discussion Topic
-          other: Discussion Topics
+          one: Discussion topic
+          other: Discussion topics
         draft_case_ids:
           one: CASA case
           other: CASA cases
@@ -54,8 +54,8 @@ en:
         other_expense_amount: Other expense amount
         other_expenses_describe: Other expense details
       case_contact/contact_topic_answers:
-        contact_topic: Discussion Topic
-        value: Discussion Notes
+        contact_topic: Discussion topic
+        value: Discussion notes
     errors:
       messages:
         cant_be_future: can't be in the future
@@ -82,6 +82,6 @@ en:
       year_first: "%Y-%m-%d"
   imports:
     labels:
-      casa_case: "CASA Case"
+      casa_case: "CASA case"
       volunteer: "Volunteer"
       supervisor: "Supervisor"

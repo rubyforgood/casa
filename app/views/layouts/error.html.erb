@@ -9,9 +9,14 @@
     <title><%= content_for?(:page_title) ? yield(:page_title) : "CASA" %></title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
+    <%= render "shared/favicons" %>
     <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
   </head>
   <body class="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
-    <%= yield %>
+    <%# A landmark, not a bare yield: without it every element on the page sits outside any landmark
+        (axe `region`) and the document has no main landmark (`landmark-one-main`). %>
+    <main>
+      <%= yield %>
+    </main>
   </body>
 </html>

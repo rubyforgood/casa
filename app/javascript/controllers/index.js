@@ -52,12 +52,6 @@ application.register("dismiss", DismissController)
 import DropdownController from "./dropdown_controller"
 application.register("dropdown", DropdownController)
 
-import HelloController from "./hello_controller"
-application.register("hello", HelloController)
-
-import IconToggleController from "./icon_toggle_controller"
-application.register("icon-toggle", IconToggleController)
-
 import LocalStorageResetController from "./local_storage_reset_controller"
 application.register("local-storage-reset", LocalStorageResetController)
 
@@ -70,9 +64,6 @@ application.register("multiple-select", MultipleSelectController)
 import NavDrawerController from "./nav_drawer_controller"
 application.register("nav-drawer", NavDrawerController)
 
-import NavbarController from "./navbar_controller"
-application.register("navbar", NavbarController)
-
 import RevealController from "./reveal_controller"
 application.register("reveal", RevealController)
 
@@ -84,12 +75,6 @@ application.register("select-all", SelectAllController)
 
 import SettingsNavController from "./settings_nav_controller"
 application.register("settings-nav", SettingsNavController)
-
-import SidebarController from "./sidebar_controller"
-application.register("sidebar", SidebarController)
-
-import SidebarGroupController from "./sidebar_group_controller"
-application.register("sidebar-group", SidebarGroupController)
 
 import TruncatedTextController from "./truncated_text_controller"
 application.register("truncated-text", TruncatedTextController)

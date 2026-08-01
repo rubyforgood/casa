@@ -24,9 +24,9 @@ en:
       unlock_instructions:
         subject: "Unlock instructions"
       email_changed:
-        subject: "Email Changed"
+        subject: "Email changed"
       password_change:
-        subject: "Password Changed"
+        subject: "Password changed"
     omniauth_callbacks:
       failure: "Could not authenticate you from %{kind} because \"%{reason}\"."
       success: "Successfully authenticated from %{kind} account."

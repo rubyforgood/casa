@@ -38,7 +38,10 @@ class CasaCaseDecorator < Draper::Decorator
       object.case_number,
       {
         "data-transitioned": object.in_transition_age?,
-        "data-lookup": volunteer_names
+        "data-lookup": volunteer_names,
+        # The window this case's report should start from; the modal's JS copies it into the date field
+        # when the case is picked, since the default is per-case and the case is chosen in the modal.
+        "data-start-date": object.court_report_default_start_date.iso8601
       }
     ]
   end

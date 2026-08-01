@@ -3,7 +3,9 @@
     (the requested follow-up, or nil). %>
 <% if followup %>
   <div class="mt-4 <%= alert_classes(:warning) %>">
-    <i class="bi bi-calendar-check mt-0.5 shrink-0 text-amber-600" aria-hidden="true"></i>
+    <%# Inherits the card's amber-800 (6.84:1) rather than setting amber-600, which was only 3.09:1 on
+        this tint -- the one thing kept from the reverted tile experiment. %>
+    <i class="bi bi-calendar-check mt-0.5 shrink-0 text-base leading-5" aria-hidden="true"></i>
     <div class="min-w-0">
       <p class="font-medium">Reminder set<% if followup.creator %> by <%= formatted_name(followup.creator.display_name) %><% end %> · <%= followup.created_at.strftime("%b %-d, %Y") %></p>
       <% if followup.note.present? %><p class="mt-0.5 whitespace-pre-line"><%= followup.note %></p><% end %>

@@ -1,12 +1,20 @@
 <%# Org announcement banner for the casa_app (Tailwind) shell. Uses the same
-    @active_banner + dismiss controller as the legacy layout. %>
+    @active_banner + dismiss controller as the legacy layout.
+
+    Deliberately plain: a tint, a hairline border, a leading glyph, the message, Dismiss. An icon tile
+    and a left accent band were both tried and both reverted -- neither earned its place. %>
 <% if @active_banner %>
   <div data-controller="dismiss" data-dismiss-target="element" data-dismiss-url-value="<%= dismiss_banner_path(@active_banner) %>" class="flex items-start gap-3 border-b border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 sm:px-6">
-    <%# The icon inherits the container's amber-900 rather than setting its own colour, matching
-        shared/_flashes. It used to be text-amber-500, which is 2.07:1 against this amber-50
-        background where WCAG 1.4.11 (non-text contrast) needs 3:1. axe has no rule for icon
-        contrast, so the whole-app sweep could not catch it. %>
-    <i class="bi bi-megaphone mt-0.5 shrink-0" aria-hidden="true"></i>
+    <%# A plain leading glyph, top-aligned to the first line -- NOT an icon tile. The icon-tile pattern
+        is for contexts where the icon is the subject (KPI cards, empty states, section headers) and it
+        assumes a white surface; a soft tile is invisible on this amber-50 bar (amber-100 measures
+        1.07:1 against it), and the filled amber-700 tile that fixed the visibility shouted and pushed
+        the bar from 44px to 57px. A message bar is not a card: every system that ships one -- Polaris
+        Banner, Material, Carbon inline notification, Primer flash, Atlassian SectionMessage -- uses a
+        bare tone-coloured glyph and lets the tint plus the border carry the semantics.
+        The glyph inherits the container's amber-900 (8.73:1, well past the 3:1 WCAG 1.4.11 asks of
+        non-text) and is text-base so it reads as an icon rather than a character. %>
+    <i class="bi bi-megaphone mt-0.5 shrink-0 text-base leading-5" aria-hidden="true"></i>
     <div class="min-w-0 flex-1"><%= @active_banner.content %></div>
     <%# A button, not <a href="#">: it performs an action rather than navigating, so a link
         mis-announces it to screen readers and does not activate on Space. amber-700 on amber-50

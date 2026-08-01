@@ -243,7 +243,7 @@ RSpec.describe "/imports", type: :request do
 
       get download_failed_imports_path(import_type: "casa_case")
 
-      expect(response.body).to include("Please upload a CASA Case CSV")
+      expect(response.body).to include("Please upload a CASA case CSV")
       expect(response.headers["Content-Disposition"]).to include("attachment; filename=\"failed_rows.csv\"")
     end
 
@@ -262,7 +262,7 @@ RSpec.describe "/imports", type: :request do
 
       get download_failed_imports_path(import_type: "casa_case")
 
-      expect(response.body).to include("Please upload a CASA Case CSV")
+      expect(response.body).to include("Please upload a CASA case CSV")
       expect(response.headers["Content-Disposition"]).to include("attachment; filename=\"failed_rows.csv\"")
       expect(File.exist?(path)).to be_falsey
     end

@@ -11,8 +11,8 @@ RSpec.describe VolunteerDecorator do
       it "includes both supervisor and admin in prompt" do
         sign_in admin
 
-        expect(volunteer.decorate.cc_reminder_text).to include "Supervisor"
-        expect(volunteer.decorate.cc_reminder_text).to include "Admin"
+        expect(volunteer.decorate.cc_reminder_text).to include "supervisor"
+        expect(volunteer.decorate.cc_reminder_text).to include "admin"
       end
     end
 
@@ -20,8 +20,8 @@ RSpec.describe VolunteerDecorator do
       it "includes only supervisor in prompt" do
         sign_in supervisor
 
-        expect(volunteer.decorate.cc_reminder_text).to include "Supervisor"
-        expect(volunteer.decorate.cc_reminder_text).not_to include "Admin"
+        expect(volunteer.decorate.cc_reminder_text).to include "supervisor"
+        expect(volunteer.decorate.cc_reminder_text).not_to include "admin"
       end
     end
   end
