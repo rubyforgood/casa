@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CaseCourtReportsController < ApplicationController
+  GENERATION_FAILED_MESSAGE = "Something went wrong generating this report. The CASA team has been notified. Please try again in a few minutes."
+
   before_action :set_casa_case, only: %i[show]
   after_action :verify_authorized
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
@@ -47,11 +49,16 @@ class CaseCourtReportsController < ApplicationController
         end
       end
     end
-  rescue Zip::Error
+  rescue Zip::Error => e
+    # Keep the actionable message, but a broken org template is still something we want to hear about.
+    report_generation_error(e)
+
     error_messages = generate_error("Template is not found")
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   rescue => e
-    error_messages = generate_error(e.to_s)
+    report_generation_error(e)
+
+    error_messages = generate_error(GENERATION_FAILED_MESSAGE)
     render json: {status: :unprocessable_content, error_messages: error_messages}, status: :unprocessable_content
   end
 
@@ -104,6 +111,18 @@ class CaseCourtReportsController < ApplicationController
         io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
       )
     end
+  end
+
+  # Report the exception rather than rendering it. This used to pass e.to_s straight to the
+  # user, so when Azure blob signing broke, an office manager's screen read
+  # "undefined method 'parse' for class CGI" and nothing reached Bugsnag. See #7093.
+  def report_generation_error(error)
+    case_number = params.dig(:case_court_report, :case_number)
+
+    Bugsnag.notify(error) do |event|
+      event.add_metadata(:court_report, {case_number: case_number, user_id: current_user&.id})
+    end
+    Rails.logger.error("Court report generation failed for case #{case_number}: #{error.class}: #{error.message}")
   end
 
   def generate_error(message)
