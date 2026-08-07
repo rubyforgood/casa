@@ -15,7 +15,8 @@ class NotificationsController < ApplicationController
     # the date-split helpers.
     hidden_ids = notifications.reject { |notification| notification.event&.renderable? }.map(&:id)
     @notifications = hidden_ids.any? ? notifications.where.not(id: hidden_ids) : notifications
-    @patch_notes = PatchNote.notes_available_for_user(current_user)
+    # includes(:patch_note_type) because the view groups the notes by type name.
+    @patch_notes = PatchNote.notes_available_for_user(current_user).includes(:patch_note_type)
   end
 
   def mark_as_read

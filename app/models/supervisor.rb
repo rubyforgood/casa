@@ -5,8 +5,11 @@ class Supervisor < User
   has_many :active_supervisor_volunteers, -> { where(is_active: true) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
   has_many :unassigned_supervisor_volunteers, -> { where(is_active: false) }, class_name: "SupervisorVolunteer", foreign_key: "supervisor_id"
 
-  has_many :volunteers, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :active_supervisor_volunteers
-  has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer
+  # :supervisor as well as :supervisor_volunteer -- supervisors#edit lists who each volunteer is
+  # currently assigned to. Volunteer#supervisor is its own has_one :through, so preloading the join
+  # row alone does not satisfy it and it costs a query per volunteer.
+  has_many :volunteers, -> { includes(:supervisor_volunteer, :supervisor).order(:display_name) }, through: :active_supervisor_volunteers
+  has_many :volunteers_ever_assigned, -> { includes(:supervisor_volunteer, :supervisor).order(:display_name) }, through: :supervisor_volunteers, source: :volunteer
 
   scope :active, -> { where(active: true) }
 

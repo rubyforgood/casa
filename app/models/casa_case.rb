@@ -148,11 +148,19 @@ class CasaCase < ApplicationRecord
     court_reports.order("created_at").last
   end
 
+  # Both of these are called per case when a list of cases is rendered (the court-report case
+  # picker, the missing-data report). Filtering in Ruby when court_dates is already loaded lets an
+  # includes(:court_dates) actually take effect -- a scoped where/order on the association always
+  # issues its own query and silently defeats the preload.
   def next_court_date
+    return court_dates.select { |court_date| court_date.date >= Date.today }.min_by(&:date) if court_dates.loaded?
+
     court_dates.where("date >= ?", Date.today).order(:date).first
   end
 
   def most_recent_past_court_date
+    return court_dates.select { |court_date| court_date.date < Date.today }.max_by(&:date) if court_dates.loaded?
+
     court_dates.where("date < ?", Date.today).order(:date).last
   end
 

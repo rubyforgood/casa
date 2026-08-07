@@ -152,7 +152,7 @@
                         <div class="text-sm leading-5">
                           <%= b.label(class: "block font-medium text-slate-700") %>
                           <%# recency hint: only when this type has actually been logged for the case(s) %>
-                          <% last_logged = b.object.last_logged_hint_with_cases(casa_case_ids) %>
+                          <% last_logged = b.object.last_logged_hint_with_cases(casa_case_ids, @last_logged_at_by_contact_type) %>
                           <% if last_logged %>
                             <span class="text-xs text-slate-500"><%= last_logged %></span>
                           <% end %>
