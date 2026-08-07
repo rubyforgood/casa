@@ -270,14 +270,27 @@ RSpec.describe "/case_court_reports", type: :request do
     end
 
     context "when an unpredictable error occurs" do
+      let(:error) { NoMethodError.new("undefined method 'parse' for class CGI") }
+
       before do
-        expect_any_instance_of(CaseCourtReportsController).to receive(:save_report).and_raise StandardError.new("Unexpected Error")
+        allow(Bugsnag).to receive(:notify).and_call_original
+        expect_any_instance_of(CaseCourtReportsController).to receive(:save_report).and_raise error
       end
 
       it { is_expected.to have_http_status(:unprocessable_content) }
 
-      it "shows the correct error message" do
-        expect(request.parsed_body["error_messages"]).to include("Unexpected Error")
+      it "shows a generic error message" do
+        expect(request.parsed_body["error_messages"]).to include(CaseCourtReportsController::GENERATION_FAILED_MESSAGE)
+      end
+
+      it "does not leak the exception to the user" do
+        expect(request.parsed_body["error_messages"]).not_to include("undefined method")
+      end
+
+      it "reports the exception to Bugsnag" do
+        request
+
+        expect(Bugsnag).to have_received(:notify).with(error)
       end
     end
   end
