@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class CaseCourtReportsController < ApplicationController
-  GENERATION_FAILED_MESSAGE = "Something went wrong generating this report. The CASA team has been notified. Please try again in a few minutes."
+  GENERATION_FAILED_MESSAGE = "Something went wrong generating this report. Please use the bug reporting form linked at the bottom of this page, or notify casa@rubyforgood.org"
 
   before_action :set_casa_case, only: %i[show]
   after_action :verify_authorized
@@ -113,9 +113,7 @@ class CaseCourtReportsController < ApplicationController
     end
   end
 
-  # Report the exception rather than rendering it. This used to pass e.to_s straight to the
-  # user, so when Azure blob signing broke, an office manager's screen read
-  # "undefined method 'parse' for class CGI" and nothing reached Bugsnag. See #7093.
+  # Report the exception rather than rendering it, so devs get technical details and users are spared them.
   def report_generation_error(error)
     case_number = params.dig(:case_court_report, :case_number)
 

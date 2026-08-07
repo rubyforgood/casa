@@ -283,7 +283,6 @@ RSpec.describe "/case_court_reports", type: :request do
         expect(request.parsed_body["error_messages"]).to include(CaseCourtReportsController::GENERATION_FAILED_MESSAGE)
       end
 
-      # An office manager once read "undefined method 'parse' for class CGI" off her screen. See #7093.
       it "does not leak the exception to the user" do
         expect(request.parsed_body["error_messages"]).not_to include("undefined method")
       end
