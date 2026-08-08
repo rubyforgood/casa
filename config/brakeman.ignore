@@ -22,8 +22,27 @@
         22
       ],
       "note": ""
+    },
+    {
+      "warning_type": "Unmaintained Dependency",
+      "warning_code": 122,
+      "fingerprint": "21ab0fe00fdd5899ffc405cff75aadb91b805ee996a614f7e27b08a287e9062d",
+      "check_name": "EOLRails",
+      "message": "Support for Rails 8.0.5.1 ends on 2026-10-07",
+      "file": "Gemfile.lock",
+      "line": 459,
+      "link": "https://brakemanscanner.org/docs/warning_types/unmaintained_dependency/",
+      "code": null,
+      "render_path": null,
+      "location": null,
+      "user_input": null,
+      "confidence": "Weak",
+      "cwe_id": [
+        1104
+      ],
+      "note": "Rails EOL is tracked separately from this Azure adapter change; upgrading Rails is out of scope here."
     }
   ],
-  "updated": "2023-01-17 23:08:51 -0500",
-  "brakeman_version": "5.4.0"
+  "updated": "2026-08-08 00:00:00 -0500",
+  "brakeman_version": "7.1.2"
 }
