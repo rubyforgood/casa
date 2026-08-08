@@ -23,7 +23,7 @@ local:
 
 # Use rails credentials:edit to set the Azure Storage secret (as azure_storage:storage_access_key)
 microsoft:
-  service: AzureStorage
+  service: AzureBlob
   storage_account_name: <%= ENV['STORAGE_ACCOUNT_NAME'] %>
   storage_access_key: <%= ENV['STORAGE_ACCESS_KEY'] %>
   container: <%= ENV['STORAGE_CONTAINER'] %>
