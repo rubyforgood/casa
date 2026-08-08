@@ -12,6 +12,7 @@ FactoryBot.define do
       start_date { nil }
       end_date { nil }
       time_zone { nil }
+      include_empty_topics { false }
     end
 
     initialize_with {
@@ -31,7 +32,8 @@ FactoryBot.define do
         case_court_orders: case_court_orders,
         start_date: start_date,
         end_date: end_date,
-        time_zone: time_zone
+        time_zone: time_zone,
+        include_empty_topics: include_empty_topics
       )
     }
   end

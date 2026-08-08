@@ -120,6 +120,19 @@ RSpec.describe "/case_court_reports", type: :request do
       request
     end
 
+    it "passes the empty-topic option to the report context" do
+      params[:case_court_report][:include_empty_topics] = "1"
+      context_builder = instance_double(CaseCourtReportContext, context: {})
+      report = instance_double(CaseCourtReport, generate_to_string: "report")
+      allow(CaseCourtReport).to receive(:new).and_return(report)
+      allow_any_instance_of(CaseCourtReportsController).to receive(:save_report)
+      expect(CaseCourtReportContext).to receive(:new)
+        .with(hash_including(include_empty_topics: "1"))
+        .and_return(context_builder)
+
+      expect(request).to have_http_status(:ok)
+    end
+
     context "when no custom template is set" do
       it "sends response as a JSON string", :aggregate_failures do
         expect(request.content_type).to eq("application/json; charset=utf-8")

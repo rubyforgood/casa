@@ -65,7 +65,7 @@ class CaseCourtReportsController < ApplicationController
   private
 
   def date_range_params
-    params.permit(:time_zone, case_court_report: %i[start_date end_date])
+    params.permit(:time_zone, case_court_report: %i[start_date end_date include_empty_topics])
   end
 
   def case_params
@@ -94,7 +94,8 @@ class CaseCourtReportsController < ApplicationController
         path_to_template: template_docx_file.to_path,
         time_zone: time_range[:time_zone],
         start_date: time_range[:case_court_report][:start_date],
-        end_date: time_range[:case_court_report][:end_date]
+        end_date: time_range[:case_court_report][:end_date],
+        include_empty_topics: time_range[:case_court_report][:include_empty_topics]
       }
       context = CaseCourtReportContext.new(args).context
       court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)

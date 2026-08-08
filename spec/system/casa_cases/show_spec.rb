@@ -61,6 +61,7 @@ RSpec.describe "casa_cases/show", type: :system do
 
       within("#generate-court-report") do
         expect(page).to have_content(casa_case.case_number)
+        expect(page).to have_unchecked_field("Include sections with no entries")
         # No past hearing, so the window starts the day the case was opened in CASA -- not "today",
         # which would be an empty window. (The case is created before this example freezes the clock.)
         expect(page.find("#start_date").value).to eq(casa_case.created_at.to_date.to_s)
