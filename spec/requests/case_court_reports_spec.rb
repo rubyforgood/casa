@@ -53,13 +53,14 @@ RSpec.describe "/case_court_reports", type: :request do
       end
 
       let(:casa_case) { volunteer.casa_cases.first }
+      let(:case_number) { "#C-15-JV-24-191" }
+      let(:report_bytes) { Rails.root.join("spec/fixtures/files/default_past_court_date_template.docx").binread }
 
       before do
-        Tempfile.create do |t|
-          casa_case.court_reports.attach(
-            io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
-          )
-        end
+        casa_case.update!(case_number: case_number)
+        casa_case.court_reports.attach(
+          io: StringIO.new(report_bytes), filename: "stored-report.docx"
+        )
       end
 
       it "authorizes action" do
@@ -73,6 +74,15 @@ RSpec.describe "/case_court_reports", type: :request do
 
       it "send response with a status :ok" do
         expect(request).to have_http_status(:ok)
+      end
+
+      it "sends the stored report bytes using the case number as the filename", :aggregate_failures do
+        expect(request.body).to eq(report_bytes)
+        expect(request.body.bytesize).to eq(casa_case.latest_court_report.blob.byte_size)
+        expect(request.body).to start_with("PK\x03\x04".b)
+        expect(request.headers["Content-Disposition"]).to include(
+          %(attachment; filename="#{casa_case.case_number}.docx")
+        )
       end
     end
 

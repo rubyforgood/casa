@@ -24,8 +24,11 @@ class CaseCourtReportsController < ApplicationController
     respond_to do |format|
       format.docx do
         @casa_case.latest_court_report.open do |file|
-          # TODO test this .read being present, we've broken it twice now
-          send_data File.read(file.path), type: :docx, disposition: "attachment", status: :ok
+          send_data File.binread(file.path),
+            type: :docx,
+            filename: "#{@casa_case.case_number}.docx",
+            disposition: "attachment",
+            status: :ok
         end
       end
     end
