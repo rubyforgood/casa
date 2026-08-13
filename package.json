@@ -24,7 +24,7 @@
     "@stimulus-components/rails-nested-form": "^5.0.0",
     "@tailwindcss/cli": "^4.3.2",
     "add-to-calendar-button": "^2.14.0",
-    "datatables.net-dt": "^1.13.11",
+    "datatables.net-dt": "^3.0.1",
     "esbuild": "^0.28.0",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.8",
