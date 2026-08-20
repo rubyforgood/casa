@@ -19,7 +19,7 @@
     "@popperjs/core": "^2.11.8",
     "@rails/actioncable": "^8.1.300",
     "@rails/actiontext": "^8.1.300",
-    "@rails/activestorage": "^8.1.300",
+    "@rails/activestorage": "^8.1.301",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
     "@tailwindcss/cli": "^4.3.2",
