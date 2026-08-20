@@ -25,7 +25,7 @@
     "@tailwindcss/cli": "^4.3.2",
     "add-to-calendar-button": "^2.14.0",
     "datatables.net-dt": "^1.13.11",
-    "esbuild": "^0.28.0",
+    "esbuild": "^0.28.2",
     "jquery": "^3.7.1",
     "js-cookie": "^3.0.8",
     "jstz": "^2.1.1",
