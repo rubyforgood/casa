@@ -25,7 +25,7 @@ gem "flipper-ui" # Web UI for managing feature flags
 gem "friendly_id", "~> 5.7.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
 gem "httparty" # HTTP network requests
-gem "image_processing", "~> 1.14" # Image processing helpers
+gem "image_processing", "~> 2.0" # Image processing helpers
 gem "jbuilder" # JSON API builder
 gem "jsbundling-rails" # JavaScript bundling
 gem "lograge" # Log less so Heroku Papertrail quits rate limiting our logs
