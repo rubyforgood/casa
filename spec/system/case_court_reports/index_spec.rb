@@ -62,6 +62,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     it "shows the Generate button and a searchable picker", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate report", visible: :visible
       expect(page).to have_css "#generate-docx-report-modal .ts-wrapper"
+      expect(page).to have_unchecked_field("Include sections with no entries")
     end
 
     it "shows both dates empty until a case is chosen", :aggregate_failures do

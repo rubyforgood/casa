@@ -12,6 +12,7 @@ class CaseCourtReportContext
     @path_to_template = args[:path_to_template]
     @court_date = args[:court_date] || @casa_case.next_court_date
     @case_court_orders = args[:case_court_orders] || @casa_case.case_court_orders
+    @include_empty_topics = ActiveModel::Type::Boolean.new.cast(args[:include_empty_topics])
     @date_range = calculate_date_range(args)
   end
 
@@ -59,9 +60,11 @@ class CaseCourtReportContext
 
   def filtered_interviewees
     CaseContactContactType
-      .joins(:contact_type, case_contact: :casa_case)
+      .joins(contact_type: :contact_type_group, case_contact: :casa_case)
+      .includes(:case_contact, contact_type: :contact_type_group)
       .where("case_contacts.casa_case_id": @casa_case.id)
       .where("case_contacts.occurred_at": @date_range)
+      .order("contact_type_groups.name ASC", "contact_types.name ASC", "case_contact_contact_types.id ASC")
   end
 
   def case_details
@@ -92,15 +95,15 @@ class CaseCourtReportContext
   # Sample output
   #
   # expected_topics = {
-  # "Question 1" => {topic: "Question 1", details: "Details 1", answers: [
+  # "Question 1" => {topic: "Question 1", details: "", answers: [
   #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 1"},
   #   {date: "12/03/20", medium: "Type A2, Type B2", value: "Answer 3"}
   # ]},
-  # "Question 2" => {topic: "Question 2", details: "Details 2", answers: [
+  # "Question 2" => {topic: "Question 2", details: "", answers: [
   #   {date: "12/02/20", medium: "Type A1, Type B1", value: "Answer 2"},
   #   {date: "12/04/20", medium: "Type A3, Type B3", value: "Answer 5"}
   # ]},
-  # "Question 3" => {topic: "Question 3", details: "Details 3", answers: [
+  # "Question 3" => {topic: "Question 3", details: "", answers: [
   #   {date: "12/03/20", medium: "Type A2, Type B2", value: "No Answer Provided"},
   #   {date: "12/04/20", medium: "Type A3, Type B3", value: "No Answer Provided"}
   # ]}
@@ -112,7 +115,7 @@ class CaseCourtReportContext
       hash[topic.question] = {
         answers: answers_by_topic_id.fetch(topic.id, []),
         topic: topic.question,
-        details: topic.details
+        details: ""
       }
     end
   end
@@ -120,10 +123,13 @@ class CaseCourtReportContext
   private
 
   def report_topics(answered_topic_ids)
-    ContactTopic
+    topics = ContactTopic
       .where(casa_org: @casa_case.casa_org, exclude_from_court_report: false)
-      .merge(ContactTopic.active.or(ContactTopic.where(id: answered_topic_ids)))
-      .order(:id)
+      .order(:question)
+
+    return topics.where(id: answered_topic_ids) unless @include_empty_topics
+
+    topics.merge(ContactTopic.active.or(ContactTopic.where(id: answered_topic_ids)))
   end
 
   def court_topic_answers
