@@ -92,14 +92,9 @@ GEM
       dumb_delegator
     axe-core-rspec (4.12.0)
       axe-core-api (= 4.12.0)
-    azure-storage-blob (2.0.3)
-      azure-storage-common (~> 2.0)
-      nokogiri (~> 1, >= 1.10.8)
-    azure-storage-common (2.0.4)
-      faraday (~> 1.0)
-      faraday_middleware (~> 1.0, >= 1.0.0.rc1)
-      net-http-persistent (~> 4.0)
-      nokogiri (~> 1, >= 1.10.8)
+    azure-blob (0.8.0)
+      cgi
+      rexml
     base64 (0.3.0)
     bcrypt (3.1.22)
     benchmark (0.5.0)
@@ -237,8 +232,6 @@ GEM
     faraday-patron (1.0.0)
     faraday-rack (1.0.0)
     faraday-retry (1.0.4)
-    faraday_middleware (1.2.1)
-      faraday (~> 1.0)
     ffi (1.17.4)
     ffi (1.17.4-arm64-darwin)
     ffi (1.17.4-x86_64-darwin)
@@ -342,15 +335,12 @@ GEM
       benchmark
       logger
     mini_mime (1.1.5)
-    mini_portile2 (2.8.9)
     minitest (6.0.6)
       drb (~> 2.0)
       prism (~> 1.5)
     multi_xml (0.8.1)
       bigdecimal (>= 3.1, < 5)
     multipart-post (2.4.1)
-    net-http-persistent (4.0.8)
-      connection_pool (>= 2.2.4, < 4)
     net-imap (0.6.4.1)
       date
       net-protocol
@@ -361,9 +351,6 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.4)
-      mini_portile2 (~> 2.8.2)
-      racc (~> 1.4)
     nokogiri (1.19.4-arm64-darwin)
       racc (~> 1.4)
     nokogiri (1.19.4-x86_64-darwin)
@@ -709,7 +696,6 @@ GEM
 
 PLATFORMS
   arm64-darwin
-  ruby
   x86_64-darwin
   x86_64-linux
 
@@ -719,7 +705,7 @@ DEPENDENCIES
   annotaterb
   authtrail
   axe-core-rspec
-  azure-storage-blob
+  azure-blob
   blueprinter
   brakeman
   bugsnag
@@ -729,7 +715,6 @@ DEPENDENCIES
   capybara-screenshot
   caxlsx (~> 4.5)
   caxlsx_rails (~> 0.7.1)
-  cgi (~> 0.5.1)
   cssbundling-rails (~> 1.4)
   database_cleaner-active_record
   delayed_job_active_record
