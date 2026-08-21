@@ -10,6 +10,9 @@ class VolunteerDatatable < ApplicationDatatable
     hours_spent_in_days
   ]
 
+  # Window for the "Hours (30 days)" column.
+  HOURS_SPENT_IN_DAYS = 30
+
   # Server-side entry point for the migrated (bespoke Pagy) index. Reuses the same
   # filter/search/order SQL as the DataTables JSON path; the controller maps plain GET
   # params into the DataTables param shape. Preloads languages for the extra-languages column.
@@ -28,7 +31,13 @@ class VolunteerDatatable < ApplicationDatatable
   private
 
   def data
-    records.map do |volunteer|
+    volunteers = records.to_a
+    preload_languages(volunteers)
+    active_case_counts = active_case_counts_for(volunteers)
+    contacted_case_counts = contacted_case_counts_for(volunteers)
+    minutes_spent = minutes_spent_for(volunteers)
+
+    volunteers.map do |volunteer|
       {
         active: volunteer.active?,
         casa_cases: volunteer.casa_cases.map { |cc| {id: cc.id, case_number: cc.case_number} },
@@ -37,16 +46,73 @@ class VolunteerDatatable < ApplicationDatatable
         email: volunteer.email,
         has_transition_aged_youth_cases: volunteer.has_transition_aged_youth_cases?,
         id: volunteer.id,
-        made_contact_with_all_cases_in_days: volunteer.made_contact_with_all_cases_in_days?,
+        made_contact_with_all_cases_in_days:
+          made_contact_with_all_cases?(volunteer, active_case_counts, contacted_case_counts),
         most_recent_attempt: {
           case_id: volunteer.most_recent_attempt_case_id,
           occurred_at: I18n.l(volunteer.most_recent_attempt_occurred_at, format: :full, default: nil)
         },
         supervisor: {id: volunteer.supervisor_id, name: NamePresentation.strip_honorific(volunteer.supervisor_name)},
-        hours_spent_in_days: volunteer.hours_spent_in_days(30),
+        hours_spent_in_days: Volunteer.format_hours_and_minutes(minutes_spent.fetch(volunteer.id, 0)),
         extra_languages: volunteer.languages&.map { |lang| {id: lang.id, name: lang.name} }
       }
     end
+  end
+
+  # Preloaded against the already-loaded page rather than via raw_records.includes(:languages):
+  # filtered_records can carry SELECT aliases, DISTINCT and an ORDER BY on an alias (the
+  # extra_languages filter), and an includes on that relation makes Rails build an id-lookup
+  # query that repeats the alias in its own SELECT list, which Postgres rejects.
+  def preload_languages(volunteers)
+    ActiveRecord::Associations::Preloader.new(records: volunteers, associations: :languages).call
+  end
+
+  # Mirrors Volunteer#made_contact_with_all_cases_in_days? using the page-wide counts below.
+  def made_contact_with_all_cases?(volunteer, active_case_counts, contacted_case_counts)
+    active_cases = active_case_counts.fetch(volunteer.id, 0)
+    return true if active_cases.zero?
+
+    contacted_case_counts.fetch(volunteer.id, 0) == active_cases
+  end
+
+  # The three aggregates below mirror Volunteer#made_contact_with_all_cases_in_days? and
+  # Volunteer#hours_spent_in_days, but each runs a single grouped query for the whole page
+  # instead of two or three queries per row.
+  def active_case_counts_for(volunteers)
+    actively_assigned(volunteers).group(:volunteer_id).count
+  end
+
+  # NOTE: deliberately NOT distinct, to match Volunteer#cases_where_contact_made_in_days, which
+  # counts contact rows rather than cases. That makes a volunteer with more contacts than active
+  # cases look like they have not reached everyone -- pre-existing behaviour, preserved here so
+  # this stays a performance change only.
+  def contacted_case_counts_for(volunteers)
+    actively_assigned(volunteers)
+      .joins(casa_case: :case_contacts)
+      .where(case_contacts: {contact_made: true, occurred_at: contact_made_cutoff..})
+      .group(:volunteer_id)
+      .count
+  end
+
+  def minutes_spent_for(volunteers)
+    actively_assigned(volunteers)
+      .joins(casa_case: :case_contacts)
+      .where(case_contacts: {contact_made: true, occurred_at: HOURS_SPENT_IN_DAYS.days.ago.to_date..})
+      .group(:volunteer_id)
+      .sum(:duration_minutes)
+  end
+
+  # Volunteer#actively_assigned_and_active_cases, expressed from the assignment side so it can be
+  # grouped by volunteer.
+  def actively_assigned(volunteers)
+    CaseAssignment
+      .active
+      .joins(:casa_case)
+      .where(volunteer_id: volunteers.map(&:id), casa_cases: {active: true})
+  end
+
+  def contact_made_cutoff
+    Volunteer::CONTACT_MADE_IN_DAYS_NUM.days.ago.to_date
   end
 
   def filtered_records

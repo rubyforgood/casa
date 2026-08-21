@@ -6,9 +6,7 @@ spec/models
 spec/services
 spec/lib
 spec/system
-spec/requests
 spec/controllers
 spec/views
 spec/decorators
 spec/policies
-spec/datatables

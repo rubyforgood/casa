@@ -117,13 +117,20 @@ class Volunteer < User
     current_contact_cases_count == total_active_case_count
   end
 
+  # Formats a raw minute total as "1h 30m", dropping any zero component. Extracted so that
+  # VolunteerDatatable, which sums the same minutes for a whole page in one grouped query rather
+  # than once per row, renders identical strings.
+  def self.format_hours_and_minutes(minutes)
+    ["#{minutes / 60}h", "#{minutes % 60}m"].select { |str| str =~ /[1-9]/ }.join(" ")
+  end
+
   def hours_spent_in_days(num_days)
     minutes = actively_assigned_and_active_cases
       .includes(:case_contacts)
       .where(case_contacts: {contact_made: true, occurred_at: num_days.days.ago.to_date..})
       .sum(:duration_minutes)
 
-    ["#{minutes / 60}h", "#{minutes % 60}m"].select { |str| str =~ /[1-9]/ }.join(" ")
+    self.class.format_hours_and_minutes(minutes)
   end
 
   # Calendar year to date, matching the learning-hours roster's default period -- and matching what the

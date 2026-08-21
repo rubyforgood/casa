@@ -106,7 +106,10 @@ class CaseContacts::FormController < ApplicationController
 
   def set_case_contact
     @case_contact = CaseContact
-      .includes(:creator, :contact_topic_answers)
+      # contact_topic_answers' contact_topic too: saving the nested answers validates each
+      # belongs_to :contact_topic, which is satisfied from the loaded record instead of a query
+      # per answer.
+      .includes(:creator, contact_topic_answers: :contact_topic)
       .find(params[:case_contact_id])
   end
 
@@ -114,6 +117,9 @@ class CaseContacts::FormController < ApplicationController
     @casa_cases = get_casa_cases
     contact_types = get_contact_types.decorate
     @grouped_contact_types = group_contact_types_by_name(contact_types)
+    # Resolved once for the whole form: both the checkbox list and the multi-select show a
+    # "last logged" hint per contact type.
+    @last_logged_at_by_contact_type = CaseContact.last_logged_at_by_contact_type(@casa_cases.map(&:id))
     @contact_topics = get_contact_topics
     # No pre-built blank answer: the Notes checklist lists every topic and creates an answer
     # only when a topic is checked (contact-topics controller). A seeded blank row would just

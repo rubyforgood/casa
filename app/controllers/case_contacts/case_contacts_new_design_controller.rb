@@ -16,6 +16,8 @@ class CaseContacts::CaseContactsNewDesignController < ApplicationController
 
     scope = filter_case_contacts(policy_scope(current_organization.case_contacts))
       .includes(:casa_case, :contact_types, :contact_topics, :followups, :creator, contact_topic_answers: :contact_topic)
+      # CaseContactPolicy#same_org? reads both of these for every row's edit/destroy permissions.
+      .preload(:casa_org, :creator_casa_org)
     order = Arel.sql("case_contacts.#{@sort} #{@direction} NULLS LAST, case_contacts.id DESC")
     @pagy, @case_contacts = pagy(scope.order(order))
 
