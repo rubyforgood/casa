@@ -33,7 +33,7 @@
     "popper.js": "^1.16.1",
     "strftime": "^0.10.3",
     "sweetalert2": "^11.3.5",
-    "tailwindcss": "^4.3.2",
+    "tailwindcss": "^4.3.3",
     "tom-select": "^2.6.1",
     "trix": "^2.1.19"
   },
