@@ -17,9 +17,12 @@ RSpec.describe CaseContactsContactDates do
     end
 
     context "with interviewees" do
-      let(:contact_type_1) { create(:contact_type, name: "Mental therapist") }
-      let(:contact_type_2) { create(:contact_type, name: "Physical therapist") }
-      let(:contact_type_3) { create(:contact_type, name: "Aunt") }
+      let(:casa_org) { create(:casa_org) }
+      let(:family_group) { create(:contact_type_group, casa_org: casa_org, name: "Family") }
+      let(:health_group) { create(:contact_type_group, casa_org: casa_org, name: "Health") }
+      let(:contact_type_1) { create(:contact_type, contact_type_group: health_group, name: "Mental therapist") }
+      let(:contact_type_2) { create(:contact_type, contact_type_group: health_group, name: "Physical therapist") }
+      let(:contact_type_3) { create(:contact_type, contact_type_group: family_group, name: "Aunt") }
 
       let(:ccct_1) { create(:case_contact_contact_type, contact_type: contact_type_1) }
       let(:ccct_2) { create(:case_contact_contact_type, contact_type: contact_type_2) }
@@ -41,6 +44,10 @@ RSpec.describe CaseContactsContactDates do
 
       it "returns formatted data" do
         expect(subject).to eq([
+          {dates: "4/01*",
+           dates_by_medium_type: {"in-person" => "4/01*"},
+           name: "Names of persons involved, starting with the child's name",
+           type: "Aunt"},
           {dates: "6/01*",
            dates_by_medium_type: {"in-person" => "6/01*"},
            name: "Names of persons involved, starting with the child's name",
@@ -48,11 +55,7 @@ RSpec.describe CaseContactsContactDates do
           {dates: "4/01*, 5/01*, 6/01*",
            dates_by_medium_type: {"in-person" => "5/01*, 6/01*", "text/email" => "4/01*"},
            name: "Names of persons involved, starting with the child's name",
-           type: "Physical therapist"},
-          {dates: "4/01*",
-           dates_by_medium_type: {"in-person" => "4/01*"},
-           name: "Names of persons involved, starting with the child's name",
-           type: "Aunt"}
+           type: "Physical therapist"}
         ])
       end
     end

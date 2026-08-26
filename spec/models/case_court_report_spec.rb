@@ -104,6 +104,48 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A2, Type B2 \(12\/02\/20\): No Answer Provided.*/)
       end
 
+      it "omits guidance and unanswered topics from real report templates" do
+        casa_case = create(:casa_case)
+        answered_topic = create(
+          :contact_topic,
+          casa_org: casa_case.casa_org,
+          question: "Included topic heading",
+          details: "Included topic guidance"
+        )
+        create(
+          :contact_topic,
+          casa_org: casa_case.casa_org,
+          question: "Omitted topic heading",
+          details: "Omitted topic guidance"
+        )
+        case_contact = create(:case_contact, casa_case: casa_case)
+        create(
+          :contact_topic_answer,
+          case_contact: case_contact,
+          contact_topic: answered_topic,
+          value: "Included topic answer"
+        )
+        template_paths = %w[
+          default_report_template.docx
+          montgomery_report_template.docx
+          prince_george_report_template.docx
+        ].map { |filename| Rails.root.join("app/documents/templates", filename).to_s }
+
+        template_paths.each do |template_path|
+          topics = CaseCourtReportContext.new(case_id: casa_case.id, path_to_template: template_path).court_topics.values
+          docx_response = generate_doc(full_context.merge(case_topics: topics), template_path)
+          document_text = (docx_response.paragraphs.map(&:to_s) + table_text(docx_response)).join(" ")
+
+          aggregate_failures(File.basename(template_path)) do
+            expect(document_text).to include("Included topic heading")
+            expect(document_text).to include("Included topic answer")
+            expect(document_text).not_to include("Included topic guidance")
+            expect(document_text).not_to include("Omitted topic heading")
+            expect(document_text).not_to include("Omitted topic guidance")
+          end
+        end
+      end
+
       context "when there are topics but no answers" do
         let(:curr_context) do
           full_context[:case_topics] = [

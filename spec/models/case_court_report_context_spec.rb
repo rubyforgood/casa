@@ -229,7 +229,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
         expect(court_topics.values).to all(
           a_hash_including(
             topic: a_kind_of(String),
-            details: a_kind_of(String),
+            details: "",
             answers: all(
               a_hash_including(
                 date: a_string_matching(/\d{2}\/\d{2}\/\d{2}/),
@@ -270,13 +270,21 @@ RSpec.describe CaseCourtReportContext, type: :model do
     end
 
     context "when some topics have no answers" do
-      it "includes every topic, with an empty answer list for unanswered ones" do
+      it "omits unanswered topics by default" do
         create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[0], value: "Answer 1")
 
         court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
 
-        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics.keys).to eq(["Question 1"])
         expect(court_topics["Question 1"][:answers].pluck(:value)).to eq(["Answer 1"])
+      end
+
+      it "includes unanswered topics when requested" do
+        create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[0], value: "Answer 1")
+
+        court_topics = build(:case_court_report_context, casa_case: casa_case, include_empty_topics: true).court_topics
+
+        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
         expect(court_topics["Question 2"][:answers]).to eq([])
         expect(court_topics["Question 3"][:answers]).to eq([])
       end
@@ -284,7 +292,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       it "does not include unanswered topics that are inactive" do
         topics[1].update!(active: false)
 
-        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+        court_topics = build(:case_court_report_context, casa_case: casa_case, include_empty_topics: true).court_topics
 
         expect(court_topics.keys).to eq(["Question 1", "Question 3"])
       end
@@ -292,7 +300,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
       it "does not include unanswered topics excluded from the court report" do
         topics[1].update!(exclude_from_court_report: true)
 
-        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+        court_topics = build(:case_court_report_context, casa_case: casa_case, include_empty_topics: true).court_topics
 
         expect(court_topics.keys).to eq(["Question 1", "Question 3"])
       end
@@ -301,21 +309,24 @@ RSpec.describe CaseCourtReportContext, type: :model do
         topics
         create(:contact_topic, question: "Other Org Question")
 
-        court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
+        court_topics = build(:case_court_report_context, casa_case: casa_case, include_empty_topics: true).court_topics
 
         expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
       end
     end
 
     context "when answers occur in a different order than the topics were created" do
-      it "orders topics by creation order, not by answer date" do
+      it "orders topics alphabetically" do
+        topics[0].update!(question: "Zulu")
+        topics[1].update!(question: "Alpha")
+        topics[2].update!(question: "Middle")
         create(:contact_topic_answer, case_contact: contacts[0], contact_topic: topics[2], value: "Earliest answer")
         create(:contact_topic_answer, case_contact: contacts[1], contact_topic: topics[1], value: "Middle answer")
         create(:contact_topic_answer, case_contact: contacts[2], contact_topic: topics[0], value: "Latest answer")
 
         court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
 
-        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics.keys).to eq(["Alpha", "Middle", "Zulu"])
       end
     end
 
@@ -326,7 +337,7 @@ RSpec.describe CaseCourtReportContext, type: :model do
 
         court_topics = build(:case_court_report_context, casa_case: casa_case).court_topics
 
-        expect(court_topics.keys).to eq(["Question 1", "Question 2", "Question 3"])
+        expect(court_topics.keys).to eq(["Question 2"])
         expect(court_topics["Question 2"][:answers].pluck(:value)).to eq(["Answer before deactivation"])
       end
     end
@@ -399,6 +410,20 @@ RSpec.describe CaseCourtReportContext, type: :model do
       result = court_report_context.filtered_interviewees.map(&:case_contact)
 
       expect(result).to be_empty
+    end
+
+    it "orders interviewees by contact type group and name" do
+      casa_case = create(:casa_case)
+      family_group = create(:contact_type_group, casa_org: casa_case.casa_org, name: "Family")
+      health_group = create(:contact_type_group, casa_org: casa_case.casa_org, name: "Health")
+      therapist = create(:contact_type, contact_type_group: health_group, name: "Therapist")
+      aunt = create(:contact_type, contact_type_group: family_group, name: "Aunt")
+      counselor = create(:contact_type, contact_type_group: health_group, name: "Counselor")
+      create(:case_contact, casa_case: casa_case, contact_types: [therapist, aunt, counselor])
+
+      result = build(:case_court_report_context, casa_case: casa_case).filtered_interviewees
+
+      expect(result.map { |interviewee| interviewee.contact_type.name }).to eq(["Aunt", "Counselor", "Therapist"])
     end
   end
 

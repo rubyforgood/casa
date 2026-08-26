@@ -4,13 +4,17 @@ class CaseContactsContactDates
   end
 
   def contact_dates_details
-    contact_type_names = @case_contact_contact_types.map(&:contact_type).map(&:name).uniq # .sort # TODO sort after refactor
-    contact_type_names.map do |contact_type_name|
-      case_contacts = case_contacts_for_type(contact_type_name)
+    contact_types = @case_contact_contact_types
+      .map(&:contact_type)
+      .uniq
+      .sort_by { |contact_type| [contact_type.contact_type_group.name, contact_type.name] }
+
+    contact_types.map do |contact_type|
+      case_contacts = case_contacts_for_type(contact_type)
 
       {
         name: "Names of persons involved, starting with the child's name",
-        type: contact_type_name,
+        type: contact_type.name,
         dates: order_and_format(case_contacts),
         dates_by_medium_type: case_contacts.group_by(&:medium_type).transform_values { |vals| order_and_format(vals) }
       }
@@ -19,9 +23,9 @@ class CaseContactsContactDates
 
   private
 
-  def case_contacts_for_type(contact_type_name)
+  def case_contacts_for_type(contact_type)
     @case_contact_contact_types
-      .select { |ccct| ccct.contact_type.name == contact_type_name }
+      .select { |ccct| ccct.contact_type_id == contact_type.id }
       .map(&:case_contact)
   end
 
