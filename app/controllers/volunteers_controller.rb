@@ -227,7 +227,7 @@ class VolunteersController < ApplicationController
   end
 
   def skip_volunteer_email_reconfirmation
-    return unless update_volunteer_params[:email].present?
+    return if update_volunteer_params[:email].blank?
     return if update_volunteer_params[:email] == @volunteer.email
 
     @volunteer.skip_reconfirmation!
