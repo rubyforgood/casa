@@ -1,6 +1,8 @@
 class VolunteersController < ApplicationController
   include SmsBodyHelper
 
+  PER_PAGE = 25
+
   before_action :set_volunteer, except: %i[index new create stop_impersonating]
   before_action :set_edit_context, only: %i[edit update activate deactivate]
   after_action :verify_authorized, except: %i[stop_impersonating]
@@ -9,20 +11,8 @@ class VolunteersController < ApplicationController
     authorize Volunteer
     @active_nav = "volunteers"
     @supervisors = policy_scope(current_organization.supervisors.active)
-    @search = params[:search].to_s
-    @status = %w[active inactive all].include?(params[:status]) ? params[:status] : "active"
-    @supervisor_filter = params[:supervisor].to_s
-    @transition = %w[yes no].include?(params[:transition]) ? params[:transition] : ""
-    @extra_languages = %w[yes no].include?(params[:languages]) ? params[:languages] : ""
-    @sort = VolunteerDatatable::ORDERABLE_FIELDS.include?(params[:sort]) ? params[:sort] : "display_name"
-    @direction = (params[:direction] == "desc") ? "desc" : "asc"
-
-    datatable = VolunteerDatatable.new(policy_scope(current_organization.volunteers), volunteer_index_params)
-    count = datatable.index_count
-    per_page = 25
-    page = params[:page].to_i.clamp(1, [(count.to_f / per_page).ceil, 1].max)
-    @pagy = Pagy.new(count: count, page: page, limit: per_page)
-    @volunteers = datatable.index_relation.offset(@pagy.offset).limit(per_page).to_a
+    set_index_filters
+    load_paginated_volunteers
     render :index, layout: "casa_app"
   end
 
@@ -42,28 +32,14 @@ class VolunteersController < ApplicationController
     @volunteer = current_organization.volunteers.new(create_volunteer_params)
     authorize @volunteer
 
-    if @volunteer.save
-      # invitation error handling
-      begin
-        @volunteer.invite!(current_user)
-      rescue => e
-        flash[:alert] = "Volunteer invitation failed. Reason: #{e.message}"
-      end
-
-      # call short io api here
-      invitation_url = Rails.application.routes.url_helpers.accept_user_invitation_url(invitation_token: @volunteer.raw_invitation_token, host: request.base_url)
-
-      hash_of_short_urls = {0 => nil, 1 => nil}
-      if @volunteer.phone_number.present?
-        hash_of_short_urls = handle_short_url([invitation_url, request.base_url + "/users/edit"])
-      end
-
-      sms_status = deliver_sms_to @volunteer, account_activation_msg("volunteer", hash_of_short_urls)
-      redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
-    else
+    unless @volunteer.save
       @active_nav = "volunteers"
-      render :new, status: :unprocessable_content, layout: "casa_app"
+      return render :new, status: :unprocessable_content, layout: "casa_app"
     end
+
+    invite_volunteer
+    sms_status = deliver_sms_to @volunteer, account_activation_msg("volunteer", activation_short_urls)
+    redirect_to edit_volunteer_path(@volunteer), notice: sms_acct_creation_notice("volunteer", sms_status)
   end
 
   def edit
@@ -124,7 +100,7 @@ class VolunteersController < ApplicationController
     authorize @volunteer
     if @volunteer.save
       begin
-        send_sms_to(volunteers_phone_number, "Hello #{@volunteer.display_name}, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County")
+        send_sms_to(volunteers_phone_number, volunteer_reactivation_msg(@volunteer.display_name))
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert sent"
       rescue
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer reactivation alert not sent. Twilio is disabled for #{@volunteer.casa_org.name}."
@@ -134,16 +110,7 @@ class VolunteersController < ApplicationController
 
   def reminder
     authorize @volunteer
-    with_cc = params[:with_cc].present?
-
-    cc_recipients = []
-    if with_cc
-      if current_user.casa_admin?
-        cc_recipients.append(current_user.email)
-      end
-      cc_recipients.append(@volunteer.supervisor.email) if @volunteer.supervisor
-    end
-    VolunteerMailer.case_contacts_reminder(@volunteer, cc_recipients).deliver
+    VolunteerMailer.case_contacts_reminder(@volunteer, reminder_cc_recipients).deliver
 
     redirect_back_or_to edit_volunteer_path(@volunteer), notice: "Reminder sent to volunteer."
   end
@@ -165,6 +132,41 @@ class VolunteersController < ApplicationController
     @volunteer = Volunteer.find(params[:id])
   end
 
+  # A failed invitation must not fail the creation itself — the volunteer record is already saved,
+  # so surface the reason and carry on to the activation SMS.
+  def invite_volunteer
+    @volunteer.invite!(current_user)
+  rescue => e
+    flash[:alert] = "Volunteer invitation failed. Reason: #{e.message}"
+  end
+
+  # The two links the activation SMS shortens (via short.io): set-password and profile-edit. Only
+  # shortened when there is a phone number to text; otherwise account_activation_msg falls back to
+  # its "check your email" wording.
+  def activation_short_urls
+    return {0 => nil, 1 => nil} if @volunteer.phone_number.blank?
+
+    handle_short_url([accept_invitation_url, "#{request.base_url}/users/edit"])
+  end
+
+  def accept_invitation_url
+    Rails.application.routes.url_helpers.accept_user_invitation_url(
+      invitation_token: @volunteer.raw_invitation_token,
+      host: request.base_url
+    )
+  end
+
+  # An admin sending the reminder is cc'd on it; a supervisor is not (they are cc'd only as the
+  # volunteer's own supervisor, which the second line covers for admins and supervisors alike).
+  def reminder_cc_recipients
+    return [] if params[:with_cc].blank?
+
+    recipients = []
+    recipients.append(current_user.email) if current_user.casa_admin?
+    recipients.append(@volunteer.supervisor.email) if @volunteer.supervisor
+    recipients
+  end
+
   # Shared setup for the actions that render the casa_app edit page (edit + the
   # update/activate/deactivate failure re-renders): light up the sidebar nav and
   # load the active supervisors the "assign a supervisor" form needs.
@@ -173,40 +175,26 @@ class VolunteersController < ApplicationController
     @supervisors = policy_scope current_organization.supervisors.active
   end
 
-  # Map the index's plain GET filters into the DataTables param shape VolunteerDatatable
-  # understands, so the migrated (bespoke Pagy) index reuses its exact filter/search/order SQL.
-  def volunteer_index_params
-    {
-      search: {value: @search},
-      additional_filters: {
-        active: volunteer_active_filter,
-        supervisor: volunteer_supervisor_filter,
-        transition_aged_youth: (@transition.present? ? [(@transition == "yes").to_s] : %w[true false]),
-        extra_languages: (@extra_languages.present? ? [(@extra_languages == "yes").to_s] : nil)
-      },
-      columns: {"0" => {name: @sort}},
-      order: {"0" => {column: "0", dir: @direction}}
-    }.with_indifferent_access
+  # The index view and its _filter partial read these ivars directly, the same convention the
+  # other Tailwind index pages (supervisors, casa_cases) use for sortable_header, so mirror the
+  # normalized values from the filter object onto them.
+  def set_index_filters
+    @filters = VolunteerIndexFilters.new(params, supervisor_ids: @supervisors.map { |s| s.id.to_s })
+    @search = @filters.search
+    @status = @filters.status
+    @supervisor_filter = @filters.supervisor
+    @transition = @filters.transition
+    @extra_languages = @filters.extra_languages
+    @sort = @filters.sort
+    @direction = @filters.direction
   end
 
-  def volunteer_active_filter
-    case @status
-    when "inactive" then %w[false]
-    when "all" then %w[true false]
-    else %w[true]
-    end
-  end
-
-  # The datatable's supervisor filter is value-list based: [""] means "no supervisor", a list of
-  # ids means those supervisors, and "" mixed with ids means "null OR those". "All" therefore
-  # passes "" + every active supervisor id so it also includes volunteers whose supervisor is
-  # inactive/absent (their joined supervisor is null).
-  def volunteer_supervisor_filter
-    case @supervisor_filter
-    when "", "all" then ["", *@supervisors.map { |s| s.id.to_s }]
-    when "unassigned" then [""]
-    else [@supervisor_filter]
-    end
+  def load_paginated_volunteers
+    datatable = VolunteerDatatable.new(policy_scope(current_organization.volunteers), @filters.to_datatable_params)
+    count = datatable.index_count
+    page = params[:page].to_i.clamp(1, [(count.to_f / PER_PAGE).ceil, 1].max)
+    @pagy = Pagy.new(count: count, page: page, limit: PER_PAGE)
+    @volunteers = datatable.index_relation.offset(@pagy.offset).limit(PER_PAGE).to_a
   end
 
   def generate_devise_password

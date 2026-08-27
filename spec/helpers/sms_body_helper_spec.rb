@@ -22,4 +22,17 @@ RSpec.describe SmsBodyHelper, type: :helper do
       expect(expected_response).to include("First, set your password here www.yummy.com. Go to profile edit page to change SMS settings.")
     end
   end
+
+  describe "#volunteer_reactivation_msg" do
+    it "greets the volunteer and explains they can reuse their old credentials" do
+      expect(volunteer_reactivation_msg("Ali Ahmed")).to eq(
+        "Hello Ali Ahmed, \n \n Your CASA/Prince George’s County volunteer console account has been reactivated. You can login using the credentials you were already using. \n \n If you have any questions, please contact your most recent Case Supervisor for assistance. \n \n CASA/Prince George’s County"
+      )
+    end
+
+    it "handles a blank display name without raising" do
+      expect { volunteer_reactivation_msg(nil) }.not_to raise_error
+      expect(volunteer_reactivation_msg(nil)).to start_with("Hello ,")
+    end
+  end
 end

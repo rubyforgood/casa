@@ -30,6 +30,16 @@ module SmsBodyHelper
     "#{display_name} has flagged a Case Contact that needs follow up. Click to see more: #{short_link}"
   end
 
+  def volunteer_reactivation_msg(display_name)
+    [
+      "Hello #{display_name},",
+      "Your CASA/Prince George’s County volunteer console account has been reactivated. " \
+        "You can login using the credentials you were already using.",
+      "If you have any questions, please contact your most recent Case Supervisor for assistance.",
+      "CASA/Prince George’s County"
+    ].join(" \n \n ")
+  end
+
   def password_reset_msg(display_name, short_link)
     "Hi #{display_name}, click here to reset your password: #{short_link}"
   end
