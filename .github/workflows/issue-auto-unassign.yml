@@ -22,13 +22,9 @@ jobs:
         run: echo "Unassigned issues = ${{steps.unassign_issues.outputs.unassigned_issues}}"
       - name: Print the warned issues
         run: echo "Warned issues = ${{steps.unassign_issues.outputs.warned_issues}}"
-      - name: Move unassigned issues from In Progress to To Do
-        uses: bjthompson805/move-issues@4d2c991804d44e11541302f32eb71659f3a0435d # v1
-        id: move_issues
-        with:
-          token: ${{secrets.GITHUB_TOKEN}}
-          issues: ${{steps.unassign_issues.outputs.unassigned_issues}}
-          from_column: '8461148'
-          to_column: '15690587'
-      - name: Print moved issues
-        run: echo "Moved issues = ${{steps.move_issues.outputs.moved_issues}}"
+      # The "move unassigned issues from In Progress to To Do" step was removed:
+      # it used bjthompson805/move-issues, which drives the retired Projects
+      # (classic) REST API (/projects/columns/{id}/cards). Columns 8461148 and
+      # 15690587 no longer resolve, so the step 404'd on every nightly run and
+      # failed the whole workflow. Re-add via the Projects v2 GraphQL API
+      # (e.g. actions/add-to-project) if the board move is still wanted.

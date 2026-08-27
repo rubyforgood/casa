@@ -73,6 +73,8 @@ class VolunteersController < ApplicationController
 
   def update
     authorize @volunteer
+    skip_volunteer_email_reconfirmation
+
     if @volunteer.update(update_volunteer_params)
       notice = check_unconfirmed_email_notice(@volunteer)
 
@@ -222,6 +224,13 @@ class VolunteersController < ApplicationController
     VolunteerParameters
       .new(params)
       .without_active
+  end
+
+  def skip_volunteer_email_reconfirmation
+    return if update_volunteer_params[:email].blank?
+    return if update_volunteer_params[:email] == @volunteer.email
+
+    @volunteer.skip_reconfirmation!
   end
 
   def volunteers_phone_number

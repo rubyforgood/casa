@@ -8,14 +8,11 @@ gem "rails", "~> 8.0"
 gem "after_party" # Post-deployment tasks
 gem "amazing_print" # Easier console reading
 gem "authtrail" # Track Devise login activity
-gem "azure-storage-blob", require: false
+gem "azure-blob", require: false # Active Storage adapter for Azure (maintained replacement for retired azure-storage-blob)
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
 gem "caxlsx", "~> 4.5" # Excel spreadsheets - TODO can we remove this version restriction?
 gem "caxlsx_rails", "~> 0.7.1" # Excel spreadsheets - TODO can we remove this version restriction?
-# Ruby 4.0 ships a cgi stdlib with only escape/unescape; azure-storage-common needs the
-# full library's CGI.parse to sign blob URLs. Remove when azure-storage-blob is dropped.
-gem "cgi", "~> 0.4.2"
 gem "cssbundling-rails", "~> 1.4" # CSS compilation
 gem "delayed_job_active_record" # Background job processing
 gem "devise" # Authentication
@@ -28,7 +25,7 @@ gem "flipper-ui" # Web UI for managing feature flags
 gem "friendly_id", "~> 5.7.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
 gem "httparty" # HTTP network requests
-gem "image_processing", "~> 1.14" # Image processing helpers
+gem "image_processing", "~> 2.0" # Image processing helpers
 gem "jbuilder" # JSON API builder
 gem "jsbundling-rails" # JavaScript bundling
 gem "lograge" # Log less so Heroku Papertrail quits rate limiting our logs

@@ -53,13 +53,14 @@ RSpec.describe "/case_court_reports", type: :request do
       end
 
       let(:casa_case) { volunteer.casa_cases.first }
+      let(:case_number) { "#C-15-JV-24-191" }
+      let(:report_bytes) { Rails.root.join("spec/fixtures/files/default_past_court_date_template.docx").binread }
 
       before do
-        Tempfile.create do |t|
-          casa_case.court_reports.attach(
-            io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
-          )
-        end
+        casa_case.update!(case_number: case_number)
+        casa_case.court_reports.attach(
+          io: StringIO.new(report_bytes), filename: "stored-report.docx"
+        )
       end
 
       it "authorizes action" do
@@ -73,6 +74,15 @@ RSpec.describe "/case_court_reports", type: :request do
 
       it "send response with a status :ok" do
         expect(request).to have_http_status(:ok)
+      end
+
+      it "sends the stored report bytes using the case number as the filename", :aggregate_failures do
+        expect(request.body).to eq(report_bytes)
+        expect(request.body.bytesize).to eq(casa_case.latest_court_report.blob.byte_size)
+        expect(request.body).to start_with("PK\x03\x04".b)
+        expect(request.headers["Content-Disposition"]).to include(
+          %(attachment; filename="#{casa_case.case_number}.docx")
+        )
       end
     end
 
@@ -118,6 +128,19 @@ RSpec.describe "/case_court_reports", type: :request do
     it "authorizes action" do
       expect_any_instance_of(CaseCourtReportsController).to receive(:authorize).with(CaseCourtReport).and_call_original
       request
+    end
+
+    it "passes the empty-topic option to the report context" do
+      params[:case_court_report][:include_empty_topics] = "1"
+      context_builder = instance_double(CaseCourtReportContext, context: {})
+      report = instance_double(CaseCourtReport, generate_to_string: "report")
+      allow(CaseCourtReport).to receive(:new).and_return(report)
+      allow_any_instance_of(CaseCourtReportsController).to receive(:save_report)
+      expect(CaseCourtReportContext).to receive(:new)
+        .with(hash_including(include_empty_topics: "1"))
+        .and_return(context_builder)
+
+      expect(request).to have_http_status(:ok)
     end
 
     context "when no custom template is set" do
@@ -270,14 +293,27 @@ RSpec.describe "/case_court_reports", type: :request do
     end
 
     context "when an unpredictable error occurs" do
+      let(:error) { NoMethodError.new("undefined method 'parse' for class CGI") }
+
       before do
-        expect_any_instance_of(CaseCourtReportsController).to receive(:save_report).and_raise StandardError.new("Unexpected Error")
+        allow(Bugsnag).to receive(:notify).and_call_original
+        expect_any_instance_of(CaseCourtReportsController).to receive(:save_report).and_raise error
       end
 
       it { is_expected.to have_http_status(:unprocessable_content) }
 
-      it "shows the correct error message" do
-        expect(request.parsed_body["error_messages"]).to include("Unexpected Error")
+      it "shows a generic error message" do
+        expect(request.parsed_body["error_messages"]).to include(CaseCourtReportsController::GENERATION_FAILED_MESSAGE)
+      end
+
+      it "does not leak the exception to the user" do
+        expect(request.parsed_body["error_messages"]).not_to include("undefined method")
+      end
+
+      it "reports the exception to Bugsnag" do
+        request
+
+        expect(Bugsnag).to have_received(:notify).with(error)
       end
     end
   end

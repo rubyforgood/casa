@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class CaseCourtReportsController < ApplicationController
+  GENERATION_FAILED_MESSAGE = "Something went wrong generating this report. Please use the bug reporting form linked at the bottom of this page, or notify casa@rubyforgood.org"
+
   before_action :set_casa_case, only: %i[show]
   after_action :verify_authorized
   skip_after_action :verify_policy_scoped # TODO: index should call policy_scope; remove this skip once it does
@@ -22,8 +24,11 @@ class CaseCourtReportsController < ApplicationController
     respond_to do |format|
       format.docx do
         @casa_case.latest_court_report.open do |file|
-          # TODO test this .read being present, we've broken it twice now
-          send_data File.read(file.path), type: :docx, disposition: "attachment", status: :ok
+          send_data File.binread(file.path),
+            type: :docx,
+            filename: "#{@casa_case.case_number}.docx",
+            disposition: "attachment",
+            status: :ok
         end
       end
     end
@@ -47,18 +52,23 @@ class CaseCourtReportsController < ApplicationController
         end
       end
     end
-  rescue Zip::Error
+  rescue Zip::Error => e
+    # Keep the actionable message, but a broken org template is still something we want to hear about.
+    report_generation_error(e)
+
     error_messages = generate_error("Template is not found")
     render json: {status: :not_found, error_messages: error_messages}, status: :not_found
   rescue => e
-    error_messages = generate_error(e.to_s)
+    report_generation_error(e)
+
+    error_messages = generate_error(GENERATION_FAILED_MESSAGE)
     render json: {status: :unprocessable_content, error_messages: error_messages}, status: :unprocessable_content
   end
 
   private
 
   def date_range_params
-    params.permit(:time_zone, case_court_report: %i[start_date end_date])
+    params.permit(:time_zone, case_court_report: %i[start_date end_date include_empty_topics])
   end
 
   def case_params
@@ -90,7 +100,8 @@ class CaseCourtReportsController < ApplicationController
         path_to_template: template_docx_file.to_path,
         time_zone: time_range[:time_zone],
         start_date: time_range[:case_court_report][:start_date],
-        end_date: time_range[:case_court_report][:end_date]
+        end_date: time_range[:case_court_report][:end_date],
+        include_empty_topics: time_range[:case_court_report][:include_empty_topics]
       }
       context = CaseCourtReportContext.new(args).context
       court_report = CaseCourtReport.new(path_to_template: template_docx_file.to_path, context: context)
@@ -107,6 +118,16 @@ class CaseCourtReportsController < ApplicationController
         io: File.open(t.path), filename: "#{casa_case.case_number}.docx"
       )
     end
+  end
+
+  # Report the exception rather than rendering it, so devs get technical details and users are spared them.
+  def report_generation_error(error)
+    case_number = params.dig(:case_court_report, :case_number)
+
+    Bugsnag.notify(error) do |event|
+      event.add_metadata(:court_report, {case_number: case_number, user_id: current_user&.id})
+    end
+    Rails.logger.error("Court report generation failed for case #{case_number}: #{error.class}: #{error.message}")
   end
 
   def generate_error(message)

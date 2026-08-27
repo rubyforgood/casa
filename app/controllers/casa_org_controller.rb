@@ -91,7 +91,7 @@ class CasaOrgController < ApplicationController
   end
 
   def set_contact_topics
-    @contact_topics = @casa_org.contact_topics.where(soft_delete: false)
+    @contact_topics = @casa_org.contact_topics.where(soft_delete: false).order(:question)
   end
 
   def set_custom_org_links

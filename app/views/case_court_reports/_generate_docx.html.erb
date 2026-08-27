@@ -57,6 +57,10 @@
                 data: {court_report_target: "endDate"}, class: input_class %>
         </div>
       </div>
+      <label class="flex items-center gap-2 text-sm font-medium text-slate-700">
+        <%= form.check_box :include_empty_topics, class: "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
+        <span>Include sections with no entries</span>
+      </label>
     <% end %>
     <%= render Dialog::FooterComponent.new do %>
       <button type="button" data-action="modal#close" class="<%= button_classes(:secondary) %>">Cancel</button>

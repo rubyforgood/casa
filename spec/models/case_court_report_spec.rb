@@ -54,6 +54,31 @@ RSpec.describe CaseCourtReport, type: :model do
       }
     end
 
+    # rubyzip 3 defaults write_zip64_support to true, and sablon streams entries without
+    # knowing their sizes, so every entry came out with version-needed 45 and 0xFFFFFFFF
+    # size placeholders. Word rejects zip64 OOXML packages outright, while unzip, rubyzip
+    # and the docx gem all read them fine — so every other assertion in this file passed
+    # while production handed users a file Word called corrupt. See #7093.
+    describe "zip container format" do
+      subject(:report) do
+        CaseCourtReport.new(path_to_template: path_to_template, context: full_context).generate_to_string.b
+      end
+
+      it "does not use zip64 extensions, which Word cannot open" do
+        version_needed = report[4, 2].unpack1("v")
+
+        expect(version_needed).to eq(20)
+      end
+
+      it "writes real entry sizes rather than zip64 placeholders", :aggregate_failures do
+        compressed_size = report[18, 4].unpack1("V")
+        uncompressed_size = report[22, 4].unpack1("V")
+
+        expect(compressed_size).not_to eq(0xFFFFFFFF)
+        expect(uncompressed_size).not_to eq(0xFFFFFFFF)
+      end
+    end
+
     describe "contact_topics" do
       it "all contact topics are present in the report" do
         docx_response = generate_doc(full_context, path_to_template)
@@ -77,6 +102,48 @@ RSpec.describe CaseCourtReport, type: :model do
         expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A3, Type B3 \(12\/02\/20\): Answer 5.*/)
         expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A3, Type B3 \(12\/01\/20\): No Answer Provided.*/)
         expect(docx_response.paragraphs.map(&:to_s)).to include(/Type A2, Type B2 \(12\/02\/20\): No Answer Provided.*/)
+      end
+
+      it "omits guidance and unanswered topics from real report templates" do
+        casa_case = create(:casa_case)
+        answered_topic = create(
+          :contact_topic,
+          casa_org: casa_case.casa_org,
+          question: "Included topic heading",
+          details: "Included topic guidance"
+        )
+        create(
+          :contact_topic,
+          casa_org: casa_case.casa_org,
+          question: "Omitted topic heading",
+          details: "Omitted topic guidance"
+        )
+        case_contact = create(:case_contact, casa_case: casa_case)
+        create(
+          :contact_topic_answer,
+          case_contact: case_contact,
+          contact_topic: answered_topic,
+          value: "Included topic answer"
+        )
+        template_paths = %w[
+          default_report_template.docx
+          montgomery_report_template.docx
+          prince_george_report_template.docx
+        ].map { |filename| Rails.root.join("app/documents/templates", filename).to_s }
+
+        template_paths.each do |template_path|
+          topics = CaseCourtReportContext.new(case_id: casa_case.id, path_to_template: template_path).court_topics.values
+          docx_response = generate_doc(full_context.merge(case_topics: topics), template_path)
+          document_text = (docx_response.paragraphs.map(&:to_s) + table_text(docx_response)).join(" ")
+
+          aggregate_failures(File.basename(template_path)) do
+            expect(document_text).to include("Included topic heading")
+            expect(document_text).to include("Included topic answer")
+            expect(document_text).not_to include("Included topic guidance")
+            expect(document_text).not_to include("Omitted topic heading")
+            expect(document_text).not_to include("Omitted topic guidance")
+          end
+        end
       end
 
       context "when there are topics but no answers" do

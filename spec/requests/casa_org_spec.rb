@@ -17,6 +17,15 @@ RSpec.describe "CasaOrg", type: :request do
     end
 
     it { is_expected.to be_successful }
+
+    it "orders contact topics alphabetically" do
+      create(:contact_topic, casa_org: casa_org, question: "Zulu")
+      create(:contact_topic, casa_org: casa_org, question: "Alpha")
+
+      request
+
+      expect(assigns(:contact_topics).pluck(:question)).to eq(["Alpha", "Zulu"])
+    end
   end
 
   describe "PATCH /update" do
