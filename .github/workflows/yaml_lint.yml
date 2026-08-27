@@ -22,4 +22,4 @@ jobs:
         with:
           persist-credentials: false
       - name: yaml-lint
-        uses: ibiqlik/action-yamllint@ae1abb2821b567e96742aa776f7b62c9b6a26bc8 # v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
