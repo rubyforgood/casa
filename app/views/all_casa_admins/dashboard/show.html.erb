@@ -35,8 +35,8 @@
                 <tr>
                   <td class="<%= td %>"><%= link_to organization.name, all_casa_admins_casa_org_path(organization), class: "font-medium text-brand-600 hover:text-brand-700" %></td>
                   <td class="<%= td %> whitespace-nowrap"><%= I18n.l(organization.created_at, format: :full, default: nil) %></td>
-                  <td class="<%= td %>"><%= organization.user_count %></td>
-                  <td class="<%= td %>"><%= organization.case_contacts_count %></td>
+                  <td class="<%= td %>"><%= @user_counts.fetch(organization.id, 0) %></td>
+                  <td class="<%= td %>"><%= @case_contacts_counts.fetch(organization.id, 0) %></td>
                 </tr>
               <% end %>
             </tbody>

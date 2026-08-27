@@ -306,9 +306,23 @@ class CaseContact < ApplicationRecord
     casa_case.in_transition_age?
   end
 
+  # {contact_type_id => most recent occurred_at} for the given cases, in one query. The contact
+  # form renders a "last logged" hint for every contact type in the chapter, which otherwise costs
+  # a query per type.
+  def self.last_logged_at_by_contact_type(casa_case_ids)
+    joins(:contact_types)
+      .where(casa_case_id: casa_case_ids)
+      .group("contact_types.id")
+      .maximum(:occurred_at)
+  end
+
   def contact_groups_with_types
     hash = Hash.new { |h, k| h[k] = [] }
-    contact_types.includes(:contact_type_group).each do |contact_type|
+    # Only add the includes when the caller has not already preloaded contact_types: calling
+    # .includes on a loaded association throws the preload away and re-queries per case contact,
+    # which is an N+1 on the contacts list (LoadsCaseContacts preloads contact_types).
+    types = contact_types.loaded? ? contact_types : contact_types.includes(:contact_type_group)
+    types.each do |contact_type|
       hash[contact_type.contact_type_group.name] << contact_type.name
     end
     hash

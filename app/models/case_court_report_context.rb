@@ -45,8 +45,16 @@ class CaseCourtReportContext
   end
 
   def latest_hearing_date
-    latest_hearing_date = @casa_case.most_recent_past_court_date
-    latest_hearing_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(latest_hearing_date.date, format: :full, default: nil)
+    most_recent_past_court_date.nil? ? "___<LATEST HEARING DATE>____" : I18n.l(most_recent_past_court_date.date, format: :full, default: nil)
+  end
+
+  # CasaCase#most_recent_past_court_date is a scoped query on the court_dates association, so it
+  # re-runs on every call. Both the date range and the hearing-date label need it, so resolve it
+  # once per report.
+  def most_recent_past_court_date
+    return @most_recent_past_court_date if defined?(@most_recent_past_court_date)
+
+    @most_recent_past_court_date = @casa_case.most_recent_past_court_date
   end
 
   def case_orders(orders)
@@ -58,6 +66,8 @@ class CaseCourtReportContext
     end
   end
 
+  # includes, not just joins: CaseContactsContactDates walks every row calling #contact_type and
+  # #case_contact, so joining alone still costs two queries per interviewee row.
   def filtered_interviewees
     CaseContactContactType
       .joins(contact_type: :contact_type_group, case_contact: :casa_case)
@@ -156,7 +166,7 @@ class CaseCourtReportContext
   def calculate_date_range(args)
     zone = args[:time_zone] ? ActiveSupport::TimeZone.new(args[:time_zone]) : Time.zone
 
-    start_date = @casa_case.most_recent_past_court_date&.date&.in_time_zone(zone)
+    start_date = most_recent_past_court_date&.date&.in_time_zone(zone)
     start_date = zone.parse(args[:start_date]) if args[:start_date]&.present?
 
     end_date = args[:end_date]&.present? ? zone.parse(args[:end_date]) : nil

@@ -79,12 +79,15 @@ class CaseCourtReportsController < ApplicationController
     @casa_case = CasaCase.find_by(case_number: params[:id], casa_org: current_user.casa_org)
   end
 
+  # The case picker renders CasaCaseDecorator#court_report_select_option for every case -- for an
+  # admin that is every active case in the chapter -- which reads the assigned volunteers and, via
+  # court_report_default_start_date, the case's court dates.
   def assigned_cases
     @assigned_cases = if current_user.volunteer?
       CasaCase.actively_assigned_to(current_user)
     else
       current_user.casa_org.casa_cases.active
-    end
+    end.includes(:assigned_volunteers, :court_dates)
   end
 
   def generate_report_to_string(casa_case, time_range)

@@ -65,6 +65,22 @@ class CasaOrg < ApplicationRecord
     case_contacts.count
   end
 
+  # Per-org totals for the all-CASA dashboard, which lists every organisation: #case_contacts_count
+  # and #user_count each cost a query per row when called in that loop. COALESCE mirrors
+  # #case_contacts_count, which attributes a contact to its case's org, falling back to the
+  # creator's org for org-less (draft) contacts. "users" is the alias Rails gives the :creator
+  # join here -- there is only one users join in this relation.
+  def self.case_contacts_count_by_org_id
+    CaseContact
+      .left_joins(:casa_case, :creator)
+      .group(Arel.sql("COALESCE(casa_cases.casa_org_id, users.casa_org_id)"))
+      .count
+  end
+
+  def self.user_count_by_org_id
+    User.group(:casa_org_id).count
+  end
+
   def org_logo
     if logo.attached?
       Rails.application.routes.url_helpers.rails_blob_path(logo, only_path: true)
