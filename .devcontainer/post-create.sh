@@ -5,7 +5,7 @@ cp -n .devcontainer/.env.codespaces .env
 
 # If the project's required ruby version changes from 4.0.3, this command
 # will download and compile the correct version, but it will take a long time.
-if [ "$RUBY_VERSION" != "4.0.3" ]; then
+if [ "$RUBY_VERSION" != "4.0.6" ]; then
 	rvm install $RUBY_VERSION
 	rvm use $RUBY_VERSION
 	echo "Ruby $RUBY_VERSION installed"
