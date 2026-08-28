@@ -95,7 +95,7 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 
 | Technology | Version |
 |---|---|
-| Ruby | 4.0.3 (see `.ruby-version`) |
+| Ruby | 4.0.6 (see `.ruby-version`) |
 | Rails | 7.2 |
 | PostgreSQL | 14+ |
 | Node.js | LTS/Krypton (see `.nvmrc`) |
