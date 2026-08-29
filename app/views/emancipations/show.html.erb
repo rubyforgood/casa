@@ -26,7 +26,7 @@
       <% @emancipation_form_data.each do |category| %>
         <h2 class="emancipation-category no-select flex items-center justify-between gap-3 border-b border-slate-100 py-2.5 last:border-b-0" data-is-open="<%= emancipation_category_checkbox_checked(@current_case, category) ? "true" : "false" %>">
           <div class="emacipation-category-input-label-pair flex cursor-pointer items-center gap-2.5">
-            <%= tag.input(type: "checkbox", class: "emancipation-category-check-box #{check_class}", value: category.id, checked: emancipation_category_checkbox_checked(@current_case, category), aria: {label: category.name}) %>
+            <%= tag.input(type: "checkbox", class: "emancipation-category-check-box pointer-events-none #{check_class}", value: category.id, checked: emancipation_category_checkbox_checked(@current_case, category), aria: {label: category.name}) %>
             <div class="text-sm font-medium text-slate-800"><%= category.name %></div>
           </div>
           <% if category.emancipation_options.count > 0 %>
@@ -37,16 +37,16 @@
           <% category.emancipation_options.each do |option| %>
             <div class="check-item flex cursor-pointer items-center gap-2.5 py-1 text-sm text-slate-700">
               <% if category.mutually_exclusive %>
-                <%= tag.input(type: "radio", id: "O#{option.id}", class: "emancipation-radio-button #{radio_class}", name: "C#{category.id}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
+                <%= tag.input(type: "radio", id: "O#{option.id}", class: "emancipation-radio-button pointer-events-none #{radio_class}", name: "C#{category.id}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
               <% else %>
-                <%= tag.input(type: "checkbox", id: "O#{option.id}", class: "emancipation-option-check-box #{check_class}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
+                <%= tag.input(type: "checkbox", id: "O#{option.id}", class: "emancipation-option-check-box pointer-events-none #{check_class}", value: option.id, checked: emancipation_option_checkbox_checked(@current_case, option), aria: {label: option.name}) %>
               <% end %>
               <label><%= option.name %></label>
             </div>
           <% end %>
-          <%# The labels intentionally have no for= matching the inputs: JS sets checkbox state after
-              the AJAX save succeeds, and a real label/control pair would toggle natively on top of
-              that. The inputs carry aria-label instead, so they still have an accessible name. %>
+          <%# The labels intentionally have no for= matching the inputs, and the inputs are
+              pointer-events-none: JS sets checked after the AJAX save, and a native toggle on
+              click inverted add/delete vs the DOM. Inputs keep aria-label for an accessible name. %>
         </div>
       <% end %>
     </div>
