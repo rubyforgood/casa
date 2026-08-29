@@ -71,7 +71,7 @@ export class Toggler {
 
   manageTogglerText () {
     if (this.emancipationCategory.attr('data-is-open') === 'true') {
-      this.categoryCollapseIcon.text('-')
+      this.categoryCollapseIcon.text('–')
     } else if (this.emancipationCategory.attr('data-is-open') === 'false') {
       this.categoryCollapseIcon.text('+')
     }
