@@ -9,9 +9,15 @@ RSpec.describe ReimbursementPolicy do
   let(:organization) { build(:casa_org, users: [volunteer, supervisor, casa_admin]) }
 
   context "when org reimbursement is enabled" do
-    permissions :index?, :change_complete_status? do
+    permissions :index? do
       it { is_expected.to permit(casa_admin) }
       it { is_expected.to permit(supervisor) }
+      it { is_expected.not_to permit(volunteer) }
+    end
+
+    permissions :change_complete_status? do
+      it { is_expected.to permit(casa_admin) }
+      it { is_expected.not_to permit(supervisor) }
       it { is_expected.not_to permit(volunteer) }
     end
   end

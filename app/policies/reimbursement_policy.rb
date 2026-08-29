@@ -11,6 +11,6 @@ class ReimbursementPolicy < ApplicationPolicy
   end
 
   def change_complete_status?
-    index? && reimbursement_enabled?
+    is_admin? && reimbursement_enabled?
   end
 end

@@ -42,6 +42,20 @@ RSpec.describe ReimbursementsController, type: :request do
       expect(case_contact.reload.reimbursement_complete).to be_truthy
     end
 
+    context "when the signed-in user is a supervisor" do
+      let(:supervisor) { create(:supervisor) }
+
+      before { sign_in(supervisor) }
+
+      it "redirects away without changing the reimbursement status" do
+        patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
+
+        expect(response).to redirect_to(root_url)
+        expect(response).to have_http_status(:redirect)
+        expect(case_contact.reload.reimbursement_complete).to be_falsey
+      end
+    end
+
     it "sends a notification to the case_contact's creator" do
       expect do
         patch reimbursement_mark_as_complete_url(case_contact, case_contact: {reimbursement_complete: true})
