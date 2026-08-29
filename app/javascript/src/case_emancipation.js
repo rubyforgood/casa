@@ -71,20 +71,25 @@ export class Toggler {
 
   manageTogglerText () {
     if (this.emancipationCategory.attr('data-is-open') === 'true') {
-      this.categoryCollapseIcon.text('–')
+      this.categoryCollapseIcon.text('−')
     } else if (this.emancipationCategory.attr('data-is-open') === 'false') {
       this.categoryCollapseIcon.text('+')
     }
   }
 
+  setOpen (isOpen) {
+    this.emancipationCategory.attr('data-is-open', isOpen ? 'true' : 'false')
+    this.emancipationCategory.data('is-open', isOpen)
+  }
+
   openChildren () {
     this.categoryOptionsContainer.show()
-    this.emancipationCategory.attr('data-is-open', 'true')
+    this.setOpen(true)
   }
 
   closeChildren () {
     this.categoryOptionsContainer.hide()
-    this.emancipationCategory.attr('data-is-open', 'false')
+    this.setOpen(false)
   }
 
   deselectChildren (notifierCallback) {
@@ -107,61 +112,67 @@ $(() => { // JQuery's callback for the DOM loading
   const notificationsElement = $('#notifications')
   emancipationPage.notifier = new Notifier(notificationsElement)
 
+  // Labels have no `for=` so JS owns checked state after the AJAX save. A click on the
+  // <input> itself still toggles natively *before* the wrapper handler runs, which inverted
+  // add/delete and then flipped the box back — persist was right, the DOM was wrong.
+  $('.emancipation-category-check-box, .emancipation-option-check-box, .emancipation-radio-button').on('click', function (event) {
+    event.preventDefault()
+  })
+
   $('.category-collapse-icon').on('click', function () {
-    const categoryCollapseIcon = $(this)
-    const emancipationCategory = categoryCollapseIcon.parent()
+    const emancipationCategory = $(this).parent()
     const toggler = new Toggler(emancipationCategory)
 
     if (emancipationCategory.attr('data-is-open') === 'true') {
       toggler.closeChildren()
-      toggler.manageTogglerText()
-    } else if (emancipationCategory.attr('data-is-open') === 'false') {
+    } else {
       toggler.openChildren()
-      toggler.manageTogglerText()
     }
+    toggler.manageTogglerText()
   })
 
   $('.emacipation-category-input-label-pair').on('click', function () {
-    const emacipationCategoryInputLabelPair = $(this)
-    const emancipationCategory = emacipationCategoryInputLabelPair.parent()
+    const emancipationCategory = $(this).parent()
     const toggler = new Toggler(emancipationCategory)
     const categoryCheckbox = emancipationCategory.find('.emancipation-category-check-box')
-    const categoryCheckboxChecked = categoryCheckbox.is(':checked')
+    const categoryCheckboxChecked = categoryCheckbox.prop('checked')
 
-    if (!emancipationCategory.data('disabled')) {
-      emancipationCategory.data('disabled', true)
-      emancipationCategory.addClass('disabled')
-      categoryCheckbox.prop('disabled', 'disabled')
-
-      let saveAction,
-        doneCallback
-
-      if (categoryCheckboxChecked) {
-        doneCallback = () => {
-          toggler.manageTogglerText()
-          toggler.deselectChildren((text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
-        }
-        saveAction = 'delete_category'
-      } else {
-        doneCallback = () => {
-          toggler.openChildren()
-          toggler.manageTogglerText()
-        }
-        saveAction = 'add_category'
-      }
-
-      saveCheckState(saveAction, categoryCheckbox.val())
-        .done(function () {
-          doneCallback()
-          categoryCheckbox.prop('checked', !categoryCheckboxChecked)
-          toggler.manageTogglerText()
-        })
-        .always(function () {
-          emancipationCategory.data('disabled', false)
-          emancipationCategory.removeClass('disabled')
-          categoryCheckbox.prop('disabled', false)
-        })
+    if (emancipationCategory.data('disabled')) {
+      return
     }
+
+    emancipationCategory.data('disabled', true)
+    emancipationCategory.addClass('disabled')
+    categoryCheckbox.prop('disabled', true)
+
+    let saveAction,
+      doneCallback
+
+    if (categoryCheckboxChecked) {
+      doneCallback = () => {
+        toggler.closeChildren()
+        toggler.manageTogglerText()
+        toggler.deselectChildren((text) => emancipationPage.notifier.notify('Unchecked ' + text, 'info'))
+      }
+      saveAction = 'delete_category'
+    } else {
+      doneCallback = () => {
+        toggler.openChildren()
+        toggler.manageTogglerText()
+      }
+      saveAction = 'add_category'
+    }
+
+    saveCheckState(saveAction, categoryCheckbox.val())
+      .done(function () {
+        doneCallback()
+        categoryCheckbox.prop('checked', !categoryCheckboxChecked)
+      })
+      .always(function () {
+        emancipationCategory.data('disabled', false)
+        emancipationCategory.removeClass('disabled')
+        categoryCheckbox.prop('disabled', false)
+      })
   })
 
   $('.check-item').on('click', function () {
@@ -185,12 +196,14 @@ $(() => { // JQuery's callback for the DOM loading
 
         radioComponent.data('disabled', true)
         radioComponent.addClass('disabled')
-        radioInput.prop('disabled', 'disabled')
+        radioInput.prop('disabled', true)
       })
 
       saveCheckState('set_option', checkElement.val())
         .done(function () {
           checkElement.prop('checked', true)
+        })
+        .always(function () {
           radioButtons.each(function () {
             const radioComponent = $(this)
             const radioInput = radioComponent.find('input')
@@ -201,25 +214,25 @@ $(() => { // JQuery's callback for the DOM loading
           })
         })
     } else { // Expecting type=checkbox
+      const originallyChecked = checkElement.prop('checked')
+
       checkComponent.data('disabled', true)
       checkComponent.addClass('disabled')
-      checkElement.prop('disabled', 'disabled')
+      checkElement.prop('disabled', true)
 
-      const originallyChecked = checkElement.prop('checked')
-      let asyncCall
+      const asyncCall = originallyChecked
+        ? saveCheckState('delete_option', checkElement.val())
+        : saveCheckState('add_option', checkElement.val())
 
-      if (!originallyChecked) {
-        asyncCall = saveCheckState('add_option', checkElement.val())
-      } else {
-        asyncCall = saveCheckState('delete_option', checkElement.val())
-      }
-
-      asyncCall.done(function () {
-        checkComponent.data('disabled', false)
-        checkComponent.removeClass('disabled')
-        checkElement.prop('checked', !originallyChecked)
-        checkElement.prop('disabled', false)
-      })
+      asyncCall
+        .done(function () {
+          checkElement.prop('checked', !originallyChecked)
+        })
+        .always(function () {
+          checkComponent.data('disabled', false)
+          checkComponent.removeClass('disabled')
+          checkElement.prop('disabled', false)
+        })
     }
   })
 })
