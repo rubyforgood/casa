@@ -77,19 +77,16 @@ export class Toggler {
     }
   }
 
-  setOpen (isOpen) {
-    this.emancipationCategory.attr('data-is-open', isOpen ? 'true' : 'false')
-    this.emancipationCategory.data('is-open', isOpen)
-  }
-
   openChildren () {
     this.categoryOptionsContainer.show()
-    this.setOpen(true)
+    this.emancipationCategory.attr('data-is-open', 'true')
+    this.emancipationCategory.data('is-open', true)
   }
 
   closeChildren () {
     this.categoryOptionsContainer.hide()
-    this.setOpen(false)
+    this.emancipationCategory.attr('data-is-open', 'false')
+    this.emancipationCategory.data('is-open', false)
   }
 
   deselectChildren (notifierCallback) {
@@ -112,9 +109,6 @@ $(() => { // JQuery's callback for the DOM loading
   const notificationsElement = $('#notifications')
   emancipationPage.notifier = new Notifier(notificationsElement)
 
-  // Labels have no `for=` so JS owns checked state after the AJAX save. A click on the
-  // <input> itself still toggles natively *before* the wrapper handler runs, which inverted
-  // add/delete and then flipped the box back — persist was right, the DOM was wrong.
   $('.emancipation-category-check-box, .emancipation-option-check-box, .emancipation-radio-button').on('click', function (event) {
     event.preventDefault()
   })
