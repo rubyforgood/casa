@@ -28,8 +28,8 @@
       "labels": ["renovate", "dependencies", "major"]
     },
     {
-      "description": "Everything below major: automerge after stability window once CI is green",
-      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "digest", "lockFileMaintenance", "bump", "replacement", "rollback"],
+      "description": "Minor/patch/pin, any depType: automerge after stability window once CI is green",
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "bump"],
       "automerge": true,
       "labels": ["renovate", "dependencies", "automerge"]
     },
@@ -40,9 +40,10 @@
       "labels": ["renovate", "devDependencies", "automerge"]
     },
     {
-      "description": "GitHub Actions get their own label",
+      "description": "GitHub Actions: pin to digests and automerge minor/patch",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "digest"],
+      "automerge": true,
       "labels": ["renovate", "github-actions", "automerge"]
     }
   ]
