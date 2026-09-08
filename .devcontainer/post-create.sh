@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 RUBY_VERSION="$(cat .ruby-version | tr -d '\n')"
 
 # copy the file only if it doesn't already exist

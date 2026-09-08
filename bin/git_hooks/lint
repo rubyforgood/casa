@@ -32,10 +32,12 @@ case $diff_policy in
     ;;
 
   --unpushed)
-    if [ -z "$(git ls-remote --heads origin ${current_branch})" ]; then
-      changed_file_list=$(git diff --name-only HEAD~$(git cherry -v main ${current_branch} | wc -l) HEAD)
+    if [ -z "$(git ls-remote --heads origin "${current_branch}")" ]; then
+      # wc -l pads with whitespace on BSD/macOS, so strip it before interpolating.
+      unpushed_count=$(git cherry -v main "${current_branch}" | wc -l | tr -d '[:space:]')
+      changed_file_list=$(git diff --name-only "HEAD~${unpushed_count}" HEAD)
     else
-      changed_file_list=$(git diff --name-only origin/${current_branch}..HEAD)
+      changed_file_list=$(git diff --name-only "origin/${current_branch}..HEAD")
     fi
     ;;
 
@@ -55,7 +57,7 @@ lint_time=$(date +%s)
 if test $erb_changed_count -gt 0; then
   log info "Linting via erblint"
 
-  cd $repo_root/app
+  cd "$repo_root/app" || exit 1
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -71,7 +73,7 @@ fi
 if test $factory_changed_count -gt 0; then
   log info "Linting via factory:lint"
 
-  cd $repo_root/app
+  cd "$repo_root/app" || exit 1
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -87,7 +89,7 @@ fi
 if test $js_changed_count -gt 0; then
   log info "Linting javasript via standard"
 
-  cd $repo_root/app
+  cd "$repo_root/app" || exit 1
 
   if ! [ -x "$(command -v npm)" ]; then
     log error "Command npm could not be found"
@@ -103,7 +105,7 @@ fi
 if test $rb_changed_count -gt 0; then
   log info "Linting via standardrb"
 
-  cd $repo_root
+  cd "$repo_root" || exit 1
 
   if ! [ -x "$(command -v bundle)" ]; then
     log error "Command bundle could not be found"
@@ -116,7 +118,7 @@ if test $rb_changed_count -gt 0; then
   fi
 fi
 
-cd $repo_root
+cd "$repo_root" || exit 1
 for file in $(git diff --name-only); do
   last_modified_time=$(date -r $file +%s)
   if [ $last_modified_time -ge $lint_time ] ; then
