@@ -10,6 +10,9 @@
   "prConcurrentLimit": 3,
   "prHourlyLimit": 2,
   "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "rebaseWhen": "conflicted",
   "minimumReleaseAge": "7 days",
   "labels": ["renovate", "dependencies"],
   "enabledManagers": ["bundler", "npm", "github-actions", "dockerfile", "docker-compose"],
@@ -25,24 +28,21 @@
       "labels": ["renovate", "dependencies", "major"]
     },
     {
-      "description": "Minor/patch runtime deps: automerge after stability window",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchDepTypes": ["dependencies", "require"],
+      "description": "Everything below major: automerge after stability window once CI is green",
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "digest", "lockFileMaintenance", "bump", "replacement", "rollback"],
       "automerge": true,
       "labels": ["renovate", "dependencies", "automerge"]
     },
     {
-      "description": "Minor/patch dev deps: automerge after stability window",
+      "description": "Dev deps get their own label",
       "matchUpdateTypes": ["minor", "patch"],
       "matchDepTypes": ["devDependencies", "development"],
-      "automerge": true,
       "labels": ["renovate", "devDependencies", "automerge"]
     },
     {
-      "description": "GitHub Actions: pin to digests and automerge minor/patch",
+      "description": "GitHub Actions get their own label",
       "matchManagers": ["github-actions"],
       "matchUpdateTypes": ["minor", "patch", "digest"],
-      "automerge": true,
       "labels": ["renovate", "github-actions", "automerge"]
     }
   ]
