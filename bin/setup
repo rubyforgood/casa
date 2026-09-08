@@ -1,62 +1,196 @@
 #!/usr/bin/env ruby
-require 'fileutils'
+require "fileutils"
+require "json"
+require "optparse"
+
+# Unbuffered, so progress and error output stay in order when this is piped to a
+# log rather than a terminal (e.g. the Codespaces post-create script).
+$stdout.sync = true
 
 # path to your application root.
-APP_ROOT = File.expand_path('..', __dir__)
+APP_ROOT = File.expand_path("..", __dir__)
 
+# Raises on failure. Use for steps where a non-zero exit is a hard stop.
 def system!(*args)
   system(*args, exception: true)
 end
 
-FileUtils.chdir APP_ROOT do
-  # This script is a way to set up or update your development environment automatically.
-  # This script is idempotent, so that you can run it at any time and get an expectable outcome.
-  # Add necessary setup steps to this file.
-  expected_ruby_version = `cat .ruby-version`.chomp
-  current_ruby_version = `ruby -v`.chomp
-  unless current_ruby_version.include?(expected_ruby_version)
-    puts "Ruby version must be #{expected_ruby_version}. You are on #{current_ruby_version}"
+# Returns false on failure. Use where a non-zero exit is a branch, not an error
+# (e.g. `bundle check` failing just means we need to `bundle install`).
+def try_system(*args)
+  system(*args)
+end
+
+def abort_with(message)
+  abort "\n#{message}\n"
+end
+
+def step(title)
+  puts "\n== #{title} =="
+end
+
+# Parse KEY=value lines out of a dotenv-style file. Hand-rolled because this
+# runs before `bundle install`, so the dotenv gem is not available yet.
+def parse_env_file(path)
+  return {} unless File.exist?(path)
+
+  File.readlines(path).each_with_object({}) do |line, env|
+    next if line.strip.empty? || line.strip.start_with?("#")
+
+    key, _, value = line.strip.partition("=")
+    next if key.empty?
+
+    env[key] = value.gsub(/\A["']|["']\z/, "")
+  end
+end
+
+options = {reset: ENV["FORCE_DB_RESET"] == "1", assets: true}
+OptionParser.new do |opts|
+  opts.banner = "Usage: bin/setup [options]"
+  opts.on("--reset", "Drop, recreate and reseed the development database (destroys local data)") { options[:reset] = true }
+  opts.on("--skip-assets", "Skip npm install and the JS/CSS builds") { options[:assets] = false }
+  opts.on("-h", "--help", "Show this message") do
+    puts opts
     exit
   end
+end.parse!
 
-  puts "\n== Installing dependencies =="
-  system! 'gem install foreman'
+FileUtils.chdir APP_ROOT do
+  # This script sets up your development environment. It is safe to re-run: by
+  # default the database is prepared, not reset, so local data survives.
+  # Use `bin/update` after pulling main; use this script for first-time setup.
+  #
+  # Everything cheap is checked up front, so a misconfigured machine fails in
+  # seconds rather than after several minutes of `bundle install`.
+  step "Checking prerequisites"
+
+  # .env comes first: the database check below reads its values.
+  unless File.exist?(".env")
+    puts "Creating .env from .env.example"
+    FileUtils.cp ".env.example", ".env"
+  end
+
+  env = parse_env_file(".env")
+  missing_keys = parse_env_file(".env.example").keys - env.keys
+  if missing_keys.any?
+    puts "⚠️  .env is missing keys that .env.example defines: #{missing_keys.join(", ")}"
+    puts "   Copy them over from .env.example if something behaves unexpectedly."
+  end
+
+  expected_ruby_version = File.read(".ruby-version").strip
+  if expected_ruby_version != RUBY_VERSION
+    abort_with <<~MSG
+      Ruby #{expected_ruby_version} is required, but this is Ruby #{RUBY_VERSION}.
+
+      With rbenv:  rbenv install #{expected_ruby_version} && rbenv rehash
+      With rvm:    rvm install #{expected_ruby_version} && rvm use #{expected_ruby_version}
+      With asdf:   asdf install ruby #{expected_ruby_version}
+    MSG
+  end
+  puts "Ruby #{RUBY_VERSION} ✓"
+
+  node_version = `node --version 2>/dev/null`.strip
+  abort_with <<~MSG if node_version.empty?
+    Node.js was not found on your PATH.
+
+    Install nvm (https://github.com/nvm-sh/nvm), then run `nvm install` from this
+    directory to pick up the version in .nvmrc.
+  MSG
+
+  expected_node_major = JSON.parse(File.read("package.json")).dig("engines", "node").to_s[/\d+/]
+  actual_node_major = node_version[/\d+/]
+  if expected_node_major && actual_node_major != expected_node_major
+    abort_with <<~MSG
+      Node.js #{expected_node_major}.x is required, but this is #{node_version}.
+
+      Run `nvm install` from this directory to install the version in .nvmrc.
+    MSG
+  end
+  puts "Node #{node_version} ✓"
+
+  # Confirm postgres is up AND that the credentials in .env work. This is the
+  # single most common setup failure, so it is worth catching before the slow
+  # steps rather than surfacing it as a Rails connection error later.
+  db_host = env.fetch("DATABASE_HOST", "localhost")
+  db_port = env.fetch("POSTGRES_PORT", "5432")
+  db_user = env["POSTGRES_USER"].to_s
+  db_connection_hint = <<~HINT
+    Checked host=#{db_host} port=#{db_port} user=#{db_user.empty? ? "(unset)" : db_user}, from your .env file.
+
+    - Not running? Start postgres (`brew services start postgresql` on macOS), or see
+      doc/DOCKER.md if you run it in a container.
+    - Wrong credentials? Update POSTGRES_USER / POSTGRES_PASSWORD / DATABASE_HOST in .env.
+  HINT
+
+  if try_system("command -v psql > /dev/null 2>&1")
+    # psql validates credentials, not just reachability.
+    psql_env = {"PGPASSWORD" => env["POSTGRES_PASSWORD"].to_s, "PGCONNECT_TIMEOUT" => "5"}
+    psql_cmd = ["psql", "-h", db_host, "-p", db_port, "-U", db_user, "-d", "postgres", "-c", "select 1"]
+    unless try_system(psql_env, *psql_cmd, out: File::NULL, err: File::NULL)
+      abort_with "Could not connect to postgres.\n\n#{db_connection_hint}"
+    end
+    puts "PostgreSQL connection ✓"
+  elsif try_system("command -v pg_isready > /dev/null 2>&1")
+    unless try_system("pg_isready", "-h", db_host, "-p", db_port, out: File::NULL, err: File::NULL)
+      abort_with "PostgreSQL is not accepting connections.\n\n#{db_connection_hint}"
+    end
+    puts "PostgreSQL is accepting connections ✓ (install psql to also verify credentials)"
+  else
+    puts "⚠️  Neither psql nor pg_isready found; skipping the database connection check."
+  end
+
+  step "Installing dependencies"
   # Pin bundler to a version Heroku supports for our Ruby. Match Heroku's
   # supported Ruby/Bundler pairings as they evolve:
   # https://devcenter.heroku.com/articles/ruby-support-reference#supported-ruby-versions
-  system! 'gem install bundler -v 4.0.6 --conservative'
-  system!('bundle check') || system!('bundle install')
+  system! "gem install bundler -v 4.0.6 --conservative"
+  try_system("bundle check") || system!("bundle install")
 
-  # puts '\n== Copying sample files =='
-  # unless File.exist?('config/database.yml')
-  #   FileUtils.cp 'config/database.yml.sample', 'config/database.yml'
-  # end
+  if options[:reset]
+    step "Resetting database"
+    puts "Dropping, recreating and reseeding the development database."
+    system! "bin/rails db:reset"
+  else
+    step "Preparing database"
+    puts "Creating and seeding the database if needed; existing local data is preserved."
+    puts "Pass --reset to drop and reseed from scratch."
+    system! "bin/rails db:prepare"
+  end
+  system! "bin/rails db:test:prepare"
 
-  unless File.exist?('.env')
-    puts "\n== Setup .env file from .env.example =="
-    system!('cp .env.example .env')
+  step "Removing old logs and tempfiles"
+  system! "bin/rails log:clear tmp:clear"
+
+  step "Running post-deployment tasks"
+  system! "bin/rake after_party:run"
+
+  if options[:assets]
+    step "Installing npm packages"
+    unless try_system("npm ci")
+      abort_with <<~MSG
+        `npm ci` failed.
+
+        It installs strictly from package-lock.json, so this usually means the lockfile
+        and package.json disagree. Try `npm install` to reconcile them, and check the
+        output above for the offending package.
+      MSG
+    end
+
+    step "Building assets"
+    system! "npm run build"
+    system! "npm run build:css"
   end
 
-  puts "\n== Preparing database =="
-  puts '⚠️  If you use docker to run postgres, make sure your database is running ⚠️'
-  system! 'bin/rails db:reset'
-  system! 'bin/rails db:test:prepare'
+  puts <<~DONE
 
-  puts "\n== Removing old logs and tempfiles =="
-  system! 'bin/rails log:clear tmp:clear'
+    == Done ==
 
-  puts "\n== Restarting application server =="
-  system! 'bin/rails restart'
+    Next steps:
+      1. bin/dev
+      2. Open http://localhost:3000/users/sign_in
+      3. Log in as volunteer1@example.com / 12345678
+         (also supervisor1@example.com, casa_admin1@example.com — same password)
 
-  puts "\n== Running post-deployment tasks =="
-  system! 'bin/rake after_party:run'
-
-  puts "\n== Installing npm packages =="
-  system!('npm ci') || abort('install npm and try again')
-
-  puts "\n== Building assets =="
-  system!('npm run build')
-  system!('npm run build:css')
-
-  puts "\n== Done =="
+    After pulling main, run bin/update rather than bin/setup.
+  DONE
 end
