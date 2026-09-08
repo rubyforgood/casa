@@ -10,6 +10,9 @@
   "prConcurrentLimit": 3,
   "prHourlyLimit": 2,
   "platformAutomerge": true,
+  "automergeType": "pr",
+  "automergeStrategy": "squash",
+  "rebaseWhen": "conflicted",
   "minimumReleaseAge": "7 days",
   "labels": ["renovate", "dependencies"],
   "enabledManagers": ["bundler", "npm", "github-actions", "dockerfile", "docker-compose"],
@@ -25,17 +28,15 @@
       "labels": ["renovate", "dependencies", "major"]
     },
     {
-      "description": "Minor/patch runtime deps: automerge after stability window",
-      "matchUpdateTypes": ["minor", "patch"],
-      "matchDepTypes": ["dependencies", "require"],
+      "description": "Minor/patch/pin, any depType: automerge after stability window once CI is green",
+      "matchUpdateTypes": ["minor", "patch", "pin", "pinDigest", "bump"],
       "automerge": true,
       "labels": ["renovate", "dependencies", "automerge"]
     },
     {
-      "description": "Minor/patch dev deps: automerge after stability window",
+      "description": "Dev deps get their own label",
       "matchUpdateTypes": ["minor", "patch"],
       "matchDepTypes": ["devDependencies", "development"],
-      "automerge": true,
       "labels": ["renovate", "devDependencies", "automerge"]
     },
     {
