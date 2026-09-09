@@ -4,7 +4,7 @@
 class VolunteerDashboard
   RECENT_HOURS_DAYS = 30
 
-  Row = Struct.new(:casa_case, :last_contact_on, keyword_init: true) do
+  Row = Struct.new(:casa_case, :last_contact_on) do
     def needs_contact?
       last_contact_on.nil? || (Date.current - last_contact_on.to_date).to_i > Volunteer::CONTACT_MADE_IN_DAYS_NUM
     end

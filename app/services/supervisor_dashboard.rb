@@ -9,7 +9,7 @@ class SupervisorDashboard
   RECENT_CONTACT_DAYS = 60
   RECENT_HOURS_DAYS = 30
 
-  Row = Struct.new(:volunteer, :cases_count, :status, :last_contact_on, :contacts_recent, :minutes_recent, keyword_init: true) do
+  Row = Struct.new(:volunteer, :cases_count, :status, :last_contact_on, :contacts_recent, :minutes_recent) do
     def needs_followup?
       status == :follow_up
     end
