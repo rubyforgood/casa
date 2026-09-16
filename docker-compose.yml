@@ -31,7 +31,7 @@ services:
     # NOTE: Postgres 12 went end-of-life in November 2024, so CI tests against
     # an unsupported engine. Bumping it needs the db_data volume recreated, so
     # it is a separate decision, not part of unbreaking the job.
-    image: postgres:12.5
+    image: postgres:12.22
     env_file:
       - config/docker.env
     volumes:
