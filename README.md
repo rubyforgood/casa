@@ -246,7 +246,7 @@ new tab in the browser.
 To see local email previews, check out http://localhost:3000/rails/mailers
 
 ### Running Tests
- - run the ruby test suite `bin/rails spec`
+ - run the ruby test suite `bin/rails spec`. It builds the JS and CSS bundles first; a bare `bundle exec rspec` does not, so run `npm run build` and `npm run build:css` (or `bin/setup`) once before using it
  - run the javascript test suite `npm run test`
 
 If you have trouble running tests, check out CI scripts in [`.github/workflows/`](.github/workflows/) for sample commands.

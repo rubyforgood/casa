@@ -42,6 +42,15 @@ rescue ActiveRecord::PendingMigrationError => e
   abort e.to_s.strip
 end
 
+# app/assets/builds/ is gitignored and only populated by `npm run build` and
+# `npm run build:css`. Until then any layout that links those bundles fails,
+# and for tailwind.css with a misleading AssetNotPrecompiledError that points
+# at manifest.js. Fail early with the real fix instead.
+missing_assets = %w[application.js all_casa_admin.js tailwind.css].reject { |asset| Rails.root.join("app/assets/builds", asset).exist? }
+if missing_assets.any?
+  abort "Missing built assets: #{missing_assets.join(", ")}. Run `npm run build` and `npm run build:css`, or use `bin/rails spec`, which builds them."
+end
+
 ci_environment = (ENV["GITHUB_ACTIONS"] || ENV["CI"]).present?
 
 RSpec.configure do |config|
