@@ -32,7 +32,8 @@
       <%# Grouped primary nav (design.md "Left nav"): Dashboard first, Settings pinned to the bottom,
           the middle grouped by domain (Records / Activity / Reporting) with a divider between groups.
           Each group carries an aria-label; a group whose every item is role-gated out renders nothing
-          (no stray divider). Items: [title, icon, path, key, allowed?]. %>
+          (no stray divider), which is also what hides Links when the org has no active custom link.
+          Items: [title, icon, path, key, allowed?, external?]. %>
       <nav class="flex flex-1 flex-col overflow-y-auto px-3 py-2 text-sm" aria-label="Main navigation">
         <%
           nav_groups = [
@@ -54,7 +55,10 @@
             ["Reporting", [
               ["Reports", "bi-bar-chart", reports_path, "reports", policy(:application).see_reports_page?],
               ["Analytics", "bi-graph-up", analytics_path, "analytics", policy(:analytics).index?]
-            ]]
+            ]],
+            ["Links", current_organization.custom_org_links.active.map { |custom_link|
+              [custom_link.text, "bi-link-45deg", custom_link.url, nil, true, true]
+            }]
           ]
           visible_groups = nav_groups
             .map { |label, items| [label, items.select { |item| item[4] }] }
@@ -67,8 +71,8 @@
             <% unless index.zero? %>
               <div class="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-500" aria-hidden="true"><%= label %></div>
             <% end %>
-            <% items.each do |title, icon, path, key, _allowed| %>
-              <%= render "layouts/nav_link", title: title, icon: icon, path: path, key: key %>
+            <% items.each do |title, icon, path, key, _allowed, external| %>
+              <%= render "layouts/nav_link", title: title, icon: icon, path: path, key: key, external: external %>
             <% end %>
           </div>
         <% end %>
