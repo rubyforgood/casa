@@ -22,6 +22,7 @@ jobs:
     env:
       RAILS_ENV: test
       TEST_MAX_DURATION: 60
+      PARALLEL_TEST_PROCESSORS: 4
 
     services:
       db:
@@ -53,6 +54,14 @@ jobs:
           cache: "npm"
       - run: npm ci
 
+      - uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: tmp/parallel_runtime_rspec.log
+          key: parallel-runtime-${{ github.head_ref || github.ref_name }}-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: |
+            parallel-runtime-${{ github.head_ref || github.ref_name }}-
+            parallel-runtime-main-
+
       - name: Install PostgreSQL client
         run: |
           sudo apt-get -yqq install libpq-dev
@@ -67,8 +76,7 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           POSTGRES_PORT: 5432
         run: |
-          bundle exec rake db:create
-          bundle exec rake db:schema:load
+          bundle exec rake parallel:create parallel:load_schema
           bundle exec rails assets:precompile
 
       - name: Run rspec
@@ -79,7 +87,24 @@ jobs:
           POSTGRES_HOST_AUTH_METHOD: trust
           RUN_SIMPLECOV: true
         run: |
-          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec rspec
+          group_by=filesize
+          if [ -s tmp/parallel_runtime_rspec.log ]; then
+            group_by=runtime
+          fi
+          RUBYOPT='-W:no-deprecated -W:no-experimental' bundle exec parallel_test spec --type rspec -n 4 --group-by "$group_by"
+
+      - name: Combine runtime logs
+        run: |
+          runtime_logs=(tmp/parallel_runtime_rspec_worker*.log)
+          if [ "${#runtime_logs[@]}" -ne "$PARALLEL_TEST_PROCESSORS" ]; then
+            echo "Expected $PARALLEL_TEST_PROCESSORS runtime logs, found ${#runtime_logs[@]}"
+            exit 1
+          fi
+          cat "${runtime_logs[@]}" > tmp/parallel_runtime_rspec.log
+
+      - name: Merge coverage
+        run: |
+          bundle exec ruby -rsimplecov -e 'resultsets = Dir["coverage/parallel*/.resultset.json"]; abort "Expected 4 SimpleCov resultsets, found #{resultsets.size}" unless resultsets.size == 4; SimpleCov.collate(resultsets)'
 
       - uses: qltysh/qlty-action/coverage@08a0a862c159eae9b9003081da6663d96efef637 # v2.3.0
         with:
