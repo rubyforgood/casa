@@ -1,0 +1,80 @@
+name: Shell lint
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - '**/*.sh'
+      - '**/*.bash'
+      - 'bin/**'
+      - 'docker/**'
+      - '.devcontainer/**'
+      - '.github/workflows/shell_lint.yml'
+  pull_request:
+    branches:
+      - main
+      - rfg-event-2025
+    paths:
+      - '**/*.sh'
+      - '**/*.bash'
+      - 'bin/**'
+      - 'docker/**'
+      - '.devcontainer/**'
+      - '.github/workflows/shell_lint.yml'
+
+jobs:
+  shellcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install shellcheck if the runner image lacks it
+        run: |
+          if ! command -v shellcheck > /dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install --no-install-recommends -y shellcheck
+          fi
+          shellcheck --version
+
+      - name: Shellcheck
+        # Many scripts here have no extension (bin/dev, docker/*), and bin/ also
+        # holds Ruby scripts, so select by shebang rather than by path.
+        #
+        # --severity=warning: the tree still has ~35 info/style findings, mostly
+        # SC2086 (unquoted variables) in bin/git_hooks and docker. Those are
+        # worth fixing, but gating on them today would mean rewriting scripts
+        # unrelated to whatever PR is being reviewed. Lower this as they get
+        # cleaned up.
+        run: |
+          set -eu
+
+          list=$(mktemp)
+          trap 'rm -f "$list"' EXIT
+
+          {
+            git ls-files -- '*.sh' '*.bash'
+            git ls-files | while IFS= read -r file; do
+              [ -f "$file" ] || continue
+              if head -n 1 "$file" |
+                  grep -qE '^#!.*[ /](bash|sh|dash|ksh)$'; then
+                printf '%s\n' "$file"
+              fi
+            done
+          } | sort -u > "$list"
+
+          count=$(wc -l < "$list" | tr -d '[:space:]')
+          if [ "$count" -eq 0 ]; then
+            echo "No shell scripts found -- check the discovery logic above."
+            exit 1
+          fi
+
+          echo "Checking $count shell scripts:"
+          sed 's/^/  /' "$list"
+          echo
+
+          xargs shellcheck --severity=warning -- < "$list"
