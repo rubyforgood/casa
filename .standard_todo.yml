@@ -2,9 +2,6 @@
 # Remove from this list as you refactor files.
 ---
 ignore:
-- app/controllers/all_casa_admins/sessions_controller.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
-  - Rails/LexicallyScopedActionFilter
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/casa_cases_controller.rb:
