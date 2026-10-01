@@ -208,7 +208,7 @@ Run these commands before starting the installation process:
 
 `bin/setup` checks the database before doing anything slow, and prints the host, port
 and user it tried. Either postgres is not running, or the credentials in `.env` are
-wrong — update `POSTGRES_USER`, `POSTGRES_PASSWORD` and `DATABASE_HOST` to match your
+wrong — update `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_PORT` and `DATABASE_HOST` to match your
 PostgreSQL setup and re-run `bin/setup`.
 </details>
 
