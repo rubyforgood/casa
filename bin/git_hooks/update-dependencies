@@ -28,7 +28,7 @@ fi
 
 log info "Checking javascript dependency status"
 
-if [ $(git diff HEAD@{1}..HEAD@{0} -- "package-lock.json" | wc -l) -gt 0 ] || [ $(git diff HEAD@{1}..HEAD@{0} -- "package.json" | wc -l) -gt 0 ]; then
+if ! git diff --quiet "HEAD@{1}..HEAD@{0}" -- package-lock.json package.json; then
   log info "Updating JavaScript dependencies"
   npm install
 fi

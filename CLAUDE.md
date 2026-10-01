@@ -10,7 +10,7 @@ CASA is a Rails app used by CASA (Court Appointed Special Advocate) chapters to 
 
 | Task | Command |
 |---|---|
-| One-time setup | `bin/setup` |
+| One-time setup | `bin/setup` (safe to re-run; `--reset` to rebuild the dev DB, `--skip-assets` to skip npm) |
 | Run app (web + JS/CSS watchers) | `bin/dev` then visit http://localhost:3000 |
 | Run full RSpec suite | `bin/rails spec` |
 | Run a single spec file | `bundle exec rspec spec/path/to/file_spec.rb` |
