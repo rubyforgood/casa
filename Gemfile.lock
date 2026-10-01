@@ -82,7 +82,7 @@ GEM
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
     after_party (2.1.0)
-    amazing_print (2.0.0)
+    amazing_print (3.0.0)
     annotaterb (4.25.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
