@@ -16,6 +16,8 @@ if ENV["RUN_SIMPLECOV"]
   require "simplecov"
   SimpleCov.start do
     command_name "Job #{ENV["TEST_ENV_NUMBER"]}" if ENV["TEST_ENV_NUMBER"]
+    coverage_dir "coverage/parallel#{ENV["TEST_ENV_NUMBER"]}" if ENV.key?("TEST_ENV_NUMBER")
+    merge_timeout 3600
 
     add_filter "/spec/"
     add_filter "/lib/tasks/auto_annotate_models.rake"
