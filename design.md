@@ -1963,6 +1963,15 @@ distinct from the stat/KPI **icon tile** (`rounded-xl`).
   group is a `role="group"` with an **`aria-label`** (the visible label is `aria-hidden` so it isn't
   announced twice); a group whose every item is policy-gated out **renders nothing -- no orphan
   label**. Built from a `nav_groups` array + the `layouts/_nav_link` partial in `layouts/casa_app`.
+- **Links (admin-defined custom org links)** is the **last middle group**, after Reporting and above
+  the pinned Settings: the org's active `custom_org_links`, shown to every role in that org. It reuses
+  the same group markup and the same empty-group rule, so an org with no active link gets no label and
+  no group. Its items are the only **external** nav links (`bi-link-45deg`, `target="_blank"`,
+  `rel="noopener"`), and `_nav_link`'s `external` local is what renders that: a trailing
+  `bi-box-arrow-up-right` affordance plus an `sr-only` "(opens in a new tab)", since the icon is
+  `aria-hidden` and leaving the app is not otherwise announced. The label is user-supplied (30 chars
+  max), so it is wrapped in `min-w-0 truncate` with `shrink-0` icons rather than allowed to widen the
+  256px rail.
 - **Top bar** (`border-b border-slate-200 bg-white/80 backdrop-blur`): mobile nav
   toggle, notifications, and the avatar **account menu** — the single place for identity
   + account actions (no duplicate identity block in the sidebar). Its header shows name,

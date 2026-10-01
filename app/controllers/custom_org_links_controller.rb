@@ -43,7 +43,7 @@ class CustomOrgLinksController < ApplicationController
   private
 
   def set_custom_org_link
-    @custom_org_link = CustomOrgLink.find(params[:id])
+    @custom_org_link = current_organization.custom_org_links.find(params[:id])
   end
 
   def custom_org_link_params

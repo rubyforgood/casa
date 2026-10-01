@@ -7,6 +7,8 @@ class CustomOrgLink < ApplicationRecord
   validates :active, inclusion: {in: [true, false]}
   validates :url, url: true
 
+  scope :active, -> { where(active: true) }
+
   before_save :trim_name
 
   private

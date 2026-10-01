@@ -27,6 +27,16 @@ RSpec.describe CustomOrgLink, type: :model do
     it { is_expected.not_to allow_value("some arbitrary string").for(:url) }
   end
 
+  describe ".active" do
+    it "returns only the links flagged active" do
+      casa_org = create(:casa_org)
+      active_link = create(:custom_org_link, casa_org: casa_org, active: true)
+      create(:custom_org_link, casa_org: casa_org, active: false)
+
+      expect(described_class.active).to contain_exactly(active_link)
+    end
+  end
+
   describe "#active" do
     it "only allows true or false" do
       casa_org = build(:casa_org)
