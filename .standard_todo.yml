@@ -4,11 +4,6 @@
 ignore:
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
-- app/controllers/case_contacts/followups_controller.rb:
-  - Layout/EmptyLineAfterGuardClause
-- app/controllers/case_contacts_controller.rb:
-  - Rails/LexicallyScopedActionFilter
-  - Style/HashSlice
 - app/controllers/checklist_items_controller.rb:
   - Rails/TimeZone
 - app/controllers/court_dates_controller.rb:
@@ -17,8 +12,6 @@ ignore:
   - Layout/EmptyLinesAfterModuleInclusion
 - app/controllers/imports_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
-- app/controllers/other_duties_controller.rb:
-  - Layout/EmptyLineAfterGuardClause
 - app/controllers/users/sessions_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
@@ -34,8 +27,6 @@ ignore:
   - Layout/EmptyLinesAfterModuleInclusion
 - app/helpers/banner_helper.rb:
   - Rails/TimeZone
-- app/helpers/followup_helper.rb:
-  - Layout/EmptyLineAfterGuardClause
 - app/helpers/phone_number_helper.rb:
   - Rails/Blank
   - Style/RedundantRegexpEscape
