@@ -21,8 +21,6 @@ ignore:
   - Layout/EmptyLinesAfterModuleInclusion
 - app/controllers/other_duties_controller.rb:
   - Layout/EmptyLineAfterGuardClause
-- app/controllers/reimbursements_controller.rb:
-  - Rails/TimeZone
 - app/controllers/users/sessions_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
