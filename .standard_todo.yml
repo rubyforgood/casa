@@ -4,8 +4,6 @@
 ignore:
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
-- app/controllers/casa_cases_controller.rb:
-  - Style/EmptyStringInsideInterpolation
 - app/controllers/case_contacts/followups_controller.rb:
   - Layout/EmptyLineAfterGuardClause
 - app/controllers/case_contacts_controller.rb:
