@@ -4,8 +4,6 @@
 ignore:
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
-- app/controllers/checklist_items_controller.rb:
-  - Rails/TimeZone
 - app/controllers/court_dates_controller.rb:
   - Rails/TimeZone
 - app/controllers/emancipation_checklists_controller.rb:
