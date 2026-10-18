@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 RUBY_VERSION="$(cat .ruby-version | tr -d '\n')"
 
 # copy the file only if it doesn't already exist
@@ -11,4 +12,6 @@ if [ "$RUBY_VERSION" != "4.0.6" ]; then
 	echo "Ruby $RUBY_VERSION installed"
 fi
 
-bin/setup
+# --reset builds the development database from scratch. This is a brand new
+# container, so there is no local data to lose.
+bin/setup --reset
