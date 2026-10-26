@@ -114,88 +114,95 @@ RSpec.describe "typeahead audit", :js, type: :system do
     @results << [label, ["#{e.class}: #{e.message.to_s.lines.first.to_s.strip[0, 70]}"]]
   end
 
-  it "every control filters as you type, then clears the query and registers the value" do
+  before do
     @results = []
     allow(Flipper).to receive(:enabled?).and_call_original
     allow(Flipper).to receive(:enabled?).with(:new_case_contact_table).and_return(true)
-    begin
-      sign_in admin
+    sign_in admin
+  end
 
-      visit case_contacts_path
-      find("[data-disclosure-target='trigger']").click
-      audit("case_contacts#index contact types", "select[name='filterrific[contact_type][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
-
-      visit case_contacts_new_design_path
-      find("[data-disclosure-target='trigger']").click if page.has_css?("[data-disclosure-target='trigger']", wait: 2)
-      audit("new_design cases", "#casa_case_ids", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
-      audit("new_design contact types", "#contact_type_ids", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
-
-      visit new_case_group_path
-      audit("case_groups#new cases", "select[name='case_group[casa_case_ids][]']", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
-
-      visit learning_hours_path
-      audit("learning_hours volunteer", "select[name='search']", query: "Quen", expect_option: "Quentin Quackenbush")
-
-      visit other_duties_path
-      audit("other_duties volunteer", "select[name='search']", query: "Quen", expect_option: "Quentin Quackenbush")
-
-      visit reports_path
-      audit("reports supervisors", "select[name='report[supervisor_ids][]']", query: "Zeld", expect_option: "Zelda Zimmerman")
-      audit("reports volunteers", "select[name='report[creator_ids][]']", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "Aaron Ackerman")
-      audit("reports contact types", "select[name='report[contact_type_ids][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
-      audit("reports contact type groups", "select[name='report[contact_type_group_ids][]']", query: "Zebra", expect_option: "Zebra group", absent_option: "Alpha group")
-
-      visit supervisors_path
-      audit("supervisors#index assign", "select[name='supervisor_volunteer[supervisor_id]']", query: "Zeld", expect_option: "Zelda Zimmerman")
-
-      visit edit_casa_case_path(kase)
-      audit("casa_cases#edit assign volunteer", "#case_assignment_casa_case_id", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
-
-      visit edit_volunteer_path(volunteer)
-      audit("volunteers#edit assign case", "#case_assignment_casa_case_id", query: "AAA", expect_option: "AAA-1111", absent_option: "ZZZ-9999")
-
-      # A volunteer who already HAS a supervisor renders the current-supervisor branch, not the assign
-      # form -- so this one is audited on the unassigned volunteer.
-      visit edit_volunteer_path(unassigned)
-      audit("volunteers#edit assign supervisor", "#supervisor_volunteer_supervisor_id", query: "Zeld", expect_option: "Zelda Zimmerman")
-
-      visit edit_supervisor_path(supervisor)
-      audit("supervisors#edit assign volunteer", "select[name='supervisor_volunteer[volunteer_id]']", query: "Nadi", expect_option: "Nadia Nobody")
-
-      visit new_casa_case_path
-      audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
-
-      # Filter-bar pickers (a person list among short native selects), not assign pickers.
-      visit reimbursements_path
-      audit("reimbursements#index volunteer filter", "#volunteers", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "All volunteers")
-
-      visit volunteers_path
-      audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman", absent_option: "All supervisors")
-
-      # The bulk assign-supervisor picker lives inside a dialog whose trigger only appears once a
-      # volunteer row is checked.
-      first("[id^='supervisor_volunteer_volunteer_ids_']").click
-      find("[data-select-all-target='button']").click
-      audit("volunteers#index bulk assign (in dialog)", "#supervisor_volunteer_supervisor_id", query: "Zeld",
-        expect_option: "Zelda Zimmerman", absent_option: "None")
-
-      visit case_court_reports_path
-      # This picker lives inside the "Generate report" Dialog, so it does not exist on screen until
-      # the modal is opened -- not a broken control, just one behind a trigger.
-      click_on "Generate report"
-      expect(page).to have_css("dialog[open]")
-      audit("court report case picker (in modal)", "#case-selection", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
-
-      # Volunteer-only page; as an admin the visit redirects to the dashboard.
-      sign_out admin
-      sign_in volunteer
-      visit emancipation_checklists_path
-      audit("emancipation_checklists case", "select[name='search']", query: "ZZT", expect_option: "ZZT-8888")
-    end
-
-    # Guards the inventory itself: a new TomSelect control should be added here too.
-    expect(@results.size).to(eq(21), "expected 21 controls, audited #{@results.size} -- one was added or removed")
+  def expect_audit_results(expected_count)
+    expect(@results.size).to(eq(expected_count), "expected #{expected_count} controls, audited #{@results.size} -- one was added or removed")
     failures = @results.reject { |(_, problems)| problems.empty? }
     expect(failures).to be_empty, "typeahead problems:\n" + failures.map { |l, p| "  #{l}: #{p.join("; ")}" }.join("\n")
+  end
+
+  it "case contact and case group controls filter, clear the query and register the value" do
+    visit case_contacts_path
+    find("[data-disclosure-target='trigger']").click
+    audit("case_contacts#index contact types", "select[name='filterrific[contact_type][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
+
+    visit case_contacts_new_design_path
+    find("[data-disclosure-target='trigger']").click if page.has_css?("[data-disclosure-target='trigger']", wait: 2)
+    audit("new_design cases", "#casa_case_ids", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
+    audit("new_design contact types", "#contact_type_ids", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
+
+    visit new_case_group_path
+    audit("case_groups#new cases", "select[name='case_group[casa_case_ids][]']", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
+
+    expect_audit_results(4)
+  end
+
+  it "learning hour, other duty and report controls filter, clear the query and register the value" do
+    visit learning_hours_path
+    audit("learning_hours volunteer", "select[name='search']", query: "Quen", expect_option: "Quentin Quackenbush")
+
+    visit other_duties_path
+    audit("other_duties volunteer", "select[name='search']", query: "Quen", expect_option: "Quentin Quackenbush")
+
+    visit reports_path
+    audit("reports supervisors", "select[name='report[supervisor_ids][]']", query: "Zeld", expect_option: "Zelda Zimmerman")
+    audit("reports volunteers", "select[name='report[creator_ids][]']", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "Aaron Ackerman")
+    audit("reports contact types", "select[name='report[contact_type_ids][]']", query: "Zebra", expect_option: "Zebra type", absent_option: "Alpha type")
+    audit("reports contact type groups", "select[name='report[contact_type_group_ids][]']", query: "Zebra", expect_option: "Zebra group", absent_option: "Alpha group")
+
+    expect_audit_results(6)
+  end
+
+  it "assignment controls filter, clear the query and register the value" do
+    visit supervisors_path
+    audit("supervisors#index assign", "select[name='supervisor_volunteer[supervisor_id]']", query: "Zeld", expect_option: "Zelda Zimmerman")
+
+    visit edit_casa_case_path(kase)
+    audit("casa_cases#edit assign volunteer", "#case_assignment_casa_case_id", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
+
+    visit edit_volunteer_path(volunteer)
+    audit("volunteers#edit assign case", "#case_assignment_casa_case_id", query: "AAA", expect_option: "AAA-1111", absent_option: "ZZZ-9999")
+
+    visit edit_volunteer_path(unassigned)
+    audit("volunteers#edit assign supervisor", "#supervisor_volunteer_supervisor_id", query: "Zeld", expect_option: "Zelda Zimmerman")
+
+    visit edit_supervisor_path(supervisor)
+    audit("supervisors#edit assign volunteer", "select[name='supervisor_volunteer[volunteer_id]']", query: "Nadi", expect_option: "Nadia Nobody")
+
+    visit new_casa_case_path
+    audit("casa_cases#new assign volunteer", "select[name*='volunteer_id']", query: "Aaro", expect_option: "Aaron Ackerman", absent_option: "Quentin Quackenbush")
+
+    expect_audit_results(6)
+  end
+
+  it "filter, dialog and emancipation controls filter, clear the query and register the value" do
+    visit reimbursements_path
+    audit("reimbursements#index volunteer filter", "#volunteers", query: "Quen", expect_option: "Quentin Quackenbush", absent_option: "All volunteers")
+
+    visit volunteers_path
+    audit("volunteers#index supervisor filter", "#supervisor", query: "Zeld", expect_option: "Zelda Zimmerman", absent_option: "All supervisors")
+
+    first("[id^='supervisor_volunteer_volunteer_ids_']").click
+    find("[data-select-all-target='button']").click
+    audit("volunteers#index bulk assign (in dialog)", "#supervisor_volunteer_supervisor_id", query: "Zeld",
+      expect_option: "Zelda Zimmerman", absent_option: "None")
+
+    visit case_court_reports_path
+    click_on "Generate report"
+    expect(page).to have_css("dialog[open]")
+    audit("court report case picker (in modal)", "#case-selection", query: "ZZZ", expect_option: "ZZZ-9999", absent_option: "AAA-1111")
+
+    sign_out admin
+    sign_in volunteer
+    visit emancipation_checklists_path
+    audit("emancipation_checklists case", "select[name='search']", query: "ZZT", expect_option: "ZZT-8888")
+
+    expect_audit_results(5)
   end
 end
