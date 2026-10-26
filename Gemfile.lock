@@ -175,7 +175,7 @@ GEM
       actionmailer (>= 5.0)
       devise (>= 4.6)
     diff-lcs (1.6.2)
-    docx (0.13.0)
+    docx (0.13.3)
       nokogiri (~> 1.13, >= 1.13.0)
       rubyzip (>= 2.0, < 4)
     dotenv (3.2.0)
