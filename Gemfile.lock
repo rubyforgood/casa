@@ -371,12 +371,12 @@ GEM
     orm_adapter (0.5.0)
     ostruct (0.6.3)
     pagy (9.4.0)
-    parallel (2.2.0)
+    parallel (2.3.0)
     parallel_tests (5.8.0)
       parallel
     paranoia (3.1.0)
       activerecord (>= 7, < 8.2)
-    parser (3.3.12.0)
+    parser (3.3.13.0)
       ast (~> 2.4.1)
       racc
     pdf-forms (1.5.2)
@@ -473,7 +473,7 @@ GEM
       prism (>= 1.6.0)
       rbs (>= 4.0.0)
       tsort
-    regexp_parser (2.12.0)
+    regexp_parser (2.13.1)
     reline (0.7.0)
       io-console (~> 0.5)
     request_store (1.7.0)
