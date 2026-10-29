@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Auth forms submitted with a stale CSRF token", type: :request do
+RSpec.describe RecoversFromStaleForm, type: :request do
   around do |example|
     ActionController::Base.allow_forgery_protection = true
     example.run
