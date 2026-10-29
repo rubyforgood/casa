@@ -113,7 +113,7 @@ RSpec.describe "/judges", type: :request do
 
     context "logged in as admin user" do
       it "can successfully update a judge" do
-        casa_org = build(:casa_org)
+        casa_org = judge.casa_org
         sign_in build(:casa_admin, casa_org: casa_org)
 
         put judge_path(judge), params: params

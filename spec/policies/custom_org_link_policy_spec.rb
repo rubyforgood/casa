@@ -5,7 +5,7 @@ RSpec.describe CustomOrgLinkPolicy, type: :policy do
   let(:supervisor) { build_stubbed(:supervisor) }
   let(:volunteer) { build_stubbed(:volunteer) }
 
-  permissions :new?, :create?, :edit?, :update? do
+  permissions :new?, :create? do
     it "permits casa_admins" do
       expect(described_class).to permit(casa_admin)
     end
@@ -48,6 +48,25 @@ RSpec.describe CustomOrgLinkPolicy, type: :policy do
       it "resolves no links" do
         expect(resolved_scope).to be_empty
       end
+    end
+  end
+
+  permissions :edit?, :update? do
+    let(:casa_org) { create(:casa_org) }
+    let(:admin) { create(:casa_admin, casa_org: casa_org) }
+
+    it "allows casa_admins in the record's org" do
+      expect(described_class).to permit(admin, create(:custom_org_link, casa_org: casa_org))
+    end
+
+    it "does not permit casa_admins from another org" do
+      expect(described_class).not_to permit(admin, create(:custom_org_link, casa_org: create(:casa_org)))
+    end
+
+    it "does not permit supervisors or volunteers" do
+      record = create(:custom_org_link, casa_org: casa_org)
+      expect(described_class).not_to permit(create(:supervisor, casa_org: casa_org), record)
+      expect(described_class).not_to permit(create(:volunteer, casa_org: casa_org), record)
     end
   end
 end

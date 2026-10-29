@@ -3,5 +3,7 @@ class FollowupPolicy < ApplicationPolicy
     admin_or_supervisor_or_volunteer?
   end
 
-  alias_method :resolve?, :create?
+  def resolve?
+    admin_or_supervisor_or_volunteer_same_org?
+  end
 end

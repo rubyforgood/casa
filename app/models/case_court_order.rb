@@ -27,6 +27,7 @@ class CaseCourtOrder < ApplicationRecord
   ].freeze
 
   belongs_to :casa_case
+  has_one :casa_org, through: :casa_case
   belongs_to :court_date, optional: true
 
   validates :text, presence: true

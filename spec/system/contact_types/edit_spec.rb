@@ -4,7 +4,7 @@ RSpec.describe "contact_types/edit", type: :system do
   let!(:organization) { create(:casa_org) }
   let!(:admin) { create(:casa_admin, casa_org_id: organization.id) }
   let!(:contact_type_group) { create(:contact_type_group, casa_org: organization, name: "Contact type group 1") }
-  let!(:contact_type) { create(:contact_type, name: "Contact type 1") }
+  let!(:contact_type) { create(:contact_type, contact_type_group: contact_type_group, name: "Contact type 1") }
 
   before do
     sign_in admin

@@ -26,9 +26,19 @@ RSpec.describe CasaAdminPolicy do
     end
   end
 
-  permissions :index?, :activate?, :change_to_supervisor?, :create?, :new?, :resend_invitation?, :update? do
+  permissions :index?, :create?, :new? do
     it "allows casa_admins" do
       expect(subject).to permit(casa_admin)
+    end
+  end
+
+  permissions :activate?, :change_to_supervisor?, :resend_invitation?, :update? do
+    it "allows casa_admins in the record's org" do
+      expect(subject).to permit(casa_admin, create(:casa_admin, casa_org: organization))
+    end
+
+    it "does not permit casa_admins from another org" do
+      expect(subject).not_to permit(casa_admin, create(:casa_admin, casa_org: create(:casa_org)))
     end
   end
 
@@ -51,12 +61,17 @@ RSpec.describe CasaAdminPolicy do
       end
 
       it "does not permit if is the only admin" do
-        expect(subject).not_to permit(casa_admin, :casa_admin)
+        expect(subject).not_to permit(casa_admin, casa_admin)
       end
 
       it "permits if is a active user and exist other casa admins" do
+        other_admin = create(:casa_admin, casa_org: organization)
+        expect(subject).to permit(casa_admin, other_admin)
+      end
+
+      it "does not permit deactivating an admin in another org" do
         create(:casa_admin, casa_org: organization)
-        expect(subject).to permit(casa_admin, :casa_admin)
+        expect(subject).not_to permit(casa_admin, create(:casa_admin, casa_org: create(:casa_org)))
       end
     end
 

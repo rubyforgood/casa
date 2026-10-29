@@ -116,7 +116,7 @@ RSpec.describe "/contact_types", type: :request do
       it "can successfully update a contact type" do
         sign_in build(:casa_admin, casa_org: casa_org)
 
-        contact_type = create(:contact_type, contact_type_group: group)
+        contact_type = create(:contact_type, contact_type_group: create(:contact_type_group, casa_org: casa_org))
 
         put contact_type_path(contact_type), params: params
 

@@ -3,7 +3,7 @@ class CaseContacts::FollowupsController < ApplicationController
 
   def create
     authorize Followup
-    case_contact = CaseContact.find(params[:case_contact_id])
+    case_contact = CaseContact.joins(:creator).where(users: {casa_org_id: current_organization&.id}).find(params[:case_contact_id])
     note = simple_followup_params[:note].presence
     FollowupService.create_followup(case_contact, current_user, note)
 
@@ -14,7 +14,7 @@ class CaseContacts::FollowupsController < ApplicationController
   end
 
   def resolve
-    @followup = Followup.find(params[:id])
+    @followup = Followup.in_organization(current_organization).find(params[:id])
     authorize @followup
 
     @followup.resolved!

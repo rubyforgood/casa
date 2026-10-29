@@ -112,7 +112,7 @@ RSpec.describe "/hearing_types", type: :request do
       it "successfully update hearing type with active status" do
         sign_in create(:casa_admin, casa_org: casa_org)
 
-        hearing_type = create(:hearing_type)
+        hearing_type = create(:hearing_type, casa_org: casa_org)
 
         put hearing_type_path(hearing_type), params: params
 
@@ -127,7 +127,7 @@ RSpec.describe "/hearing_types", type: :request do
       it "successfully update hearing type with inactive status" do
         sign_in create(:casa_admin, casa_org: casa_org)
 
-        hearing_type = create(:hearing_type)
+        hearing_type = create(:hearing_type, casa_org: casa_org)
 
         put hearing_type_path(hearing_type), params: params
 

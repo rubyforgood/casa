@@ -24,7 +24,7 @@ class ApplicationPolicy
   end
 
   def show?
-    is_admin?
+    is_admin_same_org?
   end
 
   def create?
@@ -36,15 +36,15 @@ class ApplicationPolicy
   end
 
   def update?
-    is_admin?
+    is_admin_same_org?
   end
 
   def edit?
-    is_admin?
+    is_admin_same_org?
   end
 
   def destroy?
-    is_admin?
+    is_admin_same_org?
   end
 
   def is_admin?

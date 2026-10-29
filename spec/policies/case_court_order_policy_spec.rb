@@ -8,8 +8,18 @@ RSpec.describe CaseCourtOrderPolicy do
   let(:volunteer) { build_stubbed(:volunteer) }
 
   permissions :destroy? do
-    it { is_expected.to permit(casa_admin) }
-    it { is_expected.to permit(supervisor) }
-    it { is_expected.to permit(volunteer) }
+    let(:casa_org) { create(:casa_org) }
+    let(:court_order) { create(:case_court_order, casa_case: create(:casa_case, casa_org: casa_org)) }
+    let(:other_org_court_order) { create(:case_court_order, casa_case: create(:casa_case, casa_org: create(:casa_org))) }
+
+    %i[casa_admin supervisor volunteer].each do |role|
+      it "permits a #{role} in the court order's org" do
+        expect(subject).to permit(create(role, casa_org: casa_org), court_order)
+      end
+
+      it "does not permit a #{role} from another org" do
+        expect(subject).not_to permit(create(role, casa_org: casa_org), other_org_court_order)
+      end
+    end
   end
 end

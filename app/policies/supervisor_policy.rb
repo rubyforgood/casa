@@ -37,5 +37,5 @@ class SupervisorPolicy < UserPolicy
   end
 
   alias_method :create?, :new?
-  alias_method :change_to_admin?, :is_admin?
+  alias_method :change_to_admin?, :is_admin_same_org?
 end

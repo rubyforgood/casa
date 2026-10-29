@@ -11,7 +11,7 @@ class CaseCourtOrdersController < ApplicationController
   private
 
   def set_case_court_order
-    @case_court_order = CaseCourtOrder.find(params[:id])
+    @case_court_order = CaseCourtOrder.joins(:casa_case).where(casa_cases: {casa_org_id: current_organization&.id}).find(params[:id])
   rescue ActiveRecord::RecordNotFound
     head :not_found
   end
