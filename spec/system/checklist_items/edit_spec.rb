@@ -22,7 +22,7 @@ RSpec.describe "checklist_items/edit", type: :system do
     expect(page).to have_text("Yes")
 
     click_on "Submit"
-    current_date = Time.new.strftime("%m/%d/%Y")
+    current_date = Time.zone.now.strftime("%m/%d/%Y")
     expect(page).to have_text("Updated #{current_date}")
   end
 
