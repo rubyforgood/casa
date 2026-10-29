@@ -274,7 +274,7 @@ class DbPopulator
         category: checklist_item_categories.sample,
         mandatory: mandatory_options.sample
       )
-      hearing_type.update_attribute(:checklist_updated_date, "Updated #{Time.new.strftime("%m/%d/%Y")}")
+      hearing_type.update_attribute(:checklist_updated_date, "Updated #{Time.zone.now.strftime("%m/%d/%Y")}")
     end
   end
 

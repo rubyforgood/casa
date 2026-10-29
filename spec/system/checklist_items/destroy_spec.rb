@@ -18,7 +18,7 @@ RSpec.describe "checklist_items/destroy", type: :system do
     expect(page).not_to have_text(checklist_item.description)
 
     click_on "Submit"
-    current_date = Time.new.strftime("%m/%d/%Y")
+    current_date = Time.zone.now.strftime("%m/%d/%Y")
     expect(page).to have_text("Updated #{current_date}")
   end
 end
