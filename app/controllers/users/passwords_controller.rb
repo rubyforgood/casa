@@ -2,6 +2,7 @@ class Users::PasswordsController < Devise::PasswordsController
   include ApplicationHelper
   include PhoneNumberHelper
   include SmsBodyHelper
+  include RecoversFromStaleForm
 
   layout "casa_auth"
 

@@ -2,6 +2,7 @@
 
 class AllCasaAdmins::SessionsController < Devise::SessionsController
   include Accessible
+  include RecoversFromStaleForm
 
   layout "casa_auth"
   skip_before_action :check_user, only: :destroy # standard:disable Rails/LexicallyScopedActionFilter
