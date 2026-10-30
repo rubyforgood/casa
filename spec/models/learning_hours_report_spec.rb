@@ -20,6 +20,7 @@ RSpec.describe LearningHoursReport, type: :model do
 
         result.each_with_index do |row, index|
           next if index.zero?
+
           expect(row[0]).to eq learning_hours[index - 1].user.display_name
           expect(row[1]).to eq learning_hours[index - 1].name
           expect(row[2]).to eq learning_hours[index - 1].learning_hour_type.name
