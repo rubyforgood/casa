@@ -8,7 +8,7 @@
   <%= button_to resolve_followup_path(followup), method: :patch, id: "resolve", data: {turbo: false}, form_class: "inline", class: button_classes(:secondary) do %>
     <i class="bi bi-calendar-check" aria-hidden="true"></i> Resolve reminder
   <% end %>
-<% else %>
+<% elsif policy(Followup.new(case_contact: contact)).create? %>
   <%= render Dialog::GroupComponent.new(label: "Set a reminder for this case contact", wrapper_class: "contents") do |dialog| %>
     <% dialog.with_trigger do %>
       <%= button_tag type: "button", data: {action: "modal#open"}, class: button_classes(:secondary) do %>

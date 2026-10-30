@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe "CaseContacts::FollowupsController", type: :request do
   let(:volunteer) { create(:volunteer) }
-  let(:case_contact) { create(:case_contact) }
+  let(:case_contact) { create(:case_contact, creator: volunteer) }
 
   describe "POST /create" do
     subject(:request) do
@@ -59,12 +59,42 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
     end
 
     context "when the case contact has no casa_case" do
-      let(:case_contact) { build(:case_contact, casa_case: nil).tap { |cc| cc.save(validate: false) } }
+      let(:case_contact) { build(:case_contact, casa_case: nil, creator: volunteer).tap { |cc| cc.save(validate: false) } }
 
       it "redirects to the case contacts index without a UrlGenerationError" do
         request
         expect(response).to redirect_to(case_contacts_path)
       end
+    end
+  end
+
+  describe "POST /create on someone else's case contact in the same org" do
+    let(:other_volunteer) { create(:volunteer, casa_org: volunteer.casa_org) }
+    let(:other_contact) { create(:case_contact, creator: other_volunteer, casa_case: create(:casa_case, casa_org: volunteer.casa_org)) }
+
+    it "is refused for another volunteer" do
+      sign_in volunteer
+
+      expect {
+        post case_contact_followups_path(other_contact), params: {note: "not mine"}
+      }.not_to change(Followup, :count)
+      expect(response).to redirect_to(root_url)
+    end
+
+    it "is allowed for a supervisor" do
+      sign_in create(:supervisor, casa_org: volunteer.casa_org)
+
+      expect {
+        post case_contact_followups_path(other_contact), params: {note: "from supervisor"}
+      }.to change(Followup, :count).by(1)
+    end
+
+    it "is allowed for an admin" do
+      sign_in create(:casa_admin, casa_org: volunteer.casa_org)
+
+      expect {
+        post case_contact_followups_path(other_contact), params: {note: "from admin"}
+      }.to change(Followup, :count).by(1)
     end
   end
 
@@ -118,6 +148,7 @@ RSpec.describe "CaseContacts::FollowupsController", type: :request do
       end
 
       context "when who resolves the followup is not the followup's creator" do
+        let(:case_contact) { create(:case_contact, creator: create(:volunteer, casa_org: volunteer.casa_org)) }
         let(:followup) { create(:followup, case_contact: case_contact) }
 
         it "sends a Followup Notifier to the case contact creator and the setter" do
