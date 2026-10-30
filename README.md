@@ -56,7 +56,7 @@ Pull requests which are not for an issue but which improve the codebase are also
 
 ### Communication and Collaboration
 
-We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-34b5p4vk3-NWIw6hKs2ma~wm7mYSe0_A) in the #casa channel so you can get fast help for any questions you may have.
+For Slack and Discord, see the [contributor communication guide](CONTRIBUTING.md#where-to-ask-questions).
 
 Check out [our google calendar](https://bit.ly/casacal) to see when office hours and stakeholder meetings are.
 

@@ -42,8 +42,6 @@ class CaseContactsController < ApplicationController
   end
 
   def restore
-    authorize CasaAdmin
-
     case_contact = authorize(current_organization.case_contacts.with_deleted.find(params[:id]))
     case_contact.restore(recursive: true)
     flash[:notice] = "Contact is successfully restored."

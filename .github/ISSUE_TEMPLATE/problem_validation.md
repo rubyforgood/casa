@@ -13,6 +13,6 @@ Please use this template to document problems mentioned by CASA stakeholders so 
 **Attach a design mockup if possible**
 
 
-### Questions? Join Slack!
+### Questions? Join the Community!
 
-We highly recommend that you join us in [slack](https://join.slack.com/t/rubyforgood/shared_invite/zt-35218k86r-vlIiWqig54c9t~_LkGpQ7Q) #casa channel to ask questions quickly and hear about office hours (currently Tuesday 5-7pm Pacific), stakeholder news, and upcoming new issues.
+For help, join the conversation through the [CASA contributor communication guide](https://github.com/rubyforgood/casa/blob/main/CONTRIBUTING.md#where-to-ask-questions).
