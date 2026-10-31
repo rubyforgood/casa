@@ -147,8 +147,6 @@ ignore:
   - Layout/EmptyLineAfterGuardClause
 - scripts/import_casa_case_date_of_birth.rb:
   - Layout/EmptyLineAfterGuardClause
-- spec/controllers/concerns/accessible_spec.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - spec/datatables/reimbursement_datatable_spec.rb:
   - Rails/TimeZone
 - spec/decorators/casa_case_decorator_spec.rb:
