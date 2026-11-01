@@ -6,6 +6,7 @@ class ShortUrlService
   include ApiBaseHelper
   include RequestHeaderHelper
   include HTTParty
+
   base_uri SHORT_IO
   headers ACCEPT_JSON
   headers CONTENT_TYPE_JSON

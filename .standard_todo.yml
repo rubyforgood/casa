@@ -95,8 +95,6 @@ ignore:
   - Layout/EmptyLineAfterGuardClause
   - Rails/Blank
   - Rails/RootPathnameMethods
-- app/services/short_url_service.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/validators/user_validator.rb:
   - Rails/Blank
 - config/application.rb:
