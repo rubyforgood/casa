@@ -175,8 +175,6 @@ ignore:
   - Rails/TimeZone
 - spec/requests/case_contact_reports_spec.rb:
   - Rails/Date
-- spec/requests/case_court_reports_spec.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - spec/requests/court_dates_spec.rb:
   - Layout/EmptyLinesAfterModuleInclusion
 - spec/requests/notifications_spec.rb:
