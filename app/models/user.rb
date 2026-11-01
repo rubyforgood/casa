@@ -124,18 +124,16 @@ class User < ApplicationRecord
   def no_attempt_for_two_weeks
     # Get ACTIVE volunteers that have ACTIVE supervisor assignments with at least one ACTIVE case
     # 1st condition: Volunteer has not created a contact AT ALL within the past 14 days
+    # One query for who has a recent contact, rather than loading or querying every volunteer's contacts.
+    recently_attempted_ids = CaseContact
+      .where(creator_id: volunteers.map(&:id), created_at: 14.days.ago..)
+      .distinct.pluck(:creator_id).to_set
 
-    no_attempt_count = 0
-    volunteers.map do |volunteer|
-      if volunteer.supervisor.active? &&
-          volunteer.case_assignments.any? { |assignment| assignment.active? } &&
-          (volunteer.case_contacts.none? ||
-          volunteer.case_contacts.maximum(:created_at) < 14.days.ago)
-
-        no_attempt_count += 1
-      end
+    volunteers.to_a.count do |volunteer|
+      volunteer.supervisor.active? &&
+        volunteer.case_assignments.any?(&:active?) &&
+        !recently_attempted_ids.include?(volunteer.id)
     end
-    no_attempt_count
   end
 
   # Generate a Devise reset_token, used for the account_setup mailer. This happens automatically

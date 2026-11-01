@@ -17,7 +17,8 @@ class SupervisorsController < ApplicationController
     supervisors = policy_scope(current_organization.supervisors)
     supervisors = supervisors.where(active: true) if @status == "active"
     supervisors = supervisors.where(active: false) if @status == "inactive"
-    @supervisors = supervisors.order(:display_name)
+    # no_attempt_for_two_weeks walks each supervisor's volunteers and their case assignments.
+    @supervisors = supervisors.includes(volunteers: :case_assignments).order(:display_name)
     # Active supervisors for the inline "assign supervisor" control in the volunteers-without-
     # supervisors table (independent of the roster status filter above).
     @active_supervisors = current_organization.supervisors.active.order(:display_name)
