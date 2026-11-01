@@ -25,10 +25,9 @@ class FundRequestsController < ApplicationController
   private
 
   def verify_casa_case
-    @casa_case = CasaCase.friendly.find(params[:casa_case_id])
-    unless @casa_case.casa_org == current_user.casa_org
-      redirect_to root_path
-    end
+    @casa_case = current_organization.casa_cases.friendly.find(params[:casa_case_id])
+  rescue ActiveRecord::RecordNotFound
+    redirect_to root_path
   end
 
   def parsed_params

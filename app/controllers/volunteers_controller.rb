@@ -87,10 +87,12 @@ class VolunteersController < ApplicationController
 
   def activate
     authorize @volunteer
+    casa_case = current_organization.casa_cases.friendly.find(params[:casa_case_id]) if params[:redirect_to_path] == "casa_case"
+
     if @volunteer.activate
       VolunteerMailer.account_setup(@volunteer).deliver
 
-      if (params[:redirect_to_path] == "casa_case") && (casa_case = CasaCase.friendly.find(params[:casa_case_id]))
+      if casa_case
         redirect_to edit_casa_case_path(casa_case), notice: "Volunteer was activated. They have been sent an email."
       else
         redirect_to edit_volunteer_path(@volunteer), notice: "Volunteer was activated. They have been sent an email."
