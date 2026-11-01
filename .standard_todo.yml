@@ -6,8 +6,6 @@ ignore:
   - Rails/LexicallyScopedActionFilter
 - app/controllers/court_dates_controller.rb:
   - Rails/TimeZone
-- app/controllers/emancipation_checklists_controller.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/controllers/imports_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
 - app/controllers/users/sessions_controller.rb:
