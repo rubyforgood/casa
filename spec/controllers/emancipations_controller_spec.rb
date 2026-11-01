@@ -39,10 +39,9 @@ RSpec.describe EmancipationsController, type: :controller do
     context "when user belongs to a different org" do
       let(:user) { create(:supervisor, casa_org: other_org) }
 
-      it "redirects to root with an authorization notice" do
+      it "responds with 404 because the case is not in the user's organization" do
         get :show, params: {casa_case_id: casa_case.friendly_id}
-        expect(response).to redirect_to(root_url)
-        expect(flash[:alert]).to match(/not authorized/)
+        expect(response).to have_http_status(:not_found)
       end
     end
 
@@ -69,10 +68,10 @@ RSpec.describe EmancipationsController, type: :controller do
     context "when user belongs to a different org" do
       let(:user) { create(:supervisor, casa_org: other_org) }
 
-      it "returns unauthorized with a json error message" do
+      it "returns not found with a json error message" do
         post_save("add_category", emancipation_category.id)
-        expect(response).to have_http_status(:unauthorized)
-        expect(json_response["error"]).to match(/not authorized/)
+        expect(response).to have_http_status(:not_found)
+        expect(json_response["error"]).to match(/Could not find case/)
       end
     end
 
@@ -218,7 +217,7 @@ RSpec.describe EmancipationsController, type: :controller do
 
   # JSON error handler for unauthorized access from save
   describe "#not_authorized" do
-    let(:user) { create(:supervisor, casa_org: other_org) }
+    let(:user) { create(:volunteer, casa_org: organization) }
 
     it "renders a json unauthorized error when called from save" do
       post :save, params: {
