@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/case_court_reports", type: :request do
   include DownloadHelpers
+
   let(:volunteer) { create(:volunteer, :with_cases_and_contacts, :with_assigned_supervisor) }
 
   before do
