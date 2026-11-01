@@ -52,13 +52,37 @@ RSpec.describe ExpireCaseContactDraftsService do
       draft = abandoned_draft(days_ago: 30)
       contact_type = create(:contact_type, contact_type_group: create(:contact_type_group, casa_org: casa_org))
       draft.case_contact_contact_types.create!(contact_type: contact_type)
-      create(:additional_expense, case_contact: draft)
-      create(:contact_topic_answer, case_contact: draft, contact_topic: create(:contact_topic, casa_org: casa_org))
+      # A blank answer is what the form leaves behind when a topic is shown but nothing is typed.
+      create(:contact_topic_answer, case_contact: draft, value: nil, contact_topic: create(:contact_topic, casa_org: casa_org))
 
       expect { described_class.new.perform }.to change(CaseContact, :count).by(-1)
-      expect(AdditionalExpense.where(case_contact_id: draft.id)).to be_empty
       expect(ContactTopicAnswer.with_deleted.where(case_contact_id: draft.id)).to be_empty
       expect(CaseContactContactType.where(case_contact_id: draft.id)).to be_empty
+    end
+
+    it "keeps a draft with notes, which is unsubmitted volunteer work" do
+      abandoned_draft(days_ago: 30).update_columns(notes: "Met with the youth at school")
+
+      expect { described_class.new.perform }.not_to change(CaseContact, :count)
+    end
+
+    it "deletes a draft whose notes are only whitespace" do
+      abandoned_draft(days_ago: 30).update_columns(notes: "  \n ")
+
+      expect { described_class.new.perform }.to change(CaseContact, :count).by(-1)
+    end
+
+    it "keeps a draft with a written topic answer" do
+      draft = abandoned_draft(days_ago: 30)
+      create(:contact_topic_answer, case_contact: draft, value: "Doing well in class", contact_topic: create(:contact_topic, casa_org: casa_org))
+
+      expect { described_class.new.perform }.not_to change(CaseContact, :count)
+    end
+
+    it "keeps a draft with an expense" do
+      create(:additional_expense, case_contact: abandoned_draft(days_ago: 30))
+
+      expect { described_class.new.perform }.not_to change(CaseContact, :count)
     end
 
     it "returns how many it deleted" do

@@ -6,6 +6,10 @@
 # it represents intent worth keeping; `active` is a finished contact. `updated_at` is the liveness
 # signal because autosave touches it, so a draft someone is editing right now is never in range.
 #
+# Only EMPTY drafts expire. Autosave keeps a draft `started` even after the volunteer has typed notes,
+# so a `started` row can hold real, unsubmitted work (in production about 44% of old drafts had notes).
+# A draft with notes, a non-blank topic answer, or an expense is kept.
+#
 # Deletion goes through CaseContact#discard!, which hard-deletes and clears the children that hold FK
 # constraints -- see there for why a soft delete would make the clutter worse.
 class ExpireCaseContactDraftsService
@@ -32,6 +36,9 @@ class ExpireCaseContactDraftsService
 
   def expirable
     CaseContact.started.where(updated_at: ..days.days.ago)
+      .where("case_contacts.notes IS NULL OR case_contacts.notes !~ '\\S'")
+      .where.not(id: ContactTopicAnswer.where("value ~ '\\S'").select(:case_contact_id))
+      .where.not(id: AdditionalExpense.select(:case_contact_id))
   end
 
   # CaseContact#discard! is the single place that knows how to take a draft apart -- the same path a
