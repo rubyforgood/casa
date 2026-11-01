@@ -28,8 +28,6 @@ ignore:
 - app/helpers/phone_number_helper.rb:
   - Rails/Blank
   - Style/RedundantRegexpEscape
-- app/helpers/sidebar_helper.rb:
-  - Layout/EmptyLineAfterGuardClause
 - app/mailers/fund_request_mailer.rb:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:

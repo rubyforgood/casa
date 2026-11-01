@@ -8,6 +8,7 @@ module SidebarHelper
   def inbox_label
     unread_count = current_user.notifications.unread.count
     return "Inbox" if unread_count == 0
+
     "Inbox <span class='badge bg-danger'>#{unread_count}</span>".html_safe
   end
 
