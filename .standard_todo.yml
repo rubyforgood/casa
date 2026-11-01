@@ -177,8 +177,6 @@ ignore:
   - Rails/Date
 - spec/requests/case_court_reports_spec.rb:
   - Layout/EmptyLinesAfterModuleInclusion
-- spec/requests/court_dates_spec.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - spec/requests/notifications_spec.rb:
   - Rails/Date
 - spec/system/casa_cases/edit_spec.rb:
