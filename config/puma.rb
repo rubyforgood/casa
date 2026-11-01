@@ -40,3 +40,12 @@ plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
+
+# Heroku Ruby Language Metrics: barnes' Railtie starts reporting at boot, which
+# covers single mode. In cluster mode (WEB_CONCURRENCY > 1) the reporter thread
+# doesn't survive fork, so restart it in each worker. No-op without
+# HEROKU_METRICS_URL (local dev, CI, one-off dynos).
+before_worker_boot do
+  require "barnes"
+  Barnes.start
+end

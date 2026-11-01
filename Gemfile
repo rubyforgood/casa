@@ -9,6 +9,7 @@ gem "after_party" # Post-deployment tasks
 gem "amazing_print" # Easier console reading
 gem "authtrail" # Track Devise login activity
 gem "azure-blob", require: false # Active Storage adapter for Azure (maintained replacement for retired azure-storage-blob)
+gem "barnes", "~> 1.0" # Ruby runtime metrics (GC, heap, Puma pool) for Heroku Language Metrics
 gem "benchmark" # Used to be a default gem. Required by the delayed_job_active_record gem.
 gem "blueprinter" # JSON serialization
 gem "bugsnag" # Error tracking in production
