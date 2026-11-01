@@ -9,7 +9,9 @@ class CaseGroupMembership < ApplicationRecord
 
   def casa_case_in_same_org
     return if casa_case.nil? || case_group.nil?
-    return if casa_case.casa_org_id == case_group.casa_org_id
+    # Compare the records, not the ids: when the group and its cases are saved together, the shared org is
+    # saved through the group first and the case's casa_org_id isn't filled in yet.
+    return if casa_case.casa_org == case_group.casa_org
 
     errors.add(:casa_case, "must belong to the same organization as the group")
   end
