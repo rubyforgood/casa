@@ -26,7 +26,7 @@ end
 RSpec.describe "Seeds" do
   describe "test development DB" do
     it "successfully populates all necessary tables" do
-      Rails.application.load_tasks
+      Rails.application.load_tasks if Rake::Task.tasks.empty?
       allow(Rails).to receive(:env).and_return(ActiveSupport::StringInquirer.new("test"))
 
       Prosopite.pause
