@@ -99,8 +99,6 @@ ignore:
   - Layout/EmptyLineAfterGuardClause
   - Rails/Blank
   - Rails/RootPathnameMethods
-- app/services/learning_hours_export_csv_service.rb:
-  - Layout/EmptyLineAfterGuardClause
 - app/services/short_url_service.rb:
   - Layout/EmptyLinesAfterModuleInclusion
 - app/validators/user_validator.rb:

@@ -20,6 +20,7 @@ class LearningHoursExportCsvService
 
   def get_duration(learning_hour = nil)
     return "0:00" unless learning_hour
+
     "#{learning_hour.duration_hours}:#{learning_hour.duration_minutes}"
   end
 
