@@ -74,6 +74,7 @@ class CaseContactsExportCsvService
 
   def court_topics_filtered?
     return @court_topics_filtered if defined? @court_topics_filtered
+
     @court_topics_filtered = filtered_columns.exclude?(:court_topics)
   end
 end

@@ -89,8 +89,6 @@ ignore:
 - app/services/casa_case_change_service.rb:
   - Rails/Pluck
   - Layout/EmptyLineAfterGuardClause
-- app/services/case_contacts_export_csv_service.rb:
-  - Layout/EmptyLineAfterGuardClause
 - app/services/fdf_inputs_service.rb:
   - Layout/EmptyLineAfterGuardClause
   - Rails/Blank
