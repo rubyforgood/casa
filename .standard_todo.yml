@@ -21,8 +21,6 @@ ignore:
   - Rails/Date
 - app/decorators/case_assignment_decorator.rb:
   - Rails/Date
-- app/decorators/contact_type_decorator.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/helpers/banner_helper.rb:
   - Rails/TimeZone
 - app/helpers/phone_number_helper.rb:

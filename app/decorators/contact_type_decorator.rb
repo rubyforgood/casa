@@ -1,5 +1,6 @@
 class ContactTypeDecorator < Draper::Decorator
   include ActionView::Helpers::DateHelper
+
   delegate_all
 
   # last_logged_at_by_type is the CaseContact.last_logged_at_by_contact_type lookup. Pass it when
