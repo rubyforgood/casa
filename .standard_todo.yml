@@ -55,8 +55,6 @@ ignore:
   - Rails/UniqueValidationWithoutIndex
 - app/models/concerns/CasaCase/validations.rb:
   - Rails/TimeZone
-- app/models/concerns/api.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/models/contact_type.rb:
   - Rails/UniqueValidationWithoutIndex
 - app/models/contact_type_group.rb:
