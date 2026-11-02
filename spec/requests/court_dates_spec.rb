@@ -2,6 +2,7 @@ require "rails_helper"
 
 RSpec.describe "/casa_cases/:casa_case_id/court_dates/:id", type: :request do
   include DownloadHelpers
+
   let(:admin) { create(:casa_admin) }
   let(:casa_case) { court_date.casa_case }
   let(:court_date) { create(:court_date) }
