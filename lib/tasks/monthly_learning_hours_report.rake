@@ -1,5 +1,7 @@
-desc "Scheduled once per month in Heroku Scheduler, this task will send a learning hours report to all Casa Admins and Supervisors"
+desc "Send learning hours report to all Casa Admins and Supervisors; run daily in Heroku Scheduler, only acts on the 1st"
 task send_learning_hour_reports: :environment do
+  next unless Date.current.day == 1 || ENV["FORCE"] == "true"
+
   admins = CasaAdmin.active.where(monthly_learning_hours_report: true)
   supervisors = Supervisor.active.where(monthly_learning_hours_report: true)
 
