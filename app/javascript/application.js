@@ -1,7 +1,6 @@
 /* global window */
 import './jQueryGlobalizer.js'
 import '@hotwired/turbo-rails'
-import './sweet-alert-confirm.js'
 import './controllers'
 import 'trix'
 import '@rails/actiontext'
