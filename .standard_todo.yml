@@ -93,8 +93,6 @@ ignore:
   - Rails/Blank
 - config/application.rb:
   - Style/RedundantInterpolation
-- config/initializers/bugsnag.rb:
-  - Style/FileNull
 - db/migrate/20250507011754_remove_unused_indexes.rb:
   - Rails/ReversibleMigration
 - db/seeds/db_populator.rb:
