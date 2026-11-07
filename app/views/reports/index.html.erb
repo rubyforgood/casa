@@ -1,9 +1,8 @@
 <% content_for :page_title, "Reports" %>
 <%# reports#index (the reports hub) on the casa_app shell. A list of one-click CSV exports + a
-    filterable Case Contacts Report builder. Export/submit buttons keep `.report-form-submit` +
-    `data-disable-with` — src/reports.js intercepts the click, swaps the whole button to the
-    disable-with text, and native-submits the form (so the CSV download bypasses Turbo); EVERY icon
-    inside these buttons is pointer-events-none so `event.target` is always the button. The four
+    filterable Case Contacts Report builder. Export/submit buttons use the `report-submit`
+    controller to swap the whole button to the `data-disable-with` text, native-submit the form
+    (so the CSV download bypasses Turbo), and restore the button after three seconds. The four
     filter selects are TomSelect multi-select type-aheads (`multiple-select` controller), each on its
     own line; they keep their spec-locked ids (multiple-select-field1..4) and specs drive them via the
     .ts-control (see spec/system/reports). The column filter is a native <details>. Several
@@ -39,7 +38,7 @@
           <%= form_with url: url, method: :get do %>
             <%# flex-1 on the label makes it fill the row so the download icon sits hard right and the
                 label reads from the left -- button_classes bakes in justify-center, which flex-1 makes moot. %>
-            <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:secondary)} w-full", data: {disable_with: feedback} do %>
+            <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:secondary)} w-full", data: {controller: "report-submit", action: "click->report-submit#submit", disable_with: feedback} do %>
               <span class="pointer-events-none flex flex-1 items-center gap-2 text-left"><i class="bi <%= icon %>" aria-hidden="true"></i> <%= label %></span>
               <i class="bi bi-download pointer-events-none text-slate-400" aria-hidden="true"></i>
             <% end %>
@@ -122,7 +121,7 @@
         </details>
 
         <div>
-          <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:primary)}", data: {disable_with: "Downloading report"} do %>
+          <%= button_tag type: "submit", class: "report-form-submit #{button_classes(:primary)}", data: {controller: "report-submit", action: "click->report-submit#submit", disable_with: "Downloading report"} do %>
             <i class="bi bi-download pointer-events-none" aria-hidden="true"></i> Download report
           <% end %>
         </div>

@@ -64,6 +64,9 @@ application.register("multiple-select", MultipleSelectController)
 import NavDrawerController from "./nav_drawer_controller"
 application.register("nav-drawer", NavDrawerController)
 
+import ReportSubmitController from "./report_submit_controller"
+application.register("report-submit", ReportSubmitController)
+
 import RevealController from "./reveal_controller"
 application.register("reveal", RevealController)
 
