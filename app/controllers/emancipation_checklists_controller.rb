@@ -1,5 +1,6 @@
 class EmancipationChecklistsController < ApplicationController
   include DateHelper
+
   layout "casa_app"
   before_action -> { @active_nav = "cases" }
   before_action :require_organization!

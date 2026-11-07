@@ -6,7 +6,7 @@ class CaseCourtReportContext
   attr_reader :report_path, :template, :date_range
 
   def initialize(args = {})
-    @casa_case = CasaCase.friendly.find(args[:case_id])
+    @casa_case = CasaCase.find(args[:case_id])
     @volunteer = Volunteer.find(args[:volunteer_id]) if args[:volunteer_id]
     @time_zone = args[:time_zone]
     @path_to_template = args[:path_to_template]

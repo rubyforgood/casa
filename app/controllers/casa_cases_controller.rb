@@ -143,7 +143,7 @@ class CasaCasesController < ApplicationController
 
   def copy_court_orders
     authorize @casa_case, :update_court_orders?
-    CasaCase.find_by_case_number(params[:case_number_cp]).case_court_orders.each do |court_order|
+    current_organization.casa_cases.find_by!(case_number: params[:case_number_cp]).case_court_orders.each do |court_order|
       dup_court_order = court_order.dup
       dup_court_order.save
       @casa_case.case_court_orders.append dup_court_order
