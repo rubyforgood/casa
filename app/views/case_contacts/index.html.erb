@@ -32,8 +32,8 @@
     </div>
   </div>
 
-  <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "filter-form mb-6"}, remote: true,
-    data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} do |f| %>
+  <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "filter-form mb-6"},
+    data: {controller: "auto-submit"} do |f| %>
     <%= hidden_field_tag "casa_case_id", params[:casa_case_id] %>
 
     <% panel_open = filters_open? %>
@@ -54,7 +54,7 @@
               Not "Filter by" -- it changes the order, not which rows show. %>
           <%= f.label :sorted_by, "Sort by", class: label_class %>
           <div class="relative">
-            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: select_class}) %>
+            <%= f.select(:sorted_by, @filterrific.select_options[:sorted_by], {}, {class: select_class, data: {action: "change->auto-submit#submit"}}) %>
             <i class="<%= chevron %>" aria-hidden="true"></i>
           </div>
         </div>
@@ -64,7 +64,7 @@
             group wraps on narrow screens. %>
         <div class="flex min-h-[38px] flex-wrap items-center gap-x-4 gap-y-2">
           <label class="inline-flex items-center gap-2 text-sm text-slate-700">
-            <%= f.check_box :no_drafts, class: check_class %>
+            <%= f.check_box :no_drafts, class: check_class, data: {action: "change->auto-submit#submit"} %>
             Hide drafts
           </label>
           <%# clear_filters_path, not reset_filterrific_url: reset drops the SORT too, and a control
@@ -92,11 +92,11 @@
           <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <%= f.label "Starting from", for: "filterrific_occurred_starting_at", class: label_class %>
-              <%= f.date_field(:occurred_starting_at, class: input_class) %>
+              <%= f.date_field(:occurred_starting_at, class: input_class, data: {action: "change->auto-submit#submit"}) %>
             </div>
             <div>
               <%= f.label "Ending at", for: "filterrific_occurred_ending_at", class: label_class %>
-              <%= f.date_field(:occurred_ending_at, class: input_class) %>
+              <%= f.date_field(:occurred_ending_at, class: input_class, data: {action: "change->auto-submit#submit"}) %>
             </div>
           </div>
         </div>
@@ -130,21 +130,21 @@
               <div class="relative">
                 <%# Pass the current value: pre-rendered option HTML can't be marked selected by f.select,
                     so without it the dropdown reads "All" while a medium filter is active. %>
-                <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label", f.object.contact_medium), {include_blank: "All"}, {class: select_class}) %>
+                <%= f.select(:contact_medium, options_from_collection_for_select(contact_mediums, "value", "label", f.object.contact_medium), {include_blank: "All"}, {class: select_class, data: {action: "change->auto-submit#submit"}}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>
             <div>
               <%= f.label :want_driving_reimbursement, class: label_class %>
               <div class="relative">
-                <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
+                <%= f.select(:want_driving_reimbursement, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class, data: {action: "change->auto-submit#submit"}}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>
             <div>
               <%= f.label :contact_made, class: label_class %>
               <div class="relative">
-                <%= f.select(:contact_made, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class}) %>
+                <%= f.select(:contact_made, @case_contacts.boolean_select_options, {include_blank: "All"}, {class: select_class, data: {action: "change->auto-submit#submit"}}) %>
                 <i class="<%= chevron %>" aria-hidden="true"></i>
               </div>
             </div>
