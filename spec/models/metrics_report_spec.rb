@@ -69,5 +69,25 @@ RSpec.describe MetricsReport do
       expect(described_class.new(casa_org: org).monthly_active_users(3)[:series][0][:data].last).to eq(1)
       expect(described_class.new.monthly_active_users(3)[:series][0][:data].last).to eq(2)
     end
+
+    it "preserves 12-month active user metric counts after pruning older records" do
+      volunteer = create(:volunteer, casa_org: org)
+      admin = create(:casa_admin, casa_org: org)
+
+      create(:login_activity, user: volunteer, success: true, created_at: Time.current)
+      create(:login_activity, user: volunteer, success: true, created_at: 6.months.ago)
+      create(:login_activity, user: admin, success: true, created_at: 11.months.ago)
+      create(:login_activity, user: volunteer, success: true, created_at: 14.months.ago)
+
+      report = described_class.new(casa_org: org)
+      before_prune = report.monthly_active_users(12)
+
+      expect {
+        PruneLoginActivitiesService.new.perform
+      }.to change(LoginActivity, :count).by(-1)
+
+      after_prune = report.monthly_active_users(12)
+      expect(after_prune).to eq(before_prune)
+    end
   end
 end
