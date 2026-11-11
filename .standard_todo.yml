@@ -21,8 +21,6 @@ ignore:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:
   - Rails/Date
-- app/mailers/supervisor_mailer.rb:
-  - Rails/Date
 - app/models/casa_case.rb:
   - Rails/IgnoredColumnsAssignment
   - Rails/Date
