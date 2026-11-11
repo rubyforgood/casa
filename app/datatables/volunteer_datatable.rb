@@ -226,7 +226,7 @@ class VolunteerDatatable < ApplicationDatatable
         "supervisors.id IS NULL"
       else
         null_filter = "supervisors.id IS NULL OR" if filter.any?(&:blank?)
-        ["#{null_filter} COALESCE(supervisors.id) IN (?)", filter.select(&:present?)]
+        ["#{null_filter} COALESCE(supervisors.id) IN (?)", filter.compact_blank]
       end
   end
 
@@ -247,7 +247,7 @@ class VolunteerDatatable < ApplicationDatatable
         filter = additional_filters[:transition_aged_youth]
 
         bool_filter filter do
-          "transition_aged_youth_cases.volunteer_id IS #{(filter[0] == "true") ? "NOT" : nil} NULL"
+          "transition_aged_youth_cases.volunteer_id IS #{"NOT" if filter[0] == "true"} NULL"
         end
       }.call
   end
