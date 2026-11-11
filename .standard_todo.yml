@@ -7,9 +7,6 @@ ignore:
 - app/controllers/users/sessions_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
-- app/datatables/volunteer_datatable.rb:
-  - Rails/CompactBlank
-  - Style/EmptyStringInsideInterpolation
 - app/decorators/casa_case_decorator.rb:
   - Layout/EmptyLineAfterGuardClause
   - Rails/Date
