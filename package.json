@@ -22,7 +22,7 @@
     "@rails/activestorage": "^8.1.400",
     "@rails/ujs": "^7.1.600",
     "@stimulus-components/rails-nested-form": "^5.0.0",
-    "@tailwindcss/cli": "^4.3.2",
+    "@tailwindcss/cli": "^4.3.4",
     "add-to-calendar-button": "^3.1.0",
     "datatables.net-dt": "^1.13.11",
     "esbuild": "^0.28.2",
