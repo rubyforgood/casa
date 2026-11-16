@@ -1,46 +1,88 @@
-/* eslint-env jest */
 /**
- * @jest-environment jsdom
+ * @jest-environment node
  */
+/* eslint-env jest */
 
 describe('session_timeout_poller', () => {
   let mockAlert
   let mockReload
-  let originalTimeout
 
   beforeEach(() => {
-    // Mock window.alert and window.location.reload
+    jest.useFakeTimers()
+    jest.setSystemTime(new Date('2026-01-01T00:00:00Z'))
+
     mockAlert = jest.fn()
     mockReload = jest.fn()
-    global.alert = mockAlert
-    delete window.location
-    window.location = { reload: mockReload }
 
-    // Set a short timeout for testing (in minutes)
-    originalTimeout = global.window.timeout
-    global.window.timeout = 0.05 // 3 seconds total, warning at 1.2 seconds
-
-    jest.useFakeTimers()
+    global.window = {
+      timeout: 3,
+      alert: mockAlert,
+      location: {
+        reload: mockReload
+      }
+    }
   })
 
   afterEach(() => {
+    jest.clearAllTimers()
+    delete global.window
     jest.useRealTimers()
-    global.window.timeout = originalTimeout
     jest.resetModules()
   })
 
   test('timer runs every second', () => {
-    jest.resetModules()
-
-    // Spy on setInterval before requiring the module
     const setIntervalSpy = jest.spyOn(global, 'setInterval')
 
-    // Start the poller
     require('../src/session_timeout_poller')
 
-    // Verify setInterval was called with 1000ms (1 second)
     expect(setIntervalSpy).toHaveBeenCalledWith(expect.any(Function), 1000)
 
     setIntervalSpy.mockRestore()
+  })
+
+  test('shows the two-minute warning after the warning threshold', () => {
+    let timerCallback
+    const setIntervalSpy = jest
+      .spyOn(global, 'setInterval')
+      .mockImplementation(callback => {
+        timerCallback = callback
+      })
+
+    require('../src/session_timeout_poller')
+    setIntervalSpy.mockRestore()
+
+    expect(timerCallback).toEqual(expect.any(Function))
+
+    // With a 3-minute timeout, the warning threshold is after 1 minute.
+    jest.setSystemTime(new Date('2026-01-01T00:01:01Z'))
+    timerCallback()
+    timerCallback()
+
+    expect(mockAlert).toHaveBeenCalledWith(
+      'Warning: You will be logged off in 2 minutes due to inactivity.'
+    )
+    expect(mockReload).toHaveBeenCalledTimes(1)
+  })
+
+  test('reloads when the session timeout has elapsed', () => {
+    let timerCallback
+    const setIntervalSpy = jest
+      .spyOn(global, 'setInterval')
+      .mockImplementation(callback => {
+        timerCallback = callback
+      })
+
+    require('../src/session_timeout_poller')
+    setIntervalSpy.mockRestore()
+
+    expect(timerCallback).toEqual(expect.any(Function))
+
+    // Simulate returning after the full 3-minute timeout has elapsed.
+    jest.setSystemTime(new Date('2026-01-01T00:03:01Z'))
+    timerCallback()
+    timerCallback()
+
+    expect(mockAlert).not.toHaveBeenCalled()
+    expect(mockReload).toHaveBeenCalledTimes(1)
   })
 })

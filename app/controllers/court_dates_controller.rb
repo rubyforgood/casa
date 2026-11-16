@@ -55,7 +55,7 @@ class CourtDatesController < ApplicationController
 
   def destroy
     authorize @court_date
-    if @court_date.date > Time.now
+    if @court_date.date > Time.zone.now
       @court_date.destroy
       redirect_to casa_case_path(@casa_case), notice: "Court date was successfully deleted."
     else
