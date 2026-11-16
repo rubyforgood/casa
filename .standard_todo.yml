@@ -4,16 +4,9 @@
 ignore:
 - app/controllers/api/v1/base_controller.rb:
   - Rails/LexicallyScopedActionFilter
-- app/controllers/court_dates_controller.rb:
-  - Rails/TimeZone
-- app/controllers/imports_controller.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/controllers/users/sessions_controller.rb:
   - Layout/EmptyLinesAfterModuleInclusion
   - Rails/LexicallyScopedActionFilter
-- app/datatables/volunteer_datatable.rb:
-  - Rails/CompactBlank
-  - Style/EmptyStringInsideInterpolation
 - app/decorators/casa_case_decorator.rb:
   - Layout/EmptyLineAfterGuardClause
   - Rails/Date
@@ -27,8 +20,6 @@ ignore:
 - app/mailers/fund_request_mailer.rb:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:
-  - Rails/Date
-- app/mailers/supervisor_mailer.rb:
   - Rails/Date
 - app/models/casa_case.rb:
   - Rails/IgnoredColumnsAssignment

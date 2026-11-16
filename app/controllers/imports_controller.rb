@@ -2,6 +2,7 @@ class ImportsController < ApplicationController
   require "csv"
 
   include ActionView::Helpers::UrlHelper
+
   layout "casa_app"
   before_action -> { @active_nav = "settings" }
   before_action :failed_csv_service, only: [:create, :download_failed]
