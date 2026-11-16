@@ -111,6 +111,44 @@ RSpec.describe "/case_assignments", type: :request do
       end
     end
 
+    describe "when the requester is in a different org from the volunteer and case" do
+      let(:other_org) { create(:casa_org) }
+      let(:other_volunteer) { create(:volunteer, casa_org: other_org) }
+      let(:other_case) { create(:casa_case, casa_org: other_org) }
+
+      it "does not assign another org's volunteer to another org's case (volunteer parent)", :aggregate_failures do
+        expect {
+          post case_assignments_url(volunteer_id: other_volunteer.id), params: {case_assignment: {casa_case_id: other_case.id}}
+        }.not_to change(CaseAssignment, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not assign another org's volunteer to another org's case (case parent)", :aggregate_failures do
+        expect {
+          post case_assignments_url(casa_case_id: other_case.id), params: {case_assignment: {volunteer_id: other_volunteer.id}}
+        }.not_to change(CaseAssignment, :count)
+        expect(response).to have_http_status(:not_found)
+      end
+
+      it "does not reactivate another org's inactive assignment", :aggregate_failures do
+        assignment = create(:case_assignment, volunteer: other_volunteer, casa_case: other_case, active: false)
+
+        post case_assignments_url(volunteer_id: other_volunteer.id), params: {case_assignment: {casa_case_id: other_case.id}}
+
+        expect(assignment.reload.active).to be false
+        post case_assignments_url(casa_case_id: other_case.id), params: {case_assignment: {volunteer_id: other_volunteer.id}}
+        expect(assignment.reload.active).to be false
+      end
+
+      it "does not let a supervisor do it either" do
+        sign_in create(:supervisor, casa_org: casa_org)
+
+        expect {
+          post case_assignments_url(volunteer_id: other_volunteer.id), params: {case_assignment: {casa_case_id: other_case.id}}
+        }.not_to change(CaseAssignment, :count)
+      end
+    end
+
     describe "with another org params" do
       subject(:request) do
         post url, params: params
