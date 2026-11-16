@@ -17,7 +17,7 @@ class ContactTopicsController < ApplicationController
 
   # POST /contact_topics or /contact_topics.json
   def create
-    @contact_topic = ContactTopic.new(contact_topic_params)
+    @contact_topic = ContactTopic.new(contact_topic_params.merge(casa_org_id: current_user.casa_org_id))
     authorize @contact_topic
 
     if @contact_topic.save
@@ -56,8 +56,9 @@ class ContactTopicsController < ApplicationController
     @contact_topic = ContactTopic.find(params[:id])
   end
 
-  # Only allow a list of trusted parameters through.
+  # Only allow a list of trusted parameters through. The org is never taken from params: new topics
+  # belong to the creator's org and existing topics cannot be moved to another one.
   def contact_topic_params
-    params.require(:contact_topic).permit(:casa_org_id, :question, :details, :active, :exclude_from_court_report)
+    params.require(:contact_topic).permit(:question, :details, :active, :exclude_from_court_report)
   end
 end

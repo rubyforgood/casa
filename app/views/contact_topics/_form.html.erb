@@ -12,7 +12,6 @@
     <h1 class="text-2xl font-bold tracking-tight text-slate-900"><%= title %></h1>
     <div class="<%= card %>">
       <%= form_with model: contact_topic, local: true, class: "space-y-5" do |form| %>
-        <%= form.hidden_field :casa_org_id %>
         <%= render "shared/form_errors", resource: contact_topic %>
         <div>
           <%= form.label :question, class: label_class do %>Question <%= req %><% end %>
