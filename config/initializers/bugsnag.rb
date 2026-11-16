@@ -11,5 +11,5 @@ if ENV["BUGSNAG_API_KEY"].present?
     config.add_on_error(callback)
   end
 else
-  Bugsnag.configuration.logger = ::Logger.new("/dev/null")
+  Bugsnag.configuration.logger = ::Logger.new(File::NULL)
 end
