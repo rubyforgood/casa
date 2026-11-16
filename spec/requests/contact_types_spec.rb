@@ -3,6 +3,38 @@ require "rails_helper"
 RSpec.describe "/contact_types", type: :request do
   let(:group) { create(:contact_type_group) }
 
+  describe "writes that reach into another org" do
+    let(:org) { create(:casa_org) }
+    let(:other_group) { create(:contact_type_group, casa_org: create(:casa_org)) }
+    let(:own_group) { create(:contact_type_group, casa_org: org) }
+
+    before { sign_in create(:casa_admin, casa_org: org) }
+
+    it "cannot create a contact type inside another org's group", :aggregate_failures do
+      expect {
+        post contact_types_path, params: {contact_type: {name: "Sneaky", contact_type_group_id: other_group.id}}
+      }.not_to change(ContactType, :count)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "cannot move a contact type into another org's group", :aggregate_failures do
+      contact_type = create(:contact_type, contact_type_group: own_group)
+
+      put contact_type_path(contact_type), params: {contact_type: {contact_type_group_id: other_group.id}}
+
+      expect(contact_type.reload.contact_type_group).to eq(own_group)
+      expect(response).to have_http_status(:not_found)
+    end
+
+    it "cannot edit another org's contact type" do
+      foreign = create(:contact_type, contact_type_group: other_group)
+
+      put contact_type_path(foreign), params: {contact_type: {name: "hijacked"}}
+
+      expect(foreign.reload.name).not_to eq("hijacked")
+    end
+  end
+
   describe "GET /contact_types/new" do
     context "logged in as admin user" do
       it "can successfully access a contact type create page" do

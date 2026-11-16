@@ -39,7 +39,12 @@ class ContactTypesController < ApplicationController
     @contact_type = ContactType.find(params[:id])
   end
 
+  # The group decides which org a contact type belongs to, so it must come from the current org.
   def contact_type_params
-    params.require(:contact_type).permit(:name, :contact_type_group_id, :active)
+    permitted = params.require(:contact_type).permit(:name, :contact_type_group_id, :active)
+    if permitted[:contact_type_group_id].present?
+      permitted[:contact_type_group_id] = current_organization.contact_type_groups.find(permitted[:contact_type_group_id]).id
+    end
+    permitted
   end
 end
