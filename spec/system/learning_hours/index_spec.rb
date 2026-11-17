@@ -70,6 +70,7 @@ RSpec.describe "Learning Hours Index", type: :system do
 
       within("table") do
         expect(page).to have_content(volunteer.display_name)
+
         expect(page).not_to have_content(zero_hour_volunteer.display_name)
       end
     end
