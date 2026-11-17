@@ -20,6 +20,7 @@ RSpec.describe "dashboard/show", type: :system do
       expect(page).to have_text("My Cases")
       expect(page).to have_text(casa_case_1.case_number)
       expect(page).to have_text(casa_case_2.case_number)
+
       expect(page).not_to have_text(casa_case_3.case_number)
     end
 
@@ -35,6 +36,7 @@ RSpec.describe "dashboard/show", type: :system do
     it "displays 'No active cases' when they don't have any assignments", :js do
       visit casa_cases_path
       expect(page).to have_text("My Cases")
+
       expect(page).not_to have_css("td", text: "Bob Loblaw")
       expect(page).not_to have_text("Detail View")
     end
@@ -61,6 +63,9 @@ RSpec.describe "dashboard/show", type: :system do
       expect(section).to have_css("table tbody tr", count: 3)
       expect(section).to have_css("table thead th", minimum: 3)
 
+      # One action per row -- the name beside it is identifying text, not a second link to the same page.
+      section.all("table tbody tr").to_a.each { |row| expect(row.all("a").size).to eq 1 }
+
       # Rows used to carry their own rose border, rose fill and a filled 40px icon tile nested inside
       # this card; a tint on every row signals nothing. Severity is stated once, by the heading.
       # Scoped to the row and its cells: an initials avatar may legitimately be bg-rose-100, since
@@ -69,9 +74,6 @@ RSpec.describe "dashboard/show", type: :system do
       expect(section).to have_no_css("tr[class*='bg-rose'], tr[class*='border-rose']")
       expect(section).to have_no_css("td[class*='bg-rose'], td[class*='border-rose']")
       expect(section).to have_no_css("span.h-10")
-
-      # One action per row -- the name beside it is identifying text, not a second link to the same page.
-      section.all("table tbody tr").to_a.each { |row| expect(row.all("a").size).to eq 1 }
     end
   end
 
