@@ -21,8 +21,6 @@ ignore:
   - Rails/Date
 - app/mailers/learning_hours_mailer.rb:
   - Rails/Date
-- app/mailers/supervisor_mailer.rb:
-  - Rails/Date
 - app/models/casa_case.rb:
   - Rails/IgnoredColumnsAssignment
   - Rails/Date
@@ -86,8 +84,6 @@ ignore:
   - Rails/Blank
 - config/application.rb:
   - Style/RedundantInterpolation
-- config/initializers/bugsnag.rb:
-  - Style/FileNull
 - db/migrate/20250507011754_remove_unused_indexes.rb:
   - Rails/ReversibleMigration
 - db/seeds/db_populator.rb:
