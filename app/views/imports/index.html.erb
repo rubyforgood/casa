@@ -3,7 +3,7 @@
     are server-side link tabs keyed on ?import_type= (the controller reads @import_type); each tab
     keeps its id (a system spec clicks "supervisor-tab") and "Import X" label. Only the active panel
     is rendered. The CSV error is an inline alert. File-upload + SMS-opt-in JS hooks live in the panel
-    partials + the global src/import.js. %>
+    partials + the csv-import Stimulus controller. %>
 <% card = "rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6" %>
 <% tab = "whitespace-nowrap border-b-2 py-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500" %>
 <% active = "border-brand-600 text-brand-700" %>
