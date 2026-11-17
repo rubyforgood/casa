@@ -6,4 +6,10 @@ class AllCasaAdmins::SessionsController < Devise::SessionsController
 
   layout "casa_auth"
   skip_before_action :check_user, only: :destroy # standard:disable Rails/LexicallyScopedActionFilter
+
+  protected
+
+  def sign_in_params
+    params.fetch(resource_name, {}).permit(:email, :password)
+  end
 end
