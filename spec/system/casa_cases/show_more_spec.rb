@@ -60,6 +60,7 @@ RSpec.describe "casa_cases/show", :js, type: :system do
       visit casa_case_path(casa_case.id)
 
       expect(page).to have_text("Assigned volunteers\nAndy Dwyer")
+
       expect(page).to have_no_link("Andy Dwyer", href: volunteer_path(volunteer.id))
     end
   end
