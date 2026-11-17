@@ -70,6 +70,7 @@ RSpec.describe "case_contacts/edit", type: :system do
       check "Request travel or other reimbursement"
       expect(page).to have_select("case_contact_reimbursement_volunteer_id")
       expect(page).to have_field("case_contact_volunteer_address_line_1", disabled: false)
+
       expect(page).to have_no_text("This is not currently possible")
     end
 
