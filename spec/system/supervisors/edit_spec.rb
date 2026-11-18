@@ -293,11 +293,12 @@ RSpec.describe "supervisors/edit", type: :system do
           visit edit_supervisor_path(supervisor)
 
           expect(page).to have_text "Assigned volunteers"
-          expect(page).not_to have_button("Include unassigned")
-          expect(page).not_to have_text("Currently assigned to")
           supervisor.volunteers.each do |volunteer|
             expect(page).to have_text volunteer.email
           end
+
+          expect(page).not_to have_button("Include unassigned")
+          expect(page).not_to have_text("Currently assigned to")
         end
 
         context "when there are previously unassigned volunteers" do
@@ -306,8 +307,9 @@ RSpec.describe "supervisors/edit", type: :system do
           it "does not show them by default" do
             visit edit_supervisor_path(supervisor)
 
-            expect(page).not_to have_text unassigned_volunteer.email
             expect(page).to have_button("Include unassigned")
+
+            expect(page).not_to have_text unassigned_volunteer.email
 
             click_on "Include unassigned"
 
@@ -329,8 +331,9 @@ RSpec.describe "supervisors/edit", type: :system do
             visit edit_supervisor_path(supervisor)
 
             expect(page).to have_text "Assigned volunteers"
-            expect(page).not_to have_text unassigned_volunteer.email
             expect(page).to have_button("Include unassigned")
+
+            expect(page).not_to have_text unassigned_volunteer.email
 
             click_on "Include unassigned"
 
