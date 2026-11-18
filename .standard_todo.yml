@@ -69,8 +69,6 @@ ignore:
 - app/models/volunteer.rb:
   - Rails/WhereEquals
   - Layout/EmptyLineAfterGuardClause
-- app/notifications/delivery_methods/sms.rb:
-  - Layout/EmptyLinesAfterModuleInclusion
 - app/policies/user_policy.rb:
   - Layout/EmptyLineAfterGuardClause
 - app/services/casa_case_change_service.rb:
