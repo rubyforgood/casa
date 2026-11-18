@@ -1,4 +1,8 @@
 class ApplicationController < ActionController::Base
+  # Shown (with a 503, via public/503.html) when Postgres is unreachable -- "connection refused"
+  # during a DB restart/maintenance/failover. See ApplicationController#database_unavailable.
+  DATABASE_UNAVAILABLE_MESSAGE = "We're having trouble reaching the database, please try again in a minute."
+
   include Pundit::Authorization
   include Pagy::Backend
   include Organizational
@@ -18,6 +22,13 @@ class ApplicationController < ActionController::Base
   rescue_from Organizational::UnknownOrganization, with: :not_authorized
   rescue_from ActionController::UnknownFormat, with: :unsupported_media_type
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
+  # "Connection refused" means the web dyno could not reach Postgres at all (restart, maintenance,
+  # failover). Render a 503 instead of the generic 500 so clients -- including the case contact
+  # form's autosave, which reads the status -- can tell "try again shortly" from a real bug.
+  # ConnectionTimeoutError is a subclass of ConnectionNotEstablished; both are listed so the
+  # intent is explicit.
+  rescue_from ActiveRecord::ConnectionNotEstablished, with: :database_unavailable
+  rescue_from ActiveRecord::ConnectionTimeoutError, with: :database_unavailable
 
   impersonates :user
 
@@ -163,6 +174,13 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json { render json: {error: "Record not found"}, status: :not_found }
       format.any { render file: Rails.public_path.join("404.html"), status: :not_found, layout: false }
+    end
+  end
+
+  def database_unavailable
+    respond_to do |format|
+      format.json { render json: {error: DATABASE_UNAVAILABLE_MESSAGE}, status: :service_unavailable }
+      format.any { render file: Rails.public_path.join("503.html"), status: :service_unavailable, layout: false }
     end
   end
 
