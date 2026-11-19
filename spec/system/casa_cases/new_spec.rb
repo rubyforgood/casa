@@ -37,14 +37,14 @@ RSpec.describe "casa_cases/new", type: :system do
           select_all_el = page.find("span[data-test=select-all-input]")
           # contact types load blank (nothing selected) by default
           within ".ts-dropdown-content" do
-            expect(page).not_to have_css(".form-check-input--checked")
             expect(page).to have_css(".form-check-input--unchecked", count: 2)
+            expect(page).not_to have_css(".form-check-input--checked")
           end
           # check all contact type options
           select_all_el.click
           within ".ts-dropdown-content" do
-            expect(page).not_to have_css(".form-check-input--unchecked")
             expect(page).to have_css(".form-check-input--checked", count: 2)
+            expect(page).not_to have_css(".form-check-input--unchecked")
           end
 
           choose_typeahead_option("Test User", select_css: "#casa_case_case_assignments_attributes_0_volunteer_id")
@@ -56,9 +56,9 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content(case_number)
           expect(page).to have_content(I18n.l(court_date, format: :day_and_date))
           expect(page).to have_content("CASA case was successfully created.")
-          expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
           expect(page).to have_content("Transition-aged youth: Yes")
           expect(page).to have_content(volunteer_display_name)
+          expect(page).not_to have_content("Court Report Due Date: Thursday, 1-APR-2021") # accurate for frozen time
         end
       end
     end
@@ -91,8 +91,8 @@ RSpec.describe "casa_cases/new", type: :system do
         expect(page).to have_content(case_number)
         expect(page).to have_content("CASA case was successfully created.")
         expect(page).to have_content("Next court date: ")
-        expect(page).not_to have_content("Court Report Due Date:")
         expect(page).to have_content("Transition-aged youth: No")
+        expect(page).not_to have_content("Court Report Due Date:")
       end
     end
 
@@ -144,8 +144,8 @@ RSpec.describe "casa_cases/new", type: :system do
           expect(page).to have_content(case_number)
           expect(page).to have_content("CASA case was successfully created.")
           expect(page).to have_content("Next court date:")
-          expect(page).not_to have_content("Court Report Due Date:")
           expect(page).to have_content("Transition-aged youth: No")
+          expect(page).not_to have_content("Court Report Due Date:")
         end
       end
 
