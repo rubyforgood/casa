@@ -30,6 +30,7 @@ RSpec.describe "casa_cases/index", type: :system do
 
       find("summary[aria-label='Account menu']").click
       expect(page).to have_link("Sign out")
+
       expect(page).to have_no_link("Case groups")
     end
 
@@ -69,11 +70,13 @@ RSpec.describe "casa_cases/index", type: :system do
 
       visit casa_cases_path(search: "FINDME")
       expect(page).to have_content("CINA-FINDME-1")
-      expect(page).to have_no_content("TPR-NOPE-9")
       expect(page).to have_content("matching")
+
+      expect(page).to have_no_content("TPR-NOPE-9")
 
       visit casa_cases_path(search: "Zelda")
       expect(page).to have_content("TPR-OTHER-2")
+
       expect(page).to have_no_content("TPR-NOPE-9")
     end
 
@@ -84,10 +87,12 @@ RSpec.describe "casa_cases/index", type: :system do
       visit casa_cases_path
       # active by default
       expect(page).to have_content(active_case.case_number)
+
       expect(page).to have_no_content(inactive_case.case_number)
 
       select "Inactive", from: "Status"
       expect(page).to have_content(inactive_case.case_number)
+
       expect(page).to have_no_content(active_case.case_number)
     end
 
@@ -99,6 +104,7 @@ RSpec.describe "casa_cases/index", type: :system do
       visit casa_cases_path
 
       org_cases.each { |casa_case| expect(page).to have_content casa_case.case_number }
+
       other_org_cases.each { |casa_case| expect(page).not_to have_content casa_case.case_number }
     end
   end
