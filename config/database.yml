@@ -22,3 +22,7 @@ production:
   database: casa_production
   username: casa
   password: <%= ENV['CASA_DATABASE_PASSWORD'] %>
+  # Fail fast when Postgres is unreachable (restart/maintenance/failover -> "connection refused")
+  # instead of holding a Puma thread while the OS TCP timeout runs. pool already matches
+  # RAILS_MAX_THREADS via *default; checkout_timeout defaults to 5s and reconnect is on.
+  connect_timeout: 5
