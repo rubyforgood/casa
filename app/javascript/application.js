@@ -21,7 +21,6 @@ require('./src/require_communication_preference')
 require('./src/time_zone')
 require('./src/session_timeout_poller.js')
 require('./src/sms_reactivation_toggle')
-require('./src/validated_form')
 
 // Disable the browser's native HTML5 validation app-wide so an invalid submit reaches the server
 // and Rails renders the design-system validation (.field_with_errors rose borders + the
