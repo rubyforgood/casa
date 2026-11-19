@@ -40,6 +40,9 @@ application.register("court-order-form", CourtOrderFormController)
 import CourtReportController from "./court_report_controller"
 application.register("court-report", CourtReportController)
 
+import CsvImportController from "./csv_import_controller"
+application.register("csv-import", CsvImportController)
+
 import DisableFormController from "./disable_form_controller"
 application.register("disable-form", DisableFormController)
 
