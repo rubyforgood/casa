@@ -12,8 +12,6 @@ ignore:
   - Rails/Date
 - app/decorators/case_assignment_decorator.rb:
   - Rails/Date
-- app/helpers/banner_helper.rb:
-  - Rails/TimeZone
 - app/helpers/phone_number_helper.rb:
   - Rails/Blank
   - Style/RedundantRegexpEscape
