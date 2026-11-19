@@ -5,6 +5,7 @@ RSpec.describe "sessions/new", type: :system do
     it "renders sign in page with no flash messages" do
       visit "/"
       expect(page).to have_text "Log in"
+
       expect(page).not_to have_text "sign in before continuing"
     end
 
@@ -20,6 +21,7 @@ RSpec.describe "sessions/new", type: :system do
 
       it "renders sign in page with no flash messages" do
         expect(page).to have_text "Log in"
+
         expect(page).not_to have_text "sign in before continuing"
       end
 
@@ -52,6 +54,7 @@ RSpec.describe "sessions/new", type: :system do
 
       visit "/users/sign_in"
       expect(page).to have_text "Welcome back"
+
       expect(page).not_to have_text "sign in before continuing"
 
       fill_in "Email", with: user.email
