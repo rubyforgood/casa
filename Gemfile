@@ -23,6 +23,7 @@ gem "draper" # Decorators for cleaner presentation logic
 gem "filterrific" # Filtering and sorting of models
 gem "flipper" # Feature flag management
 gem "flipper-active_record" # Active Record adapter for Flipper
+gem "flipper-active_support_cache_store" # Rails.cache adapter for Flipper (short-lived flag cache)
 gem "flipper-ui" # Web UI for managing feature flags
 gem "friendly_id", "~> 5.7.0" # Allows us to use a slug instead of CASA case IDs in their URLs
 gem "groupdate" # Group data by time periods
