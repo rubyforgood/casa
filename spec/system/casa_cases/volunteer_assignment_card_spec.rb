@@ -20,8 +20,9 @@ RSpec.describe "casa_cases/edit volunteer assignment card", type: :system do
     # An active assignment has no unassigned date, so the pair is omitted rather than rendered as a
     # label and a hanging colon with an empty value.
     expect(active_row).to have_text("Assigned:")
-    expect(active_row).to have_no_text("Unassigned:")
     expect(past_row).to have_text("Unassigned:")
+
+    expect(active_row).to have_no_text("Unassigned:")
 
     # No fact in either row is a label with an empty value.
     [active_row, past_row].each do |row|
