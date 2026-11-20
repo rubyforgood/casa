@@ -44,7 +44,7 @@ RSpec.describe "Users::SessionsController", type: :request do
 
       it "fails normally without raising an exception" do
         expect { request }.not_to raise_error
-        expect(response).not_to have_http_status(:redirect)
+        expect(response).to have_http_status(:ok)
       end
     end
 
