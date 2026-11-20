@@ -17,7 +17,7 @@ concurrency:
 
 jobs:
   rspec:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
       RAILS_ENV: test
