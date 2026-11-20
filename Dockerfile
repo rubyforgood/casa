@@ -17,7 +17,7 @@ RUN apk update && apk upgrade && apk add --update --no-cache \
   postgresql-dev \
   tzdata
 
-RUN bundle config set force_ruby_platform true
+ENV BUNDLE_FORCE_RUBY_PLATFORM=true
 
 COPY Gemfile* $ROOT
 RUN bundle install
@@ -43,6 +43,7 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm
 RUN npm ci
 
 COPY --from=build /usr/local/bundle/ /usr/local/bundle/
+ENV BUNDLE_FORCE_RUBY_PLATFORM=true
 
 EXPOSE 3000
 

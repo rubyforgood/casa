@@ -37,7 +37,7 @@ The following commands should just be run for the initial setup only. Rebuilding
 1. Clone the respository to your local machine: `git clone https://github.com/rubyforgood/casa.git` or create a fork in GitHub if you don't have permission to commit directly to this repo.
 2. Change into the application directory: `cd casa`
 3. Run `docker compose build` to build images for all services.
-4. Run `docker compose run --rm web bundle install` to install ruby dependencies
+4. Run `docker compose run --rm web bundle install` to install ruby dependencies (usually a no-op, since the image built in step 3 already includes them)
 5. Run `docker compose run --rm web rails db:reset` to create the dev and test databases, load the schema, and run the seeds file.
 6. Run `docker compose run --rm web npm install` to install javascript dependencies
 7. Run `docker compose run --rm web npm run build` to bundle javascript assets
