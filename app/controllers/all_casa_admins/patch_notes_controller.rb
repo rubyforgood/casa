@@ -13,7 +13,21 @@ class AllCasaAdmins::PatchNotesController < AllCasaAdminsController
     @patch_note = PatchNote.new(patch_note_params)
 
     if @patch_note.save
-      render json: {status: :created, id: @patch_note.id}, status: :created
+      # The patch-notes Stimulus controller inserts `html` into the list as the new note, so all
+      # button markup (button_classes / ghost_class) comes from the server, not from JS.
+      render json: {
+        status: :created,
+        id: @patch_note.id,
+        html: render_to_string(
+          partial: "all_casa_admins/patch_notes/patch_note",
+          formats: [:html],
+          locals: {
+            patch_note: @patch_note,
+            patch_note_types: PatchNoteType.all,
+            patch_note_groups: PatchNoteGroup.all
+          }
+        )
+      }, status: :created
     else
       render json: {errors: @patch_note.errors.full_messages.to_json}, status: :unprocessable_content
     end
