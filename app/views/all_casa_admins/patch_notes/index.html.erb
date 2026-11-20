@@ -1,30 +1,30 @@
 <% content_for :page_title, "Patch notes" %>
-<%# patch_notes#index on the all_casa_admin shell. The jQuery clone-CRUD in
-    src/all_casa_admin/patch_notes.js reads the DOM by structure, so the hooks are preserved
-    verbatim: #patch-note-list whose children are [title, the new-note .patch-note-list-item,
-    then existing notes] (the JS clones child .eq(1)); each .card-body's DIRECT children are
-    textarea / .label-and-select (type) / .label-and-select (group) / .patch-note-button-controls
-    (read via .children()); and #notifications for the Notifier. Selects keep the native arrow —
-    the design-system chevron needs a wrapper the JS's .children('select') can't tolerate. %>
+<%# patch_notes#index on the all_casa_admin shell. Inline create/edit/delete is driven by the
+    patch-notes Stimulus controller (app/javascript/controllers/patch_notes_controller.js) over
+    fetch, so there is no full page reload. Every button is rendered here by the design-system
+    helpers (button_classes / ghost_class) -- no class strings are hard-coded in JS. The
+    #patch-note-list children stay [title, the new-note .patch-note-list-item, then existing
+    notes]: the controller inserts a freshly created note right after the new-note form, matching
+    the created_at-desc ordering of @patch_notes. %>
 <% textarea_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% select_class = "block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 
-<div class="px-4 py-6 sm:px-6 lg:px-8">
+<div class="px-4 py-6 sm:px-6 lg:px-8" data-controller="patch-notes" data-patch-notes-path-value="<%= all_casa_admins_patch_notes_path %>">
   <div class="mx-auto max-w-2xl space-y-4">
     <%= render "layouts/components/notifier" %>
     <div id="patch-notes">
-      <div id="patch-note-list" class="space-y-4">
+      <div id="patch-note-list" class="space-y-4" data-patch-notes-target="list">
         <div>
           <h1 class="text-2xl font-bold tracking-tight text-slate-900">Patch notes</h1>
           <p class="mt-1 text-sm text-slate-500">Post an announcement shown to users by role.</p>
         </div>
-        <div class="patch-note-list-item card rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div class="patch-note-list-item card rounded-2xl border border-slate-200 bg-white shadow-sm" data-patch-notes-target="newNoteItem">
           <div id="new-patch-note" class="card-body space-y-4 p-5 sm:p-6">
-            <textarea placeholder="New patch note" class="<%= textarea_class %>"></textarea>
+            <textarea placeholder="New patch note" class="<%= textarea_class %>" data-patch-notes-target="newNote"></textarea>
             <div class="label-and-select">
               <label for="new-patch-note-type" class="<%= label_class %>">Patch note type</label>
-              <select id="new-patch-note-type" class="<%= select_class %>">
+              <select id="new-patch-note-type" class="<%= select_class %>" data-patch-notes-target="newType">
                 <% @patch_note_types&.each do |patch_note_type| %>
                   <option value="<%= patch_note_type.id %>"><%= patch_note_type.name %></option>
                 <% end %>
@@ -32,21 +32,21 @@
             </div>
             <div class="label-and-select">
               <label for="new-patch-note-group" class="<%= label_class %>">User group</label>
-              <select id="new-patch-note-group" class="<%= select_class %>">
+              <select id="new-patch-note-group" class="<%= select_class %>" data-patch-notes-target="newGroup">
                 <% @patch_note_groups&.each do |patch_note_group| %>
                   <option value="<%= patch_note_group.id %>"><%= patch_note_group.value %></option>
                 <% end %>
               </select>
             </div>
             <div class="patch-note-button-controls flex flex-wrap gap-2">
-              <%= button_tag type: "button", class: button_classes(:primary) do %>
+              <%= button_tag type: "button", class: button_classes(:primary), data: {action: "patch-notes#create", patch_notes_target: "createButton"} do %>
                 <i class="bi bi-plus-lg" aria-hidden="true"></i> Create
               <% end %>
             </div>
           </div>
         </div>
         <% @patch_notes&.each do |patch_note| %>
-          <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note %>
+          <%= render "all_casa_admins/patch_notes/patch_note", patch_note: patch_note, patch_note_types: @patch_note_types, patch_note_groups: @patch_note_groups %>
         <% end %>
       </div>
     </div>

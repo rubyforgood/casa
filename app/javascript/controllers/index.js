@@ -67,6 +67,9 @@ application.register("multiple-select", MultipleSelectController)
 import NavDrawerController from "./nav_drawer_controller"
 application.register("nav-drawer", NavDrawerController)
 
+import PatchNotesController from "./patch_notes_controller"
+application.register("patch-notes", PatchNotesController)
+
 import ReportSubmitController from "./report_submit_controller"
 application.register("report-submit", ReportSubmitController)
 
