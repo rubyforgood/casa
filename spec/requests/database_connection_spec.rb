@@ -28,7 +28,18 @@ RSpec.describe "Database connection failures", type: :request do
       get case_contact_form_path(:details, case_contact_id: case_contact.id)
 
       expect(response).to have_http_status(:service_unavailable)
+      expect(response.headers["Retry-After"]).to eq("60")
       expect(response.body).to eq(Rails.public_path.join("503.html").read)
+    end
+
+    it "reports the error to Scout, since rescue_from hides it from Scout's middleware" do
+      error = ActiveRecord::ConnectionNotEstablished.new("connection refused")
+      stub_db_failure error
+      allow(ScoutApm::Error).to receive(:capture)
+
+      get case_contact_form_path(:details, case_contact_id: case_contact.id)
+
+      expect(ScoutApm::Error).to have_received(:capture).with(error)
     end
 
     it "renders the static 503 page when the connection times out" do
