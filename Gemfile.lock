@@ -91,10 +91,10 @@ GEM
       railties (>= 7.2)
       warden
     awesome_print (1.9.2)
-    axe-core-api (4.13.0)
+    axe-core-api (4.14.0)
       dumb_delegator
-    axe-core-rspec (4.13.0)
-      axe-core-api (= 4.13.0)
+    axe-core-rspec (4.14.0)
+      axe-core-api (= 4.14.0)
     azure-blob (0.9.0)
       cgi
       rexml
