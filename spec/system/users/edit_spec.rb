@@ -57,6 +57,7 @@ RSpec.describe "users/edit", type: :system do
       visit edit_users_path
 
       expect(page).to have_content "sms_event_test_volunteer"
+
       expect(page).not_to have_content "sms_event_test_supervisor"
       expect(page).not_to have_content "sms_event_test_casa_admin"
     end
@@ -157,6 +158,7 @@ RSpec.describe "users/edit", type: :system do
       formatted_current_sign_in_at = I18n.l(volunteer.current_sign_in_at, format: :edit_profile, default: nil)
       formatted_last_sign_in_at = I18n.l(volunteer.last_sign_in_at, format: :edit_profile, default: nil)
       expect(page).to have_text("Last logged in #{formatted_current_sign_in_at}")
+
       expect(page).not_to have_text("Last logged in #{formatted_last_sign_in_at}")
     end
 
@@ -329,8 +331,8 @@ RSpec.describe "users/edit", type: :system do
       sign_in supervisor
       visit edit_users_path
 
-      expect(page).not_to have_content "sms_event_test_volunteer"
       expect(page).to have_content "sms_event_test_supervisor"
+      expect(page).not_to have_content "sms_event_test_volunteer"
       expect(page).not_to have_content "sms_event_test_casa_admin"
     end
 
@@ -527,9 +529,9 @@ RSpec.describe "users/edit", type: :system do
       sign_in admin
       visit edit_users_path
 
+      expect(page).to have_content "sms_event_test_casa_admin"
       expect(page).not_to have_content "sms_event_test_volunteer"
       expect(page).not_to have_content "sms_event_test_supervisor"
-      expect(page).to have_content "sms_event_test_casa_admin"
     end
 
     it "notifies password changed by email", :aggregate_failures do

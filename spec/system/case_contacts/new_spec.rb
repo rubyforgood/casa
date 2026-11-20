@@ -109,6 +109,7 @@ RSpec.describe "case_contacts/new", type: :system do
       visit edit_case_contact_path(contact)
 
       expect(page).to have_text("Editing existing case contact")
+
       expect(page).to have_no_button("Discard draft")
     end
 
@@ -157,6 +158,7 @@ RSpec.describe "case_contacts/new", type: :system do
       find("#draft-case-id-selector .ts-control").click
 
       expect(page).to have_css("#draft-case-id-selector .ts-dropdown .option", text: case_number)
+
       expect(page).to have_no_css("#draft-case-id-selector .ts-dropdown .optgroup-header")
     end
   end
@@ -195,6 +197,7 @@ RSpec.describe "case_contacts/new", type: :system do
         expect(page).to have_button("Submit")
         expect(page).to have_button("Submit & add another")
       end
+
       expect(page).to have_no_css("#contact-form-action-buttons > button[type=button]", text: "Cancel")
     end
   end
@@ -263,12 +266,12 @@ RSpec.describe "case_contacts/new", type: :system do
       subject
 
       expect(page).to have_text(contact_type_group.name)
-      expect(page).to have_no_text("OnlyHiddenTypes")
-      expect(page).to have_no_text("Empty Group")
-
       expect(page).to have_field(class: "contact-form-type-checkbox", count: 2)
       expect(page).to have_field("School", class: "contact-form-type-checkbox")
       expect(page).to have_field("Shown Checkbox", class: "contact-form-type-checkbox")
+
+      expect(page).to have_no_text("OnlyHiddenTypes")
+      expect(page).to have_no_text("Empty Group")
       expect(page).to have_no_text("Empty")
       expect(page).to have_no_text("Hidden")
     end
@@ -311,6 +314,7 @@ RSpec.describe "case_contacts/new", type: :system do
 
       within notes_section_selector do
         expect(page).to have_field("Active Topic", type: :checkbox)
+
         expect(page).to have_no_text("Inactive Not Soft Deleted")
         expect(page).to have_no_text("Active Soft Deleted")
         expect(page).to have_no_text("Inactive Soft Deleted")
@@ -572,8 +576,9 @@ RSpec.describe "case_contacts/new", type: :system do
 
       # The reopened form carries the case forward but none of the last contact's other answers.
       expect(page).to have_select("case_contact_draft_case_ids", selected: [case_number])
-      expect(page).to have_no_field("case_contact_medium_type", checked: true)
       expect(page).to have_field("case_contact_notes", with: "")
+
+      expect(page).to have_no_field("case_contact_medium_type", checked: true)
     end
 
     it "does not reset referring location", :js do
@@ -643,6 +648,7 @@ RSpec.describe "case_contacts/new", type: :system do
           visit new_case_contact_path(case_contact: {casa_case_id: first_case.id})
 
           expect(page).to have_text(first_case.case_number)
+
           expect(page).to have_no_text(second_case.case_number)
         end
       end

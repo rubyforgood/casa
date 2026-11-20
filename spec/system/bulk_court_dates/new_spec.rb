@@ -17,7 +17,7 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     case_group.case_group_memberships.first.casa_case = casa_case
     case_group.save!
 
-    travel_to now
+    freeze_time
     sign_in admin
     visit casa_cases_path
     find("summary", text: "More").click
@@ -59,6 +59,5 @@ RSpec.describe "bulk_court_dates/new", type: :system do
     # can satisfy them.
     expect(page).to have_css("a", text: hearing_type.name)
     expect(page).to have_css("td", text: court_order_text)
-    travel_back
   end
 end

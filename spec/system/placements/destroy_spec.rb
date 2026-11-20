@@ -28,6 +28,7 @@ RSpec.describe "placements/destroy", type: :system do
     click_on "Confirm"
 
     expect(page).to have_text("Placement was successfully deleted.")
+
     expect(page).not_to have_text("Reunification")
     expect(page).not_to have_text("August 15, 2024 - Present")
   end

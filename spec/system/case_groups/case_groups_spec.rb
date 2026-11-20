@@ -61,6 +61,7 @@ RSpec.describe "Case groups", :js, type: :system do
     click_on "Submit"
 
     expect(page).to have_text(casa_case1.case_number)
+
     expect(page).not_to have_text(casa_case2.case_number)
   end
 
@@ -106,6 +107,7 @@ RSpec.describe "Case groups", :js, type: :system do
     end
 
     expect(page).to have_text("Case group deleted!")
+
     expect(page).to have_no_text("Doomed group")
   end
 end
