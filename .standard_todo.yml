@@ -180,5 +180,3 @@ ignore:
   - Rails/Date
 - spec/views/casa_orgs/edit.html.erb_spec.rb:
   - Style/RedundantInterpolation
-- spec/views/templates/email_templates_spec.rb:
-  - Rails/RootPathnameMethods
