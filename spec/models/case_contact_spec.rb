@@ -676,4 +676,55 @@ RSpec.describe CaseContact, type: :model do
       end
     end
   end
+
+  describe ".case_hash_from_cases" do
+    subject(:case_hash) { described_class.case_hash_from_cases(contacts) }
+
+    context "when contacts collection is empty" do
+      let(:contacts) { [] }
+
+      it "returns an empty hash" do
+        expect(case_hash).to eq({})
+      end
+    end
+
+    context "when contacts belong to multiple cases" do
+      let(:case_one) { create(:casa_case) }
+      let(:case_two) { create(:casa_case) }
+      let!(:contact_one) { create(:case_contact, casa_case: case_one) }
+      let!(:contact_two) { create(:case_contact, casa_case: case_one) }
+      let!(:contact_three) { create(:case_contact, casa_case: case_two) }
+      let(:contacts) { [contact_one, contact_two, contact_three] }
+
+      it "groups contacts under the correct case id without mixing" do
+        expect(case_hash.keys).to eq([case_one.id, case_two.id].sort)
+        expect(case_hash[case_one.id]).to contain_exactly(contact_one, contact_two)
+        expect(case_hash[case_two.id]).to contain_exactly(contact_three)
+      end
+    end
+
+    context "when a draft contact has multiple draft_case_ids" do
+      let(:case_one) { create(:casa_case) }
+      let(:case_two) { create(:casa_case) }
+      let(:draft_contact) do
+        build_stubbed(:case_contact, :details_status, casa_case: nil, draft_case_ids: [case_one.id, case_two.id])
+      end
+      let(:contacts) { [draft_contact] }
+
+      it "includes the draft contact under each associated case" do
+        expect(case_hash[case_one.id]).to eq([draft_contact])
+        expect(case_hash[case_two.id]).to eq([draft_contact])
+      end
+    end
+
+    context "when a contact only has casa_case_id and empty draft_case_ids" do
+      let(:case_one) { create(:casa_case) }
+      let(:contact) { build_stubbed(:case_contact, casa_case: case_one, draft_case_ids: []) }
+      let(:contacts) { [contact] }
+
+      it "groups the contact under its casa_case_id" do
+        expect(case_hash[case_one.id]).to eq([contact])
+      end
+    end
+  end
 end
