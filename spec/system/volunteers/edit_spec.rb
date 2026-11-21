@@ -381,6 +381,23 @@ RSpec.describe "volunteers/edit", type: :system do
     end
   end
 
+  describe "reassigned case visibility" do
+    it "lists a case reassigned to another volunteer under Assigned, not Not Assigned" do
+      organization = create(:casa_org)
+      reassigned_case = create(:casa_case, casa_org: organization, case_number: "REASSIGNED")
+      create(:case_assignment, :inactive, casa_case: reassigned_case, volunteer: create(:volunteer, casa_org: organization))
+      create(:case_assignment, casa_case: reassigned_case, volunteer: create(:volunteer, casa_org: organization))
+      volunteer = create(:volunteer, casa_org: organization)
+      admin = create(:casa_admin, casa_org: organization)
+
+      sign_in admin
+      visit edit_volunteer_path(volunteer)
+
+      expect(page).to have_css("optgroup[label='Assigned'] option", text: reassigned_case.case_number)
+      expect(page).to have_no_css("optgroup[label='Not Assigned'] option", text: reassigned_case.case_number)
+    end
+  end
+
   describe "resend invite" do
     it "allows a supervisor resend invitation to a volunteer" do
       organization = create(:casa_org)

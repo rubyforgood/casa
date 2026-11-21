@@ -191,6 +191,15 @@ RSpec.describe CasaCase, type: :model do
 
       expect(described_class.not_assigned(current_user.casa_org)).to contain_exactly(never_assigned_case, inactive_case, other_inactive_case)
     end
+
+    it "does not return a case that is actively assigned, even if it also has an inactive assignment" do
+      casa_org = create(:casa_org)
+      reassigned_case = create(:casa_case, casa_org: casa_org)
+      create(:case_assignment, :inactive, casa_case: reassigned_case, volunteer: create(:volunteer, casa_org: casa_org))
+      create(:case_assignment, casa_case: reassigned_case, volunteer: create(:volunteer, casa_org: casa_org))
+
+      expect(described_class.not_assigned(casa_org)).not_to include(reassigned_case)
+    end
   end
 
   describe ".should_transition" do
