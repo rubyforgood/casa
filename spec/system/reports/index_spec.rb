@@ -43,8 +43,9 @@ RSpec.describe "reports", :js, type: :system do
     end
 
     it "redirects to root", :aggregate_failures do
-      expect(page).not_to have_text "Case contacts report"
       expect(page).to have_text "Sorry, you are not authorized to perform this action."
+
+      expect(page).to have_no_text "Case contacts report"
     end
   end
 

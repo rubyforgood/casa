@@ -23,6 +23,7 @@ RSpec.describe "case_contacts reimbursement volunteer picker", :flipper, type: :
     visit edit_case_contact_path(contact)
 
     expect(page).to have_css("#case_contact_reimbursement_volunteer_id")
+
     expect(page).to have_no_text("No volunteer is assigned")
 
     find("#case_contact_reimbursement_volunteer_id option[value='#{vol2.id}']").select_option

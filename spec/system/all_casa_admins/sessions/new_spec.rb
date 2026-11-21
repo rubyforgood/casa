@@ -15,9 +15,10 @@ RSpec.describe "all_casa_admins/sessions/new", type: :system do
     it "allows sign out" do
       visit "/"
       find("#all-casa-log-out").click
-      expect(page).not_to have_text "sign in before continuing"
       expect(page).to have_text "Signed out successfully"
       expect(page).to have_text "All CASA log in"
+
+      expect(page).not_to have_text "sign in before continuing"
     end
 
     it "allows access to flipper" do
