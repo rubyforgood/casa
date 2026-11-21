@@ -4,7 +4,7 @@ RSpec.shared_examples "compares opening and closing tags" do
   include TemplateHelper
 
   it "validates html tags" do
-    file_content = File.read(Rails.root.join(file_path))
+    file_content = Rails.root.join(file_path).read
     tags_are_equal = validate_closing_tags_exist(file_content)
 
     expect(tags_are_equal).to be true
