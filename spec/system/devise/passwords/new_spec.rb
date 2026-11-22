@@ -91,6 +91,7 @@ RSpec.describe "users/passwords/new", type: :system do
 
       expect(page).to have_text(user.display_name)
       expect(page).to have_text("My Cases")
+
       expect(page).not_to have_text("Sign in")
     end
   end

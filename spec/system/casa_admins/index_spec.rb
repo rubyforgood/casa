@@ -17,6 +17,7 @@ RSpec.describe "casa_admins/index", type: :system do
     within "#admins" do
       expect(page).to have_content(admin2.email)
       expect(page).to have_content(admin3.email)
+
       expect(page).to have_no_content(different_org_admin.email)
       expect(page).to have_no_content(supervisor.email)
       expect(page).to have_no_content(volunteer.email)

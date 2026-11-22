@@ -9,7 +9,7 @@ module BannerHelper
     if banner.expired?
       "Expired"
     elsif banner.expires_at
-      "in #{distance_of_time_in_words(Time.now, banner.expires_at)}"
+      "in #{distance_of_time_in_words(Time.current, banner.expires_at)}"
     else
       "No Expiration"
     end

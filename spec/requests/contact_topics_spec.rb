@@ -66,6 +66,16 @@ RSpec.describe "/contact_topics", type: :request do
       end
     end
 
+    context "when casa_org_id of another org is submitted" do
+      let(:other_org) { create(:casa_org) }
+
+      it "creates the topic in the creator's own org" do
+        post contact_topics_url, params: {contact_topic: {casa_org_id: other_org.id, question: "q", details: "d"}}
+
+        expect(ContactTopic.last.casa_org).to eq(casa_org)
+      end
+    end
+
     context "with invalid parameters" do
       let(:attributes) do
         {
@@ -129,12 +139,32 @@ RSpec.describe "/contact_topics", type: :request do
     end
 
     context "with invalid parameters" do
-      let(:attributes) { {casa_org_id: 0} }
+      let(:attributes) { {question: ""} }
 
       it "renders a response with 422 status (i.e. to display the 'edit' template)" do
         patch contact_topic_url(contact_topic), params: {contact_topic: attributes}
         expect(response).to have_http_status(:unprocessable_content)
       end
+    end
+  end
+
+  describe "PATCH /update with another org's id" do
+    let(:other_org) { create(:casa_org) }
+    let!(:contact_topic) { create(:contact_topic, casa_org:) }
+
+    it "does not move the topic into another org" do
+      patch contact_topic_url(contact_topic), params: {contact_topic: {casa_org_id: other_org.id, question: "renamed"}}
+
+      expect(contact_topic.reload.casa_org).to eq(casa_org)
+      expect(contact_topic.question).to eq("renamed")
+    end
+
+    it "does not let an admin edit another org's topic" do
+      foreign = create(:contact_topic, casa_org: other_org)
+
+      patch contact_topic_url(foreign), params: {contact_topic: {question: "hijacked"}}
+
+      expect(foreign.reload.question).not_to eq("hijacked")
     end
   end
 

@@ -17,11 +17,12 @@ RSpec.describe "case_contacts/drafts", type: :system do
 
       visit case_contacts_drafts_path
 
+      expect(page).to have_content("NOTE_C")
+      expect(page).to have_content("NOTE_E")
+
       expect(page).not_to have_content("NOTE_A")
       expect(page).not_to have_content("NOTE_B")
-      expect(page).to have_content("NOTE_C")
       expect(page).not_to have_content("NOTE_D")
-      expect(page).to have_content("NOTE_E")
     end
   end
 end

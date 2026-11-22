@@ -14,6 +14,7 @@ RSpec.describe "checklist_items/destroy", type: :system do
     click_on "Delete", match: :first
 
     expect(page).to have_text("Checklist item was successfully deleted.")
+
     expect(page).not_to have_text(checklist_item.category)
     expect(page).not_to have_text(checklist_item.description)
 

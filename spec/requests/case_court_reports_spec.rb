@@ -86,6 +86,46 @@ RSpec.describe "/case_court_reports", type: :request do
       end
     end
 
+    context "when the case belongs to someone else's caseload" do
+      let(:other_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "CINA-OTHER-1") }
+
+      before do
+        other_case.court_reports.attach(io: StringIO.new("secret"), filename: "stored-report.docx")
+      end
+
+      it "does not send an unassigned volunteer the stored report, and looks the same as a missing case", :aggregate_failures do
+        get case_court_report_path(other_case.case_number, format: "docx")
+
+        expect(response).to redirect_to(case_court_reports_path)
+        expect(response.body).not_to include("secret")
+        expect(flash[:alert]).to eq "Report #{other_case.case_number} is not found."
+      end
+
+      it "does not send a volunteer whose assignment was deactivated" do
+        create(:case_assignment, casa_case: other_case, volunteer: volunteer, active: false)
+
+        get case_court_report_path(other_case.case_number, format: "docx")
+
+        expect(response).to redirect_to(case_court_reports_path)
+      end
+
+      it "still sends a supervisor in the same org the stored report" do
+        sign_in create(:supervisor, casa_org: volunteer.casa_org)
+
+        get case_court_report_path(other_case.case_number, format: "docx")
+
+        expect(response).to have_http_status(:ok)
+      end
+
+      it "does not send a supervisor from another org the stored report" do
+        sign_in create(:supervisor, casa_org: create(:casa_org))
+
+        get case_court_report_path(other_case.case_number, format: "docx")
+
+        expect(response).to redirect_to(case_court_reports_path)
+      end
+    end
+
     context "when an INVALID / non-existing case is sent" do
       let(:invalid_casa_case) { build_stubbed(:casa_case) }
 
@@ -141,6 +181,31 @@ RSpec.describe "/case_court_reports", type: :request do
         .and_return(context_builder)
 
       expect(request).to have_http_status(:ok)
+    end
+
+    context "when the case is not on the volunteer's caseload" do
+      let(:other_case) { create(:casa_case, casa_org: volunteer.casa_org, case_number: "CINA-OTHER-2") }
+      let(:missing_params) { {case_court_report: {case_number: "NO-SUCH-CASE", start_date: "January 1, 2020", end_date: "January 1, 2021"}} }
+      let(:params) { {case_court_report: {case_number: other_case.case_number, start_date: "January 1, 2020", end_date: "January 1, 2021"}} }
+
+      it "does not generate or store a report, and answers exactly like an unknown case number", :aggregate_failures do
+        expect { request }.not_to change { other_case.court_reports.count }
+        not_yours_status = response.status
+        not_yours_body = response.parsed_body.slice("link", "status")
+
+        post generate_case_court_reports_path, params: missing_params, headers: {ACCEPT: "application/json"}
+
+        expect(response.status).to eq not_yours_status
+        expect(response.parsed_body.slice("link", "status")).to eq not_yours_body
+        expect(not_yours_status).to eq 404
+      end
+
+      it "does not let a previously unassigned volunteer replace the case's latest report" do
+        create(:case_assignment, casa_case: other_case, volunteer: volunteer, active: false)
+
+        expect { request }.not_to change { other_case.court_reports.count }
+        expect(response).to have_http_status(:not_found)
+      end
     end
 
     context "when no custom template is set" do

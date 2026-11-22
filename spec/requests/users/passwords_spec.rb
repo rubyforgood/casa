@@ -87,6 +87,27 @@ RSpec.describe "Users::PasswordsController", type: :request do
       end
     end
 
+    context "when the email belongs to one account and the phone number is someone else's" do
+      let(:params) { {user: {email: user.email, phone_number: "+13333333333"}} }
+
+      it "does not text anyone a reset link, but still emails the account" do
+        expect_any_instance_of(User).to receive(:send_reset_password_instructions).once
+        request
+        expect(twillio_service_double).not_to have_received(:send_sms)
+      end
+    end
+
+    context "when the submitted number is formatted differently from the stored one" do
+      let(:params) { {user: {email: user.email, phone_number: "+1 (222) 222-2222"}} }
+
+      it "texts the stored number, never the submitted string" do
+        request
+        expect(twillio_service_double).to have_received(:send_sms).once.with(
+          {From: org.twilio_phone_number, Body: a_string_matching("reset_url"), To: user.phone_number}
+        )
+      end
+    end
+
     context "with invalid parameters" do
       let(:params) { {user: {email: "", phone_number: ""}} }
 
