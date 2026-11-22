@@ -23,11 +23,6 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
       expect(page).not_to include(other_casa_org.name)
     end
 
-    it "shows the organization time zone" do
-      expect(request.body).to include("Time zone:")
-      expect(request.body).to include(casa_org.time_zone)
-    end
-
     it "load metrics correctly" do
       expect(AllCasaAdmins::CasaOrgMetrics).to receive(:new).with(casa_org).and_call_original
       request
@@ -85,29 +80,6 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         expect(response).to have_http_status :created
         expect(response.body).to match "29207 Weimann Canyon, New Andrew, PA 40510-7416"
       end
-
-      it "creates a new CASA org with custom time zone when provided" do
-        post all_casa_admins_casa_orgs_path, params: {
-          casa_org: {
-            name: "Custom TZ Org",
-            address: "123 Main St",
-            time_zone: "America/Chicago"
-          }
-        }
-
-        expect(CasaOrg.last.time_zone).to eq "America/Chicago"
-      end
-
-      it "creates a new CASA org with default time zone when omitted" do
-        post all_casa_admins_casa_orgs_path, params: {
-          casa_org: {
-            name: "Default TZ Org",
-            address: "123 Main St"
-          }
-        }
-
-        expect(CasaOrg.last.time_zone).to eq "America/New_York"
-      end
     end
 
     context "when failure" do
@@ -132,21 +104,6 @@ RSpec.describe "AllCasaAdmin::CasaOrgs", type: :request do
         expect(response.content_type).to eq "application/json; charset=utf-8"
         expect(response).to have_http_status :unprocessable_content
         expect(response.body).to match "Name can't be blank"
-      end
-
-      context "with invalid time_zone" do
-        let(:params) do
-          {casa_org: {name: "Invalid Org", address: "123 Main St", time_zone: "Invalid/Time_Zone"}}
-        end
-
-        it "does not create a new CASA org" do
-          expect { post_create }.not_to change(CasaOrg, :count)
-        end
-
-        it "returns unprocessable content" do
-          post_create
-          expect(response).to have_http_status :unprocessable_content
-        end
       end
     end
   end

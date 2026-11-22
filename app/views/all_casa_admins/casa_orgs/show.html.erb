@@ -44,7 +44,6 @@
     <div class="<%= card %> p-5 sm:p-6">
       <h3 class="mb-3 text-lg font-semibold text-slate-900">Details</h3>
       <ul class="divide-y divide-slate-100 text-sm text-slate-700">
-        <li class="py-2"><span class="font-medium text-slate-800">Time zone:</span> <%= selected_organization.time_zone %></li>
         <% @casa_org_metrics.each do |item_description, item_value| %>
           <li class="py-2"><span class="font-medium text-slate-800"><%= item_description %>:</span> <%= item_value %></li>
         <% end %>

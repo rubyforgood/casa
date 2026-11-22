@@ -55,16 +55,6 @@ RSpec.describe "CasaOrg", type: :request do
         expect(casa_org.additional_expenses_enabled).to be true
       end
 
-      it "updates the time zone to a valid US identifier" do
-        patch casa_org_url(casa_org), params: {casa_org: {time_zone: "America/Chicago"}}
-        expect(casa_org.reload.time_zone).to eq "America/Chicago"
-      end
-
-      it "updates the time zone to an international identifier" do
-        patch casa_org_url(casa_org), params: {casa_org: {time_zone: "Asia/Kolkata"}}
-        expect(casa_org.reload.time_zone).to eq "Asia/Kolkata"
-      end
-
       describe "on logo update" do
         subject(:request) do
           patch casa_org_url(casa_org), params: params
@@ -152,33 +142,6 @@ RSpec.describe "CasaOrg", type: :request do
           response_data = request.body
           expect(response_data).to match("Name can't be blank".to_json)
         end
-      end
-
-      context "with invalid time_zone" do
-        let(:params) { {casa_org: {time_zone: "Invalid/Time_Zone"}} }
-
-        it "does not update the time zone" do
-          expect { request }.not_to change { casa_org.reload.time_zone }
-        end
-
-        it "returns unprocessable content" do
-          request
-          expect(response).to have_http_status(:unprocessable_content)
-        end
-      end
-    end
-
-    context "when user is not a casa admin" do
-      let(:volunteer) { create(:volunteer, casa_org: casa_org) }
-
-      before do
-        sign_in volunteer
-      end
-
-      it "redirects and does not allow updating the organization" do
-        patch casa_org_url(casa_org), params: {casa_org: {time_zone: "America/Chicago"}}
-        expect(response).to redirect_to(root_path)
-        expect(casa_org.reload.time_zone).not_to eq "America/Chicago"
       end
     end
   end

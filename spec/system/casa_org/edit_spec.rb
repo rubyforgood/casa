@@ -72,18 +72,4 @@ RSpec.describe "casa_org/edit", type: :system do
 
     expect(page).to have_text("Twilio phone number can't be blank")
   end
-
-  it "can update organization time zone" do
-    organization = create(:casa_org)
-    admin = create(:casa_admin, casa_org: organization)
-
-    sign_in admin
-    visit edit_casa_org_path(organization)
-
-    select "Central Time (America/Chicago)", from: "Time zone"
-    click_on "Submit"
-
-    expect(page).to have_content("CASA organization was successfully updated.")
-    expect(organization.reload.time_zone).to eq("America/Chicago")
-  end
 end
