@@ -143,11 +143,12 @@ RSpec.describe "volunteers/edit", type: :system do
 
         expect(page).to have_text "Volunteer was successfully updated."
         expect(page).to have_field("Email", with: "newemail@example.com")
-        expect(page).not_to have_field("Email", with: old_email)
         expect(volunteer.reload.email).to eq("newemail@example.com")
         expect(volunteer.unconfirmed_email).to be_nil
         expect(volunteer.old_emails).to eq([old_email])
         expect(ActionMailer::Base.deliveries.count).to eq(0)
+
+        expect(page).not_to have_field("Email", with: old_email)
       end
     end
   end
@@ -186,9 +187,9 @@ RSpec.describe "volunteers/edit", type: :system do
 
     click_on "Activate volunteer"
 
-    expect(page).not_to have_text("Volunteer was deactivated on")
-
     expect(inactive_volunteer.reload).to be_active
+
+    expect(page).not_to have_text("Volunteer was deactivated on")
   end
 
   it "allows the admin to unassign a volunteer from a supervisor" do
@@ -217,12 +218,13 @@ RSpec.describe "volunteers/edit", type: :system do
     sign_in admin
     visit edit_volunteer_path(volunteer)
 
-    expect(page).not_to have_select("supervisor_volunteer[supervisor_id]", with_options: [deactivated_supervisor.display_name])
     # The leading "" is the blank option the searchable picker loads with -- it no longer pre-selects
     # whichever supervisor happens to sort first.
     expect(page).to have_select("supervisor_volunteer[supervisor_id]", options: ["", active_supervisor.display_name])
     expect(page).to have_content("Select a supervisor")
     expect(page).to have_content("Assign a supervisor")
+
+    expect(page).not_to have_select("supervisor_volunteer[supervisor_id]", with_options: [deactivated_supervisor.display_name])
   end
 
   context "when the volunteer is unassigned from all of their cases" do
@@ -352,6 +354,7 @@ RSpec.describe "volunteers/edit", type: :system do
 
       within("#case_assignment_#{assignment2.id}") do
         expect(page).to have_text(casa_case_2.case_number)
+
         expect(page).not_to have_button("Unassign case")
       end
 
@@ -377,6 +380,7 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_content(active_casa_case.case_number)
+
       expect(page).not_to have_content(inactive_casa_case.case_number)
     end
   end
@@ -427,8 +431,9 @@ RSpec.describe "volunteers/edit", type: :system do
       visit edit_volunteer_path(volunteer)
 
       expect(page).to have_content("Send reactivation alert (SMS)")
-      expect(page).not_to have_content("Enable Twilio")
       expect(page).to have_selector("#twilio_enabled")
+
+      expect(page).not_to have_content("Enable Twilio")
     end
 
     context "admin's organization does not have twilio enabled" do
@@ -528,8 +533,9 @@ RSpec.describe "volunteers/edit", type: :system do
         sign_in user
         visit edit_volunteer_path(volunteer)
 
-        expect(page).not_to have_link("Impersonate")
         expect(page).to have_no_current_path(edit_volunteer_path(volunteer), ignore_query: true)
+
+        expect(page).not_to have_link("Impersonate")
       end
     end
   end
@@ -630,8 +636,9 @@ RSpec.describe "volunteers/edit", type: :system do
       sign_in volunteer
       visit edit_volunteer_path(volunteer)
 
-      expect(page).not_to have_selector(".notes")
       expect(page).to have_content("Sorry, you are not authorized to perform this action.")
+
+      expect(page).not_to have_selector(".notes")
     end
   end
 

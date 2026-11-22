@@ -70,6 +70,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         within(".full-card", match: :first) do
           expect(page).to have_text("Reimbursement pending")
+
           expect(page).to have_no_text("Reimbursement complete")
         end
       end
@@ -82,6 +83,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         within(".full-card", match: :first) do
           expect(page).to have_text("Reimbursement complete")
+
           expect(page).to have_no_text("Reimbursement pending")
         end
       end
@@ -122,9 +124,9 @@ RSpec.describe "case_contacts/index", type: :system do
           fill_in "filterrific_occurred_starting_at", with: yesterday
           fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
-          expect(page).to have_no_content day_before_yesterday_display
           expect(page).to have_content yesterday_display
           expect(page).to have_content today_display
+          expect(page).to have_no_content day_before_yesterday_display
         end
       end
 
@@ -138,15 +140,15 @@ RSpec.describe "case_contacts/index", type: :system do
 
           subject
 
-          expect(page).to have_no_content "You have no case contacts for this case."
           expect(page).to have_content "Draft"
+          expect(page).to have_no_content "You have no case contacts for this case."
         end
 
         it "only displays the filtered case" do
           subject
 
-          expect(page).to have_no_content other_casa_case.case_number
           expect(page).to have_content casa_case.case_number
+          expect(page).to have_no_content other_casa_case.case_number
         end
       end
 
@@ -175,6 +177,7 @@ RSpec.describe "case_contacts/index", type: :system do
           check "Hide drafts"
 
           expect(page).to have_field "Hide drafts", type: :checkbox
+
           expect(page).to have_no_content "Other filters"
         end
 
@@ -229,8 +232,8 @@ RSpec.describe "case_contacts/index", type: :system do
 
           find(".clear-button").click
 
-          expect(page).to have_no_css(".ts-control .item")
           expect(page).to have_content "Other filters"
+          expect(page).to have_no_css(".ts-control .item")
         end
 
         it "stays open when a hidden select goes back to All" do
@@ -253,6 +256,7 @@ RSpec.describe "case_contacts/index", type: :system do
           check "Hide drafts"
 
           expect(page).to have_field("Hide drafts", checked: true)
+
           expect(page).to have_no_content "Other filters"
         end
       end
@@ -347,8 +351,8 @@ RSpec.describe "case_contacts/index", type: :system do
 
           find(".clear-button").click
 
-          expect(page).to have_no_css(".ts-control .item")
           expect(page).to have_text("Showing 1\u20132 of 2")
+          expect(page).to have_no_css(".ts-control .item")
         end
 
         # The auto-submit re-rendered the page on every chip, tearing down the open menu: picking N
@@ -543,11 +547,13 @@ RSpec.describe "case_contacts/index", type: :system do
       # showing case 1 only
       visit case_contacts_path(casa_case_id: casa_case.id)
       expect(page).to have_content(case_number)
+
       expect(page).to have_no_content(another_case_number)
 
       # showing case 2 only
       visit case_contacts_path(casa_case_id: another_case.id)
       expect(page).to have_content(another_case_number)
+
       expect(page).to have_no_content(case_number)
 
       # a date range that keeps case 2's contact (today) and drops case 1's (day before yesterday)
@@ -556,6 +562,7 @@ RSpec.describe "case_contacts/index", type: :system do
       fill_in "filterrific_occurred_ending_at", with: Time.zone.tomorrow
 
       expect(page).to have_content(another_case_number)
+
       expect(page).to have_no_content(case_number)
 
       # case 1 + a date range that excludes its only contact -> no contact cards render
@@ -591,6 +598,7 @@ RSpec.describe "case_contacts/index", type: :system do
 
         expect(page).to have_content(contact_topic.question)
         expect(page).to have_content(contact_topic_answer.value)
+
         expect(page).to have_no_content contact_topics.first.details
       end
     end

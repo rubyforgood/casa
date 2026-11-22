@@ -77,13 +77,15 @@ RSpec.describe "court_dates/edit", type: :system do
 
       expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
         page.find("a", text: "Delete future court date").click
       end
-      expect(page).to have_content "Court date was successfully deleted"
 
+      expect(page).to have_content "Court date was successfully deleted"
       expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+
       expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
@@ -98,6 +100,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
       expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
       accept_alert "Are you sure?" do
         page.find("a", text: "Delete future court date").click
@@ -105,6 +108,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
       expect(page).to have_content "Court date was successfully deleted."
       expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
+
       expect(page).not_to have_content future_court_date.date.strftime("%B %-d, %Y")
     end
   end
@@ -120,6 +124,7 @@ RSpec.describe "court_dates/edit", type: :system do
 
       expect(page).to have_content past_court_date.date.strftime("%B %-d, %Y")
       expect(page).to have_content future_court_date.date.strftime("%B %-d, %Y")
+
       page.find("a", text: future_court_date.date.strftime("%B %-d, %Y")).click
 
       expect(page).not_to have_content "Delete future court date"

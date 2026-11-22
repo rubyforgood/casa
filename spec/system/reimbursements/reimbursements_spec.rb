@@ -34,6 +34,7 @@ RSpec.describe "reimbursements", type: :system do
     # contact2's volunteer is still listed as a filter option, so scope to the row.
     within "[data-test=reimbursement-row]" do
       expect(page).to have_content(contact1.creator.display_name)
+
       expect(page).to have_no_content(contact2.creator.display_name)
     end
   end

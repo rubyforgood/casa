@@ -19,6 +19,7 @@ RSpec.describe "org announcement banner", type: :system do
 
     bar = find("[data-controller='dismiss']")
     expect(bar).to have_css("i.bi-megaphone", visible: :all)
+
     expect(bar).to have_no_css("span[aria-hidden='true']")
   end
 
