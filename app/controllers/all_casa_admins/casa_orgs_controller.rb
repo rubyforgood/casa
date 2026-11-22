@@ -36,6 +36,6 @@ class AllCasaAdmins::CasaOrgsController < AllCasaAdminsController
   private
 
   def casa_org_params
-    params.require(:casa_org).permit(:name, :display_name, :address)
+    params.require(:casa_org).permit(:name, :display_name, :address, :time_zone)
   end
 end
