@@ -1,0 +1,20 @@
+{
+  "data": {
+    "repository": {
+      "i_7305": {
+        "__typename": "Issue",
+        "number": 7305,
+        "state": "OPEN",
+        "title": "Delete dead read_more.js"
+      },
+      "i_8888": null
+    }
+  },
+  "errors": [
+    {
+      "type": "FORBIDDEN",
+      "path": ["repository", "i_8888"],
+      "message": "Resource not accessible by integration"
+    }
+  ]
+}

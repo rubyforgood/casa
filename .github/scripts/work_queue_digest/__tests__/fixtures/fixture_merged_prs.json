@@ -1,0 +1,39 @@
+{
+  "data": {
+    "search": {
+      "issueCount": 2,
+      "pageInfo": {
+        "hasNextPage": false,
+        "endCursor": null
+      },
+      "nodes": [
+        {
+          "number": 7424,
+          "title": "fix: render 503 when Postgres is unreachable",
+          "url": "https://github.com/rubyforgood/casa/pull/7424",
+          "mergedAt": "2026-11-19T23:48:29Z",
+          "headRefName": "fix/pg-outage",
+          "body": "Fixes #7401",
+          "closingIssuesReferences": {
+            "totalCount": 1,
+            "pageInfo": { "hasNextPage": false },
+            "nodes": [{ "number": 7401, "state": "CLOSED" }]
+          }
+        },
+        {
+          "number": 7436,
+          "title": "Follow-up to #7412: tighten remember_me sign-in specs",
+          "url": "https://github.com/rubyforgood/casa/pull/7436",
+          "mergedAt": "2026-11-20T17:41:28Z",
+          "headRefName": "followup/7412",
+          "body": "Followup work for remember me",
+          "closingIssuesReferences": {
+            "totalCount": 0,
+            "pageInfo": { "hasNextPage": false },
+            "nodes": []
+          }
+        }
+      ]
+    }
+  }
+}

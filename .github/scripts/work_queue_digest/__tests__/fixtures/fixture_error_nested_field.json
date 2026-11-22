@@ -1,0 +1,18 @@
+{
+  "data": {
+    "repository": {
+      "i_7305": {
+        "__typename": "Issue",
+        "number": 7305,
+        "state": null,
+        "title": "Delete dead read_more.js"
+      }
+    }
+  },
+  "errors": [
+    {
+      "message": "Field 'state' failed to resolve",
+      "path": ["repository", "i_7305", "state"]
+    }
+  ]
+}

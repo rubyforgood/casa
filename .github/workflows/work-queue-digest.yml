@@ -1,0 +1,48 @@
+name: Contributor Work Queue Digest
+
+on:
+  schedule:
+    # Run weekly on Monday morning at 06:00 UTC (before weekly triage and office hours)
+    - cron: '0 6 * * 1'
+  workflow_dispatch:
+
+# Strictly read-only permissions
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+  checks: read
+  statuses: read
+
+concurrency:
+  group: work-queue-digest
+  cancel-in-progress: true
+
+jobs:
+  generate-digest:
+    name: Generate Work Queue Digest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Generate Digest and Publish Step Summary
+        uses: actions/github-script@373c709c69115d41ff229c7e5df9f8788daa9553 # v9
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const { runDigest } = require('./.github/scripts/work_queue_digest/index.js');
+            await runDigest({
+              graphql: github.graphql,
+              summary: core.summary,
+              log: {
+                info: core.info,
+                warning: core.warning,
+                error: core.error,
+                setFailed: core.setFailed
+              },
+              owner: context.repo.owner,
+              name: context.repo.repo
+            });

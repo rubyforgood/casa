@@ -1,0 +1,26 @@
+{
+  "data": {
+    "repository": {
+      "i_7305": {
+        "__typename": "Issue",
+        "number": 7305,
+        "state": "OPEN",
+        "title": "Delete dead read_more.js"
+      },
+      "i_7334": {
+        "__typename": "PullRequest",
+        "number": 7334,
+        "state": "OPEN",
+        "title": "Delete dead read_more.js (#7305)"
+      },
+      "i_999999": null
+    }
+  },
+  "errors": [
+    {
+      "type": "NOT_FOUND",
+      "path": ["repository", "i_999999"],
+      "message": "Could not resolve to an issue or pull request with the number of 999999."
+    }
+  ]
+}
