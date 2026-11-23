@@ -140,6 +140,30 @@ class CasaOrg < ApplicationRecord
     banners.where(active: true).where.not(id: current_banner_id).exists?
   end
 
+  def time_zone_object
+    Time.find_zone(time_zone) || Time.find_zone("America/New_York")
+  end
+
+  def with_time_zone(&block)
+    Time.use_zone(time_zone_object, &block)
+  end
+
+  def time_zone_now
+    Time.current.in_time_zone(time_zone_object)
+  end
+
+  def today
+    time_zone_now.to_date
+  end
+
+  def yesterday
+    today - 1.day
+  end
+
+  def tomorrow
+    today + 1.day
+  end
+
   private
 
   def sanitize_svg
