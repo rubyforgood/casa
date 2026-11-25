@@ -10,7 +10,6 @@ require('datatables.net-dt')(null, window.jQuery) // First parameter is the glob
 require('@rails/ujs').start()
 require('@rails/activestorage').start()
 require('./src/case_contact')
-require('./src/case_emancipation')
 require('./src/casa_case')
 require('./src/new_casa_case')
 require('./src/emancipations')
