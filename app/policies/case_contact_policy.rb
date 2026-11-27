@@ -21,7 +21,9 @@ class CaseContactPolicy < ApplicationPolicy
   end
 
   alias_method :index?, :admin_or_supervisor_or_volunteer?
-  alias_method :drafts?, :admin_or_supervisor?
+  # The drafts list serves two audiences: admins/supervisors get the org-wide list, volunteers
+  # get their own drafts (the controller scopes to creator: user for them, per Scope#resolve).
+  alias_method :drafts?, :admin_or_supervisor_or_volunteer?
   # The form persists on first save rather than on open, so creating is the same permission as
   # opening the form. Without this, create fell through to ApplicationPolicy#create? (admin only).
   alias_method :create?, :new?

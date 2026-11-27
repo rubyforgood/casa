@@ -32,6 +32,10 @@
     </div>
   </div>
 
+  <%# Unfinished-drafts notice (volunteers): points at the drafts list before the volunteer
+      starts a NEW contact they'd also have to remember to finish. %>
+  <%= render "case_contacts/unfinished_drafts_notice" %>
+
   <%= form_for_filterrific @filterrific, url: case_contacts_path, html: {class: "filter-form mb-6"}, remote: true,
     data: {turbo: true, turbo_frame: :case_contacts, turbo_action: :advance} do |f| %>
     <%= hidden_field_tag "casa_case_id", params[:casa_case_id] %>

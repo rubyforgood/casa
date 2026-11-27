@@ -1,0 +1,42 @@
+<%# One unfinished draft on the volunteer's own drafts list (case_contacts#drafts, casa_app).
+    Shows the draft's case (from draft_case_ids), the last edit time and a notes/topic-answer
+    preview, with Continue (opens the form wizard) and Discard (hard delete, confirmed via the
+    shared dialog: shared/confirm_button -> Dialog:: components). Deliberately not a twin of
+    _case_contact: that card serves the org-wide drafts page and the case-contacts list; this
+    row only ever shows the volunteer's own drafts, so it drops the creator/undelete/
+    reimbursement chrome and says "Continue" instead of "Edit". %>
+<% case_numbers = contact.draft_case_ids.filter_map { |id| @draft_cases[id]&.case_number } %>
+<% preview = contact.notes.presence || contact.contact_topic_answers.find { _1.value.present? }&.value %>
+<div class="rounded-2xl border border-slate-200 bg-white shadow-sm">
+  <div class="p-4 sm:p-5">
+    <div class="flex flex-wrap items-start justify-between gap-3">
+      <div class="min-w-0">
+        <h2 class="text-base font-semibold text-slate-900">
+          <% if case_numbers.any? %>
+            <%= case_numbers.join(", ") %>
+          <% else %>
+            <span class="font-normal text-slate-500">No case selected</span>
+          <% end %>
+        </h2>
+        <p class="mt-1 text-sm text-slate-500">Last edited <%= time_ago_in_words(contact.updated_at) %> ago</p>
+      </div>
+      <div class="flex flex-wrap items-center gap-2">
+        <%= link_to edit_case_contact_path(contact), data: {turbo: false}, class: button_classes(:secondary) do %>
+          <i class="bi bi-pencil" aria-hidden="true"></i> Continue
+        <% end %>
+        <%= render "shared/confirm_button",
+          url: discard_draft_case_contact_path(contact),
+          title: "Discard this draft?",
+          message: "This draft and anything autosaved into it -- notes, topic answers and expenses -- will be deleted. This cannot be undone.",
+          confirm_label: "Discard draft",
+          trigger_label: "Discard",
+          trigger_icon: "bi bi-trash",
+          trigger_class: button_classes(:danger_outline) %>
+      </div>
+    </div>
+    <%# line-clamp keeps truncation in CSS so the full text stays in the DOM for screen readers. %>
+    <% if preview.present? %>
+      <p class="mt-3 line-clamp-2 whitespace-pre-line border-t border-slate-100 pt-3 text-sm text-slate-600"><%= preview %></p>
+    <% end %>
+  </div>
+</div>

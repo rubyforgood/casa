@@ -1,0 +1,18 @@
+<%# "You have N unfinished case contacts" for the signed-in volunteer, linking to their own
+    drafts list. Rendered on the case contacts page and the volunteer dashboard; both
+    controllers set @unfinished_drafts_count (CaseContact.drafts_for(current_user).count), so
+    the notice and the list it links to count the same records. Empty drafts are auto-cleaned
+    after 7 days, so any draft that survived a week is one the volunteer wrote into. Renders
+    nothing for other roles or when there are no unfinished drafts.
+    Styling is the design-system alert card with a PLAIN glyph (design.md: "A message bar or
+    alert card gets a PLAIN glyph, never a tile"); the link follows the flashes' in-banner
+    link shape (semibold + underline). %>
+<% if @unfinished_drafts_count.to_i.positive? %>
+  <div class="<%= alert_classes(:warning) %> mb-6">
+    <i class="bi bi-exclamation-triangle mt-0.5 shrink-0 text-base leading-5" aria-hidden="true"></i>
+    <div class="min-w-0">
+      You have <%= pluralize(@unfinished_drafts_count, "unfinished case contact") %> that you started but did not submit.
+      <%= link_to "Review drafts", case_contacts_drafts_path, class: "font-semibold underline underline-offset-2 hover:no-underline" %>
+    </div>
+  </div>
+<% end %>
