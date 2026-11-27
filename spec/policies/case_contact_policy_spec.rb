@@ -128,8 +128,9 @@ RSpec.describe CaseContactPolicy, :aggregate_failures do
       expect(subject).to permit(supervisor)
     end
 
-    it "does not allow volunteers" do
-      expect(subject).not_to permit(volunteer)
+    # Volunteers access the same route; the controller scopes their list to creator: user.
+    it "allows volunteers" do
+      expect(subject).to permit(volunteer)
     end
   end
 

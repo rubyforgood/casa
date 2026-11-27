@@ -10,6 +10,7 @@ class CaseContactsController < ApplicationController
 
   def index
     @active_nav = "contacts"
+    @unfinished_drafts_count = CaseContact.drafts_for(current_user).count if current_user.volunteer?
     load_case_contacts
     render :index, layout: "casa_app" unless performed?
   end
@@ -18,7 +19,18 @@ class CaseContactsController < ApplicationController
     authorize CaseContact
     @active_nav = "contacts"
 
-    @case_contacts = current_organization.case_contacts.not_active
+    if current_user.volunteer?
+      # A volunteer's own drafts: started/details, newest edit first. Rows show the draft's
+      # case (from draft_case_ids), a notes preview and Continue/Discard actions.
+      @pagy, @case_contacts = pagy(
+        CaseContact.drafts_for(current_user)
+          .order(updated_at: :desc)
+          .includes(:contact_topic_answers, contact_topic_answers: :contact_topic)
+      )
+      @draft_cases = CasaCase.where(id: @case_contacts.flat_map(&:draft_case_ids).uniq).index_by(&:id)
+    else
+      @pagy, @case_contacts = pagy(current_organization.case_contacts.not_active)
+    end
     render layout: "casa_app"
   end
 

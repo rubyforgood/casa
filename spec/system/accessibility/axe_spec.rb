@@ -114,6 +114,34 @@ RSpec.describe "Accessibility (axe)", type: :system do
     it("emancipation", :js) { expect_axe_clean casa_case_emancipation_path(volunteer.casa_cases.first) }
   end
 
+  # Volunteer drafts surfaces (issue 7287): the own-drafts list, the unfinished-drafts notice
+  # on the case contacts page and the dashboard, and the discard dialog in its open state.
+  context "volunteer drafts" do
+    let(:volunteer) { create(:volunteer, casa_org: organization) }
+    let!(:draft) do
+      create(:case_contact, :started_status, creator: volunteer, draft_case_ids: [casa_case.id], notes: "Draft note")
+    end
+
+    # A volunteer with exactly one active case is redirected to the new-contact form, so the
+    # dashboard only renders with two assignments.
+    before do
+      create(:case_assignment, volunteer: volunteer, casa_case: casa_case)
+      create(:case_assignment, volunteer: volunteer)
+      sign_in volunteer
+    end
+
+    it("volunteer drafts list", :js) { expect_axe_clean case_contacts_drafts_path }
+    it("case contacts index with drafts notice", :js) { expect_axe_clean case_contacts_path }
+    it("dashboard with drafts notice", :js) { expect_axe_clean authenticated_user_root_path }
+
+    it("volunteer drafts: discard dialog open", :js) do
+      visit case_contacts_drafts_path
+      click_on "Discard"
+      expect(page).to have_css("dialog[open]")
+      expect(page).to be_axe_clean
+    end
+  end
+
   # Violations that only exist below a breakpoint: the auth pages' only <h1> sits in an aside
   # hidden below lg, the org-settings group labels are lg:hidden, and the metrics tables become
   # scroll containers once they no longer fit.

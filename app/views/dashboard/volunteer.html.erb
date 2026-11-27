@@ -17,6 +17,10 @@
     <% end %>
   </div>
 
+  <%# Unfinished-drafts notice (volunteers): same callout as the case contacts page, before
+      the no-cases branch so it also surfaces for a volunteer with drafts but no active case. %>
+  <%= render "case_contacts/unfinished_drafts_notice" %>
+
   <% if @dashboard.cases.empty? %>
     <div class="mx-auto max-w-lg py-16 text-center">
       <div class="mx-auto grid h-16 w-16 place-items-center rounded-2xl bg-brand-50 text-brand-600"><i class="bi bi-folder2-open text-3xl" aria-hidden="true"></i></div>

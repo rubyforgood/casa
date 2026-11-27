@@ -1753,6 +1753,14 @@ class strings are written out so the Tailwind scanner compiles them. Colors foll
   TomSelect field the guard must **not** call `.focus()` on failure -- that re-opens the dropdown over
   the error.
 
+- **Persistent callouts are the same alert card.** A standing notice (not a flash) reuses
+  `alert_classes(:warning)` with a plain glyph and one semibold-underline link, like the flashes'
+  in-banner link — e.g. the unfinished-drafts notice (`case_contacts/_unfinished_drafts_notice`,
+  issue 7287): "You have N unfinished case contacts" + **Review drafts**, rendered by the case
+  contacts page and the volunteer dashboard, hidden entirely (`positive?` guard in the partial)
+  when there is nothing to act on. The count comes from the controller (`@unfinished_drafts_count`,
+  `CaseContact.drafts_for(user).count`), so the notice and the list it links to can't disagree.
+
 ### Dropdown / popover
 Menus (the header account menu, the cases-page "More" actions menu) are a native
 `<details>/<summary>` disclosure: the `<summary>` is the trigger (styled as a button,

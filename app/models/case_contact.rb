@@ -196,6 +196,13 @@ class CaseContact < ApplicationRecord
 
   scope :no_drafts, ->(checked) { (checked == 1) ? active : all }
 
+  # A volunteer's unfinished drafts: the two live draft statuses (started/details -- notes and
+  # expenses are legacy, "no longer used"), so the list and the "unfinished case contacts" notice
+  # count the same records. Callers add `.order(updated_at: :desc)` when listing.
+  scope :drafts_for, ->(creator) {
+    where(creator_id: creator).where(status: %w[started details])
+  }
+
   scope :with_metadata_pair, ->(key, value) { where("metadata -> ? @> ?::jsonb", key.to_s, value.to_s) }
   scope :used_create_another, -> { with_metadata_pair(:create_another, true) }
 

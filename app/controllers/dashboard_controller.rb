@@ -8,6 +8,7 @@ class DashboardController < ApplicationController
       redirect_to new_case_contact_path
     elsif current_user.volunteer?
       @active_nav = "dashboard"
+      @unfinished_drafts_count = CaseContact.drafts_for(current_user).count
       @dashboard = VolunteerDashboard.new(current_user)
       render "dashboard/volunteer", layout: "casa_app"
     elsif current_user.supervisor?
