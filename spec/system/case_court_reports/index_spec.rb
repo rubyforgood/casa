@@ -42,6 +42,7 @@ RSpec.describe "case_court_reports/index", type: :system do
     it "generation modal hidden", :aggregate_failures do
       expect(page).to have_selector "#btnGenerateReport", text: "Generate report", visible: :hidden
       expect(page).to have_selector "#case-selection", visible: :hidden
+
       expect(page).not_to have_selector ".select2"
     end
   end
@@ -145,8 +146,8 @@ RSpec.describe "case_court_reports/index", type: :system do
       # leaves no placeholder and no magnifier -- searchable, but with nothing saying so.
       expect(page).to have_selector "#case-selection option:first-of-type", text: "Select case number", visible: :all
       within "#generate-docx-report-modal" do
-        expect(page).to have_no_css ".ts-control .item"
         expect(page).to have_css ".ts-control input[placeholder='Search case number']"
+        expect(page).to have_no_css ".ts-control .item"
       end
       state = page.evaluate_script(<<~JS)
         (function () {
@@ -171,6 +172,7 @@ RSpec.describe "case_court_reports/index", type: :system do
 
       # Waiting matchers: reading the menu straight after the keystrokes reads it pre-filter.
       expect(page).to have_css(".ts-dropdown .option", text: target.case_number)
+
       expect(page).to have_no_css(".ts-dropdown .option", text: decoy.case_number)
     end
 
@@ -197,6 +199,7 @@ RSpec.describe "case_court_reports/index", type: :system do
       # Same barrier as the success example: the button disables for the request and re-enables after,
       # which is the page-level signal that the round trip finished. Counting before that reads 0.
       expect(page).to have_selector "#btnGenerateReport[disabled]"
+
       expect(page).to have_no_selector "#btnGenerateReport[disabled]", wait: 10
 
       expect(page.evaluate_script("window.__opened.length")).to eq(1)
@@ -226,8 +229,8 @@ RSpec.describe "case_court_reports/index", type: :system do
         click_button "Generate report"
 
         expect(page).to have_selector "#btnGenerateReport[disabled]"
-        expect(page).not_to have_selector "#btnGenerateReport[disabled]", wait: 10
         expect(page).to have_selector "#spinner", visible: :hidden
+        expect(page).not_to have_selector "#btnGenerateReport[disabled]", wait: 10
       end
 
       opened_url = page.evaluate_script("window.__last_opened_url")

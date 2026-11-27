@@ -53,6 +53,9 @@ class Users::PasswordsController < Devise::PasswordsController
   end
 
   def send_password_reset_sms
+    # Never text a reset link to a number the requester typed: only the account's stored number qualifies.
+    return unless submitted_phone_matches_account?
+
     # for case where user enters ONLY a phone number, generate a new reset token to use;
     # otherwise, use the same reset token as sent by devise mailer
     @reset_token ||= @resource.generate_password_reset_token
@@ -62,9 +65,14 @@ class Users::PasswordsController < Devise::PasswordsController
     sms_params = {
       From: @resource.casa_org.twilio_phone_number,
       Body: password_reset_msg(@resource.display_name, @short_io_service.short_url),
-      To: @phone_number
+      To: @resource.phone_number
     }
     twilio_service.send_sms(sms_params)
+  end
+
+  def submitted_phone_matches_account?
+    stored = @resource.phone_number.to_s.gsub(/\D/, "")
+    stored.present? && stored == @phone_number.to_s.gsub(/\D/, "")
   end
 
   def valid_params?(email, phone_number)

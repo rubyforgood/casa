@@ -36,7 +36,7 @@ class CaseCourtReportsController < ApplicationController
 
   def generate
     authorize CaseCourtReport
-    casa_case = CasaCase.find_by(case_number: case_params[:case_number], casa_org: current_user.casa_org)
+    casa_case = policy_scope(CasaCase).find_by(case_number: case_params[:case_number])
 
     respond_to do |format|
       format.json do
@@ -76,7 +76,8 @@ class CaseCourtReportsController < ApplicationController
   end
 
   def set_casa_case
-    @casa_case = CasaCase.find_by(case_number: params[:id], casa_org: current_user.casa_org)
+    # Volunteers only see cases they are actively assigned to; "not yours" looks the same as "not found".
+    @casa_case = policy_scope(CasaCase).find_by(case_number: params[:id])
   end
 
   # The case picker renders CasaCaseDecorator#court_report_select_option for every case -- for an

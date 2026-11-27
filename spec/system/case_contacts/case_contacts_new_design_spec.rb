@@ -69,6 +69,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       select "In person", from: "Medium"
 
       expect(page).to have_text(in_person_date)
+
       expect(page).not_to have_text(video_date)
     end
 
@@ -80,6 +81,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       execute_script("const el = document.getElementById('occurred_ending_at'); el.value = '#{4.days.ago.to_date}'; el.dispatchEvent(new Event('change', {bubbles: true}))")
 
       expect(page).to have_text(old_date)
+
       expect(page).not_to have_text(recent_date)
     end
 
@@ -232,6 +234,7 @@ RSpec.describe "Case contacts new design", type: :system, js: true do
       find("[aria-label='Resolve reminder']").click
 
       expect(page).to have_css("[aria-label='Set reminder']")
+
       expect(page).to have_no_css("[aria-label='Reminder set']")
       expect(followup.reload.status).to eq("resolved")
     end

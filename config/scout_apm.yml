@@ -23,6 +23,12 @@ common: &defaults
 production:
   <<: *defaults
   errors_enabled: true
+  # Replaces Scout's default list (the first two). InvalidType is scanner noise from junk
+  # Accept/Content-Type headers; Rails already answers it with a 406.
+  errors_ignored_exceptions:
+    - ActiveRecord::RecordNotFound
+    - ActionController::RoutingError
+    - ActionDispatch::Http::MimeNegotiation::InvalidType
 
 development:
   <<: *defaults

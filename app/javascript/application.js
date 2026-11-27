@@ -4,7 +4,6 @@ import '@hotwired/turbo-rails'
 import './controllers'
 import 'trix'
 import '@rails/actiontext'
-import './datatable.js'
 Turbo.session.drive = false
 
 require('datatables.net-dt')(null, window.jQuery) // First parameter is the global object. Defaults to window if null
@@ -15,15 +14,12 @@ require('./src/case_emancipation')
 require('./src/casa_case')
 require('./src/new_casa_case')
 require('./src/emancipations')
-require('./src/import')
 require('./src/password_confirmation')
 require('./src/read_more')
-require('./src/reports')
 require('./src/require_communication_preference')
 require('./src/time_zone')
 require('./src/session_timeout_poller.js')
 require('./src/sms_reactivation_toggle')
-require('./src/validated_form')
 
 // Disable the browser's native HTML5 validation app-wide so an invalid submit reaches the server
 // and Rails renders the design-system validation (.field_with_errors rose borders + the

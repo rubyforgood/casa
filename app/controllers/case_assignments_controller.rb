@@ -4,6 +4,7 @@ class CaseAssignmentsController < ApplicationController
 
   def create
     authorize CaseAssignment
+    ensure_case_in_organization
 
     if existing_case_assignment.present?
       if existing_case_assignment.update(active: true)
@@ -83,10 +84,17 @@ class CaseAssignmentsController < ApplicationController
 
   def case_assignment_parent
     if params[:volunteer_id]
-      User.find(params[:volunteer_id])
+      current_organization.users.find(params[:volunteer_id])
     else
       current_organization.casa_cases.friendly.find(params[:casa_case_id])
     end
+  end
+
+  # The model only checks that the case and volunteer share an org with each other, not with the
+  # requester, so neither side of the assignment may come from outside the requester's org.
+  def ensure_case_in_organization
+    case_id = case_assignment_params[:casa_case_id]
+    current_organization.casa_cases.find(case_id) if case_id.present?
   end
 
   def after_action_path(resource)

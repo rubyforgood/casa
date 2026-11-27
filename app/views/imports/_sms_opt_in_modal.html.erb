@@ -1,9 +1,10 @@
 <%# SMS opt-in step (casa_app inline panel — was a Bootstrap modal). Rendered inside the
-    volunteer/supervisor import form after the server flags phone numbers. Keeps id="smsOptIn"
-    (src/import.js re-populates the file input from localStorage while this is present) plus the
+    volunteer/supervisor import form after the server flags phone numbers. Keeps id="smsOptIn" and the
+    csv-import optIn target (the controller re-populates the file input from localStorage while this
+    is present) plus the
     sms-opt-in-checkbox / sms-opt-in-continue-button ids + the enable-on-check script. %>
 <% check_class = "h-4 w-4 shrink-0 rounded border-slate-300 text-brand-600 focus:ring-brand-500" %>
-<div id="smsOptIn" class="rounded-xl border border-amber-200 bg-amber-50 p-4">
+<div id="smsOptIn" data-csv-import-target="optIn" class="rounded-xl border border-amber-200 bg-amber-50 p-4">
   <h3 class="flex items-center gap-2 text-sm font-semibold text-amber-900"><i class="bi bi-chat-dots" aria-hidden="true"></i> SMS opt in</h3>
   <p class="mt-1 text-sm text-amber-800">Please check this box to verify that these mobile numbers have opted in to receive SMS notifications. (They will have the opportunity to opt out or update their preferences.)</p>
   <label class="mt-3 flex items-center gap-2 text-sm font-medium text-slate-700">
