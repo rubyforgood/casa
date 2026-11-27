@@ -27,7 +27,7 @@ Seed login credentials (password `12345678` for all):
 
 ## Tech stack
 
-Rails 7.2 on Ruby (`.ruby-version`), PostgreSQL, Hotwire (Turbo + Stimulus), Bootstrap 5, ESBuild, Devise + Devise-Invitable, Pundit, Draper, ViewComponent, Delayed Job, Flipper, Paranoia (soft deletes), Strong Migrations. Linting: Standard.rb + standard-rails, StandardJS, erb-lint. Testing: RSpec + Capybara (system tests via Selenium/Chrome), Jest. There is **no UI sign-up** — users are admin-invited only (ADR 0002).
+Rails 8.1 on Ruby (`.ruby-version`), PostgreSQL, Hotwire (Turbo + Stimulus), Bootstrap 5, ESBuild, Devise + Devise-Invitable, Pundit, Draper, ViewComponent, Delayed Job, Flipper, Paranoia (soft deletes), Strong Migrations. Linting: Standard.rb + standard-rails, StandardJS, erb-lint. Testing: RSpec + Capybara (system tests via Selenium/Chrome), Jest. There is **no UI sign-up** — users are admin-invited only (ADR 0002).
 
 ## Architecture: things that require reading multiple files to understand
 
