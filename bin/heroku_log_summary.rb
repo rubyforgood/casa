@@ -289,7 +289,7 @@ class HerokuLogSummary
 
     normalized_segments = []
 
-    segments.each do |seg|
+    segments.each_with_index do |seg, index|
       if seg.match?(UUID_REGEX)
         normalized_segments << ":id"
       elsif seg.match?(INTEGER_ID_REGEX)
@@ -315,6 +315,10 @@ class HerokuLogSummary
           normalized_segments << seg.downcase
         elsif !ext.empty? && SAFE_EXTENSIONS.include?(ext) && KNOWN_SEGMENT_KEYWORDS.include?(base_name)
           normalized_segments << "#{base_name}#{ext}"
+        elsif index > 0 && segments[index - 1].downcase == "casa_cases" && (ext.empty? || SAFE_EXTENSIONS.include?(ext))
+          # CasaCase uses friendly_id on case_number, so this segment is a case
+          # number (sensitive). Never print it; report it as :slug.
+          normalized_segments << ":slug#{ext}"
         else
           # Fail closed: an unallowlisted, unidentifiable segment is never printed
           return "[unrecognized_route]"
