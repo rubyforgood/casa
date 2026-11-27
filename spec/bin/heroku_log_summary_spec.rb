@@ -117,6 +117,19 @@ RSpec.describe HerokuLogSummary do
       expect(analyzer.normalize_route("/case_contacts/10/form/20")).to eq("/case_contacts/:id/form/:id")
     end
 
+    it "normalizes friendly_id case number slugs under casa_cases to :slug" do
+      expect(analyzer.normalize_route("/casa_cases/CINA-23-1234")).to eq("/casa_cases/:slug")
+      expect(analyzer.normalize_route("/casa_cases/cina-23-1234/edit")).to eq("/casa_cases/:slug/edit")
+      expect(analyzer.normalize_route("/casa_cases/CINA-23-1234/court_dates/55/edit")).to eq("/casa_cases/:slug/court_dates/:id/edit")
+      expect(analyzer.normalize_route("/casa_cases/CINA-23-1234.json")).to eq("/casa_cases/:slug.json")
+    end
+
+    it "never prints a case number and keeps other resources fail-closed" do
+      expect(analyzer.normalize_route("/casa_cases/CINA-23-1234")).not_to include("CINA")
+      expect(analyzer.normalize_route("/volunteers/jane-doe")).to eq("[unrecognized_route]")
+      expect(analyzer.normalize_route("/casa_cases/jane%40x.org")).to eq("[unrecognized_route]")
+    end
+
     it "normalizes UUIDs to :id" do
       uuid_path = "/casa_cases/c3b8a1e2-9b2c-4f1e-8e1d-1a2b3c4d5e6f"
       expect(analyzer.normalize_route(uuid_path)).to eq("/casa_cases/:id")

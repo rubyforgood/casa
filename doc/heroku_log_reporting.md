@@ -92,6 +92,7 @@ The reporting tool is built with a **strict fail-closed, allowlist-only architec
    Query parameters (`?...`) and fragments (`#...`) are removed before any path analysis or processing occurs. Sensitive values in query params (e.g. `token=...`, `email=...`) are completely discarded.
 3. **Route Normalization**:
    - Numeric database IDs (e.g., `/casa_cases/12345`) are normalized to `/casa_cases/:id`.
+   - Case number slugs (e.g., `/casa_cases/CINA-23-1234`, since `CasaCase` uses `friendly_id`) become `/casa_cases/:slug`; the case number is never printed.
    - Nested resources (e.g., `/casa_cases/123/court_dates/456/edit`) become `/casa_cases/:id/court_dates/:id/edit`.
    - UUIDs are normalized to `:id`.
    - ISO dates (e.g., `/reports/2026-11-12`) are normalized to `:date`.
