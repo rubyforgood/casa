@@ -82,6 +82,7 @@ export default class extends Controller {
   handleError (error) {
     console.error(error.status, error.statusText)
     switch (error.status) {
+      case 503: // database briefly unreachable (restart/failover)
       case 504:
         this.badAlert('Connection lost: Changes will be saved when connection is restored.')
         break

@@ -32,6 +32,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
     contact_topic_questions.each do |question|
       expect(notes_section).to have_field(question, type: :checkbox)
     end
+
     expect(notes_section).to have_no_select(class: topic_select_class)
   end
 
@@ -80,6 +81,7 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
     answer_topic contact_topics.first.question, "First discussion topic answer."
     within notes_section do
       expect(page).to have_text "Saved"  # autosave success alert
+
       expect(page).to have_no_text "Saved" # wait for clearing of alert
     end
     answer_topic contact_topics.first.question, "Changing the first topic answer."
@@ -103,8 +105,8 @@ RSpec.describe "CaseContact form ContactTopicAnswers and notes", type: :system d
 
     it "displays a field for contact.notes", :js do
       subject
-      expect(notes_section).to have_no_css("[data-topic-group]")
       expect(notes_section).to have_field "Additional notes"
+      expect(notes_section).to have_no_css("[data-topic-group]")
 
       fill_in_contact_details
       fill_in "Additional notes", with: "This is a note."

@@ -25,10 +25,8 @@ class ApplicationController < ActionController::Base
   # "Connection refused" means the web dyno could not reach Postgres at all (restart, maintenance,
   # failover). Render a 503 instead of the generic 500 so clients -- including the case contact
   # form's autosave, which reads the status -- can tell "try again shortly" from a real bug.
-  # ConnectionTimeoutError is a subclass of ConnectionNotEstablished; both are listed so the
-  # intent is explicit.
+  # ConnectionTimeoutError is a subclass of ConnectionNotEstablished, so this covers both.
   rescue_from ActiveRecord::ConnectionNotEstablished, with: :database_unavailable
-  rescue_from ActiveRecord::ConnectionTimeoutError, with: :database_unavailable
 
   impersonates :user
 
@@ -177,7 +175,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
-  def database_unavailable
+  def database_unavailable(exception)
+    # rescue_from swallows the exception before Scout's error middleware sees it, so report it
+    # explicitly or database outages would disappear from Scout.
+    ScoutApm::Error.capture(exception)
+    response.set_header("Retry-After", "60")
     respond_to do |format|
       format.json { render json: {error: DATABASE_UNAVAILABLE_MESSAGE}, status: :service_unavailable }
       format.any { render file: Rails.public_path.join("503.html"), status: :service_unavailable, layout: false }

@@ -26,6 +26,7 @@ RSpec.describe "notifications/index", :js, type: :system do
 
       expect(page).to have_text(notification_message)
       expect(page).to have_text("Followup resolved")
+
       expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
     end
 
@@ -43,6 +44,7 @@ RSpec.describe "notifications/index", :js, type: :system do
         visit notifications_path
 
         expect(page).to have_text(new_notification_message)
+
         expect(page).not_to have_text(notification_message)
         expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       end
@@ -81,8 +83,9 @@ RSpec.describe "notifications/index", :js, type: :system do
         expect(page).to have_text(notification_message_heading)
         expect(page).to have_text(note)
         expect(page).to have_text(notification_message_more_info)
-        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
         expect(page).to have_text("New followup")
+
+        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       end
     end
 
@@ -101,8 +104,8 @@ RSpec.describe "notifications/index", :js, type: :system do
         visit notifications_path
 
         expect(page).to have_text(inline_notification_message)
-        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
         expect(page).to have_text("New followup")
+        expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       end
     end
 
@@ -130,9 +133,10 @@ RSpec.describe "notifications/index", :js, type: :system do
         visit notifications_path
 
         expect(page).to have_text(new_notification_message)
+        expect(page).to have_text("New followup")
+
         expect(page).not_to have_text(inline_notification_message)
         expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
-        expect(page).to have_text("New followup")
       end
     end
   end
@@ -149,9 +153,10 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     it "displays a notification reminder that links to the emancipation checklist" do
       notification_message = "Your case #{casa_case.case_number} is a transition aged youth. We want to make sure that along the way, we’re preparing our youth for emancipation. Make sure to check the emancipation checklist."
-      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Emancipation Checklist Reminder")
       expect(page).to have_link(notification_message, href: mark_as_read_notification_path(notification))
+
+      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
     end
   end
 
@@ -167,9 +172,10 @@ RSpec.describe "notifications/index", :js, type: :system do
 
     it "displays a notification on the notifications page" do
       notification_message = "Your youth, case number: #{casa_case.case_number} has a birthday next month."
-      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Youth Birthday Notification")
       expect(page).to have_link(notification_message, href: mark_as_read_notification_path(notification))
+
+      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
     end
   end
 
@@ -185,10 +191,11 @@ RSpec.describe "notifications/index", :js, type: :system do
       notification_message = "Volunteer #{case_contact.creator.display_name}'s request for reimbursement for " \
         "#{case_contact.miles_driven}mi on #{case_contact.occurred_at_display} has been processed and is " \
         "en route."
-      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
       expect(page).to have_content("Reimbursement Approved")
       expect(page).to have_content(notification_message)
       expect(page).to have_link(href: mark_as_read_notification_path(notification))
+
+      expect(page).not_to have_text("You currently don't have any notifications. Notifications are generated when someone requests follow-up on a case contact.")
     end
   end
 

@@ -33,6 +33,7 @@ RSpec.describe "other_duties/new", type: :system do
       expect(page).to have_text("Other duties")
       expect(page).to have_text(other_duty_1.notes)
       expect(page).to have_text(other_duty_2.notes)
+
       expect(page).not_to have_text(other_duty_3.notes)
     end
 

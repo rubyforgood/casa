@@ -30,6 +30,7 @@ RSpec.describe "flash messages", :js, type: :system do
 
     flash = page.find(".header-flash .alert")
     expect(flash).to have_css("i.bi-check-circle", visible: :all)
+
     expect(flash).to have_no_css("span[aria-hidden='true']")
   end
 
@@ -37,6 +38,7 @@ RSpec.describe "flash messages", :js, type: :system do
     sign_in_via_form(admin)
 
     expect(page).to have_css(".header-flash .alert", text: "Signed in successfully.")
+
     expect(page).to have_no_css(".header-flash .alert", wait: 12)
   end
 
@@ -47,7 +49,7 @@ RSpec.describe "flash messages", :js, type: :system do
     page.execute_script("arguments[0].dispatchEvent(new MouseEvent('mouseenter'))", flash.native)
 
     # Waits the full window for a disappearance that must not happen while hovered.
-    expect(page).not_to have_no_css(".header-flash .alert", wait: 9)
+    expect(page).to have_css(".header-flash .alert", wait: 9)
 
     page.execute_script("arguments[0].dispatchEvent(new MouseEvent('mouseleave'))", flash.native)
     expect(page).to have_no_css(".header-flash .alert", wait: 12)
@@ -60,6 +62,6 @@ RSpec.describe "flash messages", :js, type: :system do
     error = page.find(".header-flash .alert", text: "you are not authorized")
     expect(error[:role]).to eq "alert"
     expect(error[:"data-controller"]).to be_nil
-    expect(page).not_to have_no_css(".header-flash .alert", wait: 9)
+    expect(page).to have_css(".header-flash .alert", wait: 9)
   end
 end
