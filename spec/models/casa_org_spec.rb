@@ -3,6 +3,7 @@ require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CasaOrg, type: :model do
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:time_zone) }
   it { is_expected.to have_many(:users).dependent(:destroy) }
   it { is_expected.to have_many(:casa_cases).dependent(:destroy) }
   it { is_expected.to have_many(:contact_type_groups).dependent(:destroy) }
@@ -18,6 +19,48 @@ RSpec.describe CasaOrg, type: :model do
     org = create(:casa_org)
     new_org = build(:casa_org, name: org.name)
     expect(new_org.valid?).to be false
+  end
+
+  describe "time_zone validation" do
+    subject(:casa_org) { build(:casa_org) }
+
+    it "defaults to America/New_York" do
+      expect(described_class.new.time_zone).to eq("America/New_York")
+    end
+
+    it "is valid with a valid IANA identifier like America/New_York" do
+      casa_org.time_zone = "America/New_York"
+      expect(casa_org).to be_valid
+    end
+
+    it "is valid with another valid IANA identifier like Asia/Kolkata" do
+      casa_org.time_zone = "Asia/Kolkata"
+      expect(casa_org).to be_valid
+    end
+
+    it "is invalid with an invalid identifier" do
+      casa_org.time_zone = "Invalid/Timezone"
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("is not a valid IANA time zone identifier")
+    end
+
+    it "is invalid with a Rails-friendly display name that is not a canonical IANA identifier" do
+      casa_org.time_zone = "Eastern Time (US & Canada)"
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("is not a valid IANA time zone identifier")
+    end
+
+    it "is invalid with a blank value" do
+      casa_org.time_zone = ""
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("can't be blank")
+    end
+
+    it "is invalid with nil" do
+      casa_org.time_zone = nil
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("can't be blank")
+    end
   end
 
   describe "CasaOrgValidator" do
@@ -203,6 +246,133 @@ RSpec.describe CasaOrg, type: :model do
         expect(casa_org.mileage_rate_for_given_date(12.days.ago.to_date)).to eq 4.50
         expect(casa_org.mileage_rate_for_given_date(5.days.ago.to_date)).to eq 5.50
         expect(casa_org.mileage_rate_for_given_date(Date.today)).to eq 6.50
+      end
+    end
+  end
+
+  describe "organization time helpers" do
+    let(:casa_org) { build(:casa_org, time_zone: "America/New_York") }
+
+    describe "#time_zone_object" do
+      it "returns the ActiveSupport::TimeZone for a valid configured time zone" do
+        casa_org.time_zone = "America/Los_Angeles"
+        expect(casa_org.time_zone_object).to eq(ActiveSupport::TimeZone["America/Los_Angeles"])
+      end
+
+      it "falls back to America/New_York when time_zone is nil" do
+        casa_org.time_zone = nil
+        expect(casa_org.time_zone_object).to eq(ActiveSupport::TimeZone["America/New_York"])
+      end
+
+      it "falls back to America/New_York when time_zone is an invalid identifier" do
+        casa_org.time_zone = "Invalid/Time_Zone"
+        expect(casa_org.time_zone_object).to eq(ActiveSupport::TimeZone["America/New_York"])
+      end
+
+      it "resolves all TZInfo identifiers without raising" do
+        TZInfo::Timezone.all_identifiers.each do |identifier|
+          zone = Time.find_zone(identifier)
+          expect(zone).to be_a(ActiveSupport::TimeZone), "Expected #{identifier} to resolve to ActiveSupport::TimeZone"
+        end
+      end
+    end
+
+    describe "#with_time_zone" do
+      it "sets Time.zone to the organization's time zone within the block" do
+        casa_org.time_zone = "America/Los_Angeles"
+        Time.use_zone("UTC") do
+          casa_org.with_time_zone do
+            expect(Time.zone.name).to eq("America/Los_Angeles")
+          end
+          expect(Time.zone.name).to eq("UTC")
+        end
+      end
+
+      it "returns the block result" do
+        result = casa_org.with_time_zone { "test result" }
+        expect(result).to eq("test result")
+      end
+
+      it "restores the previous Time.zone even if an exception occurs" do
+        Time.use_zone("UTC") do
+          expect {
+            casa_org.with_time_zone { raise "deliberate error" }
+          }.to raise_error("deliberate error")
+          expect(Time.zone.name).to eq("UTC")
+        end
+      end
+    end
+
+    describe "date and time helpers across multiple time zones around UTC midnight" do
+      # 2026-11-23 02:00:00 UTC:
+      # Honolulu (-10h): 2026-11-22 16:00:00 HST
+      # Los Angeles (-8h): 2026-11-22 18:00:00 PST
+      # New York (-5h): 2026-11-22 21:00:00 EST
+      # London (+0h): 2026-11-23 02:00:00 GMT
+      # Kolkata (+5:30h): 2026-11-23 07:30:00 IST
+      before do
+        travel_to Time.utc(2026, 11, 23, 2, 0, 0)
+      end
+
+      it "evaluates correctly for Pacific/Honolulu" do
+        casa_org.time_zone = "Pacific/Honolulu"
+        expect(casa_org.time_zone_now.hour).to eq(16)
+        expect(casa_org.today).to eq(Date.new(2026, 11, 22))
+        expect(casa_org.yesterday).to eq(Date.new(2026, 11, 21))
+        expect(casa_org.tomorrow).to eq(Date.new(2026, 11, 23))
+      end
+
+      it "evaluates correctly for America/Los_Angeles" do
+        casa_org.time_zone = "America/Los_Angeles"
+        expect(casa_org.time_zone_now.hour).to eq(18)
+        expect(casa_org.today).to eq(Date.new(2026, 11, 22))
+        expect(casa_org.yesterday).to eq(Date.new(2026, 11, 21))
+        expect(casa_org.tomorrow).to eq(Date.new(2026, 11, 23))
+      end
+
+      it "evaluates correctly for America/New_York" do
+        casa_org.time_zone = "America/New_York"
+        expect(casa_org.time_zone_now.hour).to eq(21)
+        expect(casa_org.today).to eq(Date.new(2026, 11, 22))
+        expect(casa_org.yesterday).to eq(Date.new(2026, 11, 21))
+        expect(casa_org.tomorrow).to eq(Date.new(2026, 11, 23))
+      end
+
+      it "evaluates correctly for Europe/London" do
+        casa_org.time_zone = "Europe/London"
+        expect(casa_org.time_zone_now.hour).to eq(2)
+        expect(casa_org.today).to eq(Date.new(2026, 11, 23))
+        expect(casa_org.yesterday).to eq(Date.new(2026, 11, 22))
+        expect(casa_org.tomorrow).to eq(Date.new(2026, 11, 24))
+      end
+
+      it "evaluates correctly for Asia/Kolkata" do
+        casa_org.time_zone = "Asia/Kolkata"
+        expect(casa_org.time_zone_now.hour).to eq(7)
+        expect(casa_org.time_zone_now.min).to eq(30)
+        expect(casa_org.today).to eq(Date.new(2026, 11, 23))
+        expect(casa_org.yesterday).to eq(Date.new(2026, 11, 22))
+        expect(casa_org.tomorrow).to eq(Date.new(2026, 11, 24))
+      end
+    end
+
+    describe "DST transition behavior" do
+      context "during spring forward (EST -> EDT)" do
+        it "correctly resolves time and date across the transition" do
+          casa_org.time_zone = "America/New_York"
+          travel_to Time.utc(2026, 3, 8, 7, 30, 0) # 02:30 EST jumps to 03:30 EDT
+          expect(casa_org.today).to eq(Date.new(2026, 3, 8))
+          expect(casa_org.time_zone_now.zone).to eq("EDT")
+        end
+      end
+
+      context "during fall back (EDT -> EST)" do
+        it "correctly resolves time and date across the transition" do
+          casa_org.time_zone = "America/New_York"
+          travel_to Time.utc(2026, 11, 1, 6, 30, 0) # 01:30 repeats; 06:30 UTC is 01:30 EST
+          expect(casa_org.today).to eq(Date.new(2026, 11, 1))
+          expect(casa_org.time_zone_now.zone).to eq("EST")
+        end
       end
     end
   end

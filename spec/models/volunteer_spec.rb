@@ -2,8 +2,8 @@ require "rails_helper"
 
 RSpec.describe Volunteer, type: :model do
   describe ".email_court_report_reminder" do
-    let!(:casa_org) { build(:casa_org) }
-    let!(:casa_org_twilio_disabled) { build(:casa_org, twilio_enabled: false) }
+    let!(:casa_org) { create(:casa_org) }
+    let!(:casa_org_twilio_disabled) { create(:casa_org, twilio_enabled: false) }
     # Should send email for this case
     let!(:casa_case1) { create(:casa_case, casa_org: casa_org) }
     let!(:court_date1) { create(:court_date, casa_case: casa_case1, court_report_due_date: Date.current + 7.days) }
@@ -62,6 +62,86 @@ RSpec.describe Volunteer, type: :model do
     it "returns nil when twilio is disabled" do
       response = CourtReportDueSmsReminderService.court_report_reminder(v5, Date.current + 7.days)
       expect(response).to eq(nil)
+    end
+  end
+
+  describe ".send_court_report_reminder organization-aware behavior" do
+    before do
+      stub_const("Volunteer::COURT_REPORT_SUBMISSION_REMINDER", 7.days)
+      WebMockHelper.short_io_court_report_due_date_stub
+    end
+
+    context "with non-midnight court_report_due_date values (e.g. from CSV import)" do
+      let!(:org) { create(:casa_org, time_zone: "America/New_York") }
+      let!(:imported_case) { create(:casa_case, casa_org: org) }
+      let!(:non_midnight_court_date) do
+        target_timestamp = (org.today + 7.days).to_time.change(hour: 10, min: 30)
+        create(:court_date, casa_case: imported_case, court_report_due_date: target_timestamp)
+      end
+      let!(:imported_volunteer) do
+        v = create(:volunteer, casa_org: org)
+        create(:case_assignment, casa_org: org, casa_case: imported_case, volunteer: v)
+        v
+      end
+
+      it "successfully matches and sends reminders for non-midnight timestamps" do
+        expect(VolunteerMailer).to receive(:court_report_reminder).with(imported_volunteer, non_midnight_court_date.court_report_due_date)
+        described_class.send_court_report_reminder
+      end
+    end
+
+    context "across organizations in different time zones around UTC midnight" do
+      let!(:hawaii_org) { create(:casa_org, time_zone: "Pacific/Honolulu") }
+      let!(:kolkata_org) { create(:casa_org, time_zone: "Asia/Kolkata") }
+
+      # At 2026-11-23 02:00:00 UTC:
+      # Hawaii (-10h): 2026-11-22 16:00 HST -> target due date (today + 7) is 2026-11-29
+      # Kolkata (+5:30h): 2026-11-23 07:30 IST -> target due date (today + 7) is 2026-11-30
+
+      let!(:hawaii_case) { create(:casa_case, casa_org: hawaii_org) }
+      let!(:hawaii_court_date) { create(:court_date, casa_case: hawaii_case, court_report_due_date: Date.new(2026, 11, 29)) }
+      let!(:hawaii_volunteer) do
+        v = create(:volunteer, casa_org: hawaii_org)
+        create(:case_assignment, casa_org: hawaii_org, casa_case: hawaii_case, volunteer: v)
+        v
+      end
+
+      let!(:kolkata_case) { create(:casa_case, casa_org: kolkata_org) }
+      let!(:kolkata_court_date) { create(:court_date, casa_case: kolkata_case, court_report_due_date: Date.new(2026, 11, 30)) }
+      let!(:kolkata_volunteer) do
+        v = create(:volunteer, casa_org: kolkata_org)
+        create(:case_assignment, casa_org: kolkata_org, casa_case: kolkata_case, volunteer: v)
+        v
+      end
+
+      before do
+        travel_to Time.utc(2026, 11, 23, 2, 0, 0)
+      end
+
+      it "reminds volunteers according to each organization's local date calculation" do
+        expect(VolunteerMailer).to receive(:court_report_reminder).with(hawaii_volunteer, hawaii_court_date.court_report_due_date)
+        expect(VolunteerMailer).to receive(:court_report_reminder).with(kolkata_volunteer, kolkata_court_date.court_report_due_date)
+        described_class.send_court_report_reminder
+      end
+    end
+
+    context "idempotency on repeated execution on the same day" do
+      let!(:org) { create(:casa_org, time_zone: "America/New_York") }
+      let!(:c_case) { create(:casa_case, casa_org: org) }
+      let!(:c_date) { create(:court_date, casa_case: c_case, court_report_due_date: Date.current + 7.days) }
+      let!(:vol) do
+        v = create(:volunteer, casa_org: org)
+        create(:case_assignment, casa_org: org, casa_case: c_case, volunteer: v)
+        v
+      end
+
+      it "does not send duplicate email or SMS on subsequent runs on the same day" do
+        expect(VolunteerMailer).to receive(:court_report_reminder).once.with(vol, c_date.court_report_due_date)
+        expect(CourtReportDueSmsReminderService).to receive(:court_report_reminder).once.with(vol, c_date.court_report_due_date)
+
+        described_class.send_court_report_reminder
+        described_class.send_court_report_reminder
+      end
     end
   end
 

@@ -68,15 +68,45 @@ class Volunteer < User
   }
 
   def self.send_court_report_reminder
-    active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
-      volunteer.case_assignments.active.each do |case_assignment|
-        current_case = case_assignment.casa_case
-        report_due_date = current_case.court_dates.order(:date).last&.court_report_due_date
-        if (report_due_date == Date.current + COURT_REPORT_SUBMISSION_REMINDER) && current_case.court_report_not_submitted?
-          VolunteerMailer.court_report_reminder(volunteer, report_due_date)
-          CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)
+    CasaOrg.find_each do |org|
+      org.with_time_zone do
+        target_date = org.today + COURT_REPORT_SUBMISSION_REMINDER
+        day_start = org.time_zone_now.beginning_of_day.utc
+
+        org.volunteers.active.includes(:case_assignments).where.not(case_assignments: nil).find_each do |volunteer|
+          already_sent = SentEmail.where(
+            user_id: volunteer.id,
+            mailer_type: "VolunteerMailer",
+            category: "Court report reminder"
+          ).where("created_at >= ?", day_start).exists?
+          next if already_sent
+
+          volunteer.case_assignments.active.each do |case_assignment|
+            current_case = case_assignment.casa_case
+            next unless current_case.court_report_not_submitted?
+
+            latest_court_date = current_case.court_dates.order(:date).last
+            report_due_date = latest_court_date&.court_report_due_date
+            next unless report_due_date
+
+            if report_due_date.utc.to_date == target_date
+              VolunteerMailer.court_report_reminder(volunteer, report_due_date)
+              CourtReportDueSmsReminderService.court_report_reminder(volunteer, report_due_date)
+
+              SentEmail.create(
+                casa_org_id: org.id,
+                user_id: volunteer.id,
+                sent_address: volunteer.email,
+                mailer_type: "VolunteerMailer",
+                category: "Court report reminder"
+              )
+              break
+            end
+          end
         end
       end
+    rescue => e
+      Rails.logger.error("Failed sending court report reminder for CasaOrg #{org.id}: #{e.message}")
     end
   end
 

@@ -4,6 +4,7 @@
 <% req = required_marker %>
 <% opt = optional_marker %>
 <% input_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
+<% select_class = "block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none" %>
 
 <div class="px-4 py-6 sm:px-6 lg:px-8">
   <div class="mx-auto max-w-2xl space-y-6">
@@ -22,6 +23,10 @@
         <div>
           <%= form.label :address, class: label_class do %>Address <%= opt %><% end %>
           <%= form.text_field :address, class: input_class %>
+        </div>
+        <div>
+          <%= form.label :time_zone, class: label_class do %>Time zone <%= req %><% end %>
+          <%= form.select :time_zone, grouped_time_zone_options, {}, class: select_class %>
         </div>
         <div>
           <%= button_tag type: "submit", id: "submit", class: button_classes(:primary) do %>
