@@ -1,19 +1,20 @@
-<%# One existing patch note (all_casa_admin shell). Same structure as #new-patch-note so the
-    jQuery in src/all_casa_admin/patch_notes.js can edit/save/delete it; inputs start disabled and
-    the Edit/Delete buttons keep their .button-edit / .button-delete hooks. %>
+<%# One patch note (all_casa_admin shell). Rendered both in the index list and as the HTML
+    fragment returned by PatchNotesController#create, so a freshly created note is inserted with
+    the exact same server-rendered markup -- buttons included -- instead of being cloned in JS.
+    Inputs start disabled (view mode); the edit-mode Save/Cancel buttons live in a hidden twin of
+    the view-mode Edit/Delete controls and the patch-notes Stimulus controller just toggles
+    `hidden` / `disabled`, never button classes. %>
 <% textarea_class = "block w-full rounded-lg border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 shadow-sm placeholder:text-slate-500 focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500" %>
 <% select_class = "block w-full rounded-lg border border-slate-300 bg-white px-3.5 py-2.5 text-sm text-slate-900 shadow-sm focus:border-brand-500 focus:ring-2 focus:ring-brand-500/30 focus:outline-none disabled:bg-slate-50 disabled:text-slate-500" %>
 <% label_class = "mb-1.5 block text-sm font-medium text-slate-700" %>
 <div class="patch-note-list-item card rounded-2xl border border-slate-200 bg-white shadow-sm">
-  <div id="patch-note-<%= patch_note.id %>" class="card-body space-y-4 p-5 sm:p-6">
-    <%# aria-label because there is no label to point at (the JS reads .card-body's direct children by
-        index, so a <label> element here would shift them) and, unlike the new-note textarea, this one
-        carries content instead of a placeholder for axe to fall back on. %>
+  <div id="patch-note-<%= patch_note.id %>" class="card-body space-y-4 p-5 sm:p-6" data-patch-note-id="<%= patch_note.id %>">
+    <%# aria-label because there is no label to point at the textarea. %>
     <textarea disabled="true" aria-label="Patch note" class="<%= textarea_class %>"><%= patch_note.note %></textarea>
     <div class="label-and-select">
       <label for="patch-note-<%= patch_note.id %>-type" class="<%= label_class %>">Patch note type</label>
-      <select id="patch-note-<%= patch_note.id %>-type" disabled="true" class="<%= select_class %>">
-        <% @patch_note_types&.each do |patch_note_type| %>
+      <select id="patch-note-<%= patch_note.id %>-type" disabled="true" class="<%= select_class %> note-type-select">
+        <% patch_note_types&.each do |patch_note_type| %>
           <% if patch_note_type.id == patch_note.patch_note_type_id %>
             <option value="<%= patch_note_type.id %>" selected="selected"><%= patch_note_type.name %></option>
           <% else %>
@@ -24,8 +25,8 @@
     </div>
     <div class="label-and-select">
       <label for="patch-note-<%= patch_note.id %>-group" class="<%= label_class %>">User group</label>
-      <select id="patch-note-<%= patch_note.id %>-group" disabled="true" class="<%= select_class %>">
-        <% @patch_note_groups&.each do |patch_note_group| %>
+      <select id="patch-note-<%= patch_note.id %>-group" disabled="true" class="<%= select_class %> note-group-select">
+        <% patch_note_groups&.each do |patch_note_group| %>
           <% if patch_note_group.id == patch_note.patch_note_group_id %>
             <option value="<%= patch_note_group.id %>" selected="selected"><%= patch_note_group.value %></option>
           <% else %>
@@ -34,9 +35,13 @@
         <% end %>
       </select>
     </div>
-    <div class="patch-note-button-controls flex flex-wrap gap-2">
-      <button type="button" class="<%= ghost_class %> button-edit"><i class="bi bi-pencil" aria-hidden="true"></i> Edit</button>
-      <button type="button" class="<%= ghost_class(:danger) %> button-delete"><i class="bi bi-trash" aria-hidden="true"></i> Delete</button>
+    <div class="patch-note-button-controls patch-note-view-buttons flex flex-wrap gap-2">
+      <button type="button" class="<%= ghost_class %> button-edit" data-action="patch-notes#edit"><i class="bi bi-pencil" aria-hidden="true"></i> <span class="button-label">Edit</span></button>
+      <button type="button" class="<%= ghost_class(:danger) %> button-delete" data-action="patch-notes#delete" data-delete-count="0"><i class="bi bi-trash" aria-hidden="true"></i> <span class="button-label">Delete</span></button>
+    </div>
+    <div class="patch-note-button-controls patch-note-edit-buttons hidden flex flex-wrap gap-2">
+      <button type="button" class="<%= button_classes(:primary) %> button-save" data-action="patch-notes#save"><i class="bi bi-check-lg" aria-hidden="true"></i> <span class="button-label">Save</span></button>
+      <button type="button" class="<%= button_classes(:secondary) %> button-cancel" data-action="patch-notes#cancel"><i class="bi bi-x-lg" aria-hidden="true"></i> <span class="button-label">Cancel</span></button>
     </div>
   </div>
 </div>
