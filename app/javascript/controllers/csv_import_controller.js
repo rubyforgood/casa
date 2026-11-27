@@ -10,14 +10,19 @@ export default class extends Controller {
   connect () {
     const key = this.inputTarget.id
     const stored = window.localStorage.getItem(key)
-    if (stored && this.hasOptInTarget && this.inputTarget.files.length === 0) {
-      const { name, data } = JSON.parse(stored)
-      const bytes = Uint8Array.from(window.atob(data.split(',')[1]), (c) => c.charCodeAt(0))
-      const transfer = new window.DataTransfer()
-      transfer.items.add(new window.File([bytes], name, { type: 'text/csv' }))
-      this.inputTarget.files = transfer.files
+    try {
+      if (stored && this.hasOptInTarget && this.inputTarget.files.length === 0) {
+        const { name, data } = JSON.parse(stored)
+        const bytes = Uint8Array.from(window.atob(data.split(',')[1]), (c) => c.charCodeAt(0))
+        const transfer = new window.DataTransfer()
+        transfer.items.add(new window.File([bytes], name, { type: 'text/csv' }))
+        this.inputTarget.files = transfer.files
+      }
+    } catch {
+      // A corrupt stored value just means there is nothing to restore.
+    } finally {
+      window.localStorage.removeItem(key)
     }
-    window.localStorage.removeItem(key)
   }
 
   guard (event) {

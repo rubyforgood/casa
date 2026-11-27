@@ -97,6 +97,14 @@ describe('csv_import_controller', () => {
     expect(window.localStorage.getItem('volunteer-file')).toBeNull()
   })
 
+  test('clears a corrupt stored value without throwing', async () => {
+    window.localStorage.setItem('volunteer-file', 'not json')
+    const input = await mount(form(true), (el) => setFiles(el, []))
+
+    expect(input.files).toHaveLength(0)
+    expect(window.localStorage.getItem('volunteer-file')).toBeNull()
+  })
+
   test('clears the stored file without restoring it when the SMS opt-in step is not shown', async () => {
     window.localStorage.setItem('volunteer-file', storedCsv)
     const input = await mount(form(), (el) => setFiles(el, []))
