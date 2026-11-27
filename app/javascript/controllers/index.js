@@ -55,6 +55,9 @@ application.register("dismiss", DismissController)
 import DropdownController from "./dropdown_controller"
 application.register("dropdown", DropdownController)
 
+import EmancipationChecklistController from "./emancipation_checklist_controller"
+application.register("emancipation-checklist", EmancipationChecklistController)
+
 import LocalStorageResetController from "./local_storage_reset_controller"
 application.register("local-storage-reset", LocalStorageResetController)
 

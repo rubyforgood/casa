@@ -42,7 +42,7 @@ RSpec.describe "casa_cases/show", type: :system do
       category.find(".emacipation-category-input-label-pair").click
 
       expect(category).to have_css(".emancipation-category-check-box:not(:checked)")
-      expect(page).to have_css(".success-notification", text: "Unchecked #{emancipation_option.name}")
+      expect(page).to have_css('[data-emancipation-checklist-target="status"]', text: "Unchecked #{emancipation_option.name}")
       expect(category["data-is-open"]).to eq("false")
       expect(page).to have_css(".category-options", visible: :hidden)
       expect(casa_case.reload.emancipation_categories).not_to include(emancipation_category)
