@@ -112,7 +112,21 @@ RSpec.describe "/case_contacts", type: :request do
     context "when user is volunteer" do
       before { sign_in volunteer }
 
-      it { is_expected.to have_http_status(:redirect) }
+      # Volunteers now get their own drafts list (issue 7287), scoped to their own records.
+      it { is_expected.to have_http_status(:success) }
+
+      it "shows only the volunteer's own drafts" do
+        casa_case = create(:casa_case, casa_org: organization)
+        create(:case_contact, :started_status, creator: volunteer,
+          draft_case_ids: [casa_case.id], notes: "MY DRAFT NOTE")
+        create(:case_contact, :started_status, notes: "OTHER DRAFT NOTE")
+
+        page = request.parsed_body.to_html
+
+        expect(page).to include("MY DRAFT NOTE")
+        expect(page).not_to include("OTHER DRAFT NOTE")
+        expect(page).to include(casa_case.case_number)
+      end
     end
   end
 
