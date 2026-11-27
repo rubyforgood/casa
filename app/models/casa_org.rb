@@ -11,6 +11,8 @@ class CasaOrg < ApplicationRecord
   before_update :sanitize_svg
 
   validates :name, presence: true, uniqueness: true
+  validates :time_zone, presence: true
+  validate :valid_time_zone
   validates_with CasaOrgValidator
   # The credentials check below verifies the account/API keys but not the phone number, and native
   # form validation is disabled app-wide -- so enforce the phone's presence server-side.
@@ -170,6 +172,14 @@ class CasaOrg < ApplicationRecord
       self.twilio_phone_number = "+1#{twilio_phone_number}"
     end
   end
+
+  def valid_time_zone
+    return if time_zone.blank?
+
+    TZInfo::Timezone.get(time_zone)
+  rescue TZInfo::InvalidTimezoneIdentifier, TZInfo::UnknownTimezone
+    errors.add(:time_zone, "is not a valid IANA time zone identifier")
+  end
 end
 
 # == Schema Information
@@ -187,6 +197,7 @@ end
 #  show_driving_reimbursement  :boolean          default(TRUE)
 #  show_fund_request           :boolean          default(FALSE)
 #  slug                        :string
+#  time_zone                   :string           default("America/New_York"), not null
 #  twilio_account_sid          :string
 #  twilio_api_key_secret       :string
 #  twilio_api_key_sid          :string

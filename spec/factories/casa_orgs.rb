@@ -3,6 +3,7 @@ FactoryBot.define do
     sequence(:name) { |n| "CASA Org #{n}" }
     sequence(:display_name) { |n| "CASA Org #{n}" }
     address { "123 Main St" }
+    time_zone { "America/New_York" }
     footer_links { [["www.example.com", "First Link"], ["www.foobar.com", "Second Link"]] }
     twilio_account_sid { "articuno34" }
     twilio_api_key_secret { "open sesame" }

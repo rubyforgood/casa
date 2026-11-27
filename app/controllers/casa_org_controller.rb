@@ -51,6 +51,7 @@ class CasaOrgController < ApplicationController
       :name,
       :display_name,
       :address,
+      :time_zone,
       :logo,
       :court_report_template,
       :show_driving_reimbursement,

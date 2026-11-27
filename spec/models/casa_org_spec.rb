@@ -3,6 +3,7 @@ require "support/stubbed_requests/webmock_helper"
 
 RSpec.describe CasaOrg, type: :model do
   it { is_expected.to validate_presence_of(:name) }
+  it { is_expected.to validate_presence_of(:time_zone) }
   it { is_expected.to have_many(:users).dependent(:destroy) }
   it { is_expected.to have_many(:casa_cases).dependent(:destroy) }
   it { is_expected.to have_many(:contact_type_groups).dependent(:destroy) }
@@ -18,6 +19,48 @@ RSpec.describe CasaOrg, type: :model do
     org = create(:casa_org)
     new_org = build(:casa_org, name: org.name)
     expect(new_org.valid?).to be false
+  end
+
+  describe "time_zone validation" do
+    subject(:casa_org) { build(:casa_org) }
+
+    it "defaults to America/New_York" do
+      expect(described_class.new.time_zone).to eq("America/New_York")
+    end
+
+    it "is valid with a valid IANA identifier like America/New_York" do
+      casa_org.time_zone = "America/New_York"
+      expect(casa_org).to be_valid
+    end
+
+    it "is valid with another valid IANA identifier like Asia/Kolkata" do
+      casa_org.time_zone = "Asia/Kolkata"
+      expect(casa_org).to be_valid
+    end
+
+    it "is invalid with an invalid identifier" do
+      casa_org.time_zone = "Invalid/Timezone"
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("is not a valid IANA time zone identifier")
+    end
+
+    it "is invalid with a Rails-friendly display name that is not a canonical IANA identifier" do
+      casa_org.time_zone = "Eastern Time (US & Canada)"
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("is not a valid IANA time zone identifier")
+    end
+
+    it "is invalid with a blank value" do
+      casa_org.time_zone = ""
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("can't be blank")
+    end
+
+    it "is invalid with nil" do
+      casa_org.time_zone = nil
+      expect(casa_org).not_to be_valid
+      expect(casa_org.errors[:time_zone]).to include("can't be blank")
+    end
   end
 
   describe "CasaOrgValidator" do
