@@ -384,10 +384,16 @@ class CaseContact < ApplicationRecord
   end
 
   def self.case_hash_from_cases(cases)
-    casa_case_ids = cases.map(&:draft_case_ids).flatten.uniq.sort
-    casa_case_ids.each_with_object({}) do |casa_case_id, hash|
-      hash[casa_case_id] = cases.select { |c| c.casa_case_id == casa_case_id || c.draft_case_ids.include?(casa_case_id) }
+    result = Hash.new { |hash, key| hash[key] = [] }
+
+    cases.each do |contact|
+      case_ids = (Array(contact.draft_case_ids) + [contact.casa_case_id]).compact.uniq
+      case_ids.each do |case_id|
+        result[case_id] << contact
+      end
     end
+
+    result.sort.to_h
   end
 
   def casa_org_any_expenses_enabled?
