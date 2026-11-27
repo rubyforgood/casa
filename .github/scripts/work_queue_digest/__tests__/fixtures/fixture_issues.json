@@ -1,0 +1,78 @@
+{
+  "data": {
+    "repository": {
+      "issues": {
+        "totalCount": 3,
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": null
+        },
+        "nodes": [
+          {
+            "number": 5563,
+            "title": "☂️ Replace stub `pending` specs with real tests",
+            "createdAt": "2024-03-08T19:06:59Z",
+            "updatedAt": "2026-11-01T07:48:16Z",
+            "assignees": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "labels": {
+              "totalCount": 3,
+              "nodes": [
+                { "name": "Help Wanted" },
+                { "name": "Good First Issue" },
+                { "name": "Difficulty: Easy" }
+              ]
+            },
+            "comments": {
+              "totalCount": 1,
+              "nodes": [
+                { "createdAt": "2026-10-29T18:39:08Z", "author": { "login": "compwron" } }
+              ]
+            }
+          },
+          {
+            "number": 5589,
+            "title": "New Line Chart: WAU by Role",
+            "createdAt": "2024-03-27T17:04:02Z",
+            "updatedAt": "2026-11-01T07:48:14Z",
+            "assignees": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "labels": {
+              "totalCount": 2,
+              "nodes": [
+                { "name": "Help Wanted" },
+                { "name": "Difficulty: Intermediate" }
+              ]
+            },
+            "comments": {
+              "totalCount": 0,
+              "nodes": []
+            }
+          },
+          {
+            "number": 7305,
+            "title": "Delete dead read_more.js (replaced by truncated_text controller)",
+            "createdAt": "2026-10-20T12:00:00Z",
+            "updatedAt": "2026-11-01T12:00:00Z",
+            "assignees": {
+              "totalCount": 1,
+              "nodes": [{ "login": "contributor1" }]
+            },
+            "labels": {
+              "totalCount": 1,
+              "nodes": [{ "name": "javascript" }]
+            },
+            "comments": {
+              "totalCount": 2,
+              "nodes": [{ "createdAt": "2026-10-25T12:00:00Z", "author": { "login": "contributor1" } }]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

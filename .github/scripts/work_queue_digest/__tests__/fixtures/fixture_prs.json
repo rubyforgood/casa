@@ -1,0 +1,179 @@
+{
+  "data": {
+    "repository": {
+      "pullRequests": {
+        "totalCount": 4,
+        "pageInfo": {
+          "hasNextPage": false,
+          "endCursor": null
+        },
+        "nodes": [
+          {
+            "number": 7334,
+            "title": "Delete dead read_more.js (#7305)",
+            "url": "https://github.com/rubyforgood/casa/pull/7334",
+            "isDraft": false,
+            "headRefName": "7305-delete-read-more",
+            "createdAt": "2026-11-03T20:00:00Z",
+            "updatedAt": "2026-11-16T07:24:31Z",
+            "author": { "login": "compwron" },
+            "labels": {
+              "totalCount": 2,
+              "nodes": [{ "name": "javascript" }, { "name": "tests" }]
+            },
+            "reviewDecision": "APPROVED",
+            "reviewRequests": {
+              "totalCount": 1,
+              "nodes": [{ "requestedReviewer": { "login": "reviewer1" } }]
+            },
+            "reviews": {
+              "totalCount": 1,
+              "nodes": [{ "author": { "login": "reviewer1" }, "state": "APPROVED", "submittedAt": "2026-11-04T12:00:00Z" }]
+            },
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "committedDate": "2026-11-03T20:05:00Z",
+                    "statusCheckRollup": { "state": "SUCCESS", "contexts": { "totalCount": 10 } },
+                    "status": null,
+                    "checkSuites": { "totalCount": 10 }
+                  }
+                }
+              ]
+            },
+            "closingIssuesReferences": {
+              "totalCount": 1,
+              "pageInfo": { "hasNextPage": false },
+              "nodes": [{ "number": 7305, "title": "Delete dead read_more.js", "state": "OPEN" }]
+            },
+            "body": "Resolves #7305"
+          },
+          {
+            "number": 7158,
+            "title": "chore(deps): update dependency tom-select to v2.7.0",
+            "url": "https://github.com/rubyforgood/casa/pull/7158",
+            "isDraft": false,
+            "headRefName": "dependabot/npm/tom-select-2.7.0",
+            "createdAt": "2026-09-01T12:00:00Z",
+            "updatedAt": "2026-09-08T05:10:48Z",
+            "author": { "login": "dependabot[bot]" },
+            "labels": {
+              "totalCount": 1,
+              "nodes": [{ "name": "dependencies" }]
+            },
+            "reviewDecision": "REVIEW_REQUIRED",
+            "reviewRequests": {
+              "totalCount": 1,
+              "nodes": [{ "requestedReviewer": { "login": "reviewer1" } }]
+            },
+            "reviews": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "committedDate": "2026-09-01T12:05:00Z",
+                    "statusCheckRollup": { "state": "FAILURE", "contexts": { "totalCount": 14 } },
+                    "status": null,
+                    "checkSuites": { "totalCount": 14 }
+                  }
+                }
+              ]
+            },
+            "closingIssuesReferences": {
+              "totalCount": 0,
+              "pageInfo": { "hasNextPage": false },
+              "nodes": []
+            },
+            "body": "Bumps tom-select."
+          },
+          {
+            "number": 7446,
+            "title": "chore: fix StandardRB offense in email templates spec",
+            "url": "https://github.com/rubyforgood/casa/pull/7446",
+            "isDraft": false,
+            "headRefName": "standard-compliance-email-templates-spec",
+            "createdAt": "2026-11-21T08:30:00Z",
+            "updatedAt": "2026-11-21T08:30:00Z",
+            "author": { "login": "KoushikSagarr" },
+            "labels": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "reviewDecision": "REVIEW_REQUIRED",
+            "reviewRequests": {
+              "totalCount": 2,
+              "nodes": [{ "requestedReviewer": { "login": "reviewer1" } }]
+            },
+            "reviews": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "committedDate": "2026-11-21T08:25:00Z",
+                    "statusCheckRollup": { "state": "SUCCESS", "contexts": { "totalCount": 12 } },
+                    "status": null,
+                    "checkSuites": { "totalCount": 12 }
+                  }
+                }
+              ]
+            },
+            "closingIssuesReferences": {
+              "totalCount": 0,
+              "pageInfo": { "hasNextPage": false },
+              "nodes": []
+            },
+            "body": "Part of #7265"
+          },
+          {
+            "number": 7500,
+            "title": "Draft feature implementation",
+            "url": "https://github.com/rubyforgood/casa/pull/7500",
+            "isDraft": true,
+            "headRefName": "draft-feature",
+            "createdAt": "2026-11-20T10:00:00Z",
+            "updatedAt": "2026-11-20T10:00:00Z",
+            "author": { "login": "contributor2" },
+            "labels": {
+              "totalCount": 1,
+              "nodes": [{ "name": "Status: WIP" }]
+            },
+            "reviewDecision": null,
+            "reviewRequests": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "reviews": {
+              "totalCount": 0,
+              "nodes": []
+            },
+            "commits": {
+              "nodes": [
+                {
+                  "commit": {
+                    "committedDate": "2026-11-20T10:05:00Z",
+                    "statusCheckRollup": { "state": "FAILURE", "contexts": { "totalCount": 5 } },
+                    "status": null,
+                    "checkSuites": { "totalCount": 5 }
+                  }
+                }
+              ]
+            },
+            "closingIssuesReferences": {
+              "totalCount": 0,
+              "pageInfo": { "hasNextPage": false },
+              "nodes": []
+            },
+            "body": "WIP work"
+          }
+        ]
+      }
+    }
+  }
+}
