@@ -96,7 +96,7 @@ The complete [role description of a CASA volunteer](https://pgcasa.org/volunteer
 | Technology | Version |
 |---|---|
 | Ruby | 4.0.10 (see `.ruby-version`) |
-| Rails | 7.2 |
+| Rails | 8.1 |
 | PostgreSQL | 14+ |
 | Node.js | LTS/Krypton (see `.nvmrc`) |
 
@@ -133,7 +133,7 @@ Key libraries: [Hotwire Turbo](https://turbo.hotwired.dev/), [Stimulus](https://
 
 **Ruby**
 1. Install a ruby version manager: [rvm](https://rvm.io/) or [rbenv](https://github.com/rbenv/rbenv)
-1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 4.0.3
+1. when you cd into the project directory, let your version manager install the ruby version in `.ruby-version`. Right now that's Ruby 4.0.10
 1. `gem install bundler`
 
 **node.js**
