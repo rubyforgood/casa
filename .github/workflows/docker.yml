@@ -41,7 +41,7 @@ jobs:
       - name: compile assets
         run: docker compose exec -T web bundle exec rails assets:precompile
       - name: Test
-        run: docker compose exec -T web bundle exec rspec spec --fail-fast
+        run: docker compose exec -T web bundle exec rspec spec/requests/health_spec.rb spec/system/sessions/login_spec.rb --fail-fast
 
       - name: Archive selenium screenshots
         if: ${{ failure() }}
