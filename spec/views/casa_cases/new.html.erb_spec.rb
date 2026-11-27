@@ -36,4 +36,40 @@ RSpec.describe "casa_cases/new", type: :view do
       expect(rendered).to have_css("#casa_case_case_assignments_attributes_0_volunteer_id")
     end
   end
+
+  context "court date toggle" do
+    before do
+      enable_pundit(view, user)
+      allow(view).to receive(:current_user).and_return(user)
+      allow(view).to receive(:current_organization).and_return(casa_org)
+
+      assign :casa_case, build(:casa_case, casa_org: casa_org)
+      assign :contact_types, casa_org.contact_types
+    end
+
+    it "starts the court date hidden when the court date is unknown" do
+      assign :empty_court_date, true
+
+      render template: "casa_cases/new"
+
+      expect(rendered).to have_css("#casa_case_court_dates_attributes_0_date.hidden", visible: :all)
+    end
+
+    it "shows the court date when the court date is known" do
+      assign :empty_court_date, false
+
+      render template: "casa_cases/new"
+
+      expect(rendered).to have_css("#casa_case_court_dates_attributes_0_date", visible: :all)
+      expect(rendered).not_to have_css("#casa_case_court_dates_attributes_0_date.hidden", visible: :all)
+    end
+
+    it "wires the court date toggle to the reveal controller" do
+      render template: "casa_cases/new"
+
+      expect(rendered).to have_css("[data-controller='reveal'][data-reveal-hidden-class='hidden']")
+      expect(rendered).to have_css("#casa_case_court_dates_attributes_0_date[data-reveal-target='item']", visible: :all)
+      expect(rendered).to have_css("#casa_case_empty_court_date[data-action='click->reveal#toggle'][autocomplete='off']", visible: :all)
+    end
+  end
 end

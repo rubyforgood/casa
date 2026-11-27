@@ -31,13 +31,13 @@
             <% end %>
 
             <% if policy(@casa_case).update_court_date? %>
-              <div>
+              <div data-controller="reveal" data-reveal-hidden-class="hidden">
                 <%= form.fields_for :court_dates, @casa_case.court_dates.new do |cdf| %>
                   <%= cdf.label :date, "Next court date", class: label_class %>
-                  <%= cdf.date_field :date, class: input_class, hidden: @empty_court_date %>
+                  <%= cdf.date_field :date, class: class_names(input_class, hidden: @empty_court_date), data: {reveal_target: "item"} %>
                 <% end %>
                 <label class="mt-2 inline-flex items-center gap-2 text-sm text-slate-700">
-                  <%= form.check_box :empty_court_date, {checked: @empty_court_date, class: "toggle-court-date-input h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500"} %>
+                  <%= form.check_box :empty_court_date, {checked: @empty_court_date, class: "h-4 w-4 rounded border-slate-300 text-brand-600 focus:ring-brand-500", data: {action: "click->reveal#toggle"}, autocomplete: "off"} %>
                   I don't know the court date yet
                 </label>
               </div>
