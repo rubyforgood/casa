@@ -102,8 +102,6 @@ ignore:
   - Rails/FindEach
 - lib/tasks/data_post_processors/contact_type_populator.rb:
   - Rails/FindEach
-- lib/tasks/deployment/20240604121427_migrate_notifications.rake:
-  - Rails/ApplicationRecord
 - lib/tasks/deployment/99991023145114_store_deploy_time.rake:
   - Rails/TimeZone
 - lib/tasks/example_recurring_task.rb:
